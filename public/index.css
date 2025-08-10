@@ -1,0 +1,65 @@
+/* Global page styling for index listing */
+:root {
+  --page-bg: radial-gradient(1200px 600px at 20% -10%, rgba(13,110,253,.12), transparent 60%),
+             radial-gradient(1000px 600px at 120% 10%, rgba(32,201,151,.10), transparent 60%),
+             #0e0f12;
+}
+
+/* Transparent page, gradient behind everything */
+html, body {
+  min-height: 100%;
+  background: transparent;
+}
+
+/* If body uses bg-dark on the index page too */
+body.bg-dark {
+  background-color: transparent !important;
+}
+
+/* Fixed, non-repeating gradient layer */
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--page-bg);
+  background-repeat: no-repeat;
+  background-color: #0e0f12;
+}
+
+.container { max-width: 1100px; }
+
+.navbar.bg-body-tertiary {
+  background: rgba(17,19,23,0.7) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: saturate(120%) blur(8px);
+}
+
+h1 {
+  letter-spacing: .3px;
+  font-weight: 700;
+}
+h4 { margin-top: 1.75rem; color: #cfd7df; }
+
+.table {
+  --bs-table-bg: rgba(20, 22, 26, .65);
+  --bs-table-striped-bg: rgba(255,255,255, .02);
+  --bs-table-hover-bg: rgba(13,202,240, .08);
+  color: #dfe6ee;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table td, .table th {
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+.table a {
+  color: #9ad5ff;
+  text-decoration: none;
+}
+.table a:hover {
+  text-decoration: underline;
+}

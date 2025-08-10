@@ -1,0 +1,19 @@
+{
+  "name": "quiz-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "migrate": "node migrate-lowdb-to-sqlite.js",
+    "clear:users": "node scripts/clear-users.js",
+    "init:doubt": "node scripts/init-doubt-tag.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.2.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nanoid": "^5.1.5"
+  }
+}

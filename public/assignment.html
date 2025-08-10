@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>QBase – Quiz</title>
+	<link
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+		rel="stylesheet"
+		integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+		crossorigin="anonymous"
+	>
+	<link href="./assignment.css" rel="stylesheet">
+	<link
+		rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+	>
+	<link href="./index.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+	<script defer src="./navbar.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+		crossorigin="anonymous"
+	></script>
+</head>
+<body class="bg-dark text-light">
+	<nav class="navbar navbar-expand-lg bg-body-tertiary">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="./index.html">QBase</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
+                </li>
+					<li class="nav-item" id="nav-login-item">
+						<a class="nav-link" href="#" id="nav-login">Login</a>
+					</li>
+					<li class="nav-item dropdown d-none" id="nav-user-item">
+						<a
+							class="nav-link dropdown-toggle"
+							href="#"
+							id="navbarUserDropdown"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<span id="nav-username">User</span>
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+						<li><a class="dropdown-item" href="#" id="nav-logout">Logout</a></li>
+						<li><hr class="dropdown-divider"></li>
+						<li><a class="dropdown-item text-danger" href="#" id="nav-delete-account">Delete Account…</a></li>
+						</ul>
+					</li>
+				</ul>
+				<form class="d-flex" role="search" onsubmit="return false;">
+					<input
+						class="form-control me-2"
+						type="search"
+						placeholder="Search"
+						aria-label="Search"
+						id="navbar-search-input"
+					/>
+					<button class="btn btn-outline-success" type="submit" id="navbar-search-btn">Search</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="assignment-topba py-2 px-3 d-flex justify-content-between align-items-center">
+	<h5 class="mb-0" id="assignment-title">Assignment</h5>
+	<button id="reset-assignment" class="btn btn-outline-danger btn-sm">
+		<i class="bi bi-arrow-counterclockwise"></i> Reset Assignment
+	</button>
+	</div>
+
+	<div class="container main-wrapper">
+		<div class="left-col px-4 py-3" style="width: 100%;">
+
+			<div id="mobile-qbar"></div>
+
+			<div class="card mb-4 flex-shrink-0">
+				<div class="card-header d-flex justify-content-between align-items-center">
+					<div>
+						<strong>Q<span id="qNo">1</span></strong>
+						<div class="small text-muted" id="assignmentDetails"></div>
+					</div>
+					<div class="d-flex align-items-center gap-2">
+						<button id="bookmark-btn" class="btn btn-sm btn-outline-primary" title="Bookmark this question">
+							<i class="bi bi-bookmark"></i>
+						</button>
+						<span id="timer" class="badge bg-dark text-info">00:11</span>
+						<span class="badge bg-dark-subtle text-info" id="qTypeInfo"></span>
+					</div>
+				</div>
+				<div class="card-body">
+					<div id="passageText" class="card-text passage-text mb-3" style="display:none"></div>
+					<div id="passageImage" class="question-image mb-3" style="display:none"></div>
+
+					<p id="questionText"></p>
+					<div id="questionImage" class="question-image mb-3" style="display:none"></div>
+				</div>
+			</div>
+
+			<div class="flex-grow-1 mb-3" id="MCQOptionDiv">
+				<button
+					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+					data-opt="A"
+				>
+					A. <span id="AContent"></span>
+				</button>
+				<button
+					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+					data-opt="B"
+				>
+					B. <span id="BContent"></span>
+				</button>
+				<button
+					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+					data-opt="C"
+				>
+					C. <span id="CContent"></span>
+				</button>
+				<button
+					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+					data-opt="D"
+				>
+					D. <span id="DContent"></span>
+				</button>
+			</div>
+
+			<div class="options-list flex-grow-1 mb-3" id="numericalDiv">
+				<input
+					id="numericalInput"
+					class="form-control"
+					type="number"
+					placeholder="Enter your answer..."
+					aria-label="Numerical Answer"
+				/>
+				<div class="text-body-emphasis" style="display: none;">
+					<strong>Correct Answer:</strong>
+					<span id="numericalAnswer"></span>
+				</div>
+			</div>
+
+			<!-- Notes Section (visible for all question types) -->
+			<div class="mb-3" id="notesSection">
+				<label for="notesInput" class="form-label">Notes</label>
+				<textarea id="notesInput" class="form-control" rows="4" placeholder="Write your notes for this question..."></textarea>
+			</div>
+
+			<div class="controls d-flex justify-content-between flex-shrink-0">
+				<button id="prev-question" class="btn btn-outline-light">Doubt</button>
+				<button id="check-answer" class="btn btn-success">Check Answer</button>
+				<button id="reset-question" class="btn btn-outline-light d-none ms-2" title="Reset this question">Reset Question</button>
+			</div>
+		</div>
+
+		<div class="right-col p-3 d-none d-lg-block">
+			<h6 class="mb-3">Questions</h6>
+			<div class="controls d-flex justify-content-between flex-shrink-0" style="padding-top: 1rem;">
+			<div class="row row-cols-4 g-2" id="q_list"></div>
+		</div>
+	</div>
+
+	<script defer src="./assignment.js"></script>
+</body>
+</html>
