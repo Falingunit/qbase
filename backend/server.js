@@ -1,4 +1,4 @@
-// server.js — JWT (no cookies) + SQLite
+// server.js — JWT (no cookies) + SQLite + flexible CORS
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -7,42 +7,57 @@ import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 
-// ----- paths -----
+// ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// ----- config -----
+// ---------- Config ----------
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
-const JWT_EXPIRES_IN = '7d';
 
-// Frontend & assets (GitHub Pages)
-const FRONTEND_ORIGIN = 'https://falingunit.github.io';     // or your custom Pages domain later
-const ASSETS_BASE      = 'https://falingunit.github.io/qbase';
+// JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+
+// Frontend & assets
+// Your GitHub Pages site hosts the data/ folder
+const FRONTEND_ORIGIN = 'https://falingunit.github.io';
+const ASSETS_BASE = 'https://falingunit.github.io/qbase';
+
+// For Zoom/in-app browsers, requests still come from the frontend origin.
+// But we’ll also allow dev and your nip.io domain for safety.
+const ALLOWED_ORIGINS = [
+  FRONTEND_ORIGIN,
+  'http://localhost:3000',
+  'https://qbase.103.125.154.215.nip.io',
+];
+
+// If you want to temporarily allow everything while testing,
+// set ALLOW_ALL_ORIGINS=1 in the environment.
+const ALLOW_ALL = process.env.ALLOW_ALL_ORIGINS === '1';
 
 const app = express();
 app.set('trust proxy', 1);
 
-// ----- CORS (no credentials needed now) -----
-// CORS: only allow Pages and localhost:3000, no credentials
-const ALLOWED_ORIGINS = [
-  FRONTEND_ORIGIN,
-  'http://localhost:3000'
-];
+// ---------- CORS ----------
 const corsFn = cors({
   origin: (origin, cb) => {
-    if (!origin) return cb(null, true);
-    cb(null, ALLOWED_ORIGINS.includes(origin));
-  }
+    if (ALLOW_ALL) return cb(null, true);
+    if (!origin) return cb(null, true); // allow curl/postman
+    // allow exact matches + any *.github.io page
+    const ok =
+      ALLOWED_ORIGINS.includes(origin) ||
+      /\.github\.io$/.test(new URL(origin).hostname);
+    cb(ok ? null : new Error(`Origin ${origin} not allowed by CORS`), ok);
+  },
 });
 app.use(corsFn);
 app.options('*', corsFn);
 
-// ----- parsers -----
+// ---------- Parsers ----------
 app.use(express.json());
 
-// ----- SQLite -----
+// ---------- SQLite ----------
 const dbPath = path.join(__dirname, 'db.sqlite');
 const db = new Database(dbPath);
 db.pragma('foreign_keys = ON');
@@ -93,10 +108,11 @@ db.exec(`
   );
 `);
 
-// ----- tiny helpers -----
+// ---------- Auth helpers ----------
 function signToken(userId) {
   return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 }
+
 function auth(req, res, next) {
   const h = req.headers.authorization || '';
   const m = h.match(/^Bearer\s+(.+)$/i);
@@ -110,10 +126,9 @@ function auth(req, res, next) {
   }
 }
 
-// ----- health -----
+// ---------- Public routes ----------
 app.get('/healthz', (_req, res) => res.send('ok'));
 
-// ----- login (username only) -----
 app.post('/login', (req, res) => {
   try {
     const { username } = req.body || {};
@@ -121,12 +136,14 @@ app.post('/login', (req, res) => {
       return res.status(400).json({ error: 'Username too short' });
     }
     const uname = username.trim();
+
     let user = db.prepare('SELECT id, username FROM users WHERE username = ?').get(uname);
     if (!user) {
       const id = nanoid();
       db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
       user = { id, username: uname };
     }
+
     const token = signToken(user.id);
     res.json({ success: true, user, token });
   } catch (e) {
@@ -135,7 +152,7 @@ app.post('/login', (req, res) => {
   }
 });
 
-// ----- me (token optional for convenience) -----
+// Token-optional: returns user or null (useful for navbar)
 app.get('/me', (req, res) => {
   const h = req.headers.authorization || '';
   const m = h.match(/^Bearer\s+(.+)$/i);
@@ -149,12 +166,12 @@ app.get('/me', (req, res) => {
   }
 });
 
-// ----- logout (no-op on server with JWT) -----
+// No-op for JWT flows (client just forgets the token)
 app.post('/logout', (_req, res) => {
   res.json({ success: true });
 });
 
-// ----- assignment loader from Pages -----
+// ---------- Assignment loader (from Pages) ----------
 const assignmentCache = new Map();
 async function loadAssignment(assignmentId) {
   if (assignmentCache.has(assignmentId)) return assignmentCache.get(assignmentId);
@@ -166,10 +183,10 @@ async function loadAssignment(assignmentId) {
   return json;
 }
 
-// ----- protected routes (need Authorization: Bearer ...) -----
+// ---------- Protected routes (require Bearer token) ----------
 app.use(auth);
 
-// bookmark tags
+// Bookmark tags
 app.get('/api/bookmark-tags', (req, res) => {
   try {
     const tags = db.prepare(`
@@ -180,7 +197,7 @@ app.get('/api/bookmark-tags', (req, res) => {
     `).all(req.userId);
     res.json(tags);
   } catch (e) {
-    console.error(e);
+    console.error('get tags:', e);
     res.status(500).json({ error: 'Failed to get bookmark tags' });
   }
 });
@@ -195,12 +212,12 @@ app.post('/api/bookmark-tags', (req, res) => {
     res.json(newTag);
   } catch (e) {
     if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Tag name already exists' });
-    console.error(e);
+    console.error('create tag:', e);
     res.status(500).json({ error: 'Failed to create bookmark tag' });
   }
 });
 
-// bookmarks CRUD
+// Bookmarks
 app.post('/api/bookmarks', (req, res) => {
   try {
     const { assignmentId, questionIndex, tagId } = req.body || {};
@@ -215,7 +232,7 @@ app.post('/api/bookmarks', (req, res) => {
     res.json({ success: true, id });
   } catch (e) {
     if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Question already bookmarked with this tag' });
-    console.error(e);
+    console.error('add bookmark:', e);
     res.status(500).json({ error: 'Failed to add bookmark' });
   }
 });
@@ -229,7 +246,7 @@ app.delete('/api/bookmarks/:assignmentId/:questionIndex/:tagId', (req, res) => {
     `).run(req.userId, assignmentId, questionIndex, tagId);
     res.json({ success: true });
   } catch (e) {
-    console.error(e);
+    console.error('remove bookmark:', e);
     res.status(500).json({ error: 'Failed to remove bookmark' });
   }
 });
@@ -246,7 +263,7 @@ app.get('/api/bookmarks', (req, res) => {
     `).all(req.userId);
     res.json(rows);
   } catch (e) {
-    console.error(e);
+    console.error('list bookmarks:', e);
     res.status(500).json({ error: 'Failed to get bookmarks' });
   }
 });
@@ -262,12 +279,12 @@ app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
     `).all(req.userId, assignmentId, questionIndex);
     res.json(rows);
   } catch (e) {
-    console.error(e);
+    console.error('check bookmark:', e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
   }
 });
 
-// state & scores
+// State & scores
 app.get('/api/state/:assignmentId', (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const row = db.prepare('SELECT state FROM states WHERE userId = ? AND assignmentId = ?')
@@ -328,8 +345,7 @@ app.get('/api/scores', async (req, res) => {
   res.json(result);
 });
 
-// ----- scoring helpers -----
-const assignmentCache2 = assignmentCache; // reuse
+// ---------- Scoring helpers ----------
 async function computeAssignmentScore(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
@@ -401,7 +417,7 @@ function safeParseJSON(text, fallback) {
   try { return JSON.parse(text); } catch { return fallback; }
 }
 
-// ----- start -----
+// ---------- Start ----------
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
