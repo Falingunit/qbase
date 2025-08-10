@@ -3,38 +3,38 @@
   await loadConfig();
 
   window.addEventListener('qbase:login', async () => {
-  const data = await (await fetch('./data/assignment_list.json')).json();
-  const scores = await fetchScores();
-  // clear and rebuild
-  document.querySelector('#chaptersTable tbody').innerHTML = '';
-  buildTable(data, scores);
-});
+    const data = await (await fetch('./data/assignment_list.json')).json();
+    const scores = await fetchScores();
+    // clear and rebuild
+    document.querySelector('#chaptersTable tbody').innerHTML = '';
+    buildTable(data, scores);
+  });
 
 
   // Now you can use API_BASE in your fetch calls
-  fetch(`${API_BASE}/me`, { credentials: 'include' })
-  .then(res => res.json())
+  authFetch(`${API_BASE}/me`)
+    .then(res => res.json())
     .then(data => {
       console.log('User data:', data);
     });
 
-fetch('./data/assignment_list.json')
+  fetch('./data/assignment_list.json')
     .then(res => res.json())
     .then(async (data) => {
         const scores = await fetchScores();
         buildTable(data, scores);
-    })
+    });
 
-async function fetchScores() {
+  async function fetchScores() {
     try {
-        const r = await fetch(`${API_BASE}/api/scores`, { credentials: 'include' });
-        if (!r.ok) return {};
-        return await r.json(); // { [aID]: {score,maxScore} }
+        const r = await authFetch(`${API_BASE}/api/scores`);
+         if (!r.ok) return {};
+         return await r.json(); // { [aID]: {score,maxScore} }
     } catch { return {}; }
-}
+  }
 
-function buildTable(data, scores)
-{
+  function buildTable(data, scores)
+  {
     const tbody = document.querySelector('#chaptersTable tbody');
 
     data.forEach((entry, i) => {
@@ -73,5 +73,5 @@ function buildTable(data, scores)
 
         tbody.appendChild(tr);
     });
-}
+  }
 })();

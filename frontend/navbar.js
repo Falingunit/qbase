@@ -245,7 +245,7 @@ function setLoggedOutUI() {
   // -------------------- Backend helpers --------------------
   async function whoAmI() {
     try {
-      const r = await fetch(`${API_BASE}/me`, { credentials: 'include' });
+      const r = await authFetch(`${API_BASE}/me`);
       if (!r.ok) return null;
       const u = await r.json();
       return (u && u.username) ? u : null;
@@ -275,7 +275,7 @@ function setLoggedOutUI() {
 
   async function fetchServerState(aID) {
     try {
-      const r = await fetch(`${API_BASE}/api/state/${aID}`, { credentials: 'include' });
+      const r = await authFetch(`${API_BASE}/api/state/${aID}`);
       if (!r.ok) return null;
       const s = await r.json();
       return Array.isArray(s) ? s : null;
@@ -283,9 +283,8 @@ function setLoggedOutUI() {
   }
 
   async function postServerState(aID, state) {
-    const r = await fetch(`${API_BASE}/api/state/${aID}`, {
+    const r = await authFetch(`${API_BASE}/api/state/${aID}`, {
       method: 'POST',
-      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ state })
     });
@@ -310,28 +309,31 @@ function setLoggedOutUI() {
     err && (err.style.display = 'none');
     try {
       const r = await fetch(`${API_BASE}/login`, {
-        method: 'POST', credentials: 'include',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username })
       });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const me = await whoAmI();
-      if (me?.username) {
-        setLoggedInUI(me.username);
-        broadcastLogin(me.username);
+      const data = await r.json();
+      if (data && data.token && data.user && data.user.username) {
+        qbSetToken(data.token);
+        setLoggedInUI(data.user.username);
+        broadcastLogin(data.user.username);
         hideLoginGate();
         if (input) input.value = '';
       } else {
         throw new Error('Session not established');
       }
     } catch (e) {
-      if (err) { err.textContent = `Login failed. Please try again. ${e}`; err.style.display = 'block'; }
+      if (err) { err.textContent = 'Login failed. Please try again.'; err.style.display = 'block'; }
       showLoginGate();
     }
   }
 
   async function doLogoutFlow() {
-    try { await fetch(`${API_BASE}/logout`, { method: 'POST', credentials: 'include' }); } catch {}
+    // Replace fetch with authFetch and remove credentials
+    try { await authFetch(`${API_BASE}/logout`, { method: 'POST' }); } catch {}
+    qbClearToken();
     setLoggedOutUI();
     broadcastLogout();
     showLoginGate();
@@ -345,7 +347,6 @@ function setLoggedOutUI() {
       cancelText: 'Cancel'
     });
     if (!ok) return;
-
     const { ok: ok2, value } = await showPrompt({
       title: 'Confirm Deletion',
       label: 'Type DELETE to confirm',
@@ -354,10 +355,11 @@ function setLoggedOutUI() {
       cancelText: 'Cancel'
     });
     if (!ok2 || String(value).toUpperCase() !== 'DELETE') return;
-
     try {
-      const r = await fetch(`${API_BASE}/account`, { method: 'DELETE', credentials: 'include' });
+      // Replace fetch with authFetch and remove credentials
+      const r = await authFetch(`${API_BASE}/account`, { method: 'DELETE' });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      qbClearToken();
       setLoggedOutUI();
       broadcastLogout();
       await showNotice({ title: 'Account deleted', message: 'Your account and all progress have been deleted.' });

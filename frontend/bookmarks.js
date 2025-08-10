@@ -45,10 +45,7 @@
     contentEl.style.display = 'none';
 
     try {
-      const response = await fetch(`${API_BASE}/api/bookmarks`, { 
-        credentials: 'include',
-        cache: 'no-store'
-      });
+      const response = await authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' });
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -234,10 +231,7 @@
 
   async function removeBookmark(assignmentId, questionIndex, tagId) {
     try {
-      const resp = await fetch(`${API_BASE}/api/bookmarks/${assignmentId}/${questionIndex}/${tagId}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
+      const resp = await authFetch(`${API_BASE}/api/bookmarks/${assignmentId}/${questionIndex}/${tagId}`, { method: 'DELETE' });
       return resp.ok;
     } catch (err) {
       console.error('Failed to remove bookmark:', err);
@@ -262,7 +256,7 @@
             // Load question state for notes
             let questionState = null;
             try {
-                const stateResponse = await fetch(`${API_BASE}/api/state/${assignmentId}`, { credentials: 'include' });
+                const stateResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`);
                 if (stateResponse.ok) {
                     const states = await stateResponse.json();
                     if (Array.isArray(states) && states[questionIndex]) {
@@ -452,7 +446,7 @@
     async function saveNotes(assignmentId, questionIndex, notes, statusElement) {
         try {
             // First, get the current state
-            const stateResponse = await fetch(`${API_BASE}/api/state/${assignmentId}`, { credentials: 'include' });
+            const stateResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`);
             let states = [];
             
             if (stateResponse.ok) {
@@ -476,9 +470,8 @@
             states[questionIndex].notes = notes;
             
             // Save the updated state
-            const saveResponse = await fetch(`${API_BASE}/api/state/${assignmentId}`, {
+            const saveResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`, {
                 method: 'POST',
-                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ state: states })
             });

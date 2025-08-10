@@ -102,7 +102,7 @@ function applyNumericalEvaluationStyles(isCorrect) {
 // ---------- Auth helpers ----------
 async function whoAmI() {
   try {
-    const r = await fetch(`${API_BASE}/me`, { credentials: 'include' });
+    const r = await authFetch(`${API_BASE}/me`);
     if (r.ok) {
       const u = await r.json();
       if (u?.username) return { username: u.username, source: 'server' };
@@ -174,7 +174,7 @@ async function loadSavedState(aID) {
 
   // Logged in → use server if available; fallback to local only if server has nothing
   try {
-    const res = await fetch(`${API_BASE}/api/state/${aID}`, { credentials: 'include' });
+    const res = await authFetch(`${API_BASE}/api/state/${aID}`);
     if (res.ok) {
       const server = await res.json();
       if (Array.isArray(server) && server.length) {
@@ -191,9 +191,8 @@ async function loadSavedState(aID) {
 
 // ---------- Server POST helper ----------
 async function postState(aID, state) {
-  const res = await fetch(`${API_BASE}/api/state/${aID}`, {
+  const res = await authFetch(`${API_BASE}/api/state/${aID}`, {
     method: 'POST',
-    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ state })
   });
@@ -231,19 +230,16 @@ function flushSave() {
         new Blob([payload], { type: 'application/json' })
       );
       if (!ok) {
-        fetch(`${API_BASE}/api/state/${aID}`, {
-          method: 'POST', credentials: 'include',
+        authFetch(`${API_BASE}/api/state/${aID}`, {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: payload, keepalive: true
         });
       }
-      // We optimistically clear dirty here to avoid duplicate posts;
-      // if it actually failed, your next interaction can re-mark dirty.
       dirty = false;
     }
   } catch (e) {
     console.warn('flushSave error', e);
-    // If logged in & we failed, keep dirty=true so a later retry can happen
   }
 }
 
@@ -856,12 +852,9 @@ async function updateBookmarkButton() {
   const icon = bookmarkBtn.querySelector('i');
   
   try {
-    // Load current bookmarks for this question
-    const response = await fetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`, { credentials: 'include' });
+    const response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`);
     if (response.ok) {
       currentBookmarks = await response.json();
-      
-      // Update button appearance
       if (currentBookmarks.length > 0) {
         bookmarkBtn.classList.remove('btn-outline-primary');
         bookmarkBtn.classList.add('btn-primary');
@@ -881,8 +874,7 @@ async function updateBookmarkButton() {
 
 async function showBookmarkDialog() {
   try {
-    // Load bookmark tags
-    const response = await fetch(`${API_BASE}/api/bookmark-tags`, { credentials: 'include' });
+    const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
     if (!response.ok) {
       if (response.status === 401) {
         window.dispatchEvent(new Event('qbase:logout'));
@@ -890,7 +882,6 @@ async function showBookmarkDialog() {
       }
       throw new Error(`HTTP ${response.status}`);
     }
-    
     bookmarkTags = await response.json();
     
     // Create dialog content
@@ -1014,7 +1005,7 @@ async function showBookmarkDialog() {
 async function refreshBookmarkDialog(modalEl) {
   try {
     // Reload bookmark tags and current bookmarks
-    const response = await fetch(`${API_BASE}/api/bookmark-tags`, { credentials: 'include' });
+    const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
     if (!response.ok) {
       if (response.status === 401) {
         window.dispatchEvent(new Event('qbase:logout'));
@@ -1022,11 +1013,10 @@ async function refreshBookmarkDialog(modalEl) {
       }
       throw new Error(`HTTP ${response.status}`);
     }
-    
     bookmarkTags = await response.json();
     
     // Reload current bookmarks for this question
-    const bookmarkResponse = await fetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`, { credentials: 'include' });
+    const bookmarkResponse = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`);
     if (bookmarkResponse.ok) {
       currentBookmarks = await bookmarkResponse.json();
     } else {
@@ -1143,9 +1133,8 @@ async function refreshBookmarkDialog(modalEl) {
 
 async function addBookmark(tagId) {
   try {
-    const response = await fetch(`${API_BASE}/api/bookmarks`, {
+    const response = await authFetch(`${API_BASE}/api/bookmarks`, {
       method: 'POST',
-      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         assignmentId: aID,
@@ -1169,9 +1158,8 @@ async function addBookmark(tagId) {
 
 async function removeBookmark(tagId) {
   try {
-    const response = await fetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}/${tagId}`, {
-      method: 'DELETE',
-      credentials: 'include'
+    const response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}/${tagId}`, {
+      method: 'DELETE'
     });
     
     if (!response.ok) {
@@ -1188,9 +1176,8 @@ async function removeBookmark(tagId) {
 
 async function createBookmarkTag(tagName) {
   try {
-    const response = await fetch(`${API_BASE}/api/bookmark-tags`, {
+    const response = await authFetch(`${API_BASE}/api/bookmark-tags`, {
       method: 'POST',
-      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: tagName })
     });

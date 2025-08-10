@@ -1,46 +1,48 @@
-// server.js (SQLite + CORS/auth order fixed)
+// server.js — JWT (no cookies) + SQLite
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
+import jwt from 'jsonwebtoken';
 
-// --- paths ---
+// ----- paths -----
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// --- frontend origins / assets ---
-const FRONTEND_ORIGIN = 'https://falingunit.github.io';     // your GitHub Pages origin
-const ASSETS_BASE      = 'https://falingunit.github.io/qbase'; // where data/ lives on Pages
+// ----- config -----
+const isDev = process.env.NODE_ENV !== 'production';
+const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
+const JWT_EXPIRES_IN = '7d';
+
+// Frontend & assets (GitHub Pages)
+const FRONTEND_ORIGIN = 'https://falingunit.github.io';     // or your custom Pages domain later
+const ASSETS_BASE      = 'https://falingunit.github.io/qbase';
 
 const app = express();
-app.set('trust proxy', 1); // behind nginx so Secure cookies work
+app.set('trust proxy', 1);
 
-const isDev = process.env.NODE_ENV !== 'production';
-
-// ---------- CORS FIRST ----------
+// ----- CORS (no credentials needed now) -----
+// CORS: only allow Pages and localhost:3000, no credentials
 const ALLOWED_ORIGINS = [
-  FRONTEND_ORIGIN,          // Pages
-  'http://localhost:3000',  // optional local dev
+  FRONTEND_ORIGIN,
+  'http://localhost:3000'
 ];
-
 const corsFn = cors({
   origin: (origin, cb) => {
-    if (!origin) return cb(null, true);               // allow curl/Postman/no Origin
+    if (!origin) return cb(null, true);
     cb(null, ALLOWED_ORIGINS.includes(origin));
-  },
-  credentials: true
+  }
 });
 app.use(corsFn);
 app.options('*', corsFn);
 
-// ---------- Parsers ----------
+// ----- parsers -----
 app.use(express.json());
-app.use(cookieParser());
 
-// ---------- SQLite (MUST be before routes that use `db`) ----------
+// ----- SQLite -----
 const dbPath = path.join(__dirname, 'db.sqlite');
 const db = new Database(dbPath);
 db.pragma('foreign_keys = ON');
@@ -91,9 +93,27 @@ db.exec(`
   );
 `);
 
-// ---------- Public routes (no auth) ----------
+// ----- tiny helpers -----
+function signToken(userId) {
+  return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+}
+function auth(req, res, next) {
+  const h = req.headers.authorization || '';
+  const m = h.match(/^Bearer\s+(.+)$/i);
+  if (!m) return res.status(401).json({ error: 'Missing token' });
+  try {
+    const payload = jwt.verify(m[1], JWT_SECRET);
+    req.userId = String(payload.sub);
+    return next();
+  } catch {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
+// ----- health -----
 app.get('/healthz', (_req, res) => res.send('ok'));
 
+// ----- login (username only) -----
 app.post('/login', (req, res) => {
   try {
     const { username } = req.body || {};
@@ -101,54 +121,40 @@ app.post('/login', (req, res) => {
       return res.status(400).json({ error: 'Username too short' });
     }
     const uname = username.trim();
-
     let user = db.prepare('SELECT id, username FROM users WHERE username = ?').get(uname);
     if (!user) {
       const id = nanoid();
       db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
       user = { id, username: uname };
     }
-
-    res.cookie('userId', user.id, {
-      httpOnly: true,
-      path: '/',
-      sameSite: isDev ? 'lax' : 'none',
-      secure: !isDev
-    });
-
-    res.json({ success: true, user });
+    const token = signToken(user.id);
+    res.json({ success: true, user, token });
   } catch (e) {
     console.error('Login failed:', e);
     res.status(500).json({ error: 'Login failed' });
   }
 });
 
-// Does not 401 if logged out (useful for navbar)
+// ----- me (token optional for convenience) -----
 app.get('/me', (req, res) => {
-  const userId = req.cookies?.userId;
-  if (!userId) return res.json(null);
-  const user = db.prepare('SELECT id, username FROM users WHERE id = ?').get(userId);
-  res.json(user || null);
+  const h = req.headers.authorization || '';
+  const m = h.match(/^Bearer\s+(.+)$/i);
+  if (!m) return res.json(null);
+  try {
+    const { sub } = jwt.verify(m[1], JWT_SECRET);
+    const u = db.prepare('SELECT id, username FROM users WHERE id = ?').get(String(sub));
+    res.json(u || null);
+  } catch {
+    res.json(null);
+  }
 });
 
-app.post('/logout', (req, res) => {
-  res.clearCookie('userId', {
-    path: '/',
-    sameSite: isDev ? 'lax' : 'none',
-    secure: !isDev
-  });
+// ----- logout (no-op on server with JWT) -----
+app.post('/logout', (_req, res) => {
   res.json({ success: true });
 });
 
-// ---------- Auth middleware (protect everything below) ----------
-app.use((req, res, next) => {
-  const userId = req.cookies?.userId;
-  if (!userId) return res.status(401).json({ error: 'Not logged in' });
-  req.userId = userId;
-  next();
-});
-
-// ---------- Load assignment.json from GitHub Pages ----------
+// ----- assignment loader from Pages -----
 const assignmentCache = new Map();
 async function loadAssignment(assignmentId) {
   if (assignmentCache.has(assignmentId)) return assignmentCache.get(assignmentId);
@@ -160,18 +166,21 @@ async function loadAssignment(assignmentId) {
   return json;
 }
 
-// ---------- Bookmark/tag routes ----------
+// ----- protected routes (need Authorization: Bearer ...) -----
+app.use(auth);
+
+// bookmark tags
 app.get('/api/bookmark-tags', (req, res) => {
   try {
     const tags = db.prepare(`
-      SELECT id, name, created_at 
-      FROM bookmark_tags 
-      WHERE userId = ? 
+      SELECT id, name, created_at
+      FROM bookmark_tags
+      WHERE userId = ?
       ORDER BY name = 'Doubt' DESC, name ASC
     `).all(req.userId);
     res.json(tags);
   } catch (e) {
-    console.error('Failed to get bookmark tags:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to get bookmark tags' });
   }
 });
@@ -186,11 +195,12 @@ app.post('/api/bookmark-tags', (req, res) => {
     res.json(newTag);
   } catch (e) {
     if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Tag name already exists' });
-    console.error('Failed to create bookmark tag:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to create bookmark tag' });
   }
 });
 
+// bookmarks CRUD
 app.post('/api/bookmarks', (req, res) => {
   try {
     const { assignmentId, questionIndex, tagId } = req.body || {};
@@ -199,13 +209,13 @@ app.post('/api/bookmarks', (req, res) => {
     }
     const id = nanoid();
     db.prepare(`
-      INSERT INTO bookmarks (id, userId, assignmentId, questionIndex, tagId) 
+      INSERT INTO bookmarks (id, userId, assignmentId, questionIndex, tagId)
       VALUES (?, ?, ?, ?, ?)
     `).run(id, req.userId, assignmentId, questionIndex, tagId);
     res.json({ success: true, id });
   } catch (e) {
     if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Question already bookmarked with this tag' });
-    console.error('Failed to add bookmark:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to add bookmark' });
   }
 });
@@ -214,12 +224,12 @@ app.delete('/api/bookmarks/:assignmentId/:questionIndex/:tagId', (req, res) => {
   try {
     const { assignmentId, questionIndex, tagId } = req.params;
     db.prepare(`
-      DELETE FROM bookmarks 
+      DELETE FROM bookmarks
       WHERE userId = ? AND assignmentId = ? AND questionIndex = ? AND tagId = ?
     `).run(req.userId, assignmentId, questionIndex, tagId);
     res.json({ success: true });
   } catch (e) {
-    console.error('Failed to remove bookmark:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to remove bookmark' });
   }
 });
@@ -236,7 +246,7 @@ app.get('/api/bookmarks', (req, res) => {
     `).all(req.userId);
     res.json(rows);
   } catch (e) {
-    console.error('Failed to get bookmarks:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to get bookmarks' });
   }
 });
@@ -252,12 +262,12 @@ app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
     `).all(req.userId, assignmentId, questionIndex);
     res.json(rows);
   } catch (e) {
-    console.error('Failed to check bookmarks:', e);
+    console.error(e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
   }
 });
 
-// ---------- State & scores ----------
+// state & scores
 app.get('/api/state/:assignmentId', (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const row = db.prepare('SELECT state FROM states WHERE userId = ? AND assignmentId = ?')
@@ -318,7 +328,8 @@ app.get('/api/scores', async (req, res) => {
   res.json(result);
 });
 
-// ---------- Scoring helpers ----------
+// ----- scoring helpers -----
+const assignmentCache2 = assignmentCache; // reuse
 async function computeAssignmentScore(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
@@ -390,8 +401,7 @@ function safeParseJSON(text, fallback) {
   try { return JSON.parse(text); } catch { return fallback; }
 }
 
-// ---------- Start ----------
-const PORT = process.env.PORT || 3000;
+// ----- start -----
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
 });
