@@ -22,6 +22,14 @@ const app = express();
 // trust proxy if you’re behind nginx so secure cookies work
 app.set('trust proxy', 1);
 
+app.use((req, res, next) => {
+  if (req.path === '/healthz') return res.send('ok');
+  const userId = Number(req.cookies?.userId || 0);
+  if (!userId) return res.status(401).json({ error: 'Not logged in' });
+  req.userId = userId;
+  next();
+});
+
 app.use(cors({
   origin: (origin, cb) => {
     const allowed = [
