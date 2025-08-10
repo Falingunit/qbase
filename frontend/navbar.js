@@ -325,7 +325,7 @@ function setLoggedOutUI() {
         throw new Error('Session not established');
       }
     } catch (e) {
-      if (err) { err.textContent = 'Login failed. Please try again.'; err.style.display = 'block'; }
+      if (err) { err.textContent = `Login failed. Please try again. ${e}`; err.style.display = 'block'; }
       showLoginGate();
     }
   }
