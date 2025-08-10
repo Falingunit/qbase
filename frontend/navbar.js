@@ -385,4 +385,5 @@ function setLoggedOutUI() {
 
   // Hide gate on login event
   window.addEventListener('qbase:login', () => hideLoginGate());
+  window.addEventListener('qbase:force-login', showLoginGate);
 })();

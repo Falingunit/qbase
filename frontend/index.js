@@ -2,6 +2,15 @@
 (async () => {
   await loadConfig();
 
+  window.addEventListener('qbase:login', async () => {
+  const data = await (await fetch('./data/assignment_list.json')).json();
+  const scores = await fetchScores();
+  // clear and rebuild
+  document.querySelector('#chaptersTable tbody').innerHTML = '';
+  buildTable(data, scores);
+});
+
+
   // Now you can use API_BASE in your fetch calls
   fetch(`${API_BASE}/me`, { credentials: 'include' })
   .then(res => res.json())

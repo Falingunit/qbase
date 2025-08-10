@@ -1,64 +1,46 @@
-// server.js (SQLite version)
+// server.js (SQLite + CORS/auth order fixed)
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import path from 'path';
-import fs from 'fs';
 import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
 
+// --- paths ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Where assignment.json files live on GitHub Pages
-const FRONTEND_ORIGIN = 'https://falingunit.github.io';              // your Pages origin
-const ASSETS_BASE = 'https://falingunit.github.io/qbase'; // e.g. /physics-app
+// --- frontend origins / assets ---
+const FRONTEND_ORIGIN = 'https://falingunit.github.io';     // your GitHub Pages origin
+const ASSETS_BASE      = 'https://falingunit.github.io/qbase'; // where data/ lives on Pages
 
 const app = express();
+app.set('trust proxy', 1); // behind nginx so Secure cookies work
 
-// If frontend runs on the same origin, you can disable CORS. Otherwise set origin correctly.
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-// trust proxy if you’re behind nginx so secure cookies work
-app.set('trust proxy', 1);
+const isDev = process.env.NODE_ENV !== 'production';
 
-app.use((req, res, next) => {
-  if (req.path === '/healthz') return res.send('ok');
-  const userId = Number(req.cookies?.userId || 0);
-  if (!userId) return res.status(401).json({ error: 'Not logged in' });
-  req.userId = userId;
-  next();
-});
+// ---------- CORS FIRST ----------
+const ALLOWED_ORIGINS = [
+  FRONTEND_ORIGIN,          // Pages
+  'http://localhost:3000',  // optional local dev
+];
 
-app.use(cors({
+const corsFn = cors({
   origin: (origin, cb) => {
-    const allowed = [
-      'https://falingunit.github.io',
-      'http://localhost:3000'
-    ];
-    if (!origin) return cb(null, true);
-    cb(null, allowed.includes(origin));
+    if (!origin) return cb(null, true);               // allow curl/Postman/no Origin
+    cb(null, ALLOWED_ORIGINS.includes(origin));
   },
   credentials: true
-}));
+});
+app.use(corsFn);
+app.options('*', corsFn);
+
+// ---------- Parsers ----------
 app.use(express.json());
 app.use(cookieParser());
 
-const assignmentCache = new Map();
-
-async function loadAssignment(assignmentId) {
-  if (assignmentCache.has(assignmentId)) return assignmentCache.get(assignmentId);
-
-  const url = `${ASSETS_BASE}/data/question_data/${assignmentId}/assignment.json`;
-  const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`Failed to fetch assignment ${assignmentId}: ${res.status}`);
-
-  const assignment = await res.json();
-  assignmentCache.set(assignmentId, assignment);
-  return assignment;
-}
-
-// --- SQLite setup ---
+// ---------- SQLite (MUST be before routes that use `db`) ----------
 const dbPath = path.join(__dirname, 'db.sqlite');
 const db = new Database(dbPath);
 db.pragma('foreign_keys = ON');
@@ -109,45 +91,47 @@ db.exec(`
   );
 `);
 
-// --- Login route (username only) ---
+// ---------- Public routes (no auth) ----------
+app.get('/healthz', (_req, res) => res.send('ok'));
+
 app.post('/login', (req, res) => {
-  const { username } = req.body || {};
-  if (!username || username.trim().length < 2) {
-    return res.status(400).json({ error: 'Username too short' });
+  try {
+    const { username } = req.body || {};
+    if (!username || username.trim().length < 2) {
+      return res.status(400).json({ error: 'Username too short' });
+    }
+    const uname = username.trim();
+
+    let user = db.prepare('SELECT id, username FROM users WHERE username = ?').get(uname);
+    if (!user) {
+      const id = nanoid();
+      db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
+      user = { id, username: uname };
+    }
+
+    res.cookie('userId', user.id, {
+      httpOnly: true,
+      path: '/',
+      sameSite: isDev ? 'lax' : 'none',
+      secure: !isDev
+    });
+
+    res.json({ success: true, user });
+  } catch (e) {
+    console.error('Login failed:', e);
+    res.status(500).json({ error: 'Login failed' });
   }
-  const uname = username.trim();
-
-  const getUserByName = db.prepare('SELECT id, username FROM users WHERE username = ?');
-  let user = getUserByName.get(uname);
-  if (!user) {
-    const id = nanoid();
-    db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
-    user = { id, username: uname };
-  }
-
-  const isDev = process.env.NODE_ENV !== 'production';
-
-  res.cookie('userId', user.id, {
-    httpOnly: true,
-    path: '/',
-    sameSite: isDev ? 'lax' : 'none',
-    secure: !isDev
-  });
-
-  res.json({ success: true, user });
 });
 
-// --- Who am I? ---
+// Does not 401 if logged out (useful for navbar)
 app.get('/me', (req, res) => {
-  const userId = req.cookies.userId;
+  const userId = req.cookies?.userId;
   if (!userId) return res.json(null);
   const user = db.prepare('SELECT id, username FROM users WHERE id = ?').get(userId);
   res.json(user || null);
 });
 
-// --- Logout ---
 app.post('/logout', (req, res) => {
-  const isDev = process.env.NODE_ENV !== 'production';
   res.clearCookie('userId', {
     path: '/',
     sameSite: isDev ? 'lax' : 'none',
@@ -156,29 +140,27 @@ app.post('/logout', (req, res) => {
   res.json({ success: true });
 });
 
-// --- Auth middleware ---
+// ---------- Auth middleware (protect everything below) ----------
 app.use((req, res, next) => {
-  const userId = req.cookies.userId;
+  const userId = req.cookies?.userId;
   if (!userId) return res.status(401).json({ error: 'Not logged in' });
   req.userId = userId;
   next();
 });
 
-// --- Delete my account ---
-app.delete('/account', (req, res) => {
-  try {
-    db.prepare('DELETE FROM users WHERE id = ?').run(req.userId);
-    res.clearCookie('userId', { path: '/' });
-    res.json({ success: true });
-  } catch (e) {
-    console.error('Delete account failed:', e);
-    res.status(500).json({ error: 'Failed to delete account' });
-  }
-});
+// ---------- Load assignment.json from GitHub Pages ----------
+const assignmentCache = new Map();
+async function loadAssignment(assignmentId) {
+  if (assignmentCache.has(assignmentId)) return assignmentCache.get(assignmentId);
+  const url = `${ASSETS_BASE}/data/question_data/${assignmentId}/assignment.json`;
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error(`Failed to fetch assignment ${assignmentId}: ${r.status}`);
+  const json = await r.json();
+  assignmentCache.set(assignmentId, json);
+  return json;
+}
 
-// --- Bookmark API endpoints ---
-
-// Get all bookmark tags for user
+// ---------- Bookmark/tag routes ----------
 app.get('/api/bookmark-tags', (req, res) => {
   try {
     const tags = db.prepare(`
@@ -194,67 +176,47 @@ app.get('/api/bookmark-tags', (req, res) => {
   }
 });
 
-// Create new bookmark tag
 app.post('/api/bookmark-tags', (req, res) => {
   try {
-    const { name } = req.body;
-    if (!name || name.trim().length === 0) {
-      return res.status(400).json({ error: 'Tag name is required' });
-    }
-    
-    const tagName = name.trim();
+    const { name } = req.body || {};
+    if (!name || !name.trim()) return res.status(400).json({ error: 'Tag name is required' });
     const tagId = nanoid();
-    
-    db.prepare('INSERT INTO bookmark_tags (id, userId, name) VALUES (?, ?, ?)').run(tagId, req.userId, tagName);
-    
+    db.prepare('INSERT INTO bookmark_tags (id, userId, name) VALUES (?, ?, ?)').run(tagId, req.userId, name.trim());
     const newTag = db.prepare('SELECT id, name, created_at FROM bookmark_tags WHERE id = ?').get(tagId);
     res.json(newTag);
   } catch (e) {
-    if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-      res.status(400).json({ error: 'Tag name already exists' });
-    } else {
-      console.error('Failed to create bookmark tag:', e);
-      res.status(500).json({ error: 'Failed to create bookmark tag' });
-    }
+    if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Tag name already exists' });
+    console.error('Failed to create bookmark tag:', e);
+    res.status(500).json({ error: 'Failed to create bookmark tag' });
   }
 });
 
-// Add bookmark
 app.post('/api/bookmarks', (req, res) => {
   try {
-    const { assignmentId, questionIndex, tagId } = req.body;
-    
+    const { assignmentId, questionIndex, tagId } = req.body || {};
     if (!assignmentId || questionIndex === undefined || !tagId) {
       return res.status(400).json({ error: 'assignmentId, questionIndex, and tagId are required' });
     }
-    
-    const bookmarkId = nanoid();
+    const id = nanoid();
     db.prepare(`
       INSERT INTO bookmarks (id, userId, assignmentId, questionIndex, tagId) 
       VALUES (?, ?, ?, ?, ?)
-    `).run(bookmarkId, req.userId, assignmentId, questionIndex, tagId);
-    
-    res.json({ success: true, id: bookmarkId });
+    `).run(id, req.userId, assignmentId, questionIndex, tagId);
+    res.json({ success: true, id });
   } catch (e) {
-    if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-      res.status(400).json({ error: 'Question already bookmarked with this tag' });
-    } else {
-      console.error('Failed to add bookmark:', e);
-      res.status(500).json({ error: 'Failed to add bookmark' });
-    }
+    if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Question already bookmarked with this tag' });
+    console.error('Failed to add bookmark:', e);
+    res.status(500).json({ error: 'Failed to add bookmark' });
   }
 });
 
-// Remove bookmark
 app.delete('/api/bookmarks/:assignmentId/:questionIndex/:tagId', (req, res) => {
   try {
     const { assignmentId, questionIndex, tagId } = req.params;
-    
     db.prepare(`
       DELETE FROM bookmarks 
       WHERE userId = ? AND assignmentId = ? AND questionIndex = ? AND tagId = ?
     `).run(req.userId, assignmentId, questionIndex, tagId);
-    
     res.json({ success: true });
   } catch (e) {
     console.error('Failed to remove bookmark:', e);
@@ -262,10 +224,9 @@ app.delete('/api/bookmarks/:assignmentId/:questionIndex/:tagId', (req, res) => {
   }
 });
 
-// Get all bookmarks for user
 app.get('/api/bookmarks', (req, res) => {
   try {
-    const bookmarks = db.prepare(`
+    const rows = db.prepare(`
       SELECT b.id, b.assignmentId, b.questionIndex, b.created_at,
              bt.id as tagId, bt.name as tagName
       FROM bookmarks b
@@ -273,45 +234,38 @@ app.get('/api/bookmarks', (req, res) => {
       WHERE b.userId = ?
       ORDER BY bt.name = 'Doubt' DESC, bt.name ASC, b.created_at DESC
     `).all(req.userId);
-    
-    res.json(bookmarks);
+    res.json(rows);
   } catch (e) {
     console.error('Failed to get bookmarks:', e);
     res.status(500).json({ error: 'Failed to get bookmarks' });
   }
 });
 
-// Check if question is bookmarked
 app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
   try {
     const { assignmentId, questionIndex } = req.params;
-    
-    const bookmarks = db.prepare(`
+    const rows = db.prepare(`
       SELECT b.tagId, bt.name as tagName
       FROM bookmarks b
       JOIN bookmark_tags bt ON b.tagId = bt.id
       WHERE b.userId = ? AND b.assignmentId = ? AND b.questionIndex = ?
     `).all(req.userId, assignmentId, questionIndex);
-    
-    res.json(bookmarks);
+    res.json(rows);
   } catch (e) {
     console.error('Failed to check bookmarks:', e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
   }
 });
 
-// --- Load state ---
+// ---------- State & scores ----------
 app.get('/api/state/:assignmentId', (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
-  const row = db
-    .prepare('SELECT state FROM states WHERE userId = ? AND assignmentId = ?')
-    .get(req.userId, assignmentId);
-  // stored as TEXT; parse to JSON
+  const row = db.prepare('SELECT state FROM states WHERE userId = ? AND assignmentId = ?')
+                .get(req.userId, assignmentId);
   const state = row ? JSON.parse(row.state) : [];
   res.json(Array.isArray(state) ? state : []);
 });
 
-// --- Save state ---
 app.post('/api/state/:assignmentId', async (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const state = req.body?.state ?? [];
@@ -323,7 +277,6 @@ app.post('/api/state/:assignmentId', async (req, res) => {
     ON CONFLICT(userId, assignmentId) DO UPDATE SET state = excluded.state
   `).run(req.userId, assignmentId, stateText);
 
-  // compute and store score
   try {
     const { score, maxScore } = await computeAssignmentScore(assignmentId, state);
     db.prepare(`
@@ -338,14 +291,11 @@ app.post('/api/state/:assignmentId', async (req, res) => {
   res.json({ success: true });
 });
 
-// --- Scores summary for current user ---
 app.get('/api/scores', async (req, res) => {
-  const scoreRows = db
-    .prepare('SELECT assignmentId, score, maxScore FROM assignment_scores WHERE userId = ?')
-    .all(req.userId);
-  const stateRows = db
-    .prepare('SELECT assignmentId, state FROM states WHERE userId = ?')
-    .all(req.userId);
+  const scoreRows = db.prepare('SELECT assignmentId, score, maxScore FROM assignment_scores WHERE userId = ?')
+                      .all(req.userId);
+  const stateRows  = db.prepare('SELECT assignmentId, state FROM states WHERE userId = ?')
+                      .all(req.userId);
 
   const scoresMap = new Map();
   for (const r of scoreRows) scoresMap.set(r.assignmentId, { score: r.score, maxScore: r.maxScore });
@@ -353,7 +303,6 @@ app.get('/api/scores', async (req, res) => {
   const result = {};
   const seen = new Set();
 
-  // Include any assignments that have state saved
   for (const { assignmentId, state } of stateRows) {
     const parsed = safeParseJSON(state, []);
     const { attempted, totalQuestions } = await computeAttempted(assignmentId, parsed);
@@ -361,7 +310,6 @@ app.get('/api/scores', async (req, res) => {
     result[assignmentId] = { ...base, attempted, totalQuestions };
     seen.add(assignmentId);
   }
-  // Also include assignments with score but no state row (edge case)
   for (const [assignmentId, base] of scoresMap.entries()) {
     if (seen.has(assignmentId)) continue;
     const { attempted, totalQuestions } = await computeAttempted(assignmentId, []);
@@ -370,16 +318,15 @@ app.get('/api/scores', async (req, res) => {
   res.json(result);
 });
 
-// --- Helpers: scoring ---
+// ---------- Scoring helpers ----------
 async function computeAssignmentScore(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
-    const displayQuestions = assignment.questions.filter(q => q.qType !== 'Passage');
-    const maxScore = displayQuestions.length * 4;
-
+    const display = assignment.questions.filter(q => q.qType !== 'Passage');
+    const maxScore = display.length * 4;
     let score = 0;
-    for (let i = 0; i < displayQuestions.length; i++) {
-      const q = displayQuestions[i];
+    for (let i = 0; i < display.length; i++) {
+      const q = display[i];
       const st = Array.isArray(stateArray) ? (stateArray[i] || {}) : {};
       score += scoreQuestion(q, st);
     }
@@ -389,36 +336,32 @@ async function computeAssignmentScore(assignmentId, stateArray) {
   }
 }
 
-
 function scoreQuestion(q, st) {
-  // Unanswered → 0
-  const isUnanswered = !st || (!st.isAnswerPicked && st.pickedNumerical === undefined && (!Array.isArray(st.pickedAnswers) || st.pickedAnswers.length === 0) && !st.pickedAnswer);
-  if (isUnanswered) return 0;
+  const unanswered = !st || (!st.isAnswerPicked &&
+    st.pickedNumerical === undefined &&
+    (!Array.isArray(st.pickedAnswers) || st.pickedAnswers.length === 0) &&
+    !st.pickedAnswer);
+  if (unanswered) return 0;
 
   if (q.qType === 'SMCQ') {
     const correct = String(q.qAnswer).trim().toUpperCase();
-    const picked = String(st.pickedAnswer || '').trim().toUpperCase();
+    const picked  = String(st.pickedAnswer || '').trim().toUpperCase();
     return picked && picked === correct ? 4 : -1;
   }
   if (q.qType === 'MMCQ') {
     const correctSet = new Set((Array.isArray(q.qAnswer) ? q.qAnswer : [q.qAnswer]).map(x => String(x).trim().toUpperCase()));
-    const pickedSet = new Set((Array.isArray(st.pickedAnswers) ? st.pickedAnswers : []).map(x => String(x).trim().toUpperCase()));
-    // any wrong option picked → incorrect
-    for (const p of pickedSet) {
-      if (!correctSet.has(p)) return -1;
-    }
-    const intersection = [...pickedSet].filter(x => correctSet.has(x)).length;
-    if (intersection === correctSet.size && pickedSet.size === correctSet.size) return 4;
-    if (intersection > 0) return intersection; // partial credit as number of correct options picked
-    return -1; // picked something but none correct
+    const pickedSet  = new Set((Array.isArray(st.pickedAnswers) ? st.pickedAnswers : []).map(x => String(x).trim().toUpperCase()));
+    for (const p of pickedSet) if (!correctSet.has(p)) return -1;
+    const hits = [...pickedSet].filter(x => correctSet.has(x)).length;
+    if (hits === correctSet.size && pickedSet.size === correctSet.size) return 4;
+    if (hits > 0) return hits;
+    return -1;
   }
   if (q.qType === 'Numerical') {
     const ans = Number(q.qAnswer);
     const user = st.pickedNumerical;
-    if (typeof user === 'number' && !Number.isNaN(ans)) {
-      return user === ans ? 4 : -1;
-    }
-    return 0; // no answer
+    if (typeof user === 'number' && !Number.isNaN(ans)) return user === ans ? 4 : -1;
+    return 0;
   }
   return 0;
 }
@@ -426,16 +369,15 @@ function scoreQuestion(q, st) {
 async function computeAttempted(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
-    const displayQuestions = assignment.questions.filter(q => q.qType !== 'Passage');
-    const totalQuestions = displayQuestions.length;
-
+    const display = assignment.questions.filter(q => q.qType !== 'Passage');
+    const totalQuestions = display.length;
     let attempted = 0;
     for (let i = 0; i < totalQuestions; i++) {
       const st = Array.isArray(stateArray) ? (stateArray[i] || {}) : {};
       const answered = !!(st.isAnswerPicked ||
-                          (Array.isArray(st.pickedAnswers) && st.pickedAnswers.length) ||
-                          st.pickedAnswer ||
-                          (typeof st.pickedNumerical === 'number'));
+        (Array.isArray(st.pickedAnswers) && st.pickedAnswers.length) ||
+        st.pickedAnswer ||
+        (typeof st.pickedNumerical === 'number'));
       if (answered) attempted++;
     }
     return { attempted, totalQuestions };
@@ -448,7 +390,7 @@ function safeParseJSON(text, fallback) {
   try { return JSON.parse(text); } catch { return fallback; }
 }
 
-// --- Start server ---
+// ---------- Start ----------
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
