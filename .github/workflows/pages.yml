@@ -1,9 +1,11 @@
 name: Deploy Frontend to GitHub Pages
+
 on:
   push:
     branches: [ main ]
     paths:
       - 'frontend/**'
+  workflow_dispatch:  # allow manual runs from the Actions tab
 
 permissions:
   contents: read
@@ -23,6 +25,7 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: frontend
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
