@@ -1,6 +1,6 @@
 "use strict";
-
-const API_BASE = ''; // same-origin
+(async () => {
+  await loadConfig();
 let currentBookmarks = [];
 let assignmentData = new Map();
 
@@ -507,3 +507,4 @@ async function saveNotes(assignmentId, questionIndex, notes, statusElement) {
         }, 3000);
     }
 }
+})();

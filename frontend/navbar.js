@@ -1,9 +1,12 @@
-(() => {
+(async () => {
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn('navbar.js loaded twice; ignoring second load');
     return;
   }
-  window.__QBASE_NAVBAR_LOADED__ = true;  const API_BASE = ''; // same-origin
+  window.__QBASE_NAVBAR_LOADED__ = true;
+
+  await loadConfig();
+
   window.addEventListener('qbase:login', (e) => {
     isAuthenticated = true;                // <-- make other instances aware
     const name = e?.detail?.username;

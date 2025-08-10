@@ -1,4 +1,13 @@
 "use strict";
+(async () => {
+  await loadConfig();
+
+  // Now you can use API_BASE in your fetch calls
+  fetch(`${API_BASE}/me`, { credentials: 'include' })
+  .then(res => res.json())
+    .then(data => {
+      console.log('User data:', data);
+    });
 
 fetch('./data/assignment_list.json')
     .then(res => res.json())
@@ -9,7 +18,7 @@ fetch('./data/assignment_list.json')
 
 async function fetchScores() {
     try {
-        const r = await fetch('/api/scores', { credentials: 'include' });
+        const r = await fetch(`${API_BASE}/api/scores`, { credentials: 'include' });
         if (!r.ok) return {};
         return await r.json(); // { [aID]: {score,maxScore} }
     } catch { return {}; }
@@ -56,3 +65,4 @@ function buildTable(data, scores)
         tbody.appendChild(tr);
     });
 }
+})();

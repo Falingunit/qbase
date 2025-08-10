@@ -11,13 +11,44 @@ import { nanoid } from 'nanoid';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Where assignment.json files live on GitHub Pages
+const FRONTEND_ORIGIN = 'https://falingunit.github.io';              // your Pages origin
+const ASSETS_BASE = 'https://falingunit.github.io/qbase'; // e.g. /physics-app
+
 const app = express();
 
 // If frontend runs on the same origin, you can disable CORS. Otherwise set origin correctly.
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// trust proxy if you’re behind nginx so secure cookies work
+app.set('trust proxy', 1);
+
+app.use(cors({
+  origin: (origin, cb) => {
+    const allowed = [
+      'https://falingunit.github.io',
+      'http://localhost:3000'
+    ];
+    if (!origin) return cb(null, true);
+    cb(null, allowed.includes(origin));
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+const assignmentCache = new Map();
+
+async function loadAssignment(assignmentId) {
+  if (assignmentCache.has(assignmentId)) return assignmentCache.get(assignmentId);
+
+  const url = `${ASSETS_BASE}/data/question_data/${assignmentId}/assignment.json`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to fetch assignment ${assignmentId}: ${res.status}`);
+
+  const assignment = await res.json();
+  assignmentCache.set(assignmentId, assignment);
+  return assignment;
+}
 
 // --- SQLite setup ---
 const dbPath = path.join(__dirname, 'db.sqlite');
@@ -86,11 +117,15 @@ app.post('/login', (req, res) => {
     user = { id, username: uname };
   }
 
+  const isDev = process.env.NODE_ENV !== 'production';
+
   res.cookie('userId', user.id, {
     httpOnly: true,
     path: '/',
-    sameSite: 'lax'
+    sameSite: isDev ? 'lax' : 'none',
+    secure: !isDev
   });
+
   res.json({ success: true, user });
 });
 
@@ -104,7 +139,12 @@ app.get('/me', (req, res) => {
 
 // --- Logout ---
 app.post('/logout', (req, res) => {
-  res.clearCookie('userId', { path: '/' });
+  const isDev = process.env.NODE_ENV !== 'production';
+  res.clearCookie('userId', {
+    path: '/',
+    sameSite: isDev ? 'lax' : 'none',
+    secure: !isDev
+  });
   res.json({ success: true });
 });
 
@@ -264,7 +304,7 @@ app.get('/api/state/:assignmentId', (req, res) => {
 });
 
 // --- Save state ---
-app.post('/api/state/:assignmentId', (req, res) => {
+app.post('/api/state/:assignmentId', async (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const state = req.body?.state ?? [];
 
@@ -277,7 +317,7 @@ app.post('/api/state/:assignmentId', (req, res) => {
 
   // compute and store score
   try {
-    const { score, maxScore } = computeAssignmentScore(assignmentId, state);
+    const { score, maxScore } = await computeAssignmentScore(assignmentId, state);
     db.prepare(`
       INSERT INTO assignment_scores (userId, assignmentId, score, maxScore)
       VALUES (?, ?, ?, ?)
@@ -291,7 +331,7 @@ app.post('/api/state/:assignmentId', (req, res) => {
 });
 
 // --- Scores summary for current user ---
-app.get('/api/scores', (req, res) => {
+app.get('/api/scores', async (req, res) => {
   const scoreRows = db
     .prepare('SELECT assignmentId, score, maxScore FROM assignment_scores WHERE userId = ?')
     .all(req.userId);
@@ -308,7 +348,7 @@ app.get('/api/scores', (req, res) => {
   // Include any assignments that have state saved
   for (const { assignmentId, state } of stateRows) {
     const parsed = safeParseJSON(state, []);
-    const { attempted, totalQuestions } = computeAttempted(assignmentId, parsed);
+    const { attempted, totalQuestions } = await computeAttempted(assignmentId, parsed);
     const base = scoresMap.get(assignmentId) || { score: 0, maxScore: totalQuestions * 4 };
     result[assignmentId] = { ...base, attempted, totalQuestions };
     seen.add(assignmentId);
@@ -316,18 +356,16 @@ app.get('/api/scores', (req, res) => {
   // Also include assignments with score but no state row (edge case)
   for (const [assignmentId, base] of scoresMap.entries()) {
     if (seen.has(assignmentId)) continue;
-    const { attempted, totalQuestions } = computeAttempted(assignmentId, []);
+    const { attempted, totalQuestions } = await computeAttempted(assignmentId, []);
     result[assignmentId] = { ...base, attempted, totalQuestions };
   }
   res.json(result);
 });
 
 // --- Helpers: scoring ---
-function computeAssignmentScore(assignmentId, stateArray) {
+async function computeAssignmentScore(assignmentId, stateArray) {
   try {
-    const assignmentPath = path.join(__dirname, 'public', 'data', 'question_data', String(assignmentId), 'assignment.json');
-    const raw = fs.readFileSync(assignmentPath, 'utf-8');
-    const assignment = JSON.parse(raw);
+    const assignment = await loadAssignment(assignmentId);
     const displayQuestions = assignment.questions.filter(q => q.qType !== 'Passage');
     const maxScore = displayQuestions.length * 4;
 
@@ -338,11 +376,11 @@ function computeAssignmentScore(assignmentId, stateArray) {
       score += scoreQuestion(q, st);
     }
     return { score, maxScore };
-  } catch (e) {
-    // If anything goes wrong, do not block saving; return neutral score
+  } catch {
     return { score: 0, maxScore: 0 };
   }
 }
+
 
 function scoreQuestion(q, st) {
   // Unanswered → 0
@@ -377,17 +415,19 @@ function scoreQuestion(q, st) {
   return 0;
 }
 
-function computeAttempted(assignmentId, stateArray) {
+async function computeAttempted(assignmentId, stateArray) {
   try {
-    const assignmentPath = path.join(__dirname, 'public', 'data', 'question_data', String(assignmentId), 'assignment.json');
-    const raw = fs.readFileSync(assignmentPath, 'utf-8');
-    const assignment = JSON.parse(raw);
+    const assignment = await loadAssignment(assignmentId);
     const displayQuestions = assignment.questions.filter(q => q.qType !== 'Passage');
     const totalQuestions = displayQuestions.length;
+
     let attempted = 0;
     for (let i = 0; i < totalQuestions; i++) {
       const st = Array.isArray(stateArray) ? (stateArray[i] || {}) : {};
-      const answered = !!(st.isAnswerPicked || (Array.isArray(st.pickedAnswers) && st.pickedAnswers.length) || st.pickedAnswer || (typeof st.pickedNumerical === 'number'));
+      const answered = !!(st.isAnswerPicked ||
+                          (Array.isArray(st.pickedAnswers) && st.pickedAnswers.length) ||
+                          st.pickedAnswer ||
+                          (typeof st.pickedNumerical === 'number'));
       if (answered) attempted++;
     }
     return { attempted, totalQuestions };

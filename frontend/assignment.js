@@ -1,9 +1,11 @@
 "use strict";
 
+(async () => {
+  await loadConfig();
+
 const params = new URLSearchParams(window.location.search);
 const aID = parseInt(params.get('aID'), 10);
 
-const API_BASE = ''; // same-origin
 let saveTimeout;
 
 // ---------- Local keys & auth tracking ----------
@@ -100,7 +102,7 @@ function applyNumericalEvaluationStyles(isCorrect) {
 // ---------- Auth helpers ----------
 async function whoAmI() {
   try {
-    const r = await fetch('/me', { credentials: 'include' });
+    const r = await fetch(`${API_BASE}/me`, { credentials: 'include' });
     if (r.ok) {
       const u = await r.json();
       if (u?.username) return { username: u.username, source: 'server' };
@@ -1215,3 +1217,4 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+})();
