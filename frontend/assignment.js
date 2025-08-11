@@ -720,7 +720,7 @@ function setQuestion(qID) {
       passageImgDiv.innerHTML = '';
     }
     passageDiv.style.display = 'block';
-    passageDiv.innerHTML = question.passage;
+    passageDiv.textContent = question.passage;
     renderMathInElement(passageDiv, katexOptions);
   } else {
     passageImgDiv.style.display = 'none';
@@ -739,7 +739,7 @@ function setQuestion(qID) {
     qImgDiv.style.display ='none';
     qImgDiv.innerHTML = '';
   }
-  qTextElm.innerHTML = question.qText;
+  qTextElm.textContent = question.qText;
   renderMathInElement(qTextElm, katexOptions);
 
   // --- Timer control ---
@@ -808,10 +808,10 @@ function setQuestion(qID) {
     const C = document.getElementById("CContent");
     const D = document.getElementById("DContent");
 
-    A.innerHTML = question.qOptions[0];
-    B.innerHTML = question.qOptions[1];
-    C.innerHTML = question.qOptions[2];
-    D.innerHTML = question.qOptions[3];
+    A.textContent = question.qOptions[0];
+    B.textContent = question.qOptions[1];
+    C.textContent = question.qOptions[2];
+    D.textContent = question.qOptions[3];
 
     renderMathInElement(A, katexOptions);
     renderMathInElement(B, katexOptions);

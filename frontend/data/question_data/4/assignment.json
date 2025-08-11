@@ -388,7 +388,7 @@
     "qType": "Numerical",
     "passageId": null,
     "qText": "A small bead of mass \\(m\\) and positive charge \\(+q\\) is mounted on a fixed thin smooth horizontal plastic ring of radius \\(R\\) in the \\(x\\!-y\\) plane, centred at \\((0,0)\\). At \\(t=0\\), bead is stationary. Magnetic field \\(\\vec B=\\dfrac{E_0 t}{r}\\,\\hat k\\) (where \\(r\\ne0\\) is distance from \\(z\\)-axis; \\(E_0>0\\)) is switched on. Magnitude of normal reaction exerted by ring on bead is \\(qE_0\\lambda\\). Find \\(\\lambda\\). (Gravity absent.)",
-    "image": "25.png",
+    "image": null,
     "qOptions": [],
     "qAnswer": 0
   },

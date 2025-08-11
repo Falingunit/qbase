@@ -307,81 +307,127 @@
     }
 
     function renderQuestionForView(question, assignment, questionState, assignmentId, questionIndex) {
-        let html = '';
-        
-        // Passage (if this question has a passage)
-        if (question.passage) {
-            html += '<div class="mb-4 p-3 bg-dark rounded">';
-            html += '<h6 class="text-muted mb-2">Passage:</h6>';
-            
-            // Passage image
-            if (question.passageImage) {
-                html += `<div class="mb-3"><img src="./data/question_data/${assignmentId}/${question.passageImage}" class="img-fluid" alt="Passage Image"></div>`;
-            }
-            
-            // Passage text
-            html += `<div class="passage-text">${question.passage}</div>`;
-            html += '</div>';
+      const el = (tag, className, text) => {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text; // keep as plain text (safe for KaTeX)
+        return node;
+      };
+
+      const container = el('div');
+
+      // Passage
+      if (question.passage) {
+        const card = el('div', 'mb-4 p-3 bg-dark rounded');
+        card.appendChild(el('h6', 'text-muted mb-2', 'Passage:'));
+        if (question.passageImage) {
+          const imgWrap = el('div', 'mb-3');
+          const img = el('img', 'img-fluid');
+          img.alt = 'Passage Image';
+          img.src = `./data/question_data/${assignmentId}/${question.passageImage}`;
+          imgWrap.appendChild(img);
+          card.appendChild(imgWrap);
         }
-        
-        // Question text
-        if (question.qText) {
-            html += `<div class="mb-3"><strong>Question:</strong><br><div class="question-text">${question.qText}</div></div>`;
+        const passageText = el('div', 'passage-text', question.passage);
+        card.appendChild(passageText);
+        container.appendChild(card);
+      }
+
+      // Question text
+      if (question.qText) {
+        const wrap = el('div', 'mb-3');
+        const label = el('strong', null, 'Question:');
+        wrap.appendChild(label);
+        wrap.appendChild(document.createElement('br'));
+        wrap.appendChild(el('div', 'question-text', question.qText));
+        container.appendChild(wrap);
+      }
+
+      // Question image
+      if (question.image) {
+        const imgWrap = el('div', 'mb-3');
+        const img = el('img', 'img-fluid');
+        img.alt = 'Question Image';
+        img.src = `./data/question_data/${assignmentId}/${question.image}`;
+        imgWrap.appendChild(img);
+        container.appendChild(imgWrap);
+      }
+
+      // Options
+      if (question.qType === 'SMCQ' || question.qType === 'MMCQ') {
+        const optionsWrap = el('div', 'mb-3');
+        const options = ['A', 'B', 'C', 'D'];
+        const correctAnswers = normalizeAnswer(question);
+
+        for (let i = 0; i < options.length; i++) {
+          const option = options[i];
+          const optionText = question.qOptions ? question.qOptions[i] : question[`q${option}`];
+          if (!optionText) continue;
+
+          const isCorrect = correctAnswers.has(option);
+          const btn = el(
+            'div',
+            `btn btn-outline-secondary text-start w-100 mb-2 ${isCorrect ? 'border-success border-2' : ''}`
+          );
+          btn.style.pointerEvents = 'none';
+          btn.style.color = 'white';
+
+          const label = el('span', 'option-label', `${option}.`);
+          const text = el('span', 'option-text', optionText);
+
+          btn.appendChild(label);
+          btn.appendChild(document.createTextNode(' '));
+          btn.appendChild(text);
+          optionsWrap.appendChild(btn);
         }
-        
-        // Question image
-        if (question.image) {
-            html += `<div class="mb-3"><img src="./data/question_data/${assignmentId}/${question.image}" class="img-fluid" alt="Question Image"></div>`;
+        container.appendChild(optionsWrap);
+
+        const correctOptions = Array.from(correctAnswers).sort();
+        const ans = el('div', 'alert alert-success');
+        ans.appendChild(el('strong', null, 'Correct Answer:'));
+        ans.appendChild(document.createTextNode(' ' + correctOptions.join(', ')));
+        container.appendChild(ans);
+      }
+
+      // Numerical
+      if (question.qType === 'Numerical') {
+        const answer = normalizeAnswer(question);
+        if (answer.valid) {
+          const ans = el('div', 'alert alert-success');
+          ans.appendChild(el('strong', null, 'Correct Answer:'));
+          ans.appendChild(document.createTextNode(' ' + String(answer.value)));
+          container.appendChild(ans);
         }
-        
-        // Options for MCQ questions
-        if (question.qType === 'SMCQ' || question.qType === 'MMCQ') {
-            html += '<div class="mb-3">';
-            const options = ['A', 'B', 'C', 'D'];
-            const correctAnswers = normalizeAnswer(question);
-            
-            for (let i = 0; i < options.length; i++) {
-                const option = options[i];
-                const optionText = question.qOptions ? question.qOptions[i] : question[`q${option}`];
-                if (optionText) {
-                    const isCorrect = correctAnswers.has(option);
-                    const correctClass = isCorrect ? 'border-success border-2' : '';
-                    html += `
-                        <div class="btn btn-outline-secondary text-start w-100 mb-2 ${correctClass}" style="pointer-events: none; color: white !important;">
-                            <span class="option-label">${option}.</span> <span class="option-text">${optionText}</span>
-                        </div>
-                    `;
-                }
-            }
-            html += '</div>';
-            
-            // Show correct answer
-            const correctOptions = Array.from(correctAnswers).sort();
-            html += `<div class="alert alert-success"><strong>Correct Answer:</strong> ${correctOptions.join(', ')}</div>`;
-        }
-        
-        // Numerical answer
-        if (question.qType === 'Numerical') {
-            const answer = normalizeAnswer(question);
-            if (answer.valid) {
-                html += `<div class="alert alert-success"><strong>Correct Answer:</strong> ${answer.value}</div>`;
-            }
-        }
-        
-        // Notes section
-        html += `
-            <div class="mt-4">
-                <h6>Notes:</h6>
-                <textarea id="question-notes" class="form-control" rows="4" placeholder="Add your notes here...">${questionState?.notes || ''}</textarea>
-                <div class="mt-2">
-                    <button id="save-notes-btn" class="btn btn-primary btn-sm">Save Notes</button>
-                    <span id="notes-save-status" class="ms-2 text-muted"></span>
-                </div>
-            </div>
-        `;
-        
-        return html;
+      }
+
+      // Notes
+      const notesWrap = el('div', 'mt-4');
+      notesWrap.appendChild(el('h6', null, 'Notes:'));
+      const textarea = el('textarea', 'form-control');
+      textarea.id = 'question-notes';
+      textarea.rows = 4;
+      textarea.placeholder = 'Add your notes here...';
+      textarea.value = questionState?.notes || '';
+      notesWrap.appendChild(textarea);
+
+      const controls = el('div', 'mt-2');
+      const saveBtn = el('button', 'btn btn-primary btn-sm', 'Save Notes');
+      saveBtn.id = 'save-notes-btn';
+      const status = el('span', 'ms-2 text-muted');
+      status.id = 'notes-save-status';
+      controls.appendChild(saveBtn);
+      controls.appendChild(status);
+      notesWrap.appendChild(controls);
+
+      container.appendChild(notesWrap);
+
+      // NOTE: caller can now do:
+      // parent.appendChild(container);
+      // renderMathInElement(container, { delimiters: [...] });
+
+      return container;
     }
+
 
     function normalizeAnswer(q) {
         if (q.qType === 'SMCQ') {
