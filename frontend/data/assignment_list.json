@@ -12,5 +12,12 @@
     "chapter": "EMI",
     "title": "Motional E.M.F. (Advanced Level)",
     "aID": 1
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Motional E.M.F. CPP-1",
+    "aID": 2
   }
 ]
