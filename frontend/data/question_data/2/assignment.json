@@ -824,7 +824,7 @@
   "qType": "Numerical",
   "passageId": null,
   "qText": "A conducting rod of length 1 m is aligned along the unit vector \\(\\left(\\tfrac{3}{5}\\,\\hat\\imath+\\tfrac{4}{5}\\,\\hat k\\right)\\) and moves with velocity \\(\\vec v=2\\,\\hat\\imath\\,\\text{m/s}\\) in a uniform field \\(\\mathbf B=\\hat\\jmath-2\\hat k\\,\\text{T}\\). Find the magnitude of induced emf (in volts).",
-  "image": "51.png",
+  "image": null,
   "qOptions": [],
   "qAnswer": 4
 }

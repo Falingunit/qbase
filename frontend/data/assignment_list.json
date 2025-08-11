@@ -19,5 +19,19 @@
     "chapter": "EMI",
     "title": "Motional E.M.F. CPP-1",
     "aID": 2
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Faradays Law CPP-2",
+    "aID": 3
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Induced Electric Field CPP-4b",
+    "aID": 4
   }
 ]
