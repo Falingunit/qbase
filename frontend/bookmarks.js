@@ -21,6 +21,18 @@
     onReady();
   }
 
+  // Map aID -> title from assignment_list.json (best-effort)
+  const assignmentTitles = new Map();
+  (async () => {
+    try {
+      const list = await (await fetch("./data/assignment_list.json")).json();
+      const items = Array.isArray(list) ? list : list.assignments || list;
+      items.forEach((it) => assignmentTitles.set(Number(it.aID), it.title));
+    } catch {
+      /* ignore */
+    }
+  })();
+
   //
   // Do async config after handlers are registered
   //
@@ -60,7 +72,9 @@
     contentEl.style.display = "none";
 
     try {
-      const response = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+      const response = await authFetch(`${API_BASE}/api/bookmarks`, {
+        cache: "no-store",
+      });
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -147,7 +161,9 @@
     for (const id of ids) {
       if (!assignmentData.has(id)) {
         try {
-          const resp = await fetch(`./data/question_data/${id}/assignment.json`);
+          const resp = await fetch(
+            `./data/question_data/${id}/assignment.json`
+          );
           if (resp.ok) {
             const data = await resp.json();
             processPassageQuestions(data.questions);
@@ -203,7 +219,9 @@
               style="cursor:pointer;">
               <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-2">
-                  <small class="text-muted">Assignment ${b.assignmentId} • Q${b.questionIndex + 1}</small>
+                  <small class="text-muted">Assignment ${b.assignmentId} • Q${
+          b.questionIndex + 1
+        }</small>
                   <button class="btn btn-sm btn-outline-danger remove-bookmark"
                     data-assignment-id="${b.assignmentId}"
                     data-question-index="${b.questionIndex}"
@@ -288,7 +306,9 @@
       // Load question state for notes
       let questionState = null;
       try {
-        const stateResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`);
+        const stateResponse = await authFetch(
+          `${API_BASE}/api/state/${assignmentId}`
+        );
         if (stateResponse.ok) {
           const states = await stateResponse.json();
           if (Array.isArray(states) && states[qIdx]) {
@@ -308,7 +328,10 @@
 
       const modal = new bootstrap.Modal(modalEl);
 
-      titleEl.textContent = `Assignment ${assignmentId} • Question ${qIdx + 1}`;
+      const niceTitle =
+        assignmentTitles.get(Number(assignmentId)) ||
+        `Assignment ${assignmentId}`;
+      titleEl.textContent = `${niceTitle} • Question ${qIdx + 1}`;
 
       // Store for "Open in Assignment"
       openBtn.dataset.assignmentId = assignmentId;
@@ -346,7 +369,13 @@
     }
   }
 
-  function renderQuestionForView(question, assignment, questionState, assignmentId, questionIndex) {
+  function renderQuestionForView(
+    question,
+    assignment,
+    questionState,
+    assignmentId,
+    questionIndex
+  ) {
     const esc = (v) =>
       String(v ?? "")
         .replace(/&/g, "&amp;")
@@ -356,9 +385,9 @@
         .replace(/'/g, "&#39;");
 
     const imgSrc = (file) =>
-      `./data/question_data/${encodeURIComponent(String(assignmentId))}/${encodeURIComponent(
-        String(file)
-      )}`;
+      `./data/question_data/${encodeURIComponent(
+        String(assignmentId)
+      )}/${encodeURIComponent(String(file))}`;
 
     let html = "";
 
@@ -400,14 +429,18 @@
 
       for (let i = 0; i < options.length; i++) {
         const option = options[i];
-        const optionText = question.qOptions ? question.qOptions[i] : question[`q${option}`];
+        const optionText = question.qOptions
+          ? question.qOptions[i]
+          : question[`q${option}`];
         if (!optionText) continue;
 
         const isCorrect = correctAnswers.has(option);
         const correctClass = isCorrect ? "border-success border-2" : "";
         html += `
           <div class="btn btn-outline-secondary text-start w-100 mb-2 ${correctClass}" style="pointer-events: none; color: white !important;">
-            <span class="option-label">${option}.</span> <span class="option-text">${esc(optionText)}</span>
+            <span class="option-label">${option}.</span> <span class="option-text">${esc(
+          optionText
+        )}</span>
           </div>
         `;
       }
@@ -470,7 +503,9 @@
 
     if (assignmentId && questionIndex !== undefined) {
       window.open(
-        `./assignment.html?aID=${encodeURIComponent(assignmentId)}&q=${parseInt(questionIndex, 10) + 1}`,
+        `./assignment.html?aID=${encodeURIComponent(assignmentId)}&q=${
+          parseInt(questionIndex, 10) + 1
+        }`,
         "_blank"
       );
     }
@@ -519,7 +554,9 @@
   async function saveNotes(assignmentId, questionIndex, notes, statusElement) {
     try {
       // First, get the current state
-      const stateResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`);
+      const stateResponse = await authFetch(
+        `${API_BASE}/api/state/${assignmentId}`
+      );
       let states = [];
 
       if (stateResponse.ok) {
@@ -543,11 +580,14 @@
       states[questionIndex].notes = notes;
 
       // Save the updated state
-      const saveResponse = await authFetch(`${API_BASE}/api/state/${assignmentId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ state: states }),
-      });
+      const saveResponse = await authFetch(
+        `${API_BASE}/api/state/${assignmentId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ state: states }),
+        }
+      );
 
       if (saveResponse.ok) {
         statusElement.textContent = "Saved";

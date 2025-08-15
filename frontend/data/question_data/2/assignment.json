@@ -1,832 +1,812 @@
 {
-  "subject": "Physics",
-  "faculty": "PGR",
-  "chapter": "EMI",
-  "title": "Motional E.M.F. CPP-1",
-  "aID": 2,
   "questions": [
     {
-  "qType": "MMCQ",
-  "passageId": null,
-  "qText": "A square loop \\(ABCD\\) of edge \\(a\\) moves to the right with speed \\(v\\), parallel to \\(AB\\). A uniform magnetic field of magnitude \\(B\\) (into the page) exists only in the region between lines \\(PQ\\) and \\(RS\\). Positions I, II and III of the loop are shown. Which statements are correct?",
-  "image": "1.png",
-  "qOptions": [
-    "The induced emf has magnitude \\(Bav\\) in all three positions.",
-    "The induced emf is zero in position II.",
-    "The induced emf is anticlockwise in position I.",
-    "The induced emf is clockwise in position III."
-  ],
-  "qAnswer": ["B","C","D"]
-},
-{
-  "qType": "MMCQ",
-  "passageId": null,
-  "qText": "An aluminium ring \\(B\\) faces an electromagnet \\(A\\). The current \\(i\\) through \\(A\\) is varied. Choose all correct statements.",
-  "image": "2.png",
-  "qOptions": [
-    "If \\(i\\) increases, \\(A\\) will repel \\(B\\).",
-    "If \\(i\\) increases, \\(A\\) will attract \\(B\\).",
-    "If \\(i\\) decreases, \\(A\\) will attract \\(B\\).",
-    "If \\(i\\) decreases, \\(A\\) will repel \\(B\\)."
-  ],
-  "qAnswer": ["A","C"]
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Three identical coils are arranged coaxially as shown in the figure. \\(B\\) and \\(C\\) are fixed and a constant current passes in \\(C\\) in the anticlockwise direction. Assertion: If coil \\(A\\) carrying the same current as \\(C\\) is moved towards \\(B\\), current will be induced in \\(B\\) either in clockwise or anticlockwise sense. Reason: Current can't be induced in \\(B\\) by moving \\(A\\) alone, as \\(C\\) carries the same current which cancels the effect. (Standard Assertion–Reason format.)",
-  "image": "3.png",
-  "qOptions": [
-    "A and R are true, and R is the correct explanation of A.",
-    "A and R are true, but R is not the correct explanation of A.",
-    "A is true, R is false.",
-    "A is false, R is true."
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "The figure shows certain wire segments joined together to form a coplanar loop placed in a magnetic field (perpendicular to the plane of the loop) that increases with time. \\(I_1\\) and \\(I_2\\) are the currents in segments \\(ab\\) and \\(cd\\). Then",
-  "image": "4.png",
-  "qOptions": [
-    "\\(I_1>I_2\\)",
-    "\\(I_1<I_2\\)",
-    "\\(I_1\\) is in the direction \\(ba\\) and \\(I_2\\) is in the direction \\(cd\\).",
-    "\\(I_1\\) is in the direction \\(ab\\) and \\(I_2\\) is in the direction \\(d\\)."
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A conducting square loop of side \\(L\\) and resistance \\(R\\) moves in its plane with uniform velocity \\(v\\) perpendicular to one side. A magnetic induction \\(B\\), constant in time and space and pointing into the plane of the loop, exists everywhere. The induced current in the loop is",
-  "image": "5.png",
-  "qOptions": [
-    "\\(\\dfrac{BLv}{R}\\) clockwise",
-    "\\(\\dfrac{BLv}{R}\\) anticlockwise",
-    "\\(\\dfrac{2BLv}{R}\\) anticlockwise",
-    "zero"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A long straight conductor is placed along the axis of a circular coil of radius \\(R\\). If the current in the straight conductor starts decreasing with time, the current induced in the coil would be",
-  "image": "6.png",
-  "qOptions": [
-    "clockwise (\\(ACB\\))",
-    "anticlockwise (\\(ABC\\))",
-    "cannot be decided",
-    "no induced current"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "As shown in the figure, \\(P\\) and \\(Q\\) are coaxial conducting loops separated by some distance. When the switch \\(S\\) is closed, a clockwise current \\(I_P\\) flows in \\(P\\) (as seen by \\(E\\)) and an induced current \\(I_{Q1}\\) flows in \\(Q\\). After a long time the switch is opened and current \\(I_{Q2}\\) flows in \\(Q\\). The directions of \\(I_{Q1}\\) and \\(I_{Q2}\\) (as seen by \\(E\\)) are",
-  "image": "7.png",
-  "qOptions": [
-    "respectively clockwise and anti-clockwise",
-    "both clockwise",
-    "both anti-clockwise",
-    "respectively anti-clockwise and clockwise"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A magnet placed vertically falls freely over a cylindrical coil placed over a horizontal surface. The acceleration of the magnet is",
-  "image": "8.png",
-  "qOptions": [
-    "equal to \\(g\\)",
-    "greater than \\(g\\)",
-    "less than \\(g\\)",
-    "directed upwards"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "The diametrically opposite points (1 and 2) of a conducting ring are joined together. If the magnetic field \\(B\\) starts diminishing with time, indicate the direction of current in the wire 1–2.",
-  "image": "9.png",
-  "qOptions": [
-    "right to left",
-    "left to right",
-    "no current",
-    "none of these"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A cylindrical magnet is placed near a circular coil. The magnet is rotated about its own axis with angular speed \\(\\omega\\) as shown. The induced current in the coil is",
-  "image": "10.png",
-  "qOptions": [
-    "zero",
-    "in anticlockwise direction",
-    "in clockwise direction",
-    "directly proportional to \\(\\omega\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Two loops \\(X\\) and \\(Y\\) have their planes parallel. A current flows in loop \\(X\\). The two loops will repel each other if the current in loop \\(X\\) is",
-  "image": "11.png",
-  "qOptions": [
-    "increasing",
-    "decreasing",
-    "constant",
-    "none of these"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A rectangular coil \\(ABCD\\) is rotated anticlockwise with uniform angular velocity about the axis shown. The axis and the magnetic field \\(\\vec B\\) are horizontal. The induced emf in the coil would be maximum when",
-  "image": "12.png",
-  "qOptions": [
-    "the plane of the coil is vertical",
-    "the plane of the coil makes \\(45^{\\circ}\\) with \\(\\vec B\\)",
-    "the plane of the coil is parallel to \\(\\vec B\\)",
-    "the plane of the coil makes \\(30^{\\circ}\\) with \\(\\vec B\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A rectangular conducting frame lying in a normal magnetic field is connected to a condenser. It is moved out with velocity \\(v\\) as shown. Then",
-  "image": "13.png",
-  "qOptions": [
-    "Plate \\(A\\) will get positively charged",
-    "Neither plate \\(A\\) nor plate \\(B\\) is charged",
-    "Plate \\(B\\) will get positively charged",
-    "Both plates will get positively charged"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Magnetic flux \\(\\phi\\) (in weber) in a closed circuit of resistance \\(10\\,\\Omega\\) varies with time \\(t\\) (in s) as \\(\\phi(t)=6t^2-5t+1\\). The magnitude of induced current at \\(t=0.25\\,\\text{s}\\) is",
-  "image": null,
-  "qOptions": [
-    "0.2 A",
-    "0.6 A",
-    "0.8 A",
-    "1.2 A"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Find the expression for the induced emf in the coil (Options are made-up for formatting purposes).",
-  "image": "15.png",
-  "qOptions": [
-    "\\(\\dfrac{d\\Phi}{dt}\\)",
-    "\\(\\dfrac{Nd\\Phi}{dt}\\)",
-    "\\(\\dfrac{-d\\Phi}{dt}\\)",
-    "\\(\\dfrac{-Nd\\Phi}{dt}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "An equilateral triangular loop PQR of side \\(a\\) is at the edge of a uniform magnetic field \\(B\\) at \\(t = 0\\) as shown. It is pulled to the right with constant velocity \\(v\\) until edge PR leaves the field at \\(t = t_0\\). Which graph represents variation of induced current \\(i\\) with time \\(t\\)?",
-  "image": "16.png",
-  "qOptions": [
-    "Graph 1",
-    "Graph 2",
-    "Graph 3",
-    "Graph 4"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "Passage",
-  "passageId": "P1",
-  "qText": "A wire frame in the form of a quarter circle of radius \\(\\ell\\) and resistance \\(R\\) rotates about an axis through O and perpendicular to its plane with constant angular velocity \\(\\omega\\). Above line PQ, magnetic field \\(B\\) is out of the paper; below PQ it is into the paper. In region I, field is outward; in region II, field is inward. The angle of the sector is \\(\\pi/4\\).",
-  "image": "18.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P1",
-  "qText": "(i) The thermal energy dissipated in the wire frame when it moves from region I to region II is",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{16R}\\)",
-    "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{4R}\\)",
-    "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
-    "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P1",
-  "qText": "(ii) The total thermal energy dissipated in one cycle is",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{16R}\\)",
-    "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{4R}\\)",
-    "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
-    "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P1",
-  "qText": "(iii) The average power produced in the wire frame is",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{3B^2 \\omega^2 \\ell^4}{16R}\\)",
-    "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{16R}\\)",
-    "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{8R}\\)",
-    "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{8R}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "A plane spiral coil has \\(N=100\\) turns, inner radius \\(a = 0.10\\,m\\) and outer radius \\(b = 0.20\\,m\\). A perpendicular magnetic field increases at \\(\\alpha = 0.3\\,T/s\\). Find the potential difference between the ends.",
-  "image": null,
-  "qOptions": [],
-  "qAnswer": 2.2
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A wire bent as a parabola \\(y = kx^2\\) in uniform magnetic field \\(B\\) (\\(B\\) along \\(y\\)-axis) has a connector sliding from apex at constant acceleration \\(a\\). Find emf as function of \\(y_a\\).",
-  "image": "20.png",
-  "qOptions": [
-    "\\(\\varepsilon = B y_a \\sqrt{\\frac{4a}{k}}\\)",
-    "\\(\\varepsilon = B y_a \\sqrt{\\frac{12a}{k}}\\)",
-    "\\(\\varepsilon = B y_a \\sqrt{\\frac{2a}{k}}\\)",
-    "\\(\\varepsilon = B y_a \\sqrt{\\frac{8a}{k}}\\)"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A square wire frame with side \\(a\\) and a straight conductor carrying constant current \\(I\\) are located in the same plane, separated by \\(b\\). The frame is rotated by \\(180^\\circ\\) about an axis through \\(O\\). Find the total charge that flows through the frame. (Options are made-up distractors; one is correct.)",
-  "image": "21.png",
-  "qOptions": [
-    "\\(\\dfrac{\\mu_0 I a}{2\\pi R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)",
-    "\\(\\dfrac{\\mu_0 I a}{\\pi R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)",
-    "\\(\\dfrac{\\mu_0 I a}{2\\pi R} \\ln\\!\\left(\\dfrac{b-a}{b+a}\\right)\\)",
-    "\\(\\dfrac{\\mu_0 I a}{2 R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "Magnetic flux in coil of resistance \\(10\\,\\Omega\\) changes as shown. Find total charge in coulomb through coil.",
-  "image": "22.png",
-  "qOptions": [],
-  "qAnswer": 0.2
-},
-{
-  "qType": "Passage",
-  "passageId": "P2",
-  "qText": "A flat coil \\(C\\) of \\(n\\) turns, radius \\(A\\), resistance \\(R\\) in uniform magnetic field \\(B\\). Initially perpendicular to \\(B\\). Rotated about \\(x\\)-axis. The following questions refer to this setup.",
-  "image": "23.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "MMCQ",
-  "passageId": "P2",
-  "qText": "If coil is rotated by \\(\\theta\\), which of the following are correct?",
-  "image": null,
-  "qOptions": [
-    "\\(\\theta=90^\\circ, Q=\\frac{BAn}{R}\\)",
-    "\\(\\theta=180^\\circ, Q=\\frac{BAn}{R}\\)",
-    "\\(\\theta=180^\\circ, Q=0\\)",
-    "\\(\\theta=360^\\circ, Q=0\\)"
-  ],
-  "qAnswer": ["A","D"]
-},
-{
-  "qType": "MMCQ",
-  "passageId": "P2",
-  "qText": "If plane of coil initially parallel to \\(B\\) and all else same, pick correct cases:",
-  "image": null,
-  "qOptions": [
-    "\\(\\theta=90^\\circ, Q=\\frac{BAn}{R}\\)",
-    "\\(\\theta=180^\\circ, Q=\\frac{2BAn}{R}\\)",
-    "\\(\\theta=180^\\circ, Q=0\\)",
-    "\\(\\theta=360^\\circ, Q=0\\)"
-  ],
-  "qAnswer": ["A","C","D"]
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P2",
-  "qText": "If coil rotates about \\(x\\)-axis with constant \\(\\omega\\), emf induced is:",
-  "image": null,
-  "qOptions": [
-    "zero",
-    "changes non-linearly",
-    "has constant value \\(BAn\\omega\\)",
-    "has maximum value \\(BAn\\omega\\)"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A square frame of side \\(a\\) and long straight wire carrying current \\(I\\) are in same plane. Frame rotated \\(90^\\circ\\) about PQ. Find charge through frame if resistance \\(R\\).",
-  "image": "26.png",
-  "qOptions": [
-    "\\(\\frac{\\mu_0 I a \\ln \\sqrt{2}}{2 \\pi R}\\)",
-    "\\(\\frac{\\mu_0 I a \\ln \\sqrt{2}}{\\pi R}\\)",
-    "\\(\\frac{2 \\mu_0 I a \\ln \\sqrt{2}}{\\pi R}\\)",
-    "\\(\\frac{\\mu_0 I a \\ln (1/\\sqrt{2})}{\\pi R}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Circular coil placed between two long wires carrying current \\(I\\) in opposite directions. Plane of wires perpendicular to plane of circle. Flux through coil is:",
-  "image": "27.png",
-  "qOptions": [
-    "\\(\\frac{\\mu_0}{4\\pi} \\frac{2}{R^2}\\)",
-    "Zero",
-    "\\(\\frac{\\mu_0}{4\\pi} \\frac{2R}{1+R^2}\\)",
-    "None"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "Passage",
-  "passageId": "P3",
-  "qText": "The conductor ABCDE has slope in \\(y\\)-\\(z\\) plane. When moving at \\(v\\) in \\(B\\), emf induced between A and E is described below.",
-  "image": "28.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "MMCQ",
-  "passageId": "P3",
-  "qText": "When the conductor moves, which of the following statements are correct?",
-  "image": null,
-  "qOptions": [
-    "emf increases linearly",
-    "emf increases sharply",
-    "emf constant",
-    "loop experiences left force"
-  ],
-  "qAnswer": ["A","C","D"]
-},
-{
-  "qType": "MMCQ",
-  "passageId": "P3",
-  "qText": "In the above setup, correct emf for different motion directions:",
-  "image": "30.png",
-  "qOptions": [
-    "e=0 for v along y",
-    "e=2Bav for v along y",
-    "e=Bλv for v along z",
-    "e=2Bλv for v along x"
-  ],
-  "qAnswer": ["A","C","D"]
-},
-{
-  "qType": "MMCQ",
-  "passageId": null,
-  "qText": "A conductor AD moves right in uniform \\(B\\) into paper. Which statements are correct?",
-  "image": "31.png",
-  "qOptions": [
-    "electrons in AD move to D",
-    "B to A has potential",
-    "AD flows low to high",
-    "none correct"
-  ],
-  "qAnswer": ["B","C"]
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "Square metal loop side 0.1 m, resistance 10 Ω, moves at v in uniform \\(B=2\\) T, network of 3 Ω resistors. Find v for 1 mA current.",
-  "image": "32.png",
-  "qOptions": [],
-  "qAnswer": 6.5
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "Rectangular loop with sliding connector l=1.0 m in uniform B=2T, connector r=2Ω. Two resistors 6Ω and 3Ω connected. Find external force to keep v=2 m/s.",
-  "image": "33.png",
-  "qOptions": [],
-  "qAnswer": 2
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "Sliding wire length 0.25 m, negligible resistance, moves at 4 m/s in B=1.5 T. Rails shorted with 6Ω and 2Ω. Find current.",
-  "image": "34.png",
-  "qOptions": [],
-  "qAnswer": 1
-},
-{
-  "qType": "Passage",
-  "passageId": "P4",
-  "qText": "A metal rod of mass m and length l slides on frictionless rails ending in resistor R. Uniform B is perpendicular to plane of rails. Initial speed v₀, no external force. Find: (i) v(t), (ii) distance before stop, (iii) total energy dissipated.",
-  "image": "35.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P4",
-  "qText": "(i) Instantaneous velocity of the rod",
-  "image": null,
-  "qOptions": [
-    "\\(v_0 e^{-Ct}\\), where \\(C = \\frac{B^2 \\ell^2}{mR}\\)",
-    "\\(v_0 e^{-Ct}\\), where \\(C = \\frac{B^2 \\ell^2}{R}\\)",
-    "\\(v_0 e^{-t/C}\\), where \\(C = \\frac{B^2 \\ell^2}{mR}\\)",
-    "\\(v_0 e^{-t/C}\\), where \\(C = \\frac{B^2 \\ell}{mR}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P4",
-  "qText": "(ii) Distance travelled by the rod before stop",
-  "image": null,
-  "qOptions": [
-    "\\(\\frac{v_0 m R}{B^2 \\ell^2}\\)",
-    "\\(\\frac{v_0 m R}{B^2 \\ell}\\)",
-    "\\(\\frac{v_0 m R}{B^2 \\ell^3}\\)",
-    "\\(\\frac{v_0 m R}{2B^2 \\ell^2}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P4",
-  "qText": "(iii) Total energy dissipated in the resistor",
-  "image": null,
-  "qOptions": [
-    "\\(\\frac{1}{2} m v_0^2\\)",
-    "\\(m v_0^2\\)",
-    "\\(\\frac{1}{4} m v_0^2\\)",
-    "\\(\\frac{1}{2} m v_0\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "Passage",
-  "passageId": "P5",
-  "qText": "Two parallel vertical metallic rails AB and CD are separated by 1 m and are connected at the ends by resistances \\(R_1\\) and \\(R_2\\). A horizontal metallic bar \\(L\\) of mass \\(0.2\\,\\text{kg}\\) slides down the rails without friction in a uniform horizontal magnetic field \\(B=0.6\\,\\text{T}\\) (perpendicular to the plane). When terminal velocity is attained, the powers dissipated in \\(R_1\\) and \\(R_2\\) are \\(0.76\\,\\text{W}\\) and \\(1.2\\,\\text{W}\\), respectively. Find the terminal velocity of the bar and the values of \\(R_1\\) and \\(R_2\\).",
-  "image": "36.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "Numerical",
-  "passageId": "P5",
-  "qText": "(i) Terminal velocity of the bar \\(L\\) (in m\\,/\\,s).",
-  "image": null,
-  "qOptions": [],
-  "qAnswer": 0.98
-},
-{
-  "qType": "Numerical",
-  "passageId": "P5",
-  "qText": "(ii) Value of \\(R_1\\) (in \\(\\Omega\\)).",
-  "image": null,
-  "qOptions": [],
-  "qAnswer": 0.455
-},
-{
-  "qType": "Numerical",
-  "passageId": "P5",
-  "qText": "(iii) Value of \\(R_2\\) (in \\(\\Omega\\)).",
-  "image": null,
-  "qOptions": [],
-  "qAnswer": 0.288
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Two conducting rails separated by distance \\(\\ell\\) are joined at the top by a resistance \\(R\\). The rails are inclined at angle \\(\\theta\\) with the horizontal. A conducting wire MN of mass \\(m\\) and length \\(\\ell\\) slides on the rails with constant speed \\(v\\) in a uniform magnetic field \\(\\mathbf B\\) (horizontal and perpendicular to MN). Find the magnitude of \\(B\\). (Options are made-up distractors; one is correct.)",
-  "image": "37.png",
-  "qOptions": [
-    "\\(\\dfrac{mg\\,R}{\\ell v}\\)",
-    "\\(\\sqrt{\\dfrac{mg\\,R}{\\ell\\,v\\sin\\theta}}\\)",
-    "\\(\\sqrt{\\dfrac{mg\\,R}{\\ell^{2} v\\sin\\theta}}\\)",
-    "\\(\\dfrac{mg\\,R}{\\ell^{2} v\\sin\\theta}\\)"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "Passage",
-  "passageId": "P6",
-  "qText": "A pair of parallel horizontal conducting rails of negligible resistance are shorted at one end. Distance between rails is \\(L\\). A conducting massless rod of resistance \\(R\\) can slide without friction. A mass \\(m\\) is tied to the rod by a massless string over a pulley at the table edge. A uniform magnetic field \\(B\\) exists perpendicular to the table. The system is released from rest.",
-  "image": "38.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P6",
-  "qText": "(i) The acceleration of mass \\(m\\) in the downward direction is",
-  "image": null,
-  "qOptions": [
-    "\\(g\\)",
-    "\\(\\dfrac{B^{2}L^{2}v}{mR}\\)",
-    "\\!\\left(g-\\dfrac{B^{2}L^{2}v}{mR}\\right)",
-    "\\!\\left(g+\\dfrac{B^{2}L^{2}v}{mR}\\right)"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P6",
-  "qText": "(ii) The terminal velocity acquired by the rod is",
-  "image": null,
-  "qOptions": [
-    "\\(g\\)",
-    "\\(\\sqrt{gR}\\)",
-    "\\(\\dfrac{\\sqrt{mgR}}{BL}\\)",
-    "\\(\\dfrac{mgR}{B^{2}L^{2}}\\)"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P6",
-  "qText": "(iii) The acceleration of the mass \\(m\\) when the rod's speed is half the terminal value is",
-  "image": null,
-  "qOptions": [
-    "\\(g\\)",
-    "\\(\\dfrac{g}{2}\\)",
-    "\\(\\dfrac{g}{3}\\)",
-    "\\(\\dfrac{g}{4}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "The arrangement shown is placed in a uniform vertical magnetic field \\(B=3\\,\\text{T}\\). Initially both rods are at rest. The system is released at \\(t=0\\). Find the velocity \\(v(t)\\) of the rod of mass \\(m\\) (take \\(m=1\\,\\text{kg}\\)). (Options are made-up distractors; one is correct.)",
-  "image": "39.png",
-  "qOptions": [
-    "\\(v(t)=\\dfrac{g}{2}\\!\\left(t+\\dfrac{e^{Ct}-1}{C}\\right)\\)",
-    "\\(v(t)=g\\!\\left(t-\\dfrac{1-e^{-Ct}}{C}\\right)\\)",
-    "\\(v(t)=\\dfrac{g}{C}(1-e^{-Ct})\\)",
-    "\\(v(t)=\\dfrac{g}{2C}(1-e^{-Ct})\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "A rectangular wire frame (0.25 m \\(\\times\\) 2.0 m), mass 0.5 kg, falls from height 5 m above a region of uniform \\(B=1\\,\\text{T}\\). The frame resistance is \\(\\tfrac{1}{8}\\,\\Omega\\). Find the time taken from just entering the field to just leaving it.",
-  "image": "40.png",
-  "qOptions": [],
-  "qAnswer": 2.7
-},
-{
-  "qType": "Passage",
-  "passageId": "P7",
-  "qText": "Two long horizontal rails (20 cm apart, resistance 0.2 \\(\\Omega\\,\\text{m}^{-1}\\)) are joined by a \\(500\\,\\Omega\\) resistor at one end. A perfectly conducting rod MN of mass 0.2 kg can slide without friction on the rails in a uniform magnetic field \\(B=50\\,\\text{T}\\) (into the page). A variable force \\(F\\) is applied so that a constant current of 2 A flows through \\(R\\). Answer the following.",
-  "image": "41.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P7",
-  "qText": "(a) Magnetic force on the rod and the induced emf as a function of the distance \\(x\\) of the rod from \\(R\\). (Options are made-up distractors; one is correct.)",
-  "image": null,
-  "qOptions": [
-    "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=I\\,R\\)",
-    "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=B\\ell\\,v\\)",
-    "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=2(k+2\\lambda x)/(B\\ell)\\)",
-    "\\(F_M=B\\ell\\,v\\) and \\(\\varepsilon=I\\,\\ell B\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P7",
-  "qText": "(b) The velocity of the rod and applied force \\(F\\) as functions of \\(x\\) (10 cm from \\(R\\)). (Options are made-up distractors; one is correct.)",
-  "image": null,
-  "qOptions": [
-    "\\(v=\\dfrac{2(k+2\\lambda x)}{B\\ell},\\; F=I\\ell B\\)",
-    "\\(v=\\dfrac{2(k+2\\lambda x)}{B\\ell},\\; F=I\\ell B+\\dfrac{m(k+2\\lambda x)g}{B^{2}\\ell^{2}}\\)",
-    "\\(v=\\dfrac{B\\ell}{2(k+2\\lambda x)},\\; F=I\\ell B\\)",
-    "\\(v=\\dfrac{B\\ell}{2(k+2\\lambda x)},\\; F=I\\ell B-\\dfrac{m(k+2\\lambda x)g}{B^{2}\\ell^{2}}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P7",
-  "qText": "(c) What fraction of the work done by \\(F\\) is converted into heat? (Options are made-up distractors; one is correct.)",
-  "image": null,
-  "qOptions": [
-    "\\(1\\)",
-    "\\(\\dfrac{1}{2}\\)",
-    "\\(\\dfrac{R}{R+\\lambda x}\\)",
-    "\\(\\dfrac{\\lambda x}{R+\\lambda x}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "Passage",
-  "passageId": "P8",
-  "qText": "An infinite V-shaped wire has linear resistance \\(\\lambda\\). Another identical wire slides on it with velocity \\(v\\) (angles \\(30^{\\circ}\\)). A uniform \\(\\mathbf B\\) is perpendicular to the plane. Answer:",
-  "image": "42.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P8",
-  "qText": "(i) The current in the loop is",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{2Bv\\,t}{\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{2\\sqrt{3}Bv\\,t}{\\lambda}\\)",
-    "\\(\\dfrac{Bv\\,t}{3\\lambda}\\)",
-    "None of these"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P8",
-  "qText": "(ii) The force required per unit time to move with constant velocity",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^{2}v^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{B^{2}v^{2}}{\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{2B^{2}v^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{2B^{2}v^{2}}{\\sqrt{3}\\,\\lambda}\\)"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P8",
-  "qText": "(iii) Heat produced in the conductors till time \\(t\\) is",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^{2}v^{2}t^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{B^{2}v^{2}t^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
-    "\\(\\dfrac{2B^{2}v^{2}t^{2}}{9\\lambda}\\)",
-    "none of these"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A conducting rod AC of length \\(4\\ell\\) is rotated about a point O in a uniform \\(\\mathbf B\\) directed in the plane of the paper. Take \\(AO=\\ell,\\; OC=3\\ell\\). The correct relation of end potentials is",
-  "image": "43.png",
-  "qOptions": [
-    "VC − VO = \\(\\dfrac{B\\omega \\ell^{2}}{2}\\)",
-    "VO − VC = \\(\\dfrac{9}{2}B\\omega \\ell^{2}\\)",
-    "VC − VO = \\(\\dfrac{9}{2}B\\omega \\ell^{2}\\)",
-    "none of these"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Two semicircular rings of radius \\(R/2\\) are smoothly joined and fall with plane vertical in horizontal \\(\\mathbf B\\). At position MNQ the speed is \\(V\\). The potential difference developed across points M and Q is",
-  "image": "44.png",
-  "qOptions": [
-    "zero",
-    "2BV R and M is at higher potential",
-    "RBV and Q is at higher potential",
-    "2RBV and Q is at higher potential"
-  ],
-  "qAnswer": "D"
-},
-{
-  "qType": "Passage",
-  "passageId": "P9",
-  "qText": "A metallic rod of length \\(\\ell\\) and resistance \\(R\\) rotates freely about one end over a smooth circular metallic frame of radius \\(\\ell\\) in an inward uniform magnetic field \\(B\\). The circuit is completed by a sliding wire between center O and the point on the ring. Determine the external torque for constant angular speed \\(\\omega\\) and the power expended.",
-  "image": "45.png",
-  "qOptions": [],
-  "qAnswer": []
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P9",
-  "qText": "(i) Required torque \\(\\tau\\) (Options are made-up distractors; one is correct.)",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{4R}\\)",
-    "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{2R}\\)",
-    "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{4R}\\)",
-    "\\(\\dfrac{B \\omega \\ell^{2}}{4R}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": "P9",
-  "qText": "(ii) Power expenditure of the external agent",
-  "image": null,
-  "qOptions": [
-    "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{4R}\\)",
-    "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{4R}\\)",
-    "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{2}}{4R}\\)",
-    "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{2R}\\)"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A semicircular conducting rod of radius \\(r\\) is rotated about one of its free ends in a uniform magnetic field \\(B\\) at constant angular velocity \\(\\omega\\). The emf induced across its ends is",
-  "image": "46.png",
-  "qOptions": [
-    "zero",
-    "2B\\,\\omega r^{2}",
-    "\\(\\tfrac{1}{2}B\\,\\omega r^{2}\\)",
-    "B\\,\\omega r^{2}"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "A conducting rod AB (\\(\\ell=1\\,\\text{m}\\)) moves with velocity \\(v=4\\,\\text{m/s}\\) making \\(30^{\\circ}\\) with its length in a uniform field \\(B=2\\,\\text{T}\\) perpendicular to plane. Find \\(V_A - V_B\\).",
-  "image": "47.png",
-  "qOptions": [],
-  "qAnswer": 4
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A conducting rod of length \\(\\ell\\) attached to an insulating rod of length \\(L\\) is rotated with constant angular speed in a plane normal to a uniform magnetic field \\(B\\) as shown. The emf produced across the ends of the conducting rod is (options made-up; one is correct):",
-  "image": "48.png",
-  "qOptions": [
-    "\\(B\\,\\omega \\ell L\\)",
-    "\\(\\dfrac{1}{2} B\\,\\omega L^{2}\\)",
-    "\\(B\\,\\omega \\dfrac{L^{2}}{2}\\)",
-    "\\(\\dfrac{1}{2} B\\,\\omega \\ell^{2}\\)"
-  ],
-  "qAnswer": "B"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A conducting ring of radius \\(r\\) rolls without slipping with angular velocity \\(\\omega\\) in a uniform magnetic field \\(B\\) directed into the page. The induced emf across PQ is",
-  "image": "49.png",
-  "qOptions": [
-    "\\(\\dfrac{1}{2}B\\,\\omega r^{2}\\)",
-    "\\(B\\,\\omega r\\)",
-    "\\(B\\,\\omega r^{2}\\)",
-    "zero"
-  ],
-  "qAnswer": "C"
-},
-{
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "A ring of radius \\(r\\) and resistance \\(R\\) falls between two parallel rails with velocity \\(v\\). The upper end of rails is shorted. A uniform \\(\\mathbf B\\) is perpendicular to the plane. The direction and magnitude of current through rails is",
-  "image": "50.png",
-  "qOptions": [
-    "\\(\\dfrac{8Bvr}{R}\\) along BA",
-    "\\(\\dfrac{2Bvr}{R}\\) along BA",
-    "\\(\\dfrac{4Bvr}{R}\\) along AB",
-    "\\(\\dfrac{8Bvr}{R}\\) along AB"
-  ],
-  "qAnswer": "A"
-},
-{
-  "qType": "Numerical",
-  "passageId": null,
-  "qText": "A conducting rod of length 1 m is aligned along the unit vector \\(\\left(\\tfrac{3}{5}\\,\\hat\\imath+\\tfrac{4}{5}\\,\\hat k\\right)\\) and moves with velocity \\(\\vec v=2\\,\\hat\\imath\\,\\text{m/s}\\) in a uniform field \\(\\mathbf B=\\hat\\jmath-2\\hat k\\,\\text{T}\\). Find the magnitude of induced emf (in volts).",
-  "image": null,
-  "qOptions": [],
-  "qAnswer": 4
-}
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A square loop \\(ABCD\\) of edge \\(a\\) moves to the right with speed \\(v\\), parallel to \\(AB\\). A uniform magnetic field of magnitude \\(B\\) (into the page) exists only in the region between lines \\(PQ\\) and \\(RS\\). Positions I, II and III of the loop are shown. Which statements are correct?",
+      "image": "1.png",
+      "qOptions": [
+        "The induced emf has magnitude \\(Bav\\) in all three positions.",
+        "The induced emf is zero in position II.",
+        "The induced emf is anticlockwise in position I.",
+        "The induced emf is clockwise in position III."
+      ],
+      "qAnswer": ["B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "An aluminium ring \\(B\\) faces an electromagnet \\(A\\). The current \\(i\\) through \\(A\\) is varied. Choose all correct statements.",
+      "image": "2.png",
+      "qOptions": [
+        "If \\(i\\) increases, \\(A\\) will repel \\(B\\).",
+        "If \\(i\\) increases, \\(A\\) will attract \\(B\\).",
+        "If \\(i\\) decreases, \\(A\\) will attract \\(B\\).",
+        "If \\(i\\) decreases, \\(A\\) will repel \\(B\\)."
+      ],
+      "qAnswer": ["A", "C"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Three identical coils are arranged coaxially as shown in the figure. \\(B\\) and \\(C\\) are fixed and a constant current passes in \\(C\\) in the anticlockwise direction. Assertion: If coil \\(A\\) carrying the same current as \\(C\\) is moved towards \\(B\\), current will be induced in \\(B\\) either in clockwise or anticlockwise sense. Reason: Current can't be induced in \\(B\\) by moving \\(A\\) alone, as \\(C\\) carries the same current which cancels the effect. (Standard Assertion–Reason format.)",
+      "image": "3.png",
+      "qOptions": [
+        "A and R are true, and R is the correct explanation of A.",
+        "A and R are true, but R is not the correct explanation of A.",
+        "A is true, R is false.",
+        "A is false, R is true."
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The figure shows certain wire segments joined together to form a coplanar loop placed in a magnetic field (perpendicular to the plane of the loop) that increases with time. \\(I_1\\) and \\(I_2\\) are the currents in segments \\(ab\\) and \\(cd\\). Then",
+      "image": "4.png",
+      "qOptions": [
+        "\\(I_1>I_2\\)",
+        "\\(I_1<I_2\\)",
+        "\\(I_1\\) is in the direction \\(ba\\) and \\(I_2\\) is in the direction \\(cd\\).",
+        "\\(I_1\\) is in the direction \\(ab\\) and \\(I_2\\) is in the direction \\(d\\)."
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A conducting square loop of side \\(L\\) and resistance \\(R\\) moves in its plane with uniform velocity \\(v\\) perpendicular to one side. A magnetic induction \\(B\\), constant in time and space and pointing into the plane of the loop, exists everywhere. The induced current in the loop is",
+      "image": "5.png",
+      "qOptions": [
+        "\\(\\dfrac{BLv}{R}\\) clockwise",
+        "\\(\\dfrac{BLv}{R}\\) anticlockwise",
+        "\\(\\dfrac{2BLv}{R}\\) anticlockwise",
+        "zero"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A long straight conductor is placed along the axis of a circular coil of radius \\(R\\). If the current in the straight conductor starts decreasing with time, the current induced in the coil would be",
+      "image": "6.png",
+      "qOptions": [
+        "clockwise (\\(ACB\\))",
+        "anticlockwise (\\(ABC\\))",
+        "cannot be decided",
+        "no induced current"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "As shown in the figure, \\(P\\) and \\(Q\\) are coaxial conducting loops separated by some distance. When the switch \\(S\\) is closed, a clockwise current \\(I_P\\) flows in \\(P\\) (as seen by \\(E\\)) and an induced current \\(I_{Q1}\\) flows in \\(Q\\). After a long time the switch is opened and current \\(I_{Q2}\\) flows in \\(Q\\). The directions of \\(I_{Q1}\\) and \\(I_{Q2}\\) (as seen by \\(E\\)) are",
+      "image": "7.png",
+      "qOptions": [
+        "respectively clockwise and anti-clockwise",
+        "both clockwise",
+        "both anti-clockwise",
+        "respectively anti-clockwise and clockwise"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A magnet placed vertically falls freely over a cylindrical coil placed over a horizontal surface. The acceleration of the magnet is",
+      "image": "8.png",
+      "qOptions": [
+        "equal to \\(g\\)",
+        "greater than \\(g\\)",
+        "less than \\(g\\)",
+        "directed upwards"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The diametrically opposite points (1 and 2) of a conducting ring are joined together. If the magnetic field \\(B\\) starts diminishing with time, indicate the direction of current in the wire 1–2.",
+      "image": "9.png",
+      "qOptions": [
+        "right to left",
+        "left to right",
+        "no current",
+        "none of these"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A cylindrical magnet is placed near a circular coil. The magnet is rotated about its own axis with angular speed \\(\\omega\\) as shown. The induced current in the coil is",
+      "image": "10.png",
+      "qOptions": [
+        "zero",
+        "in anticlockwise direction",
+        "in clockwise direction",
+        "directly proportional to \\(\\omega\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two loops \\(X\\) and \\(Y\\) have their planes parallel. A current flows in loop \\(X\\). The two loops will repel each other if the current in loop \\(X\\) is",
+      "image": "11.png",
+      "qOptions": ["increasing", "decreasing", "constant", "none of these"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A rectangular coil \\(ABCD\\) is rotated anticlockwise with uniform angular velocity about the axis shown. The axis and the magnetic field \\(\\vec B\\) are horizontal. The induced emf in the coil would be maximum when",
+      "image": "12.png",
+      "qOptions": [
+        "the plane of the coil is vertical",
+        "the plane of the coil makes \\(45^{\\circ}\\) with \\(\\vec B\\)",
+        "the plane of the coil is parallel to \\(\\vec B\\)",
+        "the plane of the coil makes \\(30^{\\circ}\\) with \\(\\vec B\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A rectangular conducting frame lying in a normal magnetic field is connected to a condenser. It is moved out with velocity \\(v\\) as shown. Then",
+      "image": "13.png",
+      "qOptions": [
+        "Plate \\(A\\) will get positively charged",
+        "Neither plate \\(A\\) nor plate \\(B\\) is charged",
+        "Plate \\(B\\) will get positively charged",
+        "Both plates will get positively charged"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Magnetic flux \\(\\phi\\) (in weber) in a closed circuit of resistance \\(10\\,\\Omega\\) varies with time \\(t\\) (in s) as \\(\\phi(t)=6t^2-5t+1\\). The magnitude of induced current at \\(t=0.25\\,\\text{s}\\) is",
+      "image": null,
+      "qOptions": ["0.2 A", "0.6 A", "0.8 A", "1.2 A"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Find the expression for the induced emf in the coil (Options are made-up for formatting purposes).",
+      "image": "15.png",
+      "qOptions": [
+        "\\(\\dfrac{d\\Phi}{dt}\\)",
+        "\\(\\dfrac{Nd\\Phi}{dt}\\)",
+        "\\(\\dfrac{-d\\Phi}{dt}\\)",
+        "\\(\\dfrac{-Nd\\Phi}{dt}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An equilateral triangular loop PQR of side \\(a\\) is at the edge of a uniform magnetic field \\(B\\) at \\(t = 0\\) as shown. It is pulled to the right with constant velocity \\(v\\) until edge PR leaves the field at \\(t = t_0\\). Which graph represents variation of induced current \\(i\\) with time \\(t\\)?",
+      "image": "16.png",
+      "qOptions": ["Graph 1", "Graph 2", "Graph 3", "Graph 4"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "A wire frame in the form of a quarter circle of radius \\(\\ell\\) and resistance \\(R\\) rotates about an axis through O and perpendicular to its plane with constant angular velocity \\(\\omega\\). Above line PQ, magnetic field \\(B\\) is out of the paper; below PQ it is into the paper. In region I, field is outward; in region II, field is inward. The angle of the sector is \\(\\pi/4\\).",
+      "image": "18.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(i) The thermal energy dissipated in the wire frame when it moves from region I to region II is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{16R}\\)",
+        "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{4R}\\)",
+        "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
+        "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(ii) The total thermal energy dissipated in one cycle is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{16R}\\)",
+        "\\(\\dfrac{B^2 \\omega \\pi \\ell^4}{4R}\\)",
+        "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
+        "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(iii) The average power produced in the wire frame is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{3B^2 \\omega^2 \\ell^4}{16R}\\)",
+        "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{16R}\\)",
+        "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{8R}\\)",
+        "\\(\\dfrac{B^2 \\omega^2 \\ell^4}{8R}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A plane spiral coil has \\(N=100\\) turns, inner radius \\(a = 0.10\\,m\\) and outer radius \\(b = 0.20\\,m\\). A perpendicular magnetic field increases at \\(\\alpha = 0.3\\,T/s\\). Find the potential difference between the ends.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2.2
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A wire bent as a parabola \\(y = kx^2\\) in uniform magnetic field \\(B\\) (\\(B\\) along \\(y\\)-axis) has a connector sliding from apex at constant acceleration \\(a\\). Find emf as function of \\(y_a\\).",
+      "image": "20.png",
+      "qOptions": [
+        "\\(\\varepsilon = B y_a \\sqrt{\\frac{4a}{k}}\\)",
+        "\\(\\varepsilon = B y_a \\sqrt{\\frac{12a}{k}}\\)",
+        "\\(\\varepsilon = B y_a \\sqrt{\\frac{2a}{k}}\\)",
+        "\\(\\varepsilon = B y_a \\sqrt{\\frac{8a}{k}}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A square wire frame with side \\(a\\) and a straight conductor carrying constant current \\(I\\) are located in the same plane, separated by \\(b\\). The frame is rotated by \\(180^\\circ\\) about an axis through \\(O\\). Find the total charge that flows through the frame. (Options are made-up distractors; one is correct.)",
+      "image": "21.png",
+      "qOptions": [
+        "\\(\\dfrac{\\mu_0 I a}{2\\pi R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)",
+        "\\(\\dfrac{\\mu_0 I a}{\\pi R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)",
+        "\\(\\dfrac{\\mu_0 I a}{2\\pi R} \\ln\\!\\left(\\dfrac{b-a}{b+a}\\right)\\)",
+        "\\(\\dfrac{\\mu_0 I a}{2 R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Magnetic flux in coil of resistance \\(10\\,\\Omega\\) changes as shown. Find total charge in coulomb through coil.",
+      "image": "22.png",
+      "qOptions": [],
+      "qAnswer": 0.2
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "A flat coil \\(C\\) of \\(n\\) turns, radius \\(A\\), resistance \\(R\\) in uniform magnetic field \\(B\\). Initially perpendicular to \\(B\\). Rotated about \\(x\\)-axis. The following questions refer to this setup.",
+      "image": "23.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P2",
+      "qText": "If coil is rotated by \\(\\theta\\), which of the following are correct?",
+      "image": null,
+      "qOptions": [
+        "\\(\\theta=90^\\circ, Q=\\frac{BAn}{R}\\)",
+        "\\(\\theta=180^\\circ, Q=\\frac{BAn}{R}\\)",
+        "\\(\\theta=180^\\circ, Q=0\\)",
+        "\\(\\theta=360^\\circ, Q=0\\)"
+      ],
+      "qAnswer": ["A", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P2",
+      "qText": "If plane of coil initially parallel to \\(B\\) and all else same, pick correct cases:",
+      "image": null,
+      "qOptions": [
+        "\\(\\theta=90^\\circ, Q=\\frac{BAn}{R}\\)",
+        "\\(\\theta=180^\\circ, Q=\\frac{2BAn}{R}\\)",
+        "\\(\\theta=180^\\circ, Q=0\\)",
+        "\\(\\theta=360^\\circ, Q=0\\)"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "If coil rotates about \\(x\\)-axis with constant \\(\\omega\\), emf induced is:",
+      "image": null,
+      "qOptions": [
+        "zero",
+        "changes non-linearly",
+        "has constant value \\(BAn\\omega\\)",
+        "has maximum value \\(BAn\\omega\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A square frame of side \\(a\\) and long straight wire carrying current \\(I\\) are in same plane. Frame rotated \\(90^\\circ\\) about PQ. Find charge through frame if resistance \\(R\\).",
+      "image": "26.png",
+      "qOptions": [
+        "\\(\\frac{\\mu_0 I a \\ln \\sqrt{2}}{2 \\pi R}\\)",
+        "\\(\\frac{\\mu_0 I a \\ln \\sqrt{2}}{\\pi R}\\)",
+        "\\(\\frac{2 \\mu_0 I a \\ln \\sqrt{2}}{\\pi R}\\)",
+        "\\(\\frac{\\mu_0 I a \\ln (1/\\sqrt{2})}{\\pi R}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Circular coil placed between two long wires carrying current \\(I\\) in opposite directions. Plane of wires perpendicular to plane of circle. Flux through coil is:",
+      "image": "27.png",
+      "qOptions": [
+        "\\(\\frac{\\mu_0}{4\\pi} \\frac{2}{R^2}\\)",
+        "Zero",
+        "\\(\\frac{\\mu_0}{4\\pi} \\frac{2R}{1+R^2}\\)",
+        "None"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P3",
+      "qText": "The conductor ABCDE has slope in \\(y\\)-\\(z\\) plane. When moving at \\(v\\) in \\(B\\), emf induced between A and E is described below.",
+      "image": "28.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P3",
+      "qText": "When the conductor moves, which of the following statements are correct?",
+      "image": null,
+      "qOptions": [
+        "emf increases linearly",
+        "emf increases sharply",
+        "emf constant",
+        "loop experiences left force"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P3",
+      "qText": "In the above setup, correct emf for different motion directions:",
+      "image": "30.png",
+      "qOptions": [
+        "e=0 for v along y",
+        "e=2Bav for v along y",
+        "e=Bλv for v along z",
+        "e=2Bλv for v along x"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A conductor AD moves right in uniform \\(B\\) into paper. Which statements are correct?",
+      "image": "31.png",
+      "qOptions": [
+        "electrons in AD move to D",
+        "B to A has potential",
+        "AD flows low to high",
+        "none correct"
+      ],
+      "qAnswer": ["B", "C"]
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Square metal loop side 0.1 m, resistance 10 Ω, moves at v in uniform \\(B=2\\) T, network of 3 Ω resistors. Find v for 1 mA current.",
+      "image": "32.png",
+      "qOptions": [],
+      "qAnswer": 6.5
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Rectangular loop with sliding connector l=1.0 m in uniform B=2T, connector r=2Ω. Two resistors 6Ω and 3Ω connected. Find external force to keep v=2 m/s.",
+      "image": "33.png",
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Sliding wire length 0.25 m, negligible resistance, moves at 4 m/s in B=1.5 T. Rails shorted with 6Ω and 2Ω. Find current.",
+      "image": "34.png",
+      "qOptions": [],
+      "qAnswer": 1
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P4",
+      "qText": "A metal rod of mass m and length l slides on frictionless rails ending in resistor R. Uniform B is perpendicular to plane of rails. Initial speed v₀, no external force. Find: (i) v(t), (ii) distance before stop, (iii) total energy dissipated.",
+      "image": "35.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(i) Instantaneous velocity of the rod",
+      "image": null,
+      "qOptions": [
+        "\\(v_0 e^{-Ct}\\), where \\(C = \\frac{B^2 \\ell^2}{mR}\\)",
+        "\\(v_0 e^{-Ct}\\), where \\(C = \\frac{B^2 \\ell^2}{R}\\)",
+        "\\(v_0 e^{-t/C}\\), where \\(C = \\frac{B^2 \\ell^2}{mR}\\)",
+        "\\(v_0 e^{-t/C}\\), where \\(C = \\frac{B^2 \\ell}{mR}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(ii) Distance travelled by the rod before stop",
+      "image": null,
+      "qOptions": [
+        "\\(\\frac{v_0 m R}{B^2 \\ell^2}\\)",
+        "\\(\\frac{v_0 m R}{B^2 \\ell}\\)",
+        "\\(\\frac{v_0 m R}{B^2 \\ell^3}\\)",
+        "\\(\\frac{v_0 m R}{2B^2 \\ell^2}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(iii) Total energy dissipated in the resistor",
+      "image": null,
+      "qOptions": [
+        "\\(\\frac{1}{2} m v_0^2\\)",
+        "\\(m v_0^2\\)",
+        "\\(\\frac{1}{4} m v_0^2\\)",
+        "\\(\\frac{1}{2} m v_0\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P5",
+      "qText": "Two parallel vertical metallic rails AB and CD are separated by 1 m and are connected at the ends by resistances \\(R_1\\) and \\(R_2\\). A horizontal metallic bar \\(L\\) of mass \\(0.2\\,\\text{kg}\\) slides down the rails without friction in a uniform horizontal magnetic field \\(B=0.6\\,\\text{T}\\) (perpendicular to the plane). When terminal velocity is attained, the powers dissipated in \\(R_1\\) and \\(R_2\\) are \\(0.76\\,\\text{W}\\) and \\(1.2\\,\\text{W}\\), respectively. Find the terminal velocity of the bar and the values of \\(R_1\\) and \\(R_2\\).",
+      "image": "36.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(i) Terminal velocity of the bar \\(L\\) (in m\\,/\\,s).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.98
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(ii) Value of \\(R_1\\) (in \\(\\Omega\\)).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.455
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(iii) Value of \\(R_2\\) (in \\(\\Omega\\)).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.288
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two conducting rails separated by distance \\(\\ell\\) are joined at the top by a resistance \\(R\\). The rails are inclined at angle \\(\\theta\\) with the horizontal. A conducting wire MN of mass \\(m\\) and length \\(\\ell\\) slides on the rails with constant speed \\(v\\) in a uniform magnetic field \\(\\mathbf B\\) (horizontal and perpendicular to MN). Find the magnitude of \\(B\\). (Options are made-up distractors; one is correct.)",
+      "image": "37.png",
+      "qOptions": [
+        "\\(\\dfrac{mg\\,R}{\\ell v}\\)",
+        "\\(\\sqrt{\\dfrac{mg\\,R}{\\ell\\,v\\sin\\theta}}\\)",
+        "\\(\\sqrt{\\dfrac{mg\\,R}{\\ell^{2} v\\sin\\theta}}\\)",
+        "\\(\\dfrac{mg\\,R}{\\ell^{2} v\\sin\\theta}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P6",
+      "qText": "A pair of parallel horizontal conducting rails of negligible resistance are shorted at one end. Distance between rails is \\(L\\). A conducting massless rod of resistance \\(R\\) can slide without friction. A mass \\(m\\) is tied to the rod by a massless string over a pulley at the table edge. A uniform magnetic field \\(B\\) exists perpendicular to the table. The system is released from rest.",
+      "image": "38.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "(i) The acceleration of mass \\(m\\) in the downward direction is",
+      "image": null,
+      "qOptions": [
+        "\\(g\\)",
+        "\\(\\dfrac{B^{2}L^{2}v}{mR}\\)",
+        "\\!\\left(g-\\dfrac{B^{2}L^{2}v}{mR}\\right)",
+        "\\!\\left(g+\\dfrac{B^{2}L^{2}v}{mR}\\right)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "(ii) The terminal velocity acquired by the rod is",
+      "image": null,
+      "qOptions": [
+        "\\(g\\)",
+        "\\(\\sqrt{gR}\\)",
+        "\\(\\dfrac{\\sqrt{mgR}}{BL}\\)",
+        "\\(\\dfrac{mgR}{B^{2}L^{2}}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "(iii) The acceleration of the mass \\(m\\) when the rod's speed is half the terminal value is",
+      "image": null,
+      "qOptions": [
+        "\\(g\\)",
+        "\\(\\dfrac{g}{2}\\)",
+        "\\(\\dfrac{g}{3}\\)",
+        "\\(\\dfrac{g}{4}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The arrangement shown is placed in a uniform vertical magnetic field \\(B=3\\,\\text{T}\\). Initially both rods are at rest. The system is released at \\(t=0\\). Find the velocity \\(v(t)\\) of the rod of mass \\(m\\) (take \\(m=1\\,\\text{kg}\\)). (Options are made-up distractors; one is correct.)",
+      "image": "39.png",
+      "qOptions": [
+        "\\(v(t)=\\dfrac{g}{2}\\!\\left(t+\\dfrac{e^{Ct}-1}{C}\\right)\\)",
+        "\\(v(t)=g\\!\\left(t-\\dfrac{1-e^{-Ct}}{C}\\right)\\)",
+        "\\(v(t)=\\dfrac{g}{C}(1-e^{-Ct})\\)",
+        "\\(v(t)=\\dfrac{g}{2C}(1-e^{-Ct})\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A rectangular wire frame (0.25 m \\(\\times\\) 2.0 m), mass 0.5 kg, falls from height 5 m above a region of uniform \\(B=1\\,\\text{T}\\). The frame resistance is \\(\\tfrac{1}{8}\\,\\Omega\\). Find the time taken from just entering the field to just leaving it.",
+      "image": "40.png",
+      "qOptions": [],
+      "qAnswer": 2.7
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P7",
+      "qText": "Two long horizontal rails (20 cm apart, resistance 0.2 \\(\\Omega\\,\\text{m}^{-1}\\)) are joined by a \\(500\\,\\Omega\\) resistor at one end. A perfectly conducting rod MN of mass 0.2 kg can slide without friction on the rails in a uniform magnetic field \\(B=50\\,\\text{T}\\) (into the page). A variable force \\(F\\) is applied so that a constant current of 2 A flows through \\(R\\). Answer the following.",
+      "image": "41.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P7",
+      "qText": "(a) Magnetic force on the rod and the induced emf as a function of the distance \\(x\\) of the rod from \\(R\\). (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=I\\,R\\)",
+        "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=B\\ell\\,v\\)",
+        "\\(F_M=I\\,\\ell B\\) and \\(\\varepsilon=2(k+2\\lambda x)/(B\\ell)\\)",
+        "\\(F_M=B\\ell\\,v\\) and \\(\\varepsilon=I\\,\\ell B\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P7",
+      "qText": "(b) The velocity of the rod and applied force \\(F\\) as functions of \\(x\\) (10 cm from \\(R\\)). (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(v=\\dfrac{2(k+2\\lambda x)}{B\\ell},\\; F=I\\ell B\\)",
+        "\\(v=\\dfrac{2(k+2\\lambda x)}{B\\ell},\\; F=I\\ell B+\\dfrac{m(k+2\\lambda x)g}{B^{2}\\ell^{2}}\\)",
+        "\\(v=\\dfrac{B\\ell}{2(k+2\\lambda x)},\\; F=I\\ell B\\)",
+        "\\(v=\\dfrac{B\\ell}{2(k+2\\lambda x)},\\; F=I\\ell B-\\dfrac{m(k+2\\lambda x)g}{B^{2}\\ell^{2}}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P7",
+      "qText": "(c) What fraction of the work done by \\(F\\) is converted into heat? (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(1\\)",
+        "\\(\\dfrac{1}{2}\\)",
+        "\\(\\dfrac{R}{R+\\lambda x}\\)",
+        "\\(\\dfrac{\\lambda x}{R+\\lambda x}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P8",
+      "qText": "An infinite V-shaped wire has linear resistance \\(\\lambda\\). Another identical wire slides on it with velocity \\(v\\) (angles \\(30^{\\circ}\\)). A uniform \\(\\mathbf B\\) is perpendicular to the plane. Answer:",
+      "image": "42.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "(i) The current in the loop is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{2Bv\\,t}{\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{2\\sqrt{3}Bv\\,t}{\\lambda}\\)",
+        "\\(\\dfrac{Bv\\,t}{3\\lambda}\\)",
+        "None of these"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "(ii) The force required per unit time to move with constant velocity",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^{2}v^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{B^{2}v^{2}}{\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{2B^{2}v^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{2B^{2}v^{2}}{\\sqrt{3}\\,\\lambda}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "(iii) Heat produced in the conductors till time \\(t\\) is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^{2}v^{2}t^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{B^{2}v^{2}t^{2}}{3\\sqrt{3}\\,\\lambda}\\)",
+        "\\(\\dfrac{2B^{2}v^{2}t^{2}}{9\\lambda}\\)",
+        "none of these"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A conducting rod AC of length \\(4\\ell\\) is rotated about a point O in a uniform \\(\\mathbf B\\) directed in the plane of the paper. Take \\(AO=\\ell,\\; OC=3\\ell\\). The correct relation of end potentials is",
+      "image": "43.png",
+      "qOptions": [
+        "VC − VO = \\(\\dfrac{B\\omega \\ell^{2}}{2}\\)",
+        "VO − VC = \\(\\dfrac{9}{2}B\\omega \\ell^{2}\\)",
+        "VC − VO = \\(\\dfrac{9}{2}B\\omega \\ell^{2}\\)",
+        "none of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two semicircular rings of radius \\(R/2\\) are smoothly joined and fall with plane vertical in horizontal \\(\\mathbf B\\). At position MNQ the speed is \\(V\\). The potential difference developed across points M and Q is",
+      "image": "44.png",
+      "qOptions": [
+        "zero",
+        "2BV R and M is at higher potential",
+        "RBV and Q is at higher potential",
+        "2RBV and Q is at higher potential"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P9",
+      "qText": "A metallic rod of length \\(\\ell\\) and resistance \\(R\\) rotates freely about one end over a smooth circular metallic frame of radius \\(\\ell\\) in an inward uniform magnetic field \\(B\\). The circuit is completed by a sliding wire between center O and the point on the ring. Determine the external torque for constant angular speed \\(\\omega\\) and the power expended.",
+      "image": "45.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P9",
+      "qText": "(i) Required torque \\(\\tau\\) (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{4R}\\)",
+        "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{2R}\\)",
+        "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{4R}\\)",
+        "\\(\\dfrac{B \\omega \\ell^{2}}{4R}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P9",
+      "qText": "(ii) Power expenditure of the external agent",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{4R}\\)",
+        "\\(\\dfrac{B^{2}\\omega \\ell^{4}}{4R}\\)",
+        "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{2}}{4R}\\)",
+        "\\(\\dfrac{B^{2}\\omega^{2} \\ell^{4}}{2R}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A semicircular conducting rod of radius \\(r\\) is rotated about one of its free ends in a uniform magnetic field \\(B\\) at constant angular velocity \\(\\omega\\). The emf induced across its ends is",
+      "image": "46.png",
+      "qOptions": [
+        "zero",
+        "2B\\,\\omega r^{2}",
+        "\\(\\tfrac{1}{2}B\\,\\omega r^{2}\\)",
+        "B\\,\\omega r^{2}"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A conducting rod AB (\\(\\ell=1\\,\\text{m}\\)) moves with velocity \\(v=4\\,\\text{m/s}\\) making \\(30^{\\circ}\\) with its length in a uniform field \\(B=2\\,\\text{T}\\) perpendicular to plane. Find \\(V_A - V_B\\).",
+      "image": "47.png",
+      "qOptions": [],
+      "qAnswer": 4
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A conducting rod of length \\(\\ell\\) attached to an insulating rod of length \\(L\\) is rotated with constant angular speed in a plane normal to a uniform magnetic field \\(B\\) as shown. The emf produced across the ends of the conducting rod is (options made-up; one is correct):",
+      "image": "48.png",
+      "qOptions": [
+        "\\(B\\,\\omega \\ell L\\)",
+        "\\(\\dfrac{1}{2} B\\,\\omega L^{2}\\)",
+        "\\(B\\,\\omega \\dfrac{L^{2}}{2}\\)",
+        "\\(\\dfrac{1}{2} B\\,\\omega \\ell^{2}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A conducting ring of radius \\(r\\) rolls without slipping with angular velocity \\(\\omega\\) in a uniform magnetic field \\(B\\) directed into the page. The induced emf across PQ is",
+      "image": "49.png",
+      "qOptions": [
+        "\\(\\dfrac{1}{2}B\\,\\omega r^{2}\\)",
+        "\\(B\\,\\omega r\\)",
+        "\\(B\\,\\omega r^{2}\\)",
+        "zero"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ring of radius \\(r\\) and resistance \\(R\\) falls between two parallel rails with velocity \\(v\\). The upper end of rails is shorted. A uniform \\(\\mathbf B\\) is perpendicular to the plane. The direction and magnitude of current through rails is",
+      "image": "50.png",
+      "qOptions": [
+        "\\(\\dfrac{8Bvr}{R}\\) along BA",
+        "\\(\\dfrac{2Bvr}{R}\\) along BA",
+        "\\(\\dfrac{4Bvr}{R}\\) along AB",
+        "\\(\\dfrac{8Bvr}{R}\\) along AB"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A conducting rod of length 1 m is aligned along the unit vector \\(\\left(\\tfrac{3}{5}\\,\\hat\\imath+\\tfrac{4}{5}\\,\\hat k\\right)\\) and moves with velocity \\(\\vec v=2\\,\\hat\\imath\\,\\text{m/s}\\) in a uniform field \\(\\mathbf B=\\hat\\jmath-2\\hat k\\,\\text{T}\\). Find the magnitude of induced emf (in volts).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 4
+    }
   ]
 }

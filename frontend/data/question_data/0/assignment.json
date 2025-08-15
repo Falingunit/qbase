@@ -1,9 +1,4 @@
 {
-  "subject": "Physics",
-  "faculty": "PGR",
-  "chapter": "Magnetism",
-  "title": "Motion of Charged Particles in Magnetic Field",
-  "aID": 0,
   "questions": [
     {
       "qType": "SMCQ",
@@ -18,7 +13,12 @@
       "passageId": null,
       "qText": "In the figure a charged sphere of mass \\(m\\) and charge \\(q\\) starts sliding from rest on a vertical fixed circular track of radius \\(R\\) from the position shown. A uniform horizontal magnetic field of induction \\(B\\) exists. The maximum force exerted by the track on the sphere is",
       "image": "q2.png",
-      "qOptions": ["\\(mg\\)", "\\(3mg- Bq\\sqrt{2gR}\\)", "\\(3mg+ Bq\\sqrt{2gR}\\)", "\\(mg- Bq\\sqrt{2gR}\\)"],
+      "qOptions": [
+        "\\(mg\\)",
+        "\\(3mg- Bq\\sqrt{2gR}\\)",
+        "\\(3mg+ Bq\\sqrt{2gR}\\)",
+        "\\(mg- Bq\\sqrt{2gR}\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -26,7 +26,12 @@
       "passageId": null,
       "qText": "A particle of charge \\(q\\) and mass \\(m\\) starts moving from the origin under an electric field \\(\\vec E=E_0\\hat i\\) and a magnetic field \\(\\vec B=B_0\\hat i\\) with initial velocity \\(\\vec v=v_0\\hat j\\). The speed becomes \\(2v_0\\) after a time \\(t\\). The time \\(t\\) is",
       "image": null,
-      "qOptions": ["\\(\\dfrac{2mv_0}{qE_0}\\)", "\\(\\dfrac{2B_0q}{mv_0}\\)", "\\(\\dfrac{\\sqrt{3}B_0q}{mv_0}\\)", "\\(\\dfrac{\\sqrt{3}mv_0}{qE_0}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{2mv_0}{qE_0}\\)",
+        "\\(\\dfrac{2B_0q}{mv_0}\\)",
+        "\\(\\dfrac{\\sqrt{3}B_0q}{mv_0}\\)",
+        "\\(\\dfrac{\\sqrt{3}mv_0}{qE_0}\\)"
+      ],
       "qAnswer": "D"
     },
     {
@@ -34,7 +39,12 @@
       "passageId": null,
       "qText": "A particle of charge \\(q\\) and mass \\(m\\) starts moving from the origin under \\(\\vec E=E_0\\hat i\\) and \\(\\vec B=B_0\\hat k\\). Its velocity at \\((x,3,0)\\) is \\(4\\hat i+3\\hat j\\). The value of \\(x\\) is",
       "image": null,
-      "qOptions": ["\\(\\dfrac{36E_0B_0}{qm}\\)", "\\(\\dfrac{25m}{2qE_0}\\)", "\\(\\dfrac{10m}{qE_0}\\)", "\\(\\dfrac{25E_0B_0}{m}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{36E_0B_0}{qm}\\)",
+        "\\(\\dfrac{25m}{2qE_0}\\)",
+        "\\(\\dfrac{10m}{qE_0}\\)",
+        "\\(\\dfrac{25E_0B_0}{m}\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -42,7 +52,12 @@
       "passageId": null,
       "qText": "An electron is projected at an angle \\(\\theta\\) with a uniform magnetic field. It follows a helical path. If the pitch equals the radius of the helix, \\(\\theta\\) is",
       "image": null,
-      "qOptions": ["\\(\\tan^{-1}\\!\\pi\\)", "\\(\\tan^{-1}\\!2\\pi\\)", "\\(\\cot^{-1}\\!\\pi\\)", "\\(\\cot^{-1}\\!2\\pi\\)"],
+      "qOptions": [
+        "\\(\\tan^{-1}\\!\\pi\\)",
+        "\\(\\tan^{-1}\\!2\\pi\\)",
+        "\\(\\cot^{-1}\\!\\pi\\)",
+        "\\(\\cot^{-1}\\!2\\pi\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -50,7 +65,12 @@
       "passageId": null,
       "qText": "A particle of mass \\(m\\) and charge \\(q\\) moves with velocity \\(v\\) along \\(+x\\). It enters a region containing a uniform magnetic field \\(\\vec B\\) along \\(-z\\), extending from \\(x=a\\) to \\(x=b\\). The minimum \\(v\\) required so that the particle can just enter the region \\(x>b\\) is",
       "image": null,
-      "qOptions": ["\\(\\dfrac{qbB}{m}\\)", "\\(\\dfrac{q(b-a)B}{m}\\)", "\\(\\dfrac{qaB}{m}\\)", "\\(\\dfrac{q(b+a)B}{2m}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{qbB}{m}\\)",
+        "\\(\\dfrac{q(b-a)B}{m}\\)",
+        "\\(\\dfrac{qaB}{m}\\)",
+        "\\(\\dfrac{q(b+a)B}{2m}\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -66,7 +86,12 @@
       "passageId": null,
       "qText": "A positively charged particle moves in the \\(x\\!-\\!y\\) plane initially along \\(+x\\). Beyond point P its path is as shown and is non-circular. Which combination of fields beyond P is possible?",
       "image": "q8.png",
-      "qOptions": ["\\(\\vec E=0,\\; \\vec B=b\\hat i+c\\hat k\\)", "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat i+c\\hat k\\)", "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat i-c\\hat k\\)", "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat j-c\\hat k\\)"],
+      "qOptions": [
+        "\\(\\vec E=0,\\; \\vec B=b\\hat i+c\\hat k\\)",
+        "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat i+c\\hat k\\)",
+        "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat i-c\\hat k\\)",
+        "\\(\\vec E=a\\hat i,\\; \\vec B=b\\hat j-c\\hat k\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -74,7 +99,12 @@
       "passageId": null,
       "qText": "A non-conducting cylindrical shell of radius \\(R\\) is placed in a uniform magnetic field (axis parallel to \\(\\vec B\\)). A hole is drilled and a particle of charge \\(q\\) and mass \\(m\\) is projected with speed \\(v_0\\) perpendicular to \\(\\vec B\\) directed towards the axis. The particle collides elastically with the inner wall and rebounds. Choose the correct statements.",
       "image": "q9.png",
-      "qOptions": ["The minimum number of collisions after which it will emerge is two.", "The maximum speed for which it can come out is \\(v_0=(qBR/m)\\sqrt{3}\\).", "The minimum time in which it can come out is \\(\\dfrac{\\pi m}{qB}\\).", "If projected with speed \\(v_0/3\\) where \\(v_0=(qBR/m)\\sqrt{3}\\), it will come out after five collisions."],
+      "qOptions": [
+        "The minimum number of collisions after which it will emerge is two.",
+        "The maximum speed for which it can come out is \\(v_0=(qBR/m)\\sqrt{3}\\).",
+        "The minimum time in which it can come out is \\(\\dfrac{\\pi m}{qB}\\).",
+        "If projected with speed \\(v_0/3\\) where \\(v_0=(qBR/m)\\sqrt{3}\\), it will come out after five collisions."
+      ],
       "qAnswer": ["A", "C"]
     },
     {
@@ -82,7 +112,12 @@
       "passageId": null,
       "qText": "In a cylindrical annular region between \\(r=a\\) and \\(r=3a\\) a uniform magnetic field \\(\\vec B=B_0\\hat k\\) exists (axis is the \\(z\\)-axis). A charged particle is projected from point A perpendicular to \\(\\vec B\\) at an angle of \\(37^{\\circ}\\) with the radially inward direction, such that during its circular motion the minimum distance from the \\(z\\)-axis is \\(a\\). Which of the following are correct?",
       "image": "q10.png",
-      "qOptions": ["The particle must be negatively charged.", "The particle must be positively charged.", "One possible speed is \\(v_0=\\dfrac{10}{7}\\,\\dfrac{qB_0a}{m}\\).", "One possible speed is \\(v_0=\\dfrac{5qB_0a}{m}\\)."],
+      "qOptions": [
+        "The particle must be negatively charged.",
+        "The particle must be positively charged.",
+        "One possible speed is \\(v_0=\\dfrac{10}{7}\\,\\dfrac{qB_0a}{m}\\).",
+        "One possible speed is \\(v_0=\\dfrac{5qB_0a}{m}\\)."
+      ],
       "qAnswer": ["A", "C", "D"]
     },
     {
@@ -90,7 +125,12 @@
       "passageId": null,
       "qText": "Different charged particles are accelerated through the same potential difference and then enter a uniform magnetic field perpendicular to their velocities, moving in circular paths. Choose the correct statements.",
       "image": null,
-      "qOptions": ["All particles have the same kinetic energy.", "For the same mass-to-charge ratio, the radii of circular paths are the same.", "If the magnetic field is doubled, the radii become half.", "Singly-charged ionised isotopes will have different radii."],
+      "qOptions": [
+        "All particles have the same kinetic energy.",
+        "For the same mass-to-charge ratio, the radii of circular paths are the same.",
+        "If the magnetic field is doubled, the radii become half.",
+        "Singly-charged ionised isotopes will have different radii."
+      ],
       "qAnswer": ["B", "C", "D"]
     },
     {
@@ -98,7 +138,12 @@
       "passageId": null,
       "qText": "A ring of mass \\(m\\) and radius \\(R\\) rolls without slipping on a horizontal rough surface in a uniform magnetic field \\(B\\) (as shown). A point charge \\(q\\) of negligible mass is attached to the ring. (\\(\\theta\\) is measured clockwise from the positive \\(y\\)-axis.) Choose the correct statements.",
       "image": "q12.png",
-      "qOptions": ["The ring continues to move with constant velocity.", "The friction on the ring is \\(Bqv\\cos\\theta\\).", "The friction on the ring is \\(Bqv\\sin\\theta\\).", "The ring will lose contact with the ground if \\(v>\\dfrac{mg}{2qB}\\)."],
+      "qOptions": [
+        "The ring continues to move with constant velocity.",
+        "The friction on the ring is \\(Bqv\\cos\\theta\\).",
+        "The friction on the ring is \\(Bqv\\sin\\theta\\).",
+        "The ring will lose contact with the ground if \\(v>\\dfrac{mg}{2qB}\\)."
+      ],
       "qAnswer": ["A", "B", "C", "D"]
     },
     {
@@ -106,7 +151,12 @@
       "passageId": null,
       "qText": "A charged particle (charge-to-mass ratio \\(\\beta\\)) performs conical pendulum motion with string length \\(L\\), angle \\(\\theta\\) with the vertical and angular velocity \\(\\omega\\) in uniform gravity and a vertical downward uniform magnetic field \\(\\vec B\\). Choose the correct statements.",
       "image": "q13.png",
-      "qOptions": ["\\(B=\\dfrac{1}{\\beta}\\left[\\omega-\\dfrac{g}{\\omega L\\cos\\theta}\\right]\\).", "The angular momentum of the particle about the suspension point remains constant.", "If the direction of \\(\\vec B\\) is reversed keeping \\(\\omega\\) and \\(L\\) the same, \\(\\theta\\) remains unchanged.", "The rate of change of angular momentum about the suspension point is not a constant vector."],
+      "qOptions": [
+        "\\(B=\\dfrac{1}{\\beta}\\left[\\omega-\\dfrac{g}{\\omega L\\cos\\theta}\\right]\\).",
+        "The angular momentum of the particle about the suspension point remains constant.",
+        "If the direction of \\(\\vec B\\) is reversed keeping \\(\\omega\\) and \\(L\\) the same, \\(\\theta\\) remains unchanged.",
+        "The rate of change of angular momentum about the suspension point is not a constant vector."
+      ],
       "qAnswer": ["A", "D"]
     },
     {
@@ -114,7 +164,12 @@
       "passageId": null,
       "qText": "A particle of charge 1 C and mass 1 kg enters a region having uniform magnetic field of strength 2 T with speed 12 m/s as shown. Choose the correct statement(s).",
       "image": "q14.png",
-      "qOptions": ["The time for which the charge remains in the magnetic field is \\(\\dfrac{4\\pi}{3}\\) s.", "The velocity becomes parallel/antiparallel to the \\(x\\)-axis six times during its motion.", "The distance between the entry and exit points is 6 m.", "The deviation of the particle when it emerges is \\(\\dfrac{4\\pi}{3}\\) rad anticlockwise."],
+      "qOptions": [
+        "The time for which the charge remains in the magnetic field is \\(\\dfrac{4\\pi}{3}\\) s.",
+        "The velocity becomes parallel/antiparallel to the \\(x\\)-axis six times during its motion.",
+        "The distance between the entry and exit points is 6 m.",
+        "The deviation of the particle when it emerges is \\(\\dfrac{4\\pi}{3}\\) rad anticlockwise."
+      ],
       "qAnswer": ["A", "B", "D"]
     },
     {
@@ -130,7 +185,12 @@
       "passageId": "P1",
       "qText": "Pitch of the helical path described by the particle is",
       "image": null,
-      "qOptions": ["\\(\\dfrac{2\\pi m v_0}{qB_0}\\)", "\\(\\dfrac{\\pi m v_0}{qB_0}\\)", "\\(\\dfrac{5\\pi m v_0}{qB}\\)", "\\(\\dfrac{6\\pi m v_0}{qB}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{2\\pi m v_0}{qB_0}\\)",
+        "\\(\\dfrac{\\pi m v_0}{qB_0}\\)",
+        "\\(\\dfrac{5\\pi m v_0}{qB}\\)",
+        "\\(\\dfrac{6\\pi m v_0}{qB}\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -138,7 +198,12 @@
       "passageId": "P1",
       "qText": "The \\(z\\)-component of velocity becomes \\(\\dfrac{\\sqrt{3}}{2}v_0\\) at time \\(t=\\ ?\\)",
       "image": null,
-      "qOptions": ["\\(\\dfrac{2\\pi m}{B_0q}\\)", "\\(\\dfrac{\\pi m}{B_0q}\\)", "\\(\\dfrac{\\pi m}{2B_0q}\\)", "\\(\\dfrac{\\pi m}{4B_0q}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{2\\pi m}{B_0q}\\)",
+        "\\(\\dfrac{\\pi m}{B_0q}\\)",
+        "\\(\\dfrac{\\pi m}{2B_0q}\\)",
+        "\\(\\dfrac{\\pi m}{4B_0q}\\)"
+      ],
       "qAnswer": "C"
     },
     {
@@ -146,7 +211,12 @@
       "passageId": "P1",
       "qText": "Maximum \\(z\\)-coordinate of the particle is",
       "image": null,
-      "qOptions": ["\\(\\dfrac{\\sqrt{3}mv_0}{B_0q}\\)", "\\(\\dfrac{2\\sqrt{3}mv_0}{B_0q}\\)", "\\(\\dfrac{2mv_0}{B_0q}\\)", "\\(\\dfrac{mv_0}{B_0q}\\)"],
+      "qOptions": [
+        "\\(\\dfrac{\\sqrt{3}mv_0}{B_0q}\\)",
+        "\\(\\dfrac{2\\sqrt{3}mv_0}{B_0q}\\)",
+        "\\(\\dfrac{2mv_0}{B_0q}\\)",
+        "\\(\\dfrac{mv_0}{B_0q}\\)"
+      ],
       "qAnswer": "A"
     },
     {
@@ -154,7 +224,12 @@
       "passageId": null,
       "qText": "A charged particle moves in simultaneous \\(\\vec E\\) and \\(\\vec B\\) fields. If it moves undeflected, the electric field must be",
       "image": null,
-      "qOptions": ["\\(\\vec E=\\vec v\\times\\vec B\\)", "\\(\\vec E=-\\,\\vec v\\times\\vec B\\)", "\\(\\vec E=\\dfrac{\\vec B}{v}\\)", "\\(\\vec E=\\dfrac{\\vec v}{B}\\)"],
+      "qOptions": [
+        "\\(\\vec E=\\vec v\\times\\vec B\\)",
+        "\\(\\vec E=-\\,\\vec v\\times\\vec B\\)",
+        "\\(\\vec E=\\dfrac{\\vec B}{v}\\)",
+        "\\(\\vec E=\\dfrac{\\vec v}{B}\\)"
+      ],
       "qAnswer": "B"
     },
     {
@@ -162,7 +237,12 @@
       "passageId": null,
       "qText": "If \\(\\vec E\\) is along the \\(Y\\)-axis and the charged particle moves along the \\(X\\)-axis undeflected, the magnetic field must be",
       "image": null,
-      "qOptions": ["\\(\\dfrac{E}{v}\\) along \\(-Z\\)-axis", "\\(\\dfrac{E}{v}\\) along \\(+Z\\)-axis", "\\(\\dfrac{v}{E}\\) along \\(-Z\\)-axis", "\\(vE\\) along \\(+Z\\)-axis"],
+      "qOptions": [
+        "\\(\\dfrac{E}{v}\\) along \\(-Z\\)-axis",
+        "\\(\\dfrac{E}{v}\\) along \\(+Z\\)-axis",
+        "\\(\\dfrac{v}{E}\\) along \\(-Z\\)-axis",
+        "\\(vE\\) along \\(+Z\\)-axis"
+      ],
       "qAnswer": "B"
     },
     {
@@ -170,7 +250,12 @@
       "passageId": null,
       "qText": "A charged particle moving along the \\(x\\)-axis enters simultaneous fields with \\(\\vec E\\) along \\(y\\)-axis and \\(\\vec B\\) along \\(z\\)-axis. If \\(v>\\dfrac{E}{B}\\), the particle will",
       "image": null,
-      "qOptions": ["pass undeflected", "be deflected along \\(+y\\)", "be deflected along \\(-y\\)", "be deflected along \\(+z\\)"],
+      "qOptions": [
+        "pass undeflected",
+        "be deflected along \\(+y\\)",
+        "be deflected along \\(-y\\)",
+        "be deflected along \\(+z\\)"
+      ],
       "qAnswer": "C"
     },
     {

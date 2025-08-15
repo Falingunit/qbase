@@ -3,35 +3,42 @@
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "Magnetism",
-    "title": "Motion of Charged Particles in Magnetic Field",
+    "title": "Motion of Charged Particles in Magnetic Field #1",
     "aID": 0
   },
   {
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "EMI",
-    "title": "Motional E.M.F. (Advanced Level)",
+    "title": "Motional E.M.F. #5",
     "aID": 1
   },
   {
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "EMI",
-    "title": "Motional E.M.F. CPP-1",
+    "title": "Motional E.M.F. #1",
     "aID": 2
   },
   {
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "EMI",
-    "title": "Faradays Law CPP-2",
+    "title": "Faradays Law #2",
     "aID": 3
   },
   {
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "EMI",
-    "title": "Induced Electric Field CPP-4b",
+    "title": "Induced Electric Field #3",
     "aID": 4
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Nikiil",
+    "chapter": "Indefenite Integration",
+    "title": "Indefenite Integration #1",
+    "aID": 5
   }
 ]

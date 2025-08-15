@@ -1,127 +1,146 @@
 <!DOCTYPE html>
 
-<html lang="en"data-bs-theme="dark">
-    <head>
-        <meta charset="UTF-8">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-        <script src="config.js"></script>
-        <script defer src="./navbar.js"></script>
-        <script defer src="./index.js"></script>
-        <script defer>
-          // Inject score column after table loads
-          document.addEventListener('DOMContentLoaded', async () => {
-            try {
-              const thead = document.querySelector('#chaptersTable thead tr');
-              if (thead && !thead.querySelector('[data-score-col]')) {
-                const th = document.createElement('th');
-                th.setAttribute('data-score-col','1');
-                th.textContent = 'Score';
-                thead.appendChild(th);
-              }
-            } catch {}
-          });
-        </script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-        <link href="./index.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    </head>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+    <script src="config.js"></script>
+    <script defer src="./navbar.js"></script>
+    <script defer src="./index.js"></script>
+    <script defer>
+      // Inject score column after table loads
+      document.addEventListener("DOMContentLoaded", async () => {
+        try {
+          const thead = document.querySelector("#chaptersTable thead tr");
+          if (thead && !thead.querySelector("[data-score-col]")) {
+            const th = document.createElement("th");
+            th.setAttribute("data-score-col", "1");
+            th.textContent = "Score";
+            thead.appendChild(th);
+          }
+        } catch {}
+      });
+    </script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <link href="./index.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+  </head>
 
-    <body>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="./index.html">QBase</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <!-- NAVBAR -->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="./index.html">QBase</a>
-            <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            >
-            <span class="navbar-toggler-icon"></span>
-            </button>
-        
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="./index.html">Home</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./index.html"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
+            </li>
+            <!-- login button, shown when not logged-in -->
+            <li class="nav-item" id="nav-login-item">
+              <a class="nav-link" href="#" id="nav-login">Login</a>
+            </li>
+            <!-- user greeting, shown when logged-in -->
+            <li class="nav-item dropdown d-none" id="nav-user-item">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarUserDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span id="nav-username">User</span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                <li>
+                  <a class="dropdown-item" href="#" id="nav-logout">Logout</a>
                 </li>
-                <li class="nav-item">
-                <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
-                </li>
-                <!-- login button, shown when not logged-in -->
-                <li class="nav-item" id="nav-login-item">
-                <a class="nav-link" href="#" id="nav-login">Login</a>
-                </li>
-                <!-- user greeting, shown when logged-in -->
-                <li class="nav-item dropdown d-none" id="nav-user-item">
-                <a
-                    class="nav-link dropdown-toggle"
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item text-danger"
                     href="#"
-                    id="navbarUserDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                >
-                    <span id="nav-username">User</span>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
-                    <li><a class="dropdown-item" href="#" id="nav-logout">Logout</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#" id="nav-delete-account">Delete Account…</a></li>
-                </ul>
+                    id="nav-delete-account"
+                    >Delete Account…</a
+                  >
                 </li>
-            </ul>
-        
-            <form class="d-flex" role="search" onsubmit="return false;">
-                <input
-                class="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                id="navbar-search-input"
-                />
-                <button class="btn btn-outline-success" type="submit" id="navbar-search-btn">
-                Search
-                </button>
-            </form>
-            </div>
+              </ul>
+            </li>
+          </ul>
+
+          <form class="d-flex" role="search" onsubmit="return false;">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              id="navbar-search-input"
+            />
+            <button
+              class="btn btn-outline-success"
+              type="submit"
+              id="navbar-search-btn"
+            >
+              Search
+            </button>
+          </form>
         </div>
-        </nav>
+      </div>
+    </nav>
 
+    <!-- MAIN CONTENT -->
+    <div class="container">
+      <h1 class="text-center" style="padding-top: 3rem">QBase</h1>
 
-        <!-- MAIN CONTENT -->
-        <div class="container">
+      <p>This website contains a LOT of questions lol</p>
 
-            <h1 class="text-center" style="padding-top: 3rem;">QBase</h1>
+      <h4>Worksheets:</h4>
 
-            <p>This website contains a LOT of questions lol</p>
-
-            <h4>
-                Worksheets:
-            </h4>
-
-            <div class="table-responsive-sm">
-            <table class="table table-striped table-hover" id="chaptersTable">
-                <thead>
-                <tr>
-                    <th scope="col" width="10%">Subject</th>
-                    <th scope="col">Chapter</th>
-                    <th scope="col" width="16%">Faculty</th>
-                    <th scope="col" width="40%">Assignment</th>
-                    <th scope="col" data-score-col>Score</th>
-                    <th scope="col">Progress</th>
-                </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                </tbody>
-            </table>
-            </div>
-
-        </div>
-    </body>
-
+      <div class="table-responsive-sm">
+        <table class="table table-striped table-hover" id="chaptersTable">
+          <thead>
+            <tr>
+              <th scope="col" width="10%">Subject</th>
+              <th scope="col">Chapter</th>
+              <th scope="col" width="16%">Faculty</th>
+              <th scope="col" width="40%">Assignment</th>
+              <th scope="col" data-score-col>Score</th>
+              <th scope="col">Progress</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider"></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>

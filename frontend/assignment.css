@@ -1,8 +1,16 @@
 /* ============ Global ============ */
 :root {
-  --page-bg: radial-gradient(1200px 600px at 20% -10%, rgba(13,110,253,.12), transparent 60%),
-             radial-gradient(1000px 600px at 120% 10%, rgba(32,201,151,.10), transparent 60%),
-             #0e0f12;
+  --page-bg: radial-gradient(
+      1200px 600px at 20% -10%,
+      rgba(13, 110, 253, 0.12),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 600px at 120% 10%,
+      rgba(32, 201, 151, 0.1),
+      transparent 60%
+    ),
+    #0e0f12;
   background-repeat: no-repeat;
   --card-bg: #15171b;
   --card-border: #22262b;
@@ -11,7 +19,8 @@
 }
 
 /* Make the page itself transparent */
-html, body {
+html,
+body {
   min-height: 100%;
   background: transparent;
 }
@@ -29,16 +38,17 @@ html::before {
   z-index: -1;
   pointer-events: none;
   background: var(--page-bg);
-  background-repeat: no-repeat;     /* <- stops tiling */
-  background-color: #0e0f12;        /* fallback color outside gradients */
+  background-repeat: no-repeat; /* <- stops tiling */
+  background-color: #0e0f12; /* fallback color outside gradients */
 }
 
 body {
   min-height: 100vh;
   /* background: var(--page-bg);  (removed – gradient is on html::before) */
   color: #e8edf2;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
-               "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 /* Container sizing */
@@ -49,7 +59,7 @@ body {
 
 /* Topbar (blended glass) */
 .assignment-topbar {
-  top: 56px;                  /* height of your navbar */
+  top: 56px; /* height of your navbar */
   z-index: 1030;
 
   /* glass look */
@@ -59,7 +69,7 @@ body {
 /* optional: compact spacing and neat typography */
 .assignment-topbar h5 {
   margin: 0;
-  letter-spacing: .02em;
+  letter-spacing: 0.02em;
 }
 
 .assignment-topbar .btn {
@@ -67,18 +77,31 @@ body {
 }
 
 /* Layout */
-.main-wrapper { 
-  flex: 1; display: flex; overflow: hidden; gap: 1rem; padding: 1rem 0 2rem;
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  gap: 1rem;
+  padding: 1rem 0 2rem;
 }
-.left-col  { flex: 3; display: flex; flex-direction: column; gap: .75rem; }
-.right-col { flex: 1; border-left: 1px solid rgba(255,255,255,0.06); overflow-y: auto; }
+.left-col {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.right-col {
+  flex: 1;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  overflow-y: auto;
+}
 
 /* Navbar polish (works with Bootstrap dark) */
 .navbar.bg-body-tertiary {
-  background: rgba(17,19,23,0.7) !important;
+  background: rgba(17, 19, 23, 0.7) !important;
   backdrop-filter: saturate(120%) blur(8px);
   -webkit-backdrop-filter: saturate(120%) blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Head card */
@@ -86,23 +109,26 @@ body {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 .card-header {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
 
-.card .small.text-muted { color: var(--muted) !important; }
+.card .small.text-muted {
+  color: var(--muted) !important;
+}
 
 /* Timer + type pills */
-#timer, #qTypeInfo {
+#timer,
+#qTypeInfo {
   font-variant-numeric: tabular-nums;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: .35rem .6rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.6rem;
   border-radius: 999px;
 }
 
@@ -111,19 +137,19 @@ body {
   display: none; /* hidden by default */
   white-space: nowrap;
   overflow-x: auto;
-  padding: .5rem .25rem .25rem;
-  gap: .5rem;
+  padding: 0.5rem 0.25rem 0.25rem;
+  gap: 0.5rem;
   position: sticky;
-  top: .5rem;
+  top: 0.5rem;
   z-index: 2;
 }
 
 #mobile-qbar button {
   display: inline-block;
-  margin: 0 .4rem .4rem 0;
-  padding: .35rem .65rem;
+  margin: 0 0.4rem 0.4rem 0;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: #1a1d21;
   color: #e8edf2;
 }
@@ -134,74 +160,89 @@ body {
 
 /* Show on small, hide right-col on lg- */
 @media (max-width: 991.98px) {
-  #mobile-qbar { display: block; }
-  .right-col  { display: none; }
+  #mobile-qbar {
+    display: block;
+  }
+  .right-col {
+    display: none;
+  }
 }
 
 /* Question grid (desktop) */
 .right-col h6 {
   color: #b8c2cc;
-  letter-spacing: .04em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 #q_list {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: .5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
 }
 
 .q-btn {
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: #1b1e23;
   color: #dfe6ee;
-  transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+  transition: transform 0.06s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
-.q-btn:hover { transform: translateY(-1px); }
+.q-btn:hover {
+  transform: translateY(-1px);
+}
 .q-btn.selected {
-  box-shadow: 0 8px 20px rgba(13,202,240,.12);
-  border-color: rgba(13,202,240,.4);
+  box-shadow: 0 8px 20px rgba(13, 202, 240, 0.12);
+  border-color: rgba(13, 202, 240, 0.4);
   outline: 2px solid var(--ring) !important;
   outline-offset: 2px;
 }
 
 /* Options */
-#MCQOptionDiv { gap: .5rem; display: flex; flex-direction: column; }
+#MCQOptionDiv {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
 
 .mcq-option {
   cursor: pointer;
   background: #1a1d21;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #e8edf2;
   border-radius: 12px;
-  padding: .75rem 1rem;
-  transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+  padding: 0.75rem 1rem;
+  transition: transform 0.06s ease, background 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .mcq-option:hover {
   background: #20252b;
-  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
-.mcq-option:active { transform: translateY(0.5px); }
+.mcq-option:active {
+  transform: translateY(0.5px);
+}
 
 .mcq-option-selected {
   outline: 3px solid var(--ring) !important;
   outline-offset: 1px;
-  border-color: rgba(13,202,240,.45);
+  border-color: rgba(13, 202, 240, 0.45);
   background: linear-gradient(180deg, #202a31, #192026);
 }
 
 /* Numerical answer input */
 #numericalDiv input[type="number"] {
   background: #1a1d21;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #e8edf2;
   border-radius: 12px;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
 }
 #numericalDiv .text-body-emphasis {
-  margin-top: .5rem; color: #cbd5df;
+  margin-top: 0.5rem;
+  color: #cbd5df;
 }
 
 .controls .btn {
@@ -213,20 +254,20 @@ body {
 .question-image img {
   max-width: 100%;
   height: auto;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   display: block;
 }
 
 .passage-text {
   background: var(--card-bg);
   border-left: 4px solid var(--ring);
-  padding: .75rem 1rem;
-  border-radius: .5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
 }
 
 /* Utility */
 hr.divider {
-  border-color: rgba(255,255,255,0.08);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 /* Accessibility focus ring */
@@ -245,8 +286,8 @@ hr.divider {
 
 #q_list {
   display: grid !important;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: .6rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
 }
 
 .q-btn {
@@ -267,7 +308,7 @@ hr.divider {
 .controls {
   align-items: center;
   justify-content: space-between;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
 
 .controls #check-answer {
@@ -279,7 +320,7 @@ hr.divider {
 }
 
 /* keep the card content from stretching too wide for readability */
-.left-col .card { 
+.left-col .card {
   max-width: 760px;
 }
 
@@ -288,31 +329,32 @@ hr.divider {
 /* MCQ states */
 .mcq-option.correct {
   border-color: #2ea043 !important;
-  background: rgba(46,160,67,.12) !important;
+  background: rgba(46, 160, 67, 0.12) !important;
   color: #dff6e5 !important;
 }
 .mcq-option.wrong {
   border-color: #dc3545 !important;
-  background: rgba(220,53,69,.10) !important;
+  background: rgba(220, 53, 69, 0.1) !important;
   color: #ffdfe1 !important;
 }
-.mcq-option.missed {              /* correct option the user missed */
+.mcq-option.missed {
+  /* correct option the user missed */
   outline: 2px solid #2ea043 !important;
   outline-offset: 2px;
 }
 .mcq-option.disabled {
   pointer-events: none;
-  opacity: .85;
+  opacity: 0.85;
 }
 
 /* Numerical states */
 input.is-correct {
   border-color: #2ea043 !important;
-  box-shadow: 0 0 0 .2rem rgba(46,160,67,.25);
+  box-shadow: 0 0 0 0.2rem rgba(46, 160, 67, 0.25);
 }
 input.is-wrong {
   border-color: #dc3545 !important;
-  box-shadow: 0 0 0 .2rem rgba(220,53,69,.25);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 
 /* Question grid button states */
@@ -333,7 +375,7 @@ input.is-wrong {
 }
 
 .q-btn.unevaluated {
-  background: #233345 !important;   /* dark desaturated blue */
-  color: #b3dcff !important;        /* soft blue text */
+  background: #233345 !important; /* dark desaturated blue */
+  color: #b3dcff !important; /* soft blue text */
   border-color: #339af0 !important; /* accent blue border */
 }

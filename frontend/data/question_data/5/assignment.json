@@ -1,0 +1,155 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\(f(x)=\\min\\{\\,|x-1|,\\,|x-2|,\\,|x-3|\\,\\}\\), then the value of \\(I=\\int_{0}^{3} f(x)\\,dx\\) equals",
+      "image": null,
+      "qOptions": ["1", "2", "3", "4"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Let \\(f(x)=\\dfrac{4x^{2}-3x+1}{\\displaystyle \\int_{0}^{2\\pi x}\\!\\sin^{4} t\\,dt}\\). If \\(f'\\!\\left(\\tfrac{1}{2}\\right)=\\dfrac{p}{q\\pi}\\) with \\(p,q\\in\\mathbb{N}\\), then \\((p-q)\\) equals",
+      "image": null,
+      "qOptions": ["6", "5", "4", "3"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\(\\int e^{\\,1-\\cos x}\\,(1+x\\sin x)\\,dx=f(x)-e^{\\,1-g(x)}+c\\), then the number of solutions of the equation \\(|f(x)|=g(x)\\) equals \\((c\\text{ is arbitrary})\\).",
+      "image": null,
+      "qOptions": ["0", "1", "2", "3"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\(A=\\{a_1,a_2,\\ldots,a_n\\}\\) is the set of all natural factors of \\(1000\\) and \\[P=\\int_{-2}^{2}\\frac{x}{\\ln\\!\\big(a_1^{x}+a_2^{x}+\\cdots+a_n^{x}\\big)}\\,dx\\,,\\] then the value of \\(\\dfrac{2P}{n}\\) equals",
+      "image": null,
+      "qOptions": [
+        "\\ln 10",
+        "\\ln 2",
+        "\\dfrac{\\ln 2}{16}",
+        "\\dfrac{8}{\\ln 10}"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider a real-valued continuous function \\(f\\) such that \\[f(x)=\\sin x+\\int_{-\\pi/2}^{\\pi/2}\\big(\\sin x+t\\,f(t)\\big)\\,dt.\\] If the maximum value of the function equals \\(k(\\pi+1)\\) with \\(k\\in\\mathbb{N}\\), then the value of \\(k\\) is",
+      "image": null,
+      "qOptions": ["1", "2", "3", "4"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Let \\(\\int \\dfrac{x-\\sin x\\cos x}{x^{2}\\cos^{2} x}\\,dx=F(x)\\) with \\(F(1)=1\\). Then \\(\\displaystyle \\lim_{x\\to 0}F(x)\\) equals",
+      "image": null,
+      "qOptions": ["1", "1-\\tan 1", "2-\\tan 1", "\\tan 1"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Let a continuous function \\(f\\) satisfy\\[ (1+x^2)\\,f(x)\\,f\\!\\left(\\tfrac{2}{x}\\right)+x=x\\,f(x)+(1+x^2)\\,f\\!\\left(\\tfrac{2}{x}\\right)\\quad (x\\ne 0),\\]\\nand \\(f(0)\\ne 1\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\(\\displaystyle \\lim_{x\\to 0}\\big(\\tan^{-1}(f(x))+a\\big)^{1/x}=e^{p}\\), then \\(p\\) is equal to",
+      "image": null,
+      "qOptions": ["1", "2", "4", "8"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\(\\displaystyle \\int_{0}^{\\infty} \\frac{\\ln\\big(2f(x)\\big)}{4+x^{2}}\\,dx=-\\frac{\\pi\\,\\ln 2}{\\lambda}\\), then \\(\\lambda\\) is equal to",
+      "image": null,
+      "qOptions": ["1", "2", "4", "8"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\(g:[0,2]\\to\\big[0,\\tfrac{1}{2}\\big]\\) and \\(g(x)=f(x)\\), then \\(\\displaystyle \\int_{0}^{1/2} g^{-1}(x)\\,dx\\) is equal to",
+      "image": null,
+      "qOptions": ["1+\\ln 2", "2-\\ln 2", "1+2\\ln 2", "1-\\ln 2"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If \\(I_1=\\int_{0}^{\\pi}\\dfrac{\\cos x}{(x+2)^2}\\,dx\\), \\(I_2=\\int_{0}^{\\pi/2}\\dfrac{\\cos x\\,\\sin x}{x+1}\\,dx\\) and \\(\\lambda I_2=\\dfrac{2}{\\mu+\\pi}+k-\\gamma I_1\\), then which of the following are correct?",
+      "image": null,
+      "qOptions": [
+        "\\(\\lambda=4\\)",
+        "\\(\\mu=2\\)",
+        "\\(k=1\\)",
+        "\\(\\gamma=2\\)"
+      ],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If \\(f(x)=\\int_{0}^{x}\\big(f'(t)\\big)^{-1}\\,dt\\) and \\(\\displaystyle \\int_{0}^{1}\\big(f'(t)\\big)^{-1}\\,dt=\\sqrt{2}\\), then",
+      "image": null,
+      "qOptions": [
+        "\\(f(2)=2\\)",
+        "\\(f(8)=4\\)",
+        "\\(f(8)=9\\)",
+        "\\(f(128)=8\\)"
+      ],
+      "qAnswer": ["A", "B"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A function \\(f\\) satisfies \\[2+\\int_{2}^{x} f'(t)\\,dt=\\frac{x^{2}}{2}+\\int_{x}^{2} t^{2} f'(t)\\,dt.\\] Then the number of real solutions of the equation \\(x^{2}-2x+2(1-f(x))=0\\) is \\(n\\). Then \\(n\\) is a factor of",
+      "image": null,
+      "qOptions": ["4", "6", "3", "5"],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Let \\(f\\) be twice differentiable and satisfy\\[ f''(t)=\\int_{12t}^{t^{3}+6t^{2}} \\ln\\!\\left|\\frac{x+8}{(t+2)^{3}-x}\\right| dx\\quad \\forall t\\in\\mathbb{R},\\]\\nwith \\(f(1)=2f(2)=2\\). Find \\(\\displaystyle \\int_{-1}^{1} f(x)\\,dx\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\(A=\\int_{0}^{101} \\lfloor |x|\\rfloor\\,\\sin(\\pi x)\\,dx\\), then find the value of \\(\\dfrac{A\\pi}{2}\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 5050
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\(\\displaystyle \\int_{0}^{1/2} \\frac{\\pi\\,dx}{2\\,(\\cos^{-1}x)^{2}\\,\\sqrt{1-x^{2}}}=\\frac{p}{q}\\), where \\(p\\) and \\(q\\) are relatively prime, then find \\(p+q\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 3
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\(\\displaystyle \\int e^{x}\\!\\left(\\frac{1-x^{n}}{1-x}\\right)dx=e^{x}P(x)+C\\), where \\(n\\in\\mathbb{N}\\), \\(C\\) is a constant of integration and \\(P(0)=620\\), then find \\(n\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 7
+    }
+  ]
+}
