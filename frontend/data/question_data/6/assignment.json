@@ -1,0 +1,184 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\( f(x) = \\min\\{|x - 1|, |x - 2|, |x - 3|\\} \\), then the value of \\( \\int_0^3 f(x) \\, dx \\) equals",
+      "image": null,
+      "qOptions": ["1", "2", "3", "4"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Let \\( f(x) = \\frac{x}{x-1} \\) and \\( g(x) = (f \\circ f \\circ \\ldots \\circ f)(x) \\), then \\( \\left( \\int g(x) \\, dx \\right)^{1/3} = \\frac{1}{6} \\) occurs 2013 times",
+      "image": null,
+      "qOptions": [
+        "\\left( \\frac{1}{e^2} \\cdot \\frac{4}{5} \\right)",
+        "\\left( \\frac{1}{e^6} \\cdot \\frac{4}{5} \\right)",
+        "\\left( e^{-4/5} \\right)",
+        "\\left( \\frac{4}{5n} \\right)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Let \\( f(x) = \\frac{4x^2 - 3x + 1}{2x} \\). If \\( f\\left(\\frac{1}{2}\\right) = \\frac{p}{q\\pi} \\), \\( p, q \\in \\mathbb{N} \\), then \\( (p - q) \\) equals \\( \\int_0^1 \\sin^4 t \\, dt \\)",
+      "image": null,
+      "qOptions": ["6", "5", "4", "3"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\( \\int e^{-g(x)} (1 + \\sin x)dx = f(x) \\cdot e^{-g(x)} + c \\), then number of solutions of the equation \\( |f(x)| = g(x) \\) equals (\\( c \\) is arbitrary constant)",
+      "image": null,
+      "qOptions": ["0", "1", "2", "3"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\( A = \\{a_1, a_2, \\ldots, a_n\\} \\) be set of all possible natural factors of 1000 and \\( P = \\int_{-2}^3 \\frac{x}{n(a_1^x + a_2^x + \\ldots + a_n^x)}dx \\), then value of \\( \\frac{2P}{n} \\) equals",
+      "image": null,
+      "qOptions": [
+        "\\frac{\\ln 10}{n}",
+        "\\frac{\\ln 2}{n}",
+        "\\frac{\\ln 2}{16}",
+        "\\frac{8 \\ln 10}{n}"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider a real valued continuous function \\( f \\) such that \\( f(x) = \\sin x + \\int_{-\\pi/2}^{\\pi/2} (\\sin x + f(f(t)))dt \\). If maximum value of the function is equal to \\( k(\\pi + 1) \\, k \\in \\mathbb{N} \\), then the value of \\( k \\) is",
+      "image": null,
+      "qOptions": ["1", "2", "3", "4"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "\\( \\int \\frac{x - \\sin x \\cos x}{x^2 \\cos^2 x} dx = F(x) \\) such that \\( F(1) = 1 \\, then \\( \\lim_{x \\to 0} F(x) \\) equals",
+      "image": null,
+      "qOptions": ["1", "1 - \\tan 1", "2 - \\tan 1", "\\tan 1"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Let a continuous function \\( f \\) satisfies the relation \\n\\[ (1 + x^2)f(x) \\cdot f\\left(\\frac{2}{x}\\right) + x = xf(x) + (1 + x^2)f\\left(\\frac{2}{x}\\right) \\quad \\forall x \\in \\mathbb{R} - \\{0\\}; \\quad f(0) \\ne 1 \\]",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\( \\lim_{x \\to 0} \\tan^{-1}(f(x)) + a \\right)^4 = e^p \\, then \\( p \\) is equal to",
+      "image": null,
+      "qOptions": ["1", "2", "4", "8"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\( \\int_0^7 \\frac{\\ln(2f(x))}{4 + x^2} dx = \\frac{-\\pi \\ln 2}{\\lambda} \\, then \\( \\lambda \\) is equal to",
+      "image": null,
+      "qOptions": ["1", "2", "4", "8"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If \\( g: [0,2] \\to \\left[0, \\frac{1}{2}\\right] \\) and \\( g(x) = f(x) \\, then \\( \\int_0^{1/2} g^{-1}(x) dx \\) is equal to",
+      "image": null,
+      "qOptions": ["1 + \\ln 2", "2 - \\ln 2", "1 + 2\\ln 2", "1 - \\ln 2"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If \\( I_1 = \\int_0^{\\pi/2} \\frac{\\cos x}{(x+2)^2} dx \\) and \\( I_2 = \\int_0^{\\pi/2} \\frac{\\cos x \\cdot \\sin x}{(x+1)} dx \\) and \\lambda_2 = \\frac{2}{\\mu + \\pi + k - \\gamma} \\, then",
+      "image": null,
+      "qOptions": ["\\lambda = 4", "\\mu = 2", "k = 1", "\\gamma = 2"],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If \\( f(x) = \\int_0^x [f(t)]^{-1} dt \\) and \\( \\int_0^1 [f(t)]^{-1} dt = \\sqrt{2} \\, then",
+      "image": null,
+      "qOptions": ["f(2) = 2", "f(8) = 4", "f(8) = 9", "f(128) = 8"],
+      "qAnswer": ["A", "B"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If \\( f(x) = \\sqrt{1 - \\frac{1}{x}} \\) and \\( g(x) = \\sec^{-1}x \\, then identify which of the following statement(s) is(are) correct",
+      "image": null,
+      "qOptions": [
+        "Range of \\ g(f(x))\\ is \\left(0, \\frac{\\pi}{4}\\right)",
+        "Domain of \\ g(f(x))\\ is (-\\infty, 0) \\cup [1, x)",
+        "\\int_{-4}^{-1} \\cot(g(f(x))) dx = \\frac{14}{3}",
+        "\\lim_{x \\to -\\sqrt{2}} \\left(\\frac{\\cot(g(f(x)))}{\\sqrt{1 - x} + \\sqrt{2 - x}}\\right) = \\frac{1}{2}"
+      ],
+      "qAnswer": ["C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A function \\ f \\ satisfies \\ 2 + \\int_{x/2}^{x} f(t) dt = \\frac{x^2}{2} + \\int_{x}^{2} f^2(t) dt \\, then number of real solutions of the equation \\ x^2 - 2x + 2(1 - f(x)) = 0 \\ is n, then n is a factor of",
+      "image": null,
+      "qOptions": ["4", "6", "3", "5"],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "Matrix",
+      "passageId": null,
+      "qText": "Let \\int x^2 \\frac{d}{dx} \\left( \\frac{3x^2 + 1}{x^7 + 2x^5 + 2x^4 + x^3 + 2x^2 + 5x} \\right) dx = f(x) - \\tan^{-1}(g(x)) + c, \text{ where } c \text{ is constant of integration and } f(0) = 0, g(1) = \\frac{3}{2}, \text{ Also, } h(g(x)) = x \\ \forall x \\in \\mathbb{R} ",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": {
+        "A": ["P"],
+        "B": ["S"],
+        "C": ["T"],
+        "D": ["Q"]
+      }
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\ A = \\int_0^{101} \\lfloor x \\rfloor \\sin \\pi x \\ dx \\, then find the value of \\frac{A\\pi}{2} ",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 5050
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Let f be a twice differentiable function such that \\ f''(t) = \\int_{|2t|}^{1 + 6t^2} \\ln \\left( \\frac{x + 8}{(t + 2)^2 - x} \\right) dx \\ \forall t \\in \\mathbb{R} \\, and f(1) = 2f(2) = 2, then find the value of \\int_{-1}^1 f(x) dx ",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\int_0^{\\sqrt{2}} \\frac{\\pi \\ dx}{2 (\\cos^{-1} x)^2 \\sqrt{1 - x^2}} = \\frac{p}{q} \\, \text{ where p and q are relatively prime then find } (p + q)",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 3
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "If \\int e^x \\left( \\frac{1 - x^n}{1 - x} \\right) dx = e^x \\cdot P(x) + C \\ \text{ where } n \\in \\mathbb{N} \\text{ and C is constant of integration and } P(0) = 620 \\, then find the value of n.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 7
+    }
+  ]
+}

@@ -489,4 +489,43 @@
   // Hide gate on login event
   window.addEventListener("qbase:login", () => hideLoginGate());
   window.addEventListener("qbase:force-login", showLoginGate);
+
+  function handleNavbarSearchSubmit(e) {
+    e && e.preventDefault && e.preventDefault();
+    const input = document.getElementById("navbar-search-input");
+    const query = (input?.value || "").trim();
+
+    // Always redirect to index.html with ?q= parameter
+    const url = new URL("./index.html", window.location.href);
+    if (query) {
+      url.searchParams.set("q", query);
+    } else {
+      url.searchParams.delete("q");
+    }
+    window.location.href = url.toString();
+  }
+
+  // Prefill navbar search with current ?q= if present
+  (function initNavbarSearch() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get("q") || "";
+      const input = document.getElementById("navbar-search-input");
+      const btn = document.getElementById("navbar-search-btn");
+
+      if (input && q) {
+        input.value = q;
+      }
+
+      // Bind both button click and form submit/Enter
+      const form = input?.closest("form");
+      btn?.addEventListener("click", handleNavbarSearchSubmit);
+      form?.addEventListener("submit", handleNavbarSearchSubmit);
+      input?.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") handleNavbarSearchSubmit(ev);
+      });
+    } catch (err) {
+      console.error("Navbar search init failed:", err);
+    }
+  });
 })();

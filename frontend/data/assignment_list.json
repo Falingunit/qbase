@@ -37,8 +37,15 @@
   {
     "subject": "Mathematics",
     "faculty": "Nikiil",
-    "chapter": "Indefenite Integration",
-    "title": "Indefenite Integration #1",
+    "chapter": "Integration",
+    "title": "Integration #1",
     "aID": 5
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MJG",
+    "chapter": "Integration",
+    "title": "Integration #2",
+    "aID": 6
   }
 ]

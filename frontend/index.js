@@ -2,12 +2,21 @@
 (async () => {
   await loadConfig();
 
+  // Cache for search + scores
+  let allData = [];
+  let cachedScores = {};
+  let searchBound = false;
+  let lastSearch = "";
+
   window.addEventListener("qbase:login", async () => {
     const data = await (await fetch("./data/assignment_list.json")).json();
     const scores = await fetchScores();
+    cachedScores = scores;
+    allData = data;
     // clear and rebuild
     document.querySelector("#chaptersTable tbody").innerHTML = "";
     buildTable(data, scores);
+    setupSearchOnce();
   });
 
   // Now you can use API_BASE in your fetch calls
@@ -21,7 +30,10 @@
     .then((res) => res.json())
     .then(async (data) => {
       const scores = await fetchScores();
+      cachedScores = scores;
+      allData = data;
       buildTable(data, scores);
+      setupSearchOnce();
     });
 
   async function fetchScores() {
@@ -34,12 +46,21 @@
     }
   }
 
+  function highlightMatch(text) {
+    if (!lastSearch) return text;
+    const pattern = new RegExp(`(${escapeRegExp(lastSearch)})`, "gi");
+    return text.replace(pattern, "<mark>$1</mark>");
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
   function buildTable(data, scores) {
     const tbody = document.querySelector("#chaptersTable tbody");
+    tbody.innerHTML = "";
 
-    data.forEach((entry, i) => {
-      // top‐level row
-      const tr = document.createElement("tr");
+    data.forEach((entry) => {
       const s = scores?.[entry.aID]?.score;
       const m = scores?.[entry.aID]?.maxScore;
       const attempted = scores?.[entry.aID]?.attempted ?? 0;
@@ -52,11 +73,12 @@
           ? `<span class="badge bg-primary">${s} / ${m}</span>`
           : `<span class="badge bg-secondary">-</span>`;
 
+      const tr = document.createElement("tr");
       tr.innerHTML = `
-          <td data-open-assignment>${entry.subject}</td>
-          <td data-open-assignment>${entry.chapter}</td>
-          <td data-open-assignment>${entry.faculty}</td>
-          <td data-open-assignment>${entry.title}</td>
+          <td data-open-assignment>${highlightMatch(entry.subject)}</td>
+          <td data-open-assignment>${highlightMatch(entry.chapter)}</td>
+          <td data-open-assignment>${highlightMatch(entry.faculty)}</td>
+          <td data-open-assignment>${highlightMatch(entry.title)}</td>
           <td>${scoreBadge}</td>
           <td style="min-width:200px">
             <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
@@ -65,7 +87,6 @@
           </td>
         `;
 
-      // clicking any of the data-open-assignment cells opens the assignment
       tr.querySelectorAll("[data-open-assignment]").forEach((td) => {
         td.style.cursor = "pointer";
         td.addEventListener("click", () => {
@@ -75,5 +96,28 @@
 
       tbody.appendChild(tr);
     });
+  }
+
+  function setupSearchOnce() {
+    if (searchBound) return;
+    const input = document.getElementById("table-search-input");
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+      lastSearch = input.value.trim();
+      const qLower = lastSearch.toLowerCase();
+      const filtered = !qLower
+        ? allData
+        : allData.filter((e) => {
+            const fields = [e.subject, e.chapter, e.faculty, e.title]
+              .filter(Boolean)
+              .join(" ")
+              .toLowerCase();
+            return fields.includes(qLower);
+          });
+      buildTable(filtered, cachedScores);
+    });
+
+    searchBound = true;
   }
 })();

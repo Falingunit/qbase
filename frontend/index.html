@@ -3,6 +3,7 @@
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
@@ -117,15 +118,25 @@
         </div>
       </div>
     </nav>
-
     <!-- MAIN CONTENT -->
     <div class="container">
       <h1 class="text-center" style="padding-top: 3rem">QBase</h1>
-
       <p>This website contains a LOT of questions lol</p>
-
       <h4>Worksheets:</h4>
-
+      <div
+        class="input-group mb-3"
+        id="table-search-group"
+        style="max-width: 420px"
+      >
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search worksheets..."
+          id="table-search-input"
+          aria-label="Search worksheets"
+        />
+      </div>
       <div class="table-responsive-sm">
         <table class="table table-striped table-hover" id="chaptersTable">
           <thead>

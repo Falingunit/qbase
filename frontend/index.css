@@ -55,7 +55,6 @@ h4 {
   margin-top: 1.75rem;
   color: #cfd7df;
 }
-
 .table {
   --bs-table-bg: rgba(20, 22, 26, 0.65);
   --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
@@ -65,12 +64,10 @@ h4 {
   border-radius: 12px;
   overflow: hidden;
 }
-
 .table td,
 .table th {
   border-color: rgba(255, 255, 255, 0.06) !important;
 }
-
 .table a {
   color: #9ad5ff;
   text-decoration: none;
@@ -78,3 +75,34 @@ h4 {
 .table a:hover {
   text-decoration: underline;
 }
+#table-search-input {
+  background-color: rgba(20, 22, 26, 0.65);
+  color: #dfe6ee;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+#table-search-input::placeholder {
+  color: #9aa3ac;
+}
+#table-search-group .input-group-text {
+  background-color: rgba(20, 22, 26, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+
+/* === Consistent typography & spacing (index) === */
+html { font-size: 16px; }
+body { line-height: 1.55; }
+:root { --container-max: 1100px; }
+
+/* Readability on small devices */
+@media (max-width: 575.98px) {
+  body { font-size: 1rem; } /* ~16px */
+  .container { padding-left: 0.75rem; padding-right: 0.75rem; }
+  h1 { font-size: 1.75rem; }
+  h4 { font-size: 1.125rem; }
+  #table-search-group { max-width: 100% !important; }
+  #chaptersTable th, #chaptersTable td { white-space: nowrap; }
+}
+
+/* Better spacing for table cells */
+.table td, .table th { padding: 0.65rem 0.75rem; }
