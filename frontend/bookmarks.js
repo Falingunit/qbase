@@ -1,5 +1,14 @@
 "use strict";
 (async () => {
+  const katexOptions = {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "$", right: "$", display: false },
+      { left: "\\(", right: "\\)", display: false },
+      { left: "\\[", right: "\\]", display: true },
+    ],
+  };
+
   //
   // Attach UI handlers ASAP (works whether DOM is loading or already loaded)
   //
@@ -247,6 +256,10 @@
     }
 
     contentEl.innerHTML = html;
+
+    document.querySelectorAll(".card-text").forEach((card) => {
+      renderMathInElement(card, katexOptions);
+    });
 
     // Card click -> show modal with question
     document.querySelectorAll(".bookmark-card").forEach((card) => {
