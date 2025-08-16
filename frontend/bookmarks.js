@@ -185,6 +185,100 @@
     }
   }
 
+  // KaTeX-safe truncation: avoids cutting through math blocks
+  function truncateKaTeXSafe(input, limit = 100, katexDelimiters) {
+    const s = String(input ?? "");
+    if (!s) return "";
+
+    const delimiters = (
+      Array.isArray(katexDelimiters) && katexDelimiters.length
+        ? [...katexDelimiters]
+        : [
+            { left: "$$", right: "$$" },
+            { left: "$", right: "$" },
+            { left: "\\[", right: "\\]" },
+            { left: "\\(", right: "\\)" },
+          ]
+    ).sort((a, b) => b.left.length - a.left.length); // prefer "$$" over "$"
+
+    const isEscaped = (str, pos) => {
+      let n = 0,
+        i = pos - 1;
+      while (i >= 0 && str[i] === "\\") {
+        n++;
+        i--;
+      }
+      return n % 2 === 1;
+    };
+
+    let i = 0;
+    let out = "";
+    let truncated = false;
+
+    while (i < s.length && out.length < limit) {
+      // Check if a math block starts at i
+      let matched = null;
+      for (const d of delimiters) {
+        if (s.startsWith(d.left, i)) {
+          if (d.left[0] === "$" && isEscaped(s, i)) continue; // skip escaped $
+          matched = d;
+          break;
+        }
+      }
+
+      if (matched) {
+        // Find closing delimiter (unescaped for $)
+        const right = matched.right;
+        let searchFrom = i + matched.left.length;
+        let end = -1;
+
+        while (searchFrom <= s.length - right.length) {
+          const idx = s.indexOf(right, searchFrom);
+          if (idx === -1) break;
+          if (right[0] === "$" && isEscaped(s, idx)) {
+            searchFrom = idx + 1;
+            continue;
+          }
+          end = idx;
+          break;
+        }
+
+        if (end === -1) {
+          // Unmatched opener; treat as plain text
+          const remaining = Math.min(1, limit - out.length);
+          out += s.slice(i, i + remaining);
+          i += remaining;
+        } else {
+          const block = s.slice(i, end + right.length);
+          if (out.length + block.length <= limit) {
+            out += block;
+            i = end + right.length;
+          } else {
+            truncated = true;
+            break; // don't include partial block
+          }
+        }
+      } else {
+        // Append plain text up to next math start or limit
+        let next = s.length;
+        for (const d of delimiters) {
+          const idx = s.indexOf(d.left, i);
+          if (idx !== -1) {
+            if (d.left[0] === "$" && isEscaped(s, idx)) continue;
+            if (idx < next) next = idx;
+          }
+        }
+        const take = Math.min(next, i + (limit - out.length));
+        out += s.slice(i, take);
+        i = take;
+        if (out.length >= limit && i < s.length) truncated = true;
+      }
+    }
+
+    if (truncated || out.length < s.length) return out + "...";
+    return out;
+  }
+
   function renderBookmarks(bookmarksByTag) {
     const contentEl = document.getElementById("bookmarks-content");
     if (!contentEl) return;
@@ -195,68 +289,76 @@
       return a.localeCompare(b);
     });
 
+    const TRUNCATE_LIMIT = 100;
+
     let html = "";
     for (const tagName of sortedTags) {
       const bookmarks = bookmarksByTag[tagName];
       html += `
-        <div class="card mb-4">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">
-              <i class="bi bi-bookmark-fill text-primary"></i>
-              ${escapeHtml(tagName)}
-              <span class="badge bg-secondary ms-2">${bookmarks.length}</span>
-            </h5>
-          </div>
-          <div class="card-body">
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-      `;
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">
+            <i class="bi bi-bookmark-fill text-primary"></i>
+            ${escapeHtml(tagName)}
+            <span class="badge bg-secondary ms-2">${bookmarks.length}</span>
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    `;
       for (const b of bookmarks) {
         const assignment = assignmentData.get(b.assignmentId);
         if (!assignment) continue;
         const q = assignment.questions[b.questionIndex];
         if (!q) continue;
 
-        const truncated =
-          (q.qText || "Question text not available").slice(0, 100) +
-          (q.qText?.length > 100 ? "..." : "");
+        const text = q.qText || "Question text not available";
+        const truncated = truncateKaTeXSafe(
+          text,
+          TRUNCATE_LIMIT,
+          katexOptions?.delimiters
+        );
 
         html += `
-          <div class="col">
-            <div class="card h-100 bookmark-card"
-              data-assignment-id="${b.assignmentId}"
-              data-question-index="${b.questionIndex}"
-              style="cursor:pointer;">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                  <small class="text-muted">Assignment ${b.assignmentId} • Q${
+        <div class="col">
+          <div class="card h-100 bookmark-card"
+            data-assignment-id="${escapeHtml(String(b.assignmentId))}"
+            data-question-index="${escapeHtml(String(b.questionIndex))}"
+            style="cursor:pointer;">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <small class="text-muted">Assignment ${b.assignmentId} • Q${
           b.questionIndex + 1
         }</small>
-                  <button class="btn btn-sm btn-outline-danger remove-bookmark"
-                    data-assignment-id="${b.assignmentId}"
-                    data-question-index="${b.questionIndex}"
-                    data-tag-id="${b.tagId}">
-                    <i class="bi bi-x"></i>
-                  </button>
-                </div>
-                <p class="card-text">${escapeHtml(truncated)}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <span class="badge bg-info">${q.qType}</span>
-                  <small class="text-muted">${formatDate(b.created_at)}</small>
-                </div>
+                <button class="btn btn-sm btn-outline-danger remove-bookmark"
+                  data-assignment-id="${escapeHtml(String(b.assignmentId))}"
+                  data-question-index="${escapeHtml(String(b.questionIndex))}"
+                  data-tag-id="${escapeHtml(String(b.tagId))}">
+                  <i class="bi bi-x"></i>
+                </button>
               </div>
-            </div>
-          </div>
-        `;
-      }
-      html += `
+              <p class="card-text">${escapeHtml(truncated)}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="badge bg-info">${escapeHtml(
+                  String(q.qType)
+                )}</span>
+                <small class="text-muted">${formatDate(b.created_at)}</small>
+              </div>
             </div>
           </div>
         </div>
       `;
+      }
+      html += `
+          </div>
+        </div>
+      </div>
+    `;
     }
 
     contentEl.innerHTML = html;
 
+    // Render KaTeX after injecting HTML
     document.querySelectorAll(".card-text").forEach((card) => {
       renderMathInElement(card, katexOptions);
     });
