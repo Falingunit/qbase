@@ -2,7 +2,7 @@ name: Deploy Frontend to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - 'frontend/**'
   workflow_dispatch:  # allow manual runs from the Actions tab
