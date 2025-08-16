@@ -16,3 +16,7 @@ logs/
 # OS-specific junk
 .DS_Store
 Thumbs.db
+
+#Utils without specific files
+utils/PDF Screenshots/*
+!utils/PDF Screenshots/*.*

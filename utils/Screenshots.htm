@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SnipLab — Fast Page Selections → PNG Zip</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Cpath d='M16 18h20a4 4 0 0 1 4 4v4h4a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4v-4h-4a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4Z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --bg: #0b0d10;
+        --panel: #14171c;
+        --panel-2: #1b2027;
+        --ink: #e8eef6;
+        --muted: #a9b2bf;
+        --accent: #66d9ef;
+        --ok: #79e27d;
+        --warn: #ffcc66;
+        --danger: #ff6b6b;
+        --blue: #7aa2ff;
+        --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        --page-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #0b0d10 0, #0e1217 100%);
+        color: var(--ink);
+        font: 14px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Arial,
+          "Apple Color Emoji", "Segoe UI Emoji";
+      }
+      /* Toolbar */
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.75rem;
+        background: rgba(10, 12, 16, 0.75);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #222831;
+        flex-wrap: wrap;
+      }
+      .toolbar .group {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        background: var(--panel);
+        padding: 0.4rem 0.5rem;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      button,
+      .btn {
+        background: var(--panel-2);
+        color: var(--ink);
+        border: 1px solid #2a303a;
+        border-radius: 10px;
+        padding: 0.45rem 0.7rem;
+        cursor: pointer;
+        transition: 0.15s transform, 0.15s background, 0.15s border-color;
+        user-select: none;
+      }
+      button:hover {
+        background: #232a34;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button.primary {
+        background: #243040;
+        border-color: #2e3b4e;
+      }
+      button.primary:hover {
+        background: #2a3950;
+      }
+      .kbd {
+        background: #11161d;
+        border: 1px solid #2b3440;
+        border-bottom-color: #1b212b;
+        border-radius: 6px;
+        padding: 0.05rem 0.35rem;
+        font: 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--muted);
+      }
+      input[type="range"] {
+        accent-color: var(--accent);
+      }
+      .state {
+        padding: 0.3rem 0.55rem;
+        border-radius: 8px;
+        background: #11161d;
+        border: 1px solid #293241;
+        color: var(--muted);
+      }
+      .state b {
+        color: var(--ink);
+      }
+      /* Layout */
+      .wrap {
+        display: grid;
+        grid-template-columns: 1fr;
+        height: calc(100vh - 64px);
+      }
+      .viewer {
+        overflow: auto;
+        height: 100%;
+        padding: 1.25rem;
+        scroll-behavior: smooth;
+      }
+      .pages {
+        width: min(1200px, 96%);
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 22px;
+      }
+      .page {
+        position: relative;
+        background: #fff;
+        color: #000;
+        box-shadow: var(--page-shadow);
+        border-radius: 8px;
+        overflow: hidden;
+        transform-origin: top center;
+      }
+      .page .content {
+        display: block;
+        width: 100%;
+        height: auto;
+        user-select: none;
+      }
+      /* Overlays */
+      .overlay,
+      .crosshair-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      /* draw layer only renders the ghost; it does NOT capture events */
+      .draw-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        cursor: crosshair;
+      }
+      .crosshair-layer .v,
+      .crosshair-layer .h {
+        position: absolute;
+        background: rgba(66, 153, 225, 0.9);
+        pointer-events: none;
+        opacity: 0.8;
+        mix-blend-mode: multiply;
+      }
+      .crosshair-layer .v {
+        width: 1px;
+        top: 0;
+        bottom: 0;
+      }
+      .crosshair-layer .h {
+        height: 1px;
+        left: 0;
+        right: 0;
+      }
+      /* Selection boxes */
+      .boxes {
+        position: absolute;
+        inset: 0;
+      }
+      .selection {
+        position: absolute;
+        border: 2px solid var(--blue);
+        background: rgba(122, 162, 255, 0.12);
+        border-radius: 6px;
+        pointer-events: auto;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset;
+      }
+      .selection.selected {
+        outline: 2px dashed #7cf;
+        outline-offset: 2px;
+      }
+      .label {
+        position: absolute;
+        top: -26px;
+        left: 0;
+        transform: translateY(-2px);
+        background: #0d1320;
+        color: #e8f0ff;
+        border: 1px solid #2b3a55;
+        border-radius: 7px;
+        padding: 0.15rem 0.45rem;
+        font: 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+        white-space: nowrap;
+        box-shadow: var(--shadow);
+      }
+      .label[contenteditable="true"] {
+        outline: 2px solid var(--accent);
+      }
+      /* Draw ghost */
+      .ghost {
+        position: absolute;
+        border: 2px dashed var(--warn);
+        background: rgba(255, 204, 102, 0.12);
+        border-radius: 8px;
+      }
+      /* Tiny footer/help */
+      .help {
+        position: fixed;
+        right: 12px;
+        bottom: 12px;
+        z-index: 1000;
+        background: #0f141c;
+        border: 1px solid #273140;
+        max-width: 620px;
+        border-radius: 12px;
+        padding: 0.75rem 0.9rem;
+        box-shadow: var(--shadow);
+        display: none;
+      }
+      .help h3 {
+        margin: 0.1rem 0 0.35rem;
+        font-size: 14px;
+        color: var(--accent);
+      }
+      .help .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.35rem 0.75rem;
+      }
+      .help .grid div {
+        color: var(--muted);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        background: #17202b;
+        border: 1px solid #223042;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .thumbs {
+        display: flex;
+        gap: 0.4rem;
+        overflow: auto;
+        padding: 0.5rem;
+      }
+      .thumbs img {
+        height: 70px;
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        opacity: 0.85;
+        border: 1px solid #333;
+      }
+      .thumbs img.active {
+        outline: 2px solid var(--accent);
+        opacity: 1;
+      }
+      .sr {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* prevent the underlying image/canvas from native drag/select */
+      .page .content img,
+      .page .content canvas {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-drag: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar" role="toolbar" aria-label="SnipLab toolbar">
+      <div class="group">
+        <input
+          id="file"
+          type="file"
+          accept="image/*,application/pdf"
+          style="display: none"
+          multiple
+        />
+        <button id="openBtn" title="Open files (Ctrl/Cmd+O)">
+          <span>Open</span> <span class="kbd">Ctrl/Cmd+O</span>
+        </button>
+        <div class="pill">Pages: <span id="pageCount">0</span></div>
+      </div>
+
+      <div class="group">
+        <button id="prevBtn" title="Previous page (K / PgUp)">◀</button>
+        <button id="nextBtn" title="Next page (J / PgDn)">▶</button>
+        <div class="pill">Active page: <span id="activeIndex">–</span></div>
+      </div>
+
+      <div class="group">
+        <button id="zoomOut" title="Zoom out (-)">–</button>
+        <input id="zoom" type="range" min="10" max="400" value="100" />
+        <button id="zoomIn" title="Zoom in (+)">+</button>
+        <button id="zoomReset" title="Reset zoom (0)">100%</button>
+      </div>
+
+      <div class="group">
+        <button id="pToggle" class="primary" title="Toggle p-mode (P)">
+          p-mode: OFF
+        </button>
+        <div class="state">Next label: <b id="nextLabel">1</b></div>
+        <div class="pill">
+          Adjust: <span class="kbd">A</span> / <span class="kbd">D</span>
+        </div>
+      </div>
+
+      <div class="group">
+        <button
+          id="exportBtn"
+          class="primary"
+          title="Export selections to ZIP (E)"
+        >
+          Export ZIP
+        </button>
+        <button id="toggleCrosshair" title="Toggle crosshair (H)">
+          Crosshair
+        </button>
+        <button id="newBox" title="New selection at center (N)">New Box</button>
+        <button id="helpBtn" title="Show shortcuts (?)">?</button>
+      </div>
+
+      <div class="group">
+        <button id="undoBtn" title="Undo (Ctrl/Cmd+Z)">Undo</button>
+        <button id="redoBtn" title="Redo (Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y)">
+          Redo
+        </button>
+        <div class="pill">History: <span id="histState">0 / 0</span></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="viewer" id="viewer" tabindex="0">
+        <div class="thumbs" id="thumbs" aria-label="Page thumbnails"></div>
+        <div
+          class="pages"
+          id="pages"
+          aria-live="polite"
+          aria-busy="false"
+        ></div>
+      </div>
+    </div>
+
+    <div class="help" id="help">
+      <h3>Shortcuts</h3>
+      <div class="grid">
+        <div><span class="kbd">Ctrl/Cmd+O</span> Open files</div>
+        <div><span class="kbd">E</span> Export ZIP</div>
+        <div>
+          <span class="kbd">+</span>/<span class="kbd">-</span> Zoom in/out
+        </div>
+        <div><span class="kbd">0</span> Reset zoom</div>
+        <div>
+          <span class="kbd">J</span> / <span class="kbd">K</span> Next / Prev
+          page
+        </div>
+        <div>
+          <span class="kbd">PgDn</span> / <span class="kbd">PgUp</span> Next /
+          Prev page
+        </div>
+        <div><span class="kbd">P</span> Toggle p-mode</div>
+        <div>
+          <span class="kbd">A</span> / <span class="kbd">D</span> Decrement /
+          Increment next label
+        </div>
+        <div><span class="kbd">N</span> New box (center)</div>
+        <div><span class="kbd">H</span> Toggle crosshair</div>
+        <div><span class="kbd">R</span> Rename selected label</div>
+        <div><span class="kbd">Del</span> Delete selected box</div>
+        <div>
+          <span class="kbd">←↑→↓</span> Nudge (hold
+          <span class="kbd">Shift</span> ×10)
+        </div>
+        <div><span class="kbd">Ctrl/Cmd+Z</span> Undo</div>
+        <div>
+          <span class="kbd">Ctrl/Cmd+Shift+Z</span> /
+          <span class="kbd">Ctrl/Cmd+Y</span> Redo
+        </div>
+        <div><span class="kbd">Esc</span> Blur/Cancel editing</div>
+      </div>
+      <p class="muted" style="margin: 0.5rem 0 0; color: var(--muted)">
+        Tip: Click-drag on a page to draw a selection. Double-click a label to
+        edit. Selections are movable/resizable.
+      </p>
+    </div>
+
+    <span class="sr" id="live" aria-live="polite"></span>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <!-- pdf.js (3.x) -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+      if (window["pdfjsLib"]) {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
+      }
+    </script>
+
+    <script>
+      (() => {
+        // ---------- State ----------
+        const pagesEl = document.getElementById("pages");
+        const thumbsEl = document.getElementById("thumbs");
+        const viewerEl = document.getElementById("viewer");
+        const fileEl = document.getElementById("file");
+        const pageCountEl = document.getElementById("pageCount");
+        const activeIndexEl = document.getElementById("activeIndex");
+        const nextLabelEl = document.getElementById("nextLabel");
+        const histStateEl = document.getElementById("histState");
+        const liveEl = document.getElementById("live");
+
+        // Toolbar controls
+        const openBtn = document.getElementById("openBtn");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const zoomSlider = document.getElementById("zoom");
+        const zoomInBtn = document.getElementById("zoomIn");
+        const zoomOutBtn = document.getElementById("zoomOut");
+        const zoomResetBtn = document.getElementById("zoomReset");
+        const pToggleBtn = document.getElementById("pToggle");
+        const exportBtn = document.getElementById("exportBtn");
+        const helpBtn = document.getElementById("helpBtn");
+        const helpPanel = document.getElementById("help");
+        const toggleCrosshairBtn = document.getElementById("toggleCrosshair");
+        const newBoxBtn = document.getElementById("newBox");
+        const undoBtn = document.getElementById("undoBtn");
+        const redoBtn = document.getElementById("redoBtn");
+
+        const state = {
+          pages: [], // {type:'image'|'pdf', baseCSSWidth, baseCSSHeight, pixelW, pixelH, node:{...}}
+          zoom: 1,
+          activePage: 0,
+          crosshair: true,
+          // Labeling
+          pMode: false,
+          normalCounter: 1,
+          pIndex: 1,
+          pSuffixMap: {}, // { [pIndex]: count }
+          // Selection
+          currentSelection: null, // HTMLElement .selection
+          boxIdCounter: 1,
+        };
+
+        // History stacks
+        const history = {
+          undo: [],
+          redo: [],
+        };
+
+        function pushAction(action) {
+          history.undo.push(action);
+          history.redo.length = 0;
+          updateHistoryUI();
+        }
+        function updateHistoryUI() {
+          histStateEl.textContent = `${history.undo.length} / ${history.redo.length}`;
+          undoBtn.disabled = history.undo.length === 0;
+          redoBtn.disabled = history.redo.length === 0;
+        }
+        function announce(msg) {
+          liveEl.textContent = msg;
+        }
+
+        function updateToolbar() {
+          document.getElementById("pageCount").textContent = state.pages.length;
+          activeIndexEl.textContent = state.pages.length
+            ? state.activePage + 1
+            : "–";
+          pToggleBtn.textContent = `p-mode: ${state.pMode ? "ON" : "OFF"}`;
+          pToggleBtn.style.background = state.pMode ? "#2a3d2f" : "#243040";
+          pToggleBtn.style.borderColor = state.pMode ? "#355a41" : "#2e3b4e";
+          nextLabelEl.textContent = nextLabel();
+          zoomResetBtn.textContent = Math.round(state.zoom * 100) + "%";
+          updateHistoryUI();
+        }
+
+        function nextLabel() {
+          if (!state.pMode) return String(Math.max(1, state.normalCounter));
+          const n = Math.max(1, state.pIndex);
+          const count = state.pSuffixMap[n] || 0;
+          if (count === 0) return `p${n}`;
+          const suffixChar = String.fromCharCode(
+            "a".charCodeAt(0) + (count - 1)
+          );
+          return `p${n}${suffixChar}`;
+        }
+
+        function consumeLabel() {
+          if (!state.pMode) {
+            const label = String(Math.max(1, state.normalCounter));
+            state.normalCounter = Math.max(1, state.normalCounter + 1);
+            return label;
+          } else {
+            const n = Math.max(1, state.pIndex);
+            const count = state.pSuffixMap[n] || 0;
+            const label =
+              count === 0
+                ? `p${n}`
+                : `p${n}${String.fromCharCode(
+                    "a".charCodeAt(0) + (count - 1)
+                  )}`;
+            state.pSuffixMap[n] = count + 1;
+            return label;
+          }
+        }
+
+        // ---------- Loading ----------
+        openBtn.addEventListener("click", () => fileEl.click());
+        fileEl.addEventListener("change", handleFiles);
+
+        async function handleFiles(e) {
+          const files = [...(e.target.files || [])];
+          if (!files.length) return;
+
+          // Reset current doc
+          pagesEl.innerHTML = "";
+          thumbsEl.innerHTML = "";
+          state.pages = [];
+          state.activePage = 0;
+          history.undo.length = 0;
+          history.redo.length = 0;
+
+          files.sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, { numeric: true })
+          );
+
+          const pdfFile =
+            files.length === 1 && files[0].type === "application/pdf"
+              ? files[0]
+              : null;
+
+          if (pdfFile) {
+            await loadPDF(pdfFile);
+          } else {
+            for (const f of files) {
+              if (!f.type.startsWith("image/")) continue;
+              await loadImageFile(f);
+            }
+          }
+
+          updateToolbar();
+          if (state.pages.length) {
+            zoomToFitWidth();
+            scrollToPage(0, false);
+          }
+        }
+
+        function measuredCSSSize(maxWidth = 1040) {
+          const container = pagesEl.getBoundingClientRect();
+          const pad = 24;
+          const w = Math.min(
+            maxWidth,
+            Math.max(320, Math.floor(container.width - pad))
+          );
+          return w;
+        }
+
+        async function loadImageFile(file) {
+          const url = URL.createObjectURL(file);
+          const img = new Image();
+          img.decoding = "async";
+          img.draggable = false;
+          img.onload = () => {
+            const pixelW = img.naturalWidth;
+            const pixelH = img.naturalHeight;
+            const baseCSSWidth = measuredCSSSize();
+            const ratio = pixelH / pixelW;
+            const baseCSSHeight = Math.round(baseCSSWidth * ratio);
+
+            const page = createPageShell(baseCSSWidth, baseCSSHeight);
+            page.content.appendChild(img);
+            page.kind = "image";
+            page.canvasRef = null;
+            img.className = "content";
+
+            page.root.style.width = `${baseCSSWidth * state.zoom}px`;
+            page.root.style.height = `${baseCSSHeight * state.zoom}px`;
+            img.style.width = "100%";
+            img.style.height = "100%";
+
+            state.pages.push({
+              type: "image",
+              baseCSSWidth,
+              baseCSSHeight,
+              pixelW,
+              pixelH,
+              node: page,
+              imgEl: img,
+              canvasEl: null,
+            });
+            makeThumb(state.pages.length - 1, img, baseCSSWidth, baseCSSHeight);
+
+            URL.revokeObjectURL(url);
+            updateToolbar();
+          };
+          img.onerror = () => URL.revokeObjectURL(url);
+          img.src = url;
+        }
+
+        async function loadPDF(file) {
+          if (!window["pdfjsLib"]) {
+            alert("pdf.js failed to load.");
+            return;
+          }
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d", { willReadFrequently: true });
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            await page.render({ canvasContext: ctx, viewport }).promise;
+
+            const ratio = canvas.height / canvas.width;
+            const baseCSSWidth = measuredCSSSize();
+            const baseCSSHeight = Math.round(baseCSSWidth * ratio);
+
+            const shell = createPageShell(baseCSSWidth, baseCSSHeight);
+            shell.content.appendChild(canvas);
+            shell.kind = "pdf";
+            const pageRec = {
+              type: "pdf",
+              baseCSSWidth,
+              baseCSSHeight,
+              pixelW: canvas.width,
+              pixelH: canvas.height,
+              node: shell,
+              imgEl: null,
+              canvasEl: canvas,
+            };
+            canvas.className = "content";
+            shell.root.style.width = `${baseCSSWidth * state.zoom}px`;
+            shell.root.style.height = `${baseCSSHeight * state.zoom}px`;
+
+            state.pages.push(pageRec);
+            makeThumb(
+              state.pages.length - 1,
+              canvas,
+              baseCSSWidth,
+              baseCSSHeight
+            );
+            updateToolbar();
+          }
+        }
+
+        function makeThumb(index, sourceEl, baseW, baseH) {
+          const t = document.createElement("img");
+          t.alt = `Page ${index + 1}`;
+          t.title = `Go to page ${index + 1}`;
+          t.src = toDataURL(sourceEl);
+          if (index === 0) t.classList.add("active");
+          t.addEventListener("click", () => {
+            scrollToPage(index);
+          });
+          thumbsEl.appendChild(t);
+
+          function toDataURL(el) {
+            if (el instanceof HTMLCanvasElement)
+              return el.toDataURL("image/png");
+            const c = document.createElement("canvas");
+            const ratio = baseH / baseW;
+            c.width = 240;
+            c.height = Math.round(240 * ratio);
+            const ctx = c.getContext("2d");
+            ctx.drawImage(el, 0, 0, c.width, c.height);
+            return c.toDataURL("image/png");
+          }
+        }
+
+        function createPageShell(baseCSSWidth, baseCSSHeight) {
+          const page = document.createElement("div");
+          page.className = "page";
+          page.style.width = `${baseCSSWidth * state.zoom}px`;
+          page.style.height = `${baseCSSHeight * state.zoom}px`;
+
+          const content = document.createElement("div");
+          content.className = "content";
+          content.style.width = "100%";
+          content.style.height = "100%";
+          content.style.position = "relative";
+
+          const overlay = document.createElement("div");
+          overlay.className = "overlay";
+          const boxes = document.createElement("div");
+          boxes.className = "boxes";
+          const draw = document.createElement("div");
+          draw.className = "draw-layer";
+          const cross = document.createElement("div");
+          cross.className = "crosshair-layer";
+          const vline = document.createElement("div");
+          vline.className = "v";
+          const hline = document.createElement("div");
+          hline.className = "h";
+          cross.appendChild(vline);
+          cross.appendChild(hline);
+
+          page.appendChild(content);
+          page.appendChild(overlay);
+          page.appendChild(boxes);
+          page.appendChild(draw);
+          page.appendChild(cross);
+          pagesEl.appendChild(page);
+
+          // crosshair behavior
+          function onMove(ev) {
+            if (!state.crosshair) return;
+            const r = page.getBoundingClientRect();
+            const x = ev.clientX - r.left;
+            const y = ev.clientY - r.top;
+            vline.style.left = Math.max(0, Math.min(r.width, x)) + "px";
+            hline.style.top = Math.max(0, Math.min(r.height, y)) + "px";
+            cross.style.display = "block";
+          }
+          page.addEventListener("mousemove", onMove);
+          page.addEventListener("mouseenter", () => {
+            cross.style.display = state.crosshair ? "block" : "none";
+            setActiveFromNode(page);
+          });
+          page.addEventListener("mouseleave", () => {
+            cross.style.display = "none";
+          });
+
+          // ---------- drawing selections (on PAGE, not the draw-layer) ----------
+          let drawing = null; // {x0,y0, ghost}
+          page.addEventListener("mousedown", (e) => {
+            if (e.button !== 0) return; // left only
+            // do not start a draw if clicking an existing selection/label
+            if (e.target.closest(".selection") || e.target.closest(".label"))
+              return;
+
+            const bounds = page.getBoundingClientRect();
+            drawing = {
+              pageNode: page,
+              x0: e.clientX - bounds.left,
+              y0: e.clientY - bounds.top,
+              ghost: document.createElement("div"),
+            };
+            drawing.ghost.className = "ghost";
+            drawing.ghost.style.left = drawing.x0 + "px";
+            drawing.ghost.style.top = drawing.y0 + "px";
+            draw.appendChild(drawing.ghost);
+            // prevent text/image selection while dragging
+            document.body.style.userSelect = "none";
+            e.preventDefault();
+          });
+
+          window.addEventListener("mousemove", (e) => {
+            if (!drawing) return;
+            const bounds = drawing.pageNode.getBoundingClientRect();
+            const x = e.clientX - bounds.left,
+              y = e.clientY - bounds.top;
+            const left = Math.min(drawing.x0, x);
+            const top = Math.min(drawing.y0, y);
+            const w = Math.abs(x - drawing.x0);
+            const h = Math.abs(y - drawing.y0);
+            drawing.ghost.style.left = Math.max(0, left) + "px";
+            drawing.ghost.style.top = Math.max(0, top) + "px";
+            drawing.ghost.style.width = Math.min(bounds.width - left, w) + "px";
+            drawing.ghost.style.height =
+              Math.min(bounds.height - top, h) + "px";
+          });
+
+          window.addEventListener("mouseup", (e) => {
+            if (!drawing) return;
+            const g = drawing.ghost;
+            const pageNode = drawing.pageNode;
+            const rect = {
+              x: parseFloat(g.style.left),
+              y: parseFloat(g.style.top),
+              w: parseFloat(g.style.width),
+              h: parseFloat(g.style.height),
+            };
+            draw.removeChild(g);
+            drawing = null;
+            document.body.style.userSelect = "";
+
+            const minSize = 6;
+            if (rect.w >= minSize && rect.h >= minSize) {
+              const base = getPageRecordFromNode(pageNode);
+              const factor =
+                base.baseCSSWidth / pageNode.getBoundingClientRect().width;
+              const norm = {
+                x: rect.x * factor,
+                y: rect.y * factor,
+                w: rect.w * factor,
+                h: rect.h * factor,
+              };
+              const label = consumeLabel();
+              const el = createSelection(base.node.boxes, norm, label);
+              selectBox(el);
+              pushAction({
+                type: "create",
+                pageIndex: getPageIndexFromNode(pageNode),
+                rect: { ...norm },
+                label,
+                id: el.dataset.id,
+              });
+              updateToolbar();
+              announce(`Created selection ${label}`);
+            }
+          });
+
+          return {
+            root: page,
+            content,
+            overlay,
+            boxes,
+            draw,
+            cross,
+            vline,
+            hline,
+            kind: "image",
+          };
+        }
+
+        function getPageRecordFromNode(node) {
+          return state.pages.find((p) => p.node.root === node);
+        }
+        function getPageIndexFromNode(node) {
+          return state.pages.findIndex((p) => p.node.root === node);
+        }
+        function setActiveFromNode(node) {
+          const idx = getPageIndexFromNode(node);
+          if (idx >= 0) {
+            state.activePage = idx;
+            updateActiveThumb();
+            updateToolbar();
+          }
+        }
+        function updateActiveThumb() {
+          [...thumbsEl.children].forEach((img, i) =>
+            img.classList.toggle("active", i === state.activePage)
+          );
+        }
+
+        // ---------- Selections ----------
+        function createSelection(container, rectNorm, label, reuseId) {
+          const page = getPageRecordFromNode(container.parentElement);
+          const el = document.createElement("div");
+          el.className = "selection";
+          el.tabIndex = 0;
+          el.dataset.id = reuseId || String(state.boxIdCounter++);
+
+          const labelEl = document.createElement("div");
+          labelEl.className = "label";
+          labelEl.textContent = label;
+          labelEl.title = "Double-click to edit. Press Enter or blur to save.";
+          el.appendChild(labelEl);
+
+          el.dataset.x = String(rectNorm.x);
+          el.dataset.y = String(rectNorm.y);
+          el.dataset.w = String(rectNorm.w);
+          el.dataset.h = String(rectNorm.h);
+
+          placeSelectionEl(el, page);
+
+          // Interactions (drag/resize within page) + history capture
+          let startRect = null;
+          const pageIndex = getPageIndexFromNode(container.parentElement);
+
+          interact(el)
+            .draggable({
+              listeners: {
+                move(event) {
+                  const p = getPageRecordFromNode(container.parentElement);
+                  const factor =
+                    p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
+                  const dx = event.dx * factor;
+                  const dy = event.dy * factor;
+
+                  const x = clamp(
+                    parseFloat(el.dataset.x) + dx,
+                    0,
+                    p.baseCSSWidth - parseFloat(el.dataset.w)
+                  );
+                  const y = clamp(
+                    parseFloat(el.dataset.y) + dy,
+                    0,
+                    p.baseCSSHeight - parseFloat(el.dataset.h)
+                  );
+                  el.dataset.x = String(x);
+                  el.dataset.y = String(y);
+                  placeSelectionEl(el, p);
+                },
+              },
+            })
+            .on("dragstart", () => {
+              startRect = getRect(el);
+            })
+            .on("dragend", () => {
+              const end = getRect(el);
+              if (!rectEqual(startRect, end)) {
+                pushAction({
+                  type: "transform",
+                  id: el.dataset.id,
+                  pageIndex,
+                  from: startRect,
+                  to: end,
+                });
+              }
+              startRect = null;
+            });
+
+          interact(el)
+            .resizable({
+              edges: { top: true, left: true, bottom: true, right: true },
+            })
+            .on("resizestart", () => {
+              startRect = getRect(el);
+            })
+            .on("resizemove", (event) => {
+              const p = getPageRecordFromNode(container.parentElement);
+              const factor =
+                p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
+              const { deltaRect } = event;
+
+              let x = parseFloat(el.dataset.x) + deltaRect.left * factor;
+              let y = parseFloat(el.dataset.y) + deltaRect.top * factor;
+              let w = parseFloat(el.dataset.w) + event.deltaRect.width * factor;
+              let h =
+                parseFloat(el.dataset.h) + event.deltaRect.height * factor;
+
+              x = clamp(x, 0, p.baseCSSWidth);
+              y = clamp(y, 0, p.baseCSSHeight);
+              w = Math.max(4, Math.min(w, p.baseCSSWidth - x));
+              h = Math.max(4, Math.min(h, p.baseCSSHeight - y));
+
+              el.dataset.x = String(x);
+              el.dataset.y = String(y);
+              el.dataset.w = String(w);
+              el.dataset.h = String(h);
+
+              placeSelectionEl(el, p);
+            })
+            .on("resizeend", () => {
+              const end = getRect(el);
+              if (!rectEqual(startRect, end)) {
+                pushAction({
+                  type: "transform",
+                  id: el.dataset.id,
+                  pageIndex,
+                  from: startRect,
+                  to: end,
+                });
+              }
+              startRect = null;
+            });
+
+          el.addEventListener("mousedown", (e) => {
+            selectBox(el);
+            e.stopPropagation();
+          });
+
+          // label editing + history
+          el.querySelector(".label").addEventListener("dblclick", (e) => {
+            startRename(el);
+            e.stopPropagation();
+          });
+
+          container.appendChild(el);
+          return el;
+        }
+
+        function getRect(el) {
+          return {
+            x: parseFloat(el.dataset.x),
+            y: parseFloat(el.dataset.y),
+            w: parseFloat(el.dataset.w),
+            h: parseFloat(el.dataset.h),
+          };
+        }
+        function setRect(el, rect, pageRec) {
+          el.dataset.x = String(rect.x);
+          el.dataset.y = String(rect.y);
+          el.dataset.w = String(rect.w);
+          el.dataset.h = String(rect.h);
+          placeSelectionEl(el, pageRec);
+        }
+        function rectEqual(a, b) {
+          return (
+            a && b && a.x === b.x && a.y === b.y && a.w === b.w && a.h === b.h
+          );
+        }
+
+        function clamp(v, minv, maxv) {
+          return Math.max(minv, Math.min(maxv, v));
+        }
+
+        function placeSelectionEl(el, pageRec) {
+          const rootBox = pageRec.node.root.getBoundingClientRect();
+          const factor = rootBox.width / pageRec.baseCSSWidth;
+          el.style.left = parseFloat(el.dataset.x) * factor + "px";
+          el.style.top = parseFloat(el.dataset.y) * factor + "px";
+          el.style.width = parseFloat(el.dataset.w) * factor + "px";
+          el.style.height = parseFloat(el.dataset.h) * factor + "px";
+        }
+
+        function startRename(el) {
+          const tag = el.querySelector(".label");
+          const before = tag.textContent;
+          tag.setAttribute("contenteditable", "true");
+          tag.focus();
+          document.execCommand &&
+            document.execCommand("selectAll", false, null);
+
+          const finish = () => {
+            tag.removeAttribute("contenteditable");
+            const sanitized =
+              sanitizeLabel(tag.textContent.trim()) || "untitled";
+            if (sanitized !== before) {
+              tag.textContent = sanitized;
+              pushAction({
+                type: "rename",
+                id: el.dataset.id,
+                from: before,
+                to: sanitized,
+              });
+            } else {
+              tag.textContent = sanitized;
+            }
+          };
+          const onKey = (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              finish();
+              tag.removeEventListener("keydown", onKey);
+            }
+            if (e.key === "Escape") {
+              e.preventDefault();
+              tag.textContent = before;
+              tag.removeEventListener("keydown", onKey);
+              tag.blur();
+            }
+          };
+          tag.addEventListener("keydown", onKey);
+          tag.addEventListener(
+            "blur",
+            () => {
+              tag.removeEventListener("keydown", onKey);
+              finish();
+            },
+            { once: true }
+          );
+        }
+
+        function sanitizeLabel(str) {
+          return str
+            .replace(/[\\\/:*?"<>|\u0000-\u001f]+/g, "")
+            .replace(/\s+/g, "_")
+            .slice(0, 120);
+        }
+
+        function selectBox(el) {
+          document
+            .querySelectorAll(".selection.selected")
+            .forEach((n) => n.classList.remove("selected"));
+          el.classList.add("selected");
+          state.currentSelection = el;
+        }
+
+        function getAllSelections() {
+          const out = [];
+          state.pages.forEach((p, idx) => {
+            const nodes = [...p.node.boxes.querySelectorAll(".selection")];
+            for (const n of nodes) {
+              out.push({ pageIndex: idx, node: n });
+            }
+          });
+          return out;
+        }
+
+        function findSelectionById(id) {
+          return document.querySelector(
+            `.selection[data-id="${CSS.escape(id)}"]`
+          );
+        }
+
+        // ---------- Zoom & Paging ----------
+        function applyZoom() {
+          state.pages.forEach((p) => {
+            p.node.root.style.width = `${p.baseCSSWidth * state.zoom}px`;
+            p.node.root.style.height = `${p.baseCSSHeight * state.zoom}px`;
+            p.node.boxes
+              .querySelectorAll(".selection")
+              .forEach((el) => placeSelectionEl(el, p));
+          });
+          updateToolbar();
+        }
+        function zoomToFitWidth() {
+          if (!state.pages.length) return;
+          const w = measuredCSSSize();
+          const base = state.pages[0].baseCSSWidth;
+          state.zoom = w / base;
+          zoomSlider.value = Math.round(state.zoom * 100);
+          applyZoom();
+        }
+
+        function scrollToPage(index, smooth = true) {
+          index = clamp(index, 0, state.pages.length - 1);
+          state.activePage = index;
+          updateActiveThumb();
+          const node = state.pages[index].node.root;
+          node.scrollIntoView({
+            behavior: smooth ? "smooth" : "auto",
+            block: "center",
+          });
+          updateToolbar();
+        }
+
+        prevBtn.addEventListener("click", () =>
+          scrollToPage(state.activePage - 1)
+        );
+        nextBtn.addEventListener("click", () =>
+          scrollToPage(state.activePage + 1)
+        );
+
+        zoomSlider.addEventListener("input", (e) => {
+          state.zoom = parseInt(e.target.value, 10) / 100;
+          applyZoom();
+        });
+        zoomInBtn.addEventListener("click", () => {
+          state.zoom = Math.min(4, state.zoom + 0.1);
+          zoomSlider.value = Math.round(state.zoom * 100);
+          applyZoom();
+        });
+        zoomOutBtn.addEventListener("click", () => {
+          state.zoom = Math.max(0.1, state.zoom - 0.1);
+          zoomSlider.value = Math.round(state.zoom * 100);
+          applyZoom();
+        });
+        zoomResetBtn.addEventListener("click", () => {
+          state.zoom = 1;
+          zoomSlider.value = 100;
+          applyZoom();
+        });
+
+        // ---------- Crosshair toggle ----------
+        toggleCrosshairBtn.addEventListener("click", () => {
+          state.crosshair = !state.crosshair;
+          document
+            .querySelectorAll(".crosshair-layer")
+            .forEach(
+              (l) => (l.style.display = state.crosshair ? "block" : "none")
+            );
+          updateToolbar();
+        });
+
+        // ---------- New Box (center) ----------
+        newBoxBtn.addEventListener("click", () => {
+          newBoxAtCenter();
+        });
+
+        function newBoxAtCenter() {
+          if (!state.pages.length) return;
+          const p = state.pages[state.activePage];
+          const w = Math.max(60, Math.round(p.baseCSSWidth * 0.25));
+          const h = Math.max(45, Math.round(p.baseCSSHeight * 0.18));
+          const x = Math.round((p.baseCSSWidth - w) / 2);
+          const y = Math.round((p.baseCSSHeight - h) / 2);
+          const label = consumeLabel();
+          const el = createSelection(p.node.boxes, { x, y, w, h }, label);
+          selectBox(el);
+          pushAction({
+            type: "create",
+            pageIndex: state.activePage,
+            rect: { x, y, w, h },
+            label,
+            id: el.dataset.id,
+          });
+          announce(`Created selection ${label}`);
+          updateToolbar();
+        }
+
+        // ---------- Export ----------
+        exportBtn.addEventListener("click", exportZip);
+
+        async function exportZip() {
+          if (!window.JSZip) {
+            alert("JSZip failed to load.");
+            return;
+          }
+          const zip = new JSZip();
+          const seen = new Set();
+
+          const selections = getAllSelections();
+          if (!selections.length) {
+            alert("No selections to export.");
+            return;
+          }
+
+          for (const { pageIndex, node } of selections) {
+            const p = state.pages[pageIndex];
+            const labelRaw =
+              node.querySelector(".label").textContent.trim() || "untitled";
+            const baseName = sanitizeLabel(labelRaw) || "untitled";
+            const name = uniqueName(baseName, seen) + ".png";
+
+            const rectNorm = {
+              x: parseFloat(node.dataset.x),
+              y: parseFloat(node.dataset.y),
+              w: parseFloat(node.dataset.w),
+              h: parseFloat(node.dataset.h),
+            };
+
+            const factor =
+              p.type === "image"
+                ? p.pixelW / p.baseCSSWidth
+                : p.canvasEl.width / p.baseCSSWidth;
+
+            const sx = Math.round(rectNorm.x * factor);
+            const sy = Math.round(rectNorm.y * factor);
+            const sw = Math.round(rectNorm.w * factor);
+            const sh = Math.round(rectNorm.h * factor);
+
+            const out = document.createElement("canvas");
+            out.width = Math.max(1, sw);
+            out.height = Math.max(1, sh);
+            const ctx = out.getContext("2d");
+
+            if (p.type === "image") {
+              ctx.drawImage(p.imgEl, sx, sy, sw, sh, 0, 0, sw, sh);
+            } else {
+              ctx.drawImage(p.canvasEl, sx, sy, sw, sh, 0, 0, sw, sh);
+            }
+
+            const blob = await new Promise((res) =>
+              out.toBlob(res, "image/png")
+            );
+            zip.file(name, blob);
+          }
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const url = URL.createObjectURL(zipBlob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "selections.zip";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+        }
+
+        function uniqueName(base, seen) {
+          let name = base;
+          let i = 1;
+          while (seen.has(name)) {
+            name = `${base}-${i++}`;
+          }
+          seen.add(name);
+          return name;
+        }
+
+        // ---------- Undo / Redo ----------
+        undoBtn.addEventListener("click", undo);
+        redoBtn.addEventListener("click", redo);
+
+        function undo() {
+          const action = history.undo.pop();
+          if (!action) return;
+
+          switch (action.type) {
+            case "create": {
+              const sel = findSelectionById(action.id);
+              if (sel) sel.remove();
+              break;
+            }
+            case "delete": {
+              const p = state.pages[action.pageIndex];
+              const el = createSelection(
+                p.node.boxes,
+                action.rect,
+                action.label,
+                action.id
+              );
+              break;
+            }
+            case "transform": {
+              const sel = findSelectionById(action.id);
+              if (sel) {
+                const pageRec = state.pages[action.pageIndex];
+                setRect(sel, action.from, pageRec);
+              }
+              break;
+            }
+            case "rename": {
+              const sel = findSelectionById(action.id);
+              if (sel) {
+                sel.querySelector(".label").textContent = action.from;
+              }
+              break;
+            }
+          }
+          history.redo.push(action);
+          updateHistoryUI();
+        }
+
+        function redo() {
+          const action = history.redo.pop();
+          if (!action) return;
+
+          switch (action.type) {
+            case "create": {
+              const p = state.pages[action.pageIndex];
+              const el = createSelection(
+                p.node.boxes,
+                action.rect,
+                action.label,
+                action.id
+              );
+              break;
+            }
+            case "delete": {
+              const sel = findSelectionById(action.id);
+              if (sel) sel.remove();
+              break;
+            }
+            case "transform": {
+              const sel = findSelectionById(action.id);
+              if (sel) {
+                const pageRec = state.pages[action.pageIndex];
+                setRect(sel, action.to, pageRec);
+              }
+              break;
+            }
+            case "rename": {
+              const sel = findSelectionById(action.id);
+              if (sel) {
+                sel.querySelector(".label").textContent = action.to;
+              }
+              break;
+            }
+          }
+          history.undo.push(action);
+          updateHistoryUI();
+        }
+
+        // ---------- Keyboard shortcuts ----------
+        window.addEventListener("keydown", (e) => {
+          // Editing labels?
+          const ae = document.activeElement;
+          const isEditing =
+            ae &&
+            ae.getAttribute &&
+            ae.getAttribute("contenteditable") === "true";
+          if (isEditing) {
+            if (e.key === "Escape") {
+              ae.blur();
+            }
+            return;
+          }
+
+          // Undo / Redo
+          if (
+            (e.ctrlKey || e.metaKey) &&
+            !e.shiftKey &&
+            e.key.toLowerCase() === "z"
+          ) {
+            e.preventDefault();
+            undo();
+            return;
+          }
+          if (
+            (e.ctrlKey || e.metaKey) &&
+            ((e.shiftKey && e.key.toLowerCase() === "z") ||
+              e.key.toLowerCase() === "y")
+          ) {
+            e.preventDefault();
+            redo();
+            return;
+          }
+
+          // Open
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "o") {
+            e.preventDefault();
+            fileEl.click();
+          }
+          // Export
+          else if (e.key.toLowerCase() === "e") {
+            e.preventDefault();
+            exportZip();
+          }
+          // Zoom
+          else if (e.key === "+" || e.key === "=") {
+            e.preventDefault();
+            zoomInBtn.click();
+          } else if (e.key === "-" || e.key === "_") {
+            e.preventDefault();
+            zoomOutBtn.click();
+          } else if (e.key === "0") {
+            e.preventDefault();
+            zoomResetBtn.click();
+          }
+          // Paging
+          else if (e.key.toLowerCase() === "j" || e.key === "PageDown") {
+            e.preventDefault();
+            nextBtn.click();
+          } else if (e.key.toLowerCase() === "k" || e.key === "PageUp") {
+            e.preventDefault();
+            prevBtn.click();
+          }
+          // p-mode toggle
+          else if (e.key.toLowerCase() === "p") {
+            e.preventDefault();
+            state.pMode = !state.pMode;
+            updateToolbar();
+            announce(`p-mode ${state.pMode ? "ON" : "OFF"}`);
+          }
+          // Label adjust A/D
+          else if (e.key.toLowerCase() === "a") {
+            e.preventDefault();
+            if (state.pMode) {
+              state.pIndex = Math.max(1, state.pIndex - 1);
+            } else {
+              state.normalCounter = Math.max(1, state.normalCounter - 1);
+            }
+            updateToolbar();
+          } else if (e.key.toLowerCase() === "d") {
+            e.preventDefault();
+            if (state.pMode) {
+              state.pIndex = Math.max(1, state.pIndex + 1);
+            } else {
+              state.normalCounter = Math.max(1, state.normalCounter + 1);
+            }
+            updateToolbar();
+          }
+          // New box
+          else if (e.key.toLowerCase() === "n") {
+            e.preventDefault();
+            newBoxAtCenter();
+          }
+          // Crosshair toggle
+          else if (e.key.toLowerCase() === "h") {
+            e.preventDefault();
+            toggleCrosshairBtn.click();
+          }
+          // Help
+          else if (e.key === "?") {
+            e.preventDefault();
+            toggleHelp();
+          }
+          // Rename selected
+          else if (e.key.toLowerCase() === "r") {
+            e.preventDefault();
+            if (state.currentSelection) startRename(state.currentSelection);
+          }
+          // Delete selected
+          else if (e.key === "Delete" || e.key === "Backspace") {
+            if (state.currentSelection) {
+              e.preventDefault();
+              const sel = state.currentSelection;
+              const pageIndex = getPageIndexFromNode(sel.closest(".page"));
+              pushAction({
+                type: "delete",
+                pageIndex,
+                rect: getRect(sel),
+                label: sel.querySelector(".label").textContent,
+                id: sel.dataset.id,
+              });
+              sel.remove();
+              state.currentSelection = null;
+              updateToolbar();
+            }
+          }
+          // Nudge arrow keys
+          else if (
+            ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)
+          ) {
+            if (!state.currentSelection) return;
+            e.preventDefault();
+            const p = getPageRecordFromNode(
+              state.currentSelection.closest(".page")
+            );
+            const before = getRect(state.currentSelection);
+            const step = e.shiftKey ? 10 : 1;
+            const dx =
+              e.key === "ArrowLeft" ? -step : e.key === "ArrowRight" ? step : 0;
+            const dy =
+              e.key === "ArrowUp" ? -step : e.key === "ArrowDown" ? step : 0;
+            let x = before.x + dx;
+            let y = before.y + dy;
+            let w = before.w;
+            let h = before.h;
+            x = clamp(x, 0, p.baseCSSWidth - w);
+            y = clamp(y, 0, p.baseCSSHeight - h);
+            const after = { x, y, w, h };
+            setRect(state.currentSelection, after, p);
+            if (!rectEqual(before, after)) {
+              pushAction({
+                type: "transform",
+                id: state.currentSelection.dataset.id,
+                pageIndex: getPageIndexFromNode(p.node.root),
+                from: before,
+                to: after,
+              });
+            }
+          }
+        });
+
+        // Click page background to clear selection
+        pagesEl.addEventListener("mousedown", (e) => {
+          if (!(e.target.closest && e.target.closest(".selection"))) {
+            document
+              .querySelectorAll(".selection.selected")
+              .forEach((n) => n.classList.remove("selected"));
+            state.currentSelection = null;
+          }
+        });
+
+        // ---------- Help panel ----------
+        helpBtn.addEventListener("click", toggleHelp);
+        function toggleHelp() {
+          helpPanel.style.display =
+            helpPanel.style.display === "block" ? "none" : "block";
+        }
+
+        // ---------- Utils ----------
+        function updateAllBoxesPositions() {
+          state.pages.forEach((p) => {
+            p.node.boxes
+              .querySelectorAll(".selection")
+              .forEach((el) => placeSelectionEl(el, p));
+          });
+        }
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            applyZoom();
+            updateAllBoxesPositions();
+          }, 100);
+        });
+
+        // Initial UI
+        updateToolbar();
+      })();
+    </script>
+  </body>
+</html>
