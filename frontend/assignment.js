@@ -1,7 +1,7 @@
 "use strict";
 
 (async () => {
-  // --- Simple Image Overlay: centered + wheel zoom only (tap/click outside to close) ---
+  // --- Simple Image Overlay: centered + wheel & pinch zoom (no pan) ---
   (() => {
     const style = document.createElement("style");
     style.textContent = `
@@ -10,11 +10,11 @@
     #image-overlay .io-stage{
       position:absolute; inset:0;
       display:grid; place-items:center;
-      overflow:hidden; touch-action:none;
+      overflow:hidden; touch-action:none; /* required for pinch-zoom via PointerEvents */
     }
     #image-overlay .io-img{
       max-width:none; max-height:none;
-      transform-origin:center center;
+      transform-origin:center center; /* always stays centered */
       user-select:none; -webkit-user-drag:none;
     }
     #image-overlay .io-hint{
@@ -33,7 +33,7 @@
     <div class="io-backdrop" aria-hidden="true"></div>
     <div class="io-stage" role="dialog" aria-label="Image viewer" aria-modal="true">
       <img class="io-img" alt="">
-      <div class="io-hint">Scroll to zoom · 0 to reset · Esc to close</div>
+      <div class="io-hint">Scroll or pinch to zoom · 0 to reset · Esc to close</div>
     </div>
   `;
     document.body.appendChild(root);
@@ -103,7 +103,7 @@
     window.showImageOverlay = (src) => openOverlay(src);
 
     // Close on backdrop click/tap
-    const closeOnEvent = (e) => {
+    const closeOnEvent = () => {
       if (!open) return;
       closeOverlay();
     };
@@ -112,14 +112,21 @@
       .querySelector(".io-backdrop")
       .addEventListener("touchstart", closeOnEvent, { passive: true });
 
-    // Also close when clicking/tapping empty space in the stage (but NOT the image)
+    // Also close when clicking/tapping empty space in the stage (but NOT the image).
+    // If a pinch just happened, suppress the "click" that follows touchend.
+    let suppressNextClick = false;
     stage.addEventListener("click", (e) => {
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        return;
+      }
       if (e.target !== img) closeOverlay();
     });
     stage.addEventListener(
       "touchstart",
       (e) => {
-        if (e.target !== img) closeOverlay();
+        // If it's a single-finger tap that starts on empty space, we'll let the click handler close it.
+        // Do nothing here to avoid blocking pinch.
       },
       { passive: true }
     );
@@ -141,6 +148,52 @@
       },
       { passive: false }
     );
+
+    // --- Pinch-to-zoom via PointerEvents (no panning) ---
+    const pointers = new Map();
+    let lastPinchDist = null;
+
+    stage.addEventListener("pointerdown", (e) => {
+      if (!open) return;
+      stage.setPointerCapture?.(e.pointerId);
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    });
+
+    stage.addEventListener(
+      "pointermove",
+      (e) => {
+        if (!open) return;
+        const p = pointers.get(e.pointerId);
+        if (!p) return;
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+        if (pointers.size === 2) {
+          // Two fingers => pinch
+          const [a, b] = [...pointers.values()];
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (lastPinchDist != null) {
+            const factor = dist / lastPinchDist;
+            // gentle clamp per event to avoid jumps
+            const perMoveClamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+            zoomBy(perMoveClamp(factor, 0.9, 1.1));
+            suppressNextClick = true; // avoid accidental click after pinch
+          }
+          lastPinchDist = dist;
+        }
+      },
+      { passive: false }
+    );
+
+    function endPointer(e) {
+      try {
+        stage.releasePointerCapture?.(e.pointerId);
+      } catch {}
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) lastPinchDist = null;
+    }
+    stage.addEventListener("pointerup", endPointer);
+    stage.addEventListener("pointercancel", endPointer);
+    stage.addEventListener("pointerleave", endPointer);
 
     // Keyboard zoom only
     window.addEventListener("keydown", (e) => {
@@ -165,7 +218,7 @@
       if (open) fitToStage();
     });
   })();
-  // --- End simple overlay (outside click/touch closes; smaller initial size) ---
+  // --- End simple overlay (pinch supported) ---
 
   await loadConfig();
 
