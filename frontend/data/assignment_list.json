@@ -47,5 +47,12 @@
     "chapter": "Integration",
     "title": "Integration #2",
     "aID": 6
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Inductors",
+    "aID": 7
   }
 ]
