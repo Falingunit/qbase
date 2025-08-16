@@ -391,7 +391,6 @@ body { line-height: 1.55; }
 
 /* Make assignment topbar sticky and properly spaced */
 .assignment-topbar {
-  position: sticky;
   top: 56px;
   padding: 0.5rem 0.75rem;
   background: rgba(17,19,23,0.6);

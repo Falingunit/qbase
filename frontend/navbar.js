@@ -1,4 +1,7 @@
 (async () => {
+
+  isDev = true;
+
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
     return;
@@ -43,6 +46,8 @@
     loginItem.classList.remove("d-none");
   }
   function ensureLoginGate() {
+    if (isDev) return;
+
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
     // NEW: reuse existing overlay if the script was loaded twice
