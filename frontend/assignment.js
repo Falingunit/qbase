@@ -1,6 +1,172 @@
 "use strict";
 
 (async () => {
+  // --- Simple Image Overlay: centered + wheel zoom only (tap/click outside to close) ---
+  (() => {
+    const style = document.createElement("style");
+    style.textContent = `
+    #image-overlay{position:fixed;inset:0;display:none;z-index:1060;background:rgba(10,12,14,.85)}
+    #image-overlay .io-backdrop{position:absolute;inset:0}
+    #image-overlay .io-stage{
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      overflow:hidden; touch-action:none;
+    }
+    #image-overlay .io-img{
+      max-width:none; max-height:none;
+      transform-origin:center center;
+      user-select:none; -webkit-user-drag:none;
+    }
+    #image-overlay .io-hint{
+      position:absolute; bottom:12px; left:50%; transform:translateX(-50%);
+      font:500 13px/1.2 system-ui,sans-serif; color:#cfe7ff; opacity:.9;
+      background:rgba(20,22,26,.6); border:1px solid rgba(255,255,255,.06);
+      padding:.35rem .65rem; border-radius:12px; white-space:nowrap;
+    }
+    @media (max-width:575.98px){ #image-overlay .io-hint{ bottom:8px; } }
+  `;
+    document.head.appendChild(style);
+
+    const root = document.createElement("div");
+    root.id = "image-overlay";
+    root.innerHTML = `
+    <div class="io-backdrop" aria-hidden="true"></div>
+    <div class="io-stage" role="dialog" aria-label="Image viewer" aria-modal="true">
+      <img class="io-img" alt="">
+      <div class="io-hint">Scroll to zoom · 0 to reset · Esc to close</div>
+    </div>
+  `;
+    document.body.appendChild(root);
+
+    const stage = root.querySelector(".io-stage");
+    const img = root.querySelector(".io-img");
+
+    // Config: start slightly smaller than fit (e.g., 90%)
+    const FIT_SCALE_FACTOR = 0.9;
+
+    // State (no panning)
+    let open = false;
+    let naturalW = 0,
+      naturalH = 0;
+    let baseScale = 1; // fits image to stage
+    let zoom = 1; // user-controlled multiplier
+    const minZoom = 0.2,
+      maxZoom = 8;
+
+    function setTransform() {
+      img.style.transform = `scale(${baseScale * zoom})`;
+    }
+
+    function fitToStage() {
+      const rect = stage.getBoundingClientRect();
+      const sx = rect.width / naturalW;
+      const sy = rect.height / naturalH;
+      baseScale = Math.min(sx, sy) * FIT_SCALE_FACTOR; // contain, then shrink a bit
+      setTransform();
+    }
+
+    function zoomBy(factor) {
+      zoom = Math.min(maxZoom, Math.max(minZoom, zoom * factor));
+      setTransform();
+    }
+
+    function reset() {
+      zoom = 1;
+      fitToStage();
+    }
+
+    function openOverlay(src, alt = "") {
+      img.src = src;
+      img.alt = alt || "Image";
+      root.style.display = "block";
+      open = true;
+      if (img.complete) {
+        naturalW = img.naturalWidth;
+        naturalH = img.naturalHeight;
+        reset();
+      } else {
+        img.onload = () => {
+          naturalW = img.naturalWidth;
+          naturalH = img.naturalHeight;
+          reset();
+        };
+      }
+    }
+
+    function closeOverlay() {
+      open = false;
+      root.style.display = "none";
+      img.src = "";
+    }
+
+    // Keep your existing API
+    window.showImageOverlay = (src) => openOverlay(src);
+
+    // Close on backdrop click/tap
+    const closeOnEvent = (e) => {
+      if (!open) return;
+      closeOverlay();
+    };
+    root.querySelector(".io-backdrop").addEventListener("click", closeOnEvent);
+    root
+      .querySelector(".io-backdrop")
+      .addEventListener("touchstart", closeOnEvent, { passive: true });
+
+    // Also close when clicking/tapping empty space in the stage (but NOT the image)
+    stage.addEventListener("click", (e) => {
+      if (e.target !== img) closeOverlay();
+    });
+    stage.addEventListener(
+      "touchstart",
+      (e) => {
+        if (e.target !== img) closeOverlay();
+      },
+      { passive: true }
+    );
+
+    // Prevent clicks on the image from bubbling to stage/backdrop
+    img.addEventListener("click", (e) => e.stopPropagation());
+    img.addEventListener("touchstart", (e) => e.stopPropagation(), {
+      passive: true,
+    });
+
+    // Wheel = zoom (centered; no pan)
+    stage.addEventListener(
+      "wheel",
+      (e) => {
+        if (!open) return;
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+        zoomBy(delta);
+      },
+      { passive: false }
+    );
+
+    // Keyboard zoom only
+    window.addEventListener("keydown", (e) => {
+      if (!open) return;
+      if (e.key === "Escape") closeOverlay();
+      if (e.key === "+" || e.key === "=") {
+        e.preventDefault();
+        zoomBy(1.2);
+      }
+      if (e.key === "-") {
+        e.preventDefault();
+        zoomBy(1 / 1.2);
+      }
+      if (e.key === "0") {
+        e.preventDefault();
+        reset();
+      }
+    });
+
+    // Refit on resize
+    window.addEventListener("resize", () => {
+      if (open) fitToStage();
+    });
+  })();
+  // --- End simple overlay (outside click/touch closes; smaller initial size) ---
+
   await loadConfig();
 
   const params = new URLSearchParams(window.location.search);
@@ -800,7 +966,11 @@
     if (question.passage) {
       if (question.passageImage) {
         passageImgDiv.style.display = "block";
-        passageImgDiv.innerHTML = `<img src="./data/question_data/${aID}/${question.passageImage}" alt="Passage image">`;
+        const imgSrc = `./data/question_data/${aID}/${question.passageImage}`;
+        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image">`;
+        passageImgDiv.querySelector("img").addEventListener("click", () => {
+          showImageOverlay(imgSrc);
+        });
       } else {
         passageImgDiv.style.display = "none";
         passageImgDiv.innerHTML = "";
@@ -820,7 +990,11 @@
     const qTextElm = document.getElementById("questionText");
     if (question.image) {
       qImgDiv.style.display = "block";
-      qImgDiv.innerHTML = `<img src="./data/question_data/${aID}/${question.image}" alt="Question image">`;
+      const imgSrc = `./data/question_data/${aID}/${question.image}`;
+      qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image">`;
+      qImgDiv.querySelector("img").addEventListener("click", () => {
+        showImageOverlay(imgSrc);
+      });
     } else {
       qImgDiv.style.display = "none";
       qImgDiv.innerHTML = "";
