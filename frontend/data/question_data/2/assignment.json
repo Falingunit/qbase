@@ -212,7 +212,7 @@
         "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
         "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
       ],
-      "qAnswer": "C"
+      "qAnswer": "B"
     },
     {
       "qType": "SMCQ",
@@ -225,7 +225,7 @@
         "\\(\\dfrac{3B^2 \\omega \\ell^4 \\pi}{8R}\\)",
         "\\(\\dfrac{3B^2 \\omega \\pi \\ell^4}{16R}\\)"
       ],
-      "qAnswer": "B"
+      "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
