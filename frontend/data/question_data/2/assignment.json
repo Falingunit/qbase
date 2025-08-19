@@ -136,7 +136,7 @@
       "qText": "Two loops \\(X\\) and \\(Y\\) have their planes parallel. A current flows in loop \\(X\\). The two loops will repel each other if the current in loop \\(X\\) is",
       "image": "11.png",
       "qOptions": ["increasing", "decreasing", "constant", "none of these"],
-      "qAnswer": "B"
+      "qAnswer": "A"
     },
     {
       "qType": "SMCQ",
