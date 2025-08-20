@@ -336,7 +336,7 @@
     {
       "qType": "Passage",
       "passageId": "P2",
-      "qText": "Comprehension Q. 31 to 33\\n\\nLiquids A (molar mass = 100 g/mol and density = 1.25 g/ml) and B (molar mass = 50 g/mol and density = 1.0 g/ml) form an ideal solution. The molar volume of liquid ‘A’ increases by a factor of 3800 as it vaporizes at 27\\(^{\\circ}\\)C and that of liquid ‘B’ increases by a factor of 7600 at 27\\(^{\\circ}\\)C. A solution of liquids ‘A’ and ‘B’ at 27\\(^{\\circ}\\)C has a vapour pressure of 54.0 torr. (R = 0.08 L·atm/K·mol).",
+      "qText": "Liquids A (molar mass = 100 g/mol and density = 1.25 g/ml) and B (molar mass = 50 g/mol and density = 1.0 g/ml) form an ideal solution. The molar volume of liquid ‘A’ increases by a factor of 3800 as it vaporizes at 27\\(^{\\circ}\\)C and that of liquid ‘B’ increases by a factor of 7600 at 27\\(^{\\circ}\\)C. A solution of liquids ‘A’ and ‘B’ at 27\\(^{\\circ}\\)C has a vapour pressure of 54.0 torr. (R = 0.08 L·atm/K·mol).",
       "image": null,
       "qOptions": [],
       "qAnswer": []
