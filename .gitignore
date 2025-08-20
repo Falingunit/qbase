@@ -20,3 +20,5 @@ Thumbs.db
 #Utils without specific files
 utils/PDF Screenshots/*
 !utils/PDF Screenshots/*.*
+
+ISDEV
