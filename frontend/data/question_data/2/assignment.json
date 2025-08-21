@@ -149,7 +149,7 @@
         "the plane of the coil is parallel to \\(\\vec B\\)",
         "the plane of the coil makes \\(30^{\\circ}\\) with \\(\\vec B\\)"
       ],
-      "qAnswer": "A"
+      "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
@@ -175,13 +175,13 @@
     {
       "qType": "SMCQ",
       "passageId": null,
-      "qText": "Find the expression for the induced emf in the coil (Options are made-up for formatting purposes).",
+      "qText": "Find the expression for the induced emf in the coil (Options are made-up).",
       "image": "15.png",
       "qOptions": [
-        "\\(\\dfrac{d\\Phi}{dt}\\)",
-        "\\(\\dfrac{Nd\\Phi}{dt}\\)",
-        "\\(\\dfrac{-d\\Phi}{dt}\\)",
-        "\\(\\dfrac{-Nd\\Phi}{dt}\\)"
+        "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{2} \\right\\} \\)",
+        "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{2} R} \\left\\{ \\left( d + \\frac{a \\sqrt{2}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{2}}{2d} \\right) - \\frac{a \\sqrt{2}}{2} \\right\\} \\)",
+        "\\( I = \\frac{\\mu_0 I_0}{4 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{2a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{2} \\right\\} \\)",
+        "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{3} \\right\\} \\)"
       ],
       "qAnswer": "B"
     },
@@ -251,7 +251,7 @@
     {
       "qType": "SMCQ",
       "passageId": null,
-      "qText": "A wire bent as a parabola \\(y = kx^2\\) in uniform magnetic field \\(B\\) (\\(B\\) along \\(y\\)-axis) has a connector sliding from apex at constant acceleration \\(a\\). Find emf as function of \\(y_a\\).",
+      "qText": "A wire bent as a parabola \\(y = kx^2\\) is located in a uniform magnetic field of induction \\(B\\), the vector \\(B\\) being perpendicular to the x-y plane. At the moment \\(t = 0\\) a connector starts sliding translation wise from the parabola apex with a constant acceleration \\(a\\). Find the emf of electromagnetic induction in the loop thus formed as a function of \\(y_a\\).",
       "image": "20.png",
       "qOptions": [
         "\\(\\varepsilon = B y_a \\sqrt{\\frac{4a}{k}}\\)",
@@ -264,7 +264,7 @@
     {
       "qType": "SMCQ",
       "passageId": null,
-      "qText": "A square wire frame with side \\(a\\) and a straight conductor carrying constant current \\(I\\) are located in the same plane, separated by \\(b\\). The frame is rotated by \\(180^\\circ\\) about an axis through \\(O\\). Find the total charge that flows through the frame. (Options are made-up distractors; one is correct.)",
+      "qText": "A square wire frame with side \\(a\\) and a straight conductor carrying a constant current \\(I\\) are located in the same plane. The inductance and the resistance of the frame are equal to \\(L\\) and \\(R\\) respectively. The frame was turned through \\(180^{\\circ}\\) about the axis \\(OO'\\) separated from the current–carrying conductor by a distance \\(b\\). Find the electric charge having flown through the frame.",
       "image": "21.png",
       "qOptions": [
         "\\(\\dfrac{\\mu_0 I a}{2\\pi R} \\ln\\!\\left(\\dfrac{b+a}{b-a}\\right)\\)",
@@ -277,7 +277,7 @@
     {
       "qType": "Numerical",
       "passageId": null,
-      "qText": "Magnetic flux in coil of resistance \\(10\\,\\Omega\\) changes as shown. Find total charge in coulomb through coil.",
+      "qText": "Some magnetic flux is changed from a coil of resistance \\(10\\ \\Omega\\). As a result an induced current is developed in it, which varies with time as shown in figure. Find the magnitude of change in Coulomb that flows through the coil.",
       "image": "22.png",
       "qOptions": [],
       "qAnswer": 0.2
@@ -285,7 +285,7 @@
     {
       "qType": "Passage",
       "passageId": "P2",
-      "qText": "A flat coil \\(C\\) of \\(n\\) turns, radius \\(A\\), resistance \\(R\\) in uniform magnetic field \\(B\\). Initially perpendicular to \\(B\\). Rotated about \\(x\\)-axis. The following questions refer to this setup.",
+      "qText": "A flat coil \\(C\\) of \\(n\\) turns, area \\(A\\), resistance \\(R\\) in uniform magnetic field \\(B\\). The plane of the coil is initially perpendicular to \\(B\\). If the coil is rotated about the axis \\(x\\) - \\(y\\), Q charge flows through it.",
       "image": "23.png",
       "qOptions": [],
       "qAnswer": []
