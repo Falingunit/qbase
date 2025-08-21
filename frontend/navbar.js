@@ -1,6 +1,12 @@
 (async () => {
 
-  isDev = false;
+  isDev = true;
+
+  try
+  {
+    fetch("./ISDEV")
+  }
+  catch { isDev = false}
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");

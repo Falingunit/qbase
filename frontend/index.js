@@ -1,45 +1,64 @@
-// === index.js (drop-in replacement) ===
 "use strict";
 (async () => {
   await loadConfig();
 
-  // Cache for search + scores + sorting
   let allData = [];
   let cachedScores = {};
-  let searchBound = false;
   let lastSearch = "";
-  let sortBound = false;
-  let sortState = { key: "chapter", dir: "asc" }; // default sort within each subject
 
-  window.addEventListener("qbase:login", async () => {
-    const data = await (await fetch("./data/assignment_list.json")).json();
-    const scores = await fetchScores();
-    cachedScores = scores;
-    allData = data;
-    // clear and rebuild
-    document.querySelector("#chaptersTable tbody").innerHTML = "";
-    buildTable(data);
-    setupSearchOnce();
-    setupSortingOnce();
-  });
+  const els = {
+    content: document.getElementById("as-content"),
+    loading: document.getElementById("as-loading"),
+    error: document.getElementById("as-error"),
+    empty: document.getElementById("as-empty"),
+    search: document.getElementById("table-search-input"),
+    clear: document.getElementById("as-clear-btn"),
+  };
 
-  // Now you can use API_BASE in your fetch calls
-  authFetch(`${API_BASE}/me`)
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("User data:", data);
-    });
+  // Wire navbar -> local search
+  (function wireNavbarToLocalSearch() {
+    const globalInput = document.getElementById("navbar-search-input");
+    const globalBtn = document.getElementById("navbar-search-btn");
+    if (globalInput && els.search) {
+      globalInput.addEventListener("input", () => {
+        els.search.value = globalInput.value;
+        applyFilter();
+      });
+    }
+    if (globalBtn) globalBtn.addEventListener("click", () => applyFilter());
+  })();
 
-  fetch("./data/assignment_list.json")
-    .then((res) => res.json())
-    .then(async (data) => {
-      const scores = await fetchScores();
-      cachedScores = scores;
-      allData = data;
-      buildTable(data);
-      setupSearchOnce();
-      setupSortingOnce();
-    });
+  // Login hook mirrors initial load
+  window.addEventListener("qbase:login", bootstrap);
+  bootstrap();
+
+  async function bootstrap() {
+    toggle(els.loading, true);
+    toggle(els.error, false);
+    toggle(els.empty, false);
+    toggle(els.content, false);
+
+    try {
+      const [assignRes, scores] = await Promise.all([
+        fetch("./data/assignment_list.json").then((r) => r.json()),
+        fetchScores(),
+      ]);
+      allData = assignRes || [];
+      cachedScores = scores || {};
+      buildCards(getFilteredData());
+      bindSearch();
+
+      toggle(els.loading, false);
+      toggle(els.content, true);
+      checkEmpty();
+      // initial highlight pass
+      highlightElements(document, (els.search?.value || "").trim());
+    } catch (e) {
+      console.error(e);
+      showError("Failed to load assignments. Check the JSON/API.");
+      toggle(els.loading, false);
+    }
+  }
 
   async function fetchScores() {
     try {
@@ -51,237 +70,305 @@
     }
   }
 
-  function highlightMatch(text) {
-    if (!lastSearch) return text;
-    const pattern = new RegExp(`(${escapeRegExp(lastSearch)})`, "gi");
-    return String(text).replace(pattern, "<mark>$1</mark>");
-  }
-
-  function escapeRegExp(str) {
-    return String(str).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
-  // ---- Sorting helpers ----
-  function getScoreRatio(entry) {
-    const s = cachedScores?.[entry.aID]?.score;
-    const m = cachedScores?.[entry.aID]?.maxScore;
-    if (typeof s === "number" && typeof m === "number" && m > 0) {
-      return s / m; // 0..1
-    }
-    return -1; // missing scores go last on asc
-  }
-
-  function getProgressPct(entry) {
-    const attempted = cachedScores?.[entry.aID]?.attempted ?? 0;
-    const totalQ =
-      cachedScores?.[entry.aID]?.totalQuestions ?? entry.totalQuestions ?? 0;
-    return totalQ ? attempted / totalQ : -1;
-  }
-
-  function getSortVal(entry) {
-    switch (sortState.key) {
-      case "subject":
-        return (entry.subject || "").toLowerCase();
-      case "chapter":
-        return (entry.chapter || "").toLowerCase();
-      case "faculty":
-        return (entry.faculty || "").toLowerCase();
-      case "title":
-      case "assignment":
-        return (entry.title || "").toLowerCase();
-      case "score":
-        return getScoreRatio(entry);
-      case "progress":
-        return getProgressPct(entry);
-      default:
-        return (entry.chapter || "").toLowerCase();
-    }
-  }
-
-  function compareEntries(a, b) {
-    const va = getSortVal(a);
-    const vb = getSortVal(b);
-
-    // Numeric sort if both are numbers
-    if (typeof va === "number" && typeof vb === "number") {
-      return sortState.dir === "asc" ? va - vb : vb - va;
-    }
-
-    // String sort otherwise
-    const res = String(va).localeCompare(String(vb), undefined, {
-      numeric: true,
-      sensitivity: "base",
+  function bindSearch() {
+    if (!els.search) return;
+    let t;
+    els.search.addEventListener("input", () => {
+      clearTimeout(t);
+      t = setTimeout(applyFilter, 120);
     });
-    return sortState.dir === "asc" ? res : -res;
-  }
-
-  function setupSortingOnce() {
-    if (sortBound) return;
-    const headers = document.querySelectorAll("#chaptersTable thead th");
-    if (!headers.length) return;
-
-    const keys = [
-      "subject",
-      "chapter",
-      "faculty",
-      "assignment",
-      "score",
-      "progress",
-    ];
-    headers.forEach((th, idx) => {
-      const key = keys[idx];
-      if (!key) return;
-      th.classList.add("sortable");
-      th.setAttribute("role", "button");
-      th.dataset.sortKey = key;
-      const label = th.textContent.trim();
-      th.innerHTML = `${label} <span class="sort-indicator" aria-hidden="true"></span>`;
-      th.addEventListener("click", () => {
-        const k = th.dataset.sortKey;
-        if (sortState.key === k) {
-          sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
-        } else {
-          sortState.key = k;
-          sortState.dir = k === "score" || k === "progress" ? "desc" : "asc"; // sensible defaults
-        }
-        updateSortIndicators();
-        // Rebuild using current filtered dataset
-        const filtered = getFilteredData();
-        buildTable(filtered);
+    if (els.clear) {
+      els.clear.addEventListener("click", () => {
+        els.search.value = "";
+        applyFilter();
+        els.search.focus();
       });
-    });
-
-    updateSortIndicators();
-    sortBound = true;
+    }
   }
 
-  function updateSortIndicators() {
-    const headers = document.querySelectorAll(
-      "#chaptersTable thead th.sortable"
-    );
-    headers.forEach((th) => {
-      const span = th.querySelector(".sort-indicator");
-      const active = th.dataset.sortKey === sortState.key;
-      span.textContent = active ? (sortState.dir === "asc" ? "▲" : "▼") : "";
-      th.setAttribute(
-        "aria-sort",
-        active ? (sortState.dir === "asc" ? "ascending" : "descending") : "none"
-      );
+  function applyFilter() {
+    lastSearch = (els.search.value || "").trim();
+    els.clear?.classList.toggle("d-none", lastSearch.length === 0);
+    filterVisibility(lastSearch);
+    checkEmpty();
+    highlightElements(document, lastSearch);
+  }
+
+  function filterVisibility(qRaw) {
+    const q = qRaw.toLowerCase();
+    document.querySelectorAll(".as-card").forEach((card) => {
+      const hay = card.dataset.haystack || "";
+      const match = !q || hay.includes(q);
+      card.classList.toggle("d-none", !match);
+    });
+
+    // Hide chapter groups with no visible cards; update counts and expand if searching
+    document.querySelectorAll(".as-chapter").forEach((chap) => {
+      const visible = chap.querySelectorAll(".as-card:not(.d-none)").length;
+      chap.classList.toggle("d-none", visible === 0);
+      const badge = chap.querySelector(".as-count");
+      if (badge) badge.textContent = `(${visible})`;
+      const collapseEl = chap.querySelector(".collapse");
+      if (collapseEl && typeof bootstrap !== "undefined") {
+        const coll = bootstrap.Collapse.getOrCreateInstance(collapseEl, {
+          toggle: false,
+        });
+        if (q && visible > 0) coll.show();
+      }
+    });
+
+    // Hide subject groups; update counts and expand if searching
+    document.querySelectorAll(".as-subject").forEach((sub) => {
+      const visible = sub.querySelectorAll(".as-card:not(.d-none)").length;
+      sub.classList.toggle("d-none", visible === 0);
+      const badge = sub.querySelector(":scope > .as-header .as-count");
+      if (badge) badge.textContent = `(${visible})`;
+      const collapseEl = sub.querySelector(":scope > .collapse");
+      if (collapseEl && typeof bootstrap !== "undefined") {
+        const coll = bootstrap.Collapse.getOrCreateInstance(collapseEl, {
+          toggle: false,
+        });
+        if (q && visible > 0) coll.show();
+      }
     });
   }
 
   function getFilteredData() {
-    const qLower = (lastSearch || "").toLowerCase();
-    return !qLower
-      ? allData
-      : allData.filter((e) => {
-          const fields = [e.subject, e.chapter, e.faculty, e.title]
-            .filter(Boolean)
-            .join(" ")
-            .toLowerCase();
-          return fields.includes(qLower);
-        });
+    const q = lastSearch.toLowerCase();
+    if (!q) return allData;
+    return allData.filter((e) => {
+      const hay = [e.subject, e.chapter, e.faculty, e.title]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
   }
 
-  // ---- Grouped table builder ----
-  function buildTable(data) {
-    const tbody = document.querySelector("#chaptersTable tbody");
-    tbody.innerHTML = "";
+  function checkEmpty() {
+    const any = document.querySelectorAll(".as-card:not(.d-none)").length > 0;
+    toggle(els.empty, !any);
+  }
+
+  function toggle(el, show) {
+    if (!el) return;
+    el.classList.toggle("d-none", !show);
+  }
+  function showError(msg) {
+    if (!els.error) return;
+    els.error.textContent = msg;
+    toggle(els.error, true);
+  }
+
+  // === Build grouped cards with Subject -> Chapter -> Cards, all collapsible ===
+  function buildCards(data) {
+    const container = els.content;
+    container.innerHTML = "";
 
     // Group by subject
-    const groups = new Map(); // subject -> entries[]
-    for (const entry of data) {
-      const subj = entry.subject || "(No subject)";
-      if (!groups.has(subj)) groups.set(subj, []);
-      groups.get(subj).push(entry);
+    const subjects = new Map();
+    for (const it of data) {
+      const s = it.subject || "(No subject)";
+      if (!subjects.has(s)) subjects.set(s, []);
+      subjects.get(s).push(it);
     }
 
-    // Sort subjects alphabetically
-    const subjects = Array.from(groups.keys()).sort((a, b) =>
+    const subjOrder = Array.from(subjects.keys()).sort((a, b) =>
       a.localeCompare(b, undefined, { sensitivity: "base" })
     );
 
-    subjects.forEach((subject, idx) => {
-      const entries = groups.get(subject).slice().sort(compareEntries);
+    subjOrder.forEach((subject) => {
+      const items = subjects.get(subject) || [];
 
-      // Subject header row (collapsible)
-      const hdr = document.createElement("tr");
-      hdr.className = "table-group-header";
-      hdr.innerHTML = `<th colspan="6"><button type="button" class="btn btn-link btn-sm px-0 toggle-subject" data-sidx="${idx}"><i class="bi bi-caret-down-fill me-1"></i>${subject} <span class="text-secondary small">(${entries.length})</span></button></th>`;
-      tbody.appendChild(hdr);
+      const subEl = document.createElement("section");
+      subEl.className = "as-subject";
+      const subId = `sub-${slug(subject)}`;
 
-      // Data rows
-      entries.forEach((entry) => {
-        const s = cachedScores?.[entry.aID]?.score;
-        const m = cachedScores?.[entry.aID]?.maxScore;
-        const attempted = cachedScores?.[entry.aID]?.attempted ?? 0;
-        const totalQ =
-          cachedScores?.[entry.aID]?.totalQuestions ??
-          entry.totalQuestions ??
-          0;
-        const pct = totalQ ? Math.round((attempted / totalQ) * 100) : 0;
+      const header = document.createElement("div");
+      header.className = "as-header";
+      header.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle text-dark-emphasis fs-4\" data-bs-toggle=\"collapse\" data-bs-target=\"#${subId}\" aria-expanded=\"true\" aria-controls=\"${subId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
+        subject
+      )}\
+</span> <span class=\"as-count\">(${items.length})</span></button>`;
 
-        const scoreBadge =
-          typeof s === "number" && typeof m === "number"
-            ? `<span class="badge bg-primary">${s} / ${m}</span>`
-            : `<span class="badge bg-secondary">-</span>`;
+      const collapse = document.createElement("div");
+      collapse.className = "collapse";
+      collapse.id = subId;
 
-        const tr = document.createElement("tr");
-        tr.dataset.sidx = String(idx);
-        tr.innerHTML = `
-            <td data-open-assignment>${highlightMatch(entry.subject)}</td>
-            <td data-open-assignment>${highlightMatch(entry.chapter)}</td>
-            <td data-open-assignment>${highlightMatch(entry.faculty)}</td>
-            <td data-open-assignment>${highlightMatch(entry.title)}</td>
-            <td>${scoreBadge}</td>
-            <td style="min-width:200px">
-              <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
-                <div class="progress-bar bg-success" style="width:${pct}%">${pct}% (${attempted}/${totalQ})</div>
-              </div>
-            </td>
-          `;
-
-        tr.querySelectorAll("[data-open-assignment]").forEach((td) => {
-          td.style.cursor = "pointer";
-          td.addEventListener("click", () => {
-            window.location.href = `./assignment.html?aID=${entry.aID}`;
-          });
-        });
-
-        tbody.appendChild(tr);
-      });
-    });
-
-    // Bind collapse toggles
-    tbody.querySelectorAll(".toggle-subject").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const idx = btn.dataset.sidx;
-        const isCollapsed = btn.classList.toggle("is-collapsed");
-        // toggle icon
-        const icon = btn.querySelector(".bi");
-        if (icon)
-          icon.className = `bi ${
-            isCollapsed ? "bi-caret-right-fill" : "bi-caret-down-fill"
-          } me-1`;
-        // hide/show rows belonging to this subject index
-        tbody.querySelectorAll(`tr[data-sidx="${idx}"]`).forEach((row) => {
-          row.classList.toggle("d-none", isCollapsed);
+      // Group by chapter inside subject
+      const chapters = new Map();
+      for (const it of items) {
+        const c = it.chapter || "(No chapter)";
+        if (!chapters.has(c)) chapters.set(c, []);
+        chapters.get(c).push(it);
+      }
+      const chapOrder = Array.from(chapters.keys()).sort((a, b) => {
+        const na = extractNum(a),
+          nb = extractNum(b);
+        if (na !== nb) return na - nb;
+        return String(a).localeCompare(String(b), undefined, {
+          numeric: true,
+          sensitivity: "base",
         });
       });
+
+      chapOrder.forEach((chapter) => {
+        const list = chapters.get(chapter) || [];
+        const chapWrap = document.createElement("div");
+        chapWrap.className = "as-chapter ps-5";
+        const chapId = `${subId}-ch-${slug(chapter)}`;
+
+        const h = document.createElement("div");
+        h.className = "as-header";
+        h.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle fs-6\" data-bs-toggle=\"collapse\" data-bs-target=\"#${chapId}\" aria-expanded=\"true\" aria-controls=\"${chapId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
+          chapter
+        )}\
+</span> <span class=\"as-count\">(${list.length})</span></button>`;
+
+        const wrap = document.createElement("div");
+        wrap.className = "collapse";
+        wrap.id = chapId;
+
+        const grid = document.createElement("div");
+        grid.className = "as-grid";
+        list.forEach((it) => grid.appendChild(cardFor(it)));
+
+        wrap.appendChild(grid);
+        chapWrap.append(h, wrap);
+        collapse.appendChild(chapWrap);
+      });
+
+      subEl.append(header, collapse);
+      container.appendChild(subEl);
     });
   }
 
-  function setupSearchOnce() {
-    if (searchBound) return;
-    const input = document.getElementById("table-search-input");
-    if (!input) return;
+  function cardFor(entry) {
+    const card = document.createElement("div");
+    card.className = "card as-card h-100";
 
-    input.addEventListener("input", () => {
-      lastSearch = input.value.trim();
-      const filtered = getFilteredData();
-      buildTable(filtered);
+    // Determine status from scores: completed if all questions attempted; started if attempted > 0
+    const sc = cachedScores?.[entry.aID] || {};
+    const attempted = Number(sc.attempted ?? entry.attempted ?? 0);
+    const totalQ = Number(sc.totalQuestions ?? entry.totalQuestions ?? 0);
+    const statusClass =
+      attempted > 0 && totalQ > 0 && attempted >= totalQ
+        ? "completed"
+        : attempted > 0
+        ? "started"
+        : "";
+    if (statusClass) card.classList.add(statusClass);
+
+    // Precompute searchable text
+    const hay = [entry.subject, entry.chapter, entry.faculty, entry.title]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    card.dataset.haystack = hay;
+
+    const body = document.createElement("div");
+    body.className = "card-body d-flex flex-column gap-1";
+
+    const title = document.createElement("h5");
+    title.className = "card-title mb-1 as-highlightable";
+    title.dataset.raw = entry.title || "Assignment";
+    title.textContent = entry.title || "Assignment";
+
+    const meta = document.createElement("div");
+    meta.className = "as-meta";
+    const ch = document.createElement("div");
+    ch.innerHTML = `Chapter: <strong class="as-highlightable" data-raw="${escapeAttr(
+      entry.chapter || "—"
+    )}">${escapeHtml(entry.chapter || "—")}</strong>`;
+    const fac = document.createElement("div");
+    fac.innerHTML = `Faculty: <strong class="as-highlightable" data-raw="${escapeAttr(
+      entry.faculty || "—"
+    )}">${escapeHtml(entry.faculty || "—")}</strong>`;
+    meta.append(ch, fac);
+
+    body.append(title, meta);
+
+    const footer = document.createElement("div");
+    footer.className = "card-footer bg-transparent border-0 as-actions";
+
+    // Score + progress
+    const score = sc.score,
+      maxScore = sc.maxScore;
+    const pct = totalQ ? Math.round((attempted / totalQ) * 100) : 0;
+
+    const info = document.createElement("div");
+    info.className =
+      "d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2";
+    const scoreSpan = document.createElement("span");
+    scoreSpan.className = "as-score";
+    scoreSpan.innerHTML =
+      typeof score === "number" && typeof maxScore === "number"
+        ? `<span class="badge bg-primary">${score} / ${maxScore}</span>`
+        : `<span class="badge bg-secondary">-</span>`;
+
+    info.append(scoreSpan);
+
+    const progressWrap = document.createElement("div");
+    progressWrap.className = "as-progress w-100";
+    progressWrap.innerHTML = `<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="progress-bar ${
+      statusClass === "completed" ? "bg-success" : "bg-success"
+    }" style="width:${pct}%">${pct}% (${attempted}/${totalQ})</div></div>`;
+
+    footer.append(info, progressWrap);
+
+    card.append(body, footer);
+
+    // Entire card clickable (non-interactive areas)
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a, button, input, textarea, select, label")) return;
+      window.location.href = `./assignment.html?aID=${encodeURIComponent(
+        entry.aID
+      )}`;
     });
 
-    searchBound = true;
+    return card;
+  }
+
+  // === utils ===
+  function slug(s) {
+    return String(s || "")
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-");
+  }
+  function extractNum(s) {
+    const m = String(s || "").match(/(\d+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1]) : Number.POSITIVE_INFINITY;
+  }
+
+  // === highlight helpers (same approach as worksheet index) ===
+  function escapeAttr(s) {
+    return String(s ?? "").replaceAll('"', "&quot;");
+  }
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text ?? "";
+    return div.innerHTML;
+  }
+  function escapeRegExp(s) {
+    return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+  function highlightText(raw, q) {
+    if (!q) return escapeHtml(raw ?? "");
+    const OPEN = "__<<OPEN>>__";
+    const CLOSE = "__<<CLOSE>>__";
+    const re = new RegExp(escapeRegExp(q), "ig");
+    const marked = String(raw ?? "").replace(re, (m) => OPEN + m + CLOSE);
+    let safe = escapeHtml(marked);
+    return safe.replaceAll(OPEN, "<mark>").replaceAll(CLOSE, "</mark>");
+  }
+  function highlightElements(root, q) {
+    (root || document).querySelectorAll(".as-highlightable").forEach((el) => {
+      const raw =
+        el.dataset.raw ?? el.getAttribute("data-raw") ?? el.textContent ?? "";
+      el.innerHTML = q ? highlightText(raw, q) : escapeHtml(raw);
+    });
   }
 })();
