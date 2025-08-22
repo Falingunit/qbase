@@ -30,9 +30,9 @@
 
   // Login hook mirrors initial load
   window.addEventListener("qbase:login", bootstrap);
-  bootstrap();
+  initApp();
 
-  async function bootstrap() {
+  async function initApp() {
     toggle(els.loading, true);
     toggle(els.error, false);
     toggle(els.empty, false);
@@ -102,33 +102,41 @@
       card.classList.toggle("d-none", !match);
     });
 
-    // Hide chapter groups with no visible cards; update counts and expand if searching
+    // Chapters
     document.querySelectorAll(".as-chapter").forEach((chap) => {
       const visible = chap.querySelectorAll(".as-card:not(.d-none)").length;
       chap.classList.toggle("d-none", visible === 0);
+
       const badge = chap.querySelector(".as-count");
       if (badge) badge.textContent = `(${visible})`;
+
       const collapseEl = chap.querySelector(".collapse");
-      if (collapseEl && typeof bootstrap !== "undefined") {
-        const coll = bootstrap.Collapse.getOrCreateInstance(collapseEl, {
+      const BS = window.bootstrap;
+      if (collapseEl && BS?.Collapse) {
+        const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
         if (q && visible > 0) coll.show();
+        else coll.hide();
       }
     });
 
-    // Hide subject groups; update counts and expand if searching
+    // Subjects
     document.querySelectorAll(".as-subject").forEach((sub) => {
       const visible = sub.querySelectorAll(".as-card:not(.d-none)").length;
       sub.classList.toggle("d-none", visible === 0);
+
       const badge = sub.querySelector(":scope > .as-header .as-count");
       if (badge) badge.textContent = `(${visible})`;
+
       const collapseEl = sub.querySelector(":scope > .collapse");
-      if (collapseEl && typeof bootstrap !== "undefined") {
-        const coll = bootstrap.Collapse.getOrCreateInstance(collapseEl, {
+      const BS = window.bootstrap;
+      if (collapseEl && BS?.Collapse) {
+        const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
         if (q && visible > 0) coll.show();
+        else coll.hide();
       }
     });
   }
@@ -186,7 +194,7 @@
 
       const header = document.createElement("div");
       header.className = "as-header";
-      header.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle text-dark-emphasis fs-4\" data-bs-toggle=\"collapse\" data-bs-target=\"#${subId}\" aria-expanded=\"true\" aria-controls=\"${subId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
+      header.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle text-dark-emphasis fs-5\" data-bs-toggle=\"collapse\" data-bs-target=\"#${subId}\" aria-controls=\"${subId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
         subject
       )}\
 </span> <span class=\"as-count\">(${items.length})</span></button>`;
@@ -220,10 +228,10 @@
 
         const h = document.createElement("div");
         h.className = "as-header";
-        h.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle fs-6\" data-bs-toggle=\"collapse\" data-bs-target=\"#${chapId}\" aria-expanded=\"true\" aria-controls=\"${chapId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
+        h.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle fs-5\" data-bs-toggle=\"collapse\" data-bs-target=\"#${chapId}\" aria-controls=\"${chapId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
           chapter
         )}\
-</span> <span class=\"as-count\">(${list.length})</span></button>`;
+        </span> <span class=\"as-count\">(${list.length})</span></button>`;
 
         const wrap = document.createElement("div");
         wrap.className = "collapse";
@@ -355,15 +363,22 @@
   function escapeRegExp(s) {
     return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
+
+  const OPEN = "\u0001"; // sentinel that survives HTML-escape
+  const CLOSE = "\u0002";
+
   function highlightText(raw, q) {
     if (!q) return escapeHtml(raw ?? "");
-    const OPEN = "__<<OPEN>>__";
-    const CLOSE = "__<<CLOSE>>__";
     const re = new RegExp(escapeRegExp(q), "ig");
     const marked = String(raw ?? "").replace(re, (m) => OPEN + m + CLOSE);
-    let safe = escapeHtml(marked);
-    return safe.replaceAll(OPEN, "<mark>").replaceAll(CLOSE, "</mark>");
+    // escape everything, then swap sentinels for <mark> tags
+    return escapeHtml(marked)
+      .split(OPEN)
+      .join("<mark>")
+      .split(CLOSE)
+      .join("</mark>");
   }
+
   function highlightElements(root, q) {
     (root || document).querySelectorAll(".as-highlightable").forEach((el) => {
       const raw =
