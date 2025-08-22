@@ -180,10 +180,10 @@
       "qOptions": [
         "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{2} \\right\\} \\)",
         "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{2} R} \\left\\{ \\left( d + \\frac{a \\sqrt{2}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{2}}{2d} \\right) - \\frac{a \\sqrt{2}}{2} \\right\\} \\)",
-        "\\( I = \\frac{\\mu_0 I_0}{4 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{2a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{2} \\right\\} \\)",
-        "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{2d} \\right) - \\frac{a \\sqrt{3}}{3} \\right\\} \\)"
+        "\\( I = \\frac{\\mu_0 I_0}{4 \\pi \\sqrt{3} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{d} \\right) - \\frac{a \\sqrt{3}}{2} \\right\\} \\)",
+        "\\( I = \\frac{\\mu_0 I_0}{2 \\pi \\sqrt{2} R} \\left\\{ \\left( d + \\frac{a \\sqrt{3}}{2} \\right) \\ln \\left( 1 + \\frac{a \\sqrt{3}}{d} \\right) - \\frac{a \\sqrt{3}}{3} \\right\\} \\)"
       ],
-      "qAnswer": "B"
+      "qAnswer": "A"
     },
     {
       "qType": "SMCQ",
@@ -358,7 +358,7 @@
     {
       "qType": "Passage",
       "passageId": "P3",
-      "qText": "The conductor ABCDE has slope in \\(y\\)-\\(z\\) plane. When moving at \\(v\\) in \\(B\\), emf induced between A and E is described below.",
+      "qText": "The conductor ABCDE has the slope shown in the figure. It lies in the \\(y\\)-\\(z\\) plane. When moving at \\(v\\) in \\(B\\), emf induced between A and E is described below.",
       "image": "28.png",
       "qOptions": [],
       "qAnswer": []
@@ -371,8 +371,8 @@
       "qOptions": [
         "emf increases linearly",
         "emf increases sharply",
-        "emf constant",
-        "loop experiences left force"
+        "emf has a constant value \\(Ba^2v\\)",
+        "The loop will experiende a force to the let after entering the field partially"
       ],
       "qAnswer": ["A", "C", "D"]
     },
