@@ -185,12 +185,12 @@
       subEl.className = "as-subject";
       const subId = `sub-${slug(subject)}`;
 
-      // Subject header with collapse toggle
+      // Subject header with collapse toggle (match index.js)
       const header = document.createElement("div");
       header.className = "as-header";
-      header.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle text-dark-emphasis fs-4\" data-bs-toggle=\"collapse\" data-bs-target=\"#${subId}\" aria-expanded=\"true\" aria-controls=\"${subId}\"><i class=\"bi bi-chevron-right\"></i><span class="me-1">${escapeHtml(
+      header.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle text-dark-emphasis fs-5\" data-bs-toggle=\"collapse\" data-bs-target=\"#${subId}\" aria-controls=\"${subId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
         subject
-      )}</span> <span class="as-count">(${items.length})</span></button>`;
+      )}</span> <span class=\"as-count\">(${items.length})</span></button>`;
 
       const collapse = document.createElement("div");
       collapse.className = "collapse";
@@ -223,10 +223,9 @@
 
         const h = document.createElement("div");
         h.className = "as-header";
-        h.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle fs-6\" data-bs-toggle=\"collapse\" data-bs-target=\"#${chapId}\" aria-expanded=\"true\" aria-controls=\"${chapId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
+        h.innerHTML = `<button class=\"btn btn-sm btn-link as-toggle fs-5\" data-bs-toggle=\"collapse\" data-bs-target=\"#${chapId}\" aria-controls=\"${chapId}\"><i class=\"bi bi-chevron-right\"></i><span class=\"me-1\">${escapeHtml(
           chapter
-        )}\
-        </span> <span class=\"as-count\">(${list.length})</span></button>`;
+        )}</span> <span class=\"as-count\">(${list.length})</span></button>`;
 
         const wrap = document.createElement("div");
         wrap.className = "collapse";
@@ -256,22 +255,23 @@
       .toLowerCase();
 
     const body = document.createElement("div");
-    body.className = "card-body";
+    body.className = "card-body d-flex flex-column gap-1";
 
     const title = document.createElement("h5");
     title.className = "card-title mb-1 as-highlightable";
-    title.dataset.raw = it.title;
-    title.href = `./worksheet.html/?wID=${encodeURIComponent(it.wID || "")}`;
-    title.textContent = it.title;
+    title.dataset.raw = it.title || "Worksheet";
+    title.textContent = it.title || "Worksheet";
 
     const meta = document.createElement("div");
     meta.className = "as-meta";
-    meta.innerHTML = `Chapter:&nbsp;</span>`;
-    const metaValue = document.createElement("strong");
-    metaValue.className = "as-highlightable";
-    metaValue.dataset.raw = it.chapter || "—";
-    metaValue.textContent = it.chapter || "—";
-    meta.appendChild(metaValue);
+    const ch = document.createElement("div");
+    ch.textContent = "Chapter: ";
+    const chValue = document.createElement("strong");
+    chValue.className = "as-highlightable";
+    chValue.dataset.raw = it.chapter || "—";
+    chValue.textContent = it.chapter || "—";
+    ch.appendChild(chValue);
+    meta.appendChild(ch);
 
     body.append(title, meta);
 
@@ -284,7 +284,7 @@
     card.addEventListener("click", (e) => {
       if (e.defaultPrevented) return;
       if (e.target.closest("a, button, input, textarea, select, label")) return;
-      window.location.href = `./worksheet.html/?wID=${encodeURIComponent(
+      window.location.href = `./worksheet.html?wID=${encodeURIComponent(
         it.wID || ""
       )}`;
     });
