@@ -1,0 +1,19 @@
+/* =========================
+   Cards & content blocks
+   ========================= */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.card-header {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.card .small.text-muted { color: var(--muted) !important; }
+
+/* keep the card content from stretching too wide for readability */
+.left-col .card { max-width: 760px; }
