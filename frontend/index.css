@@ -137,6 +137,7 @@ h4 {
   transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease;
   cursor: pointer;
+  position: relative;
 }
 .as-card.card:hover {
   transform: translateY(-2px);
@@ -151,6 +152,13 @@ h4 {
 }
 .as-actions .btn {
   width: 100%;
+}
+
+.as-star-btn {
+  opacity: 0.8;
+}
+.as-star-btn:hover {
+  opacity: 1;
 }
 
 /* started/completed borders */

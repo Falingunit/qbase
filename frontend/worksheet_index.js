@@ -14,6 +14,8 @@
 
   let allData = [];
   let lastSearch = "";
+  const STAR_KEY = "starredWorksheets";
+  let starred = new Set(JSON.parse(localStorage.getItem(STAR_KEY) || "[]"));
 
   // Wire global navbar search to local search (same as index.js UX)
   (function wireNavbarToLocalSearch() {
@@ -161,14 +163,41 @@
     return base.slice(0, 96) || String(Date.now());
   }
 
+  function toggleStar(id) {
+    id = String(id);
+    if (starred.has(id)) starred.delete(id);
+    else starred.add(id);
+    localStorage.setItem(STAR_KEY, JSON.stringify([...starred]));
+    renderGroups(allData);
+    applyFilter();
+  }
+
   // === Rendering (match index.js structure/classes) ===
   function renderGroups(data) {
     const container = els.content;
     container.innerHTML = "";
 
+    const starredItems = data.filter((it) =>
+      starred.has(String(it.wID))
+    );
+    const otherItems = data.filter((it) => !starred.has(String(it.wID)));
+
+    if (starredItems.length) {
+      const starEl = document.createElement("section");
+      starEl.className = "as-subject as-starred";
+      const head = document.createElement("div");
+      head.className = "as-header";
+      head.innerHTML = `<i class="bi bi-star-fill text-warning"></i><span class="me-1">Starred</span> <span class="as-count">(${starredItems.length})</span>`;
+      const grid = document.createElement("div");
+      grid.className = "as-grid";
+      starredItems.forEach((it) => grid.appendChild(cardFor(it)));
+      starEl.append(head, grid);
+      container.appendChild(starEl);
+    }
+
     // Group by subject
     const subjects = new Map();
-    for (const it of data) {
+    for (const it of otherItems) {
       const s = it.subject || "(No subject)";
       if (!subjects.has(s)) subjects.set(s, []);
       subjects.get(s).push(it);
@@ -254,6 +283,19 @@
       .join(" ")
       .toLowerCase();
 
+    const id = String(it.wID);
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-sm btn-link as-star-btn position-absolute top-0 end-0";
+    starBtn.innerHTML = `<i class="bi ${starred.has(id) ? "bi-star-fill" : "bi-star"}"></i>`;
+    starBtn.classList.toggle("text-warning", starred.has(id));
+    starBtn.classList.toggle("text-secondary", !starred.has(id));
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleStar(id);
+    });
+    card.appendChild(starBtn);
+
     const body = document.createElement("div");
     body.className = "card-body d-flex flex-column gap-1";
 
@@ -313,6 +355,13 @@
       const hay = card.dataset.haystack || "";
       const match = !q || hay.includes(q);
       card.classList.toggle("d-none", !match);
+    });
+
+    document.querySelectorAll(".as-starred").forEach((sec) => {
+      const visible = sec.querySelectorAll(".as-card:not(.d-none)").length;
+      sec.classList.toggle("d-none", visible === 0);
+      const badge = sec.querySelector(".as-count");
+      if (badge) badge.textContent = `(${visible})`;
     });
 
     const BS = window.bootstrap; // avoid any local shadowing

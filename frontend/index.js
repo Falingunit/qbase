@@ -5,6 +5,8 @@
   let allData = [];
   let cachedScores = {};
   let lastSearch = "";
+  const STAR_KEY = "starredAssignments";
+  let starred = new Set(JSON.parse(localStorage.getItem(STAR_KEY) || "[]"));
 
   const els = {
     content: document.getElementById("as-content"),
@@ -45,14 +47,12 @@
       ]);
       allData = assignRes || [];
       cachedScores = scores || {};
-      buildCards(getFilteredData());
+      buildCards(allData);
       bindSearch();
 
       toggle(els.loading, false);
       toggle(els.content, true);
-      checkEmpty();
-      // initial highlight pass
-      highlightElements(document, (els.search?.value || "").trim());
+      applyFilter();
     } catch (e) {
       console.error(e);
       showError("Failed to load assignments. Check the JSON/API.");
@@ -102,6 +102,13 @@
       card.classList.toggle("d-none", !match);
     });
 
+    document.querySelectorAll(".as-starred").forEach((sec) => {
+      const visible = sec.querySelectorAll(".as-card:not(.d-none)").length;
+      sec.classList.toggle("d-none", visible === 0);
+      const badge = sec.querySelector(".as-count");
+      if (badge) badge.textContent = `(${visible})`;
+    });
+
     // Chapters
     document.querySelectorAll(".as-chapter").forEach((chap) => {
       const visible = chap.querySelectorAll(".as-card:not(.d-none)").length;
@@ -141,18 +148,6 @@
     });
   }
 
-  function getFilteredData() {
-    const q = lastSearch.toLowerCase();
-    if (!q) return allData;
-    return allData.filter((e) => {
-      const hay = [e.subject, e.chapter, e.faculty, e.title]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(q);
-    });
-  }
-
   function checkEmpty() {
     const any = document.querySelectorAll(".as-card:not(.d-none)").length > 0;
     toggle(els.empty, !any);
@@ -168,14 +163,41 @@
     toggle(els.error, true);
   }
 
+  function toggleStar(id) {
+    id = String(id);
+    if (starred.has(id)) starred.delete(id);
+    else starred.add(id);
+    localStorage.setItem(STAR_KEY, JSON.stringify([...starred]));
+    buildCards(allData);
+    applyFilter();
+  }
+
   // === Build grouped cards with Subject -> Chapter -> Cards, all collapsible ===
   function buildCards(data) {
     const container = els.content;
     container.innerHTML = "";
 
+    const starredItems = data.filter((it) =>
+      starred.has(String(it.aID))
+    );
+    const otherItems = data.filter((it) => !starred.has(String(it.aID)));
+
+    if (starredItems.length) {
+      const starEl = document.createElement("section");
+      starEl.className = "as-subject as-starred";
+      const head = document.createElement("div");
+      head.className = "as-header";
+      head.innerHTML = `<i class="bi bi-star-fill text-warning"></i><span class="me-1">Starred</span> <span class="as-count">(${starredItems.length})</span>`;
+      const grid = document.createElement("div");
+      grid.className = "as-grid";
+      starredItems.forEach((it) => grid.appendChild(cardFor(it)));
+      starEl.append(head, grid);
+      container.appendChild(starEl);
+    }
+
     // Group by subject
     const subjects = new Map();
-    for (const it of data) {
+    for (const it of otherItems) {
       const s = it.subject || "(No subject)";
       if (!subjects.has(s)) subjects.set(s, []);
       subjects.get(s).push(it);
@@ -254,6 +276,19 @@
   function cardFor(entry) {
     const card = document.createElement("div");
     card.className = "card as-card h-100";
+
+    const id = String(entry.aID);
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-sm btn-link as-star-btn position-absolute top-0 end-0";
+    starBtn.innerHTML = `<i class="bi ${starred.has(id) ? "bi-star-fill" : "bi-star"}"></i>`;
+    starBtn.classList.toggle("text-warning", starred.has(id));
+    starBtn.classList.toggle("text-secondary", !starred.has(id));
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleStar(id);
+    });
+    card.appendChild(starBtn);
 
     // Determine status from scores: completed if all questions attempted; started if attempted > 0
     const sc = cachedScores?.[entry.aID] || {};
