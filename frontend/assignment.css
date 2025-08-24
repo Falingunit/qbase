@@ -169,8 +169,6 @@ body.bg-dark { background-color: transparent !important; }
   overflow-x: auto;
   padding: .5rem .25rem .25rem;
   gap: .5rem;
-  position: sticky;
-  top: 0;
   z-index: 2;
 }
 #mobile-qbar button {
