@@ -57,6 +57,24 @@ h4 {
   color: #9aa3ac;
 }
 
+/* navbar search expansion */
+#navbar-search-input {
+  width: 8rem;
+  max-width: 100%;
+  transition: width 0.3s ease;
+}
+#navbar-search-input:focus {
+  width: 16rem;
+}
+@media (max-width: 576px) {
+  #navbar-search-input {
+    width: 6rem;
+  }
+  #navbar-search-input:focus {
+    width: 100%;
+  }
+}
+
 /* === subject + chapter groups === */
 .as-subject {
   margin-top: 1.25rem;

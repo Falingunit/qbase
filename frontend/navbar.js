@@ -500,8 +500,8 @@
     const input = document.getElementById("navbar-search-input");
     const query = (input?.value || "").trim();
 
-    // Always redirect to index.html with ?q= parameter
-    const url = new URL("./index.html", window.location.href);
+    // Redirect to global search results page with ?q= parameter
+    const url = new URL("./search.html", window.location.href);
     if (query) {
       url.searchParams.set("q", query);
     } else {
