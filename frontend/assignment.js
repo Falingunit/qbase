@@ -1052,7 +1052,7 @@
       qImgDiv.style.display = "none";
       qImgDiv.innerHTML = "";
     }
-    qTextElm.textContent = question.qText;
+    qTextElm.innerHTML = escapeHtml(question.qText || "").replace(/\n/g, "<br>");
     renderMathInElement(qTextElm, katexOptions);
 
     // --- Timer control ---
