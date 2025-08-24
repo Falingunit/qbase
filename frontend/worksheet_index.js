@@ -292,6 +292,67 @@
     return card;
   }
 
+  // === Starred worksheets ===
+  function ensureStarSection() {
+    let sec = document.getElementById("as-starred");
+    if (!sec) {
+      sec = document.createElement("section");
+      sec.id = "as-starred";
+      sec.className = "as-subject";
+      sec.innerHTML =
+        '<div class="as-header"><button class="btn btn-sm btn-link as-toggle text-dark-emphasis fs-5" data-bs-toggle="collapse" data-bs-target="#as-starred-collapse" aria-controls="as-starred-collapse"><i class="bi bi-chevron-right"></i><span class="me-1">Starred</span> <span class="as-count">(0)</span></button></div>' +
+        '<div id="as-starred-collapse" class="collapse show"><div class="as-grid"></div></div>';
+      els.content.prepend(sec);
+    }
+    return sec;
+  }
+
+  function updateStarSection(sec) {
+    const grid = sec.querySelector(".as-grid");
+    const count = sec.querySelector(".as-count");
+    if (count) count.textContent = `(${grid.querySelectorAll(".as-card").length})`;
+    if (grid.children.length === 0) sec.remove();
+  }
+
+  function toggleStar(icon, id) {
+    const key = "starredWorksheets";
+    const raw = localStorage.getItem(key);
+    const set = new Set(raw ? JSON.parse(raw) : []);
+    const strId = String(id);
+    const card = icon.closest(".as-card");
+    if (!card) return;
+    card.dataset.starId = strId;
+
+    if (set.has(strId)) {
+      set.delete(strId);
+      localStorage.setItem(key, JSON.stringify([...set]));
+      icon.classList.remove("bi-star-fill");
+      icon.classList.add("bi-star");
+      const sec = document.getElementById("as-starred");
+      sec?.querySelector(`.as-card[data-star-id="${strId}"]`)?.remove();
+      if (sec) updateStarSection(sec);
+    } else {
+      set.add(strId);
+      localStorage.setItem(key, JSON.stringify([...set]));
+      icon.classList.add("bi-star-fill");
+      icon.classList.remove("bi-star");
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = strId;
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+        cloneIcon.addEventListener("click", () => toggleStar(cloneIcon, strId));
+      }
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
+  }
+
+  window.toggleStar = toggleStar;
+
   // === Search / filter like index.js ===
   function applyFilter() {
     lastSearch = (els.search.value || "").trim();
