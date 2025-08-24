@@ -396,6 +396,7 @@
               ? l.pickedNumerical
               : s.pickedNumerical,
           isAnswerEvaluated: !!(l.isAnswerEvaluated || s.isAnswerEvaluated),
+          evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
         };
       });
