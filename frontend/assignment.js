@@ -535,6 +535,20 @@
 
     if (authSource === "server") {
       try {
+        // Fetch latest state from server and merge with any local progress
+        try {
+          const res = await authFetch(`${API_BASE}/api/state/${aID}`);
+          if (res.ok) {
+            const server = await res.json();
+            if (Array.isArray(server) && server.length) {
+              questionStates = mergeStates(server, questionStates);
+              ensureStateLength(window.displayQuestions.length);
+              questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
+              if (currentQuestionID != null) setQuestion(currentQuestionID);
+            }
+          }
+        } catch {}
+
         if (dirty) {
           await postState(aID, questionStates);
           dirty = false;
