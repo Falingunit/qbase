@@ -119,11 +119,11 @@
 
       const collapseEl = chap.querySelector(".collapse");
       const BS = window.bootstrap;
-      if (collapseEl && BS?.Collapse) {
+      if (collapseEl && BS?.Collapse && q) {
         const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
-        if (q && visible > 0) coll.show();
+        if (visible > 0) coll.show();
         else coll.hide();
       }
     });
@@ -138,11 +138,11 @@
 
       const collapseEl = sub.querySelector(":scope > .collapse");
       const BS = window.bootstrap;
-      if (collapseEl && BS?.Collapse) {
+      if (collapseEl && BS?.Collapse && q) {
         const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
-        if (q && visible > 0) coll.show();
+        if (visible > 0) coll.show();
         else coll.hide();
       }
     });
@@ -168,7 +168,24 @@
     if (starred.has(id)) starred.delete(id);
     else starred.add(id);
     localStorage.setItem(STAR_KEY, JSON.stringify([...starred]));
+    const openIds = Array.from(
+      document.querySelectorAll(".collapse.show")
+    ).map((el) => el.id);
+
     buildCards(allData);
+
+    const BS = window.bootstrap;
+    openIds.forEach((cid) => {
+      const el = document.getElementById(cid);
+      if (!el) return;
+      if (BS?.Collapse) {
+        const coll = BS.Collapse.getOrCreateInstance(el, { toggle: false });
+        coll.show();
+      } else {
+        el.classList.add("show");
+      }
+    });
+
     applyFilter();
   }
 
@@ -180,7 +197,6 @@
     const starredItems = data.filter((it) =>
       starred.has(String(it.aID))
     );
-    const otherItems = data.filter((it) => !starred.has(String(it.aID)));
 
     if (starredItems.length) {
       const starEl = document.createElement("section");
@@ -195,9 +211,9 @@
       container.appendChild(starEl);
     }
 
-    // Group by subject
+    // Group by subject (include starred items so they appear twice)
     const subjects = new Map();
-    for (const it of otherItems) {
+    for (const it of data) {
       const s = it.subject || "(No subject)";
       if (!subjects.has(s)) subjects.set(s, []);
       subjects.get(s).push(it);
