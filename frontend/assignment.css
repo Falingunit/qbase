@@ -57,15 +57,6 @@ body {
   margin-inline: auto;
 }
 
-/* Topbar (blended glass) */
-.assignment-topbar {
-  top: 56px; /* height of your navbar */
-  z-index: 1030;
-
-  /* glass look */
-  background: rgba(0, 0, 0, 0);
-}
-
 /* optional: compact spacing and neat typography */
 .assignment-topbar h5 {
   margin: 0;
@@ -382,7 +373,6 @@ input.is-wrong {
 }
 
 
-/* === Consistent typography & spacing === */
 html { font-size: 16px; }
 body { line-height: 1.55; }
 :root {
@@ -390,7 +380,6 @@ body { line-height: 1.55; }
   --container-max: 1100px;
 }
 
-/* Make assignment topbar sticky and properly spaced */
 .assignment-topbar {
   top: 56px;
   padding: 0.5rem 0.75rem;
@@ -423,4 +412,51 @@ body { line-height: 1.55; }
 /* Slightly larger question buttons on desktop for accessibility */
 @media (min-width: 992px) {
   .q-btn { font-size: 0.95rem; }
+}
+
+
+/* === One-screen page (no window scroll) === */
+html { block-size: 100%; }
+
+body {
+  margin: 0;
+  min-block-size: 100vh;   /* fallback */
+  min-block-size: 100dvh;  /* modern: accounts for mobile UI bars */
+  overflow: hidden;        /* disable page scroll */
+  display: flex;           /* let .main-wrapper fill the viewport */
+  flex-direction: column;
+}
+
+/* Make the main content area fill the viewport and scroll internally */
+.main-wrapper {
+  flex: 1 1 auto;
+  min-block-size: 0;       /* critical for flex children to be scrollable */
+}
+
+/* Internal scrolling columns */
+.left-col,
+.right-col {
+  min-block-size: 0;
+  overflow: auto;          /* scroll inside these instead of the page */
+}
+
+/* Keep large media from forcing overflow */
+img, video {
+  max-inline-size: 100%;
+  max-block-size: 100%;
+  object-fit: contain;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: 0 0 1px 1px rgba(13, 110, 253, 0.12) inset;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
 }

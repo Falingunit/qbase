@@ -27,7 +27,7 @@
 		crossorigin="anonymous"
 	></script>
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark text-light" style="max-height: 10vh !important;">
 	<nav class="navbar navbar-expand-lg bg-body-tertiary">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="./index.html">QBase</a>
@@ -99,7 +99,7 @@
 	</div>
 
 	<div class="container main-wrapper">
-		<div class="left-col px-4 py-3" style="width: 100%;">
+		<div class="left-col px-4 py-3 overflow-y-scroll" style="width: 100%;">
 
 			<div id="mobile-qbar"></div>
 
@@ -126,7 +126,7 @@
 				</div>
 			</div>
 
-			<div class="flex-grow-1 mb-3" id="MCQOptionDiv">
+			<div class="mb-3" id="MCQOptionDiv">
 				<button
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="A"
@@ -179,7 +179,7 @@
 			</div>
 		</div>
 
-		<div class="right-col p-3 d-none d-lg-block">
+		<div class="right-col p-3 d-none d-lg-block overflow-y-scroll">
 			<h6 class="mb-3">Questions</h6>
 			<div class="controls d-flex justify-content-between flex-shrink-0" style="padding-top: 1rem;">
 			<div class="row row-cols-4 g-2" id="q_list"></div>

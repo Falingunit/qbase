@@ -187,3 +187,17 @@ mark {
 .d-none {
   display: none !important;
 }
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: 0 0 1px 1px rgba(13, 110, 253, 0.12) inset;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
+}
