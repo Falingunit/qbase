@@ -508,32 +508,25 @@
 
     // Passage
     if (question.passage) {
-      html += '<div class="mb-4 p-3 bg-dark rounded">';
-      html += '<h6 class="text-muted mb-2">Passage:</h6>';
-
       if (question.passageImage) {
-        html += `<div class="mb-3"><img src="${imgSrc(
+        html += `<div class="passage-image mb-3"><img src="${imgSrc(
           question.passageImage
-        )}" class="img-fluid" alt="Passage Image"></div>`;
+        )}" alt="Passage Image"></div>`;
       }
-
       // keep as plain text (safe for KaTeX render later)
-      html += `<div class="passage-text">${esc(question.passage)}</div>`;
-      html += "</div>";
+      html += `<div class="passage-text mb-4">${esc(question.passage)}</div>`;
     }
 
     // Question text
     if (question.qText) {
-      html += `<div class="mb-3"><strong>Question:</strong><br><div class="question-text">${esc(
-        question.qText
-      )}</div></div>`;
+      html += `<div class="question-text mb-3">${esc(question.qText)}</div>`;
     }
 
     // Question image
     if (question.image) {
-      html += `<div class="mb-3"><img src="${imgSrc(
+      html += `<div class="question-image mb-3"><img src="${imgSrc(
         question.image
-      )}" class="img-fluid" alt="Question Image"></div>`;
+      )}" alt="Question Image"></div>`;
     }
 
     // Options (SMCQ/MMCQ)
@@ -550,9 +543,9 @@
         if (!optionText) continue;
 
         const isCorrect = correctAnswers.has(option);
-        const correctClass = isCorrect ? "border-success border-2" : "";
+        const correctClass = isCorrect ? "correct" : "";
         html += `
-          <div class="btn btn-outline-secondary text-start w-100 mb-2 ${correctClass}" style="pointer-events: none; color: white !important;">
+          <div class="btn btn-outline-secondary text-body mcq-option disabled text-start w-100 mb-2 ${correctClass}">
             <span class="option-label">${option}.</span> <span class="option-text">${esc(
           optionText
         )}</span>
@@ -560,18 +553,13 @@
         `;
       }
       html += "</div>";
-
-      const correctOptions = Array.from(correctAnswers).sort();
-      html += `<div class="alert alert-success"><strong>Correct Answer:</strong> ${esc(
-        correctOptions.join(", ")
-      )}</div>`;
     }
 
     // Numerical
     if (question.qType === "Numerical") {
       const answer = normalizeAnswer(question);
       if (answer.valid) {
-        html += `<div class="alert alert-success"><strong>Correct Answer:</strong> ${esc(
+        html += `<div class="text-body-emphasis"><strong>Correct Answer:</strong> ${esc(
           answer.value
         )}</div>`;
       }
