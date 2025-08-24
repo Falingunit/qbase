@@ -495,22 +495,234 @@
   window.addEventListener("qbase:login", () => hideLoginGate());
   window.addEventListener("qbase:force-login", showLoginGate);
 
-  function handleNavbarSearchSubmit(e) {
-    e && e.preventDefault && e.preventDefault();
-    const input = document.getElementById("navbar-search-input");
-    const query = (input?.value || "").trim();
-
-    // Redirect to global search results page with ?q= parameter
-    const url = new URL("./search.html", window.location.href);
-    if (query) {
-      url.searchParams.set("q", query);
-    } else {
-      url.searchParams.delete("q");
+  // --- Global search overlay ---
+  let searchCachePromise = null;
+  function fetchSearchData() {
+    if (!searchCachePromise) {
+      searchCachePromise = Promise.all([
+        fetch("./data/assignment_list.json")
+          .then((r) => r.json())
+          .catch(() => []),
+        fetch("./data/worksheets/worksheet_list.json")
+          .then((r) => r.json())
+          .catch(() => []),
+      ]).then(([assignments, worksheets]) => ({
+        assignments: Array.isArray(assignments) ? assignments : [],
+        worksheets: normalizeWorksheets(worksheets),
+      }));
     }
-    window.location.href = url.toString();
+    return searchCachePromise;
   }
 
-  // Prefill navbar search with current ?q= if present
+  function normalizeWorksheets(input) {
+    const out = [];
+    const pushItem = (raw, subjHint) => {
+      if (!raw) return;
+      const subject = (raw.subject || subjHint || "").toString();
+      const chapter = (
+        raw.chapter ||
+        raw.chapterName ||
+        raw.topic ||
+        ""
+      ).toString();
+      const title = (
+        raw.title ||
+        raw.name ||
+        raw.worksheetTitle ||
+        raw.label ||
+        raw.file ||
+        "Worksheet"
+      ).toString();
+      const wID = String(
+        raw.wID || raw.id || raw.wid || generateWID(subject, chapter, title)
+      );
+      out.push({ subject, chapter, title, wID });
+    };
+
+    if (Array.isArray(input)) {
+      input.forEach((it) => pushItem(it));
+    } else if (input && Array.isArray(input.worksheets)) {
+      input.worksheets.forEach((it) => pushItem(it));
+    } else if (input && Array.isArray(input.items)) {
+      input.items.forEach((it) => pushItem(it));
+    } else if (input && typeof input === "object") {
+      Object.entries(input).forEach(([subj, arr]) => {
+        if (Array.isArray(arr)) arr.forEach((it) => pushItem(it, subj));
+      });
+    }
+    return out;
+  }
+
+  function generateWID(subject, chapter, title) {
+    const slug = (s) =>
+      String(s || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+    return [slug(subject), slug(chapter), slug(title)]
+      .filter(Boolean)
+      .join("-");
+  }
+
+  function filterAssignments(list, q) {
+    if (!q) return list;
+    return list.filter((it) => {
+      const hay = [it.title, it.subject, it.chapter, it.faculty]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function filterWorksheets(list, q) {
+    if (!q) return list;
+    return list.filter((it) => {
+      const hay = [it.title, it.subject, it.chapter]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  function ensureSearchUI() {
+    let wrap = document.getElementById("navbar-search-results");
+    if (wrap) {
+      return {
+        wrap,
+        aList: wrap.querySelector("#nav-search-assignments"),
+        aEmpty: wrap.querySelector("#nav-search-a-empty"),
+        wList: wrap.querySelector("#nav-search-worksheets"),
+        wEmpty: wrap.querySelector("#nav-search-w-empty"),
+      };
+    }
+
+    wrap = document.createElement("div");
+    wrap.id = "navbar-search-results";
+    wrap.innerHTML = `
+      <div class="section">
+        <div class="section-title">Assignments</div>
+        <div id="nav-search-a-empty" class="empty d-none">No assignments found</div>
+        <div id="nav-search-assignments" class="list-group list-group-flush"></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Worksheets</div>
+        <div id="nav-search-w-empty" class="empty d-none">No worksheets found</div>
+        <div id="nav-search-worksheets" class="list-group list-group-flush"></div>
+      </div>`;
+
+    const form = document.querySelector("nav form[role='search']");
+    form?.classList.add("qbase-search-form");
+    form?.appendChild(wrap);
+
+    const input = document.getElementById("navbar-search-input");
+    document.addEventListener("click", (ev) => {
+      if (!wrap.contains(ev.target) && ev.target !== input) {
+        wrap.classList.remove("show");
+      }
+    });
+    input?.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") wrap.classList.remove("show");
+    });
+
+    if (!document.getElementById("navbar-search-style")) {
+      const style = document.createElement("style");
+      style.id = "navbar-search-style";
+      style.textContent = `
+        .qbase-search-form { position: relative; }
+        #navbar-search-results {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          margin-top: 0.25rem;
+          background: rgba(20,22,26,0.95);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 0.25rem;
+          z-index: 2000;
+          max-height: 60vh;
+          overflow-y: auto;
+          display: none;
+        }
+        #navbar-search-results.show { display: block; }
+        #navbar-search-results .section-title {
+          font-size: 0.875rem;
+          margin: 0.5rem 0.75rem;
+          color: #9aa3ac;
+        }
+        #navbar-search-results .list-group-item {
+          background: transparent;
+          color: #dfe6ee;
+          border: none;
+          padding: 0.5rem 0.75rem;
+        }
+        #navbar-search-results .empty {
+          padding: 0.5rem 0.75rem;
+          color: #9aa3ac;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    return {
+      wrap,
+      aList: wrap.querySelector("#nav-search-assignments"),
+      aEmpty: wrap.querySelector("#nav-search-a-empty"),
+      wList: wrap.querySelector("#nav-search-worksheets"),
+      wEmpty: wrap.querySelector("#nav-search-w-empty"),
+    };
+  }
+
+  async function handleNavbarSearchSubmit(e) {
+    e && e.preventDefault && e.preventDefault();
+    const input = document.getElementById("navbar-search-input");
+    const query = (input?.value || "").trim().toLowerCase();
+    const ui = ensureSearchUI();
+    ui.aList.innerHTML = "";
+    ui.wList.innerHTML = "";
+    ui.aEmpty.classList.add("d-none");
+    ui.wEmpty.classList.add("d-none");
+
+    if (!query) {
+      ui.wrap.classList.remove("show");
+      return;
+    }
+
+    const data = await fetchSearchData();
+    const aMatches = filterAssignments(data.assignments, query);
+    const wMatches = filterWorksheets(data.worksheets, query);
+
+    if (aMatches.length) {
+      aMatches.forEach((it) => {
+        const a = document.createElement("a");
+        a.className = "list-group-item list-group-item-action";
+        a.href = `./assignment.html?aID=${encodeURIComponent(it.aID || "")}`;
+        a.textContent = `${it.subject || ""} – ${it.title || "Assignment"}`;
+        ui.aList.appendChild(a);
+      });
+    } else {
+      ui.aEmpty.classList.remove("d-none");
+    }
+
+    if (wMatches.length) {
+      wMatches.forEach((it) => {
+        const a = document.createElement("a");
+        a.className = "list-group-item list-group-item-action";
+        a.href = `./worksheet.html?wID=${encodeURIComponent(it.wID || "")}`;
+        a.textContent = `${it.subject || ""} – ${it.title || "Worksheet"}`;
+        ui.wList.appendChild(a);
+      });
+    } else {
+      ui.wEmpty.classList.remove("d-none");
+    }
+
+    ui.wrap.classList.add("show");
+  }
+
+  // Prefill navbar search with current ?q= if present and wire events
   (function initNavbarSearch() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -522,7 +734,6 @@
         input.value = q;
       }
 
-      // Bind both button click and form submit/Enter
       const form = input?.closest("form");
       btn?.addEventListener("click", handleNavbarSearchSubmit);
       form?.addEventListener("submit", handleNavbarSearchSubmit);
@@ -532,5 +743,5 @@
     } catch (err) {
       console.error("Navbar search init failed:", err);
     }
-  });
+  })();
 })();
