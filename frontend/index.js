@@ -294,7 +294,12 @@
     )}">${escapeHtml(entry.faculty || "—")}</strong>`;
     meta.append(ch, fac);
 
-    body.append(title, meta);
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "d-flex justify-content-between"
+
+    titleDiv.append(title)
+
+    body.append(titleDiv, meta);
 
     const footer = document.createElement("div");
     footer.className = "card-footer bg-transparent border-0 as-actions";
@@ -313,18 +318,19 @@
       typeof score === "number" && typeof maxScore === "number"
         ? `<span class="badge bg-primary">${score} / ${maxScore}</span>`
         : `<span class="badge bg-secondary">-</span>`;
-
+    info.append(scoreSpan);
+        
     const starBtn = document.createElement("button");
     starBtn.type = "button";
-    starBtn.className = "btn btn-link p-0 ms-auto";
-    starBtn.innerHTML = '<i class="bi bi-star"></i>';
+    starBtn.className = "btn p-0 ms-auto";
+    starBtn.innerHTML = '<i class="bi bi-star text-warning"></i>';
     starBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const iconEl = starBtn.querySelector("i");
       toggleStar(iconEl, entry.aID);
     });
 
-    info.append(scoreSpan, starBtn);
+    titleDiv.append(starBtn)
 
     const progressWrap = document.createElement("div");
     progressWrap.className = "as-progress w-100";
