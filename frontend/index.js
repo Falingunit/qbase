@@ -314,7 +314,17 @@
         ? `<span class="badge bg-primary">${score} / ${maxScore}</span>`
         : `<span class="badge bg-secondary">-</span>`;
 
-    info.append(scoreSpan);
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-link p-0 ms-auto";
+    starBtn.innerHTML = '<i class="bi bi-star"></i>';
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const iconEl = starBtn.querySelector("i");
+      toggleStar(iconEl, entry.aID);
+    });
+
+    info.append(scoreSpan, starBtn);
 
     const progressWrap = document.createElement("div");
     progressWrap.className = "as-progress w-100";
@@ -323,6 +333,40 @@
     }" style="width:${pct}%">${pct}% (${attempted}/${totalQ})</div></div>`;
 
     footer.append(info, progressWrap);
+
+    card.dataset.starId = String(entry.aID);
+
+    // Initialize star state from storage
+    const starSet = new Set(
+      JSON.parse(localStorage.getItem("starredAssignments") || "[]")
+    );
+    if (starSet.has(String(entry.aID))) {
+      const iconEl = starBtn.querySelector("i");
+      iconEl.classList.add("bi-star-fill");
+      iconEl.classList.remove("bi-star");
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = String(entry.aID);
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, String(entry.aID));
+        });
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./assignment.html?aID=${encodeURIComponent(
+          entry.aID
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
 
     card.append(body, footer);
 
@@ -368,32 +412,46 @@
     if (!card) return;
     card.dataset.starId = strId;
 
-    if (set.has(strId)) {
+    const starred = set.has(strId);
+    if (starred) {
       set.delete(strId);
       localStorage.setItem(key, JSON.stringify([...set]));
-      icon.classList.remove("bi-star-fill");
-      icon.classList.add("bi-star");
       const sec = document.getElementById("as-starred");
       sec?.querySelector(`.as-card[data-star-id="${strId}"]`)?.remove();
       if (sec) updateStarSection(sec);
     } else {
       set.add(strId);
       localStorage.setItem(key, JSON.stringify([...set]));
-      icon.classList.add("bi-star-fill");
-      icon.classList.remove("bi-star");
       const sec = ensureStarSection();
       const grid = sec.querySelector(".as-grid");
       const clone = card.cloneNode(true);
       clone.dataset.starId = strId;
       const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
       if (cloneIcon) {
-        cloneIcon.classList.add("bi-star-fill");
-        cloneIcon.classList.remove("bi-star");
-        cloneIcon.addEventListener("click", () => toggleStar(cloneIcon, strId));
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, strId);
+        });
       }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./assignment.html?aID=${encodeURIComponent(
+          strId
+        )}`;
+      });
       grid.appendChild(clone);
       updateStarSection(sec);
     }
+
+    document
+      .querySelectorAll(
+        `.as-card[data-star-id="${strId}"] .bi-star, .as-card[data-star-id="${strId}"] .bi-star-fill`
+      )
+      .forEach((i) => {
+        i.classList.toggle("bi-star-fill", set.has(strId));
+        i.classList.toggle("bi-star", !set.has(strId));
+      });
   }
 
   window.toggleStar = toggleStar;

@@ -276,9 +276,53 @@
     body.append(title, meta);
 
     const footer = document.createElement("div");
-    footer.className = "card-footer bg-transparent border-0 as-actions";
+    footer.className =
+      "card-footer bg-transparent border-0 as-actions d-flex justify-content-end";
+
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-link p-0";
+    starBtn.innerHTML = '<i class="bi bi-star"></i>';
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const iconEl = starBtn.querySelector("i");
+      toggleStar(iconEl, it.wID);
+    });
+    footer.appendChild(starBtn);
 
     card.append(body, footer);
+
+    card.dataset.starId = String(it.wID);
+    const starSet = new Set(
+      JSON.parse(localStorage.getItem("starredWorksheets") || "[]")
+    );
+    if (starSet.has(String(it.wID))) {
+      const iconEl = starBtn.querySelector("i");
+      iconEl.classList.add("bi-star-fill");
+      iconEl.classList.remove("bi-star");
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = String(it.wID);
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, String(it.wID));
+        });
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./worksheet.html?wID=${encodeURIComponent(
+          it.wID || ""
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
 
     // Make entire card clickable (but keep links/buttons functional)
     card.addEventListener("click", (e) => {
@@ -323,32 +367,46 @@
     if (!card) return;
     card.dataset.starId = strId;
 
-    if (set.has(strId)) {
+    const starred = set.has(strId);
+    if (starred) {
       set.delete(strId);
       localStorage.setItem(key, JSON.stringify([...set]));
-      icon.classList.remove("bi-star-fill");
-      icon.classList.add("bi-star");
       const sec = document.getElementById("as-starred");
       sec?.querySelector(`.as-card[data-star-id="${strId}"]`)?.remove();
       if (sec) updateStarSection(sec);
     } else {
       set.add(strId);
       localStorage.setItem(key, JSON.stringify([...set]));
-      icon.classList.add("bi-star-fill");
-      icon.classList.remove("bi-star");
       const sec = ensureStarSection();
       const grid = sec.querySelector(".as-grid");
       const clone = card.cloneNode(true);
       clone.dataset.starId = strId;
       const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
       if (cloneIcon) {
-        cloneIcon.classList.add("bi-star-fill");
-        cloneIcon.classList.remove("bi-star");
-        cloneIcon.addEventListener("click", () => toggleStar(cloneIcon, strId));
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, strId);
+        });
       }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./worksheet.html?wID=${encodeURIComponent(
+          strId
+        )}`;
+      });
       grid.appendChild(clone);
       updateStarSection(sec);
     }
+
+    document
+      .querySelectorAll(
+        `.as-card[data-star-id="${strId}"] .bi-star, .as-card[data-star-id="${strId}"] .bi-star-fill`
+      )
+      .forEach((i) => {
+        i.classList.toggle("bi-star-fill", set.has(strId));
+        i.classList.toggle("bi-star", !set.has(strId));
+      });
   }
 
   window.toggleStar = toggleStar;
