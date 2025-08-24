@@ -337,7 +337,7 @@
                   <i class="bi bi-x"></i>
                 </button>
               </div>
-              <p class="card-text">${escapeHtml(truncated)}</p>
+              <p class="card-text">${escapeHtml(truncated).replace(/\n/g, "<br>")}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <span class="badge bg-info">${escapeHtml(
                   String(q.qType)
@@ -526,7 +526,7 @@
     if (question.qText) {
       html += `<div class="mb-3"><strong>Question:</strong><br><div class="question-text">${esc(
         question.qText
-      )}</div></div>`;
+      ).replace(/\n/g, "<br>")}</div></div>`;
     }
 
     // Question image
