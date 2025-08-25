@@ -14,6 +14,8 @@
 
   let allData = [];
   let lastSearch = "";
+  const STAR_KEY = "starredWorksheets";
+  let starred = new Set(JSON.parse(localStorage.getItem(STAR_KEY) || "[]"));
 
   // Wire global navbar search to local search (same as index.js UX)
   (function wireNavbarToLocalSearch() {
@@ -161,12 +163,55 @@
     return base.slice(0, 96) || String(Date.now());
   }
 
+  function toggleStar(id) {
+    id = String(id);
+    if (starred.has(id)) starred.delete(id);
+    else starred.add(id);
+    localStorage.setItem(STAR_KEY, JSON.stringify([...starred]));
+    const openIds = Array.from(
+      document.querySelectorAll(".collapse.show")
+    ).map((el) => el.id);
+
+    renderGroups(allData);
+
+    const BS = window.bootstrap;
+    openIds.forEach((cid) => {
+      const el = document.getElementById(cid);
+      if (!el) return;
+      if (BS?.Collapse) {
+        const coll = BS.Collapse.getOrCreateInstance(el, { toggle: false });
+        coll.show();
+      } else {
+        el.classList.add("show");
+      }
+    });
+
+    applyFilter();
+  }
+
   // === Rendering (match index.js structure/classes) ===
   function renderGroups(data) {
     const container = els.content;
     container.innerHTML = "";
 
-    // Group by subject
+    const starredItems = data.filter((it) =>
+      starred.has(String(it.wID))
+    );
+
+    if (starredItems.length) {
+      const starEl = document.createElement("section");
+      starEl.className = "as-subject as-starred";
+      const head = document.createElement("div");
+      head.className = "as-header";
+      head.innerHTML = `<i class="bi bi-star-fill text-warning"></i><span class="me-1">Starred</span> <span class="as-count">(${starredItems.length})</span>`;
+      const grid = document.createElement("div");
+      grid.className = "as-grid";
+      starredItems.forEach((it) => grid.appendChild(cardFor(it)));
+      starEl.append(head, grid);
+      container.appendChild(starEl);
+    }
+
+    // Group by subject (include starred items so they appear twice)
     const subjects = new Map();
     for (const it of data) {
       const s = it.subject || "(No subject)";
@@ -254,6 +299,19 @@
       .join(" ")
       .toLowerCase();
 
+    const id = String(it.wID);
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-sm btn-link as-star-btn position-absolute top-0 end-0";
+    starBtn.innerHTML = `<i class="bi ${starred.has(id) ? "bi-star-fill" : "bi-star"}"></i>`;
+    starBtn.classList.toggle("text-warning", starred.has(id));
+    starBtn.classList.toggle("text-secondary", !starred.has(id));
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleStar(id);
+    });
+    card.appendChild(starBtn);
+
     const body = document.createElement("div");
     body.className = "card-body d-flex flex-column gap-1";
 
@@ -315,6 +373,13 @@
       card.classList.toggle("d-none", !match);
     });
 
+    document.querySelectorAll(".as-starred").forEach((sec) => {
+      const visible = sec.querySelectorAll(".as-card:not(.d-none)").length;
+      sec.classList.toggle("d-none", visible === 0);
+      const badge = sec.querySelector(".as-count");
+      if (badge) badge.textContent = `(${visible})`;
+    });
+
     const BS = window.bootstrap; // avoid any local shadowing
 
     // Chapters
@@ -326,11 +391,11 @@
       if (badge) badge.textContent = `(${visible})`;
 
       const collapseEl = chap.querySelector(".collapse");
-      if (collapseEl && BS?.Collapse) {
+      if (collapseEl && BS?.Collapse && q) {
         const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
-        if (q && visible > 0) coll.show();
+        if (visible > 0) coll.show();
         else coll.hide();
       }
     });
@@ -344,11 +409,11 @@
       if (badge) badge.textContent = `(${visible})`;
 
       const collapseEl = sub.querySelector(":scope > .collapse");
-      if (collapseEl && BS?.Collapse) {
+      if (collapseEl && BS?.Collapse && q) {
         const coll = BS.Collapse.getOrCreateInstance(collapseEl, {
           toggle: false,
         });
-        if (q && visible > 0) coll.show();
+        if (visible > 0) coll.show();
         else coll.hide();
       }
     });
