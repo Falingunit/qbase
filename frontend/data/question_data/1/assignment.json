@@ -126,7 +126,7 @@
     {
       "qType": "MMCQ",
       "passageId": null,
-      "qText": "XX′ is a conducting rod that can slide freely on a U-shaped frame with total resistance R. A constant magnetic field B is perpendicular to the frame. A constant force is applied via a string so that the rod moves with constant velocity \\(\\vec v_0 = v_0(-\\hat i)\\). Then: (i) the force of tension in the string on XX′ is ____. If the directions of velocity and magnetic field are both reversed (magnitudes unchanged) and the same constant speed is maintained, then (ii) the force of tension becomes ____.",
+      "qText": "XX′ is a conducting rod that can slide freely on a U-shaped frame with total resistance R. A constant magnetic field B is perpendicular to the frame. A constant force is applied via a string so that the rod moves with constant velocity \\(\\vec v_0 = v_0(-\\hat i)\\). Then: \n\n (i) [FOR OPTIONS A AND B] the force of tension in the string on XX′ is ____. \n\n (ii) [FOR OPTIONS C AND D] If the directions of velocity and magnetic field are both reversed (magnitudes unchanged) and the same constant speed is maintained, then the force of tension becomes ____.",
       "image": "13.png",
       "qOptions": [
         "\\(\\dfrac{B^{2}\\,\\ell^{2}\\,v_0}{R}(-\\hat i)\\)",
