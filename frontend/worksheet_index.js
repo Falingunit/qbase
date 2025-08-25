@@ -276,9 +276,53 @@
     body.append(title, meta);
 
     const footer = document.createElement("div");
-    footer.className = "card-footer bg-transparent border-0 as-actions";
+    footer.className =
+      "card-footer bg-transparent border-0 as-actions d-flex justify-content-end";
+
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-link p-0";
+    starBtn.innerHTML = '<i class="bi bi-star"></i>';
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const iconEl = starBtn.querySelector("i");
+      toggleStar(iconEl, it.wID);
+    });
+    footer.appendChild(starBtn);
 
     card.append(body, footer);
+
+    card.dataset.starId = String(it.wID);
+    const starSet = new Set(
+      JSON.parse(localStorage.getItem("starredWorksheets") || "[]")
+    );
+    if (starSet.has(String(it.wID))) {
+      const iconEl = starBtn.querySelector("i");
+      iconEl.classList.add("bi-star-fill");
+      iconEl.classList.remove("bi-star");
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = String(it.wID);
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, String(it.wID));
+        });
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./worksheet.html?wID=${encodeURIComponent(
+          it.wID || ""
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
 
     // Make entire card clickable (but keep links/buttons functional)
     card.addEventListener("click", (e) => {
@@ -291,6 +335,81 @@
 
     return card;
   }
+
+  // === Starred worksheets ===
+  function ensureStarSection() {
+    let sec = document.getElementById("as-starred");
+    if (!sec) {
+      sec = document.createElement("section");
+      sec.id = "as-starred";
+      sec.className = "as-subject";
+      sec.innerHTML =
+        '<div class="as-header"><button class="btn btn-sm btn-link as-toggle text-dark-emphasis fs-5" data-bs-toggle="collapse" data-bs-target="#as-starred-collapse" aria-controls="as-starred-collapse"><i class="bi bi-chevron-right"></i><span class="me-1">Starred</span> <span class="as-count">(0)</span></button></div>' +
+        '<div id="as-starred-collapse" class="collapse show"><div class="as-grid"></div></div>';
+      els.content.prepend(sec);
+    }
+    return sec;
+  }
+
+  function updateStarSection(sec) {
+    const grid = sec.querySelector(".as-grid");
+    const count = sec.querySelector(".as-count");
+    if (count) count.textContent = `(${grid.querySelectorAll(".as-card").length})`;
+    if (grid.children.length === 0) sec.remove();
+  }
+
+  function toggleStar(icon, id) {
+    const key = "starredWorksheets";
+    const raw = localStorage.getItem(key);
+    const set = new Set(raw ? JSON.parse(raw) : []);
+    const strId = String(id);
+    const card = icon.closest(".as-card");
+    if (!card) return;
+    card.dataset.starId = strId;
+
+    const starred = set.has(strId);
+    if (starred) {
+      set.delete(strId);
+      localStorage.setItem(key, JSON.stringify([...set]));
+      const sec = document.getElementById("as-starred");
+      sec?.querySelector(`.as-card[data-star-id="${strId}"]`)?.remove();
+      if (sec) updateStarSection(sec);
+    } else {
+      set.add(strId);
+      localStorage.setItem(key, JSON.stringify([...set]));
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = strId;
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, strId);
+        });
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./worksheet.html?wID=${encodeURIComponent(
+          strId
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
+
+    document
+      .querySelectorAll(
+        `.as-card[data-star-id="${strId}"] .bi-star, .as-card[data-star-id="${strId}"] .bi-star-fill`
+      )
+      .forEach((i) => {
+        i.classList.toggle("bi-star-fill", set.has(strId));
+        i.classList.toggle("bi-star", !set.has(strId));
+      });
+  }
+
+  window.toggleStar = toggleStar;
 
   // === Search / filter like index.js ===
   function applyFilter() {
