@@ -5,6 +5,7 @@
   let allData = [];
   let cachedScores = {};
   let lastSearch = "";
+  let starredAssignments = new Set();
 
   const els = {
     content: document.getElementById("as-content"),
@@ -39,12 +40,14 @@
     toggle(els.content, false);
 
     try {
-      const [assignRes, scores] = await Promise.all([
+      const [assignRes, scores, starred] = await Promise.all([
         fetch("./data/assignment_list.json").then((r) => r.json()),
         fetchScores(),
+        fetchStarredAssignments(),
       ]);
       allData = assignRes || [];
       cachedScores = scores || {};
+      starredAssignments = new Set((starred || []).map(String));
       buildCards(getFilteredData());
       bindSearch();
 
@@ -67,6 +70,16 @@
       return await r.json(); // { [aID]: {score,maxScore, attempted, totalQuestions} }
     } catch {
       return {};
+    }
+  }
+
+  async function fetchStarredAssignments() {
+    try {
+      const r = await authFetch(`${API_BASE}/api/favorites/assignment`);
+      if (!r.ok) return [];
+      return await r.json();
+    } catch {
+      return [];
     }
   }
 
@@ -314,7 +327,17 @@
         ? `<span class="badge bg-primary">${score} / ${maxScore}</span>`
         : `<span class="badge bg-secondary">-</span>`;
 
-    info.append(scoreSpan);
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "btn btn-link p-0 ms-auto";
+    starBtn.innerHTML = '<i class="bi bi-star"></i>';
+    starBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const iconEl = starBtn.querySelector("i");
+      toggleStar(iconEl, entry.aID);
+    });
+
+    info.append(scoreSpan, starBtn);
 
     const progressWrap = document.createElement("div");
     progressWrap.className = "as-progress w-100";
@@ -323,6 +346,37 @@
     }" style="width:${pct}%">${pct}% (${attempted}/${totalQ})</div></div>`;
 
     footer.append(info, progressWrap);
+
+    card.dataset.starId = String(entry.aID);
+
+    // Initialize star state from server
+    if (starredAssignments.has(String(entry.aID))) {
+      const iconEl = starBtn.querySelector("i");
+      iconEl.classList.add("bi-star-fill");
+      iconEl.classList.remove("bi-star");
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = String(entry.aID);
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, String(entry.aID));
+        });
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./assignment.html?aID=${encodeURIComponent(
+          entry.aID
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
 
     card.append(body, footer);
 
@@ -336,6 +390,90 @@
 
     return card;
   }
+
+  // === Starred assignments ===
+  function ensureStarSection() {
+    let sec = document.getElementById("as-starred");
+    if (!sec) {
+      sec = document.createElement("section");
+      sec.id = "as-starred";
+      sec.className = "as-subject";
+      sec.innerHTML =
+        '<div class="as-header"><button class="btn btn-sm btn-link as-toggle text-dark-emphasis fs-5" data-bs-toggle="collapse" data-bs-target="#as-starred-collapse" aria-controls="as-starred-collapse"><i class="bi bi-chevron-right"></i><span class="me-1">Starred</span> <span class="as-count">(0)</span></button></div>' +
+        '<div id="as-starred-collapse" class="collapse show"><div class="as-grid"></div></div>';
+      els.content.prepend(sec);
+    }
+    return sec;
+  }
+
+  function updateStarSection(sec) {
+    const grid = sec.querySelector(".as-grid");
+    const count = sec.querySelector(".as-count");
+    if (count) count.textContent = `(${grid.querySelectorAll(".as-card").length})`;
+    if (grid.children.length === 0) sec.remove();
+  }
+
+  async function toggleStar(icon, id) {
+    const strId = String(id);
+    const card = icon.closest(".as-card");
+    if (!card) return;
+    card.dataset.starId = strId;
+
+    const starred = starredAssignments.has(strId);
+    try {
+      const method = starred ? "DELETE" : "POST";
+      const r = await authFetch(
+        `${API_BASE}/api/favorites/assignment/${encodeURIComponent(strId)}`,
+        { method }
+      );
+      if (!r.ok) return;
+    } catch (e) {
+      console.error("toggleStar failed", e);
+      return;
+    }
+
+    if (starred) {
+      starredAssignments.delete(strId);
+      const sec = document.getElementById("as-starred");
+      sec?.querySelector(`.as-card[data-star-id="${strId}"]`)?.remove();
+      if (sec) updateStarSection(sec);
+    } else {
+      starredAssignments.add(strId);
+      const sec = ensureStarSection();
+      const grid = sec.querySelector(".as-grid");
+      const clone = card.cloneNode(true);
+      clone.dataset.starId = strId;
+      const cloneIcon = clone.querySelector(".bi-star, .bi-star-fill");
+      if (cloneIcon) {
+        const cloneBtn = cloneIcon.closest("button");
+        (cloneBtn || cloneIcon).addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleStar(cloneIcon, strId);
+        });
+        cloneIcon.classList.add("bi-star-fill");
+        cloneIcon.classList.remove("bi-star");
+      }
+      clone.addEventListener("click", (e) => {
+        if (e.target.closest("a, button, input, textarea, select, label")) return;
+        window.location.href = `./assignment.html?aID=${encodeURIComponent(
+          strId
+        )}`;
+      });
+      grid.appendChild(clone);
+      updateStarSection(sec);
+    }
+
+    document
+      .querySelectorAll(
+        `.as-card[data-star-id="${strId}"] .bi-star, .as-card[data-star-id="${strId}"] .bi-star-fill`
+      )
+      .forEach((i) => {
+        i.classList.toggle("bi-star-fill", starredAssignments.has(strId));
+        i.classList.toggle("bi-star", !starredAssignments.has(strId));
+      });
+  }
+
+  window.toggleStar = toggleStar;
 
   // === utils ===
   function slug(s) {

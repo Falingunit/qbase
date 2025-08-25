@@ -106,6 +106,15 @@ db.exec(`
     FOREIGN KEY (tagId) REFERENCES bookmark_tags(id) ON DELETE CASCADE,
     UNIQUE(userId, assignmentId, questionIndex, tagId)
   );
+
+  CREATE TABLE IF NOT EXISTS favorites (
+    userId TEXT NOT NULL,
+    itemType TEXT NOT NULL,
+    itemId INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, itemType, itemId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // ---------- Auth helpers ----------
@@ -281,6 +290,44 @@ app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
   } catch (e) {
     console.error('check bookmark:', e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
+  }
+});
+
+// Favorites
+app.get('/api/favorites/:type', (req, res) => {
+  try {
+    const { type } = req.params;
+    const rows = db
+      .prepare('SELECT itemId FROM favorites WHERE userId = ? AND itemType = ? ORDER BY created_at DESC')
+      .all(req.userId, type);
+    res.json(rows.map((r) => r.itemId));
+  } catch (e) {
+    console.error('list favorites:', e);
+    res.status(500).json({ error: 'Failed to get favorites' });
+  }
+});
+
+app.post('/api/favorites/:type/:id', (req, res) => {
+  try {
+    const { type, id } = req.params;
+    db.prepare('INSERT OR IGNORE INTO favorites (userId, itemType, itemId) VALUES (?, ?, ?)')
+      .run(req.userId, type, id);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('add favorite:', e);
+    res.status(500).json({ error: 'Failed to add favorite' });
+  }
+});
+
+app.delete('/api/favorites/:type/:id', (req, res) => {
+  try {
+    const { type, id } = req.params;
+    db.prepare('DELETE FROM favorites WHERE userId = ? AND itemType = ? AND itemId = ?')
+      .run(req.userId, type, id);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('remove favorite:', e);
+    res.status(500).json({ error: 'Failed to remove favorite' });
   }
 });
 
