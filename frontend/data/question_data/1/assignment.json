@@ -275,10 +275,10 @@
       "qText": "If in the previous problem resistances of values \\(R_1\\) and \\(R_2\\) are connected on both ends as shown in the figure, the current \\(I\\) flowing through resistance \\(R_1\\) is given by",
       "image": "21.png",
       "qOptions": [
-        "\\(\\frac{B l R_2 (v_1 v_2 - v_2 v_1)}{R_1 R_2 (r_1 + r_2) + r_2 R_1 (R_1 + R_2)}\\)",
-        "\\(\\frac{B l R_2 (v_1 v_2 + v_2 v_1)}{R_1 R_2 (r_1 + r_2) + r_2 R_1 (R_1 + R_2)}\\)",
-        "\\(\\frac{B l R_2 (v_1 v_2 - v_2 v_1)}{R_1 R_2 (r_1 - r_2) + r_2 R_1 (R_1 - R_2)}\\)",
-        "\\(\\frac{B l R_2 (v_1 v_2 - v_2 v_1)}{R_1 R_2 (r_1 + r_2) - r_2 R_1 (R_1 + R_2)}\\)"
+        "\\(\\frac{B l R_2 (v_1 r_2 - v_2 r_1)}{R_1 R_2 (r_1 + r_2) + r_2 R_1 (R_1 + R_2)}\\)",
+        "\\(\\frac{B l R_2 (v_1 r_2 + v_2 r_1)}{R_1 R_2 (r_1 + r_2) + r_2 R_1 (R_1 + R_2)}\\)",
+        "\\(\\frac{B l R_2 (v_1 r_2 - v_2 r_1)}{R_1 R_2 (r_1 - r_2) + r_2 R_1 (R_1 - R_2)}\\)",
+        "\\(\\frac{B l R_2 (v_1 r_2 - v_2 r_1)}{R_1 R_2 (r_1 + r_2) - r_2 R_1 (R_1 + R_2)}\\)"
       ],
       "qAnswer": "A"
     },
@@ -367,7 +367,7 @@
         "\\(B \\omega L^2 / 2\\)",
         "\\(B \\omega L^2\\)",
         "\\(2B \\omega L^2\\)",
-        "\\(8B \\omega L^2\\)"
+        "zero"
       ],
       "qAnswer": "D"
     },
