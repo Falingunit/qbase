@@ -202,10 +202,10 @@
       "qText": "The amount of charge induced on a flat face (say x) of the shuttle during the fall, in terms of shuttle speed v, is",
       "image": null,
       "qOptions": [
-        "\\(\\varepsilon_0\\pi R^2 d B v\\)",
-        "\\(2\\,\\varepsilon_0\\pi R^2 d B v\\)",
-        "\\(\\varepsilon_0\\pi R^2 d B v\\)",
-        "\\(\\varepsilon_0\\pi R^2 d B^2 v\\)"
+        "\\(\\varepsilon_0\\pi R^2 B v\\)",
+        "\\(2\\,\\varepsilon_0\\pi R^2 B v\\)",
+        "\\(\\varepsilon_0\\pi R d B v\\)",
+        "\\(\\frac{\\varepsilon_0\\pi R^3 B^2 v}{d}\\)"
       ],
       "qAnswer": "A"
     },
@@ -215,10 +215,10 @@
       "qText": "The magnetic force acting on the shuttle during the fall, in terms of the shuttle’s acceleration \\(a\\), is",
       "image": null,
       "qOptions": [
+        "\\(\\varepsilon_0 \\pi R^2 B d\\, a\\)",
         "\\(\\varepsilon_0 \\pi R^2 B^2 d\\, a\\)",
-        "\\(2\\,\\varepsilon_0 \\pi R^2 B^2 d\\, a\\)",
-        "\\(\\varepsilon_0 \\pi R^2 B^2 d\\, a\\)",
-        "\\(\\varepsilon_0 \\pi R^2 B^2 d\\, a\\)"
+        "\\(2\\varepsilon_0 \\pi R^2 B^2 d\\, a\\)",
+        "\\(\\varepsilon_0 \\pi R^3í B^2 a\\)"
       ],
       "qAnswer": "B"
     },
@@ -233,7 +233,7 @@
         "\\(\\displaystyle \\frac{\\varepsilon_0 \\pi R^2 d\\, B^2}{m}\\, g\\)",
         "\\(\\displaystyle \\frac{\\varepsilon_0 \\pi R^2 d\\, B^2}{m}\\)"
       ],
-      "qAnswer": "C"
+      "qAnswer": "A"
     },
     {
       "qType": "Passage",
