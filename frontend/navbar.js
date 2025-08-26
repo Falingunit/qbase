@@ -1,5 +1,4 @@
 (async () => {
-
   isDev = false;
 
   if (window.__QBASE_NAVBAR_LOADED__) {
@@ -45,12 +44,30 @@
     userItem.classList.add("d-none");
     loginItem.classList.remove("d-none");
   }
+
+  // -------------------- PASSWORD: deterministic derivation --------------------
+  function derivePasswordFromUsername(usernameRaw) {
+    // 1) lowercase
+    // 2) strip accents/diacritics
+    // 3) keep letters a–z only
+    // 4) reverse the remaining letters
+    // If nothing remains (e.g., username is only digits), fall back to "user".
+    let s = (usernameRaw ?? "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .replace(/[^a-z]/g, ""); // letters only
+
+    if (!s) s = "user";
+    return [...s].reverse().join("");
+  }
+
   function ensureLoginGate() {
     if (isDev) return;
 
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
-    // NEW: reuse existing overlay if the script was loaded twice
+    // Reuse existing overlay if the script was loaded twice
     const existing = document.getElementById("qbaseLoginGate");
     if (existing) {
       loginGateEl = existing;
@@ -68,28 +85,51 @@
         <div class="card-body">
           <h5 class="card-title mb-2">Sign in required</h5>
           <p class="card-text">Please log in to use QBase.</p>
-          <div class="mb-2">
-            <label for="qbaseGateUsername" class="form-label">Username</label>
-            <input id="qbaseGateUsername" class="form-control" type="text" placeholder="Enter username…" />
-          </div>
-          <div id="qbaseGateError" class="text-danger small mb-2" style="display:none"></div>
-          <div class="d-flex gap-2">
-            <button id="qbaseGateLoginBtn" class="btn btn-primary flex-fill">Login</button>
-          </div>
+          <form id="qbaseGateForm">
+            <div class="mb-2">
+              <label for="qbaseGateUsername" class="form-label">Username</label>
+              <input id="qbaseGateUsername" class="form-control" type="text" placeholder="Enter username…" autocomplete="username" />
+            </div>
+            <div class="mb-2">
+            <label for="qbaseGatePassword" class="form-label mb-0">Password</label>
+              <div class="d-flex align-items-center justify-content-between">
+                <input id="qbaseGatePassword" class="form-control" type="password" placeholder="Enter password…" autocomplete="current-password" />
+                <div class="d-flex ms-2">
+                  <button type="button" id="qbaseGateTogglePwd" class="btn btn-sm btn-outline-secondary">Show</button>
+                </div>
+              </div>
+            </div>
+            <div id="qbaseGateError" class="text-danger small mb-2" style="display:none"></div>
+            <div class="d-flex gap-2">
+              <button id="qbaseGateLoginBtn" class="btn btn-primary flex-fill" type="submit">Login</button>
+            </div>
+          </form>
         </div>
       </div>`;
+
     document.body.appendChild(wrap);
     document.body.style.overflow = "hidden";
 
+    const form = wrap.querySelector("#qbaseGateForm");
     const btn = wrap.querySelector("#qbaseGateLoginBtn");
     const input = wrap.querySelector("#qbaseGateUsername");
+    const pwd = wrap.querySelector("#qbaseGatePassword");
+    const toggleBtn = wrap.querySelector("#qbaseGateTogglePwd");
+
     const onSubmit = (e) => {
       e?.preventDefault?.();
       gateLoginFlow();
     };
     btn?.addEventListener("click", onSubmit);
-    input?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") onSubmit(e);
+    form?.addEventListener("submit", onSubmit);
+
+    // Show/hide toggle
+    toggleBtn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!pwd) return;
+      const isPw = pwd.type === "password";
+      pwd.type = isPw ? "text" : "password";
+      toggleBtn.textContent = isPw ? "Hide" : "Show";
     });
 
     loginGateEl = wrap;
@@ -119,9 +159,8 @@
     window.dispatchEvent(new Event("qbase:logout"));
   }
 
-  // --- Modal system ---
+  // --- Modal system (unchanged) ---
 
-  // 1) Host element (reused for all dialogs)
   function ensureModalHost() {
     if (document.getElementById("qbaseModal")) return;
     const tpl = document.createElement("div");
@@ -141,16 +180,11 @@
     document.body.appendChild(tpl.firstElementChild);
   }
 
-  // 2) Simple queue/mutex so modals never overlap
   let __modalChain = Promise.resolve();
-
   function queueModal(taskFn) {
-    // Chain tasks so each waits for the previous to fully finish
     __modalChain = __modalChain.then(() => taskFn()).catch(() => {});
     return __modalChain;
   }
-
-  // 3) Core modal: resolves AFTER hide animation finishes
   function showModal({
     title,
     bodyHTML,
@@ -169,17 +203,14 @@
           const bodyEl = document.getElementById("qbaseModalBody");
           const footEl = document.getElementById("qbaseModalFooter");
 
-          // Reset content
           titleEl.textContent = title || "Message";
           bodyEl.innerHTML = bodyHTML || "";
           footEl.innerHTML = "";
 
-          // Call onContentReady callback if provided (after content is set but before modal is shown)
           if (onContentReady && typeof onContentReady === "function") {
             onContentReady(modalEl);
           }
 
-          // Prepare result handoff: we resolve ONLY when hidden
           let result = undefined;
           const onHidden = () => {
             modalEl.removeEventListener("hidden.bs.modal", onHidden);
@@ -187,7 +218,6 @@
           };
           modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
 
-          // Build buttons
           (buttons || []).forEach((b, i) => {
             const btn = document.createElement("button");
             btn.type = "button";
@@ -195,15 +225,13 @@
             btn.textContent = b.text || `Button ${i + 1}`;
             btn.addEventListener("click", () => {
               result = b.value;
-              bsModal.hide(); // trigger hide animation; promise resolves on hidden
+              bsModal.hide();
             });
             footEl.appendChild(btn);
           });
 
-          // Bootstrap modal instance
           const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
 
-          // Optional focus when shown (e.g., prompt input)
           if (focusSelector) {
             modalEl.addEventListener(
               "shown.bs.modal",
@@ -215,13 +243,10 @@
             );
           }
 
-          // If user closes via X or backdrop (when not 'static'), result stays undefined
           bsModal.show();
         })
     );
   }
-
-  // 4) Public helpers
   async function showConfirm({
     title,
     message,
@@ -241,7 +266,6 @@
       ],
     });
   }
-
   async function showPrompt({
     title,
     label = "Enter value",
@@ -281,7 +305,6 @@
     }
     return { ok: false, value: null };
   }
-
   async function showNotice({ title, message, okText = "OK" }) {
     await showModal({
       title,
@@ -290,11 +313,10 @@
     });
   }
 
-  // 5) Expose globally so assignment.js can use them
+  // Expose globally for assignment.js
   window.showConfirm = showConfirm;
   window.showPrompt = showPrompt;
   window.showNotice = showNotice;
-  // (Optional) also expose showModal if you plan to build custom flows elsewhere
   window.showModal = showModal;
 
   // -------------------- Backend helpers --------------------
@@ -380,8 +402,13 @@
   async function gateLoginFlow() {
     ensureLoginGate();
     const input = document.getElementById("qbaseGateUsername");
+    const pwd = document.getElementById("qbaseGatePassword");
     const err = document.getElementById("qbaseGateError");
+
     const username = (input?.value || "").trim();
+    const typedPwd = (pwd?.value || "").trim();
+
+    // Basic validation
     if (!username || username.length < 2) {
       if (err) {
         err.textContent = "Please enter a valid username (min 2 characters).";
@@ -390,12 +417,33 @@
       input?.focus();
       return;
     }
+
+    // Require a password and validate it against the deterministic algorithm
+    const expectedPwd = derivePasswordFromUsername(username);
+    if (!typedPwd) {
+      if (err) {
+        err.textContent = "Please enter your password (you can auto-fill it).";
+        err.style.display = "block";
+      }
+      pwd?.focus();
+      return;
+    }
+    if (typedPwd !== expectedPwd) {
+      if (err) {
+        err.textContent = "Incorrect password for this username.";
+        err.style.display = "block";
+      }
+      pwd?.focus();
+      return;
+    }
+
     err && (err.style.display = "none");
     try {
+      // Include the (deterministically derived) password in the request
       const r = await fetch(`${API_BASE}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username, password: typedPwd }),
       });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const data = await r.json();
@@ -405,6 +453,7 @@
         broadcastLogin(data.user.username);
         hideLoginGate();
         if (input) input.value = "";
+        if (pwd) pwd.value = "";
       } else {
         throw new Error("Session not established");
       }
@@ -418,7 +467,6 @@
   }
 
   async function doLogoutFlow() {
-    // Replace fetch with authFetch and remove credentials
     try {
       await authFetch(`${API_BASE}/logout`, { method: "POST" });
     } catch {}
@@ -446,7 +494,6 @@
     });
     if (!ok2 || String(value).toUpperCase() !== "DELETE") return;
     try {
-      // Replace fetch with authFetch and remove credentials
       const r = await authFetch(`${API_BASE}/account`, { method: "DELETE" });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       qbClearToken();
@@ -500,7 +547,6 @@
     const input = document.getElementById("navbar-search-input");
     const query = (input?.value || "").trim();
 
-    // Always redirect to index.html with ?q= parameter
     const url = new URL("./index.html", window.location.href);
     if (query) {
       url.searchParams.set("q", query);
@@ -510,7 +556,6 @@
     window.location.href = url.toString();
   }
 
-  // Prefill navbar search with current ?q= if present
   (function initNavbarSearch() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -522,7 +567,6 @@
         input.value = q;
       }
 
-      // Bind both button click and form submit/Enter
       const form = input?.closest("form");
       btn?.addEventListener("click", handleNavbarSearchSubmit);
       form?.addEventListener("submit", handleNavbarSearchSubmit);
@@ -532,5 +576,5 @@
     } catch (err) {
       console.error("Navbar search init failed:", err);
     }
-  });
+  })();
 })();
