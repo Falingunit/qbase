@@ -5,8 +5,8 @@ const PRECACHE = [
   '/qbase/index.html',
   '/qbase/index.css', // adjust to your actual files
   '/qbase/index.js',
-  '/qbase/android-chrome-192x192',
-  '/qbase/android-chrome-512x512',
+  '/qbase/android-chrome-192x192.png',
+  '/qbase/android-chrome-512x512.png',
   '/qbase/offline.html'
 ];
 
