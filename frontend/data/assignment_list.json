@@ -61,5 +61,26 @@
     "chapter": "Dilute Solutions",
     "title": "Dilute Solutions Assignment",
     "aID": 8
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #1",
+    "aID": 9
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #2",
+    "aID": 10
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #3 (advanced)",
+    "aID": 11
   }
 ]
