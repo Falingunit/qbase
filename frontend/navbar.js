@@ -1,5 +1,5 @@
 (async () => {
-  isDev = true;
+  isDev = false;
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
