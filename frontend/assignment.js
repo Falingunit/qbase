@@ -252,15 +252,6 @@
   let loggedInUser = null; // username or null
   let authSource = "none"; // 'server' | 'none'
 
-  function askLocalOrServer() {
-    // OK  => Use LOCAL data and upload to server
-    // Cancel => Use SERVER data
-    return confirm(
-      "Both server and local progress exist.\n\nOK = Use LOCAL and upload to server\nCancel = Use SERVER"
-    );
-  }
-  function deleteLocal() {}
-
   // ---------- Default state & guards ----------
   function defaultState() {
     return {
@@ -355,12 +346,6 @@
         if (u?.username) return { username: u.username, source: "server" };
       }
     } catch {}
-    return null;
-  }
-
-  // ---------- Local cache helpers ----------
-  function saveLocal() {}
-  function loadLocal() {
     return null;
   }
 
@@ -473,7 +458,6 @@
   const markDirty = () => {
     dirty = true;
   };
-  let toldLocalFallback = false;
 
   async function scheduleSave(aID) {
     if (!dirty) return;
@@ -1017,6 +1001,8 @@
     const numerical = document.getElementById("numericalDiv");
     const MCQOptions = document.getElementById("MCQOptionDiv");
     const assignmentDetails = document.getElementById("assignmentDetails");
+    const assignmentTitleElem = document.getElementById("assignment-title")
+    const pageTitle = document.getElementsByTagName("title")
     const typeInfo = document.getElementById("qTypeInfo");
     const qNo = document.getElementById("qNo");
     const numericalAnswer = document.getElementById("numericalAnswer");
@@ -1027,6 +1013,8 @@
     qNo.textContent = qID + 1;
     typeInfo.textContent = question.qType;
     assignmentDetails.textContent = assignmentTitle;
+    assignmentTitleElem.textContent = assignmentTitle
+    pageTitle.textContent = `QBase - ${assignmentTitle} - Q${qID + 1}`
 
     // Passage (text + image)
     const passageImgDiv = document.getElementById("passageImage");
