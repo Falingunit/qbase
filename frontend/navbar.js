@@ -1,5 +1,5 @@
 (async () => {
-  isDev = false;
+  isDev = true;
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
@@ -8,7 +8,97 @@
   window.__QBASE_NAVBAR_LOADED__ = true;
 
   await loadConfig();
+  // ======= Tunables =======
+  const SHOW_AT_TOP_PX = 120; // Show navbar when within this many pixels from top
+  const SPEED_THRESHOLD = 600; // px/sec upward needed to "fast show"
+  const MIN_DELTA = 5; // Ignore tiny scroll jitter
 
+  // ======= Grab the navbar =======
+  const nav = document.querySelector(".navbar");
+  if (!nav) return;
+
+  // Ensure smooth hide/show + minimal CSS without touching your stylesheets
+  const style = document.createElement("style");
+  style.textContent = `
+    .navbar.js-autohide {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform;
+    }
+    .navbar.js-autohide.navbar--hidden {
+      transform: translateY(-100%);
+    }
+  `;
+  document.head.appendChild(style);
+  nav.classList.add("js-autohide");
+
+  // ======= State =======
+  let lastY = Math.max(0, window.scrollY || window.pageYOffset);
+  let lastT = performance.now();
+  let hidden = false;
+  let ticking = false;
+
+  function hide() {
+    if (!hidden) {
+      nav.classList.add("navbar--hidden");
+      hidden = true;
+    }
+  }
+  function show() {
+    if (hidden) {
+      nav.classList.remove("navbar--hidden");
+      hidden = false;
+    }
+  }
+
+  function update() {
+    const y = Math.max(0, window.scrollY || window.pageYOffset);
+    const t = performance.now();
+
+    const dy = y - lastY; // + = down, - = up
+    const dt = Math.max(16, t - lastT); // ms (avoid divide-by-zero)
+    const v = dy / (dt / 1000); // px/sec (+down, -up)
+
+    const atTop = y <= SHOW_AT_TOP_PX;
+    const menuOpen = !!document.querySelector(".navbar-collapse.show"); // don't autohide if mobile menu open
+
+    // Add a subtle shadow when not at the top
+    if (y > 0) nav.classList.add("shadow-sm");
+    else nav.classList.remove("shadow-sm");
+
+    if (menuOpen) {
+      show(); // keep visible while the menu is open
+    } else if (atTop) {
+      show(); // always show near top
+    } else if (dy > MIN_DELTA) {
+      hide(); // scrolling down -> hide
+    } else if (-v > SPEED_THRESHOLD) {
+      show(); // fast upward scroll -> show
+    }
+
+    lastY = y;
+    lastT = t;
+    ticking = false;
+  }
+
+  // Use rAF to keep things smooth
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+
+  // Re-evaluate on resize or orientation change (safe default)
+  window.addEventListener("resize", () => {
+    requestAnimationFrame(update);
+  });
+
+  // Initial position on load
+  update();
   window.addEventListener("qbase:login", (e) => {
     isAuthenticated = true; // <-- make other instances aware
     const name = e?.detail?.username;
@@ -541,40 +631,4 @@
   // Hide gate on login event
   window.addEventListener("qbase:login", () => hideLoginGate());
   window.addEventListener("qbase:force-login", showLoginGate);
-
-  function handleNavbarSearchSubmit(e) {
-    e && e.preventDefault && e.preventDefault();
-    const input = document.getElementById("navbar-search-input");
-    const query = (input?.value || "").trim();
-
-    const url = new URL("./index.html", window.location.href);
-    if (query) {
-      url.searchParams.set("q", query);
-    } else {
-      url.searchParams.delete("q");
-    }
-    window.location.href = url.toString();
-  }
-
-  (function initNavbarSearch() {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const q = params.get("q") || "";
-      const input = document.getElementById("navbar-search-input");
-      const btn = document.getElementById("navbar-search-btn");
-
-      if (input && q) {
-        input.value = q;
-      }
-
-      const form = input?.closest("form");
-      btn?.addEventListener("click", handleNavbarSearchSubmit);
-      form?.addEventListener("submit", handleNavbarSearchSubmit);
-      input?.addEventListener("keydown", (ev) => {
-        if (ev.key === "Enter") handleNavbarSearchSubmit(ev);
-      });
-    } catch (err) {
-      console.error("Navbar search init failed:", err);
-    }
-  })();
 })();

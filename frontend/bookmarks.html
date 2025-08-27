@@ -41,9 +41,10 @@
     ></script>
   </head>
   <body class="bg-dark text-light">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.html">QBase</a>
+
         <button
           class="navbar-toggler"
           type="button"
@@ -57,23 +58,26 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left nav -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link" href="./index.html">Home</a>
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                href="./bookmarks.html"
-                >Bookmarks</a
-              >
+              <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="./worksheet_index.html"
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="./worksheet_index.html"
                 >Worksheets</a
               >
             </li>
+          </ul>
+
+          <!-- Right nav -->
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item" id="nav-login-item">
               <a class="nav-link" href="#" id="nav-login">Login</a>
             </li>
@@ -88,7 +92,10 @@
               >
                 <span id="nav-username">User</span>
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarUserDropdown"
+              >
                 <li>
                   <a class="dropdown-item" href="#" id="nav-logout">Logout</a>
                 </li>
@@ -104,28 +111,12 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex" role="search" onsubmit="return false;">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              id="navbar-search-input"
-            />
-            <button
-              class="btn btn-outline-success"
-              type="submit"
-              id="navbar-search-btn"
-            >
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>
 
     <div class="container">
-      <h1 class="text-center pt-3 pt-md-5 fs-2">QBase</h1>
+      <h1 class="text-center pt-3 pt-md-5 fs-2 mt-4">QBase</h1>
       <h2 class="">Bookmarks</h2>
 
       <div id="loading" class="text-center py-5">
