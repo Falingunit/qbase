@@ -14,5 +14,5 @@ window.authFetch = (url, opts = {}) => {
   const token = qbGetToken();
   const headers = new Headers(opts.headers || {});
   if (token) headers.set("Authorization", `Bearer ${token}`);
-  return fetch(url, { ...opts, headers });
+  return fetch(url, { cache: "no-store", ...opts, headers });
 };
