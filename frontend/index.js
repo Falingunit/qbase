@@ -5,6 +5,7 @@
   let allData = [];
   let cachedScores = {};
   let lastSearch = "";
+  let starredIds = new Set();
 
   const els = {
     content: document.getElementById("as-content"),
@@ -28,8 +29,15 @@
     if (globalBtn) globalBtn.addEventListener("click", () => applyFilter());
   })();
 
-  // Login hook mirrors initial load
-  window.addEventListener("qbase:login", bootstrap);
+  // Refresh starred on login
+  window.addEventListener("qbase:login", async () => {
+    const starred = await fetchStarred();
+    starredIds = new Set(Array.isArray(starred) ? starred.map(Number) : []);
+    buildCards(getFilteredData());
+    filterVisibility(lastSearch);
+    highlightElements(document, (els.search?.value || "").trim());
+    checkEmpty();
+  });
   initApp();
 
   async function initApp() {
@@ -39,12 +47,14 @@
     toggle(els.content, false);
 
     try {
-      const [assignRes, scores] = await Promise.all([
+      const [assignRes, scores, starred] = await Promise.all([
         fetch("./data/assignment_list.json").then((r) => r.json()),
         fetchScores(),
+        fetchStarred(),
       ]);
       allData = assignRes || [];
       cachedScores = scores || {};
+      starredIds = new Set(Array.isArray(starred) ? starred.map(Number) : []);
       buildCards(getFilteredData());
       bindSearch();
 
@@ -67,6 +77,16 @@
       return await r.json(); // { [aID]: {score,maxScore, attempted, totalQuestions} }
     } catch {
       return {};
+    }
+  }
+
+  async function fetchStarred() {
+    try {
+      const r = await authFetch(`${API_BASE}/api/starred`);
+      if (!r.ok) return [];
+      return await r.json(); // [assignmentId]
+    } catch {
+      return [];
     }
   }
 
@@ -173,6 +193,22 @@
     const container = els.content;
     container.innerHTML = "";
 
+    // Build starred section at top
+    const starredWrap = document.getElementById("as-starred-wrap");
+    const starredGrid = document.getElementById("as-starred");
+    const starredCount = document.getElementById("as-starred-count");
+    if (starredWrap && starredGrid) {
+      starredGrid.innerHTML = "";
+      const starredList = data.filter((it) => starredIds.has(Number(it.aID)));
+      if (starredList.length > 0) {
+        starredList.forEach((it) => starredGrid.appendChild(cardFor(it)));
+        if (starredCount) starredCount.textContent = `(${starredList.length})`;
+        starredWrap.classList.remove("d-none");
+      } else {
+        starredWrap.classList.add("d-none");
+      }
+    }
+
     // Group by subject
     const subjects = new Map();
     for (const it of data) {
@@ -254,6 +290,7 @@
   function cardFor(entry) {
     const card = document.createElement("div");
     card.className = "card as-card h-100";
+    if (starredIds.has(Number(entry.aID))) card.classList.add("as-starred");
 
     // Determine status from scores: completed if all questions attempted; started if attempted > 0
     const sc = cachedScores?.[entry.aID] || {};
@@ -276,6 +313,21 @@
 
     const body = document.createElement("div");
     body.className = "card-body d-flex flex-column gap-1";
+
+    // Star button (top-right)
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "as-star-btn btn btn-sm btn-link p-0 m-0";
+    const isStarred = starredIds.has(Number(entry.aID));
+    starBtn.innerHTML = isStarred
+      ? '<i class="bi bi-star-fill"></i>'
+      : '<i class="bi bi-star"></i>';
+    starBtn.title = isStarred ? "Unstar" : "Star";
+    starBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      await toggleStar(entry.aID, !isStarred);
+    });
 
     const title = document.createElement("h5");
     title.className = "card-title mb-1 as-highlightable";
@@ -324,7 +376,7 @@
 
     footer.append(info, progressWrap);
 
-    card.append(body, footer);
+    card.append(starBtn, body, footer);
 
     // Entire card clickable (non-interactive areas)
     card.addEventListener("click", (e) => {
@@ -335,6 +387,34 @@
     });
 
     return card;
+  }
+
+  async function toggleStar(aID, makeStarred) {
+    const hasToken = !!qbGetToken();
+    if (!hasToken) {
+      // Ask user to log in
+      window.dispatchEvent(new Event("qbase:force-login"));
+      return;
+    }
+    const id = Number(aID);
+    try {
+      if (makeStarred) {
+        const r = await authFetch(`${API_BASE}/api/starred/${id}`, { method: "POST" });
+        if (!r.ok) throw new Error("star failed");
+        starredIds.add(id);
+      } else {
+        const r = await authFetch(`${API_BASE}/api/starred/${id}`, { method: "DELETE" });
+        if (!r.ok) throw new Error("unstar failed");
+        starredIds.delete(id);
+      }
+      // Rebuild to reflect updated stars
+      buildCards(getFilteredData());
+      filterVisibility(lastSearch);
+      highlightElements(document, (els.search?.value || "").trim());
+      checkEmpty();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   // === utils ===

@@ -106,6 +106,15 @@ db.exec(`
     FOREIGN KEY (tagId) REFERENCES bookmark_tags(id) ON DELETE CASCADE,
     UNIQUE(userId, assignmentId, questionIndex, tagId)
   );
+
+  -- Starred assignments
+  CREATE TABLE IF NOT EXISTS starred_assignments (
+    userId TEXT NOT NULL,
+    assignmentId INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, assignmentId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // ---------- Auth helpers ----------
@@ -281,6 +290,54 @@ app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
   } catch (e) {
     console.error('check bookmark:', e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
+  }
+});
+
+// Starred assignments
+app.get('/api/starred', (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT assignmentId FROM starred_assignments WHERE userId = ? ORDER BY created_at DESC`
+      )
+      .all(req.userId);
+    res.json(rows.map((r) => Number(r.assignmentId)));
+  } catch (e) {
+    console.error('list starred:', e);
+    res.status(500).json({ error: 'Failed to get starred assignments' });
+  }
+});
+
+app.post('/api/starred/:assignmentId', (req, res) => {
+  try {
+    const assignmentId = Number(req.params.assignmentId);
+    if (!Number.isFinite(assignmentId)) {
+      return res.status(400).json({ error: 'Invalid assignmentId' });
+    }
+    db.prepare(
+      `INSERT INTO starred_assignments (userId, assignmentId) VALUES (?, ?)
+       ON CONFLICT(userId, assignmentId) DO NOTHING`
+    ).run(req.userId, assignmentId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('star assignment:', e);
+    res.status(500).json({ error: 'Failed to star assignment' });
+  }
+});
+
+app.delete('/api/starred/:assignmentId', (req, res) => {
+  try {
+    const assignmentId = Number(req.params.assignmentId);
+    if (!Number.isFinite(assignmentId)) {
+      return res.status(400).json({ error: 'Invalid assignmentId' });
+    }
+    db.prepare(
+      `DELETE FROM starred_assignments WHERE userId = ? AND assignmentId = ?`
+    ).run(req.userId, assignmentId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('unstar assignment:', e);
+    res.status(500).json({ error: 'Failed to unstar assignment' });
   }
 });
 
