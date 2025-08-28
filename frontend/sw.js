@@ -27,6 +27,14 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  // Skip caching for cross-origin or API requests
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request).catch(() => caches.match('/qbase/offline.html'))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(request).then(cached => {
