@@ -57,6 +57,14 @@ app.options('*', corsFn);
 // ---------- Parsers ----------
 app.use(express.json());
 
+// ---------- Disable caching for dynamic content ----------
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
+
 // ---------- SQLite ----------
 const dbPath = path.join(__dirname, 'db.sqlite');
 const db = new Database(dbPath);
