@@ -14,6 +14,43 @@
 
   let allData = [];
   let lastSearch = "";
+  let starredWids = (function loadStarred() {
+    try {
+      const raw = localStorage.getItem("qb_ws_starred");
+      const arr = raw ? JSON.parse(raw) : [];
+      return new Set((Array.isArray(arr) ? arr : []).map(String));
+    } catch {
+      return new Set();
+    }
+  })();
+  function saveStarred() {
+    try {
+      localStorage.setItem("qb_ws_starred", JSON.stringify(Array.from(starredWids)));
+    } catch {}
+  }
+  async function toggleStar(wID, makeStarred) {
+    const id = String(wID || "");
+    if (!id) return;
+    if (makeStarred) starredWids.add(id);
+    else starredWids.delete(id);
+    saveStarred();
+    // Rebuild to reflect updated stars
+    renderGroups(getFilteredData());
+    filterVisibility(lastSearch);
+    highlightElements(document, (els.search?.value || "").trim());
+    checkEmpty();
+  }
+  function getFilteredData() {
+    const q = (lastSearch || "").toLowerCase();
+    if (!q) return allData;
+    return allData.filter((e) => {
+      const hay = [e.subject, e.chapter, e.title]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }
 
   // Wire global navbar search to local search (same as index.js UX)
   (function wireNavbarToLocalSearch() {
@@ -166,6 +203,22 @@
     const container = els.content;
     container.innerHTML = "";
 
+    // Build starred section at top
+    const starredWrap = document.getElementById("as-starred-wrap");
+    const starredGrid = document.getElementById("as-starred");
+    const starredCount = document.getElementById("as-starred-count");
+    if (starredWrap && starredGrid) {
+      starredGrid.innerHTML = "";
+      const starredList = data.filter((it) => starredWids.has(String(it.wID)));
+      if (starredList.length > 0) {
+        starredList.forEach((it) => starredGrid.appendChild(cardFor(it)));
+        if (starredCount) starredCount.textContent = `(${starredList.length})`;
+        starredWrap.classList.remove("d-none");
+      } else {
+        starredWrap.classList.add("d-none");
+      }
+    }
+
     // Group by subject
     const subjects = new Map();
     for (const it of data) {
@@ -249,6 +302,7 @@
   function cardFor(it) {
     const card = document.createElement("div");
     card.className = "card as-card h-100";
+    if (starredWids.has(String(it.wID))) card.classList.add("as-starred");
     card.dataset.haystack = [it.subject, it.chapter, it.title]
       .filter(Boolean)
       .join(" ")
@@ -256,6 +310,21 @@
 
     const body = document.createElement("div");
     body.className = "card-body d-flex flex-column gap-1";
+
+    // Star button (top-right)
+    const starBtn = document.createElement("button");
+    starBtn.type = "button";
+    starBtn.className = "as-star-btn btn btn-sm btn-link p-0 m-0";
+    const isStarred = starredWids.has(String(it.wID));
+    starBtn.innerHTML = isStarred
+      ? '<i class="bi bi-star-fill"></i>'
+      : '<i class="bi bi-star"></i>';
+    starBtn.title = isStarred ? "Unstar" : "Star";
+    starBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      await toggleStar(it.wID, !isStarred);
+    });
 
     const title = document.createElement("h5");
     title.className = "card-title mb-1 as-highlightable";
@@ -278,7 +347,7 @@
     const footer = document.createElement("div");
     footer.className = "card-footer bg-transparent border-0 as-actions";
 
-    card.append(body, footer);
+    card.append(starBtn, body, footer);
 
     // Make entire card clickable (but keep links/buttons functional)
     card.addEventListener("click", (e) => {

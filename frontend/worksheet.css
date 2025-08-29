@@ -1,0 +1,73 @@
+:root {
+  --ws-gutter: 56px;
+  --mask-color: rgba(0, 0, 0, 0.96);
+}
+
+.worksheet-topbar {
+  background: rgba(17, 19, 23, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: saturate(120%) blur(8px);
+}
+
+.ws-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.ws-page {
+  position: relative;
+  margin-inline: auto;
+  width: min(100%, 900px);
+  background: #0f1114;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: visible; /* gutters sit outside */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.ws-media-wrap { position: relative; }
+.ws-img { width: 100%; height: auto; display: block; border-radius: 12px; }
+.ws-canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.ws-canvas.active { pointer-events: auto; cursor: crosshair; }
+
+/* Marker gutters */
+.ws-gutter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--ws-gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.ws-gutter.left { left: calc(-1 * var(--ws-gutter)); }
+.ws-gutter.right { right: calc(-1 * var(--ws-gutter)); }
+.ws-gutter .hint { color: #9aa3ac; font-size: 0.75rem; opacity: 0.7; }
+
+.ws-marker {
+  position: absolute;
+  transform: translateY(-50%);
+  background: rgba(20, 22, 26, 0.9);
+  color: #dfe6ee;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: .25rem .5rem;
+  font-size: .85rem;
+  white-space: nowrap;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ws-marker.left { left: -10px; transform: translate(-100%, -50%); }
+.ws-marker.right { right: -10px; transform: translate(100%, -50%); }
+
+/* Answers */
+.ws-answers { display: flex; flex-direction: column; gap: 1rem; }
+.ws-answer { position: relative; margin-inline: auto; width: min(100%, 900px); }
+.ws-ans-img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08) }
+.ws-ans-mask { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 12px; }
+.ws-ans-mask.active { cursor: crosshair; }
+
+/* Active tool states */
+#tool-draw.active, #tool-erase.active, #ans-mask.active, #ans-reveal.active { outline: 2px solid #0dcaf0; }
+

@@ -1,5 +1,5 @@
 (async () => {
-  isDev = false;
+  isDev = true;
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
@@ -136,20 +136,29 @@
   }
 
   // -------------------- PASSWORD: deterministic derivation --------------------
+  /**
+   * Derives a password from a username using a "first-two, last-two, plus length" rule.
+   * This algorithm is simple enough for a human to compute mentally.
+   *
+   * @param {string | null | undefined} usernameRaw The raw username string.
+   * @returns {string} The derived password.
+   */
   function derivePasswordFromUsername(usernameRaw) {
-    // 1) lowercase
-    // 2) strip accents/diacritics
-    // 3) keep letters a–z only
-    // 4) reverse the remaining letters
-    // If nothing remains (e.g., username is only digits), fall back to "user".
-    let s = (usernameRaw ?? "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/\p{Diacritic}/gu, "")
-      .replace(/[^a-z]/g, ""); // letters only
+    // 1) Sanitize: lowercase, keep only letters (a-z) and digits (0-9).
+    const s = (usernameRaw ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
-    if (!s) s = "user";
-    return [...s].reverse().join("");
+    // 2) If the sanitized string is empty, fall back to a default.
+    if (!s) {
+      return "default123";
+    }
+
+    // 3) Get the required components for the password.
+    const len = s.length;
+    const firstTwo = s.slice(0, 2);
+    const lastTwo = s.slice(-2);
+
+    // 4) Combine the parts: [first two][last two][length].
+    return `${firstTwo}${lastTwo}${len}`;
   }
 
   function ensureLoginGate() {
