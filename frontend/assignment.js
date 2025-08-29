@@ -1174,8 +1174,10 @@
     const icon = bookmarkBtn.querySelector("i");
 
     try {
+      // Use original question index (not display index) for bookmark lookups
+      const originalIdx = window.questionIndexMap[currentQuestionID];
       const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`
+        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
       );
       if (response.ok) {
         currentBookmarks = await response.json();
@@ -1344,8 +1346,10 @@
       bookmarkTags = await response.json();
 
       // Reload current bookmarks for this question
+      // Use original question index for current question
+      const originalIdx = window.questionIndexMap[currentQuestionID];
       const bookmarkResponse = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}`
+        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
       );
       if (bookmarkResponse.ok) {
         currentBookmarks = await bookmarkResponse.json();
@@ -1469,7 +1473,8 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignmentId: aID,
-          questionIndex: currentQuestionID,
+          // Persist original index from assignment.json
+          questionIndex: window.questionIndexMap[currentQuestionID],
           tagId: tagId,
         }),
       });
@@ -1492,8 +1497,10 @@
 
   async function removeBookmark(tagId) {
     try {
+      // Remove by original index
+      const originalIdx = window.questionIndexMap[currentQuestionID];
       const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${currentQuestionID}/${tagId}`,
+        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
         {
           method: "DELETE",
         }

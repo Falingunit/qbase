@@ -31,6 +31,12 @@
   async function toggleStar(wID, makeStarred) {
     const id = String(wID || "");
     if (!id) return;
+    // Preserve currently open collapses (subjects/chapters)
+    const previouslyOpen = Array.from(
+      document.querySelectorAll(".as-subject > .collapse.show, .as-chapter .collapse.show")
+    )
+      .map((el) => el.id)
+      .filter(Boolean);
     if (makeStarred) starredWids.add(id);
     else starredWids.delete(id);
     saveStarred();
@@ -39,6 +45,15 @@
     filterVisibility(lastSearch);
     highlightElements(document, (els.search?.value || "").trim());
     checkEmpty();
+    // Restore previously open collapses
+    const BS = window.bootstrap;
+    previouslyOpen.forEach((cid) => {
+      const el = cid ? document.getElementById(cid) : null;
+      if (el && BS?.Collapse) {
+        const coll = BS.Collapse.getOrCreateInstance(el, { toggle: false });
+        try { coll.show(); } catch {}
+      }
+    });
   }
   function getFilteredData() {
     const q = (lastSearch || "").toLowerCase();

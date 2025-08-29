@@ -1,0 +1,14 @@
+{
+  // Map the production path /qbase → local ./frontend for Live Server
+  "liveServer.settings.mount": [["/qbase", "./frontend"]],
+
+  // Optional niceties
+  "liveServer.settings.host": "127.0.0.1",
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.ignoreFiles": [
+    "**/.vscode/**",
+    "**/.git/**",
+    "**/node_modules/**"
+  ]
+}
+

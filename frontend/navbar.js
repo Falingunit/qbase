@@ -1,5 +1,30 @@
 (async () => {
-  isDev = false;
+  // Robust dev mode detection (localhost or explicit opt-in)
+  const IS_DEV = (() => {
+    try {
+      const qs = new URLSearchParams(location.search);
+      if (["1", "true"].includes((qs.get("dev") || "").toLowerCase())) return true;
+      const ls = (localStorage.getItem("qbase.dev") || "").toLowerCase();
+      if (["1", "true"].includes(ls)) return true;
+      const h = location.hostname;
+      return h === "localhost" || h === "127.0.0.1";
+    } catch {
+      return false;
+    }
+  })();
+  window.QBASE_DEV = IS_DEV;
+  const FORCE_LOGIN = (() => {
+    try {
+      const qs = new URLSearchParams(location.search);
+      if (["1", "true"].includes((qs.get("login") || "").toLowerCase())) return true;
+      if (["1", "true"].includes((qs.get("forceLogin") || "").toLowerCase())) return true;
+      const ls = (localStorage.getItem("qbase.forceLogin") || "").toLowerCase();
+      return ["1", "true"].includes(ls);
+    } catch {
+      return false;
+    }
+  })();
+  window.QBASE_FORCE_LOGIN = FORCE_LOGIN;
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
@@ -162,7 +187,6 @@
   }
 
   function ensureLoginGate() {
-    if (isDev) return;
 
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
@@ -237,6 +261,7 @@
 
   function showLoginGate() {
     const el = ensureLoginGate();
+    if (!el) return;
     el.classList.remove("d-none");
     el.classList.add("d-flex");
     document.body.style.overflow = "hidden";
@@ -420,12 +445,27 @@
 
   // -------------------- Backend helpers --------------------
   async function whoAmI() {
+    const token = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
+    if (IS_DEV && !FORCE_LOGIN) {
+      const devName = localStorage.getItem("qbase.dev.user") || "Dev";
+      if (!token || token === "dev-token") {
+        try { if (!token) qbSetToken("dev-token"); } catch {}
+        return { username: devName };
+      }
+      // If we have a non-dev token, try the real server for accuracy.
+    }
     try {
       const r = await authFetch(`${API_BASE}/me`);
       if (!r.ok) return null;
       const u = await r.json();
       return u && u.username ? u : null;
     } catch {
+      if (IS_DEV && !FORCE_LOGIN) {
+        // Fallback to stubbed identity if server is unreachable in dev
+        const devName = localStorage.getItem("qbase.dev.user") || "Dev";
+        try { if (!token) qbSetToken("dev-token"); } catch {}
+        return { username: devName };
+      }
       return null;
     }
   }
@@ -633,7 +673,7 @@
       hideLoginGate();
     } else {
       setLoggedOutUI();
-      if (!isAuthenticated) showLoginGate();
+      if ((!IS_DEV || FORCE_LOGIN) && !isAuthenticated) showLoginGate();
     }
   })();
 

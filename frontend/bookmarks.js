@@ -311,6 +311,11 @@
         if (!assignment) continue;
         const q = assignment.questions[b.questionIndex];
         if (!q) continue;
+        // Compute display index (excludes Passage markers)
+        const displayIndex =
+          assignment.questions
+            .slice(0, b.questionIndex + 1)
+            .filter((qq) => qq.qType !== "Passage").length - 1;
 
         const text = q.qText || "Question text not available";
         const truncated = truncateKaTeXSafe(
@@ -321,14 +326,15 @@
 
         html += `
         <div class="col">
-          <div class="card h-100 bookmark-card"
+          <div class="as-card card h-100 bookmark-card"
             data-assignment-id="${escapeHtml(String(b.assignmentId))}"
             data-question-index="${escapeHtml(String(b.questionIndex))}"
+            data-display-index="${escapeHtml(String(displayIndex))}"
             style="cursor:pointer;">
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start mb-2">
                 <small class="text-muted">Assignment ${b.assignmentId} • Q${
-          b.questionIndex + 1
+          displayIndex + 1
         }</small>
                 <button class="btn btn-sm btn-outline-danger remove-bookmark"
                   data-assignment-id="${escapeHtml(String(b.assignmentId))}"
@@ -446,11 +452,17 @@
       const niceTitle =
         assignmentTitles.get(Number(assignmentId)) ||
         `Assignment ${assignmentId}`;
-      titleEl.textContent = `${niceTitle} • Question ${qIdx + 1}`;
+      // Compute display index to show consistent numbering with assignment page
+      const displayIndex =
+        assignment.questions
+          .slice(0, qIdx + 1)
+          .filter((qq) => qq.qType !== "Passage").length - 1;
+      titleEl.textContent = `${niceTitle} • Question ${displayIndex + 1}`;
 
       // Store for "Open in Assignment"
       openBtn.dataset.assignmentId = assignmentId;
-      openBtn.dataset.questionIndex = String(qIdx);
+      openBtn.dataset.questionIndex = String(qIdx); // original index
+      openBtn.dataset.displayIndex = String(displayIndex);
 
       // Render the question
       bodyEl.innerHTML = renderQuestionForView(
@@ -614,12 +626,25 @@
     if (!btn) return;
 
     const assignmentId = btn.dataset.assignmentId;
-    const questionIndex = btn.dataset.questionIndex;
+    const originalIndex = btn.dataset.questionIndex;
+    // Prefer the precomputed display index if present
+    let displayIndex = btn.dataset.displayIndex;
 
-    if (assignmentId && questionIndex !== undefined) {
+    if (!displayIndex && assignmentId && originalIndex !== undefined) {
+      // Derive display index from loaded assignment data
+      const a = assignmentData.get(parseInt(assignmentId, 10));
+      if (a) {
+        const qIdx = parseInt(originalIndex, 10);
+        displayIndex = String(
+          a.questions.slice(0, qIdx + 1).filter((q) => q.qType !== "Passage").length - 1
+        );
+      }
+    }
+
+    if (assignmentId && displayIndex !== undefined) {
       window.open(
         `./assignment.html?aID=${encodeURIComponent(assignmentId)}&q=${
-          parseInt(questionIndex, 10) + 1
+          parseInt(displayIndex, 10) + 1
         }`,
         "_blank"
       );
