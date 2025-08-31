@@ -22,3 +22,4 @@ utils/PDF Screenshots/*
 !utils/PDF Screenshots/*.*
 
 ISDEV
+frontend/dev.config.json

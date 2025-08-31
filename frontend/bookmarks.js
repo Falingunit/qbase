@@ -68,9 +68,11 @@
   });
 
   let currentBookmarks = [];
+  let __bookmarksLoadSeq = 0; // prevent overlapping load races
   const assignmentData = new Map();
 
   async function loadBookmarks() {
+    const mySeq = ++__bookmarksLoadSeq;
     const loadingEl = document.getElementById("loading");
     const noBookmarksEl = document.getElementById("no-bookmarks");
     const contentEl = document.getElementById("bookmarks-content");
@@ -84,9 +86,11 @@
       const response = await authFetch(`${API_BASE}/api/bookmarks`, {
         cache: "no-store",
       });
+      if (mySeq !== __bookmarksLoadSeq) return; // outdated response
 
       if (!response.ok) {
         if (response.status === 401) {
+          if (mySeq !== __bookmarksLoadSeq) return;
           loadingEl.style.display = "none";
           noBookmarksEl.style.display = "block";
           noBookmarksEl.innerHTML = `
@@ -103,6 +107,7 @@
       }
 
       currentBookmarks = await response.json();
+      if (mySeq !== __bookmarksLoadSeq) return;
 
       if (!Array.isArray(currentBookmarks) || currentBookmarks.length === 0) {
         loadingEl.style.display = "none";
@@ -113,18 +118,20 @@
 
       const bookmarksByTag = groupBookmarksByTag(currentBookmarks);
       await loadAssignmentData(bookmarksByTag);
+      if (mySeq !== __bookmarksLoadSeq) return;
       renderBookmarks(bookmarksByTag);
 
       loadingEl.style.display = "none";
       contentEl.style.display = "block";
     } catch (error) {
       console.error("Failed to load bookmarks:", error);
+      if (mySeq !== __bookmarksLoadSeq) return;
       loadingEl.style.display = "none";
       noBookmarksEl.style.display = "block";
       noBookmarksEl.innerHTML = `
         <h3>Error loading bookmarks</h3>
         <p class="text-muted">Failed to load bookmarks. Please try again.</p>
-        <button class="btn btn-primary" onclick="loadBookmarks()">Retry</button>
+        <button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>
       `;
     }
   }
@@ -747,4 +754,7 @@
       }, 3000);
     }
   }
+  
+  // Expose retry for inline button
+  window.qbLoadBookmarks = loadBookmarks;
 })();

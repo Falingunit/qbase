@@ -14,6 +14,14 @@
     }
   })();
   window.QBASE_DEV = IS_DEV;
+  // Dev auto-login suppression per session (set on logout)
+  const DEV_NO_AUTO = (() => {
+    try {
+      return sessionStorage.getItem("qbase.dev.noAutoLogin") === "1";
+    } catch {
+      return false;
+    }
+  })();
   const FORCE_LOGIN = (() => {
     try {
       const qs = new URLSearchParams(location.search);
@@ -28,6 +36,22 @@
     }
   })();
   window.QBASE_FORCE_LOGIN = FORCE_LOGIN;
+
+  // Try to load optional dev auto-login config at runtime
+  let __devAutoCfgLoaded = false;
+  let __devAutoCfg = null;
+  async function loadDevAutoConfig() {
+    if (__devAutoCfgLoaded) return __devAutoCfg;
+    __devAutoCfgLoaded = true;
+    try {
+      const r = await fetch("./dev.config.json", { cache: "no-store" });
+      if (!r.ok) return (__devAutoCfg = null);
+      const cfg = await r.json();
+      return (__devAutoCfg = cfg || null);
+    } catch {
+      return (__devAutoCfg = null);
+    }
+  }
 
   if (window.__QBASE_NAVBAR_LOADED__) {
     console.warn("navbar.js loaded twice; ignoring second load");
@@ -101,8 +125,7 @@
       hide(); // scrolling down -> hide
     } else if (-v > SPEED_THRESHOLD) {
       show(); // fast upward scroll -> show
-    } // Initial position on load
-    update();
+    }
 
     lastY = y;
     lastT = t;
@@ -450,28 +473,67 @@
   // -------------------- Backend helpers --------------------
   async function whoAmI() {
     const token = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
-    if (IS_DEV && !FORCE_LOGIN) {
-      const devName = localStorage.getItem("qbase.dev.user") || "Dev";
-      if (!token || token === "dev-token") {
+
+    // In dev, prefer auto-login to a real server account if configured.
+    if (IS_DEV && !DEV_NO_AUTO && !FORCE_LOGIN) {
+      const devCfg = await loadDevAutoConfig();
+      if (devCfg && devCfg.autoLogin && devCfg.username && devCfg.password) {
+        // If no real token (or a dev stub), attempt auto-login.
+        let needsLogin = !token || token === "dev-token";
+        // If there is some token, verify it; if invalid, we will re-login below.
+        if (!needsLogin) {
+          try {
+            const r0 = await authFetch(`${API_BASE}/me`);
+            if (!r0.ok) needsLogin = true;
+          } catch {
+            needsLogin = true;
+          }
+        }
+        if (needsLogin) {
+          try {
+            const r = await fetch(`${API_BASE}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: String(devCfg.username || "").trim(),
+                password: String(devCfg.password || ""),
+              }),
+            });
+            if (r.ok) {
+              const data = await r.json();
+              if (data && data.token) {
+                qbSetToken(data.token);
+              }
+            }
+          } catch {}
+        }
+        // After ensuring token, ask server who we are.
         try {
-          if (!token) qbSetToken("dev-token");
+          const r = await authFetch(`${API_BASE}/me`);
+          if (r.ok) {
+            const u = await r.json();
+            if (u && u.username) return u;
+          }
         } catch {}
-        return { username: devName };
+        // If dev auto-login is configured, do not fall back to dummy unless forced.
+        if (!FORCE_LOGIN) return null;
       }
-      // If we have a non-dev token, try the real server for accuracy.
     }
+
+    // Standard path: ask the server.
     try {
       const r = await authFetch(`${API_BASE}/me`);
-      if (!r.ok) return null;
+      if (!r.ok) throw new Error(String(r.status));
       const u = await r.json();
       return u && u.username ? u : null;
     } catch {
+      // Legacy dev fallback only when no auto-login is configured and not forcing login.
       if (IS_DEV && !FORCE_LOGIN) {
-        // Fallback to stubbed identity if server is unreachable in dev
         const devName = localStorage.getItem("qbase.dev.user") || "Dev";
         try {
           if (!token) qbSetToken("dev-token");
         } catch {}
+        // Return a stub identity just to keep UI usable offline.
         return { username: devName };
       }
       return null;
@@ -618,6 +680,7 @@
       await authFetch(`${API_BASE}/logout`, { method: "POST" });
     } catch {}
     qbClearToken();
+    try { sessionStorage.setItem("qbase.dev.noAutoLogin", "1"); } catch {}
     setLoggedOutUI();
     broadcastLogout();
     showLoginGate();
@@ -681,7 +744,13 @@
       hideLoginGate();
     } else {
       setLoggedOutUI();
-      if ((!IS_DEV || FORCE_LOGIN) && !isAuthenticated) showLoginGate();
+      if ((!IS_DEV || FORCE_LOGIN) && !isAuthenticated) {
+        showLoginGate();
+      } else if (IS_DEV && !isAuthenticated) {
+        // If dev auto-login is configured but failed, show the gate.
+        const cfg = await loadDevAutoConfig();
+        if (cfg && cfg.autoLogin) showLoginGate();
+      }
     }
   })();
 

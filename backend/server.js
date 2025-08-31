@@ -20,15 +20,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 // Frontend & assets
-// Your GitHub Pages site hosts the data/ folder
+// Your GitHub Pages site hosts the data/ folder (prod)
 const FRONTEND_ORIGIN = 'https://falingunit.github.io';
-const ASSETS_BASE = 'https://falingunit.github.io/qbase';
+const ASSETS_BASE = process.env.ASSETS_BASE || 'https://falingunit.github.io/qbase';
 
 // For Zoom/in-app browsers, requests still come from the frontend origin.
 // But we’ll also allow dev and your nip.io domain for safety.
 const ALLOWED_ORIGINS = [
   FRONTEND_ORIGIN,
   'http://localhost:3000',
+  'http://127.0.0.1:3000',
   'https://qbase.103.125.154.215.nip.io',
 ];
 
@@ -44,15 +45,32 @@ const corsFn = cors({
   origin: (origin, cb) => {
     if (ALLOW_ALL) return cb(null, true);
     if (!origin) return cb(null, true); // allow curl/postman
-    // allow exact matches + any *.github.io page
-    const ok =
-      ALLOWED_ORIGINS.includes(origin) ||
-      /\.github\.io$/.test(new URL(origin).hostname);
+
+    let ok = false;
+    try {
+      const u = new URL(origin);
+      const host = u.hostname;
+      // Allow configured list (exact matches)
+      if (ALLOWED_ORIGINS.includes(origin)) ok = true;
+      // Allow any *.github.io page
+      if (!ok && /\.github\.io$/i.test(host)) ok = true;
+      // Allow WireGuard client host 10.0.0.3 (any scheme/port)
+      if (!ok && host === '10.0.0.3') ok = true;
+      // Allow local development hosts
+      if (!ok && (host === 'localhost' || host === '127.0.0.1')) ok = true;
+    } catch {}
+
     cb(ok ? null : new Error(`Origin ${origin} not allowed by CORS`), ok);
   },
 });
 app.use(corsFn);
-app.options('*', corsFn);
+// Allow Chrome Private Network Access for preflights when accessing 10.0.0.1 from 10.0.0.3
+app.options('*', (req, res, next) => {
+  if (req.headers['access-control-request-private-network'] === 'true') {
+    res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  }
+  corsFn(req, res, next);
+});
 
 // ---------- Parsers ----------
 app.use(express.json());
