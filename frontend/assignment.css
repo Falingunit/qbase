@@ -1,64 +1,21 @@
-/* =========================
-   Design tokens
-   ========================= */
-:root {
-  --page-bg: radial-gradient(1200px 600px at 20% -10%, rgba(13,110,253,.12), transparent 60%),
-             radial-gradient(1000px 600px at 120% 10%, rgba(32,201,151,.10), transparent 60%),
-             #0e0f12;
-  --card-bg: #15171b;
-  --card-border: #22262b;
-  --muted: #9aa4ad;
-  --ring: #0dcaf0;
-  --radius: 16px;
-  --container-max: 1100px;
-}
+/* Base design tokens and background moved to theme.css */
 
-/* =========================
-   Base / page background
-   ========================= */
-html,
-body {
-  min-height: 100%;
-  background: transparent;
-}
-
-html::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: var(--page-bg);
-  background-repeat: no-repeat;
-  background-color: #0e0f12; /* fallback outside gradients */
-}
-
+/* Assignment page layout: internal column scrolling */
 body {
   margin: 0;
-  color: #e8edf2;
+  color: var(--text);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
     "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   line-height: 1.55;
-
-  /* One-screen layout: no window scroll; columns scroll internally */
   min-block-size: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-body.bg-dark { background-color: transparent !important; }
-
-:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
 /* iOS fallback if 100dvh unsupported */
 @supports not (height: 100dvh) {
-  body {
-    block-size: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
-  }
+  body { block-size: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
 }
 
 /* =========================
@@ -99,15 +56,8 @@ body.bg-dark { background-color: transparent !important; }
 }
 
 /* =========================
-   Navbar & topbar
+   Topbar (page-specific)
    ========================= */
-.navbar.bg-body-tertiary {
-  background: rgba(17,19,23,0.7) !important;
-  backdrop-filter: saturate(120%) blur(8px);
-  -webkit-backdrop-filter: saturate(120%) blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
 .assignment-topbar {
   position: sticky;
   padding: .5rem .75rem;
@@ -121,24 +71,7 @@ body.bg-dark { background-color: transparent !important; }
 .assignment-topbar h5 { margin: 0; letter-spacing: 0.02em; }
 .assignment-topbar .btn { border-radius: 999px; }
 
-/* =========================
-   Cards & content blocks
-   ========================= */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-}
-.card-header {
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-}
-.card .small.text-muted { color: var(--muted) !important; }
-
-/* keep the card content from stretching too wide for readability */
+/* Cards are themed globally; page-specific sizing */
 .left-col .card { max-width: 760px; }
 
 /* =========================
@@ -168,10 +101,14 @@ body.bg-dark { background-color: transparent !important; }
   white-space: nowrap;
   overflow-x: auto;
   padding: .5rem .25rem .25rem;
-  gap: .5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  
+    gap: .5rem;
+  margin-bottom: 1rem;
   z-index: 2;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 30px, #000 calc(100% - 30px), transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 30px, #000 calc(100% - 30px), transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
 }
 #mobile-qbar button {
   display: inline-block;
@@ -253,11 +190,13 @@ body.bg-dark { background-color: transparent !important; }
 /* =========================
    Options (MCQ)
    ========================= */
-#MCQOptionDiv {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
+#MCQOptionDiv { display: grid; grid-template-columns: 1fr; 
+  margin-bottom: 1rem; }
+@media (min-width: 768px) {
+  #MCQOptionDiv { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 }
+/* Neutralize vertical spacing from markup on grid */
+#MCQOptionDiv .mcq-option { margin-bottom: 0 !important; }
 
 .mcq-option {
   cursor: pointer;
@@ -266,6 +205,9 @@ body.bg-dark { background-color: transparent !important; }
   color: #e8edf2;
   border-radius: 12px;
   padding: .75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
   transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .mcq-option:hover {
@@ -274,11 +216,33 @@ body.bg-dark { background-color: transparent !important; }
 }
 .mcq-option:active { transform: translateY(.5px); }
 
+/* Letter badge (A/B/C/D) */
+.mcq-option .opt-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
+  font-weight: 400;
+  line-height: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #dfe6ee;
+  border-radius: 999px; /* default: circle */
+}
+
+/* Shape by question type */
+body[data-qtype="SMCQ"] .mcq-option .opt-badge { border-radius: 999px; }
+body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
+
+.mcq-option .opt-text { flex: 1 1 auto; min-width: 0; }
+
 .mcq-option-selected {
-  outline: 3px solid var(--ring) !important;
+  outline: 2px solid var(--ring) !important;
   outline-offset: 1px;
   border-color: rgba(13,202,240,0.45);
-  background: linear-gradient(180deg, #202a31, #192026);
+  background: linear-gradient(180deg, #202a31, #1920268a);
 }
 
 /* MCQ feedback states */
@@ -287,11 +251,13 @@ body.bg-dark { background-color: transparent !important; }
   background: rgba(46,160,67,0.12) !important;
   color: #dff6e5 !important;
 }
+.mcq-option.correct .opt-badge { background: #2ea04363 !important; color: #ffffff !important; border-color: #2ea043 !important; }
 .mcq-option.wrong {
   border-color: #dc3545 !important;
   background: rgba(220,53,69,0.10) !important;
   color: #ffdfe1 !important;
 }
+.mcq-option.wrong .opt-badge { background: #dc354675 !important; color: #ffffff !important; border-color: #dc3545 !important; }
 .mcq-option.missed {
   outline: 2px solid #2ea043 !important;
   outline-offset: 2px;
@@ -326,12 +292,18 @@ input.is-wrong {
 /* =========================
    Media & passages
    ========================= */
+.passage-image,
+.question-image {
+  display: flex;
+  justify-content: center;
+}
+
 .passage-image img,
 .question-image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: .5rem;
   display: block;
+  height: auto;
+  max-width: min(100%, 720px);
+  border-radius: .5rem;
   cursor: pointer;
 }
 
@@ -346,6 +318,18 @@ img, video {
   border-left: 4px solid var(--ring);
   padding: .75rem 1rem;
   border-radius: .5rem;
+}
+
+/* Stack passage text and image on mobile */
+@media (max-width: 767.98px) {
+  .passage-text,
+  .passage-image {
+    width: 100% !important;
+  }
+}
+
+#notesInput {
+  background: linear-gradient(#00000000, #2c2c2c2a);
 }
 
 hr.divider { border-color: rgba(255,255,255,0.08); }
@@ -364,6 +348,19 @@ html { font-size: 16px; }
   #MCQOptionDiv .mcq-option { padding: .75rem 1rem; font-size: 1rem; }
   .controls .btn { padding: .5rem .9rem; }
   #notesInput { font-size: 1rem; }
+  /* On mobile, move the blue outline to wrap both text and image */
+  .passage-wrapper {
+    background: var(--card-bg);
+    border-left: 4px solid var(--ring);
+    padding: .75rem 1rem;
+    border-radius: .5rem;
+  }
+  /* Avoid double styling inside the wrapper on mobile */
+  .passage-text {
+    background: transparent;
+    border-left: none;
+    padding: 0;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 991.98px) {
@@ -371,19 +368,78 @@ html { font-size: 16px; }
   .container.main-wrapper { padding-inline: 1rem; }
 }
 
+/* Prevent overly tall images on larger viewports while keeping aspect */
+@media (min-width: 576px) {
+  .question-image img { max-height: 70vh; }
+  .passage-image img { max-height: 60vh; }
+}
+
 @media (min-width: 992px) {
   .q-btn { font-size: .95rem; }
 }
 
-/* =========================
-   Scrollbars (WebKit)
-   ========================= */
-::-webkit-scrollbar { width: 12px; }
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: 0 0 1px 1px rgba(13,110,253,0.12) inset;
-  border-radius: 10px;
+/* Bookmark indicator on question circles (mobile + sidebar) */
+.q-btn { position: relative; }
+.q-btn .q-bookmark-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #0d6efd; /* bootstrap primary */
+  color: white;
+  border: 1px solid rgba(0,0,0,0.2);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+  font-size: 10px; /* small icon sizing */
+  line-height: 1;
 }
-::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  -webkit-box-shadow: 0 0 2px 1px rgb(64 52 80) inset;
+.q-btn .q-bookmark-indicator i { font-size: 10px; line-height: 1; }
+.q-btn .q-bookmark-indicator.hidden { display: none !important; }
+
+/* Scrollbars are themed globally */
+
+/* --------- Desktop toggles with animation --------- */
+@media (min-width: 992px) {
+  /* Q-bar: keep in flow and animate collapse/expand */
+  #mobile-qbar {
+    display: block; /* override base none to allow transition */
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-6px);
+    margin-bottom: 0;
+    pointer-events: none;
+    transition: max-height .28s ease, opacity .18s ease, transform .28s ease, margin-bottom .28s ease;
+  }
+  body.desktop-qbar-visible #mobile-qbar {
+    /* accommodate up to ~2 lines of buttons comfortably */
+    max-height: 88px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-bottom: 1rem;
+    pointer-events: auto;
+  }
+
+  /* Sidebar: animate width/opacity instead of display */
+  .right-col {
+    transition: max-width .3s ease, opacity .2s ease, transform .3s ease;
+  }
+  body.questions-hidden .right-col {
+    max-width: 0 !important;
+    transform: translateX(8px);
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #mobile-qbar,
+  .right-col {
+    transition: none !important;
+  }
 }

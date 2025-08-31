@@ -860,6 +860,11 @@
       dbtn.textContent = i + 1;
       dbtn.dataset.qid = i;
       dbtn.addEventListener("click", () => clickQuestionButton(i));
+      // Bookmark indicator (hidden by default)
+      const dInd = document.createElement("span");
+      dInd.className = "q-bookmark-indicator hidden";
+      dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      dbtn.appendChild(dInd);
       dcol.appendChild(dbtn);
       desktop.appendChild(dcol);
 
@@ -869,10 +874,17 @@
       mbtn.textContent = i + 1;
       mbtn.dataset.qid = i;
       mbtn.addEventListener("click", () => clickQuestionButton(i));
+      // Bookmark indicator (hidden by default)
+      const mInd = document.createElement("span");
+      mInd.className = "q-bookmark-indicator hidden";
+      mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      mbtn.appendChild(mInd);
       mobile.appendChild(mbtn);
     });
 
     questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    // initial bookmark badges
+    updateBookmarkIndicators();
   }
 
   function MCQOptionClicked(optionElement) {
@@ -1012,6 +1024,9 @@
 
     qNo.textContent = qID + 1;
     typeInfo.textContent = question.qType;
+    try {
+      document.body.setAttribute("data-qtype", String(question.qType || "").toUpperCase());
+    } catch {}
     assignmentDetails.textContent = assignmentTitle;
     assignmentTitleElem.textContent = assignmentTitle
     pageTitle.textContent = `QBase - ${assignmentTitle} - Q${qID + 1}`
@@ -1141,7 +1156,8 @@
       renderMathInElement(D, katexOptions);
 
       numerical.style.display = "none";
-      MCQOptions.style.display = "block";
+      // Allow CSS to control the layout (grid on larger screens)
+      MCQOptions.style.display = "";
       renderMathInElement(MCQOptions, katexOptions);
     }
 
@@ -1192,6 +1208,8 @@
           icon.className = "bi bi-bookmark";
           bookmarkBtn.title = "Bookmark this question";
         }
+        // refresh small badges on circles as well
+        updateBookmarkIndicators();
       }
     } catch (error) {
       console.error("Failed to update bookmark button:", error);
@@ -1484,6 +1502,8 @@
         throw new Error(error.error || "Failed to add bookmark");
       }
 
+      // Update badges across question circles
+      updateBookmarkIndicators();
       return true;
     } catch (error) {
       console.error("Failed to add bookmark:", error);
@@ -1510,6 +1530,8 @@
         throw new Error("Failed to remove bookmark");
       }
 
+      // Update badges across question circles
+      updateBookmarkIndicators();
       return true;
     } catch (error) {
       console.error("Failed to remove bookmark:", error);
@@ -1537,7 +1559,9 @@
       const newTag = await response.json();
 
       // Automatically add bookmark to the new tag
-      return await addBookmark(newTag.id);
+      const ok = await addBookmark(newTag.id);
+      if (ok) updateBookmarkIndicators();
+      return ok;
     } catch (error) {
       console.error("Failed to create bookmark tag:", error);
       await showNotice({
@@ -1553,4 +1577,112 @@
     div.textContent = text;
     return div.innerHTML;
   }
+  
+  // -------------------- UI toggles: Questions sidebar and desktop Q-bar --------------------
+  try {
+    const btnSidebar = document.getElementById("toggle-questions");
+    const btnQbar = document.getElementById("toggle-qbar");
+
+    const LS_SIDEBAR = "qbase.assignment.sidebarVisible";
+    const LS_QBAR = "qbase.assignment.desktopQbar";
+
+    const isDesktop = () => window.matchMedia("(min-width: 992px)").matches;
+
+    function getBool(key, fallback) {
+      const raw = localStorage.getItem(key);
+      if (raw === null || raw === undefined) return fallback;
+      return raw === "1" || raw === "true";
+    }
+
+    function setBool(key, value) {
+      localStorage.setItem(key, value ? "1" : "0");
+    }
+
+    function applySidebarVisible(visible) {
+      document.body.classList.toggle("questions-hidden", !visible);
+      if (btnSidebar) btnSidebar.classList.toggle("active", visible);
+    }
+
+    function applyDesktopQbar(enabled) {
+      document.body.classList.toggle("desktop-qbar-visible", enabled);
+      if (btnQbar) btnQbar.classList.toggle("active", enabled);
+    }
+
+    // Initial state (default: sidebar visible on desktop; desktop Qbar off)
+    const sidebarDefault = true;
+    const qbarDefault = false;
+    applySidebarVisible(getBool(LS_SIDEBAR, sidebarDefault));
+    applyDesktopQbar(getBool(LS_QBAR, qbarDefault));
+
+    // Wire events
+    btnSidebar?.addEventListener("click", () => {
+      const currentlyVisible = !document.body.classList.contains("questions-hidden");
+      const next = !currentlyVisible;
+      applySidebarVisible(next);
+      setBool(LS_SIDEBAR, next);
+    });
+
+    btnQbar?.addEventListener("click", () => {
+      const enabled = !document.body.classList.contains("desktop-qbar-visible");
+      applyDesktopQbar(enabled);
+      setBool(LS_QBAR, enabled);
+    });
+
+    // Keep classes consistent on viewport changes
+    window.addEventListener("resize", () => {
+      // No-op for now; classes are responsive via CSS media queries
+      // But ensure button active states sync from storage if needed
+      applySidebarVisible(getBool(LS_SIDEBAR, sidebarDefault));
+      applyDesktopQbar(getBool(LS_QBAR, qbarDefault));
+    });
+  } catch (e) {
+    console.warn("Toggle wiring failed", e);
+  }
+  
+  // ---------- Bookmark badges on question circles ----------
+  async function updateBookmarkIndicators() {
+    try {
+      // Fetch all bookmarks and filter to current assignment
+      const res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+      if (!res.ok) {
+        // On unauthorized, hide all indicators
+        questionButtons?.forEach((btn) => {
+          btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+        });
+        return;
+      }
+      const all = await res.json();
+      const mine = Array.isArray(all)
+        ? all.filter((b) => Number(b.assignmentId) === Number(aID))
+        : [];
+      const bookmarkedOriginalIdx = new Set(
+        mine.map((b) => Number(b.questionIndex))
+      );
+
+      const qMap = window.questionIndexMap || [];
+      questionButtons?.forEach((btn) => {
+        const idx = Number(btn.dataset.qid);
+        const orig = qMap[idx];
+        let ind = btn.querySelector('.q-bookmark-indicator');
+        if (!ind) {
+          ind = document.createElement('span');
+          ind.className = 'q-bookmark-indicator hidden';
+          ind.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+          btn.appendChild(ind);
+        }
+        if (bookmarkedOriginalIdx.has(Number(orig))) ind.classList.remove('hidden');
+        else ind.classList.add('hidden');
+      });
+    } catch (err) {
+      console.warn('updateBookmarkIndicators failed', err);
+    }
+  }
+
+  // Refresh badges on login/logout
+  window.addEventListener('qbase:login', () => updateBookmarkIndicators());
+  window.addEventListener('qbase:logout', () => {
+    questionButtons?.forEach((btn) => {
+      btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+    });
+  });
 })();

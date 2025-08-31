@@ -1,0 +1,81 @@
+:root {
+  /* Brand colors and surfaces */
+  --page-bg: radial-gradient(1200px 600px at 20% -10%, rgba(13,110,253,.12), transparent 60%),
+             radial-gradient(1000px 600px at 120% 10%, rgba(32,201,151,.10), transparent 60%),
+             #0e0f12;
+  --text: #e8edf2;
+  --muted: #9aa4ad;
+  --primary: #0d6efd;
+  --accent: #20c997;
+  --ring: #0dcaf0;
+
+  /* Surfaces */
+  --card-bg: #15171b;
+  --card-border: #22262b;
+
+  /* Shape & layout */
+  --radius: 16px;
+  --container-max: 1100px;
+}
+
+/* Base page background overlay (keeps Bootstrap body classes intact) */
+html,
+body { min-height: 100%; background: transparent; }
+body.bg-dark { background-color: transparent !important; }
+html::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--page-bg);
+  background-repeat: no-repeat;
+  background-color: #0e0f12; /* fallback outside gradients */
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Layout helpers */
+.container { max-width: var(--container-max); }
+
+/* Navbar glass look */
+.navbar.bg-body-tertiary {
+  background: rgba(17, 19, 23, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: saturate(120%) blur(8px);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+}
+
+/* Headings */
+h1 { letter-spacing: 0.3px; font-weight: 700; }
+h4 { margin-top: 1.75rem; color: #cfd7df; }
+
+/* Cards shared styling */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.card-header {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+}
+.card .small.text-muted { color: var(--muted) !important; }
+
+/* Scrollbars (WebKit) */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: 0 0 1px 1px rgba(13, 110, 253, 0.12) inset;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
+}

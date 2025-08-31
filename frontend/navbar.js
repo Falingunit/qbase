@@ -3,7 +3,8 @@
   const IS_DEV = (() => {
     try {
       const qs = new URLSearchParams(location.search);
-      if (["1", "true"].includes((qs.get("dev") || "").toLowerCase())) return true;
+      if (["1", "true"].includes((qs.get("dev") || "").toLowerCase()))
+        return true;
       const ls = (localStorage.getItem("qbase.dev") || "").toLowerCase();
       if (["1", "true"].includes(ls)) return true;
       const h = location.hostname;
@@ -16,8 +17,10 @@
   const FORCE_LOGIN = (() => {
     try {
       const qs = new URLSearchParams(location.search);
-      if (["1", "true"].includes((qs.get("login") || "").toLowerCase())) return true;
-      if (["1", "true"].includes((qs.get("forceLogin") || "").toLowerCase())) return true;
+      if (["1", "true"].includes((qs.get("login") || "").toLowerCase()))
+        return true;
+      if (["1", "true"].includes((qs.get("forceLogin") || "").toLowerCase()))
+        return true;
       const ls = (localStorage.getItem("qbase.forceLogin") || "").toLowerCase();
       return ["1", "true"].includes(ls);
     } catch {
@@ -85,7 +88,6 @@
 
     const atTop = y <= SHOW_AT_TOP_PX;
     const menuOpen = !!document.querySelector(".navbar-collapse.show"); // don't autohide if mobile menu open
-    const isDesktop = window.matchMedia && window.matchMedia("(min-width: 992px)").matches;
 
     // Add a subtle shadow when not at the top
     if (y > 0) nav.classList.add("shadow-sm");
@@ -93,15 +95,14 @@
 
     if (menuOpen) {
       show(); // keep visible while the menu is open
-    } else if (!isDesktop && atTop) {
-      // On mobile/tablet, keep showing when near the top.
-      // On desktop, default to hidden at top to avoid overlapping bars.
-      show();
+    } else if (atTop) {
+      show(); // always show near top
     } else if (dy > MIN_DELTA) {
       hide(); // scrolling down -> hide
     } else if (-v > SPEED_THRESHOLD) {
       show(); // fast upward scroll -> show
-    }
+    } // Initial position on load
+    update();
 
     lastY = y;
     lastT = t;
@@ -126,12 +127,8 @@
   });
 
   // Initial position on load
-  // Start hidden on desktop by default to avoid showing both navbars.
-  try {
-    const desktop = window.matchMedia && window.matchMedia("(min-width: 992px)").matches;
-    if (desktop) hide();
-  } catch {}
   update();
+
   window.addEventListener("qbase:login", (e) => {
     isAuthenticated = true; // <-- make other instances aware
     const name = e?.detail?.username;
@@ -195,7 +192,6 @@
   }
 
   function ensureLoginGate() {
-    return
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
     // Reuse existing overlay if the script was loaded twice
@@ -457,7 +453,9 @@
     if (IS_DEV && !FORCE_LOGIN) {
       const devName = localStorage.getItem("qbase.dev.user") || "Dev";
       if (!token || token === "dev-token") {
-        try { if (!token) qbSetToken("dev-token"); } catch {}
+        try {
+          if (!token) qbSetToken("dev-token");
+        } catch {}
         return { username: devName };
       }
       // If we have a non-dev token, try the real server for accuracy.
@@ -471,7 +469,9 @@
       if (IS_DEV && !FORCE_LOGIN) {
         // Fallback to stubbed identity if server is unreachable in dev
         const devName = localStorage.getItem("qbase.dev.user") || "Dev";
-        try { if (!token) qbSetToken("dev-token"); } catch {}
+        try {
+          if (!token) qbSetToken("dev-token");
+        } catch {}
         return { username: devName };
       }
       return null;

@@ -12,6 +12,7 @@
 		integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
 		crossorigin="anonymous"
 	>
+	<link href="./theme.css" rel="stylesheet">
 	<link href="./assignment.css" rel="stylesheet">
 	<link
 		rel="stylesheet"
@@ -30,7 +31,7 @@
 	></script>
 </head>
 <body class="bg-dark text-light" style="max-height: 10vh !important;">
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.html">QBase</a>
 
@@ -103,23 +104,34 @@
         </div>
       </div>
     </nav>
-	<div class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center">
+    <div class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0" id="assignment-title">Assignment</h5>
+      <div class="d-flex align-items-center gap-2">
+        <!-- Toggle desktop sidebar Questions list (default on for desktop) -->
+        <button id="toggle-questions" class="btn btn-outline-secondary btn-sm" title="Show/Hide Questions sidebar">
+			<i class="bi bi-layout-sidebar-inset-reverse"></i>   
+			<span class="d-none d-sm-inline">Side Bar</span>
+        </button>
+        <!-- Toggle showing the mobile Q-bar on desktop (always on in mobile) -->
+        <button id="toggle-qbar" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex" title="Show the compact Q-bar on desktop">
+			<i class="bi bi-chevron-bar-up"></i>
+          <span class="d-none d-sm-inline">Top Bar</span>
+        </button>
+        <button id="reset-assignment" class="btn btn-outline-danger btn-sm align-self-end">
+          <i class="bi bi-arrow-counterclockwise" aria-selected="false"></i> Reset Assignment
+        </button>
+      </div>
+    </div>
 
-	<h5 class="mb-0" id="assignment-title">Assignment</h5>
-	<button id="reset-assignment" class="btn btn-outline-danger btn-sm align-self-end">
-		<i class="bi bi-arrow-counterclockwise" aria-selected="false"></i> Reset Assignment
-	</button>
-	</div>
-
-	<div class="container main-wrapper d-flex justify-content-between" >
+	<div class="container-fluid px-0 main-wrapper d-flex justify-content-between">
 
 		<div class=" p-4 overflow-y-scroll" style="width: 100%;">
-			<div id="mobile-qbar" style="min-height: fit-content;"></div>
+			<div id="mobile-qbar"></div>
 
 			<div class="card mb-4 flex-shrink-0">
 				<div class="card-header d-flex justify-content-between align-items-center">
 					<div>
-						<strong>Q<span id="qNo">1</span></strong>
+						<strong style="font-weight: 600;">Q-<span id="qNo">1</span></strong>
 						<div class="small text-muted" id="assignmentDetails"></div>
 					</div>
 					<div class="d-flex align-items-center gap-2">
@@ -131,9 +143,10 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<div id="passageText" class="card-text passage-text mb-3" style="display:none"></div>
-					<div id="passageImage" class="question-image mb-3" style="display:none"></div>
-
+					<div class="d-flex flex-column flex-md-row passage-wrapper">
+						<div id="passageText" class="card-text passage-text mb-3" style="display:none; width:70%;"></div>
+						<div id="passageImage" class="passage-image mb-3" style="display:none; width: 30%;"></div>
+					</div>
 					<p id="questionText"></p>
 					<div id="questionImage" class="question-image mb-3" style="display:none"></div>
 				</div>
@@ -144,25 +157,29 @@
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="A"
 				>
-					A. <span id="AContent"></span>
+					<span class="opt-badge" aria-hidden="true">A</span>
+					<span class="opt-text"><span id="AContent"></span></span>
 				</button>
 				<button
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="B"
 				>
-					B. <span id="BContent"></span>
+					<span class="opt-badge" aria-hidden="true">B</span>
+					<span class="opt-text"><span id="BContent"></span></span>
 				</button>
 				<button
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="C"
 				>
-					C. <span id="CContent"></span>
+					<span class="opt-badge" aria-hidden="true">C</span>
+					<span class="opt-text"><span id="CContent"></span></span>
 				</button>
 				<button
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="D"
 				>
-					D. <span id="DContent"></span>
+					<span class="opt-badge" aria-hidden="true">D</span>
+					<span class="opt-text"><span id="DContent"></span></span>
 				</button>
 			</div>
 
@@ -192,12 +209,12 @@
 			</div>
 		</div>
 
-		<div class="right-col p-3 d-none d-lg-block overflow-y-scroll" style="border: none;">
-			<h6 class="mb-3">Questions</h6>
-			<div class="controls d-flex justify-content-between flex-shrink-0" style="padding-top: 1rem;">
-			<div class="row row-cols-4 g-2" id="q_list"></div>
-		</div>
-	</div>
+        <div class="right-col p-3 d-none d-lg-block overflow-y-scroll" style="border: none;">
+            <h6 class="mb-3">Questions</h6>
+            <div class="controls d-flex justify-content-between flex-shrink-0" style="padding-top: 1rem;">
+            <div class="row row-cols-4 g-2" id="q_list"></div>
+        </div>
+    </div>
 
 	<script defer src="./assignment.js"></script>
 </body>
