@@ -85,6 +85,7 @@
 
     const atTop = y <= SHOW_AT_TOP_PX;
     const menuOpen = !!document.querySelector(".navbar-collapse.show"); // don't autohide if mobile menu open
+    const isDesktop = window.matchMedia && window.matchMedia("(min-width: 992px)").matches;
 
     // Add a subtle shadow when not at the top
     if (y > 0) nav.classList.add("shadow-sm");
@@ -92,8 +93,10 @@
 
     if (menuOpen) {
       show(); // keep visible while the menu is open
-    } else if (atTop) {
-      show(); // always show near top
+    } else if (!isDesktop && atTop) {
+      // On mobile/tablet, keep showing when near the top.
+      // On desktop, default to hidden at top to avoid overlapping bars.
+      show();
     } else if (dy > MIN_DELTA) {
       hide(); // scrolling down -> hide
     } else if (-v > SPEED_THRESHOLD) {
@@ -123,6 +126,11 @@
   });
 
   // Initial position on load
+  // Start hidden on desktop by default to avoid showing both navbars.
+  try {
+    const desktop = window.matchMedia && window.matchMedia("(min-width: 992px)").matches;
+    if (desktop) hide();
+  } catch {}
   update();
   window.addEventListener("qbase:login", (e) => {
     isAuthenticated = true; // <-- make other instances aware
@@ -187,7 +195,7 @@
   }
 
   function ensureLoginGate() {
-
+    return
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
     // Reuse existing overlay if the script was loaded twice
