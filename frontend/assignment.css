@@ -280,14 +280,12 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 /* Base: expand slightly and fade while thinning (kept inside button) */
 @keyframes mcq-ring-green {
   0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
-  10% { opacity: .95; transform: scale(0.80); border-width: 100px;}
-  60% { opacity: .55; transform: scale(1.03); border-width: 2px; }
+  10% { opacity: .95; transform: scale(0.70); border-width: 100px;}
   100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
 }
 @keyframes mcq-ring-red {
   0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
-  10% { opacity: .95; transform: scale(0.80); border-width: 100px;}
-  60% { opacity: .55; transform: scale(1.03); border-width: 2px; }
+  10% { opacity: .95; transform: scale(0.70); border-width: 100px;}
   100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
 }
 

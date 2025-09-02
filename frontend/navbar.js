@@ -215,6 +215,7 @@
   }
 
   function ensureLoginGate() {
+    return
     if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
 
     // Reuse existing overlay if the script was loaded twice
