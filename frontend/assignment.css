@@ -274,6 +274,14 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 }
 .mcq-option.disabled { pointer-events: none; opacity: 0.85; }
 
+.fonted {
+  font-family: "Noto Serif", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
 /* =========================
    Evaluation ring animations (MCQ)
    ========================= */

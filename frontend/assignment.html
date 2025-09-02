@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>QBase - Assignment</title> 
 	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 	<link
 		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
 		rel="stylesheet"
@@ -144,15 +146,15 @@
 				</div>
 				<div class="card-body">
 					<div class="d-flex flex-column flex-md-row passage-wrapper">
-						<div id="passageText" class="card-text passage-text mb-3" style="display:none; width:70%;"></div>
+						<div id="passageText" class="fonted card-text passage-text mb-3" style="display:none; width:70%;"></div>
 						<div id="passageImage" class="passage-image mb-3" style="display:none; width: 30%;"></div>
 					</div>
-					<p id="questionText"></p>
+					<p id="questionText" class="fonted"></p>
 					<div id="questionImage" class="question-image mb-3" style="display:none"></div>
 				</div>
 			</div>
 
-			<div class="mb-3" id="MCQOptionDiv">
+			<div class="mb-3 fonted" id="MCQOptionDiv">
 				<button
 					class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
 					data-opt="A"
