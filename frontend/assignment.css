@@ -277,14 +277,18 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 /* =========================
    Evaluation ring animations (MCQ)
    ========================= */
-/* Base: ring starts thick and shrinks to thin, staying inside the button */
+/* Base: expand slightly and fade while thinning (kept inside button) */
 @keyframes mcq-ring-green {
-  0% { border-width: 6px; }
-  100% { border-width: 0; }
+  0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
+  10% { opacity: .95; transform: scale(0.80); border-width: 100px;}
+  60% { opacity: .55; transform: scale(1.03); border-width: 2px; }
+  100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
 }
 @keyframes mcq-ring-red {
-  0% { border-width: 6px; }
-  100% { border-width: 0; }
+  0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
+  10% { opacity: .95; transform: scale(0.80); border-width: 100px;}
+  60% { opacity: .55; transform: scale(1.03); border-width: 2px; }
+  100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
 }
 
 /* When a correct option is picked: play green ring once and disappear */
@@ -293,9 +297,11 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
   position: absolute;
   inset: 0; /* stay within; no spillover */
   border-radius: 16px;
-  border: 6px solid #2ea043;
+  border: 4px solid #2ea043;
   pointer-events: none;
-  animation: mcq-ring-green 650ms ease-out forwards;
+  opacity: 0;
+  transform: scale(0.98);
+  animation: mcq-ring-green 800ms ease-out forwards;
 }
 
 /* When an incorrect option is picked: play red ring once and disappear */
@@ -304,22 +310,15 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
   position: absolute;
   inset: 0;
   border-radius: 16px;
-  border: 6px solid #dc3545;
+  border: 4px solid #dc3545;
   pointer-events: none;
-  animation: mcq-ring-red 650ms ease-out forwards;
+  opacity: 0;
+  transform: scale(0.98);
+  animation: mcq-ring-red 800ms ease-out forwards;
 }
 
 /* Missed correct option (unpicked but correct): grow a subtle green ring while keeping the steady outline */
-.mcq-option.missed::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  border: 6px solid #2ea043;
-  pointer-events: none;
-  /* quick inner-to-edge shrink; persistent .missed outline stays */
-  animation: mcq-ring-green 500ms ease-out forwards;
-}
+/* No animation for missed (unpicked but correct) — keep persistent outline only */
 
 /* =========================
    Numerical inputs
@@ -343,13 +342,13 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
    ========================= */
 @keyframes num-ring-green {
   0% { box-shadow: 0 0 0 0 rgba(46,160,67,0.45); }
-  50% { box-shadow: 0 0 0 10px rgba(46,160,67,0.45); }
-  100% { box-shadow: 0 0 0 0 rgba(46,160,67,0.45); }
+  70% { box-shadow: 0 0 0 8px rgba(46,160,67,0.35); }
+  100% { box-shadow: 0 0 0 10px rgba(46,160,67,0.00); }
 }
 @keyframes num-ring-red {
   0% { box-shadow: 0 0 0 0 rgba(220,53,69,0.50); }
-  50% { box-shadow: 0 0 0 10px rgba(220,53,69,0.50); }
-  100% { box-shadow: 0 0 0 0 rgba(220,53,69,0.50); }
+  70% { box-shadow: 0 0 0 8px rgba(220,53,69,0.40); }
+  100% { box-shadow: 0 0 0 10px rgba(220,53,69,0.00); }
 }
 input.is-correct {
   border-color: #2ea043 !important;
