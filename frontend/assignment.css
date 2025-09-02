@@ -242,7 +242,7 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
   outline: 2px solid var(--ring) !important;
   outline-offset: 1px;
   border-color: rgba(13,202,240,0.45);
-  background: linear-gradient(180deg, #202a31, #1920268a);
+  background-color: rgba(13, 202, 240, 0.158);
 }
 
 /* MCQ feedback states */

@@ -82,5 +82,12 @@
     "chapter": "Alternating Current",
     "title": "AC Assignment #3 (advanced)",
     "aID": 11
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Options",
+    "title": "Ray Optics Assignment #1 (Plane Mirror)",
+    "aID": 12
   }
 ]
