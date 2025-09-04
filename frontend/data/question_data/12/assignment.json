@@ -133,7 +133,7 @@
     {
       "qType": "SMCQ",
       "passageId": null,
-      "qText": "A ray of light is incident on a plane mirror along the vector i + j − k. The normal at the point of incidence is along the vector i + j + k. Find the unit vector along the reflected ray. (Options are made-up distractors; one is correct. Here i, j, k are unit vectors.)",
+      "qText": "A ray of light is incident on a plane mirror along the vector \\(\\hat i + \\hat j − \\hat k\\). The normal at the point of incidence is along the vector \\(\\hat i + \\hat j\\). Find the unit vector along the reflected ray. (Options are made-up distractors; one is correct. Here i, j, k are unit vectors.)",
       "image": null,
       "qOptions": [
         "-(i + j + k)/sqrt3",
