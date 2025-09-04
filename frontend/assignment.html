@@ -108,20 +108,44 @@
     </nav>
     <div class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center">
       <h5 class="mb-0" id="assignment-title">Assignment</h5>
-      <div class="d-flex align-items-center gap-2">
-        <!-- Toggle desktop sidebar Questions list (default on for desktop) -->
-        <button id="toggle-questions" class="btn btn-outline-secondary btn-sm" title="Show/Hide Questions sidebar">
-			<i class="bi bi-layout-sidebar-inset-reverse"></i>   
-			<span class="d-none d-sm-inline">Side Bar</span>
-        </button>
-        <!-- Toggle showing the mobile Q-bar on desktop (always on in mobile) -->
-        <button id="toggle-qbar" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex" title="Show the compact Q-bar on desktop">
-			<i class="bi bi-chevron-bar-up"></i>
-          <span class="d-none d-sm-inline">Top Bar</span>
-        </button>
-        <button id="reset-assignment" class="btn btn-outline-danger btn-sm align-self-end">
-          <i class="bi bi-arrow-counterclockwise" aria-selected="false"></i> Reset Assignment
-        </button>
+      <div class="topbar-actions">
+               <div class="topbar-group" aria-label="Question navigation">
+          <button id="nav-prev" class="btn btn-outline-secondary btn-sm" title="Previous question" aria-label="Previous question">
+            <i class="bi bi-chevron-left" aria-hidden="true"></i>
+          </button>
+          <button id="nav-next" class="btn btn-outline-secondary btn-sm" title="Next question" aria-label="Next question">
+            <i class="bi bi-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+                <span class="topbar-sep">|</span>
+        <div class="topbar-group" aria-label="View controls">
+          <!-- Toggle desktop sidebar Questions list (default on for desktop) -->
+          <button id="toggle-questions" class="btn btn-outline-secondary btn-sm" title="Show/Hide Questions sidebar">
+				<i class="bi bi-layout-sidebar-inset-reverse"></i>
+				<span class="d-none d-sm-inline">Side Bar</span>
+          </button>
+          <!-- Toggle showing the mobile Q-bar on desktop (always on in mobile) -->
+          <button id="toggle-qbar" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex" title="Show the compact Q-bar on desktop">
+				<i class="bi bi-chevron-bar-up"></i>
+            <span class="d-none d-sm-inline">Top Bar</span>
+          </button>
+                          <span class="topbar-sep">|</span>
+
+          <!-- Font size slider: adjusts only question + options -->
+          <div class="qa-font-control d-flex align-items-center" title="Adjust question font size">
+            <i class="bi bi-fonts me-2" aria-hidden="true"></i>
+            <input id="qa-font-range" class="form-range qa-font-range" type="range" min="90" max="140" step="5" value="100" aria-label="Question font size" />
+          </div>
+        </div>
+
+        <span class="topbar-sep">|</span>
+ 
+        <div class="topbar-group" aria-label="Reset controls">
+          <button id="reset-assignment" class="btn btn-outline-danger btn-sm align-self-end" title="Reset entire assignment">
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+            <span class="d-none d-sm-inline">Reset Assignment</span>
+          </button>
+        </div>
       </div>
     </div>
 

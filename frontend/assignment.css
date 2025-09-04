@@ -13,6 +13,11 @@ body {
   flex-direction: column;
 }
 
+/* Question font-size scale (question text + MCQ option text only) */
+:root { --qa-scale: 1; }
+#questionText { font-size: calc(1rem * var(--qa-scale)); }
+#MCQOptionDiv .opt-text { font-size: calc(1rem * var(--qa-scale)); }
+
 /* iOS fallback if 100dvh unsupported */
 @supports not (height: 100dvh) {
   body { block-size: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
@@ -70,6 +75,16 @@ body {
 }
 .assignment-topbar h5 { margin: 0; letter-spacing: 0.02em; }
 .assignment-topbar .btn { border-radius: 999px; }
+/* Topbar grouping and separators */
+.assignment-topbar .topbar-actions { display: inline-flex; align-items: center; gap: .75rem; }
+.assignment-topbar .topbar-group { display: inline-flex; align-items: center; gap: .5rem; }
+.assignment-topbar .topbar-sep { opacity: .35; user-select: none; }
+/* Compact slider styling in topbar */
+.assignment-topbar .qa-font-control { gap: .25rem; }
+.assignment-topbar .qa-font-range { width: 120px; height: 1.25rem; padding: 0; }
+.assignment-topbar .qa-font-range::-webkit-slider-runnable-track { height: .25rem; }
+.assignment-topbar .qa-font-range::-moz-range-track { height: .25rem; }
+.assignment-topbar .qa-font-range::-ms-track { height: .25rem; }
 
 /* Cards are themed globally; page-specific sizing */
 .left-col .card { max-width: 760px; }
@@ -363,6 +378,15 @@ input.is-correct {
 input.is-wrong {
   border-color: #dc3545 !important;
   animation: num-ring-red 900ms ease-out 1;
+}
+
+/* Disable evaluation animations when restoring an already-evaluated question */
+body.suppress-eval-anim .mcq-option.correct::after,
+body.suppress-eval-anim .mcq-option.wrong::after,
+body.suppress-eval-anim .mcq-option.missed::after,
+body.suppress-eval-anim input.is-correct,
+body.suppress-eval-anim input.is-wrong {
+  animation: none !important;
 }
 
 /* =========================

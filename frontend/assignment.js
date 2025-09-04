@@ -1108,24 +1108,31 @@
     }
 
     if (questionState.isAnswerEvaluated) {
-      if (question.qType === "SMCQ") {
-        const correct = normalizeAnswer(question);
-        const picked = getUserSelection(questionState, "SMCQ");
-        clearMCQVisuals();
-        applyMCQEvaluationStyles(correct, picked);
-      } else if (question.qType === "MMCQ") {
-        const correct = normalizeAnswer(question);
-        const picked = getUserSelection(questionState, "MMCQ");
-        clearMCQVisuals();
-        applyMCQEvaluationStyles(correct, picked);
-      } else if (question.qType === "Numerical") {
-        const ans = normalizeAnswer(question);
-        const user = getUserSelection(questionState, "Numerical");
-        const isCorrect =
-          typeof user === "number" && ans.valid && user === ans.value;
-        applyNumericalEvaluationStyles(isCorrect);
-        if (numericalAnswer)
-          numericalAnswer.parentElement.style.display = "block";
+      // Suppress animations when restoring evaluated state on navigation
+      document.body.classList.add("suppress-eval-anim");
+      try {
+        if (question.qType === "SMCQ") {
+          const correct = normalizeAnswer(question);
+          const picked = getUserSelection(questionState, "SMCQ");
+          clearMCQVisuals();
+          applyMCQEvaluationStyles(correct, picked);
+        } else if (question.qType === "MMCQ") {
+          const correct = normalizeAnswer(question);
+          const picked = getUserSelection(questionState, "MMCQ");
+          clearMCQVisuals();
+          applyMCQEvaluationStyles(correct, picked);
+        } else if (question.qType === "Numerical") {
+          const ans = normalizeAnswer(question);
+          const user = getUserSelection(questionState, "Numerical");
+          const isCorrect =
+            typeof user === "number" && ans.valid && user === ans.value;
+          applyNumericalEvaluationStyles(isCorrect);
+          if (numericalAnswer)
+            numericalAnswer.parentElement.style.display = "block";
+        }
+      } finally {
+        // Remove on next tick to avoid triggering animations
+        setTimeout(() => document.body.classList.remove("suppress-eval-anim"), 0);
       }
     } else {
       // Not evaluated yet → ensure reset icon hidden
@@ -1178,6 +1185,9 @@
 
     // Update bookmark button state
     updateBookmarkButton();
+
+    // Update prev/next button disabled state
+    updateTopbarNavButtons();
   }
 
   // --- Bookmark functionality ---
@@ -1638,6 +1648,32 @@
   } catch (e) {
     console.warn("Toggle wiring failed", e);
   }
+
+  // -------------------- Topbar question navigation --------------------
+  function updateTopbarNavButtons() {
+    const prev = document.getElementById("nav-prev");
+    const next = document.getElementById("nav-next");
+    if (!prev || !next || currentQuestionID == null) return;
+    const last = (window.displayQuestions?.length || 1) - 1;
+    prev.disabled = currentQuestionID <= 0;
+    next.disabled = currentQuestionID >= last;
+  }
+
+  // Wire prev/next click handlers
+  (function wireTopbarNav() {
+    const prev = document.getElementById("nav-prev");
+    const next = document.getElementById("nav-next");
+    if (prev) prev.addEventListener("click", () => {
+      if (currentQuestionID == null) return;
+      if (currentQuestionID > 0) clickQuestionButton(currentQuestionID - 1);
+    });
+    if (next) next.addEventListener("click", () => {
+      if (currentQuestionID == null) return;
+      const last = (window.displayQuestions?.length || 1) - 1;
+      if (currentQuestionID < last) clickQuestionButton(currentQuestionID + 1);
+    });
+    updateTopbarNavButtons();
+  })();
   
   // ---------- Bookmark badges on question circles ----------
   async function updateBookmarkIndicators() {
@@ -1686,3 +1722,31 @@
     });
   });
 })();
+  // --- Question font size slider (question + options only) ---
+  (function initQAFontSlider() {
+    const slider = document.getElementById("qa-font-range");
+    if (!slider) return;
+    const LS_KEY = "qbase:qa-scale";
+    const applyScale = (scale) => {
+      const clamped = Math.min(1.6, Math.max(0.6, scale));
+      document.documentElement.style.setProperty("--qa-scale", String(clamped));
+    };
+    try {
+      const saved = localStorage.getItem(LS_KEY);
+      if (saved) {
+        const pct = Math.round(parseFloat(saved) * 100);
+        if (!Number.isNaN(pct)) slider.value = String(pct);
+        applyScale(parseFloat(saved));
+      }
+    } catch {}
+    slider.addEventListener("input", () => {
+      const pct = Number(slider.value || 100);
+      const scale = pct / 100;
+      applyScale(scale);
+    });
+    slider.addEventListener("change", () => {
+      const pct = Number(slider.value || 100);
+      const scale = pct / 100;
+      try { localStorage.setItem(LS_KEY, String(scale)); } catch {}
+    });
+  })();
