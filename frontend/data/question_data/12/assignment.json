@@ -156,7 +156,7 @@
       "passageId": "P2",
       "qText": "Co-ordinates of the point of incidence are",
       "image": null,
-      "qOptions": ["(1,1)", "(-1,1)", "(1,2)", "(-2,1)"],
+      "qOptions": ["(1,-1)", "(-1,1)", "(1,2)", "(-2,1)"],
       "qAnswer": "A"
     },
     {
