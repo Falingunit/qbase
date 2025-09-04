@@ -117,7 +117,7 @@
     {
       "qType": "Numerical",
       "passageId": null,
-      "qText": "A light ray is incident on a plane mirror M. The mirror is rotated in the direction as shown in the figure by an arrow at frequency \\(\\omega/\\pi\\) rev/s. The light reflected from the mirror is received on the wall at a distance 10 m from the axis of rotation. When the angle of incidence becomes 37°, find the speed of the spot of light on the wall (m/s).",
+      "qText": "A light ray is incident on a plane mirror M. The mirror is rotated in the direction as shown in the figure by an arrow at frequency \\(\\frac{9}{\\pi}\\) rev/s. The light reflected from the mirror is received on the wall at a distance 10 m from the axis of rotation. When the angle of incidence becomes 37°, find the speed of the spot of light on the wall (m/s).",
       "image": "13.png",
       "qOptions": [],
       "qAnswer": 500
