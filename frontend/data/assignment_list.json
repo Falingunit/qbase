@@ -3,7 +3,7 @@
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "Magnetism",
-    "title": "Motion of Charged Particles in Magnetic Field",
+    "title": "Motion of Charged Particles in Magnetic Field #2 (advanced)",
     "aID": 0
   },
   {
@@ -89,5 +89,12 @@
     "chapter": "Ray Options",
     "title": "Ray Optics Assignment #1 (Plane Mirror)",
     "aID": 12
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Surface Chemistry",
+    "title": "Surface Chemistry Assignment #1 (1-75)",
+    "aID": 13
   }
 ]

@@ -1,0 +1,861 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is the function of an emulsifying agent in stabilizing emulsions?",
+      "image": null,
+      "qOptions": [
+        "Precipitation",
+        "Centrifugation",
+        "Formation of an interfacial film",
+        "Ionization"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is the purpose of the Cottrell precipitator in the electrical precipitation of smoke?",
+      "image": null,
+      "qOptions": [
+        "Filtration",
+        "Centrifugation",
+        "Precipitation",
+        "Ionization"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "How is rubber obtained in the rubber industry?",
+      "image": null,
+      "qOptions": [
+        "Filtration",
+        "Coagulation of latex",
+        "Distillation",
+        "Evaporation of solvent"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is used in place of tannin in the tanning process?",
+      "image": null,
+      "qOptions": [
+        "Aluminium salts",
+        "Sodium salts",
+        "Chromium salts",
+        "Potassium salts"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is the process of hardening leather called?",
+      "image": null,
+      "qOptions": ["Coating", "Tanning", "Lubrication", "Grafting"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is used in curing kalaazar?",
+      "image": null,
+      "qOptions": [
+        "Colloidal gold",
+        "Colloidal silver",
+        "Colloidal platinum",
+        "Colloidal copper"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is argyrol used as?",
+      "image": null,
+      "qOptions": ["Eye lotion", "Antiseptic", "Antibiotic", "Disinfectant"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Why are colloidal medicines more effective?",
+      "image": null,
+      "qOptions": [
+        "They are cheaper",
+        "They have a larger surface area",
+        "They have a longer shelf life",
+        "They are easier to manufacture"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "How is drinking water purified using alum?",
+      "image": null,
+      "qOptions": [
+        "Filtration",
+        "Coagulation",
+        "Sedimentation",
+        "Centrifugation"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What acts as a protective colloid in fertile soils?",
+      "image": null,
+      "qOptions": ["Sand", "Humus", "Clay", "Silt"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is the styptic action of alum and ferric chloride solution attributed to?",
+      "image": null,
+      "qOptions": [
+        "Dispersion of light",
+        "Coagulation of blood",
+        "Absorption of light",
+        "Refraction of light"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What is added for the stabilisation of an emulsion?",
+      "image": null,
+      "qOptions": ["Water", "Emulsifying agent", "Oil", "Salt"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What are examples of the W/O type emulsion?",
+      "image": null,
+      "qOptions": [
+        "Milk and vanishing cream",
+        "Oil and water",
+        "Butter and cream",
+        "Gel and liquid"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What are examples of the O/W type emulsion?",
+      "image": null,
+      "qOptions": [
+        "Butter and cream",
+        "Milk and vanishing cream",
+        "Oil and water",
+        "Gel and liquid"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What are the two types of emulsions?",
+      "image": null,
+      "qOptions": [
+        "O/W type and G/S type",
+        "Water-emulsified and Oil-emulsified",
+        "Water dispersed in oil (W/O) type and Oil dispersed in water (O/W) type",
+        "Solid emulsified and Liquid-emulsified"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following colloidal systems describe emulsions?",
+      "image": null,
+      "qOptions": ["Solid-liquid", "Liquid-liquid", "Gas-solid", "Gas-liquid"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "What type of state do solids need to be in for them to have a large surface area?",
+      "image": null,
+      "qOptions": [
+        "Liquid state",
+        "Gaseous state",
+        "Finely divided state",
+        "Crystalline state"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In an experiment, addition of 5.0 mL of 0.006 M BaCl\\(_2\\) to 10.0 mL of arsenic sulphide sol just causes the complete coagulation in 3 h. The flocculating value of the effective ion is:",
+      "image": null,
+      "qOptions": ["2", "3", "4", "5"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In which of the following, Tyndall effect is not observed?",
+      "image": null,
+      "qOptions": ["Smoke", "Emulsion", "Sugar solution", "Gold sol"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "To remove colouring matter from pure substances the activated charcoal is used. It works by",
+      "image": null,
+      "qOptions": ["Bleaching", "Reduction", "Oxidation", "Adsorption"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which gas will be adsorbed on a solid to greater extent?",
+      "image": null,
+      "qOptions": [
+        "Having nonpolar molecule",
+        "Having highest critical temperature",
+        "Having lowest critical temperature",
+        "Having lowest critical pressure"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The correct variation for adsorption of a gases on a solid surface with pressure of the gas, in the following manner is",
+      "image": null,
+      "qOptions": [
+        "Slow → fast → independent of the pressure",
+        "Fast → slow → independent of the pressure",
+        "Independent of the pressure → fast → slow",
+        "Independent of the pressure → slow → fast"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The process of removing dissolved impurities from a colloidal system by means of diffusion through suitable membrane under the influence of an electric field is called",
+      "image": null,
+      "qOptions": ["Electro-osmosis", "Electrodialysis", "Peptization"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which one of the following statements is not correct?",
+      "image": null,
+      "qOptions": [
+        "The value of equilibrium constant is changed in the presence of a catalyst in the reaction at equilibrium",
+        "Enzymes catalyse many bio-chemical reactions",
+        "Coenzymes increase the catalytic activity of enzyme",
+        "Catalyst does not initiate any reaction"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following type of catalysis can be explained by the adsorption theory?",
+      "image": null,
+      "qOptions": [
+        "Homogeneous catalysis",
+        "Acid base catalysis",
+        "Heterogeneous catalysis",
+        "Enzyme catalysis"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which is the correct characteristic of catalyst?",
+      "image": null,
+      "qOptions": [
+        "Alters the equilibrium in a reaction",
+        "Is always in the same phase as the reactants",
+        "Participates in the reaction and provides easier pathway for the same",
+        "Does not participate in the reaction"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "When a sulphur sol is evaporated sulphur is obtained. On mixing with water sulphur sol is not formed. The sol is",
+      "image": null,
+      "qOptions": ["Lyophilic", "Reversible", "Hydrophobic", "Hydrophilic"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following is not correct for enzyme catalysis?",
+      "image": null,
+      "qOptions": [
+        "The enzyme activity is maximum at optimum pH which is between 5–7",
+        "Each enzyme is specific for a given reaction",
+        "The enzymatic activity is increased in presence of certain substances called co-enzymes",
+        "The favourable temperature range of enzyme activity is between 50–60 \\(^\\circ\\)C"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "After the reaction is over between adsorbed reactants, it is important to create space for the other reactant molecules to approach the surface and react. The process responsible for this is known as",
+      "image": null,
+      "qOptions": ["sorption", "desorption", "physisorption", "chemisorption"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "One desires to prepare a positively charged silver iodide sol. This can be achieved by",
+      "image": null,
+      "qOptions": [
+        "Adding a little AgNO\\(_3\\) solution to KI solution in slight excess",
+        "Adding a little KI solution to AgNO\\(_3\\) solution in slight excess",
+        "Mixing equal volumes of equimolar solutions of AgNO\\(_3\\) and KI",
+        "None of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "1 mol of AgI/AgI^- is coagulated by",
+      "image": null,
+      "qOptions": [
+        "1 mol of KI",
+        "500 mL of 1 M K\\(_2\\)SO\\(_4\\)",
+        "300 mL of 1 M Na\\(_3\\)PO\\(_4\\)",
+        "1 mol of AgI"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The potential difference between the fixed charged layer and the diffused layer having opposite charge is called:",
+      "image": null,
+      "qOptions": [
+        "Water potential",
+        "Zeta potential",
+        "Electrode potential",
+        "None of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "According to the adsorption theory of catalysis, the rate of reaction increases because",
+      "image": null,
+      "qOptions": [
+        "adsorption lowers the activation energy of the reaction",
+        "concentration of reactant molecules at the active centres of the catalyst becomes high due to adsorption",
+        "adsorption produces heat which increases the rate of reaction",
+        "adsorption increases the activation energy of the reaction"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following statement is incorrect regarding physisorption?",
+      "image": null,
+      "qOptions": [
+        "More easily liquefiable gases are adsorbed readily",
+        "Under high pressure it results into multi molecular layer on adsorbent surface",
+        "Enthalpy of adsorption \\(\\Delta H_{\\text{adsorption}}\\) is low and positive",
+        "It occurs because of van der Waal's forces"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "During the preparation of colloidal sol by Bredig's arc method, traces of alkali (or Na\\(_2\\)CO\\(_3\\)) is added to",
+      "image": null,
+      "qOptions": [
+        "homogenise the sol",
+        "stabilize the sol",
+        "act as peptizing agent",
+        "act as coagulating agent"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which property of colloids is not dependent on the charge on colloidal particles?",
+      "image": null,
+      "qOptions": [
+        "Coagulation",
+        "Electrophoresis",
+        "Electro-osmosis",
+        "Tyndall effect"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Based on Langmuir adsorption isotherm, at very high pressures the amount of gas adsorbed",
+      "image": null,
+      "qOptions": [
+        "Increases first and decreases later with pressure",
+        "Reaches a constant limiting value",
+        "Increases with pressure",
+        "Goes on increasing with pressure"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following electrolytes will be most effective in the coagulation of gold sol",
+      "image": null,
+      "qOptions": [
+        "NaNO\\(_3\\)",
+        "K\\(_4\\)[Fe(CN)\\(_6\\)]",
+        "Na\\(_3\\)PO\\(_4\\)",
+        "MgCl\\(_2\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Arsenic sulphide sol is prepared by passing H\\(_2\\)S through As\\(_2\\)O\\(_3\\) solution. The charge developed on sol particles is due to",
+      "image": null,
+      "qOptions": ["H\\(^+\\)", "S\\(^{2-}\\)", "OH\\(^-\\)", "O\\(^{2-}\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The Langmuir adsorption isotherm is deduced using the assumption",
+      "image": null,
+      "qOptions": [
+        "the adsorption sites are equivalent in their ability to adsorb the particles",
+        "the heat of adsorption varies with coverage",
+        "the adsorbed molecules interact with each other",
+        "the adsorption takes place in multi layers"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A micelle formed during the cleansing action by soap is",
+      "image": null,
+      "qOptions": [
+        "a discrete particle of soap",
+        "aggregated particles of soap and dirt",
+        "a discrete particle of dust",
+        "an aggregated particle of dust and water"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Among the colloids cheese (C), milk (M) and smoke (S), the correct combination of the dispersed phase and dispersion medium respectively are",
+      "image": null,
+      "qOptions": [
+        "C: solid in liquid; M: solid in liquid; S: solid in gas",
+        "C: solid in liquid; M: liquid in liquid; S: gas in solid",
+        "C: liquid in solid; M: liquid in solid; S: solid in gas",
+        "C: liquid in solid; M: liquid in liquid; S: solid in gas"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The Brownian motion is due to",
+      "image": null,
+      "qOptions": [
+        "Temperature fluctuation within the liquid phase",
+        "Attraction and repulsion between charges on the colloidal particles",
+        "Impact of the molecules of the dispersion medium on the colloidal particles",
+        "Convectional currents"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following statement about zeolites is not correct?",
+      "image": null,
+      "qOptions": [
+        "Zeolites are open structures of silica in which trivalent aluminium is substituted by a fraction of silicon atoms",
+        "Shape selectivity of zeolites depends upon porous structures of the catalyst",
+        "Zeolites are synthetic microporous aluminosilicates which do not exist naturally",
+        "Zeolites are aluminosilicates having three dimensional network"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "To stop bleeding from cut we use ferric chloride, it is because",
+      "image": null,
+      "qOptions": [
+        "Fe\\(^{3+}\\) ion coagulates blood, which is a negatively charged sol",
+        "Fe\\(^{3+}\\) ion coagulates blood, which is a positively charged sol",
+        "Cl\\(^-\\) coagulates blood, which is a positively charged sol",
+        "Cl\\(^-\\) ion coagulates blood, which is a negatively charged sol"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following mixture will lead to the formation of negatively charged colloid \\([\\text{AgI}]^-\\) ?",
+      "image": null,
+      "qOptions": [
+        "50 mL of 0.1 M AgNO\\(_3\\) + 50 mL of 0.1 M KI",
+        "50 mL of 0.1 M AgNO\\(_3\\) + 50 mL of 0.2 M KI",
+        "50 mL of 0.2 M AgNO\\(_3\\) + 50 mL of 0.1 M KI",
+        "50 mL of 0.2 M AgNO\\(_3\\) + 50 mL of 0.2 M KI"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Powdered substances are more effective adsorbents than their crystalline form because",
+      "image": null,
+      "qOptions": [
+        "adsorption is an exothermic process",
+        "they become inert and do not react with the adsorbate",
+        "the extent of adsorption increases with increases in surface area of the adsorbent",
+        "adsorption is more if the size of adsorbent is small"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Gold number of a lyophilic sol is such a property that",
+      "image": null,
+      "qOptions": [
+        "The larger its value, the greater is the peptizing power",
+        "The lower its value, the greater is the protecting power",
+        "The larger its value, the greater is the protecting power",
+        "The lower its value, the greater is the peptizing power"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which is correct in case of van der Waal's adsorption?",
+      "image": null,
+      "qOptions": [
+        "High temperature, low pressure",
+        "Low temperature, high pressure",
+        "Low temperature, low pressure",
+        "High temperature, high pressure"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Position of non-polar and polar parts in micelle is:",
+      "image": null,
+      "qOptions": [
+        "polar at the outer surface but nonpolar at the inner surface",
+        "polar at the inner surface but nonpolar at the outer surface",
+        "distributed over all the surface",
+        "are present in the surface only"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The coagulation of \\(10\\ \\mathrm{cm^3}\\) of gold sol by \\(1\\ \\mathrm{mL}\\) 10% NaCl solution is completely prevented by addition of 0.25 g of starch to it. The gold number of starch is",
+      "image": null,
+      "qOptions": ["0.025", "0.25", "2.5", "250"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "The critical micelle concentration (CMC) of a cationic colloidal electrolyte is \\(10^{-3}\\,\\mathrm{M}\\). If \\(1\\,\\mathrm{mm^3}\\) contains \\(10^{13}\\) micelles, the number of cations making one micelle is (Given, \\(N_A=6.0\\times10^{23}\\,\\mathrm{mol^{-1}}\\)).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 60
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Bleeding is stopped by the application of ferric chloride. This is because:",
+      "image": null,
+      "qOptions": [
+        "The blood starts flowing in opposite direction",
+        "The blood reacts and forms a solid, which seals the blood vessel",
+        "The blood is coagulated and thus the blood vessel is sealed",
+        "The ferric chloride seals the blood vessel"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following set is having correct statements for enzyme catalysis? 1. Each enzyme is specific for a given reaction 2. The enzyme activity is maximum at optimum pH 3. The enzymatic activity is increased in presence of certain substances called co-enzymes 4. The favourable temperature range of enzyme activity is between 50–60 \\(^\\circ\\)C",
+      "image": null,
+      "qOptions": ["1, 3, 4", "2, 3", "1, 2, 3", "1, 2, 3, 4"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "5 mL of \\(\\mathrm{Ag_2S}\\) sol is mixed with distilled water and 0.01 M solution of electrolyte AB so that total volume is 10 mL. It was found that solutions containing more than a certain volume of AB coagulate within 5 min. What is the flocculation value of AB for \\(\\mathrm{Ag_2S}\\) sol?",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 5
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The disperse phase in colloidal iron(III) hydroxide and colloidal gold is positively and negatively charged, respectively. Which of the following statements is NOT correct?",
+      "image": null,
+      "qOptions": [
+        "Magnesium chloride solution coagulates the gold solution more readily than the iron(III) hydroxide solution",
+        "Sodium sulphate solution causes coagulation in both the solutions",
+        "Coagulation in both solutions can be brought about by electrophoresis",
+        "Mixing of the solutions has no effect"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The correct option among the following is:",
+      "image": null,
+      "qOptions": [
+        "Colloidal particles in lyophobic sols can be precipitated by electrophoresis",
+        "Brownian motion in colloidal solution is faster if the viscosity of the solution is very high",
+        "Colloidal medicines are more effective because they have small surface area",
+        "Addition of alum to water makes it unfit for drinking"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following electrolytes will have maximum coagulating value for \\(\\mathrm{AgI}\\) sol?",
+      "image": null,
+      "qOptions": [
+        "\\(\\mathrm{Na_2S}\\)",
+        "\\(\\mathrm{Na_3PO_4}\\)",
+        "\\(\\mathrm{Na_2SO_4}\\)",
+        "\\(\\mathrm{NaCl}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following statements are correct about zeolites? 1. Zeolites are aluminosilicates having three dimensional network 2. Shape selectivity of zeolites depends upon porous structure of the catalyst 3. Zeolites are synthetic microporous aluminosilicates which do not exist naturally 4. Zeolites are open structures of silica in which trivalent aluminium substitutes for a fraction of silicon atoms",
+      "image": null,
+      "qOptions": ["1, 2", "1, 2, 3", "2, 4", "1, 2, 4"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "\\(\\mathrm{As_2S_3}\\) and \\(\\mathrm{TiO_2}\\) sols are examples of",
+      "image": null,
+      "qOptions": [
+        "Negatively charged sols",
+        "Positively charged sols",
+        "Positively and negatively charged sols respectively",
+        "Negatively and positively charged sols respectively"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the plots is adsorption isobar for chemisorption",
+      "image": "63.png",
+      "qOptions": ["Graph A", "Graph B", "Graph C", "Graph D"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which statement is correct about chemisorptions?",
+      "image": null,
+      "qOptions": [
+        "It is irreversible in nature",
+        "It involves formation multi layer of adsorbent on adsorbate",
+        "Decreases with increase of temperature",
+        "It involves the weak attractive forces between adsorbent and adsorbate"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which sol is used as intramuscular injection?",
+      "image": null,
+      "qOptions": [
+        "Antimony sol",
+        "Silver sol",
+        "Emulsion of milk of magnesia",
+        "Gold sol"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following substances is used in the styptic action which prevents bleeding of blood?",
+      "image": null,
+      "qOptions": [
+        "\\(\\mathrm{CoCl_3}\\) solution",
+        "\\(\\mathrm{FeCl_3}\\) solution",
+        "Gold sol",
+        "AgBr emulsion"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "10 mL of 1 mM surfactant solution forms a monolayer covering \\(0.24\\ \\mathrm{cm^2}\\) on a polar substrate. If the polar head is approximated as cube, what is its edge length?",
+      "image": null,
+      "qOptions": ["2.0 pm", "2.0 nm", "1.0 pm", "0.1 nm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A catalyst adsorbs 100 mL of nitrogen gas at S.T.P. per gram of catalyst surface and forms a mono-molecular layer. The effective surface area occupied by one nitrogen molecule on the surface of catalyst is \\(0.16 \\times 10^{-14}\\ \\mathrm{cm^2}\\). What is the total surface area occupied by nitrogen molecules per gram of catalyst? (Given: Volume of gas at STP = 22.4 L)",
+      "image": null,
+      "qOptions": [
+        "43.04 \\times 10^5 \\ \\mathrm{cm^2}",
+        "0.18 \\times 10^{-15} \\ \\mathrm{cm^2}",
+        "42 \\times 10^5 \\ \\mathrm{cm^2}",
+        "0.19 \\times 9^{-15} \\ \\mathrm{cm^2}"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The plots of the extent of adsorption \\((x/m)\\) vs pressure at different temperature are as shown. The correct order of increasing temperature for curves I, II, III, IV is:",
+      "image": "64.png",
+      "qOptions": [
+        "\\(T_1 > T_2 > T_3 > T_4\\)",
+        "\\(T_4 > T_3 > T_2 > T_1\\)",
+        "\\(T_3 > T_2 > T_1 > T_4\\)",
+        "can't be predicted"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider the following statements for a gold sol: (I) It is macromolecular colloid (II) It is a lyophobic sol (III) It is a negatively charged sol (IV) It is a multimolecular colloid (V) It is an associated colloid. The correct statements are",
+      "image": null,
+      "qOptions": [
+        "I, II, III only",
+        "II, III, IV only",
+        "III, IV, V only",
+        "I, IV, V only"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "'X' is a protecting colloid. The following data is obtained for preventing the coagulation of 10 mL of gold sol to which 1 mL of 10% NaCl is added. What is the gold number of 'X'?",
+      "image": "68.png",
+      "qOptions": ["24", "26", "27", "25"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following general reaction is an example for heterogeneous catalysis?",
+      "image": null,
+      "qOptions": [
+        "\\(\\mathrm{A_2(g) + B_2(g) \\xrightarrow{C(g)} 2AB(g)}\\)",
+        "\\(\\mathrm{A(s) + B(s) \\xrightarrow{C(s)} D(s)}\\)",
+        "\\(\\mathrm{A(g) + B(g) \\xrightarrow{C(s)} D(g)}\\)",
+        "\\(\\mathrm{A_2(g) + B_2(g) \\xrightarrow{C(g)} D(s)}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Identify the method of preparation of a colloidal sol from the following",
+      "image": null,
+      "qOptions": [
+        "Ultrafiltration",
+        "Peptisation",
+        "Dialysis",
+        "Electro-dialysis"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Match List–I with List–II (see table). Correct answer is",
+      "image": "71.png",
+      "qOptions": [
+        "I-B, II-A, III-C, IV-D",
+        "I-A, II-C, III-D, IV-B",
+        "I-A, II-B, III-C, IV-D",
+        "I-A, II-D, III-B, IV-C"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The following data is obtained for coagulating a positively charged sol in 2 hours (see table). What is the coagulating value of electrolyte for this sol?",
+      "image": "72.png",
+      "qOptions": [
+        "\\(7 \\times 10^{-5}\\)",
+        "\\(7 \\times 10^{-2}\\)",
+        "\\(5 \\times 10^{-2}\\)",
+        "\\(9 \\times 10^{-2}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "'A' is a protecting colloid. The following data is obtained for preventing the coagulation of 10 mL of gold sol to which 1 mL of 10% NaCl is added. What is the gold number of 'A'?",
+      "image": "73.png",
+      "qOptions": ["32", "33", "35", "40"],
+      "qAnswer": "B"
+    }
+  ]
+}
