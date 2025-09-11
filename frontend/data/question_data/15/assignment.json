@@ -745,6 +745,14 @@
       "qAnswer": "A"
     },
     {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0101.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
       "qType": "SMCQ",
       "passageId": null,
       "qText": "",
@@ -753,12 +761,36 @@
       "qAnswer": "C"
     },
     {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0103.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": 2.38
+    },
+    {
       "qType": "SMCQ",
       "passageId": null,
       "qText": "",
       "image": "page_0104.png",
       "qOptions": ["A", "B", "C", "D"],
       "qAnswer": "D"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0105.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0106.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["B", "C"]
     },
     {
       "qType": "SMCQ",
@@ -775,6 +807,14 @@
       "image": "page_0109.png",
       "qOptions": ["A", "B", "C", "D"],
       "qAnswer": 8.0
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0110.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["A", "B", "C"]
     },
     {
       "qType": "SMCQ",
@@ -801,6 +841,14 @@
       "qAnswer": "D"
     },
     {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0114.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
       "qType": "SMCQ",
       "passageId": null,
       "qText": "",
@@ -815,6 +863,14 @@
       "image": "page_0116.png",
       "qOptions": ["A", "B", "C", "D"],
       "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0117.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["B", "D"]
     },
     {
       "qType": "SMCQ",
@@ -833,6 +889,14 @@
       "qAnswer": "B"
     },
     {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0120.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["A", "B", "D"]
+    },
+    {
       "qType": "Numerical",
       "passageId": null,
       "qText": "",
@@ -849,12 +913,28 @@
       "qAnswer": 5.0
     },
     {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0123.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
       "qType": "SMCQ",
       "passageId": null,
       "qText": "",
       "image": "page_0124.png",
       "qOptions": ["A", "B", "C", "D"],
       "qAnswer": "B"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0125.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": ["B", "D"]
     },
     {
       "qType": "SMCQ",
