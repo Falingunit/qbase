@@ -86,7 +86,7 @@
       "qText": "",
       "image": "page_0011.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 1
+      "qAnswer": 1.0
     },
     {
       "qType": "SMCQ",
@@ -206,7 +206,7 @@
       "qText": "",
       "image": "page_0026.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 4
+      "qAnswer": 4.0
     },
     {
       "qType": "SMCQ",
@@ -342,7 +342,7 @@
       "qText": "",
       "image": "page_0043.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "SMCQ",
@@ -366,7 +366,7 @@
       "qText": "",
       "image": "page_0046.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 6
+      "qAnswer": 6.0
     },
     {
       "qType": "SMCQ",
@@ -918,7 +918,7 @@
       "qText": "",
       "image": "page_0115.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "SMCQ",
@@ -974,7 +974,7 @@
       "qText": "",
       "image": "page_0122.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 5
+      "qAnswer": 5.0
     },
     {
       "qType": "Numerical",
@@ -982,7 +982,7 @@
       "qText": "",
       "image": "page_0123.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "SMCQ",
@@ -1014,7 +1014,7 @@
       "qText": "",
       "image": "page_0127.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 4
+      "qAnswer": 4.0
     },
     {
       "qType": "SMCQ",
@@ -1126,7 +1126,7 @@
       "qText": "",
       "image": "page_0141.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "SMCQ",
@@ -1150,7 +1150,7 @@
       "qText": "",
       "image": "page_0144.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 6
+      "qAnswer": 6.0
     },
     {
       "qType": "SMCQ",
@@ -1198,7 +1198,7 @@
       "qText": "",
       "image": "page_0150.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 6
+      "qAnswer": 6.0
     },
     {
       "qType": "SMCQ",
@@ -1238,7 +1238,7 @@
       "qText": "",
       "image": "page_0155.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 7
+      "qAnswer": 7.0
     },
     {
       "qType": "SMCQ",
@@ -1318,7 +1318,7 @@
       "qText": "",
       "image": "page_0165.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 4
+      "qAnswer": 4.0
     },
     {
       "qType": "SMCQ",
@@ -1334,7 +1334,7 @@
       "qText": "",
       "image": "page_0167.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "Numerical",
@@ -1342,7 +1342,7 @@
       "qText": "",
       "image": "page_0168.png",
       "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": 3
+      "qAnswer": 3.0
     },
     {
       "qType": "SMCQ",

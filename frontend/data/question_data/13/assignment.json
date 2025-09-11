@@ -1577,6 +1577,14 @@
       "qAnswer": "A"
     },
     {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "",
+      "image": "page_0198.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": 15.62
+    },
+    {
       "qType": "SMCQ",
       "passageId": null,
       "qText": "",
