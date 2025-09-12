@@ -1,0 +1,373 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Find the root mean square (rms) voltage for the given variation of voltage.",
+      "image": "1.png",
+      "qOptions": [
+        "\\(V_0\\sqrt{\\tfrac{5}{24}}\\)",
+        "\\(V_0\\sqrt{\\tfrac{1}{2}}\\)",
+        "\\(V_0\\sqrt{\\tfrac{7}{24}}\\)",
+        "\\(V_0\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A circuit, containing an inductance and a resistance connected in series, has an AC source of 200 V, 50 Hz connected across it. An AC current of 10 A (rms) flows through the circuit and the power loss is measured to be 1 kW. Find:",
+      "image": null,
+      "qOptions": [
+        "The inductance of the circuit is \\(\\tfrac{\\sqrt{3}}{10\\pi}\\,\\text{H}\\).",
+        "The frequency of the AC when the phase difference between the current and emf becomes \\(\\pi/4\\), with the above components, is \\(\\tfrac{50}{\\sqrt{3}}\\,\\text{Hz}\\).",
+        "The frequency of AC at which the reactive power is half of the actual power loss is \\(\\tfrac{25}{\\sqrt{3}}\\,\\text{Hz}\\).",
+        "The frequency of the AC when the phase difference between the current and emf becomes \\(\\pi/4\\), with the above components, is \\(\\tfrac{25}{\\sqrt{3}}\\,\\text{Hz}\\)."
+      ],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Consider a series LCR circuit having two sources \\(E_1\\) and \\(E_2\\) of same frequency \\(\\omega\\). \\(\\omega = \\tfrac{1}{\\sqrt{LC}}\\). At time \\(t=0\\), the observations are",
+      "image": "3.png",
+      "qOptions": [
+        "The current in the circuit is \\(\\sqrt{2}\\,E_0/R\\)",
+        "The charge in the capacitor is \\(E_0/(\\omega R)\\)",
+        "The induced emf in the inductor is \\(E_0\\,\\omega L/R\\)",
+        "The charge of the capacitor is decreasing at \\(t=0\\)."
+      ],
+      "qAnswer": ["B", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the circuit shown, effective current through source is",
+      "image": "4.png",
+      "qOptions": ["2 A", "\\(2\\sqrt{2}\\) A", "0.5 A", "\\(\\sqrt{0.4}\\) A"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Figure shows a two branched parallel circuit with \\(R_A=8\\,\\Omega\\), \\(X_L=6\\,\\Omega\\), \\(R_B=6\\,\\Omega\\) and \\(X_C=8\\,\\Omega\\). The current supplied by the alternating source \\(V\\) is \\(I=14\\,\\text{A}\\). (Take \\(\\sin 37^\\circ=3/5\\).)",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Current passing through the resistor \\(R_A\\) is",
+      "image": null,
+      "qOptions": ["5 A", "7 A", "\\(7\\sqrt{2}\\) A", "10 A"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Power dissipated in the circuit is",
+      "image": null,
+      "qOptions": ["686 W", "1372 W", "920 W", "1500 W"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A combination of inductors and resistances are connected across an ac source as shown. The phase difference between the current flowing through \\(R_1\\) and \\(R_2\\) (in radians) is",
+      "image": "6.png",
+      "qOptions": [
+        "\\(\\tfrac{37}{180}\\pi\\)",
+        "\\(\\tfrac{\\pi}{2}\\)",
+        "\\(\\tfrac{16}{180}\\pi\\)",
+        "can not be decided"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An ac voltage source \\(V=V_0\\sin \\omega t\\) is connected across resistance \\(R\\) and capacitance \\(C\\). It is given that \\(R=\\tfrac{1}{\\omega C}\\). The peak current is \\(I_0\\). If the angular frequency of the voltage source is changed to \\(\\tfrac{\\omega}{\\sqrt{3}}\\) keeping \\(R\\) and \\(C\\) fixed, then the new peak current in the circuit is",
+      "image": "7.png",
+      "qOptions": [
+        "\\(\\tfrac{I_0}{2}\\)",
+        "\\(\\tfrac{I_0}{\\sqrt{2}}\\)",
+        "\\(\\tfrac{I_0}{\\sqrt{3}}\\)",
+        "\\(\\tfrac{I_0}{3}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The switch \\(S\\) is closed in the circuit shown at time \\(t=0\\). The current in the resistor at \\(t=0\\) and \\(t=\\infty\\) are respectively",
+      "image": "8.png",
+      "qOptions": ["0, 0 Amp", "1, 0 Amp", "0, 1 Amp", "1, 1 Amp"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "In the figure Box-1 contains one capacitor and one resistor. Box-2 contains one inductor and one resistor. \\(R_1\\) = resistance in Box 1, \\(R_2\\) = resistance in Box 2. Power factor of Box 1 = \\(\\tfrac{1}{\\sqrt{5}}\\). Power factor of Box 2 = \\(-\\tfrac{1}{\\sqrt{5}}\\). Power factor of Box 1 + Power factor of Box 2 = \\(\\tfrac{1}{\\sqrt{2}}\\). Power factor of Box 3 = \\(-\\tfrac{1}{\\sqrt{2}}\\). Resistance of Box 3 = \\(R_1 + R_2\\). Current \\(I = I_0 \\sin(\\omega t + \\phi)\\). On the basis of above mentioned information pick the incorrect option from below:",
+      "image": "9.png",
+      "qOptions": [
+        "\\(\\dfrac{R_1}{R_2} = 3\\)",
+        "\\(Z_3 = 4\\sqrt{2}\\,R_2\\) (Impedance of Box 3)",
+        "\\(I = \\dfrac{V_0}{4R_2}\\sin(\\omega t)\\)",
+        "\\(\\phi = (2n+1)\\pi\\), where \\(n\\) may be some integer"
+      ],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a certain series LCR A.C. circuit it is found that \\(X_L=2X_C\\) and the phase difference between the current and voltage is \\(\\pi/4\\). If now capacitance is made \\(1/4\\)th and the inductance and resistance are doubled then which is not correct.",
+      "image": null,
+      "qOptions": [
+        "Voltage will lead current by a phase of \\(\\tan^{-1}(1/2)\\).",
+        "Voltage will lag behind current by a phase of \\(\\tan^{-1}(1/2)\\).",
+        "Voltage will lag behind current by a phase of \\(\\pi/4\\).",
+        "Voltage and current will be in same phase."
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "In a certain series LCR circuit connected to an AC source, \\(X_L>X_C\\) then",
+      "image": null,
+      "qOptions": [
+        "Slightly increasing the capacitance will increase the current in the circuit.",
+        "Slightly increasing the inductance will increase the current in the circuit.",
+        "Slightly decreasing the capacitance will increase the current in the circuit.",
+        "Slightly decreasing the inductance will increase the current in the circuit."
+      ],
+      "qAnswer": ["C", "D"]
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "The power factor of the circuit shown in the figure is \\(K/10\\). Find the value of \\(K\\).",
+      "image": "12.png",
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the diagram, the current \\(I(t)=I_0\\sin(\\omega t)\\) is plotted as a solid curve. The other three curves have the form \\(I(t)=I_0\\sin(\\omega t+\\phi)\\), where \\(\\phi\\) is between \\(-\\pi/2\\) and \\(+\\pi/2\\). Rank the curves according to the value of \\(\\phi\\), from the most negative to the most positive.",
+      "image": "13.png",
+      "qOptions": ["1, 2, 3", "2, 3, 1", "3, 2, 1", "1, 3, 2"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider a mechanical system, consisting of two ideal springs and a block of mass \\(m\\) as shown in the figure. Neglect any type of friction during the motion of mass \\(m\\). Which one of the four electric circuits is analogous of this mechanical system.",
+      "image": "14.png",
+      "qOptions": ["(A)", "(B)", "(C)", "(D)"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider the shown circuit. The net current supplied as a function of time is",
+      "image": "15.png",
+      "qOptions": [
+        "\\((2\\sqrt{2}\\sin \\omega t)\\,\\text{A}\\)",
+        "\\((2\\sqrt{2}\\cos \\omega t)\\,\\text{A}\\)",
+        "\\((-2\\sqrt{2}\\sin \\omega t)\\,\\text{A}\\)",
+        "\\((-2\\sqrt{2}\\cos \\omega t)\\,\\text{A}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the circuit shown in the adjacent figure, the potential differences across \\(L\\), \\(R\\) and \\(C\\) are in the ratio \\(1:\\sqrt{2}:1\\). If the resistance \\(R' = 100\\,\\Omega\\) and \\(L=1\\,\\text{mH}\\), the value of \\(C\\) is",
+      "image": "16.png",
+      "qOptions": [
+        "\\(1\\,\\mu\\text{F}\\)",
+        "\\(\\tfrac{1}{10}\\,\\mu\\text{F}\\)",
+        "\\(\\tfrac{1}{100}\\,\\mu\\text{F}\\)",
+        "\\(\\tfrac{1}{1000}\\,\\mu\\text{F}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Some electrical elements are shown in the below figure. All ammeters and voltmeters are ideal and read rms values. An alternating source of emf \\(e=e_0\\sin \\omega t\\) is connected in each circuit between P and Q. Now choose the correct option(s).",
+      "image": "17.png",
+      "qOptions": [
+        "The reading of voltmeter \\(V_3\\) is more than the sum of the readings of the voltmeters \\(V_1\\) and \\(V_2\\) for each case in figure (i) and (ii).",
+        "The reading of ammeter \\(A_3\\) is more than the sum of the readings of the ammeters \\(A_1\\) and \\(A_2\\) for each case in figure (iii) and (iv).",
+        "The reading of voltmeter \\(V_3\\) is less than the sum of the readings of the voltmeters \\(V_1\\) and \\(V_2\\) for each case in figure (i) and (ii).",
+        "The reading of ammeter \\(A_3\\) is less than the sum of the readings of the ammeters \\(A_1\\) and \\(A_2\\) for each case in figure (iii) and (iv)."
+      ],
+      "qAnswer": ["C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "When a resistance \\(R\\) is connected in series with an element \\(A\\), the electric current is found to be lagging behind the voltage by angle \\(\\theta_1\\). When the same resistance is connected in series with element \\(B\\), current leads by \\(\\theta_2\\). When \\(R, A, B\\) are connected in series, the current now leads voltage by \\(\\theta\\). Assume same AC source is used in all cases, then:",
+      "image": null,
+      "qOptions": [
+        "\\(\\theta = \\theta_2 - \\theta_1\\)",
+        "\\(\\tan\\theta = \\tan\\theta_2 - \\tan\\theta_1\\)",
+        "\\(\\theta = \\dfrac{\\theta_1 + \\theta_2}{2}\\)",
+        "\\(\\tan\\theta = 2\\tan\\theta_2 - \\tan\\theta_1\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "In a certain series LCR A.C. circuit it is found that \\(X_L = 2X_C\\) and phase difference between the current and voltage is \\(\\pi/4\\). If now capacitance is made \\(1/4\\)th and the inductance and resistance are doubled then which are not correct.",
+      "image": null,
+      "qOptions": [
+        "Voltage will lead current by a phase of \\(\\tan^{-1}(1/2)\\).",
+        "Voltage will lag behind current by a phase of \\(\\tan^{-1}(1/2)\\).",
+        "Voltage will lag behind current by a phase of \\(\\pi/4\\).",
+        "Voltage and current will be in same phase."
+      ],
+      "qAnswer": ["A", "B", "C"]
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "An alternating voltage \\(V_0 = 100\\,\\text{V}\\) with angular frequency \\(\\omega\\) is connected across the capacitor and inductor having \\(X_L = 5\\,\\Omega\\) and \\(X_C = 10\\,\\Omega\\). Find the ratio of current through inductor to AC source.",
+      "image": "20.png",
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Figure shows a two branched parallel circuit with \\(R_1=8\\,\\Omega\\), \\(X_L=6\\,\\Omega\\), \\(R_2=6\\,\\Omega\\) and \\(X_C=8\\,\\Omega\\). The rms current supplied by the alternating source \\(\\varepsilon\\) is 20 A. Average power dissipated in the circuit is",
+      "image": "21.png",
+      "qOptions": ["1000 W", "1400 W", "1600 W", "2800 W"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "List–I contains the different ac circuits and List–II contains their respective resonant angular frequency. Then match the options of List–I correctly with the options of List–II.",
+      "image": "p2.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "For circuit (P), the resonant angular frequency is:",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{\\sqrt{2LC}}\\)",
+        "\\(\\dfrac{1}{\\sqrt{LC - R^{2}C^{2}}}\\)",
+        "\\(\\dfrac{1}{2\\sqrt{LC}}\\)",
+        "\\(\\sqrt{\\dfrac{1}{2LC} - \\dfrac{R^{2}}{L^{2}}}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "For circuit (Q), the resonant angular frequency is:",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{\\sqrt{2LC}}\\)",
+        "\\(\\dfrac{1}{\\sqrt{LC - R^{2}C^{2}}}\\)",
+        "\\(\\dfrac{1}{2\\sqrt{LC}}\\)",
+        "\\(\\sqrt{\\dfrac{1}{2LC} - \\dfrac{R^{2}}{L^{2}}}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "For circuit (R), the resonant angular frequency is:",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{\\sqrt{2LC}}\\)",
+        "\\(\\dfrac{1}{\\sqrt{LC - R^{2}C^{2}}}\\)",
+        "\\(\\dfrac{1}{2\\sqrt{LC}}\\)",
+        "\\(\\sqrt{\\dfrac{1}{2LC} - \\dfrac{R^{2}}{L^{2}}}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "For circuit (S), the resonant angular frequency is:",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{\\sqrt{2LC}}\\)",
+        "\\(\\dfrac{1}{\\sqrt{LC - R^{2}C^{2}}}\\)",
+        "\\(\\dfrac{1}{2\\sqrt{LC}}\\)",
+        "\\(\\sqrt{\\dfrac{1}{2LC} - \\dfrac{R^{2}}{L^{2}}}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "An AC circuit contains two identical resistances and two identical capacitors, connected as shown in the figure. \\(R=\\dfrac{1000}{\\sqrt{3}}\\,\\Omega\\) and \\(C=10\\,\\mu\\text{F}\\). If \\(n\\phi = \\pi\\), where \\(\\phi\\) is the phase angle between the source voltage and potential difference between point A and point B. Find the value of \\(n\\).",
+      "image": "23.png",
+      "qOptions": [],
+      "qAnswer": 3
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "The figure-2, figure-3, figure-4, and figure-5 represent the graphs of the source voltage \\(V\\), resistor voltage \\(V_R\\), inductor voltage \\(V_L\\) and capacitor voltage \\(V_C\\) as a function of time \\(t\\) of the series circuit with impedance \\(500\\,\\Omega\\) as shown in figure-1 \\((t_0=\\tfrac{\\pi}{20}\\,\\text{ms})\\). Choose correct option(s).",
+      "image": "24.png",
+      "qOptions": [
+        "\\(R=400\\,\\Omega\\), \\(C=0.5\\,\\mu\\text{F}\\), and \\(L=50\\,\\text{mH}\\).",
+        "\\(R=300\\,\\Omega\\), \\(C=0.5\\,\\mu\\text{F}\\), and \\(L=60\\,\\text{mH}\\).",
+        "\\(V_0 = 30\\,\\text{V}\\).",
+        "I = 0.1 A cos(10000t) Amp and current log the source voltage"
+      ],
+      "qAnswer": ["B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "In the given LCR series circuit. Choose the correct option/options (resistance is nonzero).",
+      "image": "25.png",
+      "qOptions": [
+        "Reading of voltmeter \\(V_2\\) may be greater than source voltage \\(V\\).",
+        "Reading of voltmeter \\(V_4\\) may be equal to \\(V_1\\).",
+        "Reading of \\(V_4\\) may be equal to source voltage \\(V\\).",
+        "Reading of \\(V_1\\), \\(V_2\\) and \\(V_3\\) may be equal."
+      ],
+      "qAnswer": ["A", "B", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "The key \\(K\\) of the circuit has been kept open and at certain moment, it is closed. Before closing the switch, capacitor has no charge and inductor has no current. Ammeter is ideal. Choose the correct option(s).",
+      "image": "26.png",
+      "qOptions": [
+        "The reading of ammeter immediately just after the key \\(K\\) is closed is \\(\\dfrac{V}{4R}\\) A.",
+        "The reading of ammeter immediately just after the key \\(K\\) is closed is zero.",
+        "The key \\(K\\) is kept closed until a steady state is achieved, then the key is opened again. The reading of ammeter immediately after the key \\(K\\) is opened is zero.",
+        "The key \\(K\\) is kept closed until a steady state is achieved, then the key is opened again. The reading of ammeter immediately after the key \\(K\\) is opened is \\(\\dfrac{V}{R}\\)."
+      ],
+      "qAnswer": ["B", "C"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "An inductor of inductance \\(L\\), two capacitors of capacitance \\(C_1\\) and \\(C_2\\) and three resistors \\(R_1\\), \\(R_2\\) and \\(R_3\\) are connected in a circuit with an alternating voltage source \\(e = e_0 \\sin \\omega t\\) as shown. A galvanometer is connected between points \\(Q\\) and \\(S\\). If deflection in galvanometer is zero, then",
+      "image": "27.png",
+      "qOptions": [
+        "\\(R_1 R_2 = \\dfrac{L}{C_2}\\)",
+        "\\(\\dfrac{C_1}{C_2} = \\dfrac{R_3}{R_2}\\)",
+        "\\(\\dfrac{C_1}{C_2} = \\dfrac{R_2}{R_3}\\)",
+        "\\(R_2 R_3 = \\dfrac{L}{C_1}\\)"
+      ],
+      "qAnswer": ["A", "C"]
+    }
+  ]
+}

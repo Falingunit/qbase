@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qbase.local/schemas/assignment.schema.json",
+  "title": "Assignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["questions"],
+  "properties": {
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/question" }
+    }
+  },
+  "$defs": {
+    "nonPassageBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qType", "qText", "image", "qOptions", "qAnswer"],
+      "properties": {
+        "qType": { "type": "string", "enum": ["SMCQ", "MMCQ"] },
+        "qText": { "type": "string" },
+        "image": { "type": ["string", "null"] },
+        "qOptions": { "type": "array", "items": { "type": "string" } },
+        "qAnswer": { "type": ["string", "array"] }
+      }
+    },
+    "questionSMCQ": {
+      "allOf": [
+        { "$ref": "#/$defs/nonPassageBase" },
+        {
+          "properties": {
+            "qType": { "const": "SMCQ" },
+            "qOptions": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "qAnswer": {
+              "type": "string",
+              "pattern": "^[A-Z]$"
+            }
+          }
+        }
+      ]
+    },
+    "questionMMCQ": {
+      "allOf": [
+        { "$ref": "#/$defs/nonPassageBase" },
+        {
+          "properties": {
+            "qType": { "const": "MMCQ" },
+            "qOptions": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "qAnswer": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "pattern": "^[A-Z]$" },
+              "uniqueItems": true
+            }
+          }
+        }
+      ]
+    },
+    "questionNonPassage": {
+      "oneOf": [
+        { "$ref": "#/$defs/questionSMCQ" },
+        { "$ref": "#/$defs/questionMMCQ" }
+      ]
+    },
+    "questionPassage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qType", "qText", "image", "questions"],
+      "properties": {
+        "qType": { "const": "Passage" },
+        "qText": { "type": "string" },
+        "image": { "type": ["string", "null"] },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/questionNonPassage" }
+        }
+      }
+    },
+    "question": {
+      "oneOf": [
+        { "$ref": "#/$defs/questionNonPassage" },
+        { "$ref": "#/$defs/questionPassage" }
+      ]
+    }
+  }
+}

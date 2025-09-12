@@ -2,6 +2,7 @@
   "questions": [
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "If \\(V_0\\) and \\(I_0\\) are the peak current and voltage across the resistor in a series LCR circuit, then the power dissipated in the circuit is",
       "image": null,
       "qOptions": [
@@ -14,30 +15,23 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "The current and voltage functions in an AC circuit are \\(I=100\\sin 100t\\) mA, \\(V=100\\sin\\left(100t+\\tfrac{\\pi}{3}\\right)\\) V. The power dissipated in the circuit is",
       "image": null,
-      "qOptions": [
-        "10 W",
-        "2.5 W",
-        "5 W",
-        "5 kW"
-      ],
+      "qOptions": ["10 W", "2.5 W", "5 W", "5 kW"],
       "qAnswer": "B"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Voltage applied to an AC circuit and current flowing in it is given by: \\(V=200\\sqrt{2}\\sin\\!\\left(\\omega t+\\tfrac{\\pi}{4}\\right)\\) and \\(i=-\\sqrt{2}\\cos\\!\\left(\\omega t+\\tfrac{\\pi}{4}\\right)\\). Then power consumed in the circuit will be",
       "image": null,
-      "qOptions": [
-        "200 W",
-        "400 W",
-        "\\(200\\sqrt{2}\\) W",
-        "none of these"
-      ],
+      "qOptions": ["200 W", "400 W", "\\(200\\sqrt{2}\\) W", "none of these"],
       "qAnswer": "D"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "When 100 V DC source is applied across a coil, a current of 1 A flows through it. When 100 V AC source of 50 Hz is applied to the same coil, 0.5 A current flows. Calculate the inductance of the coil.",
       "image": null,
       "qOptions": [
@@ -50,6 +44,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In the circuit shown in figure, the reading of the AC ammeter is",
       "image": "5.png",
       "qOptions": [
@@ -62,6 +57,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "If \\(L\\) and \\(R\\) be the inductance and resistance of the choke coil, then identify the correct statement:",
       "image": null,
       "qOptions": [
@@ -74,18 +70,15 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In the circuit shown in figure, the AC source gives a voltage \\(V=20\\cos(2000t)\\). Neglecting source resistance, the voltmeter and ammeter readings will be",
       "image": "7.png",
-      "qOptions": [
-        "0 V, 2.0 A",
-        "0 V, 1.4 A",
-        "5.6 V, 1.4 A",
-        "8 V, 2.0 A"
-      ],
+      "qOptions": ["0 V, 2.0 A", "0 V, 1.4 A", "5.6 V, 1.4 A", "8 V, 2.0 A"],
       "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "The adjoining figure shows an AC circuit with resistance \\(R\\), inductance \\(L\\) and source voltage \\(V_s\\). Then",
       "image": "8.png",
       "qOptions": [
@@ -98,6 +91,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "When an alternating voltage of 220 V is applied across a device P, a current of 0.25 A flows and it leads the applied voltage by \\(\\pi/2\\) rad. When the same source is connected across another device Q, the same current is in phase with the applied voltage. What is the current when the same source is connected across a series combination of P and Q?",
       "image": null,
       "qOptions": [
@@ -110,30 +104,23 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In a series LCR circuit, current in the circuit is 11 A when the applied voltage is 220 V. Voltage across the capacitor is 200 V. If value of resistor is \\(20\\ \\Omega\\), then the voltage across the unknown inductor is",
       "image": null,
-      "qOptions": [
-        "zero",
-        "200 V",
-        "20 V",
-        "None of these"
-      ],
+      "qOptions": ["zero", "200 V", "20 V", "None of these"],
       "qAnswer": "B"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "A steady current of magnitude \\(I'\\) and an AC current of peak value \\(I'\\) are allowed to pass through identical resistors for the same time. The ratio of heat produced in the two resistors will be",
       "image": null,
-      "qOptions": [
-        "2:1",
-        "1:2",
-        "1:1",
-        "None of these"
-      ],
+      "qOptions": ["2:1", "1:2", "1:1", "None of these"],
       "qAnswer": "A"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In the circuit shown in figure, the energy lost in one cycle is",
       "image": "12.png",
       "qOptions": [
@@ -146,6 +133,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In series LCR circuit voltage drop across resistance is 8 V, across inductor is 6 V and across capacitor is 12 V. Then",
       "image": null,
       "qOptions": [
@@ -158,6 +146,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "An AC voltage source \\(V=V_0\\sin\\omega t\\) is connected across resistance \\(R\\) and capacitance \\(C\\) as shown. It is given that \\(R=1/\\omega C\\). The peak current is \\(I_0\\). If the angular frequency of the voltage source is changed to \\(\\omega/\\sqrt{3}\\) then the new peak current in the circuit is",
       "image": "14.png",
       "qOptions": [
@@ -170,6 +159,7 @@
     },
     {
       "qType": "MMCQ",
+      "passageId": null,
       "qText": "Current in an AC circuit is given by \\(i=3\\sin\\omega t+4\\cos\\omega t\\) then",
       "image": null,
       "qOptions": [
@@ -178,13 +168,11 @@
         "if voltage applied is \\(V=V_m\\sin\\omega t\\) then the circuit must be containing resistance and capacitance",
         "if voltage applied is \\(V=V_m\\cos\\omega t\\) then the circuit may contain resistance and inductance only"
       ],
-      "qAnswer": [
-        "C",
-        "D"
-      ]
+      "qAnswer": ["C", "D"]
     },
     {
       "qType": "MMCQ",
+      "passageId": null,
       "qText": "In an AC series circuit given that, \\(R=10\\ \\Omega\\), \\(X_L=20\\ \\Omega\\) and \\(X_C=10\\ \\Omega\\). Then choose the correct options",
       "image": null,
       "qOptions": [
@@ -193,15 +181,11 @@
         "Phase angle between voltage function and current function is \\(45^\\circ\\)",
         "Power factor of circuit is \\(1/\\sqrt{2}\\)"
       ],
-      "qAnswer": [
-        "A",
-        "B",
-        "C",
-        "D"
-      ]
+      "qAnswer": ["A", "B", "C", "D"]
     },
     {
       "qType": "MMCQ",
+      "passageId": null,
       "qText": "In the above problem, choose the correct options",
       "image": null,
       "qOptions": [
@@ -210,14 +194,11 @@
         "If frequency is increased from the given value, impedance of the circuit will increase",
         "If frequency is decreased from the given value, current in the circuit may increase or decrease"
       ],
-      "qAnswer": [
-        "B",
-        "C",
-        "D"
-      ]
+      "qAnswer": ["B", "C", "D"]
     },
     {
       "qType": "MMCQ",
+      "passageId": null,
       "qText": "In the circuit shown in figure (\\(i_{\\text{rms}}=2\\) A)",
       "image": "18.png",
       "qOptions": [
@@ -226,14 +207,11 @@
         "\\(V_L=40\\ \\text{V}\\)",
         "\\(V_0=100\\ \\text{V}\\)"
       ],
-      "qAnswer": [
-        "A",
-        "B",
-        "C"
-      ]
+      "qAnswer": ["A", "B", "C"]
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In a series LC circuit, the applied voltage is \\(V=V_0\\sin\\omega t\\). If \\(\\omega\\) is very low, then the voltage drops across the inductor \\(V_L\\) and capacitor \\(V_C\\) are",
       "image": "19.png",
       "qOptions": [
@@ -246,18 +224,15 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "A coil, a capacitor and an AC source of rms voltage 24 V are connected in series. By varying the frequency of the source, a maximum rms current of 6 A is observed. If coil is connected to a battery of emf 12 V and internal resistance \\(4\\Omega\\), then current through it in steady state is",
       "image": null,
-      "qOptions": [
-        "2.4 A",
-        "1.8 A",
-        "1.5 A",
-        "1.2 A"
-      ],
+      "qOptions": ["2.4 A", "1.8 A", "1.5 A", "1.2 A"],
       "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "In a series CR circuit shown in figure, the applied voltage is 10 V and the voltage across capacitor is found to be 8 V. The voltage across R and the phase difference between current and the applied voltage will respectively be",
       "image": "21.png",
       "qOptions": [
@@ -270,6 +245,7 @@
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "A 50 Hz AC source of 20 V is connected across R and C as shown in figure. The voltage across R is 12 V. The voltage across C is",
       "image": "22.png",
       "qOptions": [
@@ -282,227 +258,249 @@
     },
     {
       "qType": "Passage",
+      "passageId": "P1",
       "qText": "For an LCR series AC circuit, match Column I with Column II. Column I: (A) If resistance is increased (B) If capacitance is increased (C) If inductance is increased (D) If frequency is increased. Column II options: P — Current will definitely increase; Q — Current will definitely decrease; R — Current may increase or decrease; S — Power consumed may decrease or increase; T — Power consumed will definitely increase.",
       "image": null,
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "(A) If resistance is increased, choose the correct effect from Column II.",
-          "image": null,
-          "qOptions": [
-            "Current will definitely increase",
-            "Current will definitely decrease",
-            "Current may increase or decrease",
-            "Power consumed may decrease or increase"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(B) If capacitance is increased, choose the correct effect from Column II.",
-          "image": null,
-          "qOptions": [
-            "Current will definitely decrease",
-            "Power consumed will definitely increase",
-            "Current may increase or decrease",
-            "Power consumed may decrease or increase"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(C) If inductance is increased, choose the correct effect from Column II.",
-          "image": null,
-          "qOptions": [
-            "Power consumed may decrease or increase",
-            "Current will definitely increase",
-            "Current will definitely decrease",
-            "Current may increase or decrease"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(D) If frequency is increased, choose the correct effect from Column II.",
-          "image": null,
-          "qOptions": [
-            "Current may increase or decrease",
-            "Power consumed will definitely increase",
-            "Current will definitely increase",
-            "Current will definitely decrease"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(A) If resistance is increased, choose the correct effect from Column II.",
+      "image": null,
+      "qOptions": [
+        "Current will definitely increase",
+        "Current will definitely decrease",
+        "Current may increase or decrease",
+        "Power consumed may decrease or increase"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(B) If capacitance is increased, choose the correct effect from Column II.",
+      "image": null,
+      "qOptions": [
+        "Current will definitely decrease",
+        "Power consumed will definitely increase",
+        "Current may increase or decrease",
+        "Power consumed may decrease or increase"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(C) If inductance is increased, choose the correct effect from Column II.",
+      "image": null,
+      "qOptions": [
+        "Power consumed may decrease or increase",
+        "Current will definitely increase",
+        "Current will definitely decrease",
+        "Current may increase or decrease"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "(D) If frequency is increased, choose the correct effect from Column II.",
+      "image": null,
+      "qOptions": [
+        "Current may increase or decrease",
+        "Power consumed will definitely increase",
+        "Current will definitely increase",
+        "Current will definitely decrease"
+      ],
+      "qAnswer": "A"
     },
     {
       "qType": "Passage",
+      "passageId": "P2",
       "qText": "A coil is in series with a \\(\\dfrac{500}{\\pi}\\ \\mu\\text{F}\\) capacitor across a 160 V, 50 Hz supply. The current taken by the circuit is 8 A and the power consumed is 768 W. Calculate the inductance of the coil for the following cases.",
       "image": null,
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "Case (a): current is leading. The inductance of the coil is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{10}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{80}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{360}{\\pi}\\ \\text{mH}\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Case (b): current is lagging. The inductance of the coil is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{360}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{80}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{160}{\\pi}\\ \\text{mH}\\)"
-          ],
-          "qAnswer": "B"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Case (a): current is leading. The inductance of the coil is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{10}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{80}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{360}{\\pi}\\ \\text{mH}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Case (b): current is lagging. The inductance of the coil is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{360}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{80}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{160}{\\pi}\\ \\text{mH}\\)"
+      ],
+      "qAnswer": "B"
     },
     {
       "qType": "Passage",
+      "passageId": "P3",
       "qText": "The current in a certain circuit varies with time as shown in the figure. Find the average current and the rms current in terms of \\(I_0\\).",
       "image": "25.png",
-      "questions": [
-        {
-          "qType": "Numerical",
-          "qText": "(a) Average current \\(I_{\\text{avg}}\\)",
-          "image": null,
-          "qOptions": [],
-          "qAnswer": 0
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(b) RMS current \\(I_{\\text{rms}}\\). (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{I_0}{\\sqrt{3}}\\)",
-            "\\(\\dfrac{I_0}{\\sqrt{2}}\\)",
-            "\\(\\dfrac{I_0}{3}\\)",
-            "\\(\\dfrac{I_0}{2\\sqrt{3}}\\)"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "(a) Average current \\(I_{\\text{avg}}\\)",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "(b) RMS current \\(I_{\\text{rms}}\\). (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{I_0}{\\sqrt{3}}\\)",
+        "\\(\\dfrac{I_0}{\\sqrt{2}}\\)",
+        "\\(\\dfrac{I_0}{3}\\)",
+        "\\(\\dfrac{I_0}{2\\sqrt{3}}\\)"
+      ],
+      "qAnswer": "A"
     },
     {
       "qType": "Passage",
+      "passageId": "P4",
       "qText": "In the figure the readings of voltmeters are \\(V_1=40\\ \\text{V}\\), \\(V_2=40\\ \\text{V}\\) and \\(V_3=10\\ \\text{V}\\). Find (a) the peak value of current, (b) the peak value of emf, (c) the values of \\(L\\) and \\(C\\).",
       "image": "26.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "(a) Peak value of current is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(10\\sqrt{2}\\ \\text{A}\\)",
-            "\\(20\\sqrt{2}\\ \\text{A}\\)",
-            "10 A",
-            "\\(5\\sqrt{2}\\ \\text{A}\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(b) Peak value of emf is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(50\\sqrt{2}\\ \\text{V}\\)",
-            "\\(40\\sqrt{2}\\ \\text{V}\\)",
-            "50 V",
-            "\\(100\\sqrt{2}\\ \\text{V}\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(c) The inductance \\(L\\) is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{10}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{50}{\\pi}\\ \\text{mH}\\)",
-            "\\(\\dfrac{5}{\\pi}\\ \\text{mH}\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(c) The capacitance \\(C\\) is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{5}{\\pi}\\ \\text{mF}\\)",
-            "\\(\\dfrac{10}{\\pi}\\ \\text{mF}\\)",
-            "\\(\\dfrac{1}{\\pi}\\ \\text{mF}\\)",
-            "\\(\\dfrac{40}{\\pi}\\ \\text{mF}\\)"
-          ],
-          "qAnswer": "B"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(a) Peak value of current is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(10\\sqrt{2}\\ \\text{A}\\)",
+        "\\(20\\sqrt{2}\\ \\text{A}\\)",
+        "10 A",
+        "\\(5\\sqrt{2}\\ \\text{A}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(b) Peak value of emf is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(50\\sqrt{2}\\ \\text{V}\\)",
+        "\\(40\\sqrt{2}\\ \\text{V}\\)",
+        "50 V",
+        "\\(100\\sqrt{2}\\ \\text{V}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(c) The inductance \\(L\\) is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{40}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{10}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{50}{\\pi}\\ \\text{mH}\\)",
+        "\\(\\dfrac{5}{\\pi}\\ \\text{mH}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "(c) The capacitance \\(C\\) is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{5}{\\pi}\\ \\text{mF}\\)",
+        "\\(\\dfrac{10}{\\pi}\\ \\text{mF}\\)",
+        "\\(\\dfrac{1}{\\pi}\\ \\text{mF}\\)",
+        "\\(\\dfrac{40}{\\pi}\\ \\text{mF}\\)"
+      ],
+      "qAnswer": "B"
     },
     {
       "qType": "Passage",
+      "passageId": "P5",
       "qText": "A circuit element shown in the figure as a box has either a capacitor or an inductor. The power factor of the circuit is 0.8 while current lags behind the voltage. Find (a) the source voltage \\(V\\), (b) the nature of the element in the box and find its value.",
       "image": "27.png",
-      "questions": [
-        {
-          "qType": "Numerical",
-          "qText": "(a) Source voltage \\(V\\) (rms) is",
-          "image": null,
-          "qOptions": [],
-          "qAnswer": 100
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(b) Nature of the element in the box and its value is ____ (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "Inductor of \\(\\dfrac{8}{5\\pi}\\ \\text{mH}\\)",
-            "Capacitor of \\(\\dfrac{8}{5\\pi}\\ \\text{mF}\\)",
-            "Resistor of \\(\\dfrac{8}{5\\pi}\\ \\Omega\\)",
-            "Inductor of \\(\\dfrac{5}{8\\pi}\\ \\text{mH}\\)"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(a) Source voltage \\(V\\) (rms) is",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 100
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P5",
+      "qText": "(b) Nature of the element in the box and its value is ____ (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "Inductor of \\(\\dfrac{8}{5\\pi}\\ \\text{mH}\\)",
+        "Capacitor of \\(\\dfrac{8}{5\\pi}\\ \\text{mF}\\)",
+        "Resistor of \\(\\dfrac{8}{5\\pi}\\ \\Omega\\)",
+        "Inductor of \\(\\dfrac{5}{8\\pi}\\ \\text{mH}\\)"
+      ],
+      "qAnswer": "A"
     },
     {
       "qType": "Passage",
+      "passageId": "P6",
       "qText": "The maximum values of the alternating voltage and current are 400 V and 20 A respectively in a circuit connected to 50 Hz supply and these quantities are sinusoidal. The instantaneous values of the voltage and current are \\(200\\sqrt{2}\\) V and 10 A respectively. At \\(t=0\\) both are increasing positively.",
       "image": null,
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "(a) Write down the expression for voltage and current at time \\(t\\). (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{4})\\ \\text{V},\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{6})\\ \\text{A}\\)",
-            "\\(V=400\\sin(100\\pi t-\\tfrac{\\pi}{4}),\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{6})\\)",
-            "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{6}),\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{4})\\)",
-            "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{4}),\\ i=20\\sin(100\\pi t-\\tfrac{\\pi}{6})\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "(b) Determine the power consumed in the circuit. (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(1000\\sqrt{2}(\\sqrt{3}+1)\\ \\text{W}\\)",
-            "\\(1000(\\sqrt{3}+1)\\ \\text{W}\\)",
-            "\\(1000\\sqrt{2}(\\sqrt{3}-1)\\ \\text{W}\\)",
-            "\\(2000\\sqrt{2}(\\sqrt{3}+1)\\ \\text{W}\\)"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "(a) Write down the expression for voltage and current at time \\(t\\). (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{4})\\ \\text{V},\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{6})\\ \\text{A}\\)",
+        "\\(V=400\\sin(100\\pi t-\\tfrac{\\pi}{4}),\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{6})\\)",
+        "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{6}),\\ i=20\\sin(100\\pi t+\\tfrac{\\pi}{4})\\)",
+        "\\(V=400\\sin(100\\pi t+\\tfrac{\\pi}{4}),\\ i=20\\sin(100\\pi t-\\tfrac{\\pi}{6})\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "(b) Determine the power consumed in the circuit. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(1000\\sqrt{2}(\\sqrt{3}+1)\\ \\text{W}\\)",
+        "\\(1000(\\sqrt{3}+1)\\ \\text{W}\\)",
+        "\\(1000\\sqrt{2}(\\sqrt{3}-1)\\ \\text{W}\\)",
+        "\\(2000\\sqrt{2}(\\sqrt{3}+1)\\ \\text{W}\\)"
+      ],
+      "qAnswer": "A"
     }
   ]
 }

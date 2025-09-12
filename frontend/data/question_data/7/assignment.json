@@ -2,933 +2,920 @@
   "questions": [
     {
       "qType": "Passage",
-      "passageId": "P1",
       "qText": "In the circuit (Fig. 4.114), all symbols have their usual meanings. At \\(t=0\\), key \\(K\\) is closed. Answer the following about the equivalent resistance between terminals \\(A\\) and \\(B\\).",
       "image": "p1.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "At \\(t=0\\), the equivalent resistance between \\(A\\) and \\(B\\) is",
+          "image": null,
+          "qOptions": [
+            "\\(R_1+R_2+R_3\\)",
+            "\\(R_1+R_2\\)",
+            "\\(R_1+R_3\\)",
+            "indeterminate"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "As \\(t\\to\\infty\\), the equivalent resistance between \\(A\\) and \\(B\\) is",
+          "image": null,
+          "qOptions": [
+            "\\(R_1+R_2+R_3\\)",
+            "\\(R_1+R_2\\)",
+            "\\(R_1+R_3\\)",
+            "none of these"
+          ],
+          "qAnswer": "C"
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P1",
-      "qText": "At \\(t=0\\), the equivalent resistance between \\(A\\) and \\(B\\) is",
-      "image": null,
-      "qOptions": [
-        "\\(R_1+R_2+R_3\\)",
-        "\\(R_1+R_2\\)",
-        "\\(R_1+R_3\\)",
-        "indeterminate"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P1",
-      "qText": "As \\(t\\to\\infty\\), the equivalent resistance between \\(A\\) and \\(B\\) is",
-      "image": null,
-      "qOptions": [
-        "\\(R_1+R_2+R_3\\)",
-        "\\(R_1+R_2\\)",
-        "\\(R_1+R_3\\)",
-        "none of these"
-      ],
-      "qAnswer": "C"
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P2",
       "qText": "There is no current in any part of the circuit for \\(t<0\\). Switch \\(S\\) is closed at \\(t=0\\) (figure shown). Answer the following for the RL network.",
       "image": "p2.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The rate at which the current through the inductor increases initially is",
+          "image": null,
+          "qOptions": [
+            "zero",
+            "\\(10\\,\\text{A s}^{-1}\\)",
+            "\\(1\\,\\text{A s}^{-1}\\)",
+            "\\(5\\,\\text{A s}^{-1}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Current through the \\(6\\,\\Omega\\) resistor",
+          "image": null,
+          "qOptions": [
+            "increases linearly with time",
+            "increases non-linearly with time",
+            "decreases non-linearly with time",
+            "remains constant"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The current through the inductor after a long time will be",
+          "image": null,
+          "qOptions": [
+            "zero",
+            "infinite",
+            "\\(\\tfrac{6}{13}\\,\\text{A}\\)",
+            "none of these"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the circuit (Fig. 4.69), the final current through the \\(30\\,\\Omega\\) resistor when the circuit is completed is",
+          "image": "3.png",
+          "qOptions": [
+            "3 A",
+            "0.1 A",
+            "5 A",
+            "0.5 A"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the given circuit (Fig. 4.76), the steady-state current through the \\(5\\,\\text{mH}\\) inductor is",
+          "image": "4.png",
+          "qOptions": [
+            "\\(\\tfrac{2}{3}\\,\\text{A}\\)",
+            "\\(\\tfrac{8}{3}\\,\\text{A}\\)",
+            "\\(\\tfrac{1}{3}\\,\\text{A}\\)",
+            "\\(\\tfrac{2}{3}\\,\\text{A}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the circuit of Fig. 4.90, meters (1) and (2) are ammeters. Just after key \\(K\\) is pressed to complete the circuit, the readings are",
+          "image": "5.png",
+          "qOptions": [
+            "maximum in both (1) and (2)",
+            "zero in both (1) and (2)",
+            "zero in (1), minimum in (2)",
+            "maximum in (1), zero in (2)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In Fig. 4.85, key \\(K\\) is closed at \\(t=0\\). After a long time, the potential difference between \\(A\\) and \\(B\\) is zero. The value of \\(R\\) will be \\([r_1=r_2=1\\,\\Omega,\\; E_1=3\\,\\text{V},\\; E_2=7\\,\\text{V},\\; C=2\\,\\mu\\text{F},\\; L=4\\,\\text{mH}]\\).",
+          "image": "6.png",
+          "qOptions": [
+            "\\(\\tfrac{4}{3}\\,\\Omega\\)",
+            "\\(\\tfrac{4}{9}\\,\\Omega\\)",
+            "\\(\\tfrac{2}{3}\\,\\Omega\\)",
+            "\\(4\\,\\Omega\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the circuit of Fig. 4.89, switch \\(S\\) is shifted to position 2 from position 1 at \\(t=0\\) (it had been in position 1 for a long time). The current in the circuit just after shifting (battery and both inductors ideal) will be",
+          "image": "7.png",
+          "qOptions": [
+            "\\(\\tfrac{4E}{5R}\\)",
+            "\\(\\tfrac{5E}{4R}\\)",
+            "\\(\\tfrac{5E}{9R}\\)",
+            "\\(\\tfrac{E}{R}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The current through the battery immediately after key \\(K\\) is closed in Fig. 4.98 (initially all capacitors uncharged, \\(R=6\\,\\Omega\\), \\(C=4\\,\\mu\\text{F}\\)) is",
+          "image": "8.png",
+          "qOptions": [
+            "1 A",
+            "5 A",
+            "3 A",
+            "2 A"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "Two different coils have self-inductances \\(L_1=8\\,\\text{mH}\\) and \\(L_2=2\\,\\text{mH}\\). The current in each coil is increased at the same constant rate. At a certain instant, the power given to the two coils is the same. At that time, the current, induced voltage and the energy stored in the first coil are \\(i_1\\), \\(v_1\\) and \\(\\omega_1\\) respectively. The corresponding values for the second coil are \\(i_2\\), \\(v_2\\) and \\(\\omega_2\\). Then",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{i_1}{i_2}=\\dfrac{1}{4}\\)",
+            "\\(\\dfrac{i_1}{i_2}=4\\)",
+            "\\(\\dfrac{\\omega_2}{\\omega_1}=4\\)",
+            "\\(\\dfrac{v_2}{v_1}=\\dfrac{1}{4}\\)"
+          ],
+          "qAnswer": [
+            "A",
+            "C",
+            "D"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "The potential difference across a \\(2\\,\\text{H}\\) inductor as a function of time is shown (current initially zero). Choose the correct statement(s).",
+          "image": "10.png",
+          "qOptions": [
+            "Current at \\(t=2\\,\\text{s}\\) is \\(5\\,\\text{A}\\).",
+            "Current at \\(t=2\\,\\text{s}\\) is \\(10\\,\\text{A}\\).",
+            "The current–time graph across the inductor is the one labelled (C) in the figure.",
+            "The current–time graph across the inductor is the one labelled (D) in the figure."
+          ],
+          "qAnswer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the circuit shown, \\(R=\\sqrt{\\tfrac{L}{C}}\\). Switch \\(S\\) is closed at \\(t=0\\). The current through \\(C\\) and \\(L\\) would be equal after a time \\(t\\) equal to",
+          "image": "11.png",
+          "qOptions": [
+            "\\(CR\\)",
+            "\\(CR\\,\\ln 2\\)",
+            "\\(\\dfrac{L}{R}\\,\\ln 2\\)",
+            "\\(LR\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the figure shown, a conducting wire \\(PQ\\) of length \\(1\\,\\text{m}\\) moves in a uniform magnetic field \\(B=3\\,\\text{T}\\) with constant velocity \\(v=2\\,\\text{m s}^{-1}\\) towards the right. \\(R=2\\,\\Omega,\\; C=1\\,\\text{F},\\; L=2\\,\\text{H}\\). The current through the inductor at time \\(t=2\\,\\text{s}\\) is",
+          "image": "12.png",
+          "qOptions": [
+            "2 A",
+            "4 A",
+            "6 A",
+            "8 A"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P2",
-      "qText": "The rate at which the current through the inductor increases initially is",
-      "image": null,
-      "qOptions": [
-        "zero",
-        "\\(10\\,\\text{A s}^{-1}\\)",
-        "\\(1\\,\\text{A s}^{-1}\\)",
-        "\\(5\\,\\text{A s}^{-1}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P2",
-      "qText": "Current through the \\(6\\,\\Omega\\) resistor",
-      "image": null,
-      "qOptions": [
-        "increases linearly with time",
-        "increases non-linearly with time",
-        "decreases non-linearly with time",
-        "remains constant"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P2",
-      "qText": "The current through the inductor after a long time will be",
-      "image": null,
-      "qOptions": [
-        "zero",
-        "infinite",
-        "\\(\\tfrac{6}{13}\\,\\text{A}\\)",
-        "none of these"
-      ],
-      "qAnswer": "C"
-    },
-
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the circuit (Fig. 4.69), the final current through the \\(30\\,\\Omega\\) resistor when the circuit is completed is",
-      "image": "3.png",
-      "qOptions": ["3 A", "0.1 A", "5 A", "0.5 A"],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the given circuit (Fig. 4.76), the steady-state current through the \\(5\\,\\text{mH}\\) inductor is",
-      "image": "4.png",
-      "qOptions": [
-        "\\(\\tfrac{2}{3}\\,\\text{A}\\)",
-        "\\(\\tfrac{8}{3}\\,\\text{A}\\)",
-        "\\(\\tfrac{1}{3}\\,\\text{A}\\)",
-        "\\(\\tfrac{2}{3}\\,\\text{A}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the circuit of Fig. 4.90, meters (1) and (2) are ammeters. Just after key \\(K\\) is pressed to complete the circuit, the readings are",
-      "image": "5.png",
-      "qOptions": [
-        "maximum in both (1) and (2)",
-        "zero in both (1) and (2)",
-        "zero in (1), minimum in (2)",
-        "maximum in (1), zero in (2)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In Fig. 4.85, key \\(K\\) is closed at \\(t=0\\). After a long time, the potential difference between \\(A\\) and \\(B\\) is zero. The value of \\(R\\) will be \\([r_1=r_2=1\\,\\Omega,\\; E_1=3\\,\\text{V},\\; E_2=7\\,\\text{V},\\; C=2\\,\\mu\\text{F},\\; L=4\\,\\text{mH}]\\).",
-      "image": "6.png",
-      "qOptions": [
-        "\\(\\tfrac{4}{3}\\,\\Omega\\)",
-        "\\(\\tfrac{4}{9}\\,\\Omega\\)",
-        "\\(\\tfrac{2}{3}\\,\\Omega\\)",
-        "\\(4\\,\\Omega\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the circuit of Fig. 4.89, switch \\(S\\) is shifted to position 2 from position 1 at \\(t=0\\) (it had been in position 1 for a long time). The current in the circuit just after shifting (battery and both inductors ideal) will be",
-      "image": "7.png",
-      "qOptions": [
-        "\\(\\tfrac{4E}{5R}\\)",
-        "\\(\\tfrac{5E}{4R}\\)",
-        "\\(\\tfrac{5E}{9R}\\)",
-        "\\(\\tfrac{E}{R}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The current through the battery immediately after key \\(K\\) is closed in Fig. 4.98 (initially all capacitors uncharged, \\(R=6\\,\\Omega\\), \\(C=4\\,\\mu\\text{F}\\)) is",
-      "image": "8.png",
-      "qOptions": ["1 A", "5 A", "3 A", "2 A"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "Two different coils have self-inductances \\(L_1=8\\,\\text{mH}\\) and \\(L_2=2\\,\\text{mH}\\). The current in each coil is increased at the same constant rate. At a certain instant, the power given to the two coils is the same. At that time, the current, induced voltage and the energy stored in the first coil are \\(i_1\\), \\(v_1\\) and \\(\\omega_1\\) respectively. The corresponding values for the second coil are \\(i_2\\), \\(v_2\\) and \\(\\omega_2\\). Then",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{i_1}{i_2}=\\dfrac{1}{4}\\)",
-        "\\(\\dfrac{i_1}{i_2}=4\\)",
-        "\\(\\dfrac{\\omega_2}{\\omega_1}=4\\)",
-        "\\(\\dfrac{v_2}{v_1}=\\dfrac{1}{4}\\)"
-      ],
-      "qAnswer": ["A", "C", "D"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "The potential difference across a \\(2\\,\\text{H}\\) inductor as a function of time is shown (current initially zero). Choose the correct statement(s).",
-      "image": "10.png",
-      "qOptions": [
-        "Current at \\(t=2\\,\\text{s}\\) is \\(5\\,\\text{A}\\).",
-        "Current at \\(t=2\\,\\text{s}\\) is \\(10\\,\\text{A}\\).",
-        "The current–time graph across the inductor is the one labelled (C) in the figure.",
-        "The current–time graph across the inductor is the one labelled (D) in the figure."
-      ],
-      "qAnswer": ["A", "C"]
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the circuit shown, \\(R=\\sqrt{\\tfrac{L}{C}}\\). Switch \\(S\\) is closed at \\(t=0\\). The current through \\(C\\) and \\(L\\) would be equal after a time \\(t\\) equal to",
-      "image": "11.png",
-      "qOptions": [
-        "\\(CR\\)",
-        "\\(CR\\,\\ln 2\\)",
-        "\\(\\dfrac{L}{R}\\,\\ln 2\\)",
-        "\\(LR\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the figure shown, a conducting wire \\(PQ\\) of length \\(1\\,\\text{m}\\) moves in a uniform magnetic field \\(B=3\\,\\text{T}\\) with constant velocity \\(v=2\\,\\text{m s}^{-1}\\) towards the right. \\(R=2\\,\\Omega,\\; C=1\\,\\text{F},\\; L=2\\,\\text{H}\\). The current through the inductor at time \\(t=2\\,\\text{s}\\) is",
-      "image": "12.png",
-      "qOptions": ["2 A", "4 A", "6 A", "8 A"],
-      "qAnswer": "B"
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P3",
       "qText": "In the given circuit, at \\(t=0\\) the switch \\(S\\) is closed (values shown in the figure). Answer the following about the transient.",
       "image": "p3.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The current through the \\(10\\,\\Omega\\) resistor at any instant \\(t\\) (\\(0<t<\\infty\\)) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{1}{6}e^{-(1000/3)t}\\,\\text{A}\\)",
+            "\\(\\dfrac{5}{6}e^{-(1000/3)t}\\,\\text{A}\\)",
+            "\\(\\dfrac{1}{6}e^{+(1000/3)t}\\,\\text{A}\\)",
+            "\\(\\dfrac{6}{5}e^{+(1000/3)t}\\,\\text{A}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The energy stored in the inductor at any instant \\(0<t<\\infty\\) will be",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{1}{2}\\,[5-5e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
+            "\\(\\tfrac{125}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
+            "\\(\\tfrac{25}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
+            "\\(\\tfrac{5}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The energy stored in the capacitor and inductor, respectively, as \\(t\\to\\infty\\) will be",
+          "image": null,
+          "qOptions": [
+            "1 mJ and 62.5 mJ",
+            "62.5 mJ and 1 mJ",
+            "2 mJ and 62.5 mJ",
+            "1 mJ and 60 mJ"
+          ],
+          "qAnswer": "A"
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P3",
-      "qText": "The current through the \\(10\\,\\Omega\\) resistor at any instant \\(t\\) (\\(0<t<\\infty\\)) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{1}{6}e^{-(1000/3)t}\\,\\text{A}\\)",
-        "\\(\\dfrac{5}{6}e^{-(1000/3)t}\\,\\text{A}\\)",
-        "\\(\\dfrac{1}{6}e^{+(1000/3)t}\\,\\text{A}\\)",
-        "\\(\\dfrac{6}{5}e^{+(1000/3)t}\\,\\text{A}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P3",
-      "qText": "The energy stored in the inductor at any instant \\(0<t<\\infty\\) will be",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{1}{2}\\,[5-5e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
-        "\\(\\tfrac{125}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
-        "\\(\\tfrac{25}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)",
-        "\\(\\tfrac{5}{2}\\,[1-e^{-(1000/3)t}]^{2}\\,\\text{mJ}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P3",
-      "qText": "The energy stored in the capacitor and inductor, respectively, as \\(t\\to\\infty\\) will be",
-      "image": null,
-      "qOptions": [
-        "1 mJ and 62.5 mJ",
-        "62.5 mJ and 1 mJ",
-        "2 mJ and 62.5 mJ",
-        "1 mJ and 60 mJ"
-      ],
-      "qAnswer": "A"
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P4",
       "qText": "A square frame consists of two loops with resistors and inductors as shown. The frame is placed in a time-varying magnetic field: one loop lies in a region with crosses (into the page) and the other in dots (out of the page). The magnetic field varies as \\(B=(20+10t)\\,\\text{Wb m}^{-2}\\) in both regions. Dimensions: \\(l=20\\,\\text{cm}\\), \\(b=10\\,\\text{cm}\\). The frame has \\(R=10\\,\\Omega\\) and \\(L=10\\,\\text{H}\\).",
       "image": "p4.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The direction of induced current in the bigger loop will be",
+          "image": null,
+          "qOptions": [
+            "clockwise",
+            "anticlockwise",
+            "first clockwise for some time, then anticlockwise, and so on",
+            "first anticlockwise for some time, then clockwise, and so on"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The induced emf in the frame only due to the variation of magnetic field will be",
+          "image": null,
+          "qOptions": [
+            "0.3 V",
+            "0.1 V",
+            "0.5 V",
+            "0.4 V"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The current in the frame as a function of time will be",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{1}{20}(1-e^{-t})\\,\\text{A}\\)",
+            "\\(\\tfrac{1}{40}(1-e^{-t})\\,\\text{A}\\)",
+            "\\(\\tfrac{1}{20}e^{-t}\\,\\text{A}\\)",
+            "\\(\\tfrac{1}{10}e^{-t}\\,\\text{A}\\)"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P4",
-      "qText": "The direction of induced current in the bigger loop will be",
-      "image": null,
-      "qOptions": [
-        "clockwise",
-        "anticlockwise",
-        "first clockwise for some time, then anticlockwise, and so on",
-        "first anticlockwise for some time, then clockwise, and so on"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P4",
-      "qText": "The induced emf in the frame only due to the variation of magnetic field will be",
-      "image": null,
-      "qOptions": ["0.3 V", "0.1 V", "0.5 V", "0.4 V"],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P4",
-      "qText": "The current in the frame as a function of time will be",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{1}{20}(1-e^{-t})\\,\\text{A}\\)",
-        "\\(\\tfrac{1}{40}(1-e^{-t})\\,\\text{A}\\)",
-        "\\(\\tfrac{1}{20}e^{-t}\\,\\text{A}\\)",
-        "\\(\\tfrac{1}{10}e^{-t}\\,\\text{A}\\)"
-      ],
-      "qAnswer": "B"
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P5",
       "qText": "Match the circuits (List–I) with the correct current expressions through the element \\('ab'\\) (List–II).",
       "image": "p5.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "For circuit (A), the correct \\(i(t)\\) from List–II is",
+          "image": null,
+          "qOptions": [
+            "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
+            "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "For circuit (B), the correct \\(i(t)\\) from List–II is",
+          "image": null,
+          "qOptions": [
+            "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
+            "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "For circuit (C), the correct \\(i(t)\\) from List–II is",
+          "image": null,
+          "qOptions": [
+            "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
+            "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "For circuit (D), the correct \\(i(t)\\) from List–II is",
+          "image": null,
+          "qOptions": [
+            "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
+            "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
+            "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
+          ],
+          "qAnswer": "A"
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "For circuit (A), the correct \\(i(t)\\) from List–II is",
-      "image": null,
-      "qOptions": [
-        "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
-        "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "For circuit (B), the correct \\(i(t)\\) from List–II is",
-      "image": null,
-      "qOptions": [
-        "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
-        "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "For circuit (C), the correct \\(i(t)\\) from List–II is",
-      "image": null,
-      "qOptions": [
-        "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
-        "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "For circuit (D), the correct \\(i(t)\\) from List–II is",
-      "image": null,
-      "qOptions": [
-        "(p) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(2\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(q) \\(i=(5\\,\\text{A})\\big[1-e^{-t/(4\\times10^{-4}\\,\\text{s})}\\big]\\)",
-        "(r) \\(i=(5\\,\\text{A})e^{-t/(2\\times10^{-4}\\,\\text{s})}\\)",
-        "(s) \\(i=(5\\,\\text{A})e^{-t/(4\\times10^{-4}\\,\\text{s})}\\)"
-      ],
-      "qAnswer": "A"
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P6",
       "qText": "In the circuit of Fig. 4.113, switches \\(S_1\\) and \\(S_3\\) have been closed for 1 s and \\(S_2\\) remained open. Just after 1 s, switch \\(S_2\\) is closed and \\(S_1\\) and \\(S_3\\) are opened (\\(t=0^+\\)). Answer the following.",
       "image": "p6.png",
-      "qOptions": [],
-      "qAnswer": []
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The maximum current in the circuit containing the inductor and capacitor (only \\(S_2\\) is closed) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{2}\\left(1+\\tfrac{1}{e}\\right)\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The maximum charge on the capacitor is",
+          "image": null,
+          "qOptions": [
+            "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{2}\\left(1+\\tfrac{1}{e}\\right)\\)",
+            "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The charge on the upper plate of the capacitor as a function of time is",
+          "image": null,
+          "qOptions": [
+            "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{3\\pi}{4}\\right)\\)",
+            "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)",
+            "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)",
+            "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "A pure inductor \\(L\\), a capacitor \\(C\\) and a resistor \\(R\\) are connected across a battery of emf \\(E\\) and internal resistance \\(r\\) as shown (switch \\(S_w\\) closed at \\(t=0\\)). Select the correct alternative(s).",
+          "image": "21.png",
+          "qOptions": [
+            "Current through \\(R\\) is zero all the time.",
+            "Current through \\(R\\) is zero at \\(t=0\\) and as \\(t\\to\\infty\\).",
+            "Maximum charge stored in the capacitor is \\(CE\\).",
+            "Maximum energy stored in the inductor equals the maximum energy stored in the capacitor."
+          ],
+          "qAnswer": [
+            "B"
+          ]
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A simple \\(LR\\) circuit is connected to a battery at \\(t=0\\). The energy stored in the inductor reaches half of its maximum value at time",
+          "image": "22.png",
+          "qOptions": [
+            "\\(\\dfrac{R}{L}\\ln\\!\\left(\\dfrac{\\sqrt{2}}{\\sqrt{2}-1}\\right)\\)",
+            "\\(\\dfrac{L}{R}\\ln\\!\\left(\\dfrac{\\sqrt{2}-1}{\\sqrt{2}}\\right)\\)",
+            "\\(\\dfrac{L}{R}\\ln\\!\\left(\\dfrac{\\sqrt{2}}{\\sqrt{2}-1}\\right)\\)",
+            "\\(\\dfrac{R}{L}\\ln\\!\\left(\\dfrac{\\sqrt{2}-1}{\\sqrt{2}}\\right)\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "For the circuit shown, what is the rate of change of current through the \\(4\\,\\text{mH}\\) inductor immediately after the switch is closed?",
+          "image": "23.png",
+          "qOptions": [
+            "9000 A/s",
+            "6000 A/s",
+            "3000 A/s",
+            "4500 A/s"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A long conductor is placed in a horizontal plane carrying current \\(i(t)=3+4t^2\\). A square loop (side \\(0.25\\,\\text{m}\\)) lies in the same plane at a distance \\(1\\,\\text{m}\\) from the conductor, as shown. The loop is connected to an inductor of inductance \\(5\\,\\text{H}\\). Find the current in the inductor as a function of time (assume \\(t=0\\) is when current starts in the straight conductor). (Options are made-up distractors; one is correct.)",
+          "image": "24.png",
+          "qOptions": [
+            "\\(\\dfrac{2}{5}(\\ln 5)\\times10^{-7}\\,t^2\\)",
+            "\\(\\dfrac{1}{5}(\\ln 5)\\times10^{-7}\\,t^2\\)",
+            "\\(\\dfrac{2}{5}(\\ln 2)\\times10^{-7}\\,t^2\\)",
+            "\\(\\dfrac{2}{5}(\\ln 5)\\times10^{-6}\\,t^2\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "Numerical",
+          "qText": "In the LR–C network shown, at a certain instant the circuit current is \\(1\\,\\text{A}\\) and increasing at the rate of \\(2\\,\\text{A s}^{-1}\\). The charge on the capacitor at the same instant will be ______.",
+          "image": "25.png",
+          "qOptions": [],
+          "qAnswer": 0
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "The network shown is part of a complete circuit. If at a certain instant the electric current is \\(10\\,\\text{A}\\) and is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then",
+          "image": "26.png",
+          "qOptions": [
+            "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then \\(V_A-V_B=0\\).",
+            "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then the rate of increase of magnetic energy in one of the inductors is \\(10\\,\\text{J s}^{-1}\\).",
+            "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then the time rate of increase of the total magnetic energy stored in both inductors is \\(200\\,\\text{J s}^{-1}\\).",
+            "none of these"
+          ],
+          "qAnswer": [
+            "A",
+            "C"
+          ]
+        }
+      ]
     },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "The maximum current in the circuit containing the inductor and capacitor (only \\(S_2\\) is closed) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{2}\\left(1+\\tfrac{1}{e}\\right)\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "The maximum charge on the capacitor is",
-      "image": null,
-      "qOptions": [
-        "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{2}\\left(1+\\tfrac{1}{e}\\right)\\)",
-        "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "The charge on the upper plate of the capacitor as a function of time is",
-      "image": null,
-      "qOptions": [
-        "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{3\\pi}{4}\\right)\\)",
-        "\\(\\sqrt{2}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)",
-        "\\(\\sqrt{3}\\left(1-\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)",
-        "\\(\\sqrt{3}\\left(1+\\tfrac{1}{e}\\right)\\sin\\!\\left(t+\\tfrac{\\pi}{4}\\right)\\)"
-      ],
-      "qAnswer": "A"
-    },
-
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "A pure inductor \\(L\\), a capacitor \\(C\\) and a resistor \\(R\\) are connected across a battery of emf \\(E\\) and internal resistance \\(r\\) as shown (switch \\(S_w\\) closed at \\(t=0\\)). Select the correct alternative(s).",
-      "image": "21.png",
-      "qOptions": [
-        "Current through \\(R\\) is zero all the time.",
-        "Current through \\(R\\) is zero at \\(t=0\\) and as \\(t\\to\\infty\\).",
-        "Maximum charge stored in the capacitor is \\(CE\\).",
-        "Maximum energy stored in the inductor equals the maximum energy stored in the capacitor."
-      ],
-      "qAnswer": ["B"]
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A simple \\(LR\\) circuit is connected to a battery at \\(t=0\\). The energy stored in the inductor reaches half of its maximum value at time",
-      "image": "22.png",
-      "qOptions": [
-        "\\(\\dfrac{R}{L}\\ln\\!\\left(\\dfrac{\\sqrt{2}}{\\sqrt{2}-1}\\right)\\)",
-        "\\(\\dfrac{L}{R}\\ln\\!\\left(\\dfrac{\\sqrt{2}-1}{\\sqrt{2}}\\right)\\)",
-        "\\(\\dfrac{L}{R}\\ln\\!\\left(\\dfrac{\\sqrt{2}}{\\sqrt{2}-1}\\right)\\)",
-        "\\(\\dfrac{R}{L}\\ln\\!\\left(\\dfrac{\\sqrt{2}-1}{\\sqrt{2}}\\right)\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "For the circuit shown, what is the rate of change of current through the \\(4\\,\\text{mH}\\) inductor immediately after the switch is closed?",
-      "image": "23.png",
-      "qOptions": ["9000 A/s", "6000 A/s", "3000 A/s", "4500 A/s"],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A long conductor is placed in a horizontal plane carrying current \\(i(t)=3+4t^2\\). A square loop (side \\(0.25\\,\\text{m}\\)) lies in the same plane at a distance \\(1\\,\\text{m}\\) from the conductor, as shown. The loop is connected to an inductor of inductance \\(5\\,\\text{H}\\). Find the current in the inductor as a function of time (assume \\(t=0\\) is when current starts in the straight conductor). (Options are made-up distractors; one is correct.)",
-      "image": "24.png",
-      "qOptions": [
-        "\\(\\dfrac{2}{5}(\\ln 5)\\times10^{-7}\\,t^2\\)",
-        "\\(\\dfrac{1}{5}(\\ln 5)\\times10^{-7}\\,t^2\\)",
-        "\\(\\dfrac{2}{5}(\\ln 2)\\times10^{-7}\\,t^2\\)",
-        "\\(\\dfrac{2}{5}(\\ln 5)\\times10^{-6}\\,t^2\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "Numerical",
-      "passageId": null,
-      "qText": "In the LR–C network shown, at a certain instant the circuit current is \\(1\\,\\text{A}\\) and increasing at the rate of \\(2\\,\\text{A s}^{-1}\\). The charge on the capacitor at the same instant will be ______.",
-      "image": "25.png",
-      "qOptions": [],
-      "qAnswer": 0
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "The network shown is part of a complete circuit. If at a certain instant the electric current is \\(10\\,\\text{A}\\) and is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then",
-      "image": "26.png",
-      "qOptions": [
-        "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then \\(V_A-V_B=0\\).",
-        "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then the rate of increase of magnetic energy in one of the inductors is \\(10\\,\\text{J s}^{-1}\\).",
-        "If electric current is increasing at \\(10^3\\,\\text{A s}^{-1}\\), then the time rate of increase of the total magnetic energy stored in both inductors is \\(200\\,\\text{J s}^{-1}\\).",
-        "none of these"
-      ],
-      "qAnswer": ["A", "C"]
-    },
-
     {
       "qType": "Passage",
-      "passageId": "P7",
       "qText": "For the network shown (values: \\(R_1=2\\,\\Omega\\), \\(R_2=3\\,\\Omega\\), \\(L=4\\,\\text{H}\\), source/capacitor waveforms as marked), answer the following. Graphs labelled (a), (b), (c), (d) are provided alongside.",
       "image": "p7.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The current \\(i_L\\) through the inductor is",
-      "image": null,
-      "qOptions": [
-        "\\([\\,2-2(1-e^{-2t})\\,]~\\text{A}\\)",
-        "\\([\\,2+2(1-e^{-2t})\\,]~\\text{A}\\)",
-        "\\([\\,3-2(1-e^{-2t})\\,]~\\text{A}\\)",
-        "\\([\\,2+3(1-e^{-2t})\\,]~\\text{A}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The variation of current in the inductor with time can be represented by the graph labelled",
-      "image": null,
-      "qOptions": ["(a)", "(b)", "(c)", "(d)"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The potential difference across the inductor, \\(V_L\\), is",
-      "image": null,
-      "qOptions": [
-        "\\(8e^{-2t}\\,\\text{V}\\)",
-        "\\(9e^{-2t}\\,\\text{V}\\)",
-        "\\(16e^{-2t}\\,\\text{V}\\)",
-        "\\(18e^{-2t}\\,\\text{V}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The variation of potential difference across \\(A\\) and \\(C\\), \\(V_{AC}\\), with time is represented by",
-      "image": null,
-      "qOptions": ["(a)", "(b)", "(c)", "(d)"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The variation of potential difference across \\(C\\) and \\(D\\), \\(V_{CD}\\), with time is represented by",
-      "image": null,
-      "qOptions": ["(a)", "(b)", "(c)", "(d)"],
-      "qAnswer": "B"
-    },
-
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the network shown (part of a complete circuit), if at a certain instant the current is \\(5\\,\\text{A}\\) and is decreasing at a rate of \\(10^3\\,\\text{A s}^{-1}\\), then \\(V_B-V_A\\) equals",
-      "image": "28.png",
-      "qOptions": ["10 V", "−10 V", "0", "−13 V"],
-      "qAnswer": "C"
-    },
-
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "Two parallel resistanceless rails are connected by an inductor of inductance \\(L\\) at one end as shown. A uniform magnetic field \\(B\\) is inward, perpendicular to the plane of the rails. A conducting rod of length \\(\\ell\\), mass \\(m\\) and negligible resistance is placed transversely on the rails and given an impulse \\(J\\) towards the right. Select the correct option(s) (refer to the figure for the exact expressions).",
-      "image": "29.png",
-      "qOptions": [
-        "Displacement of the conductor when its speed becomes half of the initial value is the expression marked (A) in the figure.",
-        "Displacement of the conductor when its speed becomes half of the initial value is the expression marked (B) in the figure.",
-        "Current through the inductor at the instant when the speed is half of the initial value is the expression marked (C) in the figure.",
-        "Current through the inductor at the instant when the speed is half of the initial value is the expression marked (D) in the figure."
-      ],
-      "qAnswer": ["A", "C"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "In the LC circuit shown, initially the capacitor has charge \\(Q_0\\). At \\(t=0\\), the switch \\(S\\) is closed. Which statement(s) is/are correct?",
-      "image": "30.png",
-      "qOptions": [
-        "Maximum current through the inductor is \\(\\dfrac{2Q_0}{\\sqrt{LC}}\\).",
-        "Charge on the capacitor is zero at \\(t=\\pi\\sqrt{LC}\\).",
-        "Current through the inductor is zero at \\(t=\\dfrac{\\pi}{2}\\sqrt{LC}\\).",
-        "Maximum magnetic energy that can be stored in the inductor is \\(\\dfrac{Q_0^{\\,2}}{2C}\\)."
-      ],
-      "qAnswer": ["D"]
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In the electrical network of Fig. 4.77, the key is placed on (1) for \\(t<0\\) until the capacitor gets fully charged. The key is placed on (2) at \\(t=0\\). The time when the energy in both the capacitor and the inductor is the same for the first time is",
-      "image": "31.png",
-      "qOptions": [
-        "\\(\\dfrac{\\pi}{4}\\sqrt{LC}\\)",
-        "\\(\\dfrac{3\\pi}{4}\\sqrt{LC}\\)",
-        "\\(\\dfrac{\\pi}{3}\\sqrt{LC}\\)",
-        "\\(\\dfrac{2\\pi}{3}\\sqrt{LC}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The capacitance in an oscillatory \\(LC\\) circuit is increased by 1\\%. The percentage change in inductance required to restore the original frequency of oscillation is",
-      "image": null,
-      "qOptions": [
-        "decrease \\(L\\) by 0.5\\%",
-        "increase \\(L\\) by 1\\%",
-        "decrease \\(L\\) by 1\\%",
-        "decrease \\(L\\) by 2\\%"
-      ],
-      "qAnswer": "C"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The current \\(i_L\\) through the inductor is",
+          "image": null,
+          "qOptions": [
+            "\\([\\,2-2(1-e^{-2t})\\,]~\\text{A}\\)",
+            "\\([\\,2+2(1-e^{-2t})\\,]~\\text{A}\\)",
+            "\\([\\,3-2(1-e^{-2t})\\,]~\\text{A}\\)",
+            "\\([\\,2+3(1-e^{-2t})\\,]~\\text{A}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The variation of current in the inductor with time can be represented by the graph labelled",
+          "image": null,
+          "qOptions": [
+            "(a)",
+            "(b)",
+            "(c)",
+            "(d)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The potential difference across the inductor, \\(V_L\\), is",
+          "image": null,
+          "qOptions": [
+            "\\(8e^{-2t}\\,\\text{V}\\)",
+            "\\(9e^{-2t}\\,\\text{V}\\)",
+            "\\(16e^{-2t}\\,\\text{V}\\)",
+            "\\(18e^{-2t}\\,\\text{V}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The variation of potential difference across \\(A\\) and \\(C\\), \\(V_{AC}\\), with time is represented by",
+          "image": null,
+          "qOptions": [
+            "(a)",
+            "(b)",
+            "(c)",
+            "(d)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The variation of potential difference across \\(C\\) and \\(D\\), \\(V_{CD}\\), with time is represented by",
+          "image": null,
+          "qOptions": [
+            "(a)",
+            "(b)",
+            "(c)",
+            "(d)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the network shown (part of a complete circuit), if at a certain instant the current is \\(5\\,\\text{A}\\) and is decreasing at a rate of \\(10^3\\,\\text{A s}^{-1}\\), then \\(V_B-V_A\\) equals",
+          "image": "28.png",
+          "qOptions": [
+            "10 V",
+            "−10 V",
+            "0",
+            "−13 V"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "Two parallel resistanceless rails are connected by an inductor of inductance \\(L\\) at one end as shown. A uniform magnetic field \\(B\\) is inward, perpendicular to the plane of the rails. A conducting rod of length \\(\\ell\\), mass \\(m\\) and negligible resistance is placed transversely on the rails and given an impulse \\(J\\) towards the right. Select the correct option(s) (refer to the figure for the exact expressions).",
+          "image": "29.png",
+          "qOptions": [
+            "Displacement of the conductor when its speed becomes half of the initial value is the expression marked (A) in the figure.",
+            "Displacement of the conductor when its speed becomes half of the initial value is the expression marked (B) in the figure.",
+            "Current through the inductor at the instant when the speed is half of the initial value is the expression marked (C) in the figure.",
+            "Current through the inductor at the instant when the speed is half of the initial value is the expression marked (D) in the figure."
+          ],
+          "qAnswer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "In the LC circuit shown, initially the capacitor has charge \\(Q_0\\). At \\(t=0\\), the switch \\(S\\) is closed. Which statement(s) is/are correct?",
+          "image": "30.png",
+          "qOptions": [
+            "Maximum current through the inductor is \\(\\dfrac{2Q_0}{\\sqrt{LC}}\\).",
+            "Charge on the capacitor is zero at \\(t=\\pi\\sqrt{LC}\\).",
+            "Current through the inductor is zero at \\(t=\\dfrac{\\pi}{2}\\sqrt{LC}\\).",
+            "Maximum magnetic energy that can be stored in the inductor is \\(\\dfrac{Q_0^{\\,2}}{2C}\\)."
+          ],
+          "qAnswer": [
+            "D"
+          ]
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In the electrical network of Fig. 4.77, the key is placed on (1) for \\(t<0\\) until the capacitor gets fully charged. The key is placed on (2) at \\(t=0\\). The time when the energy in both the capacitor and the inductor is the same for the first time is",
+          "image": "31.png",
+          "qOptions": [
+            "\\(\\dfrac{\\pi}{4}\\sqrt{LC}\\)",
+            "\\(\\dfrac{3\\pi}{4}\\sqrt{LC}\\)",
+            "\\(\\dfrac{\\pi}{3}\\sqrt{LC}\\)",
+            "\\(\\dfrac{2\\pi}{3}\\sqrt{LC}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The capacitance in an oscillatory \\(LC\\) circuit is increased by 1\\%. The percentage change in inductance required to restore the original frequency of oscillation is",
+          "image": null,
+          "qOptions": [
+            "decrease \\(L\\) by 0.5\\%",
+            "increase \\(L\\) by 1\\%",
+            "decrease \\(L\\) by 1\\%",
+            "decrease \\(L\\) by 2\\%"
+          ],
+          "qAnswer": "C"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P8",
       "qText": "Two capacitors \\(C\\) and \\(3C\\) are charged to potential differences \\(V_0\\) and \\(2V_0\\), respectively, and then connected to an inductor of inductance \\(L\\) as shown in Fig. 4.119. Initially, the current in the inductor is zero. Then switch \\(S\\) is closed.",
       "image": "p8.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "The maximum current in the inductor is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{3V_0}{2}\\sqrt{\\dfrac{3C}{L}}\\)",
-        "\\(V_0\\sqrt{\\dfrac{3C}{L}}\\)",
-        "\\(2V_0\\sqrt{\\dfrac{3C}{L}}\\)",
-        "\\(V_0\\sqrt{\\dfrac{C}{L}}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "Potential difference across the capacitor \\(C\\) when the current in the circuit is maximum is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{V_0}{4}\\)",
-        "\\(\\dfrac{3V_0}{4}\\)",
-        "\\(\\dfrac{5V_0}{4}\\)",
-        "none of these"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "Potential difference across the capacitor \\(3C\\) when the current in the circuit is maximum is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{V_0}{4}\\)",
-        "\\(\\dfrac{V_0}{4}\\) (same as across \\(C\\))",
-        "\\(\\dfrac{5V_0}{4}\\)",
-        "none of these"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "For the network of Fig. 4.91, the frequency of oscillation of current in the inductance is",
-      "image": "34.png",
-      "qOptions": [
-        "\\(\\dfrac{1}{3\\sqrt{LC}}\\)",
-        "\\(\\dfrac{1}{6\\pi\\sqrt{LC}}\\)",
-        "\\(\\dfrac{1}{\\sqrt{LC}}\\)",
-        "\\(\\dfrac{1}{2\\pi\\sqrt{LC}}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "Numerical",
-      "passageId": null,
-      "qText": "In the circuit containing three equal resistors \\(X_1, X_2, X_3\\) (each \\(R\\)), an inductor, a capacitor \\(C\\) and an emf source of value \\(\\xi\\) (with \\(R=\\sqrt{\\tfrac{L}{C}}\\)). The switch is first connected to position-1. When the charge on the capacitor becomes half its maximum possible value, the switch is moved to position-2. Find the current in resistor \\(X_3\\) just after shifting to position-2 (Fig. given; \\(L=5\\,\\text{mH},\\; C=2\\,\\mu\\text{F},\\; R=10\\,\\Omega,\\; \\xi=5\\,\\text{V}\\)).",
-      "image": "35.png",
-      "qOptions": [],
-      "qAnswer": 0
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Two capacitors \\(C_1=C_2=\\dfrac{1}{\\pi^2}\\times10^{-2}\\,\\text{F}\\) and an inductor \\(L=2\\times10^{-2}\\,\\text{H}\\) are connected in series as shown. Initially each capacitor carries charge \\(4\\sqrt{3}\\,\\mu\\text{C}\\). At \\(t=0\\), switch \\(S_1\\) is closed and at \\(t=1/400\\,\\text{s}\\), switch \\(S_2\\) is also closed. The maximum charge on capacitor \\(C_2\\) during the LC oscillation is",
-      "image": "36.png",
-      "qOptions": [
-        "3 \\(\\mu\\text{C}\\)",
-        "6 \\(\\mu\\text{C}\\)",
-        "3\\sqrt{3} \\(\\mu\\text{C}\\)",
-        "6\\sqrt{3} \\(\\mu\\text{C}\\)"
-      ],
-      "qAnswer": "D"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The maximum current in the inductor is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{3V_0}{2}\\sqrt{\\dfrac{3C}{L}}\\)",
+            "\\(V_0\\sqrt{\\dfrac{3C}{L}}\\)",
+            "\\(2V_0\\sqrt{\\dfrac{3C}{L}}\\)",
+            "\\(V_0\\sqrt{\\dfrac{C}{L}}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Potential difference across the capacitor \\(C\\) when the current in the circuit is maximum is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{V_0}{4}\\)",
+            "\\(\\dfrac{3V_0}{4}\\)",
+            "\\(\\dfrac{5V_0}{4}\\)",
+            "none of these"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Potential difference across the capacitor \\(3C\\) when the current in the circuit is maximum is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{V_0}{4}\\)",
+            "\\(\\dfrac{V_0}{4}\\) (same as across \\(C\\))",
+            "\\(\\dfrac{5V_0}{4}\\)",
+            "none of these"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "For the network of Fig. 4.91, the frequency of oscillation of current in the inductance is",
+          "image": "34.png",
+          "qOptions": [
+            "\\(\\dfrac{1}{3\\sqrt{LC}}\\)",
+            "\\(\\dfrac{1}{6\\pi\\sqrt{LC}}\\)",
+            "\\(\\dfrac{1}{\\sqrt{LC}}\\)",
+            "\\(\\dfrac{1}{2\\pi\\sqrt{LC}}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "Numerical",
+          "qText": "In the circuit containing three equal resistors \\(X_1, X_2, X_3\\) (each \\(R\\)), an inductor, a capacitor \\(C\\) and an emf source of value \\(\\xi\\) (with \\(R=\\sqrt{\\tfrac{L}{C}}\\)). The switch is first connected to position-1. When the charge on the capacitor becomes half its maximum possible value, the switch is moved to position-2. Find the current in resistor \\(X_3\\) just after shifting to position-2 (Fig. given; \\(L=5\\,\\text{mH},\\; C=2\\,\\mu\\text{F},\\; R=10\\,\\Omega,\\; \\xi=5\\,\\text{V}\\)).",
+          "image": "35.png",
+          "qOptions": [],
+          "qAnswer": 0
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Two capacitors \\(C_1=C_2=\\dfrac{1}{\\pi^2}\\times10^{-2}\\,\\text{F}\\) and an inductor \\(L=2\\times10^{-2}\\,\\text{H}\\) are connected in series as shown. Initially each capacitor carries charge \\(4\\sqrt{3}\\,\\mu\\text{C}\\). At \\(t=0\\), switch \\(S_1\\) is closed and at \\(t=1/400\\,\\text{s}\\), switch \\(S_2\\) is also closed. The maximum charge on capacitor \\(C_2\\) during the LC oscillation is",
+          "image": "36.png",
+          "qOptions": [
+            "3 \\(\\mu\\text{C}\\)",
+            "6 \\(\\mu\\text{C}\\)",
+            "3\\sqrt{3} \\(\\mu\\text{C}\\)",
+            "6\\sqrt{3} \\(\\mu\\text{C}\\)"
+          ],
+          "qAnswer": "D"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P9",
       "qText": "In the circuit shown, initially \\(k_1\\) is closed and \\(k_2\\) is open. The capacitors \\(C_1=2\\,\\mu\\text{F}\\) and \\(C_2=3\\,\\mu\\text{F}\\) are connected to a \\(20\\,\\text{V}\\) source through \\(R=20\\,\\Omega\\).",
       "image": "p9.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P9",
-      "qText": "Let \\(k_1\\) remain closed and \\(k_2\\) be opened for a long time. The charge on capacitor \\(C_2\\) will be",
-      "image": null,
-      "qOptions": [
-        "60 \\(\\mu\\text{C}\\)",
-        "12 \\(\\mu\\text{C}\\)",
-        "24 \\(\\mu\\text{C}\\)",
-        "8 \\(\\mu\\text{C}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P9",
-      "qText": "At \\(t=0\\), when the capacitors are fully charged, switch \\(k_1\\) is opened and \\(k_2\\) is closed so that the inductor \\(L=2\\,\\text{H}\\) is connected in series with capacitor \\(C_1\\). The maximum charge will appear on capacitor \\(C_1\\) at time \\(t=\\,?\\)",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\pi}{2000}\\,\\text{s}\\)",
-        "\\(\\dfrac{\\pi}{1000}\\,\\text{s}\\)",
-        "\\(\\dfrac{\\pi}{500}\\,\\text{s}\\)",
-        "None"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P9",
-      "qText": "The maximum energy across the inductor will be",
-      "image": null,
-      "qOptions": ["0.144 mJ", "0.288 mJ", "0.072 mJ", "None of these"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A capacitor with charge \\(Q\\) is connected to an inductor \\(L\\) as shown. When the switch is flipped from position 1 to 2, the current in the circuit is observed to be half its maximum value. Then",
-      "image": "38.png",
-      "qOptions": [
-        "the charge on the capacitor at that instant was \\(Q/2\\)",
-        "the charge on the capacitor at that instant was \\(\\dfrac{\\sqrt{3}}{2}Q\\)",
-        "the total energy lost is \\(\\dfrac{Q^2}{4C}\\)",
-        "the total energy lost is \\(\\dfrac{Q^2}{8C}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "An alternating voltage of amplitude \\(V_0=100\\,\\text{V}\\) is applied across a capacitor and an inductor connected in parallel with reactances \\(X_C=10\\,\\Omega\\) and \\(X_L=5\\,\\Omega\\), respectively. The ratio of current through the inductor to the source current is",
-      "image": "39.png",
-      "qOptions": [
-        "\\(\\dfrac{1}{2}\\)",
-        "1",
-        "2",
-        "\\(\\dfrac{1}{\\sqrt{2}}\\)"
-      ],
-      "qAnswer": "C"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "Let \\(k_1\\) remain closed and \\(k_2\\) be opened for a long time. The charge on capacitor \\(C_2\\) will be",
+          "image": null,
+          "qOptions": [
+            "60 \\(\\mu\\text{C}\\)",
+            "12 \\(\\mu\\text{C}\\)",
+            "24 \\(\\mu\\text{C}\\)",
+            "8 \\(\\mu\\text{C}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "At \\(t=0\\), when the capacitors are fully charged, switch \\(k_1\\) is opened and \\(k_2\\) is closed so that the inductor \\(L=2\\,\\text{H}\\) is connected in series with capacitor \\(C_1\\). The maximum charge will appear on capacitor \\(C_1\\) at time \\(t=\\,?\\)",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\pi}{2000}\\,\\text{s}\\)",
+            "\\(\\dfrac{\\pi}{1000}\\,\\text{s}\\)",
+            "\\(\\dfrac{\\pi}{500}\\,\\text{s}\\)",
+            "None"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The maximum energy across the inductor will be",
+          "image": null,
+          "qOptions": [
+            "0.144 mJ",
+            "0.288 mJ",
+            "0.072 mJ",
+            "None of these"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A capacitor with charge \\(Q\\) is connected to an inductor \\(L\\) as shown. When the switch is flipped from position 1 to 2, the current in the circuit is observed to be half its maximum value. Then",
+          "image": "38.png",
+          "qOptions": [
+            "the charge on the capacitor at that instant was \\(Q/2\\)",
+            "the charge on the capacitor at that instant was \\(\\dfrac{\\sqrt{3}}{2}Q\\)",
+            "the total energy lost is \\(\\dfrac{Q^2}{4C}\\)",
+            "the total energy lost is \\(\\dfrac{Q^2}{8C}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "An alternating voltage of amplitude \\(V_0=100\\,\\text{V}\\) is applied across a capacitor and an inductor connected in parallel with reactances \\(X_C=10\\,\\Omega\\) and \\(X_L=5\\,\\Omega\\), respectively. The ratio of current through the inductor to the source current is",
+          "image": "39.png",
+          "qOptions": [
+            "\\(\\dfrac{1}{2}\\)",
+            "1",
+            "2",
+            "\\(\\dfrac{1}{\\sqrt{2}}\\)"
+          ],
+          "qAnswer": "C"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P10",
       "qText": "A straight conductor \\(AB\\) of negligible resistance and mass \\(m\\) is placed on two smooth, parallel rails separated by a distance \\(\\ell\\). The left ends of the rails are shorted by a capacitor \\(C\\). The conductor is attached to an ideal spring of constant \\(k\\) fixed to a rigid support. A uniform magnetic field \\(B\\) is directed into the page. The conductor is displaced to the right by \\(x_0\\) (compressing the spring) and released from rest (gravity neglected).",
       "image": "p10.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P10",
-      "qText": "I. The least time to reach the original (natural) position of the conductor is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m-CB^2\\ell^2}{k}}\\)",
-        "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m}{k}}\\)",
-        "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{CB^2\\ell^2}{k}}\\)",
-        "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m+CB^2\\ell^2}{k}}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P10",
-      "qText": "II. The maximum speed of the conductor is",
-      "image": null,
-      "qOptions": [
-        "\\(x_0\\sqrt{\\dfrac{k}{m+CB^2\\ell^2}}\\)",
-        "\\(x_0\\sqrt{\\dfrac{k}{m-CB^2\\ell^2}}\\)",
-        "\\(x_0\\sqrt{\\dfrac{k}{m}}\\)",
-        "\\(x_0\\sqrt{\\dfrac{k}{CB^2\\ell^2}}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P10",
-      "qText": "III. The maximum charge on the capacitor is",
-      "image": null,
-      "qOptions": [
-        "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m+CB^2\\ell^2}}\\)",
-        "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m-CB^2\\ell^2}}\\)",
-        "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m}}\\)",
-        "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{CB^2\\ell^2}}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A toroid is wound over a circular core. Radius of each turn is \\(r\\) and radius of the core is \\(R\\) (\\(R\\gg r\\)). The self-inductance \\(L\\) of the toroid is",
-      "image": "41.png",
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0 N^2}{2R}\\)",
-        "\\(\\dfrac{\\mu_0 N r}{2R}\\)",
-        "\\(\\dfrac{\\mu_0 N^2 r^2}{R}\\)",
-        "\\(\\dfrac{\\mu_0 N^2 r^2}{2R}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A straight solenoid of length \\(1\\,\\text{m}\\) has \\(5000\\) turns in the primary and \\(200\\) turns in the secondary. If the area of cross-section is \\(4\\,\\text{cm}^2\\), the mutual inductance will be",
-      "image": null,
-      "qOptions": ["503 H", "503 mH", "503 \\(\\mu\\)H", "5.03 H"],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The approximate formula for the mutual inductance of two thin coaxial loops of the same radius \\(a\\) whose centers are separated by a distance \\(l\\) with \\(l\\gg a\\) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0\\pi a^4}{2l^3}\\)",
-        "\\(\\dfrac{\\mu_0 a^4}{2l^2}\\)",
-        "\\(\\dfrac{\\mu_0\\pi a^4}{4\\pi l^2}\\)",
-        "\\(\\dfrac{\\mu_0 a^4}{\\pi l^3}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Another approximate expression for the mutual inductance of two thin coaxial loops of the same radius \\(a\\) with center-to-center distance \\(l\\) (\\(l\\gg a\\)) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{1}{2}\\,\\dfrac{\\mu_0\\pi a^4}{l^3}\\)",
-        "\\(\\dfrac{1}{2}\\,\\dfrac{\\mu_0 a^4}{l^2}\\)",
-        "\\(\\dfrac{\\mu_0\\pi a^4}{4\\pi l^2}\\)",
-        "\\(\\dfrac{\\mu_0 a^4}{\\pi l^3}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A circuit contains two inductors of self-inductance \\(L_1\\) and \\(L_2\\) in series (Fig. 4.68). If \\(M\\) is the mutual inductance, the effective inductance of the circuit will be",
-      "image": "45.png",
-      "qOptions": [
-        "\\(L_1+L_2\\)",
-        "\\(L_1+L_2-2M\\)",
-        "\\(L_1+L_2+M\\)",
-        "\\(L_1+L_2+2M\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A long solenoid of length \\(L\\), cross-sectional area \\(A\\) having \\(N_1\\) turns has a small coil of \\(N_2\\) turns wound about its center as shown in Fig. 4.70. The mutual inductance of the two circuits is",
-      "image": "46.png",
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0 A N_1 N_2}{L}\\)",
-        "\\(\\mu_0 A (N_1 N_2)\\)",
-        "\\(\\mu_0 A N_1 N_2 L\\)",
-        "\\(\\dfrac{\\mu_0 A N_1^2 N_2}{L}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The inductance \\(L\\) of a solenoid of length \\(l\\) whose windings are made of a material of density \\(D\\) and resistivity \\(\\rho\\) (winding resistance is \\(R\\)) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0}{4\\pi l\\,\\rho D}\\,Rm\\)",
-        "\\(\\dfrac{\\mu_0}{4\\pi R\\,\\rho D}\\,lm\\)",
-        "\\(\\dfrac{\\mu_0}{4\\pi l\\,\\rho D}\\,R^2 m\\)",
-        "\\(\\dfrac{\\mu_0}{2\\pi R\\,\\rho D}\\,lm\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The coefficient of mutual inductance of two circuits \\(A\\) and \\(B\\) is \\(3\\,\\text{mH}\\) and their respective resistances are \\(10\\,\\Omega\\) and \\(4\\,\\Omega\\). How much should the current change in \\(0.02\\,\\text{s}\\) in circuit \\(A\\) so that the induced current in \\(B\\) is \\(0.0060\\,\\text{A}\\)?",
-      "image": null,
-      "qOptions": ["0.24 A", "1.6 A", "0.18 A", "0.16 A"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Calculate the inductance per unit length of the double tape line shown in Fig. 4.74 if the tapes are separated by a distance \\(h\\) which is much smaller than their width \\(b\\).",
-      "image": "49.png",
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0 h}{b}\\)",
-        "\\(\\dfrac{\\mu_0 h}{2b}\\)",
-        "\\(\\dfrac{2\\mu_0 h}{b}\\)",
-        "\\(\\dfrac{\\sqrt{2}\\,\\mu_0 h}{b}\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Figure 4.75 shows a rectangular coil near a long straight wire carrying current. The mutual inductance of the combination is",
-      "image": "50.png",
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0 a}{2\\pi}\\ln\\!\\left(1-\\dfrac{b}{c}\\right)\\)",
-        "\\(\\dfrac{\\mu_0 a}{2\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)",
-        "\\(\\dfrac{\\mu_0 a}{\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)",
-        "\\(\\dfrac{\\mu_0 a}{\\sqrt{2}\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A conducting ring of radius \\(R\\) lies in a plane perpendicular to its axis. Another ring having current \\(i\\) and radius \\(r\\) (\\(r<R\\)) is placed on the axis at a distance \\(x\\) from the center of the bigger ring, with its plane perpendicular to the axis. The mutual inductance of the bigger ring due to the smaller ring is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\mu_0\\pi R r^2}{(R^2+x^2)^{3/2}}\\)",
-        "\\(\\dfrac{\\mu_0\\pi R^2 r^2}{4(R^2+x^2)^{3/2}}\\)",
-        "\\(\\dfrac{\\mu_0\\pi R r^2}{16(R^2+x^2)^{3/2}}\\)",
-        "\\(\\dfrac{\\mu_0\\pi R^2 r^2}{2(R^2+x^2)^{3/2}}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Two circular coils can be arranged as in the three situations shown (figure). Their mutual inductance will be",
-      "image": "52.png",
-      "qOptions": [
-        "maximum in situation (A)",
-        "maximum in situation (B)",
-        "maximum in situation (C)",
-        "the same in all situations"
-      ],
-      "qAnswer": "A"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "I. The least time to reach the original (natural) position of the conductor is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m-CB^2\\ell^2}{k}}\\)",
+            "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m}{k}}\\)",
+            "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{CB^2\\ell^2}{k}}\\)",
+            "\\(\\dfrac{\\pi}{2}\\sqrt{\\dfrac{m+CB^2\\ell^2}{k}}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "II. The maximum speed of the conductor is",
+          "image": null,
+          "qOptions": [
+            "\\(x_0\\sqrt{\\dfrac{k}{m+CB^2\\ell^2}}\\)",
+            "\\(x_0\\sqrt{\\dfrac{k}{m-CB^2\\ell^2}}\\)",
+            "\\(x_0\\sqrt{\\dfrac{k}{m}}\\)",
+            "\\(x_0\\sqrt{\\dfrac{k}{CB^2\\ell^2}}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "III. The maximum charge on the capacitor is",
+          "image": null,
+          "qOptions": [
+            "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m+CB^2\\ell^2}}\\)",
+            "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m-CB^2\\ell^2}}\\)",
+            "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{m}}\\)",
+            "\\(x_0 C B\\ell\\sqrt{\\dfrac{k}{CB^2\\ell^2}}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A toroid is wound over a circular core. Radius of each turn is \\(r\\) and radius of the core is \\(R\\) (\\(R\\gg r\\)). The self-inductance \\(L\\) of the toroid is",
+          "image": "41.png",
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0 N^2}{2R}\\)",
+            "\\(\\dfrac{\\mu_0 N r}{2R}\\)",
+            "\\(\\dfrac{\\mu_0 N^2 r^2}{R}\\)",
+            "\\(\\dfrac{\\mu_0 N^2 r^2}{2R}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A straight solenoid of length \\(1\\,\\text{m}\\) has \\(5000\\) turns in the primary and \\(200\\) turns in the secondary. If the area of cross-section is \\(4\\,\\text{cm}^2\\), the mutual inductance will be",
+          "image": null,
+          "qOptions": [
+            "503 H",
+            "503 mH",
+            "503 \\(\\mu\\)H",
+            "5.03 H"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The approximate formula for the mutual inductance of two thin coaxial loops of the same radius \\(a\\) whose centers are separated by a distance \\(l\\) with \\(l\\gg a\\) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0\\pi a^4}{2l^3}\\)",
+            "\\(\\dfrac{\\mu_0 a^4}{2l^2}\\)",
+            "\\(\\dfrac{\\mu_0\\pi a^4}{4\\pi l^2}\\)",
+            "\\(\\dfrac{\\mu_0 a^4}{\\pi l^3}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Another approximate expression for the mutual inductance of two thin coaxial loops of the same radius \\(a\\) with center-to-center distance \\(l\\) (\\(l\\gg a\\)) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{1}{2}\\,\\dfrac{\\mu_0\\pi a^4}{l^3}\\)",
+            "\\(\\dfrac{1}{2}\\,\\dfrac{\\mu_0 a^4}{l^2}\\)",
+            "\\(\\dfrac{\\mu_0\\pi a^4}{4\\pi l^2}\\)",
+            "\\(\\dfrac{\\mu_0 a^4}{\\pi l^3}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A circuit contains two inductors of self-inductance \\(L_1\\) and \\(L_2\\) in series (Fig. 4.68). If \\(M\\) is the mutual inductance, the effective inductance of the circuit will be",
+          "image": "45.png",
+          "qOptions": [
+            "\\(L_1+L_2\\)",
+            "\\(L_1+L_2-2M\\)",
+            "\\(L_1+L_2+M\\)",
+            "\\(L_1+L_2+2M\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A long solenoid of length \\(L\\), cross-sectional area \\(A\\) having \\(N_1\\) turns has a small coil of \\(N_2\\) turns wound about its center as shown in Fig. 4.70. The mutual inductance of the two circuits is",
+          "image": "46.png",
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0 A N_1 N_2}{L}\\)",
+            "\\(\\mu_0 A (N_1 N_2)\\)",
+            "\\(\\mu_0 A N_1 N_2 L\\)",
+            "\\(\\dfrac{\\mu_0 A N_1^2 N_2}{L}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The inductance \\(L\\) of a solenoid of length \\(l\\) whose windings are made of a material of density \\(D\\) and resistivity \\(\\rho\\) (winding resistance is \\(R\\)) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0}{4\\pi l\\,\\rho D}\\,Rm\\)",
+            "\\(\\dfrac{\\mu_0}{4\\pi R\\,\\rho D}\\,lm\\)",
+            "\\(\\dfrac{\\mu_0}{4\\pi l\\,\\rho D}\\,R^2 m\\)",
+            "\\(\\dfrac{\\mu_0}{2\\pi R\\,\\rho D}\\,lm\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The coefficient of mutual inductance of two circuits \\(A\\) and \\(B\\) is \\(3\\,\\text{mH}\\) and their respective resistances are \\(10\\,\\Omega\\) and \\(4\\,\\Omega\\). How much should the current change in \\(0.02\\,\\text{s}\\) in circuit \\(A\\) so that the induced current in \\(B\\) is \\(0.0060\\,\\text{A}\\)?",
+          "image": null,
+          "qOptions": [
+            "0.24 A",
+            "1.6 A",
+            "0.18 A",
+            "0.16 A"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Calculate the inductance per unit length of the double tape line shown in Fig. 4.74 if the tapes are separated by a distance \\(h\\) which is much smaller than their width \\(b\\).",
+          "image": "49.png",
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0 h}{b}\\)",
+            "\\(\\dfrac{\\mu_0 h}{2b}\\)",
+            "\\(\\dfrac{2\\mu_0 h}{b}\\)",
+            "\\(\\dfrac{\\sqrt{2}\\,\\mu_0 h}{b}\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Figure 4.75 shows a rectangular coil near a long straight wire carrying current. The mutual inductance of the combination is",
+          "image": "50.png",
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0 a}{2\\pi}\\ln\\!\\left(1-\\dfrac{b}{c}\\right)\\)",
+            "\\(\\dfrac{\\mu_0 a}{2\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)",
+            "\\(\\dfrac{\\mu_0 a}{\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)",
+            "\\(\\dfrac{\\mu_0 a}{\\sqrt{2}\\pi}\\ln\\!\\left(1+\\dfrac{b}{c}\\right)\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A conducting ring of radius \\(R\\) lies in a plane perpendicular to its axis. Another ring having current \\(i\\) and radius \\(r\\) (\\(r<R\\)) is placed on the axis at a distance \\(x\\) from the center of the bigger ring, with its plane perpendicular to the axis. The mutual inductance of the bigger ring due to the smaller ring is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\mu_0\\pi R r^2}{(R^2+x^2)^{3/2}}\\)",
+            "\\(\\dfrac{\\mu_0\\pi R^2 r^2}{4(R^2+x^2)^{3/2}}\\)",
+            "\\(\\dfrac{\\mu_0\\pi R r^2}{16(R^2+x^2)^{3/2}}\\)",
+            "\\(\\dfrac{\\mu_0\\pi R^2 r^2}{2(R^2+x^2)^{3/2}}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Two circular coils can be arranged as in the three situations shown (figure). Their mutual inductance will be",
+          "image": "52.png",
+          "qOptions": [
+            "maximum in situation (A)",
+            "maximum in situation (B)",
+            "maximum in situation (C)",
+            "the same in all situations"
+          ],
+          "qAnswer": "A"
+        }
+      ]
     }
   ]
 }

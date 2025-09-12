@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 // ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
@@ -143,6 +144,57 @@ db.exec(`
   );
 `);
 
+// ----- Auth schema migration: add password + must_change flag if missing -----
+function ensureUserAuthColumns() {
+  const cols = db.prepare("PRAGMA table_info('users')").all();
+  const names = new Set(cols.map(c => c.name));
+  if (!names.has('password_hash')) {
+    db.prepare("ALTER TABLE users ADD COLUMN password_hash TEXT").run();
+  }
+  if (!names.has('must_change_password')) {
+    db.prepare("ALTER TABLE users ADD COLUMN must_change_password INTEGER DEFAULT 0").run();
+  }
+  if (!names.has('created_at')) {
+    db.prepare("ALTER TABLE users ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP").run();
+  }
+}
+ensureUserAuthColumns();
+
+// Derive default password for existing accounts (migration)
+function deriveDefaultPassword(username) {
+  const mode = process.env.MIGRATION_DEFAULT_PASSWORD_MODE || 'derived';
+  if (mode === 'fixed') {
+    return process.env.MIGRATION_DEFAULT_PASSWORD_VALUE || 'TempPass123';
+  }
+  if (mode === 'username') {
+    return String(username || '');
+  }
+  // 'derived' algorithm: first two + last two + length of sanitized username
+  const s = String(username || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (!s) return 'default123';
+  const firstTwo = s.slice(0, 2);
+  const lastTwo = s.slice(-2);
+  const len = s.length;
+  return `${firstTwo}${lastTwo}${len}`;
+}
+
+// One-time migration: for users with NULL password_hash, set a default and require change
+function migrateExistingUsersPasswords() {
+  const toMigrate = db.prepare("SELECT id, username FROM users WHERE password_hash IS NULL").all();
+  if (!toMigrate.length) return;
+  const update = db.prepare("UPDATE users SET password_hash = ?, must_change_password = 1 WHERE id = ?");
+  const saltRounds = Number(process.env.BCRYPT_COST) || 10;
+  const txn = db.transaction((rows) => {
+    for (const row of rows) {
+      const pwd = deriveDefaultPassword(row.username);
+      const hash = bcrypt.hashSync(String(pwd), saltRounds);
+      update.run(hash, row.id);
+    }
+  });
+  txn(toMigrate);
+}
+migrateExistingUsersPasswords();
+
 // ---------- Auth helpers ----------
 function signToken(userId) {
   return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
@@ -164,23 +216,56 @@ function auth(req, res, next) {
 // ---------- Public routes ----------
 app.get('/healthz', (_req, res) => res.send('ok'));
 
-app.post('/login', (req, res) => {
+// Sign-up
+app.post('/signup', (req, res) => {
   try {
-    const { username } = req.body || {};
-    if (!username || username.trim().length < 2) {
-      return res.status(400).json({ error: 'Username too short' });
+    const { username, password } = req.body || {};
+    if (!username || typeof username !== 'string' || username.trim().length < 3) {
+      return res.status(400).json({ error: 'Username must be at least 3 chars' });
+    }
+    if (!password || typeof password !== 'string' || password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 chars' });
     }
     const uname = username.trim();
 
-    let user = db.prepare('SELECT id, username FROM users WHERE username = ?').get(uname);
-    if (!user) {
-      const id = nanoid();
-      db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
-      user = { id, username: uname };
+    const existing = db.prepare('SELECT id FROM users WHERE username = ?').get(uname);
+    if (existing) return res.status(409).json({ error: 'Username already taken' });
+
+    const id = nanoid();
+    const saltRounds = Number(process.env.BCRYPT_COST) || 10;
+    const hash = bcrypt.hashSync(password, saltRounds);
+    db.prepare('INSERT INTO users (id, username, password_hash, must_change_password) VALUES (?, ?, ?, 0)')
+      .run(id, uname, hash);
+
+    const token = signToken(id);
+    res.json({ success: true, user: { id, username: uname, mustChangePassword: false }, token });
+  } catch (e) {
+    console.error('Signup failed:', e);
+    res.status(500).json({ error: 'Signup failed' });
+  }
+});
+
+// Sign-in
+app.post('/login', (req, res) => {
+  try {
+    const { username, password } = req.body || {};
+    if (!username || typeof username !== 'string') {
+      return res.status(400).json({ error: 'Username required' });
     }
+    if (!password || typeof password !== 'string') {
+      return res.status(400).json({ error: 'Password required' });
+    }
+    const uname = username.trim();
+    const user = db.prepare('SELECT id, username, password_hash, must_change_password FROM users WHERE username = ?')
+                   .get(uname);
+    if (!user || !user.password_hash) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const ok = bcrypt.compareSync(password, user.password_hash);
+    if (!ok) return res.status(401).json({ error: 'Invalid credentials' });
 
     const token = signToken(user.id);
-    res.json({ success: true, user, token });
+    res.json({ success: true, user: { id: user.id, username: user.username, mustChangePassword: !!user.must_change_password }, token });
   } catch (e) {
     console.error('Login failed:', e);
     res.status(500).json({ error: 'Login failed' });
@@ -194,8 +279,9 @@ app.get('/me', (req, res) => {
   if (!m) return res.json(null);
   try {
     const { sub } = jwt.verify(m[1], JWT_SECRET);
-    const u = db.prepare('SELECT id, username FROM users WHERE id = ?').get(String(sub));
-    res.json(u || null);
+    const u = db.prepare('SELECT id, username, must_change_password FROM users WHERE id = ?').get(String(sub));
+    if (!u) return res.json(null);
+    res.json({ id: u.id, username: u.username, mustChangePassword: !!u.must_change_password });
   } catch {
     res.json(null);
   }
@@ -204,6 +290,28 @@ app.get('/me', (req, res) => {
 // No-op for JWT flows (client just forgets the token)
 app.post('/logout', (_req, res) => {
   res.json({ success: true });
+});
+
+// Password change (requires auth)
+app.post('/change-password', auth, (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body || {};
+    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 6) {
+      return res.status(400).json({ error: 'New password must be at least 6 chars' });
+    }
+    const user = db.prepare('SELECT id, password_hash FROM users WHERE id = ?').get(req.userId);
+    if (!user || !user.password_hash) return res.status(400).json({ error: 'Account not ready for password change' });
+    if (!currentPassword || !bcrypt.compareSync(String(currentPassword), user.password_hash)) {
+      return res.status(401).json({ error: 'Current password incorrect' });
+    }
+    const saltRounds = Number(process.env.BCRYPT_COST) || 10;
+    const newHash = bcrypt.hashSync(newPassword, saltRounds);
+    db.prepare('UPDATE users SET password_hash = ?, must_change_password = 0 WHERE id = ?').run(newHash, req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('Change password failed:', e);
+    res.status(500).json({ error: 'Failed to change password' });
+  }
 });
 
 // ---------- Assignment loader (from Pages) ----------

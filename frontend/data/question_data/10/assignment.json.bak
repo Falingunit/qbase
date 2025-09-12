@@ -1,0 +1,422 @@
+{
+  "questions": [
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "A series circuit connected across a 200 V, 60 Hz line consists of a capacitive reactance 30 \\(\\Omega\\), a non-inductive resistor 44 \\(\\Omega\\) and a coil of inductive reactance 90 \\(\\Omega\\) and resistance 36 \\(\\Omega\\) as shown in the diagram.",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The potential difference across the coil is:",
+      "image": null,
+      "qOptions": ["100 V", "194 V", "97 V", "zero"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The newer used in the circuit is:",
+      "image": null,
+      "qOptions": ["320 W", "144 W", "160 W", "96 W"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The power dissipated in the inductance coil is:",
+      "image": null,
+      "qOptions": ["zero", "320 W", "144 W", "160 W"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a series RC circuit shown in figure, the applied voltage is 10 V and the voltage across capacitor is found to be 8 V. Then the voltage across \\(R\\), and the phase difference between current and the applied voltage will respectively be:",
+      "image": "4.png",
+      "qOptions": [
+        "6 V, \\(\\tan^{-1}(\\tfrac{4}{3})\\)",
+        "3 V, \\(\\tan^{-1}(\\tfrac{3}{4})\\)",
+        "6 V, \\(\\tan^{-1}(\\tfrac{5}{3})\\)",
+        "none of these"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The given figure represents the phasor diagram of a series L–C–R circuit connected to an A.C. source. At the instant \\(t\\) when the source voltage is given by \\(V=V_0\\cos \\omega t\\), the current in the circuit will be:",
+      "image": "5.png",
+      "qOptions": [
+        "\\(I=I_0\\cos(\\omega t+\\pi/6)\\)",
+        "\\(I=I_0\\cos(\\omega t-\\pi/6)\\)",
+        "\\(I=I_0\\cos(\\omega t+\\pi/3)\\)",
+        "\\(I=I_0\\cos(\\omega t-\\pi/3)\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Power factor of an L–R series circuit is 0.6 and that of a C–R series circuit is 0.5. If the elements (L, C and R) of the two circuits are joined in series the power factor of this circuit is found to be 1. The ratio of the resistance in the L–R circuit to the resistance in the C–R circuit is:",
+      "image": null,
+      "qOptions": [
+        "\\(\\tfrac{6}{5}\\)",
+        "\\(\\tfrac{5}{6}\\)",
+        "\\(\\tfrac{4}{3\\sqrt{3}}\\)",
+        "\\(\\tfrac{3\\sqrt{3}}{4}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the circuit diagram shown, \\(X_C=100\\,\\Omega\\), \\(X_L=200\\,\\Omega\\) and \\(R=100\\,\\Omega\\). The effective current through the source is",
+      "image": "7.png",
+      "qOptions": ["2 A", "\\(\\sqrt{2}\\) A", "0.5 A", "\\(2\\sqrt{2}\\) A"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the circuit, as shown in the figure, if the value of R.M.S current is 2.2 ampere, the power factor of the box is:",
+      "image": "8.png",
+      "qOptions": [
+        "\\(\\tfrac{1}{\\sqrt{2}}\\)",
+        "1",
+        "\\(\\tfrac{\\sqrt{3}}{2}\\)",
+        "\\(\\tfrac{1}{2}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Select the correct circuit-diagram for a phasor diagram as shown in the adjacent figure.",
+      "image": "9.png",
+      "qOptions": ["diagram (a)", "diagram (b)", "diagram (c)", "diagram (d)"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the shown AC circuit, phase difference between currents \\(I_1\\) and \\(I_2\\) is",
+      "image": "10.png",
+      "qOptions": [
+        "\\(\\tfrac{\\pi}{2}-\\tan^{-1}\\!\\left(\\tfrac{X_L}{R}\\right)\\)",
+        "\\(\\tan^{-1}\\!\\left(\\tfrac{X_L+X_C}{R}\\right)\\)",
+        "\\(\\tfrac{\\pi}{2}+\\tan^{-1}\\!\\left(\\tfrac{X_L}{R}\\right)\\)",
+        "\\(\\tan^{-1}\\!\\left(\\tfrac{X_L-X_C}{R}\\right)+\\tfrac{\\pi}{2}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The current \\(I\\), potential difference \\(V_L\\) across the inductor and potential difference \\(V_C\\) across the capacitor in circuit as shown in the figure are best represented vectorially as:",
+      "image": "11.png",
+      "qOptions": ["diagram (a)", "diagram (b)", "diagram (c)", "diagram (d)"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "An LCR circuit has \\(L=256\\,\\mathrm{mH}\\), \\(R=7\\,\\Omega\\) and \\(C=90\\,\\mu\\mathrm{F}\\) connected in series to a source of \\(100\\cos\\omega t\\) volt. Calculate at a frequency that is 20% lower than the resonance frequency.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "Find the current amplitude (in A).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 4
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "Find the average power dissipated per cycle (in W).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 56
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P3",
+      "qText": "A series LCR circuit containing a resistance of 30 \\(\\Omega\\) has angular resonance frequency \\(100\\,\\mathrm{rad\\,s^{-1}}\\). At resonance the voltages across resistance and inductance are 15 V and 10 V respectively. Determine \\(L\\), \\(C\\), and the frequency at which the current lags the voltage by \\(45^{\\circ}\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "Find the value of inductance \\(L\\) (in H).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.2
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "Find the value of capacitance \\(C\\) (in \\(\\mu\\)F).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 500
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "At what frequency is the current \\(45^{\\circ}\\) lagging the voltage? (in Hz)",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 200
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P4",
+      "qText": "An LCR series circuit with 100 \\(\\Omega\\) resistance is connected to an AC source of 200 V and angular frequency 300 rad/s. When only the capacitance is removed, the current lags the voltage by \\(60^{\\circ}\\). When only the inductance is removed, the current leads the voltage by \\(60^{\\circ}\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P4",
+      "qText": "Calculate the current in the complete LCR circuit (in A).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P4",
+      "qText": "Calculate the power dissipated in the LCR circuit (in W).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 400
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P5",
+      "qText": "An inductor 2 H, a capacitor 100 \\(\\mu\\)F and a resistor 50 \\(\\Omega\\) are connected in series across a source of emf \\(=100\\sin 100 t\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "Find the energy dissipated in the circuit in 20 minutes (in kJ).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 24
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P5",
+      "qText": "If resistance is removed from the circuit and the inductance is doubled, then find the variation of current with time in the new circuit. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-0.5\\cos(100t)\\)",
+        "\\(-0.5\\sin(100t)\\)",
+        "\\(0.5\\cos(100t)\\)",
+        "\\(-0.5\\cos(50t)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A coil having a resistance of 5 \\(\\Omega\\) and an inductance of 0.02 H is arranged in parallel with another coil having a resistance of 1 \\(\\Omega\\) and an inductance of 0.8 H. Calculate the power absorbed when a voltage of 100 V at 50 Hz is applied.",
+      "image": "16.png",
+      "qOptions": [],
+      "qAnswer": 784
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider an LCR circuit as shown in figure, with an AC source of peak value \\(V_0\\) and angular frequency \\(\\omega\\). Then the peak value of current through the AC source is",
+      "image": "17.png",
+      "qOptions": [
+        "\\( \\dfrac{V_0}{\\sqrt{\\dfrac{1}{R^2}+(\\omega L-\\dfrac{1}{\\omega C})^2}} \\)",
+        "\\( V_0\\,\\Big[\\dfrac{1}{R^2}+(\\omega C-\\dfrac{1}{\\omega L})^2\\Big]^{1/2} \\)",
+        "\\( \\dfrac{V_0}{\\sqrt{R^2+(\\omega L-\\dfrac{1}{\\omega C})^2}} \\)",
+        "none of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A capacitor and resistor are connected with an AC source shown in figure. Reactance of capacitor is \\(X_c=3\\,\\Omega\\) and resistance of resistor is 4 \\(\\Omega\\). Phase difference between current \\(I\\) and \\(I_1\\) is",
+      "image": "18.png",
+      "qOptions": ["90°", "zero", "53°", "37°"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A signal generator supplies a sine wave of 200 V, 5 kHz to the circuit shown in the figure. Then choose the wrong statement",
+      "image": "19.png",
+      "qOptions": [
+        "The current in the resistive branch is 2 A",
+        "The current in the capacitive branch is 1.26 A",
+        "Total line current is = 2.83 A",
+        "current in both the branches is same"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P6",
+      "qText": "A choke coil is needed to operate an arc lamp at 160 V (rms) and 50 Hz. The lamp has an effective resistance of 5 \\(\\Omega\\) when running at 10 A (rms).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P6",
+      "qText": "Calculate the inductance of the choke coil (in mH).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 48.4
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P6",
+      "qText": "If the same arc lamp is to be operated on 160 V (dc), what additional series resistance is required? (in \\(\\Omega\\))",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 11
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P7",
+      "qText": "A current of 4 A flows in a coil when connected to a 12 V dc source. If the same coil is connected to a 12 V, 50 rad/s ac source, a current of 2.4 A flows in the circuit.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P7",
+      "qText": "Determine the inductance of the coil (in mH).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 80
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P7",
+      "qText": "Find the power developed in the circuit if a 2500 \\(\\mu\\)F capacitor is connected in series with the coil (in W).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 17.28
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P8",
+      "qText": "An AC circuit consists of a 220 \\(\\Omega\\) resistance and a 0.7 H choke connected to a 220 V, 50 Hz source. Find the power absorbed from the source, total current in the circuit and the phase difference between the total current and the source voltage if the resistance and the choke are joined (a) in series, (b) in parallel.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P8",
+      "qText": "(a) Series: power absorbed (in W).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 110
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P8",
+      "qText": "(a) Series: total current (in A).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.7
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "(a) Series: phase relation between current and source voltage is:",
+      "image": null,
+      "qOptions": [
+        "lags by 45°",
+        "leads by 45°",
+        "in phase (0°)",
+        "90° out of phase"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P8",
+      "qText": "(b) Parallel: power absorbed (in W).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 220
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P8",
+      "qText": "(b) Parallel: total current (in A).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.4
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "(b) Parallel: phase relation between current and source voltage is:",
+      "image": null,
+      "qOptions": [
+        "lags by 45°",
+        "leads by 45°",
+        "in phase (0°)",
+        "90° out of phase"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P9",
+      "qText": "An inductor of 0.03 H, a 10 \\(\\Omega\\) resistor and a 2 \\(\\mu\\)F capacitor are connected in series.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P9",
+      "qText": "At what frequency will they resonate? (in Hz)",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 650
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P9",
+      "qText": "What will be the phase angle at resonance? (in degrees)",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "An arc lamp consumes 10 A at 40 V. Calculate the power factor when it is connected with a suitable value of choke coil required to run the arc lamp on ac mains of 200 V (rms) and 50 Hz.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.2
+    }
+  ]
+}

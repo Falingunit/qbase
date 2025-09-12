@@ -2,7 +2,6 @@
   "questions": [
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "A uniform magnetic field of induction \\(B\\) is confined to a cylindrical region of radius \\(R\\). The magnetic field is increasing at a constant rate of \\(\\,dB/dt\\,\\) (T s\\(^{-1}\\)). An electron placed at point \\(P\\) on the periphery of the field experiences an acceleration equal to",
       "image": "1.png",
       "qOptions": [
@@ -15,7 +14,6 @@
     },
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "A uniform but time‐varying magnetic field \\(\\vec B(t)\\) exists in a circular region of radius \\(R\\) and is directed into the plane of the paper. For the magnitude of the induced electric field \\(\\vec E\\) at a point at distance \\(r\\) from the centre it can be said that",
       "image": "2.png",
       "qOptions": [
@@ -28,15 +26,18 @@
     },
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "In a cylindrical symmetrical region the magnetic field increases at a constant rate \\(\\tfrac{dB}{dt}\\) normal into the plane. Select the graph which best explains the variation of the induced electric field magnitude \\(|\\vec E|\\) with distance from the centre (both inside and outside the region).",
       "image": "3.png",
-      "qOptions": ["Graph (A)", "Graph (B)", "Graph (C)", "Graph (D)"],
+      "qOptions": [
+        "Graph (A)",
+        "Graph (B)",
+        "Graph (C)",
+        "Graph (D)"
+      ],
       "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "Uniform time‐varying magnetic fields \\(B_1, B_2, B_3\\) exist in three different infinitely long cylindrical regions with axes passing through \\(P, Q, R\\) respectively and perpendicular to the plane of the paper. \\(PQR\\) is an equilateral triangle of side \\(4\\sqrt{3}\\,r\\) where each cylinder has radius \\(r=1\\,\\text{m}\\). The fields vary with time as \\(B_1=A+at\\), \\(B_2=A-bt\\), \\(B_3=A+ct\\) with \\(a=2\\,\\text{T s}^{-1}\\), \\(b=2\\,\\text{T s}^{-1}\\), \\(c=1\\,\\text{T s}^{-1}\\) and \\(A\\) constant. The induced electric field strength at the centroid of triangle \\(PQR\\) is",
       "image": "4.png",
       "qOptions": [
@@ -49,7 +50,6 @@
     },
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "A horizontal cylindrical region has a uniform but time‐varying magnetic field increasing at a constant rate \\(dB/dt\\) (as shown). A charged particle of charge \\(q\\) and mass \\(m\\) is kept in equilibrium at the top of a vertical spring of spring constant \\(K\\) on the horizontal line passing through the centre of the magnetic field. The compression in the spring will be",
       "image": "5.png",
       "qOptions": [
@@ -62,7 +62,6 @@
     },
     {
       "qType": "SMCQ",
-      "passageId": null,
       "qText": "A time‐varying non‐uniform magnetic field passes through a circular region of radius \\(R\\). The magnetic field is directed outwards and depends on radial distance and time as \\(B=B_0 r t\\). What is the induced electric field strength at a radial distance \\(R/2\\) from the centre?",
       "image": "6.png",
       "qOptions": [
@@ -75,556 +74,581 @@
     },
     {
       "qType": "Passage",
-      "passageId": "P1",
       "qText": "The magnetic field within a long, straight solenoid of circular cross section and radius \\(R\\) is increasing uniformly at a rate \\(dB/dt\\).",
       "image": null,
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P1",
-      "qText": "The rate of change of magnetic flux through a circle of radius \\(r_1\\) inside the solenoid (normal to the solenoid axis and centred on it) is",
-      "image": null,
-      "qOptions": [
-        "\\(\\sqrt{2}\\,\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{1}{2}\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{3}{2}\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P1",
-      "qText": "The magnitude of the induced electric field inside the solenoid at a distance \\(r_1\\) from its axis is",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{r_1}{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(r_1\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{3r_1}{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{r_1}{\\sqrt{2}}\\,\\tfrac{dB}{dt}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P1",
-      "qText": "The magnitude of the induced electric field outside the solenoid at a distance \\(r_2\\) from the axis is",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{R^{2}}{r_2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{R^{2}}{2r_2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{3R^{2}}{2r_2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{R^{2}}{\\sqrt{2}r_2}\\,\\tfrac{dB}{dt}\\)"
-      ],
-      "qAnswer": "B"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The rate of change of magnetic flux through a circle of radius \\(r_1\\) inside the solenoid (normal to the solenoid axis and centred on it) is",
+          "image": null,
+          "qOptions": [
+            "\\(\\sqrt{2}\\,\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{1}{2}\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{3}{2}\\pi r_1^{2}\\,\\tfrac{dB}{dt}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The magnitude of the induced electric field inside the solenoid at a distance \\(r_1\\) from its axis is",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{r_1}{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(r_1\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{3r_1}{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{r_1}{\\sqrt{2}}\\,\\tfrac{dB}{dt}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The magnitude of the induced electric field outside the solenoid at a distance \\(r_2\\) from the axis is",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{R^{2}}{r_2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{R^{2}}{2r_2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{3R^{2}}{2r_2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{R^{2}}{\\sqrt{2}r_2}\\,\\tfrac{dB}{dt}\\)"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P2",
       "qText": "A long solenoid of radius \\(R\\) has \\(n\\) turns per unit length and carries a time varying current \\(I=I_{\\max}\\cos \\omega t\\).",
       "image": "10.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P2",
-      "qText": "The magnitude of the induced electric field inside the solenoid at a distance \\(r<R\\) from its long central axis is",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{3\\mu_0 n I_{\\max}\\omega}{2}\\,r\\sin \\omega t\\)",
-        "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega}{2}\\,r\\cos \\omega t\\)",
-        "\\(\\mu_0 n I_{\\max}\\omega\\,r\\sin \\omega t\\)",
-        "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega}{2}\\,r\\sin \\omega t\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P2",
-      "qText": "The magnitude of the electric field outside the solenoid at a distance \\(r>R\\) from its long central axis is",
-      "image": null,
-      "qOptions": [
-        "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)",
-        "\\(\\tfrac{2\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)",
-        "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega R^{2}}{3r}\\sin \\omega t\\)",
-        "\\(\\tfrac{3\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "Numerical",
-      "passageId": null,
-      "qText": "In a cylindrical region of radius \\(R\\), a time varying magnetic field \\(B\\) exists with \\(\\tfrac{dB}{dt}=k\\,(>0)\\). A positive charge \\(q\\) is at point \\(P\\) at a distance \\(d=2R\\) from the centre \\(O\\). The charge is slowly moved to infinity along a straight line perpendicular to \\(OP\\) by an external agent without changing its kinetic energy. If the external work is \\(w=\\alpha\\,q\\pi R^{2}k\\), find the value of \\(\\alpha\\).",
-      "image": "12.png",
-      "qOptions": [],
-      "qAnswer": 4
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "In each diagram, a magnetic field (into the plane) exists in the circular region and is increasing with time. Four differently shaped metallic conductors \\(PQR\\) are placed as shown. (In options A and B, \\(Q\\) is the centre.) The end \\(P\\) will be more positively charged than \\(R\\) in",
-      "image": "13.png",
-      "qOptions": ["Figure (A)", "Figure (B)", "Figure (C)", "Figure (D)"],
-      "qAnswer": ["B", "D"]
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A uniform magnetic field \\(\\vec B\\) exists in a circular region of radius \\(R\\) and is decreasing at a constant rate. A concentric wooden ring (radius \\(2R\\)) carries uniformly distributed charge \\(Q\\) and a concentric copper ring has radius \\(3R\\). Select the incorrect statement (rings are on a frictionless surface).",
-      "image": "14.png",
-      "qOptions": [
-        "There will be an induced current in the copper ring",
-        "Induced electric field at \\(2R\\) is more in magnitude than at \\(3R\\)",
-        "Induced electric field at \\(2R\\) is less in magnitude than at \\(3R\\)",
-        "The wooden ring will rotate"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A magnetic field, confined in a cylindrical region of radius \\(R\\), is changing at the rate of \\(4\\,\\text{T s}^{-1}\\). A path \\(PQ\\) of length \\(\\sqrt{\\tfrac{3}{2}}\\,R\\) is considered in the region as shown. The induced emf across \\(P\\) and \\(Q\\) along the path will be",
-      "image": "15.png",
-      "qOptions": [
-        "\\(\\tfrac{R^{2}}{24}(\\pi+6)\\,V\\)",
-        "\\(\\tfrac{R^{2}\\pi}{24}\\,V\\)",
-        "\\(\\tfrac{R^{2}\\pi}{6}\\,V\\)",
-        "\\(\\tfrac{R^{2}}{6}(\\pi+6)\\,V\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A uniform magnetic field \\(B\\) exists in a circular region of radius \\(R\\) (as shown). Its magnitude changes at the rate \\(dB/dt\\). The emf induced across the ends of a circular concentric conducting arc of radius \\(R_1\\) having an angle \\(\\Theta\\) (with \\(-\\angle OAO' = \\Theta\\)) is",
-      "image": "16.png",
-      "qOptions": [
-        "\\(\\tfrac{\\Theta}{2\\pi} R_1^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{\\Theta}{2\\pi} R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{\\Theta}{2\\pi} R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "none of these"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Three disjoint regions each of area \\(A\\) contain magnetic fields whose magnitudes are decreasing at a constant rate \\(a\\). If \\(\\vec E\\) is the induced electric field, the value of the line integral \\(\\displaystyle \\oint \\vec E\\cdot d\\vec r\\) along the given loop equals",
-      "image": "17.png",
-      "qOptions": ["\\(aA\\)", "\\(-aA\\)", "\\(3aA\\)", "\\(-3aA\\)"],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Two concentric cylindrical regions have time‐varying magnetic fields as shown. For \\(0\\le r\\le R\\), \\(\\tfrac{dB}{dt}=2k_0\\) into the plane; for \\(R\\le r\\le 2R\\), \\(\\tfrac{dB}{dt}=4k_0\\) out of the plane. Find the induced emf across the arc \\(AB\\) of radius \\(3R\\).",
-      "image": "18.png",
-      "qOptions": [
-        "\\(6R^{2}k\\,\\Theta\\)",
-        "\\(5R^{2}k\\,\\Theta\\)",
-        "\\(7R^{2}k\\,\\Theta\\)",
-        "none of these"
-      ],
-      "qAnswer": "B"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The magnitude of the induced electric field inside the solenoid at a distance \\(r<R\\) from its long central axis is",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{3\\mu_0 n I_{\\max}\\omega}{2}\\,r\\sin \\omega t\\)",
+            "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega}{2}\\,r\\cos \\omega t\\)",
+            "\\(\\mu_0 n I_{\\max}\\omega\\,r\\sin \\omega t\\)",
+            "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega}{2}\\,r\\sin \\omega t\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The magnitude of the electric field outside the solenoid at a distance \\(r>R\\) from its long central axis is",
+          "image": null,
+          "qOptions": [
+            "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)",
+            "\\(\\tfrac{2\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)",
+            "\\(\\tfrac{\\mu_0 n I_{\\max}\\omega R^{2}}{3r}\\sin \\omega t\\)",
+            "\\(\\tfrac{3\\mu_0 n I_{\\max}\\omega R^{2}}{2r}\\sin \\omega t\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "Numerical",
+          "qText": "In a cylindrical region of radius \\(R\\), a time varying magnetic field \\(B\\) exists with \\(\\tfrac{dB}{dt}=k\\,(>0)\\). A positive charge \\(q\\) is at point \\(P\\) at a distance \\(d=2R\\) from the centre \\(O\\). The charge is slowly moved to infinity along a straight line perpendicular to \\(OP\\) by an external agent without changing its kinetic energy. If the external work is \\(w=\\alpha\\,q\\pi R^{2}k\\), find the value of \\(\\alpha\\).",
+          "image": "12.png",
+          "qOptions": [],
+          "qAnswer": 4
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "In each diagram, a magnetic field (into the plane) exists in the circular region and is increasing with time. Four differently shaped metallic conductors \\(PQR\\) are placed as shown. (In options A and B, \\(Q\\) is the centre.) The end \\(P\\) will be more positively charged than \\(R\\) in",
+          "image": "13.png",
+          "qOptions": [
+            "Figure (A)",
+            "Figure (B)",
+            "Figure (C)",
+            "Figure (D)"
+          ],
+          "qAnswer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A uniform magnetic field \\(\\vec B\\) exists in a circular region of radius \\(R\\) and is decreasing at a constant rate. A concentric wooden ring (radius \\(2R\\)) carries uniformly distributed charge \\(Q\\) and a concentric copper ring has radius \\(3R\\). Select the incorrect statement (rings are on a frictionless surface).",
+          "image": "14.png",
+          "qOptions": [
+            "There will be an induced current in the copper ring",
+            "Induced electric field at \\(2R\\) is more in magnitude than at \\(3R\\)",
+            "Induced electric field at \\(2R\\) is less in magnitude than at \\(3R\\)",
+            "The wooden ring will rotate"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A magnetic field, confined in a cylindrical region of radius \\(R\\), is changing at the rate of \\(4\\,\\text{T s}^{-1}\\). A path \\(PQ\\) of length \\(\\sqrt{\\tfrac{3}{2}}\\,R\\) is considered in the region as shown. The induced emf across \\(P\\) and \\(Q\\) along the path will be",
+          "image": "15.png",
+          "qOptions": [
+            "\\(\\tfrac{R^{2}}{24}(\\pi+6)\\,V\\)",
+            "\\(\\tfrac{R^{2}\\pi}{24}\\,V\\)",
+            "\\(\\tfrac{R^{2}\\pi}{6}\\,V\\)",
+            "\\(\\tfrac{R^{2}}{6}(\\pi+6)\\,V\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A uniform magnetic field \\(B\\) exists in a circular region of radius \\(R\\) (as shown). Its magnitude changes at the rate \\(dB/dt\\). The emf induced across the ends of a circular concentric conducting arc of radius \\(R_1\\) having an angle \\(\\Theta\\) (with \\(-\\angle OAO' = \\Theta\\)) is",
+          "image": "16.png",
+          "qOptions": [
+            "\\(\\tfrac{\\Theta}{2\\pi} R_1^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{\\Theta}{2\\pi} R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{\\Theta}{2\\pi} R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "none of these"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Three disjoint regions each of area \\(A\\) contain magnetic fields whose magnitudes are decreasing at a constant rate \\(a\\). If \\(\\vec E\\) is the induced electric field, the value of the line integral \\(\\displaystyle \\oint \\vec E\\cdot d\\vec r\\) along the given loop equals",
+          "image": "17.png",
+          "qOptions": [
+            "\\(aA\\)",
+            "\\(-aA\\)",
+            "\\(3aA\\)",
+            "\\(-3aA\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Two concentric cylindrical regions have time‐varying magnetic fields as shown. For \\(0\\le r\\le R\\), \\(\\tfrac{dB}{dt}=2k_0\\) into the plane; for \\(R\\le r\\le 2R\\), \\(\\tfrac{dB}{dt}=4k_0\\) out of the plane. Find the induced emf across the arc \\(AB\\) of radius \\(3R\\).",
+          "image": "18.png",
+          "qOptions": [
+            "\\(6R^{2}k\\,\\Theta\\)",
+            "\\(5R^{2}k\\,\\Theta\\)",
+            "\\(7R^{2}k\\,\\Theta\\)",
+            "none of these"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P3",
       "qText": "A cylindrical region of radius \\(r\\) contains a downward magnetic field \\(\\vec B\\) that is increasing at rate \\(dB/dt\\). A rod \\(PQ\\) is placed in different orientations inside the region as shown (cases i–iv). Match each case with the relevant statement in Column II:  \nA. Induced emf in rod \\(PQ\\) is \\(\\tfrac{1}{2}r^{2}\\Theta\\,\\tfrac{dB}{dt}\\)  \nB. Induced emf in rod \\(PQ\\) is less than \\(\\tfrac{1}{2}r^{2}\\Theta\\,\\tfrac{dB}{dt}\\)  \nC. End \\(P\\) is positive with respect to \\(Q\\)  \nD. End \\(Q\\) is positive with respect to \\(P\\).",
       "image": "19.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": "P3",
-      "qText": "Case (i): choose the correct statements from Column II.",
-      "image": null,
-      "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": ["B", "C"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": "P3",
-      "qText": "Case (ii): choose the correct statements from Column II.",
-      "image": null,
-      "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": ["A", "D"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": "P3",
-      "qText": "Case (iii): choose the correct statements from Column II.",
-      "image": null,
-      "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": ["A", "C"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": "P3",
-      "qText": "Case (iv): choose the correct statements from Column II.",
-      "image": null,
-      "qOptions": ["A", "B", "C", "D"],
-      "qAnswer": ["B", "D"]
+      "questions": [
+        {
+          "qType": "MMCQ",
+          "qText": "Case (i): choose the correct statements from Column II.",
+          "image": null,
+          "qOptions": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "qAnswer": [
+            "B",
+            "C"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "Case (ii): choose the correct statements from Column II.",
+          "image": null,
+          "qOptions": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "qAnswer": [
+            "A",
+            "D"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "Case (iii): choose the correct statements from Column II.",
+          "image": null,
+          "qOptions": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "qAnswer": [
+            "A",
+            "C"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "Case (iv): choose the correct statements from Column II.",
+          "image": null,
+          "qOptions": [
+            "A",
+            "B",
+            "C",
+            "D"
+          ],
+          "qAnswer": [
+            "B",
+            "D"
+          ]
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P4",
       "qText": "In a very long solenoid of radius \\(R\\), the magnetic field changes at a rate \\(dB/dt\\). In the circuit shown, \\(AB=BC\\).",
       "image": "20.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P4",
-      "qText": "The induced emf for the triangular circuit \\(ABC\\) is",
-      "image": null,
-      "qOptions": [
-        "\\(R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(4R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{1}{2}R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(2R^{2}\\,\\tfrac{dB}{dt}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P4",
-      "qText": "The induced emf between the ends of length \\(AB\\) if \\(AC\\) and \\(BC\\) are removed from the circuit is",
-      "image": null,
-      "qOptions": [
-        "\\(R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(4R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(\\tfrac{1}{2}R^{2}\\,\\tfrac{dB}{dt}\\)",
-        "\\(2R^{2}\\,\\tfrac{dB}{dt}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A uniform but time‐varying magnetic field \\(\\vec B=(B_0 t)(-\\hat k)\\) fills a cylindrical region whose boundary is \\(x^2+y^2=a^2\\). For the path \\(C\\) shown, the line integral \\(\\displaystyle \\oint_C \\vec E\\cdot d\\vec y\\) equals",
-      "image": "22.png",
-      "qOptions": [
-        "0",
-        "\\(\\tfrac{\\pi}{4}(B_0 a^2)\\)",
-        "\\(-\\tfrac{\\pi}{8}(B_0 a^2)\\)",
-        "\\(\\tfrac{\\pi B_0 a^2}{8}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A flat metal spiral (constant spacing \\(h\\) between coils) with total number of coils \\(N\\) is placed in a uniform magnetic field \\(B=B_0\\cos \\omega t\\) perpendicular to the plane of the spiral. The total emf induced in the spiral (between points \\(A\\) and \\(C\\)) is approximately (assume \\(N\\gg 1\\))",
-      "image": "23.png",
-      "qOptions": [
-        "\\(\\dfrac{2\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t}{3}\\)",
-        "\\(\\dfrac{\\pi B_0\\omega h^{2}N^{2}\\sin \\omega t}{3}\\)",
-        "\\(\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t\\)",
-        "\\(\\dfrac{\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t}{3}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "In a cylindrical magnetic field \\(B\\) changing as \\(B=B_0+\\alpha t\\). Find the value of \\(\\displaystyle \\int\\vec E\\!\\cdot d\\vec l\\) for the path \\(BOA\\) as shown (line \\(AOB\\) is semicircular; \\(\\vec E\\) is the induced electric field in the region).",
-      "image": "24.png",
-      "qOptions": [
-        "\\(\\dfrac{\\pi a^2\\alpha}{2}\\)",
-        "\\(a^2\\alpha\\!\\left(\\dfrac{\\pi}{2}-1\\right)\\)",
-        "\\(a^2\\alpha\\)",
-        "\\(\\pi a^2\\alpha\\)"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "Numerical",
-      "passageId": null,
-      "qText": "A small bead of mass \\(m\\) and positive charge \\(+q\\) is mounted on a fixed thin smooth horizontal plastic ring of radius \\(R\\) in the \\(x\\!-y\\) plane, centred at \\((0,0)\\). At \\(t=0\\), bead is stationary. Magnetic field \\(\\vec B=\\dfrac{E_0 t}{r}\\,\\hat k\\) (where \\(r\\ne0\\) is distance from \\(z\\)-axis; \\(E_0>0\\)) is switched on. Magnitude of normal reaction exerted by ring on bead is \\(qE_0\\lambda\\). Find \\(\\lambda\\). (Gravity absent.)",
-      "image": null,
-      "qOptions": [],
-      "qAnswer": 0
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A line charge \\(\\lambda\\) per unit length is pasted uniformly on the rim of a wheel of mass \\(m\\) and radius \\(R\\). The wheel has light non-conducting spokes and is free to rotate about a vertical axis as shown. A uniform magnetic field exists over a radial region of radius \\(r\\) given by \\(B=-B_0\\,\\hat k\\) (\\(r\\le a;a<R\\)), and \\(B=0\\) otherwise. What is the angular velocity of the wheel just after the field is suddenly switched off?",
-      "image": "26.png",
-      "qOptions": [
-        "\\(-\\dfrac{2B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)",
-        "\\(-\\dfrac{B_0\\pi a^2\\lambda}{3mR}\\,\\hat k\\)",
-        "\\(\\dfrac{B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)",
-        "\\(-\\dfrac{B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "Charge \\(Q\\) is uniformly distributed on a thin insulating ring of mass \\(m\\) which is initially at rest. To what angular velocity will the ring be accelerated when a magnetic field \\(B\\), perpendicular to the plane of the ring, is switched on?",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{qB}{2m}\\)",
-        "\\(\\dfrac{3qB}{2m}\\)",
-        "\\(\\dfrac{qB}{m}\\)",
-        "\\(\\dfrac{qB}{4m}\\)"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A non-conducting ring of radius \\(r\\) and mass \\(m\\) is given charge \\(q\\) uniformly. It is kept in a magnetic field \\(B\\) (into the page) confined to a circular region of radius \\(a\\) whose centre coincides with that of the ring. If the magnetic field is suddenly switched off, the angular velocity of the ring will be (neglect self-inductance).",
-      "image": "28.png",
-      "qOptions": [
-        "\\(\\dfrac{qBa^{2}}{2mr^{2}}\\)",
-        "\\(\\dfrac{4\\pi Br}{\\mu_{0}q}\\)",
-        "\\(\\dfrac{\\pi Br}{2\\mu_{0}q}\\)",
-        "\\(\\dfrac{qB}{2m}\\)"
-      ],
-      "qAnswer": "A"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The induced emf for the triangular circuit \\(ABC\\) is",
+          "image": null,
+          "qOptions": [
+            "\\(R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(4R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{1}{2}R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(2R^{2}\\,\\tfrac{dB}{dt}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The induced emf between the ends of length \\(AB\\) if \\(AC\\) and \\(BC\\) are removed from the circuit is",
+          "image": null,
+          "qOptions": [
+            "\\(R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(4R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(\\tfrac{1}{2}R^{2}\\,\\tfrac{dB}{dt}\\)",
+            "\\(2R^{2}\\,\\tfrac{dB}{dt}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A uniform but time‐varying magnetic field \\(\\vec B=(B_0 t)(-\\hat k)\\) fills a cylindrical region whose boundary is \\(x^2+y^2=a^2\\). For the path \\(C\\) shown, the line integral \\(\\displaystyle \\oint_C \\vec E\\cdot d\\vec y\\) equals",
+          "image": "22.png",
+          "qOptions": [
+            "0",
+            "\\(\\tfrac{\\pi}{4}(B_0 a^2)\\)",
+            "\\(-\\tfrac{\\pi}{8}(B_0 a^2)\\)",
+            "\\(\\tfrac{\\pi B_0 a^2}{8}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A flat metal spiral (constant spacing \\(h\\) between coils) with total number of coils \\(N\\) is placed in a uniform magnetic field \\(B=B_0\\cos \\omega t\\) perpendicular to the plane of the spiral. The total emf induced in the spiral (between points \\(A\\) and \\(C\\)) is approximately (assume \\(N\\gg 1\\))",
+          "image": "23.png",
+          "qOptions": [
+            "\\(\\dfrac{2\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t}{3}\\)",
+            "\\(\\dfrac{\\pi B_0\\omega h^{2}N^{2}\\sin \\omega t}{3}\\)",
+            "\\(\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t\\)",
+            "\\(\\dfrac{\\pi B_0\\omega h^{2}N^{3}\\sin \\omega t}{3}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "In a cylindrical magnetic field \\(B\\) changing as \\(B=B_0+\\alpha t\\). Find the value of \\(\\displaystyle \\int\\vec E\\!\\cdot d\\vec l\\) for the path \\(BOA\\) as shown (line \\(AOB\\) is semicircular; \\(\\vec E\\) is the induced electric field in the region).",
+          "image": "24.png",
+          "qOptions": [
+            "\\(\\dfrac{\\pi a^2\\alpha}{2}\\)",
+            "\\(a^2\\alpha\\!\\left(\\dfrac{\\pi}{2}-1\\right)\\)",
+            "\\(a^2\\alpha\\)",
+            "\\(\\pi a^2\\alpha\\)"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "Numerical",
+          "qText": "A small bead of mass \\(m\\) and positive charge \\(+q\\) is mounted on a fixed thin smooth horizontal plastic ring of radius \\(R\\) in the \\(x\\!-y\\) plane, centred at \\((0,0)\\). At \\(t=0\\), bead is stationary. Magnetic field \\(\\vec B=\\dfrac{E_0 t}{r}\\,\\hat k\\) (where \\(r\\ne0\\) is distance from \\(z\\)-axis; \\(E_0>0\\)) is switched on. Magnitude of normal reaction exerted by ring on bead is \\(qE_0\\lambda\\). Find \\(\\lambda\\). (Gravity absent.)",
+          "image": null,
+          "qOptions": [],
+          "qAnswer": 0
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A line charge \\(\\lambda\\) per unit length is pasted uniformly on the rim of a wheel of mass \\(m\\) and radius \\(R\\). The wheel has light non-conducting spokes and is free to rotate about a vertical axis as shown. A uniform magnetic field exists over a radial region of radius \\(r\\) given by \\(B=-B_0\\,\\hat k\\) (\\(r\\le a;a<R\\)), and \\(B=0\\) otherwise. What is the angular velocity of the wheel just after the field is suddenly switched off?",
+          "image": "26.png",
+          "qOptions": [
+            "\\(-\\dfrac{2B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)",
+            "\\(-\\dfrac{B_0\\pi a^2\\lambda}{3mR}\\,\\hat k\\)",
+            "\\(\\dfrac{B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)",
+            "\\(-\\dfrac{B_0\\pi a^2\\lambda}{mR}\\,\\hat k\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Charge \\(Q\\) is uniformly distributed on a thin insulating ring of mass \\(m\\) which is initially at rest. To what angular velocity will the ring be accelerated when a magnetic field \\(B\\), perpendicular to the plane of the ring, is switched on?",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{qB}{2m}\\)",
+            "\\(\\dfrac{3qB}{2m}\\)",
+            "\\(\\dfrac{qB}{m}\\)",
+            "\\(\\dfrac{qB}{4m}\\)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A non-conducting ring of radius \\(r\\) and mass \\(m\\) is given charge \\(q\\) uniformly. It is kept in a magnetic field \\(B\\) (into the page) confined to a circular region of radius \\(a\\) whose centre coincides with that of the ring. If the magnetic field is suddenly switched off, the angular velocity of the ring will be (neglect self-inductance).",
+          "image": "28.png",
+          "qOptions": [
+            "\\(\\dfrac{qBa^{2}}{2mr^{2}}\\)",
+            "\\(\\dfrac{4\\pi Br}{\\mu_{0}q}\\)",
+            "\\(\\dfrac{\\pi Br}{2\\mu_{0}q}\\)",
+            "\\(\\dfrac{qB}{2m}\\)"
+          ],
+          "qAnswer": "A"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P5",
       "qText": "A thin circular ring of mass \\(m\\), radius \\(R\\) carries uniformly distributed charge \\(Q\\). It rests on a rough horizontal floor (coefficient of friction \\(\\mu\\)). A uniform vertically upward magnetic field of radius greater than \\(R\\) and coaxial with the ring exists. The magnetic field varies as \\(B=B_0 t^{2}\\) (\\(t\\) in s).",
       "image": "29.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "Choose the correct graph showing the variation of induced electric field with time \\(t\\) at the circumference of the ring.",
-      "image": "29a.png",
-      "qOptions": ["Graph (A)", "Graph (B)", "Graph (C)", "Graph (D)"],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "What is the torque applied by the electric force on the ring at any time \\(t\\)?",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{3B_0QR^{2}t}{2}\\)",
-        "\\(\\dfrac{B_0QR^{2}t}{2}\\)",
-        "\\(B_0QR^{2}t\\)",
-        "\\(2B_0QR^{2}t\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P5",
-      "qText": "Find the time at which the ring starts rotating.",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{4\\mu m g}{3B_0QR}\\)",
-        "\\(\\dfrac{\\mu m g}{B_0QR}\\)",
-        "\\(\\dfrac{\\mu m g}{B_0QR}\\)",
-        "ring would never rotate"
-      ],
-      "qAnswer": "B"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "Choose the correct graph showing the variation of induced electric field with time \\(t\\) at the circumference of the ring.",
+          "image": "29a.png",
+          "qOptions": [
+            "Graph (A)",
+            "Graph (B)",
+            "Graph (C)",
+            "Graph (D)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "What is the torque applied by the electric force on the ring at any time \\(t\\)?",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{3B_0QR^{2}t}{2}\\)",
+            "\\(\\dfrac{B_0QR^{2}t}{2}\\)",
+            "\\(B_0QR^{2}t\\)",
+            "\\(2B_0QR^{2}t\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Find the time at which the ring starts rotating.",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{4\\mu m g}{3B_0QR}\\)",
+            "\\(\\dfrac{\\mu m g}{B_0QR}\\)",
+            "\\(\\dfrac{\\mu m g}{B_0QR}\\)",
+            "ring would never rotate"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P6",
       "qText": "A non-conducting thin ring of radius \\(R\\) and mass \\(m\\) lies on a rough horizontal insulating plane. Charge \\(Q\\) is uniformly distributed over the ring. At \\(t=0\\) a uniform vertical magnetic field \\(B=\\dfrac{B_0 t^{2}\\sqrt{3}}{2}\\) is switched on. The coefficient of friction is \\(\\mu\\).",
       "image": null,
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "What is \\(\\displaystyle \\int_{\\text{over the ring}} |d\\vec F|\\), where \\(d\\vec F\\) is the force applied by the electric field on an infinitesimal element of the ring?",
-      "image": null,
-      "qOptions": [
-        "\\(QB_0Rt\\)",
-        "\\(\\dfrac{QB_0Rt}{2}\\)",
-        "\\(QB_0Rt\\sqrt{3}\\)",
-        "\\(\\dfrac{QB_0Rt\\sqrt{3}}{2}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "Time (in seconds) at which the ring will just start rotating is",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{\\sqrt{3}}{2}\\)",
-        "\\(\\dfrac{1}{2}\\)",
-        "\\(\\sqrt{3}\\)",
-        "\\(\\dfrac{1}{\\sqrt{3}}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P6",
-      "qText": "The magnetic field is switched off at \\(t=\\sqrt{3}\\,\\text{s}\\). Find the angular velocity just after this.",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{qB_0}{m\\sqrt{3}}\\)",
-        "\\(\\dfrac{2qB_0}{m}\\)",
-        "\\(\\dfrac{qB_0}{2m}\\)",
-        "\\(\\dfrac{2qB_0}{m\\sqrt{3}}\\)"
-      ],
-      "qAnswer": "A"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "What is \\(\\displaystyle \\int_{\\text{over the ring}} |d\\vec F|\\), where \\(d\\vec F\\) is the force applied by the electric field on an infinitesimal element of the ring?",
+          "image": null,
+          "qOptions": [
+            "\\(QB_0Rt\\)",
+            "\\(\\dfrac{QB_0Rt}{2}\\)",
+            "\\(QB_0Rt\\sqrt{3}\\)",
+            "\\(\\dfrac{QB_0Rt\\sqrt{3}}{2}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Time (in seconds) at which the ring will just start rotating is",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{\\sqrt{3}}{2}\\)",
+            "\\(\\dfrac{1}{2}\\)",
+            "\\(\\sqrt{3}\\)",
+            "\\(\\dfrac{1}{\\sqrt{3}}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The magnetic field is switched off at \\(t=\\sqrt{3}\\,\\text{s}\\). Find the angular velocity just after this.",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{qB_0}{m\\sqrt{3}}\\)",
+            "\\(\\dfrac{2qB_0}{m}\\)",
+            "\\(\\dfrac{qB_0}{2m}\\)",
+            "\\(\\dfrac{2qB_0}{m\\sqrt{3}}\\)"
+          ],
+          "qAnswer": "A"
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P7",
       "qText": "A square conducting loop (side 20.0 cm) is placed in the magnetic field region shown; the field at the centre changes at \\(dB/dt=0.035\\,\\text{T s}^{-1}\\).",
       "image": "35.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The directions of induced electric field at points \\(a\\), \\(b\\) and \\(c\\) are best shown by",
-      "image": "35a.png",
-      "qOptions": ["Figure (A)", "Figure (B)", "Figure (C)", "Figure (D)"],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The current induced in the loop if its resistance is \\(2.00\\,\\Omega\\) is",
-      "image": null,
-      "qOptions": [
-        " \\(2.50\\times10^{-4}\\,\\text{A}\\)",
-        " \\(4.35\\times10^{-4}\\,\\text{A}\\)",
-        " \\(1.25\\times10^{-4}\\,\\text{A}\\)",
-        " \\(7.37\\times10^{-4}\\,\\text{A}\\)"
-      ],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P7",
-      "qText": "The potential difference between points \\(a\\) and \\(b\\) is",
-      "image": null,
-      "qOptions": ["6 V", "0", "10 V", "12 V"],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "The wire network shown has uniform resistance per unit length \\(1\\,\\Omega\\!\\cdot\\!\\text{m}^{-1}\\) and lies in a uniform time-varying magnetic field (into the plane) increasing at \\(1\\,\\text{T s}^{-1}\\). If the currents in the two rightmost vertical segments are \\(I_1\\) and \\(I_2\\), find \\(I_1/I_2\\).",
-      "image": "38.png",
-      "qOptions": ["2", "4", "1/3", "1/6"],
-      "qAnswer": "D"
-    },
-    {
-      "qType": "Numerical",
-      "passageId": null,
-      "qText": "In the square conducting frame \\(ABCEFG A\\) (side \\(m\\), resistance \\(1\\,\\Omega\\!\\cdot\\!\\text{m}^{-1}\\)) a uniform magnetic field \\(B\\) is applied perpendicular to the plane and pointing inward, increasing at \\(10\\,\\text{T s}^{-1}\\). Find the rate at which heat is produced in the circuit (\\(AB=BC=CD=BH\\)).",
-      "image": "39.png",
-      "qOptions": [],
-      "qAnswer": 200
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "A very long solenoid (field into the page, magnitude increasing with time) induces an emf in a conducting wire loop that lights two identical bulbs \\(A\\) and \\(B\\) in series. Now two diametrically opposite points of the wire loop to the right of bulb \\(B\\) are shorted by a wire (see figure). After inserting the short, which statements are true?",
-      "image": "40.png",
-      "qOptions": [
-        "bulb A goes out",
-        "bulb B gets brighter",
-        "bulb B goes out",
-        "bulb A gets brighter"
-      ],
-      "qAnswer": ["B", "D"]
-    },
-    {
-      "qType": "MMCQ",
-      "passageId": null,
-      "qText": "In the network shown: \\(R_1=1\\,\\Omega\\), \\(R_2=2\\,\\Omega\\), \\(R_3=3\\,\\Omega\\), a battery of emf \\(0.3\\,\\text{V}\\) is connected. In loop (1) an inward magnetic field \\(B_1=e^{2t}\\) is applied and in loop (2) an outward magnetic field \\(B_2=2t\\) is applied. Mark the CORRECT statement(s) at \\(t=0\\).",
-      "image": "41.png",
-      "qOptions": [
-        "initial current in \\(R_3\\) is \\(-\\dfrac{9}{110}\\,\\text{A}\\)",
-        "initial current in \\(R_2\\) is \\(\\dfrac{16}{110}\\,\\text{A}\\)",
-        "initial current in \\(R_3\\) is \\(-\\dfrac{8}{110}\\,\\text{A}\\)",
-        "initial current in \\(R_1\\) is \\(-\\dfrac{23}{110}\\,\\text{A}\\)"
-      ],
-      "qAnswer": ["B", "D"]
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "The directions of induced electric field at points \\(a\\), \\(b\\) and \\(c\\) are best shown by",
+          "image": "35a.png",
+          "qOptions": [
+            "Figure (A)",
+            "Figure (B)",
+            "Figure (C)",
+            "Figure (D)"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The current induced in the loop if its resistance is \\(2.00\\,\\Omega\\) is",
+          "image": null,
+          "qOptions": [
+            " \\(2.50\\times10^{-4}\\,\\text{A}\\)",
+            " \\(4.35\\times10^{-4}\\,\\text{A}\\)",
+            " \\(1.25\\times10^{-4}\\,\\text{A}\\)",
+            " \\(7.37\\times10^{-4}\\,\\text{A}\\)"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The potential difference between points \\(a\\) and \\(b\\) is",
+          "image": null,
+          "qOptions": [
+            "6 V",
+            "0",
+            "10 V",
+            "12 V"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "The wire network shown has uniform resistance per unit length \\(1\\,\\Omega\\!\\cdot\\!\\text{m}^{-1}\\) and lies in a uniform time-varying magnetic field (into the plane) increasing at \\(1\\,\\text{T s}^{-1}\\). If the currents in the two rightmost vertical segments are \\(I_1\\) and \\(I_2\\), find \\(I_1/I_2\\).",
+          "image": "38.png",
+          "qOptions": [
+            "2",
+            "4",
+            "1/3",
+            "1/6"
+          ],
+          "qAnswer": "D"
+        },
+        {
+          "qType": "Numerical",
+          "qText": "In the square conducting frame \\(ABCEFG A\\) (side \\(m\\), resistance \\(1\\,\\Omega\\!\\cdot\\!\\text{m}^{-1}\\)) a uniform magnetic field \\(B\\) is applied perpendicular to the plane and pointing inward, increasing at \\(10\\,\\text{T s}^{-1}\\). Find the rate at which heat is produced in the circuit (\\(AB=BC=CD=BH\\)).",
+          "image": "39.png",
+          "qOptions": [],
+          "qAnswer": 200
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "A very long solenoid (field into the page, magnitude increasing with time) induces an emf in a conducting wire loop that lights two identical bulbs \\(A\\) and \\(B\\) in series. Now two diametrically opposite points of the wire loop to the right of bulb \\(B\\) are shorted by a wire (see figure). After inserting the short, which statements are true?",
+          "image": "40.png",
+          "qOptions": [
+            "bulb A goes out",
+            "bulb B gets brighter",
+            "bulb B goes out",
+            "bulb A gets brighter"
+          ],
+          "qAnswer": [
+            "B",
+            "D"
+          ]
+        },
+        {
+          "qType": "MMCQ",
+          "qText": "In the network shown: \\(R_1=1\\,\\Omega\\), \\(R_2=2\\,\\Omega\\), \\(R_3=3\\,\\Omega\\), a battery of emf \\(0.3\\,\\text{V}\\) is connected. In loop (1) an inward magnetic field \\(B_1=e^{2t}\\) is applied and in loop (2) an outward magnetic field \\(B_2=2t\\) is applied. Mark the CORRECT statement(s) at \\(t=0\\).",
+          "image": "41.png",
+          "qOptions": [
+            "initial current in \\(R_3\\) is \\(-\\dfrac{9}{110}\\,\\text{A}\\)",
+            "initial current in \\(R_2\\) is \\(\\dfrac{16}{110}\\,\\text{A}\\)",
+            "initial current in \\(R_3\\) is \\(-\\dfrac{8}{110}\\,\\text{A}\\)",
+            "initial current in \\(R_1\\) is \\(-\\dfrac{23}{110}\\,\\text{A}\\)"
+          ],
+          "qAnswer": [
+            "B",
+            "D"
+          ]
+        }
+      ]
     },
     {
       "qType": "Passage",
-      "passageId": "P8",
       "qText": "A thin superconducting (zero-resistance) ring of radius \\(r_0\\) and self-inductance \\(L\\) is held above a long vertical solenoid as shown. The magnetic field near the ring can be approximated by \\(B_z=B_0(1-\\alpha z)\\) and \\(B_r=B_0\\beta r\\). Initially the ring is horizontal (no current). When released, it moves down with axis vertical; its centre starts at \\(z=0,r=0\\).",
       "image": "42.png",
-      "qOptions": [],
-      "qAnswer": []
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "Find the magnitude of current in the ring at a vertical position \\(z\\).",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{1}{L}B_0\\alpha\\pi r_0^{2}z\\)",
-        "\\(\\dfrac{1}{L}B_0\\alpha\\beta\\pi r_0^{2}z\\)",
-        "\\(\\dfrac{1}{2L}B_0\\beta\\pi r_0^{2}z\\)",
-        "None of these"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "Find the vertical coordinate \\(z\\) for the equilibrium position of the ring.",
-      "image": null,
-      "qOptions": [
-        "\\(-\\dfrac{2mgL}{B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
-        "\\(-\\dfrac{mgL}{2B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
-        "\\(-\\dfrac{mgL}{4B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
-        "none of these"
-      ],
-      "qAnswer": "B"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": "P8",
-      "qText": "Find the time period of SHM (for small displacement) of the ring about the equilibrium position.",
-      "image": null,
-      "qOptions": [
-        "\\(\\dfrac{1}{B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{\\alpha\\beta}}\\)",
-        "\\(\\dfrac{1}{2B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{\\alpha\\beta}}\\)",
-        "\\(\\dfrac{1}{B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{3\\alpha\\beta}}\\)",
-        "None of these"
-      ],
-      "qAnswer": "A"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A cylindrical region (radius \\(R\\)) contains a magnetic field into the page with \\(\\tfrac{dB}{dt}=k>0\\). Three resistive wires \\(xy, yz, zx\\) form an equilateral triangle \\(xyz\\) with resistances \\(2r, r, r\\) respectively. Points \\(x\\) and \\(y\\) are connected to the plates of a capacitor of capacitance \\(C\\) using perfect conductors. The small capacitor coincides with the centre of the cross-section. Select the correct statement.",
-      "image": "45.png",
-      "qOptions": [
-        "The charge appearing on the capacitor in steady state is \\(\\dfrac{kR^{2}C}{6}\\)",
-        "The charge appearing on the capacitor in steady state is \\(\\dfrac{kR^{2}C}{3}\\)",
-        "Induced current in the loop \\(xyz\\) is \\(\\dfrac{3\\sqrt{3}\\,kR^{2}}{8r}\\)",
-        "Induced current in the loop \\(xyz\\) is \\(\\dfrac{16r}{3\\sqrt{3}\\,kR^{2}}\\)"
-      ],
-      "qAnswer": "C"
-    },
-    {
-      "qType": "SMCQ",
-      "passageId": null,
-      "qText": "A plane loop, shaped as two squares of sides \\(a=1\\,\\text{m}\\) and \\(b=0.4\\,\\text{m}\\) is introduced into a uniform magnetic field perpendicular to the loop. The magnetic field varies as \\(B=10^{-3}\\sin(100t)\\,\\text{T}\\). If the resistance per unit length is \\(r=5\\,\\text{m}\\Omega\\,\\text{m}^{-1}\\), the amplitude of the current induced in the loop is",
-      "image": "46.png",
-      "qOptions": ["2 A", "3 A", "4 A", "5 A"],
-      "qAnswer": "B"
+      "questions": [
+        {
+          "qType": "SMCQ",
+          "qText": "Find the magnitude of current in the ring at a vertical position \\(z\\).",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{1}{L}B_0\\alpha\\pi r_0^{2}z\\)",
+            "\\(\\dfrac{1}{L}B_0\\alpha\\beta\\pi r_0^{2}z\\)",
+            "\\(\\dfrac{1}{2L}B_0\\beta\\pi r_0^{2}z\\)",
+            "None of these"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Find the vertical coordinate \\(z\\) for the equilibrium position of the ring.",
+          "image": null,
+          "qOptions": [
+            "\\(-\\dfrac{2mgL}{B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
+            "\\(-\\dfrac{mgL}{2B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
+            "\\(-\\dfrac{mgL}{4B_0^{2}\\alpha\\beta\\pi^{2}r_0^{4}}\\)",
+            "none of these"
+          ],
+          "qAnswer": "B"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "Find the time period of SHM (for small displacement) of the ring about the equilibrium position.",
+          "image": null,
+          "qOptions": [
+            "\\(\\dfrac{1}{B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{\\alpha\\beta}}\\)",
+            "\\(\\dfrac{1}{2B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{\\alpha\\beta}}\\)",
+            "\\(\\dfrac{1}{B_0 r_0^{2}}\\sqrt{\\dfrac{2mL}{3\\alpha\\beta}}\\)",
+            "None of these"
+          ],
+          "qAnswer": "A"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A cylindrical region (radius \\(R\\)) contains a magnetic field into the page with \\(\\tfrac{dB}{dt}=k>0\\). Three resistive wires \\(xy, yz, zx\\) form an equilateral triangle \\(xyz\\) with resistances \\(2r, r, r\\) respectively. Points \\(x\\) and \\(y\\) are connected to the plates of a capacitor of capacitance \\(C\\) using perfect conductors. The small capacitor coincides with the centre of the cross-section. Select the correct statement.",
+          "image": "45.png",
+          "qOptions": [
+            "The charge appearing on the capacitor in steady state is \\(\\dfrac{kR^{2}C}{6}\\)",
+            "The charge appearing on the capacitor in steady state is \\(\\dfrac{kR^{2}C}{3}\\)",
+            "Induced current in the loop \\(xyz\\) is \\(\\dfrac{3\\sqrt{3}\\,kR^{2}}{8r}\\)",
+            "Induced current in the loop \\(xyz\\) is \\(\\dfrac{16r}{3\\sqrt{3}\\,kR^{2}}\\)"
+          ],
+          "qAnswer": "C"
+        },
+        {
+          "qType": "SMCQ",
+          "qText": "A plane loop, shaped as two squares of sides \\(a=1\\,\\text{m}\\) and \\(b=0.4\\,\\text{m}\\) is introduced into a uniform magnetic field perpendicular to the loop. The magnetic field varies as \\(B=10^{-3}\\sin(100t)\\,\\text{T}\\). If the resistance per unit length is \\(r=5\\,\\text{m}\\Omega\\,\\text{m}^{-1}\\), the amplitude of the current induced in the loop is",
+          "image": "46.png",
+          "qOptions": [
+            "2 A",
+            "3 A",
+            "4 A",
+            "5 A"
+          ],
+          "qAnswer": "B"
+        }
+      ]
     }
   ]
 }
