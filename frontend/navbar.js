@@ -188,89 +188,30 @@
     loginItem.classList.remove("d-none");
   }
 
-  // -------------------- Password helpers --------------------
+  // -------------------- PASSWORD: deterministic derivation --------------------
+  /**
+   * Derives a password from a username using a "first-two, last-two, plus length" rule.
+   * This algorithm is simple enough for a human to compute mentally.
+   *
+   * @param {string | null | undefined} usernameRaw The raw username string.
+   * @returns {string} The derived password.
+   */
   function derivePasswordFromUsername(usernameRaw) {
+    // 1) Sanitize: lowercase, keep only letters (a-z) and digits (0-9).
     const s = (usernameRaw ?? "").toLowerCase().replace(/[^a-z0-9]/g, "");
-    if (!s) return "default123";
+
+    // 2) If the sanitized string is empty, fall back to a default.
+    if (!s) {
+      return "default123";
+    }
+
+    // 3) Get the required components for the password.
     const len = s.length;
     const firstTwo = s.slice(0, 2);
     const lastTwo = s.slice(-2);
-    return `${firstTwo}${lastTwo}${len}`;
-  }
 
-  async function showChangePasswordDialog(currentPassword = "") {
-    const idCur = "qbaseChangePwdCurrent";
-    const idNew = "qbaseChangePwdNew";
-    const idNew2 = "qbaseChangePwdNew2";
-    const body = `
-      <div class="mb-2">
-        <label for="${idCur}" class="form-label">Current password</label>
-        <input id="${idCur}" class="form-control" type="password" value="${currentPassword}" autocomplete="current-password" />
-      </div>
-      <div class="mb-2">
-        <label for="${idNew}" class="form-label">New password</label>
-        <input id="${idNew}" class="form-control" type="password" placeholder="At least 6 characters" autocomplete="new-password" />
-      </div>
-      <div class="mb-2">
-        <label for="${idNew2}" class="form-label">Confirm new password</label>
-        <input id="${idNew2}" class="form-control" type="password" autocomplete="new-password" />
-      </div>
-      <div id="qbaseChangePwdErr" class="text-danger small" style="display:none"></div>
-    `;
-    const res = await showModal({
-      title: "Change Password",
-      bodyHTML: body,
-      buttons: [
-        { text: "Cancel", className: "btn btn-outline-secondary", value: false },
-        { text: "Update", className: "btn btn-success", value: true },
-      ],
-      focusSelector: `#${currentPassword ? idNew : idCur}`,
-      onContentReady: (modalEl) => {
-        const err = modalEl.querySelector("#qbaseChangePwdErr");
-        const onValidate = () => {
-          err && (err.style.display = "none");
-          const cur = modalEl.querySelector(`#${idCur}`)?.value || "";
-          const n1 = modalEl.querySelector(`#${idNew}`)?.value || "";
-          const n2 = modalEl.querySelector(`#${idNew2}`)?.value || "";
-          if (!cur || n1.length < 6 || n1 !== n2) {
-            err.textContent = !cur
-              ? "Current password required."
-              : n1.length < 6
-              ? "New password must be at least 6 characters."
-              : "New passwords do not match.";
-            err.style.display = "block";
-            return false;
-          }
-          return true;
-        };
-        // Intercept primary button to validate before closing
-        const footer = modalEl.querySelector("#qbaseModalFooter");
-        const btn = footer?.querySelector(".btn.btn-success");
-        btn?.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (!onValidate()) return;
-          try {
-            const cur = modalEl.querySelector(`#${idCur}`)?.value || "";
-            const n1 = modalEl.querySelector(`#${idNew}`)?.value || "";
-            const r = await authFetch(`${API_BASE}/change-password`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ currentPassword: cur, newPassword: n1 }),
-            });
-            if (!r.ok) throw new Error(String(r.status));
-            await showNotice({
-              title: "Password changed",
-              message: "Your password has been updated.",
-            });
-          } catch {
-            err.textContent = "Failed to change password. Check current password.";
-            err.style.display = "block";
-            return; // keep modal open
-          }
-        });
-      },
-    });
-    return res;
+    // 4) Combine the parts: [first two][last two][length].
+    return `${firstTwo}${lastTwo}${len}`;
   }
 
   function ensureLoginGate() {
@@ -292,8 +233,8 @@
     wrap.innerHTML = `
       <div class="card text-light" style="background:#15171b;border:1px solid rgba(255,255,255,0.08);min-width:320px;max-width:420px">
         <div class="card-body">
-          <h5 class="card-title mb-2" id="qbaseGateTitle">Sign in required</h5>
-          <p class="card-text" id="qbaseGateSubtitle">Please log in to use QBase.</p>
+          <h5 class="card-title mb-2">Sign in required</h5>
+          <p class="card-text">Please log in to use QBase.</p>
           <form id="qbaseGateForm">
             <div class="mb-2">
               <label for="qbaseGateUsername" class="form-label">Username</label>
@@ -308,17 +249,9 @@
                 </div>
               </div>
             </div>
-            <div class="mb-2 d-none" id="qbaseGatePassword2Wrap">
-              <label for="qbaseGatePassword2" class="form-label">Confirm Password</label>
-              <input id="qbaseGatePassword2" class="form-control" type="password" autocomplete="new-password" />
-            </div>
             <div id="qbaseGateError" class="text-danger small mb-2" style="display:none"></div>
-            <div class="d-flex flex-column gap-2">
-              <button id="qbaseGateLoginBtn" class="btn btn-primary w-100" type="submit">Login</button>
-              <div class="d-flex justify-content-between small">
-                <a href="#" id="qbaseGateToggleMode">Need an account? Sign up</a>
-                <a href="#" id="qbaseGateAutofill">Autofill migrated default</a>
-              </div>
+            <div class="d-flex gap-2">
+              <button id="qbaseGateLoginBtn" class="btn btn-primary flex-fill" type="submit">Login</button>
             </div>
           </form>
         </div>
@@ -331,37 +264,11 @@
     const btn = wrap.querySelector("#qbaseGateLoginBtn");
     const input = wrap.querySelector("#qbaseGateUsername");
     const pwd = wrap.querySelector("#qbaseGatePassword");
-    const pwd2Wrap = wrap.querySelector("#qbaseGatePassword2Wrap");
-    const pwd2 = wrap.querySelector("#qbaseGatePassword2");
     const toggleBtn = wrap.querySelector("#qbaseGateTogglePwd");
-    const toggleMode = wrap.querySelector("#qbaseGateToggleMode");
-    const autofill = wrap.querySelector("#qbaseGateAutofill");
-    const titleEl = wrap.querySelector("#qbaseGateTitle");
-    const subEl = wrap.querySelector("#qbaseGateSubtitle");
-    let signUpMode = false;
-
-    function renderMode() {
-      if (signUpMode) {
-        titleEl.textContent = "Create an account";
-        subEl.textContent = "Sign up to start using QBase.";
-        btn.textContent = "Sign up";
-        pwd.setAttribute("autocomplete", "new-password");
-        pwd2Wrap.classList.remove("d-none");
-        toggleMode.textContent = "Have an account? Sign in";
-      } else {
-        titleEl.textContent = "Sign in required";
-        subEl.textContent = "Please log in to use QBase.";
-        btn.textContent = "Login";
-        pwd.setAttribute("autocomplete", "current-password");
-        pwd2Wrap.classList.add("d-none");
-        toggleMode.textContent = "Need an account? Sign up";
-      }
-    }
-    renderMode();
 
     const onSubmit = (e) => {
       e?.preventDefault?.();
-      gateLoginFlow(signUpMode);
+      gateLoginFlow();
     };
     btn?.addEventListener("click", onSubmit);
     form?.addEventListener("submit", onSubmit);
@@ -373,18 +280,6 @@
       const isPw = pwd.type === "password";
       pwd.type = isPw ? "text" : "password";
       toggleBtn.textContent = isPw ? "Hide" : "Show";
-    });
-    toggleMode?.addEventListener("click", (e) => {
-      e.preventDefault();
-      signUpMode = !signUpMode;
-      renderMode();
-    });
-    autofill?.addEventListener("click", (e) => {
-      e.preventDefault();
-      const u = (input?.value || "").trim();
-      if (!u) return;
-      pwd.value = derivePasswordFromUsername(u);
-      if (!signUpMode) pwd.focus();
     });
 
     loginGateEl = wrap;
@@ -713,32 +608,38 @@
     showLoginGate();
   }
 
-  async function gateLoginFlow(signUpMode = false) {
+  async function gateLoginFlow() {
     ensureLoginGate();
     const input = document.getElementById("qbaseGateUsername");
     const pwd = document.getElementById("qbaseGatePassword");
-    const pwd2 = document.getElementById("qbaseGatePassword2");
     const err = document.getElementById("qbaseGateError");
 
     const username = (input?.value || "").trim();
     const typedPwd = (pwd?.value || "").trim();
-    const typedPwd2 = (pwd2?.value || "").trim();
 
     // Basic validation
-    if (!username || username.length < 3) {
+    if (!username || username.length < 2) {
       if (err) {
-        err.textContent = "Please enter a valid username (min 3 characters).";
+        err.textContent = "Please enter a valid username (min 2 characters).";
         err.style.display = "block";
       }
       input?.focus();
       return;
     }
 
+    // Require a password and validate it against the deterministic algorithm
+    const expectedPwd = derivePasswordFromUsername(username);
     if (!typedPwd) {
       if (err) {
-        err.textContent = signUpMode
-          ? "Please enter a password (at least 6 characters)."
-          : "Please enter your password.";
+        err.textContent = "Please enter your password (you can auto-fill it).";
+        err.style.display = "block";
+      }
+      pwd?.focus();
+      return;
+    }
+    if (typedPwd !== expectedPwd) {
+      if (err) {
+        err.textContent = "Incorrect password for this username.";
         err.style.display = "block";
       }
       pwd?.focus();
@@ -747,28 +648,14 @@
 
     err && (err.style.display = "none");
     try {
-      let r, data;
-      if (signUpMode) {
-        if (typedPwd.length < 6) {
-          throw new Error("WEAK");
-        }
-        if (typedPwd2 !== typedPwd) {
-          throw new Error("MISMATCH");
-        }
-        r = await fetch(`${API_BASE}/signup`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password: typedPwd }),
-        });
-      } else {
-        r = await fetch(`${API_BASE}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password: typedPwd }),
-        });
-      }
+      // Include the (deterministically derived) password in the request
+      const r = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password: typedPwd }),
+      });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      data = await r.json();
+      const data = await r.json();
       if (data && data.token && data.user && data.user.username) {
         qbSetToken(data.token);
         setLoggedInUI(data.user.username);
@@ -776,24 +663,12 @@
         hideLoginGate();
         if (input) input.value = "";
         if (pwd) pwd.value = "";
-        if (pwd2) pwd2.value = "";
-        if (data.user.mustChangePassword) {
-          // Prompt user to change password immediately; pass current for convenience
-          await showChangePasswordDialog(typedPwd);
-        }
       } else {
         throw new Error("Session not established");
       }
     } catch (e) {
       if (err) {
-        const msg = signUpMode
-          ? e?.message === "WEAK"
-            ? "Password must be at least 6 characters."
-            : e?.message === "MISMATCH"
-            ? "Passwords do not match."
-            : "Sign up failed. Please try a different username."
-          : "Login failed. Please check your credentials.";
-        err.textContent = msg;
+        err.textContent = "Login failed. Please try again.";
         err.style.display = "block";
       }
       showLoginGate();
@@ -867,10 +742,6 @@
       setLoggedInUI(me.username);
       broadcastLogin(me.username);
       hideLoginGate();
-      if (me.mustChangePassword) {
-        // We don't know current password on page load; ask user for it.
-        await showChangePasswordDialog("");
-      }
     } else {
       setLoggedOutUI();
       if ((!IS_DEV || FORCE_LOGIN) && !isAuthenticated) {

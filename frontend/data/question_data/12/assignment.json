@@ -2,66 +2,47 @@
   "questions": [
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two mirrors are inclined at an angle of 25° and an incident ray strikes the first mirror with an incident angle of 60° and suffers many reflections from each mirror. The total deviation after three successive reflection will be;",
       "image": null,
-      "qOptions": [
-        "130°",
-        "90°",
-        "120°",
-        "110°"
-      ],
+      "qOptions": ["130°", "90°", "120°", "110°"],
       "qAnswer": "D"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two plane mirrors are inclined at 70°. A ray incident on one mirror at angle \\(\\theta\\) after reflection falls on the second mirror and is reflected from there parallel to first mirror, \\(\\theta\\) is",
       "image": null,
-      "qOptions": [
-        "50°",
-        "45°",
-        "30°",
-        "55°"
-      ],
+      "qOptions": ["50°", "45°", "30°", "55°"],
       "qAnswer": "A"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two plane mirrors are inclined at 120° to each other. A ray of incident on mirror 1 at angle of 50° is doubly reflected. The mirror deviates the incident ray through an angle of",
       "image": null,
-      "qOptions": [
-        "120°",
-        "100°",
-        "80°",
-        "60°"
-      ],
+      "qOptions": ["120°", "100°", "80°", "60°"],
       "qAnswer": "A"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "A ray of light is incident at 50° on the middle of one of the two mirrors arranged at an angle of 60° between them. The ray then touches the second mirror, gets reflected back to the first mirror, making an angle of incidence ............",
       "image": null,
-      "qOptions": [
-        "50°",
-        "60°",
-        "70°",
-        "80°"
-      ],
+      "qOptions": ["50°", "60°", "70°", "80°"],
       "qAnswer": "C"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two plane mirrors AB and AC are inclined at an angle of 20°. A ray of light starting from point P is incident at point Q on the mirror AB, then at R on mirror AC and again on S on AB finally the ray ST goes parallel to mirror AC. The angle ‘i’ which the ray makes with the normal at point Q on mirror AB is",
       "image": "5.png",
-      "qOptions": [
-        "20°",
-        "30°",
-        "40°",
-        "60°"
-      ],
+      "qOptions": ["20°", "30°", "40°", "60°"],
       "qAnswer": "B"
     },
     {
       "qType": "MMCQ",
+      "passageId": null,
       "qText": "Two plane mirrors at an angle such that a ray incident on a mirror undergoes a total deviation of 240° after two reflections",
       "image": null,
       "qOptions": [
@@ -70,922 +51,788 @@
         "the number of images will be 5 if an object is kept unsymmetrically between the mirrors",
         "A ray will retrace its path after 2 successive reflections, if the angle of incidence on one mirror is 60°."
       ],
-      "qAnswer": [
-        "A",
-        "B",
-        "C",
-        "D"
-      ]
+      "qAnswer": ["A", "B", "C", "D"]
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "At what angle must two plane mirrors be placed so that the incident and the resulting reflected rays are always parallel to each other?",
       "image": null,
-      "qOptions": [
-        "0°",
-        "30°",
-        "60°",
-        "90°"
-      ],
+      "qOptions": ["0°", "30°", "60°", "90°"],
       "qAnswer": "D"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two mirrors are inclined at an angle of \\(\\theta\\) with each other. A ray of light is incident on 1st mirror at an angle of 50° and after 3 reflections retraces its path. Then \\(\\theta\\) is",
       "image": null,
-      "qOptions": [
-        "0°",
-        "30°",
-        "60°",
-        "90°"
-      ],
+      "qOptions": ["0°", "30°", "60°", "90°"],
       "qAnswer": "B"
     },
     {
       "qType": "SMCQ",
+      "passageId": null,
       "qText": "Two mirrors are inclined at an angle of \\(\\theta\\) with each other. A ray of light travelling parallel to one of the mirror after 4 successive reflections retraces its path. Then \\(\\theta\\) is",
       "image": null,
+      "qOptions": ["22.5°", "45°", "60°", "30°"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Refer to the diagram. Angle between the mirrors is 120°.",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "What should be the angle of incidence ‘i’ on mirror 1 so that after reflection from the mirror 2, the ray becomes vertical.",
+      "image": null,
+      "qOptions": ["0°", "30°", "60°", "90°"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "What is the total deviation in this case?",
+      "image": null,
+      "qOptions": ["150°", "120°", "60°", "90°"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "For what values of angle of incidence only one reflection takes place?",
+      "image": null,
       "qOptions": [
-        "22.5°",
-        "45°",
-        "60°",
-        "30°"
+        "\\(i < 30^\\circ\\)",
+        "\\(i < 60^\\circ\\)",
+        "\\(i > 30^\\circ\\)",
+        "\\(i > 60^\\circ\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A light ray is incident on a plane mirror M. The mirror is rotated in the direction as shown in the figure by an arrow at frequency \\(\\frac{9}{\\pi}\\) rev/s. The light reflected from the mirror is received on the wall at a distance 10 m from the axis of rotation. When the angle of incidence becomes 37°, find the speed of the spot of light on the wall (m/s).",
+      "image": "13.png",
+      "qOptions": [],
+      "qAnswer": 500
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors A and B are aligned parallel to each other as shown. A light ray is incident at an angle of 30° at a point just inside one end of A. The plane of incidence coincides with the plane of the figure. The maximum number of times the ray undergoes reflections (including the first one) before it emerges out is",
+      "image": "14.png",
+      "qOptions": ["28", "30", "32", "31"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light is incident on a plane mirror along the vector \\(\\hat i + \\hat j − \\hat k\\). The normal at the point of incidence is along the vector \\(\\hat i + \\hat j\\). Find the unit vector along the reflected ray. (Options are made-up distractors; one is correct. Here i, j, k are unit vectors.)",
+      "image": null,
+      "qOptions": [
+        "-(i + j + k)/sqrt3",
+        "-(i + j - k)/sqrt3",
+        "(i + j + k)/sqrt3",
+        "-(i - j + k)/sqrt3"
       ],
       "qAnswer": "A"
     },
     {
       "qType": "Passage",
-      "qText": "Refer to the diagram. Angle between the mirrors is 120°.",
-      "image": "p1.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "What should be the angle of incidence ‘i’ on mirror 1 so that after reflection from the mirror 2, the ray becomes vertical.",
-          "image": null,
-          "qOptions": [
-            "0°",
-            "30°",
-            "60°",
-            "90°"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "What is the total deviation in this case?",
-          "image": null,
-          "qOptions": [
-            "150°",
-            "120°",
-            "60°",
-            "90°"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "For what values of angle of incidence only one reflection takes place?",
-          "image": null,
-          "qOptions": [
-            "\\(i < 30^\\circ\\)",
-            "\\(i < 60^\\circ\\)",
-            "\\(i > 30^\\circ\\)",
-            "\\(i > 60^\\circ\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "Numerical",
-          "qText": "A light ray is incident on a plane mirror M. The mirror is rotated in the direction as shown in the figure by an arrow at frequency \\(\\frac{9}{\\pi}\\) rev/s. The light reflected from the mirror is received on the wall at a distance 10 m from the axis of rotation. When the angle of incidence becomes 37°, find the speed of the spot of light on the wall (m/s).",
-          "image": "13.png",
-          "qOptions": [],
-          "qAnswer": 500
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two plane mirrors A and B are aligned parallel to each other as shown. A light ray is incident at an angle of 30° at a point just inside one end of A. The plane of incidence coincides with the plane of the figure. The maximum number of times the ray undergoes reflections (including the first one) before it emerges out is",
-          "image": "14.png",
-          "qOptions": [
-            "28",
-            "30",
-            "32",
-            "31"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A ray of light is incident on a plane mirror along the vector \\(\\hat i + \\hat j − \\hat k\\). The normal at the point of incidence is along the vector \\(\\hat i + \\hat j\\). Find the unit vector along the reflected ray. (Options are made-up distractors; one is correct. Here i, j, k are unit vectors.)",
-          "image": null,
-          "qOptions": [
-            "-(i + j + k)/sqrt3",
-            "-(i + j - k)/sqrt3",
-            "(i + j + k)/sqrt3",
-            "-(i - j + k)/sqrt3"
-          ],
-          "qAnswer": "A"
-        }
-      ]
-    },
-    {
-      "qType": "Passage",
+      "passageId": "P2",
       "qText": "A ray of light is sent along the line \\(x - 2y - 3 = 0\\). Upon reaching \\(3x - 2y - 5 = 0\\), the ray is reflected from it. Answer the following questions.",
       "image": "p2.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "Co-ordinates of the point of incidence are",
-          "image": null,
-          "qOptions": [
-            "(1,-1)",
-            "(-1,1)",
-            "(1,2)",
-            "(-2,1)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Angle of incidence is",
-          "image": null,
-          "qOptions": [
-            "\\(\\tfrac{\\pi}{2} + \\tfrac{1}{2}\\tan^{-1}\\tfrac{7}{4}\\)",
-            "\\(\\tfrac{\\pi}{2} - \\tfrac{1}{2}\\tan^{-1}\\tfrac{7}{4}\\)",
-            "\\(\\tfrac{\\pi}{2} - \\tan^{-1}\\tfrac{7}{4}\\)",
-            "\\(\\tan^{-1}\\tfrac{7}{4}\\)"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Equation of line along the normal which is in plane formed by the two lines given in the comprehension is",
-          "image": null,
-          "qOptions": [
-            "\\(2x+3y+1=0\\)",
-            "\\(3x+2y+1=0\\)",
-            "\\(2x-3y+1=0\\)",
-            "\\(3x-2y+1=0\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "[NO ANSWER PROVIDED] \n \n  Equation of line along reflected ray is",
-          "image": null,
-          "qOptions": [
-            "31x-2y-29=0",
-            "29x-2y-31=0",
-            "31x+2y-29=0",
-            "29x+2y-31=0"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two plane mirrors combined to each other as such one is in y–z plane and other is in x–z plane. A ray of light along the vector \\(\\tfrac{1}{\\sqrt{3}}\\hat i + \\tfrac{1}{\\sqrt{3}}\\hat j + \\tfrac{1}{\\sqrt{3}}\\hat k\\) is incident on the first mirror. Find the unit vector in direction of emergent ray after successive reflections through the mirror. (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(-\\tfrac{1}{\\sqrt{3}}(\\hat i + \\hat j - \\hat k)\\)",
-            "\\(\\tfrac{1}{\\sqrt{3}}(\\hat i + \\hat j - \\hat k)\\)",
-            "\\(-\\tfrac{1}{\\sqrt{3}}(\\hat i - \\hat j + \\hat k)\\)",
-            "\\(\\tfrac{1}{\\sqrt{3}}(-\\hat i + \\hat j + \\hat k)\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A plane mirror is placed along the x-axis. One end of the mirror is at origin. Find the equation of the image of an object \\(y = a\\sin(\\omega x)\\). (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(y = -a\\sin(\\omega x)\\)",
-            "\\(y = a\\sin(\\omega x)\\)",
-            "\\(y = a\\cos(\\omega x)\\)",
-            "\\(y = -a\\cos(\\omega x)\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A boy of height 1.5 m with his eyes level at 1.4 m stands before a plane mirror of length 0.75 m fixed on the wall. The height of the lower edge of the mirror above the floor is 0.8 m. Then",
-          "image": null,
-          "qOptions": [
-            "boy will see his full image",
-            "boy can not see his hair",
-            "boy can not see his feet",
-            "boy can neither see his hair nor his feet"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "A man of height 170 cm wants to see his complete image in a plane mirror (while standing). His eyes are at a height of 160 cm from the ground.",
-          "image": null,
-          "qOptions": [
-            "Minimum length of the mirror is 80 cm",
-            "Minimum length of the mirror is 85 cm",
-            "Bottom of the mirror should be at a height of 80 cm",
-            "Bottom of the mirror should be at a height of 85 cm"
-          ],
-          "qAnswer": [
-            "B",
-            "C"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A man of height 180 cm is holding a pot of height 40 cm on his head. His eyes are at a level of 170 cm from his shoes. He is standing on a table of height 40 cm. The minimum height of the mirror required so that he can see his full image (from pot to his shoes) is",
-          "image": null,
-          "qOptions": [
-            "90 cm",
-            "120 cm",
-            "110 cm",
-            "360 cm"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "In the above question, the height of the bottom of the mirror from the ground is",
-          "image": null,
-          "qOptions": [
-            "125 cm",
-            "120 cm",
-            "100 cm",
-            "90 cm"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A point source of light B is placed at a distance L in front of the centre of a mirror of width d hung vertically on the wall. A man walks in front of the mirror at a distance of 2L from it as shown. The greatest distance over which he can see the image of the light source in the mirror is",
-          "image": "26.png",
-          "qOptions": [
-            "\\(d/2\\)",
-            "\\(d\\)",
-            "\\(2d\\)",
-            "\\(3d\\)"
-          ],
-          "qAnswer": "D"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Co-ordinates of the point of incidence are",
+      "image": null,
+      "qOptions": ["(1,-1)", "(-1,1)", "(1,2)", "(-2,1)"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Angle of incidence is",
+      "image": null,
+      "qOptions": [
+        "\\(\\tfrac{\\pi}{2} + \\tfrac{1}{2}\\tan^{-1}\\tfrac{7}{4}\\)",
+        "\\(\\tfrac{\\pi}{2} - \\tfrac{1}{2}\\tan^{-1}\\tfrac{7}{4}\\)",
+        "\\(\\tfrac{\\pi}{2} - \\tan^{-1}\\tfrac{7}{4}\\)",
+        "\\(\\tan^{-1}\\tfrac{7}{4}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Equation of line along the normal which is in plane formed by the two lines given in the comprehension is",
+      "image": null,
+      "qOptions": [
+        "\\(2x+3y+1=0\\)",
+        "\\(3x+2y+1=0\\)",
+        "\\(2x-3y+1=0\\)",
+        "\\(3x-2y+1=0\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "[NO ANSWER PROVIDED] \n \n  Equation of line along reflected ray is",
+      "image": null,
+      "qOptions": ["31x-2y-29=0", "29x-2y-31=0", "31x+2y-29=0", "29x+2y-31=0"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "Two plane mirrors combined to each other as such one is in y–z plane and other is in x–z plane. A ray of light along the vector \\(\\tfrac{1}{\\sqrt{3}}\\hat i + \\tfrac{1}{\\sqrt{3}}\\hat j + \\tfrac{1}{\\sqrt{3}}\\hat k\\) is incident on the first mirror. Find the unit vector in direction of emergent ray after successive reflections through the mirror. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-\\tfrac{1}{\\sqrt{3}}(\\hat i + \\hat j - \\hat k)\\)",
+        "\\(\\tfrac{1}{\\sqrt{3}}(\\hat i + \\hat j - \\hat k)\\)",
+        "\\(-\\tfrac{1}{\\sqrt{3}}(\\hat i - \\hat j + \\hat k)\\)",
+        "\\(\\tfrac{1}{\\sqrt{3}}(-\\hat i + \\hat j + \\hat k)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plane mirror is placed along the x-axis. One end of the mirror is at origin. Find the equation of the image of an object \\(y = a\\sin(\\omega x)\\). (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(y = -a\\sin(\\omega x)\\)",
+        "\\(y = a\\sin(\\omega x)\\)",
+        "\\(y = a\\cos(\\omega x)\\)",
+        "\\(y = -a\\cos(\\omega x)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A boy of height 1.5 m with his eyes level at 1.4 m stands before a plane mirror of length 0.75 m fixed on the wall. The height of the lower edge of the mirror above the floor is 0.8 m. Then",
+      "image": null,
+      "qOptions": [
+        "boy will see his full image",
+        "boy can not see his hair",
+        "boy can not see his feet",
+        "boy can neither see his hair nor his feet"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A man of height 170 cm wants to see his complete image in a plane mirror (while standing). His eyes are at a height of 160 cm from the ground.",
+      "image": null,
+      "qOptions": [
+        "Minimum length of the mirror is 80 cm",
+        "Minimum length of the mirror is 85 cm",
+        "Bottom of the mirror should be at a height of 80 cm",
+        "Bottom of the mirror should be at a height of 85 cm"
+      ],
+      "qAnswer": ["B", "C"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A man of height 180 cm is holding a pot of height 40 cm on his head. His eyes are at a level of 170 cm from his shoes. He is standing on a table of height 40 cm. The minimum height of the mirror required so that he can see his full image (from pot to his shoes) is",
+      "image": null,
+      "qOptions": ["90 cm", "120 cm", "110 cm", "360 cm"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the above question, the height of the bottom of the mirror from the ground is",
+      "image": null,
+      "qOptions": ["125 cm", "120 cm", "100 cm", "90 cm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A point source of light B is placed at a distance L in front of the centre of a mirror of width d hung vertically on the wall. A man walks in front of the mirror at a distance of 2L from it as shown. The greatest distance over which he can see the image of the light source in the mirror is",
+      "image": "26.png",
+      "qOptions": ["\\(d/2\\)", "\\(d\\)", "\\(2d\\)", "\\(3d\\)"],
+      "qAnswer": "D"
     },
     {
       "qType": "Passage",
+      "passageId": "P3",
       "qText": "A man is standing in a room and a plane mirror is fixed on the wall in front of him. The height of the wall is \\(H\\). The man has to see the complete image of the wall behind him at a time. Refer to positions 1, 2 and 3 shown in the diagram.",
       "image": "p3.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "When the man is standing near wall i.e. at position 1, the minimum length of the mirror required is",
-          "image": null,
-          "qOptions": [
-            "\\(H\\)",
-            "\\(H/2\\)",
-            "\\(H/3\\)",
-            "\\(H/4\\)"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "When the man is standing at the middle of the room i.e. at position 2, the minimum length of the mirror required is",
-          "image": null,
-          "qOptions": [
-            "\\(H\\)",
-            "\\(H/2\\)",
-            "\\(H/3\\)",
-            "\\(H/4\\)"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "When the man is standing at the middle of the room i.e. at position 3, the minimum length of the mirror required is",
-          "image": null,
-          "qOptions": [
-            "\\(H\\)",
-            "\\(H/2\\)",
-            "\\(H/3\\)",
-            "\\(H/4\\)"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two plane mirrors of length \\(L\\) are separated by a distance \\(L\\) and a man M2 is standing at distance \\(L\\) from the connecting line of mirrors as shown. A man M1 is walking in a straight line at distance \\(2L\\) parallel to mirrors at speed \\(u\\), then man M2 at O will be able to see image of M1 for total time",
-          "image": "30.png",
-          "qOptions": [
-            "\\(\\tfrac{4L}{u}\\)",
-            "\\(\\tfrac{3L}{u}\\)",
-            "\\(\\tfrac{6L}{u}\\)",
-            "\\(\\tfrac{9L}{u}\\)"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "As shown in the figure, a particle is placed at O in front of a plane mirror M. A man at P can move along PY and PY'. Which of the following is true?",
-          "image": "31.png",
-          "qOptions": [
-            "For all points on PY, the man can see the image of O.",
-            "For all points on PY', the man can see the image of O, but for no point on PY he can see the image of O.",
-            "For all points on PY', he can see the image, but on PY he can see the image up to distance d.",
-            "He can see the image only up to a distance d on either side of P."
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A point source of light S is placed in front of two large mirrors as shown. Which of the following observers will see only one image of S?",
-          "image": "32.png",
-          "qOptions": [
-            "A only",
-            "B only",
-            "both A and C",
-            "Both B and C"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A two-eyed man is looking at the junction of two large mutually perpendicular mirrors from a far off distance. Assume no reflection to occur from the edge. Then if both eyes are open",
-          "image": "33.png",
-          "qOptions": [
-            "the eye 1 of the man can see image of both eye 1 and eye 2",
-            "the eye 1 can see the image of eye 1 only and eye 2 can see image of eye 2 only",
-            "the eye 1 can see image of eye 2 only and the eye 2 can see the image of eye 1 only",
-            "all the above statements are false"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two mirrors AB and CD are arranged along two parallel lines. The maximum number of images of object O that can be seen by any observer is",
-          "image": "34.png",
-          "qOptions": [
-            "One",
-            "two",
-            "four",
-            "infinite"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two plane mirrors are placed at right angles to each other. A man standing between them is combing his hair. How many images will he see?",
-          "image": null,
-          "qOptions": [
-            "2",
-            "3",
-            "1",
-            "zero"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "To get three images of a single object, one can have two plane mirrors at an angle",
-          "image": null,
-          "qOptions": [
-            "60°",
-            "90°",
-            "120°",
-            "30°"
-          ],
-          "qAnswer": [
-            "B",
-            "C"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A point object is placed midway between two plane mirrors distance ‘a’ apart. The plane mirrors form an infinite number of images due to multiple reflections. The distance between nth order image formed by the two mirrors is",
-          "image": null,
-          "qOptions": [
-            "\\(na\\)",
-            "\\(2na\\)",
-            "\\(na/2\\)",
-            "\\(n^2 a\\)"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two mirrors labelled L1 for the left mirror and L2 for the right mirror are parallel to each other and 3.0 m apart. A person standing 1.0 m from the right mirror (L2) looks into this mirror and sees a series of images. The second nearest image seen in the right mirror is situated at a distance",
-          "image": "38.png",
-          "qOptions": [
-            "2.0 m from the person",
-            "4.0 m from the person",
-            "6.0 m from the person",
-            "8.0 m from the person"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two plane mirrors are placed parallel to each other at a distance \\(L\\) apart. A point object O is placed between them, at a distance of \\(L/3\\) from one mirror. Both mirrors form multiple images. The distance between any two images cannot be",
-          "image": null,
-          "qOptions": [
-            "\\(3L/2\\)",
-            "\\(2L/3\\)",
-            "\\(2L\\)",
-            "None"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "Two plane mirrors are parallel to each other and spaced 20 cm apart. An object is kept in between them 15 cm from A. Out of the following at which point is an image not formed in mirror A (distances measured from the mirror A)",
-          "image": null,
-          "qOptions": [
-            "60 cm",
-            "140 cm",
-            "170 cm",
-            "150 cm"
-          ],
-          "qAnswer": [
-            "A",
-            "B",
-            "C",
-            "D"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A plane mirror is approaching you at 10 cm/s. You can see your image in it. At what speed will your image be approaching you?",
-          "image": null,
-          "qOptions": [
-            "5 cm/s",
-            "10 cm/s",
-            "15 cm/s",
-            "20 cm/s"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "An object is moving perpendicular to the mirror at a rate of 5 cm/s towards the mirror. The velocity of the image is 35 cm/s away from the mirror. Then velocity of the mirror is",
-          "image": null,
-          "qOptions": [
-            "10 cm/s away from the object",
-            "20 cm/s towards the image",
-            "30 cm/s away from the object",
-            "20 cm/s towards the object"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "An object is moving perpendicular to the mirror at a rate of 5 cm/s away from the mirror. The separation between the object and the image is increasing at a rate of 40 cm/s. Then the velocity of the mirror is",
-          "image": null,
-          "qOptions": [
-            "15 cm/s away from the object",
-            "10 cm/s towards the image",
-            "20 cm/s away from the object",
-            "25 cm/s towards the object"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "The distance between the object and its image at time \\(t=0\\) seconds is 2 m. After 10 seconds, the distance becomes 10 m. If speed of the mirror is 3 m/s towards the object, then speed of the object is",
-          "image": null,
-          "qOptions": [
-            "3.3 m/s",
-            "3.4 m/s",
-            "3.5 m/s",
-            "2.6 m/s"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A cubicle room is formed with six plane mirrors. An insect moves along the diagonal of the floor with uniform speed. The velocities of its image in two adjacent walls with respect to the insect are \\(40\\sqrt{2}\\) cm/s, then the velocity of its image formed by the roof with respect to the insect is",
-          "image": null,
-          "qOptions": [
-            "20 cm/s",
-            "40 cm/s",
-            "\\(20\\sqrt{2}\\) cm/s",
-            "\\(10\\sqrt{2}\\) cm/s"
-          ],
-          "qAnswer": "B"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "When the man is standing near wall i.e. at position 1, the minimum length of the mirror required is",
+      "image": null,
+      "qOptions": ["\\(H\\)", "\\(H/2\\)", "\\(H/3\\)", "\\(H/4\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "When the man is standing at the middle of the room i.e. at position 2, the minimum length of the mirror required is",
+      "image": null,
+      "qOptions": ["\\(H\\)", "\\(H/2\\)", "\\(H/3\\)", "\\(H/4\\)"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "When the man is standing at the middle of the room i.e. at position 3, the minimum length of the mirror required is",
+      "image": null,
+      "qOptions": ["\\(H\\)", "\\(H/2\\)", "\\(H/3\\)", "\\(H/4\\)"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors of length \\(L\\) are separated by a distance \\(L\\) and a man M2 is standing at distance \\(L\\) from the connecting line of mirrors as shown. A man M1 is walking in a straight line at distance \\(2L\\) parallel to mirrors at speed \\(u\\), then man M2 at O will be able to see image of M1 for total time",
+      "image": "30.png",
+      "qOptions": [
+        "\\(\\tfrac{4L}{u}\\)",
+        "\\(\\tfrac{3L}{u}\\)",
+        "\\(\\tfrac{6L}{u}\\)",
+        "\\(\\tfrac{9L}{u}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "As shown in the figure, a particle is placed at O in front of a plane mirror M. A man at P can move along PY and PY'. Which of the following is true?",
+      "image": "31.png",
+      "qOptions": [
+        "For all points on PY, the man can see the image of O.",
+        "For all points on PY', the man can see the image of O, but for no point on PY he can see the image of O.",
+        "For all points on PY', he can see the image, but on PY he can see the image up to distance d.",
+        "He can see the image only up to a distance d on either side of P."
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A point source of light S is placed in front of two large mirrors as shown. Which of the following observers will see only one image of S?",
+      "image": "32.png",
+      "qOptions": ["A only", "B only", "both A and C", "Both B and C"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A two-eyed man is looking at the junction of two large mutually perpendicular mirrors from a far off distance. Assume no reflection to occur from the edge. Then if both eyes are open",
+      "image": "33.png",
+      "qOptions": [
+        "the eye 1 of the man can see image of both eye 1 and eye 2",
+        "the eye 1 can see the image of eye 1 only and eye 2 can see image of eye 2 only",
+        "the eye 1 can see image of eye 2 only and the eye 2 can see the image of eye 1 only",
+        "all the above statements are false"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two mirrors AB and CD are arranged along two parallel lines. The maximum number of images of object O that can be seen by any observer is",
+      "image": "34.png",
+      "qOptions": ["One", "two", "four", "infinite"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors are placed at right angles to each other. A man standing between them is combing his hair. How many images will he see?",
+      "image": null,
+      "qOptions": ["2", "3", "1", "zero"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "To get three images of a single object, one can have two plane mirrors at an angle",
+      "image": null,
+      "qOptions": ["60°", "90°", "120°", "30°"],
+      "qAnswer": ["B", "C"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A point object is placed midway between two plane mirrors distance ‘a’ apart. The plane mirrors form an infinite number of images due to multiple reflections. The distance between nth order image formed by the two mirrors is",
+      "image": null,
+      "qOptions": ["\\(na\\)", "\\(2na\\)", "\\(na/2\\)", "\\(n^2 a\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two mirrors labelled L1 for the left mirror and L2 for the right mirror are parallel to each other and 3.0 m apart. A person standing 1.0 m from the right mirror (L2) looks into this mirror and sees a series of images. The second nearest image seen in the right mirror is situated at a distance",
+      "image": "38.png",
+      "qOptions": [
+        "2.0 m from the person",
+        "4.0 m from the person",
+        "6.0 m from the person",
+        "8.0 m from the person"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors are placed parallel to each other at a distance \\(L\\) apart. A point object O is placed between them, at a distance of \\(L/3\\) from one mirror. Both mirrors form multiple images. The distance between any two images cannot be",
+      "image": null,
+      "qOptions": ["\\(3L/2\\)", "\\(2L/3\\)", "\\(2L\\)", "None"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors are parallel to each other and spaced 20 cm apart. An object is kept in between them 15 cm from A. Out of the following at which point is an image not formed in mirror A (distances measured from the mirror A)",
+      "image": null,
+      "qOptions": ["60 cm", "140 cm", "170 cm", "150 cm"],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plane mirror is approaching you at 10 cm/s. You can see your image in it. At what speed will your image be approaching you?",
+      "image": null,
+      "qOptions": ["5 cm/s", "10 cm/s", "15 cm/s", "20 cm/s"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is moving perpendicular to the mirror at a rate of 5 cm/s towards the mirror. The velocity of the image is 35 cm/s away from the mirror. Then velocity of the mirror is",
+      "image": null,
+      "qOptions": [
+        "10 cm/s away from the object",
+        "20 cm/s towards the image",
+        "30 cm/s away from the object",
+        "20 cm/s towards the object"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is moving perpendicular to the mirror at a rate of 5 cm/s away from the mirror. The separation between the object and the image is increasing at a rate of 40 cm/s. Then the velocity of the mirror is",
+      "image": null,
+      "qOptions": [
+        "15 cm/s away from the object",
+        "10 cm/s towards the image",
+        "20 cm/s away from the object",
+        "25 cm/s towards the object"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The distance between the object and its image at time \\(t=0\\) seconds is 2 m. After 10 seconds, the distance becomes 10 m. If speed of the mirror is 3 m/s towards the object, then speed of the object is",
+      "image": null,
+      "qOptions": ["3.3 m/s", "3.4 m/s", "3.5 m/s", "2.6 m/s"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A cubicle room is formed with six plane mirrors. An insect moves along the diagonal of the floor with uniform speed. The velocities of its image in two adjacent walls with respect to the insect are \\(40\\sqrt{2}\\) cm/s, then the velocity of its image formed by the roof with respect to the insect is",
+      "image": null,
+      "qOptions": [
+        "20 cm/s",
+        "40 cm/s",
+        "\\(20\\sqrt{2}\\) cm/s",
+        "\\(10\\sqrt{2}\\) cm/s"
+      ],
+      "qAnswer": "B"
     },
     {
       "qType": "Passage",
+      "passageId": "P4",
       "qText": "A plane mirror is placed in the y–z plane facing towards \\(-x\\)-axis. The mirror is moving parallel to the y-axis with speed 5 cm/s. A point object \\(P\\) moves in front of the mirror with velocity \\(3\\hat i + 4\\hat j + 5\\hat k\\) cm/s. Answer the following.",
       "image": null,
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "Velocity of the image is: (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(-3\\hat i + 4\\hat j + 5\\hat k\\)",
-            "\\(3\\hat i + 4\\hat j + 5\\hat k\\)",
-            "\\(-3\\hat i - 4\\hat j + 5\\hat k\\)",
-            "\\(-3\\hat i + 9\\hat j + 5\\hat k\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Velocity of the image with respect to the mirror is: (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(-3\\hat i + 4\\hat j\\)",
-            "\\(3\\hat i + 9\\hat j\\)",
-            "\\(-3\\hat i - 4\\hat j\\)",
-            "\\(6\\hat i\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Velocity of the image with respect to the object is: (Options are made-up distractors; one is correct.)",
-          "image": null,
-          "qOptions": [
-            "\\(-6\\hat i\\)",
-            "\\(6\\hat i\\)",
-            "\\(2\\hat j\\)",
-            "\\(-10\\hat j\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "In a room having two adjacent walls and ceiling made up of plane mirrors: a) Maximum number of images of an object formed are 7. b) Maximum number of images of himself which a person can see is 6. c) All the images formed are erect d) All the images formed are virtual",
-          "image": null,
-          "qOptions": [
-            "A only",
-            "B only",
-            "C only",
-            "D only"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "Velocity of the image is: (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-3\\hat i + 4\\hat j + 5\\hat k\\)",
+        "\\(3\\hat i + 4\\hat j + 5\\hat k\\)",
+        "\\(-3\\hat i - 4\\hat j + 5\\hat k\\)",
+        "\\(-3\\hat i + 9\\hat j + 5\\hat k\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "Velocity of the image with respect to the mirror is: (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-3\\hat i + 4\\hat j\\)",
+        "\\(3\\hat i + 9\\hat j\\)",
+        "\\(-3\\hat i - 4\\hat j\\)",
+        "\\(6\\hat i\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "Velocity of the image with respect to the object is: (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-6\\hat i\\)",
+        "\\(6\\hat i\\)",
+        "\\(2\\hat j\\)",
+        "\\(-10\\hat j\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a room having two adjacent walls and ceiling made up of plane mirrors: a) Maximum number of images of an object formed are 7. b) Maximum number of images of himself which a person can see is 6. c) All the images formed are erect d) All the images formed are virtual",
+      "image": null,
+      "qOptions": ["A only", "B only", "C only", "D only"],
+      "qAnswer": "A"
     },
     {
       "qType": "Passage",
+      "passageId": "P5",
       "qText": "Refer to the diagram. Two parallel plane mirrors \\(M_1\\) and \\(M_2\\) face each other with an object \\(O\\) placed between them. Due to multiple successive reflections infinite images are formed in each mirror because image formed in one mirror behaves as object for the other mirror.",
       "image": "p5.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "Separation distance between \\(n^{\\text{th}}\\) image in each mirror depends on",
-          "image": null,
-          "qOptions": [
-            "\\(a\\) only",
-            "\\(x\\) only",
-            "both \\(a\\) as well as \\(x\\)",
-            "neither \\(a\\) nor \\(x\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "If mirrors are at rest and object is moving towards mirror \\(M_1\\) perpendicularly with a speed of 5 cm/s then",
-          "image": null,
-          "qOptions": [
-            "The speed of all the images formed in both the mirrors are same",
-            "The speed of all the images formed in both the mirrors are different",
-            "First and second image in mirror \\(M_1\\) has separation velocity 10 cm/s",
-            "First and second image in mirror \\(M_2\\) has separation velocity 10 cm/s"
-          ],
-          "qAnswer": [
-            "A",
-            "C",
-            "D"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If the object is at rest exactly at the midway between the mirrors and mirrors separate from each other with equal speed such that their separation velocity is 3 cm/s then the separation velocity between \\(n^{\\text{th}}\\) image in \\(M_1\\) and \\(m^{\\text{th}}\\) image in \\(M_2\\) is",
-          "image": null,
-          "qOptions": [
-            "\\(3(n+m)\\) cm/s",
-            "\\((n+m)\\) cm/s",
-            "\\(2(n+m)\\) cm/s",
-            "\\(2(n-m)\\) cm/s"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "Mirror \\(M_1\\) is moving towards left with a speed of 5 cm/s and \\(M_2\\) is moving towards right with speed of 3 cm/s and object is moving perpendicular to the plane of mirror and towards \\(M_1\\) with speed 2 cm/s then",
-          "image": null,
-          "qOptions": [
-            "The speed of third image in mirror \\(M_1\\) is 24 cm/s and away from \\(M_1\\)",
-            "The speed of third image in mirror \\(M_1\\) is 14 cm/s and away from \\(M_1\\)",
-            "The speed of third image in mirror \\(M_2\\) is 26 cm/s and away from \\(M_2\\)",
-            "The speed of third image in mirror \\(M_2\\) is 24 cm/s and away from \\(M_2\\)"
-          ],
-          "qAnswer": [
-            "A",
-            "D"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A clock hung on a wall has marks instead of numerals on its dial. On the opposite wall, there is a plane mirror and the image of the clock in the mirror indicates the time 7:10. Then the time on the clock is",
-          "image": null,
-          "qOptions": [
-            "7:10",
-            "4:50",
-            "5:40",
-            "10:7"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Which of the following word(s) does not suffer lateral inversion from plane mirror?",
-          "image": null,
-          "qOptions": [
-            "BOB",
-            "XOX",
-            "SOS",
-            "AOA"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Mohit saw reflection of the clock in plane mirror and noted the time as 3:00. He went out and came back after two hours and again noted the time from reflection of clock in plane mirror. Clock only contains marks and not numerals. Then the time noted by him is",
-          "image": null,
-          "qOptions": [
-            "9:00",
-            "1:00",
-            "11:55",
-            "11:00"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A plane mirror is placed at the origin parallel to y–axis facing the positive x–axis. An object starts from \\((2\\,\\text{m},\\,0)\\) with a velocity of \\((2\\hat i + 2\\hat j)\\) m/s. The relative velocity of image with respect to object is along",
-          "image": null,
-          "qOptions": [
-            "positive x–axis",
-            "negative x–axis",
-            "positive y–axis",
-            "negative y–axis"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "An insect of negligible mass is sitting on a block of mass \\(M\\), tied with a spring of force constant \\(K\\). The block performs simple harmonic motion with amplitude \\(A\\) in front of a plane mirror placed as shown. The maximum speed of insect relative to its image will be",
-          "image": "56.png",
-          "qOptions": [
-            "\\(A\\sqrt{\\tfrac{K}{M}}\\)",
-            "\\(\\tfrac{A\\sqrt{3}}{2}\\sqrt{\\tfrac{K}{M}}\\)",
-            "\\(A\\sqrt{3}\\,\\sqrt{\\tfrac{K}{M}}\\)",
-            "\\(2A\\sqrt{\\tfrac{K}{M}}\\)"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Two blocks each of masses \\(m\\) lie on a smooth table. They are attached to two other masses as shown in figure by light pulleys and strings. An object \\(O\\) is kept at rest on the table. The sides AB and CD of the two blocks are reflecting. The acceleration of two images formed in those two reflecting surfaces with respect to each other is",
-          "image": "57.png",
-          "qOptions": [
-            "\\(\\tfrac{5g}{6}\\)",
-            "\\(\\tfrac{5g}{3}\\)",
-            "\\(\\tfrac{17g}{12}\\)",
-            "\\(\\tfrac{17g}{6}\\)"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "The colour of light is determined by its",
-          "image": null,
-          "qOptions": [
-            "Velocity",
-            "frequency",
-            "Amplitude",
-            "intensity"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If \\(\\varepsilon_0\\) and \\(\\mu_0\\) are respectively the electric permittivity and magnetic permeability of free space and \\(\\varepsilon\\) and \\(\\mu\\) are the corresponding quantities in a medium, the refractive index of the medium is",
-          "image": null,
-          "qOptions": [
-            "\\(\\dfrac{\\sqrt{\\mu\\,\\varepsilon}}{\\mu_0\\,\\varepsilon_0}\\)",
-            "\\(\\sqrt{\\dfrac{\\mu\\,\\varepsilon}{\\mu_0\\,\\varepsilon_0}}\\)",
-            "\\(\\sqrt{\\dfrac{\\mu_0\\,\\varepsilon_0}{\\mu\\,\\varepsilon}}\\)",
-            "\\(\\sqrt{\\dfrac{\\mu\\,\\mu_0}{\\varepsilon\\,\\varepsilon_0}}\\)"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "An insect moves with a velocity \\(V\\,\\hat i\\) towards the inclined plane mirror (30° with the x-axis) as shown. The velocity of the image is",
-          "image": "60.png",
-          "qOptions": [
-            "\\(\\tfrac{V}{2}(\\hat i+\\hat j)\\)",
-            "\\(\\tfrac{V}{2}(\\sqrt{3}\\hat i+\\hat j)\\)",
-            "\\(\\tfrac{V}{2}(\\hat i+\\sqrt{3}\\hat j)\\)",
-            "\\(-V\\hat i\\)"
-          ],
-          "qAnswer": "C"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P5",
+      "qText": "Separation distance between \\(n^{\\text{th}}\\) image in each mirror depends on",
+      "image": null,
+      "qOptions": [
+        "\\(a\\) only",
+        "\\(x\\) only",
+        "both \\(a\\) as well as \\(x\\)",
+        "neither \\(a\\) nor \\(x\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P5",
+      "qText": "If mirrors are at rest and object is moving towards mirror \\(M_1\\) perpendicularly with a speed of 5 cm/s then",
+      "image": null,
+      "qOptions": [
+        "The speed of all the images formed in both the mirrors are same",
+        "The speed of all the images formed in both the mirrors are different",
+        "First and second image in mirror \\(M_1\\) has separation velocity 10 cm/s",
+        "First and second image in mirror \\(M_2\\) has separation velocity 10 cm/s"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P5",
+      "qText": "If the object is at rest exactly at the midway between the mirrors and mirrors separate from each other with equal speed such that their separation velocity is 3 cm/s then the separation velocity between \\(n^{\\text{th}}\\) image in \\(M_1\\) and \\(m^{\\text{th}}\\) image in \\(M_2\\) is",
+      "image": null,
+      "qOptions": [
+        "\\(3(n+m)\\) cm/s",
+        "\\((n+m)\\) cm/s",
+        "\\(2(n+m)\\) cm/s",
+        "\\(2(n-m)\\) cm/s"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P5",
+      "qText": "Mirror \\(M_1\\) is moving towards left with a speed of 5 cm/s and \\(M_2\\) is moving towards right with speed of 3 cm/s and object is moving perpendicular to the plane of mirror and towards \\(M_1\\) with speed 2 cm/s then",
+      "image": null,
+      "qOptions": [
+        "The speed of third image in mirror \\(M_1\\) is 24 cm/s and away from \\(M_1\\)",
+        "The speed of third image in mirror \\(M_1\\) is 14 cm/s and away from \\(M_1\\)",
+        "The speed of third image in mirror \\(M_2\\) is 26 cm/s and away from \\(M_2\\)",
+        "The speed of third image in mirror \\(M_2\\) is 24 cm/s and away from \\(M_2\\)"
+      ],
+      "qAnswer": ["A", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A clock hung on a wall has marks instead of numerals on its dial. On the opposite wall, there is a plane mirror and the image of the clock in the mirror indicates the time 7:10. Then the time on the clock is",
+      "image": null,
+      "qOptions": ["7:10", "4:50", "5:40", "10:7"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Which of the following word(s) does not suffer lateral inversion from plane mirror?",
+      "image": null,
+      "qOptions": ["BOB", "XOX", "SOS", "AOA"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Mohit saw reflection of the clock in plane mirror and noted the time as 3:00. He went out and came back after two hours and again noted the time from reflection of clock in plane mirror. Clock only contains marks and not numerals. Then the time noted by him is",
+      "image": null,
+      "qOptions": ["9:00", "1:00", "11:55", "11:00"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plane mirror is placed at the origin parallel to y–axis facing the positive x–axis. An object starts from \\((2\\,\\text{m},\\,0)\\) with a velocity of \\((2\\hat i + 2\\hat j)\\) m/s. The relative velocity of image with respect to object is along",
+      "image": null,
+      "qOptions": [
+        "positive x–axis",
+        "negative x–axis",
+        "positive y–axis",
+        "negative y–axis"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An insect of negligible mass is sitting on a block of mass \\(M\\), tied with a spring of force constant \\(K\\). The block performs simple harmonic motion with amplitude \\(A\\) in front of a plane mirror placed as shown. The maximum speed of insect relative to its image will be",
+      "image": "56.png",
+      "qOptions": [
+        "\\(A\\sqrt{\\tfrac{K}{M}}\\)",
+        "\\(\\tfrac{A\\sqrt{3}}{2}\\sqrt{\\tfrac{K}{M}}\\)",
+        "\\(A\\sqrt{3}\\,\\sqrt{\\tfrac{K}{M}}\\)",
+        "\\(2A\\sqrt{\\tfrac{K}{M}}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two blocks each of masses \\(m\\) lie on a smooth table. They are attached to two other masses as shown in figure by light pulleys and strings. An object \\(O\\) is kept at rest on the table. The sides AB and CD of the two blocks are reflecting. The acceleration of two images formed in those two reflecting surfaces with respect to each other is",
+      "image": "57.png",
+      "qOptions": [
+        "\\(\\tfrac{5g}{6}\\)",
+        "\\(\\tfrac{5g}{3}\\)",
+        "\\(\\tfrac{17g}{12}\\)",
+        "\\(\\tfrac{17g}{6}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The colour of light is determined by its",
+      "image": null,
+      "qOptions": ["Velocity", "frequency", "Amplitude", "intensity"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\(\\varepsilon_0\\) and \\(\\mu_0\\) are respectively the electric permittivity and magnetic permeability of free space and \\(\\varepsilon\\) and \\(\\mu\\) are the corresponding quantities in a medium, the refractive index of the medium is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{\\sqrt{\\mu\\,\\varepsilon}}{\\mu_0\\,\\varepsilon_0}\\)",
+        "\\(\\sqrt{\\dfrac{\\mu\\,\\varepsilon}{\\mu_0\\,\\varepsilon_0}}\\)",
+        "\\(\\sqrt{\\dfrac{\\mu_0\\,\\varepsilon_0}{\\mu\\,\\varepsilon}}\\)",
+        "\\(\\sqrt{\\dfrac{\\mu\\,\\mu_0}{\\varepsilon\\,\\varepsilon_0}}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An insect moves with a velocity \\(V\\,\\hat i\\) towards the inclined plane mirror (30° with the x-axis) as shown. The velocity of the image is",
+      "image": "60.png",
+      "qOptions": [
+        "\\(\\tfrac{V}{2}(\\hat i+\\hat j)\\)",
+        "\\(\\tfrac{V}{2}(\\sqrt{3}\\hat i+\\hat j)\\)",
+        "\\(\\tfrac{V}{2}(\\hat i+\\sqrt{3}\\hat j)\\)",
+        "\\(-V\\hat i\\)"
+      ],
+      "qAnswer": "C"
     },
     {
       "qType": "Passage",
+      "passageId": "P6",
       "qText": "An object is placed between two parallel plane mirrors as shown. Distances from the object to mirrors are \\(Y\\) cm (to \\(M_1\\)) and \\(X\\) cm (to \\(M_2\\)). Answer the following questions.",
       "image": "p6.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "Position of third image formed by mirror \\(M_2\\) is a distance of \\(z\\) from object then \\(z\\) is:",
-          "image": null,
-          "qOptions": [
-            "\\(2x+4y\\)",
-            "\\(4x+2y\\)",
-            "\\(3x+3y\\)",
-            "\\(4x+4y\\)"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If mirror \\(M_2\\) is moving away from object by velocity 2 cm/s the velocity of 2nd image formed by mirror \\(M_1\\) is:",
-          "image": null,
-          "qOptions": [
-            "2 cm/s",
-            "4 cm/s",
-            "6 cm/s",
-            "10 cm/s"
-          ],
-          "qAnswer": "B"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If both the mirrors are at rest an object is moving towards mirror \\(M_2\\) with speed 2 cm/s then velocity of 3rd image of \\(M_1\\) with respect to a stationary observer is:",
-          "image": null,
-          "qOptions": [
-            "2 cm/s away from \\(M_1\\)",
-            "2 cm/s toward \\(M_1\\)",
-            "4 cm/s toward \\(M_1\\)",
-            "4 cm/s away from \\(M_1\\)"
-          ],
-          "qAnswer": "B"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "Position of third image formed by mirror \\(M_2\\) is a distance of \\(z\\) from object then \\(z\\) is:",
+      "image": null,
+      "qOptions": ["\\(2x+4y\\)", "\\(4x+2y\\)", "\\(3x+3y\\)", "\\(4x+4y\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "If mirror \\(M_2\\) is moving away from object by velocity 2 cm/s the velocity of 2nd image formed by mirror \\(M_1\\) is:",
+      "image": null,
+      "qOptions": ["2 cm/s", "4 cm/s", "6 cm/s", "10 cm/s"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "If both the mirrors are at rest an object is moving towards mirror \\(M_2\\) with speed 2 cm/s then velocity of 3rd image of \\(M_1\\) with respect to a stationary observer is:",
+      "image": null,
+      "qOptions": [
+        "2 cm/s away from \\(M_1\\)",
+        "2 cm/s toward \\(M_1\\)",
+        "4 cm/s toward \\(M_1\\)",
+        "4 cm/s away from \\(M_1\\)"
+      ],
+      "qAnswer": "B"
     },
     {
       "qType": "Passage",
+      "passageId": "P7",
       "qText": "For given diagram assume the following.",
       "image": "p7.png",
-      "questions": [
-        {
-          "qType": "SMCQ",
-          "qText": "If angle between incident ray and mirror is 30° then reflecting angle is:",
-          "image": null,
-          "qOptions": [
-            "30°",
-            "60°",
-            "90°",
-            "70°"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If incident ray is rotated about point ‘O’ with angular velocity 2 rad/s keeping mirror at rest the reflected ray will rotate by angular velocity:",
-          "image": null,
-          "qOptions": [
-            "2 rad/s",
-            "4 rad/s",
-            "6 rad/s",
-            "8 rad/s"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "Figure shows two successive reflection from two mirrors inclined to each other at an angle \\(\\theta\\). The net deviation after two successive reflections from each mirror once depends on",
-          "image": "63.png",
-          "qOptions": [
-            "\\(\\alpha\\) and \\(\\theta\\)",
-            "\\(\\beta\\) and \\(\\theta\\)",
-            "\\(\\alpha\\) and \\(\\beta\\)",
-            "\\(\\theta\\) only"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "If a man is standing on a plane mirror and in front of a plane mirror (both mirrors are at right angle to each other). Then find the distance of the man's head from that of its laterally and vertically inverted image (height of person's head = 3 m, distance of person from the front mirror = 4 m).",
-          "image": null,
-          "qOptions": [
-            "6",
-            "8",
-            "10",
-            "none of these"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "The reflecting surface represented by the equation \\(2x=y^2\\) as shown. A ray traveling horizontal becomes vertical after reflection. The co-ordinates of the point of incidence can be",
-          "image": "65.png",
-          "qOptions": [
-            "\\((1/2,1)\\)",
-            "\\((1,1/2)\\)",
-            "\\((1/2,1/2)\\)",
-            "\\((1/2,\\pm1)\\)"
-          ],
-          "qAnswer": "D"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "An elevator at rest which is at 12th floor of a building has a plane mirror fixed to its floor. A particle is projected with a speed \\(\\sqrt{2}\\) m/s and at 45° with the horizontal as shown. At the instant of projection the cable of the elevator breaks and the elevator starts falling freely. What will be the separation between the particle and its image 0.5 second after the instant of projection?",
-          "image": "66.png",
-          "qOptions": [
-            "4 m",
-            "2 m",
-            "0.5 m",
-            "1 m"
-          ],
-          "qAnswer": "C"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "A plane mirror is placed along x–z plane and an object \\(P\\) is placed at point \\((0,a)\\). The mirror rotates about z–axis with constant angular velocity \\(\\omega\\). Find velocity of image as a function of time \\(t\\).",
-          "image": "67.png",
-          "qOptions": [
-            "\\(2a\\omega\\cos(2\\omega t)\\,\\hat i+2a\\omega\\sin(2\\omega t)\\,\\hat j\\)",
-            "\\(a\\omega\\cos(\\omega t)\\,\\hat i+a\\omega\\sin(\\omega t)\\,\\hat j\\)",
-            "\\(a\\omega\\cos(\\omega t)\\,\\hat i-a\\omega\\sin(\\omega t)\\,\\hat j\\)",
-            "\\(2a\\omega\\cos(2\\omega t)\\,\\hat i-2a\\omega\\sin(2\\omega t)\\,\\hat j\\)"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "An object \\(O\\) is kept at \\((3\\sqrt{2}L,\\,\\sqrt{2}L)\\). Two plane mirrors \\(M_1\\) and \\(M_2\\) each of length \\(4L\\) are kept as shown in the figure. \\(N\\) is the number of images of \\(O\\) formed due to the combination of mirrors.",
-          "image": "68.png",
-          "qOptions": [
-            "N is independent of d",
-            "N can not be greater than 7 for any value of d",
-            "N = 7 for d < 4\\(\\sqrt{2}L\\)",
-            "N = 2 for d > 4\\(\\sqrt{2}L\\)"
-          ],
-          "qAnswer": [
-            "B",
-            "C",
-            "D"
-          ]
-        },
-        {
-          "qType": "MMCQ",
-          "qText": "Two plane mirrors \\(M_1\\) and \\(M_2\\) lie along x-axis and y-axis as shown. Three point objects \\(P_1, P_2\\) and \\(P_3\\) lie as shown in the figure. Choose the correct statements.",
-          "image": "69.png",
-          "qOptions": [
-            "the number of images of point object \\(P_1\\) formed by two plane mirrors is two",
-            "the number of images of point object \\(P_1\\) formed by two plane mirrors is three",
-            "the number of images of point object \\(P_2\\) formed by two plane mirrors is one",
-            "the number of images of point object \\(P_3\\) formed by two plane mirrors is one"
-          ],
-          "qAnswer": [
-            "A",
-            "C",
-            "D"
-          ]
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "[NO ANSWER PROVIDED] \n \n Two mirrors are placed in such a way that they are making 72° angle with each other. An object is placed exactly midway between two mirrors. Perpendicular distance of object from any mirror is 5 cm. Distance between the two images farthest from the object will be",
-          "image": "70.png",
-          "qOptions": [
-            "7.2 cm",
-            "8.9 cm",
-            "9.0 cm",
-            "10.0 cm"
-          ],
-          "qAnswer": "A"
-        },
-        {
-          "qType": "SMCQ",
-          "qText": "[NO ANSWER PROVIDED] \n \n A thin parallel beam of light strikes on the portion of spherical concave mirror of radius of curvature 4 m as shown in figure. (\\(d\\to 0\\)) Point O is the centre of curvature of the mirror. After reflection an image is formed at point A. Find the value of OA in metre if \\(\\cos\\alpha = \\dfrac{\\sqrt{7}}{2\\sqrt{3}}\\).",
-          "image": "71.png",
-          "qOptions": [
-            "9",
-            "6",
-            "3",
-            "1"
-          ],
-          "qAnswer": "A"
-        }
-      ]
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P7",
+      "qText": "If angle between incident ray and mirror is 30° then reflecting angle is:",
+      "image": null,
+      "qOptions": ["30°", "60°", "90°", "70°"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P7",
+      "qText": "If incident ray is rotated about point ‘O’ with angular velocity 2 rad/s keeping mirror at rest the reflected ray will rotate by angular velocity:",
+      "image": null,
+      "qOptions": ["2 rad/s", "4 rad/s", "6 rad/s", "8 rad/s"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Figure shows two successive reflection from two mirrors inclined to each other at an angle \\(\\theta\\). The net deviation after two successive reflections from each mirror once depends on",
+      "image": "63.png",
+      "qOptions": [
+        "\\(\\alpha\\) and \\(\\theta\\)",
+        "\\(\\beta\\) and \\(\\theta\\)",
+        "\\(\\alpha\\) and \\(\\beta\\)",
+        "\\(\\theta\\) only"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If a man is standing on a plane mirror and in front of a plane mirror (both mirrors are at right angle to each other). Then find the distance of the man's head from that of its laterally and vertically inverted image (height of person's head = 3 m, distance of person from the front mirror = 4 m).",
+      "image": null,
+      "qOptions": ["6", "8", "10", "none of these"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The reflecting surface represented by the equation \\(2x=y^2\\) as shown. A ray traveling horizontal becomes vertical after reflection. The co-ordinates of the point of incidence can be",
+      "image": "65.png",
+      "qOptions": [
+        "\\((1/2,1)\\)",
+        "\\((1,1/2)\\)",
+        "\\((1/2,1/2)\\)",
+        "\\((1/2,\\pm1)\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An elevator at rest which is at 12th floor of a building has a plane mirror fixed to its floor. A particle is projected with a speed \\(\\sqrt{2}\\) m/s and at 45° with the horizontal as shown. At the instant of projection the cable of the elevator breaks and the elevator starts falling freely. What will be the separation between the particle and its image 0.5 second after the instant of projection?",
+      "image": "66.png",
+      "qOptions": ["4 m", "2 m", "0.5 m", "1 m"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plane mirror is placed along x–z plane and an object \\(P\\) is placed at point \\((0,a)\\). The mirror rotates about z–axis with constant angular velocity \\(\\omega\\). Find velocity of image as a function of time \\(t\\).",
+      "image": "67.png",
+      "qOptions": [
+        "\\(2a\\omega\\cos(2\\omega t)\\,\\hat i+2a\\omega\\sin(2\\omega t)\\,\\hat j\\)",
+        "\\(a\\omega\\cos(\\omega t)\\,\\hat i+a\\omega\\sin(\\omega t)\\,\\hat j\\)",
+        "\\(a\\omega\\cos(\\omega t)\\,\\hat i-a\\omega\\sin(\\omega t)\\,\\hat j\\)",
+        "\\(2a\\omega\\cos(2\\omega t)\\,\\hat i-2a\\omega\\sin(2\\omega t)\\,\\hat j\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "An object \\(O\\) is kept at \\((3\\sqrt{2}L,\\,\\sqrt{2}L)\\). Two plane mirrors \\(M_1\\) and \\(M_2\\) each of length \\(4L\\) are kept as shown in the figure. \\(N\\) is the number of images of \\(O\\) formed due to the combination of mirrors.",
+      "image": "68.png",
+      "qOptions": [
+        "N is independent of d",
+        "N can not be greater than 7 for any value of d",
+        "N = 7 for d < 4\\(\\sqrt{2}L\\)",
+        "N = 2 for d > 4\\(\\sqrt{2}L\\)"
+      ],
+      "qAnswer": ["B", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Two plane mirrors \\(M_1\\) and \\(M_2\\) lie along x-axis and y-axis as shown. Three point objects \\(P_1, P_2\\) and \\(P_3\\) lie as shown in the figure. Choose the correct statements.",
+      "image": "69.png",
+      "qOptions": [
+        "the number of images of point object \\(P_1\\) formed by two plane mirrors is two",
+        "the number of images of point object \\(P_1\\) formed by two plane mirrors is three",
+        "the number of images of point object \\(P_2\\) formed by two plane mirrors is one",
+        "the number of images of point object \\(P_3\\) formed by two plane mirrors is one"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "[NO ANSWER PROVIDED] \n \n Two mirrors are placed in such a way that they are making 72° angle with each other. An object is placed exactly midway between two mirrors. Perpendicular distance of object from any mirror is 5 cm. Distance between the two images farthest from the object will be",
+      "image": "70.png",
+      "qOptions": ["7.2 cm", "8.9 cm", "9.0 cm", "10.0 cm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "[NO ANSWER PROVIDED] \n \n A thin parallel beam of light strikes on the portion of spherical concave mirror of radius of curvature 4 m as shown in figure. (\\(d\\to 0\\)) Point O is the centre of curvature of the mirror. After reflection an image is formed at point A. Find the value of OA in metre if \\(\\cos\\alpha = \\dfrac{\\sqrt{7}}{2\\sqrt{3}}\\).",
+      "image": "71.png",
+      "qOptions": ["9", "6", "3", "1"],
+      "qAnswer": "A"
     }
   ]
 }

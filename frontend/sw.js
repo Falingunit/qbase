@@ -1,5 +1,5 @@
 // sw.js (PWA cache for project page at /qbase/)
-const CACHE_NAME = 'qbase-v2';
+const CACHE_NAME = 'qbase-v1';
 const PRECACHE = [
   '/qbase/',           // start page
   '/qbase/index.html',

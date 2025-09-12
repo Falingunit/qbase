@@ -388,60 +388,27 @@
     return out;
   }
 
-  // ---------- Passages preprocessing (old format support) ----------
+  // ---------- Passages preprocessing ----------
   function processPassageQuestions(questions) {
     let currentPassage = null;
     let currentPassageImage = null;
+    let currentPassageId = null;
+    let passageCounter = 1;
 
     questions.forEach((q) => {
       if (q.qType === "Passage") {
         currentPassage = q.qText;
         currentPassageImage = q.image;
+        currentPassageId = `P${passageCounter++}`;
+        q.passageId = currentPassageId;
         q._isPassage = true;
-      } else if (currentPassage) {
-        q.passage = currentPassage;
-        q.passageImage = currentPassageImage;
-      }
-    });
-  }
-
-  // Build flattened questions for UI, supporting nested Passage format
-  function buildDisplayQuestions(data) {
-    const all = Array.isArray(data?.questions) ? data.questions : [];
-    const hasNestedPassages = all.some(
-      (q) => q && q.qType === "Passage" && Array.isArray(q.questions)
-    );
-
-    if (!hasNestedPassages) {
-      processPassageQuestions(all);
-      const displayQuestions = [];
-      const questionIndexMap = [];
-      all.forEach((q, idx) => {
-        if (q.qType !== "Passage") {
-          displayQuestions.push(q);
-          questionIndexMap.push(idx);
-        }
-      });
-      return { displayQuestions, questionIndexMap };
-    }
-
-    const displayQuestions = [];
-    all.forEach((item) => {
-      if (item.qType === "Passage" && Array.isArray(item.questions)) {
-        const passageText = item.qText || "";
-        const passageImage = item.image || null;
-        item.questions.forEach((sub) => {
-          const q = { ...sub };
-          if (passageText) q.passage = passageText;
-          if (passageImage) q.passageImage = passageImage;
-          displayQuestions.push(q);
-        });
       } else {
-        displayQuestions.push(item);
+        if (q.passageId === currentPassageId) {
+          q.passage = currentPassage;
+          q.passageImage = currentPassageImage;
+        }
       }
     });
-    const questionIndexMap = displayQuestions.map((_, i) => i);
-    return { displayQuestions, questionIndexMap };
   }
 
   // ---------- Load saved state (server/local with migration prompt) ----------
@@ -702,7 +669,8 @@
   function resetCurrentQuestion() {
     if (currentQuestionID == null) return;
     const qID = currentQuestionID;
-    const q = window.displayQuestions[qID];
+    const originalIdx = window.questionIndexMap[qID];
+    const q = questionData.questions[originalIdx];
 
     // Fully reset state (time = 0 now)
     questionStates[qID] = { ...defaultState(), time: 0 };
@@ -752,7 +720,8 @@
 
   function checkCurrentAnswer() {
     const qID = currentQuestionID;
-    const q = window.displayQuestions[qID];
+    const originalIdx = window.questionIndexMap[qID];
+    const q = questionData.questions[originalIdx];
     const st = questionStates[qID];
 
     if (!st) return;
@@ -833,11 +802,20 @@
   fetch(`./data/question_data/${aID}/assignment.json`)
     .then((res) => res.json())
     .then(async (data) => {
-      // Build list compatible with old and new schema formats
+      // 1) passages
+      processPassageQuestions(data.questions);
       questionData = data;
-      const built = buildDisplayQuestions(data);
-      const displayQuestions = built.displayQuestions;
-      const questionIndexMap = built.questionIndexMap;
+
+      // 2) filter out Passage markers for display
+      const allQuestions = data.questions;
+      const displayQuestions = [];
+      const questionIndexMap = [];
+      allQuestions.forEach((q, idx) => {
+        if (q.qType !== "Passage") {
+          displayQuestions.push(q);
+          questionIndexMap.push(idx);
+        }
+      });
       window.displayQuestions = displayQuestions;
       window.questionIndexMap = questionIndexMap;
 
@@ -912,7 +890,7 @@
   function MCQOptionClicked(optionElement) {
     const clickedOption = optionElement.dataset.opt;
     const originalIdx = window.questionIndexMap[currentQuestionID];
-    const question = window.displayQuestions[currentQuestionID];
+    const question = questionData.questions[originalIdx];
     const questionState = questionStates[currentQuestionID];
     const questionType = question.qType;
 
@@ -1042,7 +1020,7 @@
     const numericalAnswer = document.getElementById("numericalAnswer");
     const notesInput = document.getElementById("notesInput");
     const questionState = questionStates[qID];
-    const question = window.displayQuestions[qID];
+    const question = questionData.questions[originalIdx];
 
     qNo.textContent = qID + 1;
     typeInfo.textContent = question.qType;
