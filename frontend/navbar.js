@@ -69,19 +69,48 @@
   const nav = document.querySelector(".navbar");
   if (!nav) return;
 
-  // Ensure smooth hide/show + minimal CSS without touching your stylesheets
-  const style = document.createElement("style");
-  style.textContent = `
-    .navbar.js-autohide {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      will-change: transform;
-    }
-    .navbar.js-autohide.navbar--hidden {
-      transform: translateY(-100%);
-    }
-  `;
-  document.head.appendChild(style);
+  // Inject shared navbar markup from a single partial, then set active state
+  await injectNavbarPartial(nav);
   nav.classList.add("js-autohide");
+
+  async function injectNavbarPartial(navEl) {
+    try {
+      const r = await fetch("./partials/navbar.html", { cache: "no-store" });
+      if (r.ok) {
+        const html = await r.text();
+        navEl.innerHTML = html;
+      }
+    } catch {}
+    setActiveLink(navEl);
+  }
+
+  function setActiveLink(navEl) {
+    const explicit = (document.body?.dataset?.active || "").toLowerCase();
+    const path = (location.pathname || "").toLowerCase();
+    let key = explicit;
+    if (!key) {
+      if (path.endsWith("/bookmarks.html")) key = "bookmarks";
+      else if (path.endsWith("/worksheet_index.html")) key = "worksheets";
+      else if (path.endsWith("/index.html") || /\/(qbase\/)?$/.test(path)) key = "home";
+    }
+    const links = Array.from(navEl.querySelectorAll('a.nav-link[href]'));
+    links.forEach((a) => {
+      a.classList.remove("active");
+      a.removeAttribute("aria-current");
+    });
+    const matcher = {
+      home: (href) => /(^|\/)index\.html$/i.test(href),
+      bookmarks: (href) => /bookmarks\.html$/i.test(href),
+      worksheets: (href) => /worksheet_index\.html$/i.test(href),
+    };
+    if (key && matcher[key]) {
+      const link = links.find((a) => matcher[key](a.getAttribute("href") || ""));
+      if (link) {
+        link.classList.add("active");
+        link.setAttribute("aria-current", "page");
+      }
+    }
+  }
 
   // ======= State =======
   let lastY = Math.max(0, window.scrollY || window.pageYOffset);
@@ -165,6 +194,8 @@
   const userItem = document.getElementById("nav-user-item");
   const logoutLink = document.getElementById("nav-logout");
   const deleteAccountLink = document.getElementById("nav-delete-account");
+  const userDropdownMenu = document.querySelector('#nav-user-item .dropdown-menu');
+  let profileLink = document.getElementById('nav-profile');
   const usernameSpan = document.getElementById("nav-username");
   let loginGateEl = null;
   let isAuthenticated = false;
@@ -287,12 +318,15 @@
   }
 
   function showLoginGate() {
-    const el = ensureLoginGate();
+    const el = ensureLoginGate2();
     if (!el) return;
     el.classList.remove("d-none");
     el.classList.add("d-flex");
     document.body.style.overflow = "hidden";
-    setTimeout(() => el.querySelector("#qbaseGateUsername")?.focus(), 0);
+    setTimeout(() => {
+      const target = el.querySelector("#qbaseLoginUsername") || el.querySelector("#qbaseSignupUsername");
+      target?.focus();
+    }, 0);
   }
 
   function hideLoginGate() {
@@ -300,6 +334,437 @@
     loginGateEl.classList.remove("d-flex");
     loginGateEl.classList.add("d-none");
     document.body.style.overflow = "";
+  }
+  // New tabbed login/signup modal
+  function ensureLoginGate2() {
+    if (loginGateEl && document.body.contains(loginGateEl)) return loginGateEl;
+
+    const existing = document.getElementById("qbaseLoginGate");
+    if (existing) {
+      loginGateEl = existing;
+      return existing;
+    }
+
+    const wrap = document.createElement("div");
+    wrap.id = "qbaseLoginGate";
+    wrap.className =
+      "position-fixed top-0 start-0 w-100 h-100 align-items-center justify-content-center d-none";
+    wrap.style.cssText =
+      "z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:saturate(120%) blur(2px)";
+    wrap.innerHTML = `
+      <div class="card text-light" style="background:#15171b;border:1px solid rgba(255,255,255,0.08);min-width:320px;max-width:460px">
+        <div class="card-body">
+          <h5 class="card-title mb-2">Account</h5>
+          <p class="card-text">Sign in or create a new account.</p>
+
+          <ul class="nav nav-tabs" id="qbaseAuthTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active text-white" id="qbaseTabSignIn" data-bs-toggle="tab" data-bs-target="#qbasePaneSignIn" type="button" role="tab" aria-controls="qbasePaneSignIn" aria-selected="true">Sign In</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link text-white" id="qbaseTabSignUp" data-bs-toggle="tab" data-bs-target="#qbasePaneSignUp" type="button" role="tab" aria-controls="qbasePaneSignUp" aria-selected="false">Create new account</button>
+            </li>
+          </ul>
+          <div class="tab-content pt-3">
+            <div class="tab-pane fade show active" id="qbasePaneSignIn" role="tabpanel" aria-labelledby="qbaseTabSignIn">
+              <form id="qbaseSignInForm">
+                <div class="mb-2">
+                  <label for="qbaseLoginUsername" class="form-label">Username</label>
+                  <input id="qbaseLoginUsername" class="form-control" type="text" placeholder="Enter username" autocomplete="username" />
+                </div>
+                <div class="mb-2">
+                  <label for="qbaseLoginPassword" class="form-label mb-0">Password</label>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <input id="qbaseLoginPassword" class="form-control" type="password" placeholder="Enter password" autocomplete="current-password" />
+                    <div class="d-flex ms-2">
+                      <button type="button" id="qbaseLoginTogglePwd" class="btn btn-sm btn-outline-secondary">Show</button>
+                    </div>
+                  </div>
+                </div>
+                <div id="qbaseLoginError" class="text-danger small mb-2" style="display:none"></div>
+                <div class="d-flex gap-2">
+                  <button id="qbaseSignInBtn" class="btn btn-primary flex-fill" type="submit">Sign In</button>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane fade" id="qbasePaneSignUp" role="tabpanel" aria-labelledby="qbaseTabSignUp">
+              <form id="qbaseSignUpForm">
+                <div class="mb-2">
+                  <label for="qbaseSignupUsername" class="form-label">Username</label>
+                  <input id="qbaseSignupUsername" class="form-control" type="text" placeholder="Choose a username" autocomplete="username" />
+                </div>
+                <div class="mb-2">
+                  <label for="qbaseSignupPassword" class="form-label mb-0">Password</label>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <input id="qbaseSignupPassword" class="form-control" type="password" placeholder="Create a password" autocomplete="new-password" />
+                    <div class="d-flex ms-2">
+                      <button type="button" id="qbaseSignupTogglePwd" class="btn btn-sm btn-outline-secondary">Show</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <label for="qbaseSignupConfirm" class="form-label mb-0">Confirm Password</label>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <input id="qbaseSignupConfirm" class="form-control" type="password" placeholder="Re-enter password" autocomplete="new-password" />
+                    <div class="d-flex ms-2">
+                      <button type="button" id="qbaseSignupToggleConfirm" class="btn btn-sm btn-outline-secondary">Show</button>
+                    </div>
+                  </div>
+                </div>
+                <div id="qbaseSignupError" class="text-danger small mb-2" style="display:none"></div>
+                <div class="d-flex gap-2">
+                  <button id="qbaseSignUpBtn" class="btn btn-success flex-fill" type="submit">Create Account</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    document.body.appendChild(wrap);
+
+    const signInForm = wrap.querySelector("#qbaseSignInForm");
+    const signUpForm = wrap.querySelector("#qbaseSignUpForm");
+
+    const inUser = wrap.querySelector("#qbaseLoginUsername");
+    const inPwd = wrap.querySelector("#qbaseLoginPassword");
+    const inError = wrap.querySelector("#qbaseLoginError");
+    const inToggle = wrap.querySelector("#qbaseLoginTogglePwd");
+
+    const upUser = wrap.querySelector("#qbaseSignupUsername");
+    const upPwd = wrap.querySelector("#qbaseSignupPassword");
+    const upPwd2 = wrap.querySelector("#qbaseSignupConfirm");
+    const upError = wrap.querySelector("#qbaseSignupError");
+    const upToggle1 = wrap.querySelector("#qbaseSignupTogglePwd");
+    const upToggle2 = wrap.querySelector("#qbaseSignupToggleConfirm");
+
+    const onSignIn = (e) => {
+      e?.preventDefault?.();
+      gateLoginFlow2("signin");
+    };
+    const onSignUp = (e) => {
+      e?.preventDefault?.();
+      gateLoginFlow2("signup");
+    };
+    signInForm?.addEventListener("submit", onSignIn);
+    signUpForm?.addEventListener("submit", onSignUp);
+
+    // Show/hide toggles
+    inToggle?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!inPwd) return;
+      const isPw = inPwd.type === "password";
+      inPwd.type = isPw ? "text" : "password";
+      inToggle.textContent = isPw ? "Hide" : "Show";
+    });
+    upToggle1?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!upPwd) return;
+      const isPw = upPwd.type === "password";
+      upPwd.type = isPw ? "text" : "password";
+      upToggle1.textContent = isPw ? "Hide" : "Show";
+    });
+    upToggle2?.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (!upPwd2) return;
+      const isPw = upPwd2.type === "password";
+      upPwd2.type = isPw ? "text" : "password";
+      upToggle2.textContent = isPw ? "Hide" : "Show";
+    });
+
+    loginGateEl = wrap;
+    return wrap;
+  }
+
+  async function gateLoginFlow2(mode = "signin") {
+    ensureLoginGate2();
+    const inUser = document.getElementById("qbaseLoginUsername");
+    const inPwd = document.getElementById("qbaseLoginPassword");
+    const inErr = document.getElementById("qbaseLoginError");
+
+    const upUser = document.getElementById("qbaseSignupUsername");
+    const upPwd = document.getElementById("qbaseSignupPassword");
+    const upPwd2 = document.getElementById("qbaseSignupConfirm");
+    const upErr = document.getElementById("qbaseSignupError");
+
+    if (mode === "signup") {
+      const username = (upUser?.value || "").trim();
+      const password = (upPwd?.value || "").trim();
+      const confirm = (upPwd2?.value || "").trim();
+
+      if (upErr) upErr.style.display = "none";
+
+      if (!username || username.length < 2) {
+        if (upErr) {
+          upErr.textContent = "Please enter a valid username (min 2 characters).";
+          upErr.style.display = "block";
+        }
+        upUser?.focus();
+        return;
+      }
+      if (!password || password.length < 6) {
+        if (upErr) {
+          upErr.textContent = "Password must be at least 6 characters.";
+          upErr.style.display = "block";
+        }
+        upPwd?.focus();
+        return;
+      }
+      if (password !== confirm) {
+        if (upErr) {
+          upErr.textContent = "Passwords do not match.";
+          upErr.style.display = "block";
+        }
+        upPwd2?.focus();
+        return;
+      }
+
+      try {
+        let r = await fetch(`${API_BASE}/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+        if (r.status === 404) {
+          r = await fetch(`${API_BASE}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+        }
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const data = await r.json().catch(() => ({}));
+        if (data && data.token && data.user && data.user.username) {
+          qbSetToken(data.token);
+          setLoggedInUI(data.user.username);
+          broadcastLogin(data.user.username);
+          hideLoginGate();
+          upUser && (upUser.value = "");
+          upPwd && (upPwd.value = "");
+          upPwd2 && (upPwd2.value = "");
+        } else {
+          await showNotice({
+            title: "Account Created",
+            message: "Your account was created. Please sign in.",
+          });
+          try {
+            const tabBtn = document.getElementById("qbaseTabSignIn");
+            if (tabBtn) tabBtn.click();
+          } catch {}
+        }
+      } catch (e) {
+        if (upErr) {
+          upErr.textContent = "Sign up failed. Please try again.";
+          upErr.style.display = "block";
+        }
+      }
+      return;
+    }
+
+    // Default: sign in
+    const username = (inUser?.value || "").trim();
+    const password = (inPwd?.value || "").trim();
+
+    if (inErr) inErr.style.display = "none";
+    if (!username || username.length < 2) {
+      if (inErr) {
+        inErr.textContent = "Please enter a valid username (min 2 characters).";
+        inErr.style.display = "block";
+      }
+      inUser?.focus();
+      return;
+    }
+    if (!password) {
+      if (inErr) {
+        inErr.textContent = "Please enter your password.";
+        inErr.style.display = "block";
+      }
+      inPwd?.focus();
+      return;
+    }
+
+    try {
+      const r = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const data = await r.json();
+      if (data && data.token && data.user && data.user.username) {
+        qbSetToken(data.token);
+        setLoggedInUI(data.user.username);
+        broadcastLogin(data.user.username);
+        hideLoginGate();
+        inUser && (inUser.value = "");
+        inPwd && (inPwd.value = "");
+        try {
+          if (data.user.mustChangePassword) {
+            await showChangePasswordFlow();
+          }
+        } catch {}
+      } else {
+        throw new Error("Session not established");
+      }
+    } catch (e) {
+      if (inErr) {
+        inErr.textContent = "Sign in failed. Please try again.";
+        inErr.style.display = "block";
+      }
+      showLoginGate();
+    }
+  }
+
+  async function showChangePasswordFlow() {
+    const idCur = "qbaseChangePwCur";
+    const idNew = "qbaseChangePwNew";
+    const idCon = "qbaseChangePwCon";
+    const body = `
+      <div class="mb-2">
+        <label for="${idCur}" class="form-label">Current Password</label>
+        <input id="${idCur}" class="form-control" type="password" autocomplete="current-password" />
+      </div>
+      <div class="mb-2">
+        <label for="${idNew}" class="form-label">New Password</label>
+        <input id="${idNew}" class="form-control" type="password" autocomplete="new-password" />
+      </div>
+      <div class="mb-2">
+        <label for="${idCon}" class="form-label">Confirm New Password</label>
+        <input id="${idCon}" class="form-control" type="password" autocomplete="new-password" />
+      </div>
+      <div id="qbasePwErr" class="text-danger small" style="display:none"></div>
+    `;
+    const modalRes = await showModal({
+      title: "Update Your Password",
+      bodyHTML: body,
+      buttons: [
+        { text: "Cancel", className: "btn btn-outline-secondary", value: false },
+        { text: "Update", className: "btn btn-success", value: true },
+      ],
+      focusSelector: `#${idCur}`,
+    });
+    if (!modalRes) return;
+    const cur = document.getElementById(idCur);
+    const nw = document.getElementById(idNew);
+    const cn = document.getElementById(idCon);
+    const err = document.getElementById("qbasePwErr");
+    const currentPassword = (cur?.value || "").trim();
+    const newPassword = (nw?.value || "").trim();
+    const confirm = (cn?.value || "").trim();
+    if (!newPassword || newPassword.length < 6) {
+      if (err) {
+        err.textContent = "New password must be at least 6 characters.";
+        err.style.display = "block";
+      }
+      return;
+    }
+    if (newPassword !== confirm) {
+      if (err) {
+        err.textContent = "New passwords do not match.";
+        err.style.display = "block";
+      }
+      return;
+    }
+    try {
+      const r = await authFetch(`${API_BASE}/account/password`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      await showNotice({ title: "Password Updated", message: "Your password has been changed." });
+    } catch (e) {
+      await showNotice({ title: "Error", message: "Failed to update password. Check your current password and try again." });
+    }
+  }
+
+  async function showProfileModal() {
+    const idCur = "qbaseProfCur";
+    const idNew = "qbaseProfNew";
+    const idCon = "qbaseProfCon";
+    const delBtnId = "qbaseProfDeleteBtn";
+    const saveBtnId = "qbaseProfSaveBtn";
+    const errId = "qbaseProfErr";
+    const body = `
+      <div class="mb-3">
+        <h6 class="mb-2">Change Password</h6>
+        <div class="mb-2">
+          <label for="${idCur}" class="form-label">Current Password</label>
+          <input id="${idCur}" class="form-control" type="password" autocomplete="current-password" />
+        </div>
+        <div class="mb-2">
+          <label for="${idNew}" class="form-label">New Password</label>
+          <input id="${idNew}" class="form-control" type="password" autocomplete="new-password" />
+        </div>
+        <div class="mb-2">
+          <label for="${idCon}" class="form-label">Confirm New Password</label>
+          <input id="${idCon}" class="form-control" type="password" autocomplete="new-password" />
+        </div>
+        <div id="${errId}" class="text-danger small" style="display:none"></div>
+        <button id="${saveBtnId}" class="btn btn-primary">Update Password</button>
+      </div>
+      <hr/>
+      <div class="mt-3">
+        <h6 class="mb-2 text-danger">Danger Zone</h6>
+        <p class="small text-muted">Deleting your account permanently removes all saved data.</p>
+        <button id="${delBtnId}" class="btn btn-outline-danger">Delete Account…</button>
+      </div>
+    `;
+    await showModal({
+      title: "Profile",
+      bodyHTML: body,
+      buttons: [{ text: "Close", className: "btn btn-outline-secondary", value: true }],
+      focusSelector: `#${idCur}`,
+      onContentReady: (modalEl) => {
+        const saveBtn = modalEl.querySelector(`#${saveBtnId}`);
+        const delBtn = modalEl.querySelector(`#${delBtnId}`);
+        const err = modalEl.querySelector(`#${errId}`);
+        const getVals = () => {
+          const cur = modalEl.querySelector(`#${idCur}`);
+          const nw = modalEl.querySelector(`#${idNew}`);
+          const cn = modalEl.querySelector(`#${idCon}`);
+          return {
+            currentPassword: (cur?.value || "").trim(),
+            newPassword: (nw?.value || "").trim(),
+            confirm: (cn?.value || "").trim(),
+          };
+        };
+        const showErr = (msg) => {
+          if (err) {
+            err.textContent = msg || "";
+            err.style.display = msg ? "block" : "none";
+          }
+        };
+        saveBtn?.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const { currentPassword, newPassword, confirm } = getVals();
+          if (!newPassword || newPassword.length < 6) {
+            showErr("New password must be at least 6 characters.");
+            return;
+          }
+          if (newPassword !== confirm) {
+            showErr("New passwords do not match.");
+            return;
+          }
+          try {
+            const r = await authFetch(`${API_BASE}/account/password`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ currentPassword, newPassword }),
+            });
+            if (!r.ok) throw new Error(String(r.status));
+            showErr("");
+            await showNotice({ title: 'Password Updated', message: 'Your password has been changed.' });
+          } catch (e) {
+            showErr('Failed to update password. Check current password and try again.');
+          }
+        });
+        delBtn?.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await doDeleteAccountFlow();
+        });
+      },
+    });
   }
   function broadcastLogin(name) {
     window.dispatchEvent(
@@ -731,10 +1196,32 @@
     e.preventDefault();
     doLogoutFlow();
   });
-  deleteAccountLink?.addEventListener("click", (e) => {
-    e.preventDefault();
-    doDeleteAccountFlow();
-  });
+  // Build Profile entry dynamically if missing, and move Delete Account into Profile modal
+  (function setupProfileEntry() {
+    try {
+      // Hide existing Delete Account item if present
+      if (deleteAccountLink) {
+        const li = deleteAccountLink.closest('li');
+        if (li) li.classList.add('d-none');
+      }
+      if (!profileLink && userDropdownMenu) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.className = 'dropdown-item';
+        a.href = '#';
+        a.id = 'nav-profile';
+        a.textContent = 'Profile';
+        li.appendChild(a);
+        // Insert as first item
+        userDropdownMenu.insertBefore(li, userDropdownMenu.firstElementChild || null);
+        profileLink = a;
+      }
+      profileLink?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showProfileModal();
+      });
+    } catch {}
+  })();
 
   (async () => {
     const me = await whoAmI();
@@ -742,6 +1229,11 @@
       setLoggedInUI(me.username);
       broadcastLogin(me.username);
       hideLoginGate();
+      try {
+        if (me.mustChangePassword) {
+          await showChangePasswordFlow();
+        }
+      } catch {}
     } else {
       setLoggedOutUI();
       if ((!IS_DEV || FORCE_LOGIN) && !isAuthenticated) {
