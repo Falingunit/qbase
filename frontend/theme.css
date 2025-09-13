@@ -50,6 +50,7 @@ html::before {
   -webkit-backdrop-filter: saturate(120%) blur(8px);
 }
 
+
 /* Headings */
 h1 { letter-spacing: 0.3px; font-weight: 700; }
 h4 { margin-top: 1.75rem; color: #cfd7df; }
@@ -79,3 +80,48 @@ h4 { margin-top: 1.75rem; color: #cfd7df; }
   border-radius: 5px;
   -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
 }
+
+/* Modals: align with card look */
+.modal-content {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  border-radius: var(--radius);
+  box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+}
+.modal-header,
+.modal-footer {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+.modal .btn-close {
+  filter: invert(1) grayscale(1);
+  opacity: 0.8;
+}
+.modal .btn-close:hover { opacity: 1; }
+
+/* Dropdowns: glassy dark surface */
+.dropdown-menu {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  color: var(--text);
+}
+.dropdown-item { color: var(--text); }
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+.dropdown-divider { border-top-color: rgba(255, 255, 255, 0.08); }
+
+/* Forms on dark surfaces */
+.form-control,
+.form-select,
+.input-group-text {
+  background-color: rgba(20, 22, 26, 0.65);
+  color: #dfe6ee;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.form-control::placeholder { color: #9aa3ac; }

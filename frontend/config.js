@@ -17,10 +17,19 @@ function detectDev() {
 async function loadConfig() {
   const res = await fetch("./config.json");
   const config = await res.json();
+
+  // Local run mode: explicitly override to local backend when enabled
+  if (config.LOCAL_MODE) {
+    API_BASE = config.LOCAL_API_BASE || "http://localhost:3000";
+    return;
+  }
+
+  // Default/prod base
   API_BASE = config.API_BASE;
-  // In dev, prefer WireGuard server IP over public internet
+
+  // In dev, prefer a dev API base over public internet
   if (detectDev()) {
-    API_BASE = config.DEV_API_BASE || "http://10.0.0.1:3000";
+    API_BASE = config.DEV_API_BASE || config.API_BASE || "http://10.0.0.1:3000";
   }
 }
 

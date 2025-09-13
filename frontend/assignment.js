@@ -229,10 +229,9 @@
 
   const assignmentTitlePromise = (async () => {
     try {
-      const list = await (await fetch("./data/assignment_list.json")).json();
-      const meta = (Array.isArray(list) ? list : list.assignments || list).find(
-        (it) => Number(it.aID) === Number(aID)
-      );
+      const raw = await (await fetch("./data/assignment_list.json")).json();
+      const items = normalizeAssignmentsForLookup(raw);
+      const meta = items.find((it) => Number(it.aID) === Number(aID));
       if (meta?.title) assignmentTitle = meta.title;
 
       // If the page UI is already up, refresh the header
@@ -245,6 +244,27 @@
       );
     }
   })();
+
+  function normalizeAssignmentsForLookup(input) {
+    const out = [];
+    const pushItem = (raw) => {
+      if (!raw || typeof raw !== "object") return;
+      const id = Number(
+        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
+      );
+      if (!Number.isFinite(id)) return;
+      out.push({ aID: id, title: String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`) });
+    };
+    if (Array.isArray(input)) input.forEach(pushItem);
+    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
+    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
+    else if (input && typeof input === "object") {
+      Object.values(input).forEach((arr) => {
+        if (Array.isArray(arr)) arr.forEach(pushItem);
+      });
+    }
+    return out;
+  }
 
   let saveTimeout;
 
@@ -633,18 +653,26 @@
       if (!yes) return;
 
       try {
+        // Preserve per-question notes while resetting progress/answers
+        const preservedNotes = Array.isArray(questionStates)
+          ? questionStates.map((s) => (s && typeof s.notes === "string" ? s.notes : ""))
+          : [];
+
+        // Build a fresh state array with notes carried over
+        const resetStates = Array(window.displayQuestions.length)
+          .fill()
+          .map((_, i) => ({ ...defaultState(), notes: preservedNotes[i] || "" }));
+
         if (authSource === "server") {
-          // Clear on server
-          await postState(aID, []); // send empty state
-          questionStates = Array(window.displayQuestions.length)
-            .fill()
-            .map(defaultState);
+          // Write reset state (with notes kept) to server
+          await postState(aID, resetStates);
+          questionStates = resetStates;
         } else {
-          // Clear localStorage fallback
-          localStorage.removeItem(`qbase:${aID}:state`);
-          questionStates = Array(window.displayQuestions.length)
-            .fill()
-            .map(defaultState);
+          // Local fallback: replace stored state instead of removing it
+          try {
+            localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(resetStates));
+          } catch {}
+          questionStates = resetStates;
         }
 
         // Refresh UI to first question

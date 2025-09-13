@@ -34,13 +34,35 @@
   const assignmentTitles = new Map();
   (async () => {
     try {
-      const list = await (await fetch("./data/assignment_list.json")).json();
-      const items = Array.isArray(list) ? list : list.assignments || list;
+      const raw = await (await fetch("./data/assignment_list.json")).json();
+      const items = normalizeAssignmentsForTitles(raw);
       items.forEach((it) => assignmentTitles.set(Number(it.aID), it.title));
     } catch {
       /* ignore */
     }
   })();
+
+  function normalizeAssignmentsForTitles(input) {
+    const out = [];
+    const pushItem = (raw) => {
+      if (!raw || typeof raw !== "object") return;
+      const id = Number(
+        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
+      );
+      if (!Number.isFinite(id)) return;
+      const title = String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`);
+      out.push({ aID: id, title });
+    };
+    if (Array.isArray(input)) input.forEach(pushItem);
+    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
+    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
+    else if (input && typeof input === "object") {
+      Object.values(input).forEach((arr) => {
+        if (Array.isArray(arr)) arr.forEach(pushItem);
+      });
+    }
+    return out;
+  }
 
   //
   // Do async config after handlers are registered
@@ -301,6 +323,7 @@
     let html = "";
     for (const tagName of sortedTags) {
       const bookmarks = bookmarksByTag[tagName];
+      const tagId = bookmarks && bookmarks.length ? bookmarks[0].tagId : null;
       html += `
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
@@ -309,6 +332,17 @@
             ${escapeHtml(tagName)}
             <span class="badge bg-secondary ms-2">${bookmarks.length}</span>
           </h5>
+          <div>
+            ${
+              tagId
+                ? `<button class="btn btn-sm btn-outline-danger delete-tag" data-tag-id="${escapeHtml(
+                    String(tagId)
+                  )}" title="Delete tag and its bookmarks">
+                     <i class="bi bi-trash"></i>
+                   </button>`
+                : ""
+            }
+          </div>
         </div>
         <div class="card-body">
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
@@ -400,6 +434,21 @@
         }
       });
     });
+
+    // Delete entire tag (and its bookmarks)
+    document.querySelectorAll(".delete-tag").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const tagId = btn.dataset.tagId;
+        const ok = confirm(
+          "Delete this tag and all bookmarks under it? This cannot be undone."
+        );
+        if (!ok) return;
+        if (await deleteBookmarkTag(tagId)) {
+          loadBookmarks();
+        }
+      });
+    });
   }
 
   async function removeBookmark(assignmentId, questionIndex, tagId) {
@@ -412,6 +461,26 @@
     } catch (err) {
       console.error("Failed to remove bookmark:", err);
       alert("Failed to remove bookmark.");
+      return false;
+    }
+  }
+
+  async function deleteBookmarkTag(tagId) {
+    try {
+      const resp = await authFetch(
+        `${API_BASE}/api/bookmark-tags/${tagId}`,
+        { method: "DELETE" }
+      );
+      if (!resp.ok) {
+        const msg = `Failed to delete tag (HTTP ${resp.status})`;
+        console.error(msg);
+        alert(msg);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error("Failed to delete tag:", err);
+      alert("Failed to delete tag.");
       return false;
     }
   }

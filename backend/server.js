@@ -1,4 +1,6 @@
 // server.js — JWT (no cookies) + SQLite + flexible CORS
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -6,6 +8,7 @@ import { fileURLToPath } from 'url';
 import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 // ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
@@ -92,7 +95,9 @@ db.pragma('journal_mode = WAL');
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL
+    username TEXT UNIQUE NOT NULL,
+    password_hash TEXT,
+    force_pw_reset INTEGER DEFAULT 0
   );
 
   CREATE TABLE IF NOT EXISTS states (
@@ -143,9 +148,39 @@ db.exec(`
   );
 `);
 
+// --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
+try {
+  const cols = db.prepare("PRAGMA table_info(users)").all();
+  const hasPw = cols.some((c) => String(c.name).toLowerCase() === 'password_hash');
+  if (!hasPw) {
+    db.exec("ALTER TABLE users ADD COLUMN password_hash TEXT");
+  }
+  const hasForce = cols.some((c) => String(c.name).toLowerCase() === 'force_pw_reset');
+  if (!hasForce) {
+    db.exec("ALTER TABLE users ADD COLUMN force_pw_reset INTEGER DEFAULT 0");
+  }
+} catch (e) {
+  console.warn('users.password_hash migration check failed:', e?.message || e);
+}
+
 // ---------- Auth helpers ----------
 function signToken(userId) {
   return jwt.sign({ sub: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+}
+
+// Password helpers using Node's scrypt
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16).toString('hex');
+  const key = crypto.scryptSync(String(password), salt, 64);
+  return `${salt}:${key.toString('hex')}`;
+}
+function verifyPassword(password, stored) {
+  if (!stored || typeof stored !== 'string' || !stored.includes(':')) return false;
+  const [salt, keyHex] = stored.split(':');
+  const keyBuf = Buffer.from(keyHex, 'hex');
+  const test = crypto.scryptSync(String(password), salt, 64);
+  if (test.length !== keyBuf.length) return false;
+  return crypto.timingSafeEqual(test, keyBuf);
 }
 
 function auth(req, res, next) {
@@ -164,21 +199,61 @@ function auth(req, res, next) {
 // ---------- Public routes ----------
 app.get('/healthz', (_req, res) => res.send('ok'));
 
-app.post('/login', (req, res) => {
+// Sign up: create or set password for existing username without password
+app.post('/signup', (req, res) => {
   try {
-    const { username } = req.body || {};
+    const { username, password } = req.body || {};
     if (!username || username.trim().length < 2) {
       return res.status(400).json({ error: 'Username too short' });
     }
-    const uname = username.trim();
-
-    let user = db.prepare('SELECT id, username FROM users WHERE username = ?').get(uname);
-    if (!user) {
-      const id = nanoid();
-      db.prepare('INSERT INTO users (id, username) VALUES (?, ?)').run(id, uname);
-      user = { id, username: uname };
+    if (!password || String(password).length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
     }
+    const uname = username.trim();
+    const row = db.prepare('SELECT id, username, password_hash, force_pw_reset FROM users WHERE username = ?').get(uname);
+    const pwHash = hashPassword(password);
+    let user;
+    if (!row) {
+      const id = nanoid();
+      db.prepare('INSERT INTO users (id, username, password_hash, force_pw_reset) VALUES (?, ?, ?, 0)').run(id, uname, pwHash);
+      user = { id, username: uname };
+    } else if (!row.password_hash) {
+      db.prepare('UPDATE users SET password_hash = ?, force_pw_reset = 0 WHERE id = ?').run(pwHash, row.id);
+      user = { id: row.id, username: row.username };
+    } else {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+    const token = signToken(user.id);
+    res.json({ success: true, user: { ...user, mustChangePassword: false }, token });
+  } catch (e) {
+    console.error('Signup failed:', e);
+    res.status(500).json({ error: 'Signup failed' });
+  }
+});
 
+// Back-compat alias
+app.post('/register', (req, res) => {
+  req.url = '/signup';
+  app._router.handle(req, res);
+});
+
+// Login: require password
+app.post('/login', (req, res) => {
+  try {
+    const { username, password } = req.body || {};
+    if (!username || username.trim().length < 2) {
+      return res.status(400).json({ error: 'Username too short' });
+    }
+    if (!password) return res.status(400).json({ error: 'Password required' });
+    const uname = username.trim();
+    const row = db.prepare('SELECT id, username, password_hash, force_pw_reset FROM users WHERE username = ?').get(uname);
+    if (!row || !row.password_hash) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    if (!verifyPassword(password, row.password_hash)) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    const user = { id: row.id, username: row.username, mustChangePassword: !!row.force_pw_reset };
     const token = signToken(user.id);
     res.json({ success: true, user, token });
   } catch (e) {
@@ -194,8 +269,9 @@ app.get('/me', (req, res) => {
   if (!m) return res.json(null);
   try {
     const { sub } = jwt.verify(m[1], JWT_SECRET);
-    const u = db.prepare('SELECT id, username FROM users WHERE id = ?').get(String(sub));
-    res.json(u || null);
+    const u = db.prepare('SELECT id, username, force_pw_reset FROM users WHERE id = ?').get(String(sub));
+    if (!u) return res.json(null);
+    res.json({ id: u.id, username: u.username, mustChangePassword: !!u.force_pw_reset });
   } catch {
     res.json(null);
   }
@@ -249,6 +325,22 @@ app.post('/api/bookmark-tags', (req, res) => {
     if (e.code === 'SQLITE_CONSTRAINT_UNIQUE') return res.status(400).json({ error: 'Tag name already exists' });
     console.error('create tag:', e);
     res.status(500).json({ error: 'Failed to create bookmark tag' });
+  }
+});
+
+app.delete('/api/bookmark-tags/:tagId', (req, res) => {
+  try {
+    const { tagId } = req.params;
+    if (!tagId) return res.status(400).json({ error: 'tagId is required' });
+    // Ensure tag belongs to the user
+    const tag = db.prepare('SELECT id FROM bookmark_tags WHERE id = ? AND userId = ?').get(tagId, req.userId);
+    if (!tag) return res.status(404).json({ error: 'Tag not found' });
+    // Delete tag (bookmarks referencing it will cascade-delete)
+    db.prepare('DELETE FROM bookmark_tags WHERE id = ? AND userId = ?').run(tagId, req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('delete tag:', e);
+    res.status(500).json({ error: 'Failed to delete bookmark tag' });
   }
 });
 
@@ -426,6 +518,43 @@ app.get('/api/scores', async (req, res) => {
     result[assignmentId] = { ...base, attempted, totalQuestions };
   }
   res.json(result);
+});
+
+// Delete account (cascade via FKs)
+app.delete('/account', (req, res) => {
+  try {
+    db.prepare('DELETE FROM users WHERE id = ?').run(req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('delete account:', e);
+    res.status(500).json({ error: 'Failed to delete account' });
+  }
+});
+
+// Change password
+app.patch('/account/password', (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body || {};
+    if (!newPassword || String(newPassword).length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+    const row = db.prepare('SELECT id, password_hash, force_pw_reset FROM users WHERE id = ?').get(req.userId);
+    if (!row) return res.status(400).json({ error: 'User not found' });
+    const isForced = !!row.force_pw_reset;
+    if (!isForced) {
+      // Normal change: require current password verification
+      if (!row.password_hash) return res.status(400).json({ error: 'No password set' });
+      if (!verifyPassword(String(currentPassword || ''), row.password_hash)) {
+        return res.status(401).json({ error: 'Current password is incorrect' });
+      }
+    }
+    const newHash = hashPassword(newPassword);
+    db.prepare('UPDATE users SET password_hash = ?, force_pw_reset = 0 WHERE id = ?').run(newHash, req.userId);
+    res.json({ success: true, forced: isForced });
+  } catch (e) {
+    console.error('change password:', e);
+    res.status(500).json({ error: 'Failed to change password' });
+  }
 });
 
 // ---------- Scoring helpers ----------

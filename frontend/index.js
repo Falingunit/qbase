@@ -1,4 +1,5 @@
 "use strict";
+
 (async () => {
   await loadConfig();
 
@@ -29,10 +30,26 @@
     if (globalBtn) globalBtn.addEventListener("click", () => applyFilter());
   })();
 
-  // Refresh starred on login
+  // Refresh server-coupled data on login (scores + starred)
   window.addEventListener("qbase:login", async () => {
-    const starred = await fetchStarred();
-    starredIds = new Set(Array.isArray(starred) ? starred.map(Number) : []);
+    try {
+      const [scores, starred] = await Promise.all([
+        fetchScores(),
+        fetchStarred(),
+      ]);
+      cachedScores = scores || {};
+      starredIds = new Set(Array.isArray(starred) ? starred.map(Number) : []);
+    } catch {}
+    buildCards(getFilteredData());
+    filterVisibility(lastSearch);
+    highlightElements(document, (els.search?.value || "").trim());
+    checkEmpty();
+  });
+
+  // Clear server-coupled data on logout
+  window.addEventListener("qbase:logout", () => {
+    cachedScores = {};
+    starredIds = new Set();
     buildCards(getFilteredData());
     filterVisibility(lastSearch);
     highlightElements(document, (els.search?.value || "").trim());
@@ -52,7 +69,7 @@
         fetchScores(),
         fetchStarred(),
       ]);
-      allData = assignRes || [];
+      allData = normalizeAssignments(assignRes);
       cachedScores = scores || {};
       starredIds = new Set(Array.isArray(starred) ? starred.map(Number) : []);
       buildCards(getFilteredData());
@@ -70,11 +87,63 @@
     }
   }
 
+  // Accept both old and new assignment_list.json shapes
+  function normalizeAssignments(input) {
+    const out = [];
+
+    const pushItem = (raw, subjHint) => {
+      if (!raw || typeof raw !== "object") return;
+      const id = Number(
+        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
+      );
+      if (!Number.isFinite(id)) return;
+
+      const subject = String(raw.subject ?? subjHint ?? "").trim() || "(No subject)";
+      const chapter = String(
+        raw.chapter ?? raw.chapterName ?? raw.topic ?? ""
+      );
+      const title = String(
+        raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`
+      );
+      const faculty = String(
+        raw.faculty ?? raw.teacher ?? raw.mentor ?? ""
+      );
+
+      const attemptedRaw =
+        raw.attempted ?? raw.attemptedCount ?? raw.progress?.attempted;
+      const totalRaw =
+        raw.totalQuestions ?? raw.total ?? raw.questionsCount ?? raw.progress?.total;
+
+      const item = { aID: id, subject, chapter, title, faculty };
+      const attempted = Number(attemptedRaw);
+      const totalQuestions = Number(totalRaw);
+      if (Number.isFinite(attempted)) item.attempted = attempted;
+      if (Number.isFinite(totalQuestions)) item.totalQuestions = totalQuestions;
+
+      out.push(item);
+    };
+
+    if (Array.isArray(input)) {
+      input.forEach(pushItem);
+    } else if (input && Array.isArray(input.assignments)) {
+      input.assignments.forEach(pushItem);
+    } else if (input && Array.isArray(input.items)) {
+      input.items.forEach(pushItem);
+    } else if (input && typeof input === "object") {
+      // Possibly an object: { "Physics": [..], "Chemistry": [..] }
+      Object.entries(input).forEach(([subj, arr]) => {
+        if (Array.isArray(arr)) arr.forEach((it) => pushItem(it, subj));
+      });
+    }
+
+    return out;
+  }
+
   async function fetchScores() {
     try {
       const r = await authFetch(`${API_BASE}/api/scores`);
       if (!r.ok) return {};
-      return await r.json(); // { [aID]: {score,maxScore, attempted, totalQuestions} }
+      return await r.json();
     } catch {
       return {};
     }
@@ -337,13 +406,15 @@
     const meta = document.createElement("div");
     meta.className = "as-meta";
     const ch = document.createElement("div");
+    const chapterRaw = entry.chapter || "?";
     ch.innerHTML = `Chapter: <strong class="as-highlightable" data-raw="${escapeAttr(
-      entry.chapter || "—"
-    )}">${escapeHtml(entry.chapter || "—")}</strong>`;
+      chapterRaw
+    )}">${escapeHtml(chapterRaw)}</strong>`;
     const fac = document.createElement("div");
+    const facultyRaw = entry.faculty || "?";
     fac.innerHTML = `Faculty: <strong class="as-highlightable" data-raw="${escapeAttr(
-      entry.faculty || "—"
-    )}">${escapeHtml(entry.faculty || "—")}</strong>`;
+      facultyRaw
+    )}">${escapeHtml(facultyRaw)}</strong>`;
     meta.append(ch, fac);
 
     body.append(title, meta);
@@ -363,16 +434,20 @@
     scoreSpan.className = "as-score";
     scoreSpan.innerHTML =
       typeof score === "number" && typeof maxScore === "number"
-        ? `<span class="badge bg-primary">${score} / ${maxScore}</span>`
-        : `<span class="badge bg-secondary">-</span>`;
+        ? `<span class=\"badge bg-primary\">${score} / ${maxScore}</span>`
+        : `<span class=\"badge bg-secondary\">-</span>`;
 
     info.append(scoreSpan);
 
     const progressWrap = document.createElement("div");
     progressWrap.className = "as-progress w-100";
-    progressWrap.innerHTML = `<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="progress-bar ${
-      statusClass === "completed" ? "bg-success" : "bg-success"
-    }" style="width:${pct}%">${pct}% (${attempted}/${totalQ})</div></div>`;
+    const barClass =
+      statusClass === "completed"
+        ? "bg-success"
+        : statusClass === "started"
+        ? "bg-info"
+        : "bg-secondary";
+    progressWrap.innerHTML = `<div class=\"progress\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"${pct}\"><div class=\"progress-bar ${barClass}\" style=\"width:${pct}%\">${pct}% (${attempted}/${totalQ})</div></div>`;
 
     footer.append(info, progressWrap);
 

@@ -9,25 +9,18 @@ This repository contains a static frontend (`frontend/`) and a Node.js backend (
 
 ## Configuration
 
-- Frontend configuration is now provided statically in HTML via `window.QBASE_CONFIG` before loading `config.js` (no runtime fetch of `config.json`).
-- Alternatively, you may use meta tags (`<meta name="qbase-api-base" content="...">`, etc.).
+- `frontend/config.json` controls which backend the frontend uses.
+- `frontend/config.js` loads that config at runtime.
 
-Add this snippet before `<script src="config.js"></script>` in each HTML page you serve:
+Keys in `frontend/config.json`:
 
 ```
-<script>
-  window.QBASE_CONFIG = {
-    API_BASE: "https://your-prod-backend.example.com", // Production backend base URL
-    DEV_API_BASE: "http://10.0.0.1:3000",              // Optional dev/staging backend
-    LOCAL_MODE: false,                                  // If true, force local backend
-    LOCAL_API_BASE: "http://localhost:3000"            // Local backend base URL
-  };
-  // Optional: use meta tags instead of window.QBASE_CONFIG
-  // <meta name="qbase-api-base" content="https://your-prod-backend.example.com">
-  // <meta name="qbase-dev-api-base" content="http://10.0.0.1:3000">
-  // <meta name="qbase-local-mode" content="false">
-  // <meta name="qbase-local-api-base" content="http://localhost:3000">
-</script>
+{
+  "API_BASE": "https://your-prod-backend.example.com",   // Production backend base URL
+  "DEV_API_BASE": "http://10.0.0.1:3000",                // Optional dev/staging backend
+  "LOCAL_MODE": false,                                    // If true, force local backend
+  "LOCAL_API_BASE": "http://localhost:3000"              // Local backend base URL
+}
 ```
 
 Behavior:
@@ -56,17 +49,15 @@ Environment variables you can set:
 
 2) Configure the frontend for local
 
-Edit each `frontend/*.html` page (e.g., `index.html`) and set `LOCAL_MODE` to `true` in the `window.QBASE_CONFIG` snippet:
+Edit `frontend/config.json`:
 
 ```
-<script>
-  window.QBASE_CONFIG = {
-    API_BASE: "https://your-prod-backend.example.com",
-    DEV_API_BASE: "http://10.0.0.1:3000",
-    LOCAL_MODE: true,
-    LOCAL_API_BASE: "http://localhost:3000"
-  };
-</script>
+{
+  "API_BASE": "https://your-prod-backend.example.com",
+  "DEV_API_BASE": "http://10.0.0.1:3000",
+  "LOCAL_MODE": true,
+  "LOCAL_API_BASE": "http://localhost:3000"
+}
 ```
 
 3) Serve the frontend
@@ -86,23 +77,20 @@ Tips:
 - If you previously logged in against a different server, clear the token: open DevTools Console and run `localStorage.removeItem('qb_token')`.
 - CORS error during local testing? Start the backend with `ALLOW_ALL_ORIGINS=1`.
 
-## Navbar (Single Source)
-
-- The navbar markup lives in one place: `frontend/partials/navbar.html`.
-- Each page loads `frontend/navbar.js`, which injects that partial into the page’s `<nav class="navbar">` and sets the active link based on the page.
-- To explicitly set which link is active, add `data-active` on the `<body>`:
-
-```
-<body data-active="home|bookmarks|worksheets">
-```
-
-- To change links or labels, edit only `frontend/partials/navbar.html`.
-
 ## Deploy to Production
 
 Frontend (static hosting):
 - Host the `frontend/` directory on a static host (e.g., GitHub Pages). This app is path-aware for `/qbase` when using Pages.
-- Ensure each HTML page defines an appropriate `window.QBASE_CONFIG` block before `config.js` with your production URLs.
+- Set `frontend/config.json` for production:
+
+```
+{
+  "API_BASE": "https://your-prod-backend.example.com",
+  "DEV_API_BASE": "",
+  "LOCAL_MODE": false,
+  "LOCAL_API_BASE": "http://localhost:3000"
+}
+```
 
 Backend (Node server):
 - Deploy `backend/` to a server (VM/container). Install Node 18+, then:

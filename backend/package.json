@@ -6,10 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "migrate": "node migrate-lowdb-to-sqlite.js",
+    "migrate:legacy-passwords": "node scripts/migrate-legacy-passwords.js",
     "clear:users": "node scripts/clear-users.js",
     "init:doubt": "node scripts/init-doubt-tag.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "better-sqlite3": "^12.2.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

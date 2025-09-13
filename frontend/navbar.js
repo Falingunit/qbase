@@ -69,48 +69,19 @@
   const nav = document.querySelector(".navbar");
   if (!nav) return;
 
-  // Inject shared navbar markup from a single partial, then set active state
-  await injectNavbarPartial(nav);
+  // Ensure smooth hide/show + minimal CSS without touching your stylesheets
+  const style = document.createElement("style");
+  style.textContent = `
+    .navbar.js-autohide {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      will-change: transform;
+    }
+    .navbar.js-autohide.navbar--hidden {
+      transform: translateY(-100%);
+    }
+  `;
+  document.head.appendChild(style);
   nav.classList.add("js-autohide");
-
-  async function injectNavbarPartial(navEl) {
-    try {
-      const r = await fetch("./partials/navbar.html", { cache: "no-store" });
-      if (r.ok) {
-        const html = await r.text();
-        navEl.innerHTML = html;
-      }
-    } catch {}
-    setActiveLink(navEl);
-  }
-
-  function setActiveLink(navEl) {
-    const explicit = (document.body?.dataset?.active || "").toLowerCase();
-    const path = (location.pathname || "").toLowerCase();
-    let key = explicit;
-    if (!key) {
-      if (path.endsWith("/bookmarks.html")) key = "bookmarks";
-      else if (path.endsWith("/worksheet_index.html")) key = "worksheets";
-      else if (path.endsWith("/index.html") || /\/(qbase\/)?$/.test(path)) key = "home";
-    }
-    const links = Array.from(navEl.querySelectorAll('a.nav-link[href]'));
-    links.forEach((a) => {
-      a.classList.remove("active");
-      a.removeAttribute("aria-current");
-    });
-    const matcher = {
-      home: (href) => /(^|\/)index\.html$/i.test(href),
-      bookmarks: (href) => /bookmarks\.html$/i.test(href),
-      worksheets: (href) => /worksheet_index\.html$/i.test(href),
-    };
-    if (key && matcher[key]) {
-      const link = links.find((a) => matcher[key](a.getAttribute("href") || ""));
-      if (link) {
-        link.classList.add("active");
-        link.setAttribute("aria-current", "page");
-      }
-    }
-  }
 
   // ======= State =======
   let lastY = Math.max(0, window.scrollY || window.pageYOffset);
@@ -616,14 +587,12 @@
   }
 
   async function showChangePasswordFlow() {
-    const idCur = "qbaseChangePwCur";
+    // Non-dismissible, enforced password update flow used for legacy users.
     const idNew = "qbaseChangePwNew";
     const idCon = "qbaseChangePwCon";
+    const btnId = "qbaseChangePwSubmit";
+    const errId = "qbasePwErr";
     const body = `
-      <div class="mb-2">
-        <label for="${idCur}" class="form-label">Current Password</label>
-        <input id="${idCur}" class="form-control" type="password" autocomplete="current-password" />
-      </div>
       <div class="mb-2">
         <label for="${idNew}" class="form-label">New Password</label>
         <input id="${idNew}" class="form-control" type="password" autocomplete="new-password" />
@@ -632,50 +601,87 @@
         <label for="${idCon}" class="form-label">Confirm New Password</label>
         <input id="${idCon}" class="form-control" type="password" autocomplete="new-password" />
       </div>
-      <div id="qbasePwErr" class="text-danger small" style="display:none"></div>
+      <div id="${errId}" class="text-danger small" style="display:none"></div>
+      <div class="mt-2 d-flex justify-content-end">
+        <button id="${btnId}" class="btn btn-success">Update Password</button>
+      </div>
     `;
-    const modalRes = await showModal({
+    await showModal({
       title: "Update Your Password",
       bodyHTML: body,
-      buttons: [
-        { text: "Cancel", className: "btn btn-outline-secondary", value: false },
-        { text: "Update", className: "btn btn-success", value: true },
-      ],
-      focusSelector: `#${idCur}`,
+      // No footer buttons; we control submission and closing from content.
+      buttons: [],
+      focusSelector: `#${idNew}`,
+      backdrop: "static", // cannot close by clicking outside
+      keyboard: false,     // cannot close with ESC
+      onContentReady: (modalEl) => {
+        // Hide the header close button to prevent dismissal
+        try {
+          const closeBtn = modalEl.querySelector('.btn-close');
+          if (closeBtn) closeBtn.style.display = 'none';
+        } catch {}
+
+        const btn = modalEl.querySelector(`#${btnId}`);
+        const err = modalEl.querySelector(`#${errId}`);
+        const showErr = (msg) => {
+          if (!err) return;
+          err.textContent = msg || "";
+          err.style.display = msg ? "block" : "none";
+        };
+        const getVals = () => {
+          const nw = modalEl.querySelector(`#${idNew}`);
+          const cn = modalEl.querySelector(`#${idCon}`);
+          return {
+            newPassword: (nw?.value || "").trim(),
+            confirm: (cn?.value || "").trim(),
+          };
+        };
+        const setBusy = (busy) => {
+          if (!btn) return;
+          btn.disabled = !!busy;
+          btn.textContent = busy ? 'Updating…' : 'Update Password';
+        };
+        btn?.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const { newPassword, confirm } = getVals();
+          // Client validations with clear errors
+          if (!newPassword || newPassword.length < 6) {
+            showErr('New password must be at least 6 characters.');
+            return;
+          }
+          if (newPassword !== confirm) {
+            showErr('New passwords do not match.');
+            return;
+          }
+          setBusy(true);
+          try {
+            const r = await authFetch(`${API_BASE}/account/password`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ newPassword }),
+            });
+            if (!r.ok) {
+              // Attempt to show specific error messages
+              let msg = 'Failed to update password. Please try again.';
+              try {
+                const data = await r.json();
+                if (data && data.error) msg = String(data.error);
+              } catch {}
+              showErr(msg);
+              setBusy(false);
+              return;
+            }
+            showErr('');
+            try { await showNotice({ title: 'Password Updated', message: 'Your password has been changed.' }); } catch {}
+            // Close modal after successful update
+            try { bootstrap.Modal.getInstance(modalEl)?.hide(); } catch {}
+          } catch {
+            showErr('Failed to update password. Please check your connection and try again.');
+            setBusy(false);
+          }
+        });
+      },
     });
-    if (!modalRes) return;
-    const cur = document.getElementById(idCur);
-    const nw = document.getElementById(idNew);
-    const cn = document.getElementById(idCon);
-    const err = document.getElementById("qbasePwErr");
-    const currentPassword = (cur?.value || "").trim();
-    const newPassword = (nw?.value || "").trim();
-    const confirm = (cn?.value || "").trim();
-    if (!newPassword || newPassword.length < 6) {
-      if (err) {
-        err.textContent = "New password must be at least 6 characters.";
-        err.style.display = "block";
-      }
-      return;
-    }
-    if (newPassword !== confirm) {
-      if (err) {
-        err.textContent = "New passwords do not match.";
-        err.style.display = "block";
-      }
-      return;
-    }
-    try {
-      const r = await authFetch(`${API_BASE}/account/password`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentPassword, newPassword }),
-      });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      await showNotice({ title: "Password Updated", message: "Your password has been changed." });
-    } catch (e) {
-      await showNotice({ title: "Error", message: "Failed to update password. Check your current password and try again." });
-    }
   }
 
   async function showProfileModal() {
@@ -783,7 +789,7 @@
     tpl.innerHTML = `
       <div class="modal fade" id="qbaseModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content" style="background:#15171b;border:1px solid rgba(255,255,255,0.08)">
+          <div class="modal-content">
             <div class="modal-header border-0">
               <h5 class="modal-title" id="qbaseModalTitle">Message</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -808,16 +814,35 @@
     focusSelector,
     backdrop = "static",
     keyboard = true,
+    stack = false,
     onContentReady,
   }) {
-    return queueModal(
-      () =>
-        new Promise((resolve) => {
-          ensureModalHost();
-          const modalEl = document.getElementById("qbaseModal");
-          const titleEl = document.getElementById("qbaseModalTitle");
-          const bodyEl = document.getElementById("qbaseModalBody");
-          const footEl = document.getElementById("qbaseModalFooter");
+    const run = () =>
+      new Promise((resolve) => {
+        // If stacking is requested, create an ephemeral modal element
+        if (stack) {
+          const uid = `qbaseModal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+          const tpl = document.createElement("div");
+          tpl.innerHTML = `
+            <div class="modal fade" id="${uid}" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body"></div>
+                  <div class="modal-footer border-0"></div>
+                </div>
+              </div>
+            </div>`;
+          const host = tpl.firstElementChild;
+          document.body.appendChild(host);
+
+          const modalEl = host;
+          const titleEl = modalEl.querySelector(".modal-title");
+          const bodyEl = modalEl.querySelector(".modal-body");
+          const footEl = modalEl.querySelector(".modal-footer");
 
           titleEl.textContent = title || "Message";
           bodyEl.innerHTML = bodyHTML || "";
@@ -830,6 +855,8 @@
           let result = undefined;
           const onHidden = () => {
             modalEl.removeEventListener("hidden.bs.modal", onHidden);
+            // remove the ephemeral modal from DOM on close
+            try { modalEl.parentElement?.removeChild(modalEl); } catch {}
             resolve(result);
           };
           modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
@@ -848,6 +875,18 @@
 
           const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
 
+          // Raise z-index to appear above any currently open modal and adjust backdrop
+          modalEl.addEventListener("shown.bs.modal", () => {
+            try {
+              const openCount = document.querySelectorAll('.modal.show').length;
+              const z = 1055 + openCount * 20;
+              modalEl.style.zIndex = String(z);
+              const bds = document.querySelectorAll('.modal-backdrop');
+              const lastBd = bds[bds.length - 1];
+              if (lastBd) lastBd.style.zIndex = String(z - 5);
+            } catch {}
+          }, { once: true });
+
           if (focusSelector) {
             modalEl.addEventListener(
               "shown.bs.modal",
@@ -860,8 +899,59 @@
           }
 
           bsModal.show();
-        })
-    );
+          return;
+        }
+
+        // Default: use singleton host and queue to avoid overlap
+        ensureModalHost();
+        const modalEl = document.getElementById("qbaseModal");
+        const titleEl = document.getElementById("qbaseModalTitle");
+        const bodyEl = document.getElementById("qbaseModalBody");
+        const footEl = document.getElementById("qbaseModalFooter");
+
+        titleEl.textContent = title || "Message";
+        bodyEl.innerHTML = bodyHTML || "";
+        footEl.innerHTML = "";
+
+        if (onContentReady && typeof onContentReady === "function") {
+          onContentReady(modalEl);
+        }
+
+        let result = undefined;
+        const onHidden = () => {
+          modalEl.removeEventListener("hidden.bs.modal", onHidden);
+          resolve(result);
+        };
+        modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
+
+        (buttons || []).forEach((b, i) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = b.className || "btn btn-primary";
+          btn.textContent = b.text || `Button ${i + 1}`;
+          btn.addEventListener("click", () => {
+            result = b.value;
+            bsModal.hide();
+          });
+          footEl.appendChild(btn);
+        });
+
+        const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
+
+        if (focusSelector) {
+          modalEl.addEventListener(
+            "shown.bs.modal",
+            () => {
+              const el = modalEl.querySelector(focusSelector);
+              if (el) el.focus();
+            },
+            { once: true }
+          );
+        }
+
+        bsModal.show();
+      });
+    return stack ? run() : queueModal(run);
   }
   async function showConfirm({
     title,
@@ -880,6 +970,7 @@
         },
         { text: okText, className: "btn btn-success", value: true },
       ],
+      stack: true,
     });
   }
   async function showPrompt({
@@ -913,6 +1004,7 @@
         },
       ],
       focusSelector: `#${id}`,
+      stack: true,
     });
     if (res && typeof res === "object") {
       const input = document.getElementById(id);
@@ -926,6 +1018,7 @@
       title,
       bodyHTML: `<p class="mb-0">${message}</p>`,
       buttons: [{ text: okText, className: "btn btn-primary", value: true }],
+      stack: true,
     });
   }
 
