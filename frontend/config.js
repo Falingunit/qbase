@@ -15,8 +15,11 @@ function detectDev() {
 }
 
 async function loadConfig() {
-  const res = await fetch("./config.json");
+  // Always bypass HTTP cache for config to pick up updates immediately
+  const res = await fetch("./config.json", { cache: "no-store" });
   const config = await res.json();
+  // Expose optional version for cache-busting elsewhere if needed
+  try { window.CONFIG_VERSION = config.version || config.VERSION || null; } catch {}
 
   // Local run mode: explicitly override to local backend when enabled
   if (config.LOCAL_MODE) {

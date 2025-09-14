@@ -34,7 +34,9 @@
   const assignmentTitles = new Map();
   (async () => {
     try {
-      const raw = await (await fetch("./data/assignment_list.json")).json();
+      const raw = await (
+        await fetch("./data/assignment_list.json", { cache: "no-store" })
+      ).json();
       const items = normalizeAssignmentsForTitles(raw);
       items.forEach((it) => assignmentTitles.set(Number(it.aID), it.title));
     } catch {
@@ -200,7 +202,8 @@
       if (!assignmentData.has(id)) {
         try {
           const resp = await fetch(
-            `./data/question_data/${id}/assignment.json`
+            `./data/question_data/${id}/assignment.json`,
+            { cache: "no-store" }
           );
           if (resp.ok) {
             const data = await resp.json();

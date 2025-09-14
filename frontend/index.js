@@ -65,7 +65,7 @@
 
     try {
       const [assignRes, scores, starred] = await Promise.all([
-        fetch("./data/assignment_list.json").then((r) => r.json()),
+        fetch("./data/assignment_list.json", { cache: "no-store" }).then((r) => r.json()),
         fetchScores(),
         fetchStarred(),
       ]);
