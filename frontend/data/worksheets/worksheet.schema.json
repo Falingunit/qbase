@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./worksheet.schema.json",
+  "title": "QBase Worksheet Manifest",
+  "description": "Manifest for a single worksheet used by frontend/worksheet.html. Loaded from ./data/worksheets/{wID}.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pages"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Display title for the worksheet. Falls back to 'Worksheet' when omitted.",
+      "minLength": 1
+    },
+    "pages": {
+      "type": "array",
+      "description": "Ordered list of page image URLs for the worksheet. Use image formats renderable by <img> (e.g., PNG/JPG). Relative URLs resolve against '/qbase/'.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "format": "uri-reference",
+        "minLength": 1
+      }
+    },
+    "answers": {
+      "type": "array",
+      "description": "Optional ordered list of answer key image URLs. If provided, the 'Answer Key' section is shown with mask/reveal tools.",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "format": "uri-reference",
+        "minLength": 1
+      }
+    }
+  },
+  "examples": [
+    {
+      "title": "Algebra – Linear Equations Worksheet 1",
+      "pages": [
+        "./data/worksheets/algebra-linear-eq-ws1/pages/1.png",
+        "./data/worksheets/algebra-linear-eq-ws1/pages/2.png"
+      ],
+      "answers": [
+        "./data/worksheets/algebra-linear-eq-ws1/answers/1.png"
+      ]
+    },
+    {
+      "pages": [
+        "https://cdn.example.com/ws/chemistry/stoichiometry-ws-a/page-01.jpg"
+      ]
+    }
+  ]
+}
+

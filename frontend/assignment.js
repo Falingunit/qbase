@@ -1160,10 +1160,13 @@
         }
       } finally {
         // Remove on next tick to avoid triggering animations
-        setTimeout(() => document.body.classList.remove("suppress-eval-anim"), 0);
+        // Keep suppression while viewing an evaluated question
+        // (Do not remove here; animations should only play on explicit check)
+        // setTimeout(() => document.body.classList.remove("suppress-eval-anim"), 0);
       }
     } else {
       // Not evaluated yet → ensure reset icon hidden
+      document.body.classList.remove("suppress-eval-anim");
       const icon = document.getElementById("reset-question-icon");
       if (icon) icon.classList.add("d-none");
     }

@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "./worksheet_list.schema.json",
+  "title": "QBase Worksheet Index",
+  "description": "Data source consumed by frontend/worksheet_index.js at ./data/worksheets/worksheet_list.json. Supports multiple shapes for convenience.",
+  "oneOf": [
+    { "$ref": "#/$defs/ArrayOfItems" },
+    { "$ref": "#/$defs/WorksheetsObject" },
+    { "$ref": "#/$defs/ItemsObject" },
+    { "$ref": "#/$defs/SubjectMapObject" }
+  ],
+  "$defs": {
+    "Item": {
+      "type": "object",
+      "description": "Represents a single worksheet entry.",
+      "additionalProperties": true,
+      "properties": {
+        "subject": { "type": "string", "description": "Subject name (e.g., Physics, Algebra)." },
+        "chapter": { "type": "string", "description": "Chapter/topic label (e.g., Chapter 4: Kinematics)." },
+        "chapterName": { "type": "string", "description": "Alternate property for chapter." },
+        "topic": { "type": "string", "description": "Alternate property for chapter/topic." },
+        "chapterIndex": { "type": "integer", "minimum": 0, "description": "Optional numeric sort key extracted from chapter. Lower comes first." },
+
+        "title": { "type": "string", "description": "Display title for the worksheet card." },
+        "name": { "type": "string", "description": "Alternate property for title." },
+        "worksheetTitle": { "type": "string", "description": "Alternate property for title." },
+        "label": { "type": "string", "description": "Alternate property for title." },
+
+        "wID": { "type": "string", "description": "Explicit worksheet ID. If omitted, UI generates a stable slug from subject/chapter/title." },
+        "id": { "type": "string", "description": "Alternate property for wID." },
+        "wid": { "type": "string", "description": "Alternate property for wID." },
+
+        "file": { "type": "string", "format": "uri-reference", "description": "Optional file URL. Currently not used by UI but accepted." },
+        "path": { "type": "string", "format": "uri-reference" },
+        "url": { "type": "string", "format": "uri-reference" },
+        "pdf": { "type": "string", "format": "uri-reference" },
+        "href": { "type": "string", "format": "uri-reference" }
+      }
+    },
+
+    "ArrayOfItems": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Item" }
+    },
+
+    "WorksheetsObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["worksheets"],
+      "properties": {
+        "worksheets": { "$ref": "#/$defs/ArrayOfItems" }
+      }
+    },
+
+    "ItemsObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["items"],
+      "properties": {
+        "items": { "$ref": "#/$defs/ArrayOfItems" }
+      }
+    },
+
+    "SubjectMapObject": {
+      "type": "object",
+      "description": "Object map of subject => array of items. Items may omit 'subject' since the key provides it.",
+      "additionalProperties": { "$ref": "#/$defs/ArrayOfItems" }
+    }
+  },
+  "examples": [
+    [
+      {
+        "subject": "Physics",
+        "chapter": "4. Kinematics",
+        "title": "Displacement/Velocity Worksheet A",
+        "wID": "physics-kinematics-displacement-a"
+      },
+      {
+        "subject": "Chemistry",
+        "chapter": "Stoichiometry",
+        "title": "Mole Concept Practice",
+        "wID": "chemistry-stoichiometry-mole-concept"
+      }
+    ],
+    {
+      "worksheets": [
+        { "subject": "Algebra", "chapter": "Ch 2", "title": "Linear Equations 1" }
+      ]
+    },
+    {
+      "items": [
+        { "subject": "Biology", "chapter": "Genetics", "title": "Punnett Squares" }
+      ]
+    },
+    {
+      "Physics": [
+        { "chapter": "Optics", "title": "Lenses Worksheet" }
+      ],
+      "Mathematics": [
+        { "chapter": "Trigonometry", "title": "Identities Drill" }
+      ]
+    }
+  ]
+}
+
