@@ -1,0 +1,453 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Out of the following (i) pole (ii) focus (iii) radius of curvature (iv) principle axis for a spherical mirror, the quantities do not depend on whether the rays are paraxial or not",
+      "image": null,
+      "qOptions": [
+        "All (i), (ii), (iii) and (iv)",
+        "only (ii), (iii), (iv)",
+        "only (i), (iii) and (iv)",
+        "only (i) and (iv)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The virtual image of an object kept in front of a convex mirror has size \\(\\tfrac{1}{3}\\) of the size of the object. When the object is moved by a distance 20 cm, the size of the image is half of the size of the object. Focal length of the convex mirror is",
+      "image": null,
+      "qOptions": ["10 cm", "30 cm", "15 cm", "20 cm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A concave mirror gives an image three times as large as the object when the image is formed at a distance of 60 cm from the pole. For the image to be real, the focal length should be",
+      "image": null,
+      "qOptions": ["10 cm", "15 cm", "20 cm", "30 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A concave mirror forms a real image three times larger than the object on a screen. Object and screen are moved until the image becomes twice the size of the object. If the shift of object is 6 cm, the shift of the screen and the focal length of the mirror are",
+      "image": null,
+      "qOptions": [
+        "36 cm, 36 cm",
+        "36 cm, 16 cm",
+        "72 cm, 36 cm",
+        "none of these"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object of height 2 cm is placed in front of a concave mirror (of focal length 15 cm) perpendicular to the principal axis of the mirror at a distance of 30 cm from its focus. Bottom of the object lays in the principal axis. The height of image is",
+      "image": null,
+      "qOptions": ["1 cm", "2 cm", "3 cm", "4 cm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A man standing in front of a concave spherical mirror of radius of curvature 120 cm sees an erect image of his face four times its natural size. Then the distance of the man from the mirror is",
+      "image": null,
+      "qOptions": ["60 cm", "100 cm", "75 cm", "45 cm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A man (of height 150 cm) walking along the principal axis of a concave mirror towards the mirror observes that his image is inverted and of height 100 cm. After walking a distance of 50 cm, his image is of same height as that of man. Radius of curvature of the mirror is",
+      "image": null,
+      "qOptions": ["100 cm", "200 cm", "150 cm", "250 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A uniform rod AC of length 10 cm is kept in front of a concave mirror as shown. AB = 8 cm. Distance of the rod from the mirror is 7.5 cm. The length of the image of the rod is (in cm).",
+      "image": "8.png",
+      "qOptions": [],
+      "qAnswer": 20
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A concave mirror of focal length \\(f\\) produces an image \\(n\\) times the size of the object. If the image is real, the distance of the object from the mirror is",
+      "image": null,
+      "qOptions": [
+        "\\((n-1)f\\)",
+        "\\(\\frac{n-1}{n}f\\)",
+        "\\(\\frac{n+1}{n}f\\)",
+        "\\((n+1)f\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A U shaped wire ABCD is placed before a concave mirror (of radius of curvature 20 cm) as shown. Find the total length of the image.",
+      "image": "10.png",
+      "qOptions": ["30 cm", "16 cm", "20 cm", "24 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Converging rays are incident on a convex mirror such that their extensions intersect 30 cm behind the mirror on the optical axis. The reflected rays form a diverging beam such that their extensions intersect the optical axis 1.2 m from the mirror. Determine the focal length of the mirror (in cm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 24
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A thin rod of length \\(f/3\\) is placed along the principal axis of a concave mirror of focal length \\(f\\) such that its image that is real and elongated just touches the rod. What is the magnification?",
+      "image": null,
+      "qOptions": ["\\(-\\tfrac{3}{2}\\)", "\\(-2\\)", "+2", "+\\tfrac{3}{2}"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A square object of area 100 sq.cm is placed perpendicular to the principal axis of a concave mirror (of focal length 20 cm) with its center on the principal axis. Distance of object from the mirror is 30 cm. Then the area of the image will be",
+      "image": null,
+      "qOptions": ["16 sq. cm", "400 sq. cm", "100 sq. cm", "250 sq. cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "When an object is placed at a distance of 25 cm from a concave mirror, then magnification is \\(m_1\\). The object is moved 15 cm farther away with respect to the earlier position and the magnification becomes \\(m_2\\). If \\(m_1/m_2=4\\), the focal length of the mirror is (assume image is real in both the cases)",
+      "image": null,
+      "qOptions": ["10 cm", "30 cm", "15 cm", "20 cm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A beam of convergent light converges to a point 0.5 m in front of the mirror after reflection at a convex mirror but in absence of the mirror, the beam converges to a point 0.2 m behind the mirror. The radius of curvature of the mirror is",
+      "image": "15.png",
+      "qOptions": ["20 cm", "50 cm", "66.67 cm", "33.33 cm"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The distance of a real object from the focus of a convex mirror of radius of curvature 'a' is 'b'. Then the distance of the image from the focus is",
+      "image": null,
+      "qOptions": [
+        "\\(\\tfrac{b^2}{a}\\)",
+        "\\(\\tfrac{a}{b}\\)",
+        "\\(\\tfrac{a^2}{b}\\)",
+        "none of these"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the figure shown, if the object O moves towards the plane mirror, then the image I which is formed after successive reflections from M1 and M2 respectively will move",
+      "image": "17.png",
+      "qOptions": [
+        "Towards right",
+        "towards left",
+        "with zero velocity",
+        "cannot be determined"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The speed of image (formed in concave mirror) was found to be less than the speed of object which is located in principal axis and is moving along it; then the object is",
+      "image": null,
+      "qOptions": [
+        "between P & F",
+        "between F & C",
+        "beyond C",
+        "data insufficient"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A short linear object of length 1 mm lies along the axis of a concave mirror of focal length 20 cm at a distance 30 cm from the pole of the mirror. The size of the image is approximately equal to",
+      "image": null,
+      "qOptions": ["0.5 mm", "1 mm", "2 mm", "4 mm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Figure shows four cases (a)–(d) of a point object/mirror system. Use the appropriate subfigure for the corresponding question.",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Case (a): Find the velocity of the image with respect to ground. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-10\\,\\hat\\jmath\\) cm/s",
+        "\\(-10\\,\\hat\\imath\\) cm/s",
+        "+10\\,\\hat\\jmath\\,\\text{cm/s}",
+        "\\(-5\\,\\hat\\jmath\\) cm/s"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Case (b): Find the velocity of the image with respect to ground. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-90\\,\\hat\\imath-6\\,\\hat\\jmath\\) cm/s",
+        "\\(-86\\,\\hat\\imath-9\\,\\hat\\jmath\\) cm/s",
+        "\\(-90\\,\\hat\\imath+6\\,\\hat\\jmath\\) cm/s",
+        "\\(-80\\,\\hat\\imath-6\\,\\hat\\jmath\\) cm/s"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Case (c): Find the velocity of the image with respect to ground. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-46\\,\\hat\\imath-24\\,\\hat\\jmath\\) cm/s",
+        "\\(-42\\,\\hat\\imath-24\\,\\hat\\jmath\\) cm/s",
+        "\\(-46\\,\\hat\\imath-20\\,\\hat\\jmath\\) cm/s",
+        "\\(-46\\,\\hat\\imath+24\\,\\hat\\jmath\\) cm/s"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Case (d): A point object located at a distance of 20 cm from the pole of a concave mirror of focal length 30 cm with height 2 cm is moving with velocity \\((4\\,\\hat\\imath-5\\,\\hat\\jmath)\\) cm/s and the mirror moves with velocity \\(( -6\\,\\hat\\imath+10\\,\\hat\\jmath)\\) cm/s. Find the velocity of the image with respect to ground. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(-96\\,\\hat\\imath-41\\,\\hat\\jmath\\) cm/s",
+        "\\(-96\\,\\hat\\imath-35\\,\\hat\\jmath\\) cm/s",
+        "\\(-90\\,\\hat\\imath-41\\,\\hat\\jmath\\) cm/s",
+        "\\(-96\\,\\hat\\imath+41\\,\\hat\\jmath\\) cm/s"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A point object located at a distance 15 cm from the pole of a concave mirror of focal length 10 cm on its principal axis is moving with velocity \\((8\\hat\\imath+11\\hat\\jmath)\\) cm/s. The velocity of the mirror is \\((4\\hat\\imath+2\\hat\\jmath)\\) cm/s. If the speed of the image is \\(4k\\) cm/s, find the value of \\(k\\). [No official answer was provided in the key.]",
+      "image": "21.png",
+      "qOptions": [],
+      "qAnswer": 0
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "For a convex mirror, when an object is moved from infinity to pole, the image moves from",
+      "image": null,
+      "qOptions": [
+        "Infinity to pole",
+        "focus to pole",
+        "focus to infinity",
+        "pole to focus"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "For a concave mirror, when an object is moved from center of curvature towards focus, the image is moved from",
+      "image": null,
+      "qOptions": ["F to C", "C to F", "F to infinity", "C to infinity"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A point object is between the pole and focus of a concave mirror and moving away from the mirror with a constant speed. The velocity of the image is",
+      "image": null,
+      "qOptions": [
+        "Away from the mirror and increasing in magnitude",
+        "Towards the mirror and increasing in magnitude",
+        "Away from mirror and decreasing in magnitude",
+        "Towards mirror and decreasing in magnitude"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Choose the correct statements related to the motion of object and its image in case of mirrors",
+      "image": null,
+      "qOptions": [
+        "Object and its image always move along normal w.r.t. mirror in opposite direction",
+        "Only in case of convex mirror, it may happen that the object and its image move in the same direction",
+        "Only in case of concave mirror, it may happen that the object and its image move in the same direction",
+        "Only in case of plane mirror, object and its image move in opposite direction"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A concave mirror cannot form",
+      "image": null,
+      "qOptions": [
+        "Virtual image of virtual object",
+        "Virtual image of a real object",
+        "Real image of a real object",
+        "Real image of a virtual object"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Point B is the image of point A due to reflection from a mirror (spherical concave/convex or plane) whose principal axis is x-axis. One square on x-axis represents 5 cm and one square on y-axis represents 1 mm. The co-ordinate of center of curvature is \\((x_1,0)\\) and of the pole is \\((x_2,0)\\). If \\(|x_1|+|x_2|=5k\\) cm, find the value of \\(k\\).",
+      "image": "27.png",
+      "qOptions": [],
+      "qAnswer": 8
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Figure shows a spherical concave mirror with its pole at \\((0,0)\\) and principal axis along x-axis. There is a point object at \\((-40\\,\\text{cm},\\,1\\,\\text{cm})\\). Find the co-ordinates of its image. (Options are made-up distractors; one is correct.)",
+      "image": "28.png",
+      "qOptions": [
+        "\\(\\left(-\\tfrac{40}{7},-\\tfrac{1}{7}\\right)\\)",
+        "\\(\\left(-\\tfrac{40}{7},+\\tfrac{1}{7}\\right)\\)",
+        "\\(\\left(-\\tfrac{20}{7},-\\tfrac{1}{7}\\right)\\)",
+        "\\(\\left(-\\tfrac{40}{5},-\\tfrac{1}{5}\\right)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Points A (0,1) and B (12,5) are object–image pair (one of the points acts as object and the other point as image). X-axis is the principal axis of the mirror. The object–image pair is",
+      "image": null,
+      "qOptions": [
+        "Due to a convex mirror of focal length 2.5 cm",
+        "Due to a concave mirror having its pole at (2,0)",
+        "Real virtual pair",
+        "Data is insufficient for options (A) and (B)"
+      ],
+      "qAnswer": ["A", "B"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The reflecting surface represented by the equation \\(2x=y^2\\) as shown in the figure. A ray travelling horizontal becomes vertical after reflection. The co-ordinates of the point of incidence can be",
+      "image": "30.png",
+      "qOptions": [
+        "\\((1/2,1)\\)",
+        "\\((1,1/2)\\)",
+        "\\((1/2,1/2)\\)",
+        "\\((1/2,\\pm1)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A spherical mirror is placed such that its principal axis is along x-axis. Co-ordinates of the object is \\((-20,2)\\) and co-ordinates of the image is \\((-10,1)\\). Find the co-ordinates of the pole of the mirror. Polished surface of the mirror is towards +x-axis and reflecting surface is towards −x-axis. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\((-40/3,0)\\)",
+        "\\((-20/3,0)\\)",
+        "\\((-40/3,1)\\)",
+        "\\((-10/3,0)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is placed in front of a convex mirror at a distance of 50 cm. A plane mirror is introduced covering the lower half of the convex mirror. If the distance between the object and the plane mirror is 30 cm, it is found that there is no gap between the images formed by the two plane mirrors. The radius of the convex mirror is",
+      "image": null,
+      "qOptions": ["12.5 cm", "25 cm", "50 cm", "100 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the figure shown, the image of a real object is formed at point I. AB is the principal axis of the mirror. \\(d_2>d_1\\). The mirror must be",
+      "image": "33.png",
+      "qOptions": [
+        "Concave and placed towards right of I",
+        "Convex and placed towards left of I",
+        "Convex and placed towards right of I",
+        "Concave and placed towards left of I"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Find the co-ordinates of the image of point object P formed after two successive reflections in a situation as shown in the figure considering first reflection at the concave mirror and then at the convex mirror. (Options are made-up distractors; one is correct.)",
+      "image": "34.png",
+      "qOptions": [
+        "\\((30,-1.2)\\)",
+        "\\((30,+1.2)\\)",
+        "\\((25,-1.2)\\)",
+        "\\((30,-1.0)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is placed in front of a convex mirror at a distance of 50 cm. A plane mirror is introduced converging the lower half of the convex mirror. If the distance between the object and the plane mirror is 30 cm, it is found that there is no gap between the images formed by the two plane mirrors. The radius of the convex mirror is",
+      "image": null,
+      "qOptions": ["12.5 cm", "25 cm", "50 cm", "100 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Point S' is the image of a point source of light S in a spherical mirror whose optical axis is \\(N_1N_2\\). Find by construction the position of the center of the mirror and its focus. [This is a construction-only question; recorded as numerical with 0 since no key value was provided.]",
+      "image": "36.png",
+      "qOptions": [],
+      "qAnswer": 0
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Find the position of the final image after three successive reflections taking the first reflection on M1. (Options are made-up distractors; one is correct.)",
+      "image": "37.png",
+      "qOptions": ["5 cm from M2", "5 cm from M1", "10 cm from M2", "at M1"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The concave mirrors each of radii of curvature 40 cm are placed such that their principal axes are parallel to each other and at a distance of 1 cm to each other. Both the mirrors are at a distance of 100 cm from each other. Consider first reflection at M1 and then at M2, find the co-ordinates of the image thus formed. The location of object is the origin. (Options are made-up distractors; one is correct.)",
+      "image": "38.png",
+      "qOptions": [
+        "\\((12,-0.6)\\)",
+        "\\((12,+0.6)\\)",
+        "\\((10,-0.6)\\)",
+        "\\((12,-1.0)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A concave mirror forms the real image of a point source lying on the optical axis at a distance of 50 cm from the mirror. The focal length of the mirror is 25 cm. The mirror is cut in two and its halves are drawn a distance of 1 cm apart in a direction perpendicular to the optical axis. What is the distance between the two images formed? (in cm)",
+      "image": "39.png",
+      "qOptions": [],
+      "qAnswer": 4
+    }
+  ]
+}

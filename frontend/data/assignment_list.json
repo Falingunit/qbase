@@ -86,7 +86,7 @@
   {
     "subject": "Physics",
     "faculty": "PGR",
-    "chapter": "Ray Options",
+    "chapter": "Ray Optics",
     "title": "Ray Optics Assignment #1 (Plane Mirror)",
     "aID": 12
   },
@@ -110,5 +110,12 @@
     "chapter": "P-Block",
     "title": "P-Block Assignment (2)",
     "aID": 15
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Ray Optics Assignment #2 (Spherical Mirror)",
+    "aID": 16
   }
 ]
