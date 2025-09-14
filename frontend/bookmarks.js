@@ -337,7 +337,7 @@
               tagId
                 ? `<button class="btn btn-sm btn-outline-danger delete-tag" data-tag-id="${escapeHtml(
                     String(tagId)
-                  )}" title="Delete tag and its bookmarks">
+                  )}" data-tag-name="${escapeHtml(tagName)}" title="Delete tag and its bookmarks">
                      <i class="bi bi-trash"></i>
                    </button>`
                 : ""
@@ -440,10 +440,23 @@
       btn.addEventListener("click", async (e) => {
         e.stopPropagation();
         const tagId = btn.dataset.tagId;
-        const ok = confirm(
-          "Delete this tag and all bookmarks under it? This cannot be undone."
-        );
-        if (!ok) return;
+        const tagName = btn.dataset.tagName || "this tag";
+        let confirmed = false;
+        try {
+          confirmed = await (window.showConfirm
+            ? showConfirm({
+                title: "Delete Tag",
+                message: `Delete "${escapeHtml(tagName)}" and all its bookmarks?`,
+                okText: "Delete",
+                cancelText: "Cancel",
+              })
+            : Promise.resolve(
+                confirm(
+                  `Delete "${tagName}" and all its bookmarks? This cannot be undone.`
+                )
+              ));
+        } catch {}
+        if (!confirmed) return;
         if (await deleteBookmarkTag(tagId)) {
           loadBookmarks();
         }

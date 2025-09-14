@@ -445,7 +445,7 @@
       statusClass === "completed"
         ? "bg-success"
         : statusClass === "started"
-        ? "bg-info"
+        ? "bg-success"
         : "bg-secondary";
     progressWrap.innerHTML = `<div class=\"progress\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"${pct}\"><div class=\"progress-bar ${barClass}\" style=\"width:${pct}%\">${pct}% (${attempted}/${totalQ})</div></div>`;
 

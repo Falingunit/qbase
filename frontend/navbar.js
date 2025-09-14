@@ -354,7 +354,7 @@
                 </div>
                 <div id="qbaseLoginError" class="text-danger small mb-2" style="display:none"></div>
                 <div class="d-flex gap-2">
-                  <button id="qbaseSignInBtn" class="btn btn-primary flex-fill" type="submit">Sign In</button>
+                  <button id="qbaseSignInBtn" class="btn btn-success flex-fill" type="submit">Sign In</button>
                 </div>
               </form>
             </div>

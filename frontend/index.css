@@ -138,17 +138,20 @@
   right: 8px;
   padding: 2px 6px;
   color: #cfd7df;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 0px solid rgba(255, 255, 255, 0.12);
   z-index: 2;
 }
 .as-star-btn:hover {
-  color: #ffd166;
-  background: rgba(255, 255, 255, 0.08);
+  color: #fffc66;
 }
 .as-starred .bi-star-fill {
   color: #ffd166;
+}
+
+.as-starred .bi-star-fill:hover {
+  color: #fffc66;
 }
 
 /* highlight */
