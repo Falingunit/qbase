@@ -14,7 +14,7 @@ This repository contains a static frontend (`frontend/`) and a Node.js backend (
 
 Keys in `frontend/config.json`:
 
-```
+```json
 {
   "API_BASE": "https://your-prod-backend.example.com",   // Production backend base URL
   "DEV_API_BASE": "http://10.0.0.1:3000",                // Optional dev/staging backend
@@ -32,7 +32,7 @@ Behavior:
 
 1) Start the backend
 
-```
+```bash
 cd backend
 npm install
 # Optional during local testing to relax CORS:
@@ -51,7 +51,7 @@ Environment variables you can set:
 
 Edit `frontend/config.json`:
 
-```
+```json
 {
   "API_BASE": "https://your-prod-backend.example.com",
   "DEV_API_BASE": "http://10.0.0.1:3000",
@@ -64,7 +64,7 @@ Edit `frontend/config.json`:
 
 Serve the `frontend/` folder with any static server, for example:
 
-```
+```bash
 # Option A: using node
 npx serve frontend -l 8081
 # Option B: using Python
@@ -83,7 +83,7 @@ Frontend (static hosting):
 - Host the `frontend/` directory on a static host (e.g., GitHub Pages). This app is path-aware for `/qbase` when using Pages.
 - Set `frontend/config.json` for production:
 
-```
+```json
 {
   "API_BASE": "https://your-prod-backend.example.com",
   "DEV_API_BASE": "",
@@ -95,7 +95,7 @@ Frontend (static hosting):
 Backend (Node server):
 - Deploy `backend/` to a server (VM/container). Install Node 18+, then:
 
-```
+```bash
 cd backend
 npm ci
 # Set strong secrets and your environment
