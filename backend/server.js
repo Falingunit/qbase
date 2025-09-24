@@ -7,6 +7,7 @@ import Database from 'better-sqlite3';
 import { nanoid } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import multer from 'multer';
 
 // ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
@@ -46,6 +47,7 @@ const corsFn = cors({
   origin: (origin, cb) => {
     if (ALLOW_ALL) return cb(null, true);
     if (!origin) return cb(null, true); // allow curl/postman
+    if (origin === 'null') return cb(null, true); // allow file:// pages
 
     let ok = false;
     try {
@@ -75,6 +77,12 @@ app.options('*', (req, res, next) => {
 
 // ---------- Parsers ----------
 app.use(express.json());
+
+// ---------- Static uploads ----------
+const uploadsDir = path.join(__dirname, 'uploads');
+import fs from 'fs';
+try { fs.mkdirSync(uploadsDir, { recursive: true }); } catch {}
+app.use('/uploads', express.static(uploadsDir, { maxAge: '365d', etag: true }));
 
 // ---------- Disable caching for dynamic content ----------
 app.use((req, res, next) => {
@@ -630,4 +638,37 @@ function safeParseJSON(text, fallback) {
 // ---------- Start ----------
 app.listen(PORT, () => {
   console.log(`Listening on http://localhost:${PORT}`);
+});
+// ---------- Image uploads (authenticated) ----------
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    try {
+      const ext = path.extname(file.originalname || '').toLowerCase() || '.png';
+      const name = `${req.userId}-${Date.now()}-${nanoid(8)}${ext}`;
+      cb(null, name);
+    } catch (e) {
+      cb(e);
+    }
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (_req, file, cb) => {
+    const ok = /^image\//i.test(file.mimetype);
+    if (ok) return cb(null, true);
+    return cb(null, false);
+  },
+});
+
+app.post('/api/upload-image', upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    const url = `${req.protocol}://${req.get('host')}/uploads/${encodeURIComponent(req.file.filename)}`;
+    res.json({ url });
+  } catch (e) {
+    console.error('upload-image:', e);
+    res.status(500).json({ error: 'Upload failed' });
+  }
 });

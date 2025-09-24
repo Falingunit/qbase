@@ -1,32 +1,56 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-store, no-cache, must-revalidate, max-age=0"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>QBase - Assignment</title> 
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>QBase - Assignment</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+    />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
-    >
-    <link href="./theme.css" rel="stylesheet">
-    <link href="./assignment.css" rel="stylesheet">
+    />
+
+    <link href="./theme.css" rel="stylesheet" />
+    <!-- EasyMDE CSS before our local overrides so our assignment.css can win -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
-    >
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+      href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"
+    />
+    <link href="./assignment.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+    ></script>
     <script src="config.js"></script>
     <script defer src="./navbar.js"></script>
     <script
@@ -35,216 +59,532 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body class="bg-dark text-light" style="max-height: 10vh !important;">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="./index.html">QBase</a>
+  <body class="bg-dark text-light" style="max-height: 10vh !important">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="./index.html">QBase</a>
 
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left nav -->
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" href="./index.html">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  aria-current="page"
-                  href="./worksheet_index.html"
-                  >Worksheets</a
-                >
-              </li>
-            </ul>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left nav -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="./index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="./worksheet_index.html"
+                >Worksheets</a
+              >
+            </li>
+          </ul>
 
-            <!-- Right nav -->
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item" id="nav-login-item">
-                <a class="nav-link" href="#" id="nav-login">Login</a>
-              </li>
-              <li class="nav-item dropdown d-none" id="nav-user-item">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarUserDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <span id="nav-username">User</span>
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="navbarUserDropdown"
-                >
-                  <li>
-                    <a class="dropdown-item" href="#" id="nav-logout">Logout</a>
-                  </li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a
-                      class="dropdown-item text-danger"
-                      href="#"
-                      id="nav-delete-account"
-                      >Delete Account…</a
-                    >
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+          <!-- Right nav -->
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item" id="nav-login-item">
+              <a class="nav-link" href="#" id="nav-login">Login</a>
+            </li>
+            <li
+              class="nav-item dropdown d-none"
+              id="nav-user-item"
+              style="z-index: 1000000"
+            >
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarUserDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span id="nav-username">User</span>
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarUserDropdown"
+              >
+                <li>
+                  <a class="dropdown-item" href="#" id="nav-logout">Logout</a>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a
+                    class="dropdown-item text-danger"
+                    href="#"
+                    id="nav-delete-account"
+                    >Delete Account…</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
-      </nav>
-      <div class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center">
+      </div>
+    </nav>
+    <div
+      class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center"
+    >
+      <div class="d-flex align-items-center gap-2">
+        <a
+          href="./index.html"
+          class="topbar-back"
+          title="Back to Home"
+          aria-label="Back to Home"
+        >
+          <i class="bi bi-arrow-left" aria-hidden="true"></i>
+          <span class="visually-hidden">Back</span>
+        </a>
         <h5 class="mb-0" id="assignment-title">Assignment</h5>
-        <div class="topbar-actions">
-                <div class="topbar-group" aria-label="Question navigation">
-            <button id="nav-prev" class="btn btn-outline-secondary btn-sm" title="Previous question" aria-label="Previous question">
-              <i class="bi bi-chevron-left" aria-hidden="true"></i>
-            </button>
-            <button id="nav-next" class="btn btn-outline-secondary btn-sm" title="Next question" aria-label="Next question">
-              <i class="bi bi-chevron-right" aria-hidden="true"></i>
-            </button>
-          </div>
-                  <span class="topbar-sep">|</span>
-          <div class="topbar-group" aria-label="View controls">
-            <!-- Toggle desktop sidebar Questions list (default on for desktop) -->
-            <button id="toggle-questions" class="btn btn-outline-secondary btn-sm" title="Show/Hide Questions sidebar">
-          <i class="bi bi-layout-sidebar-inset-reverse"></i>
-          <span class="d-none d-sm-inline">Side Bar</span>
-            </button>
-            <!-- Toggle showing the mobile Q-bar on desktop (always on in mobile) -->
-            <button id="toggle-qbar" class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex" title="Show the compact Q-bar on desktop">
-          <i class="bi bi-chevron-bar-up"></i>
-              <span class="d-none d-sm-inline">Top Bar</span>
-            </button>
-                            <span class="topbar-sep">|</span>
-
-            <!-- Font size slider: adjusts only question + options -->
-            <div class="qa-font-control d-flex align-items-center" title="Adjust question font size">
-              <i class="bi bi-fonts me-2" aria-hidden="true"></i>
-              <input id="qa-font-range" class="form-range qa-font-range" type="range" min="90" max="140" step="5" value="100" aria-label="Question font size" />
-            </div>
-          </div>
-
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-group" aria-label="View controls">
+          <!-- Toggle desktop sidebar Questions list (default on for desktop) -->
+          <button
+            id="toggle-questions"
+            class="btn btn-outline-secondary btn-sm"
+            title="Show/Hide Questions sidebar"
+          >
+            <i class="bi bi-layout-sidebar-inset-reverse"></i>
+            <span class="d-none d-sm-inline">Side Bar</span>
+          </button>
+          <!-- Toggle showing the mobile Q-bar on desktop (always on in mobile) -->
+          <button
+            id="toggle-qbar"
+            class="btn btn-outline-secondary btn-sm d-none d-lg-inline-flex"
+            title="Show the compact Q-bar on desktop"
+          >
+            <i class="bi bi-chevron-bar-up"></i>
+            <span class="d-none d-sm-inline">Top Bar</span>
+          </button>
           <span class="topbar-sep">|</span>
-  
-          <div class="topbar-group" aria-label="Reset controls">
-            <button id="reset-assignment" class="btn btn-outline-danger btn-sm align-self-end" title="Reset entire assignment">
-              <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-              <span class="d-none d-sm-inline">Reset Assignment</span>
+
+          <!-- Font size slider: adjusts only question + options -->
+          <div
+            class="qa-font-control d-flex align-items-center"
+            title="Adjust question font size"
+          >
+            <i class="bi bi-fonts me-2" aria-hidden="true"></i>
+            <input
+              id="qa-font-range"
+              class="form-range qa-font-range"
+              type="range"
+              min="90"
+              max="140"
+              step="5"
+              value="100"
+              aria-label="Question font size"
+            />
+          </div>
+        </div>
+
+        <span class="topbar-sep">|</span>
+
+        <div class="topbar-group" aria-label="Reset controls">
+          <button
+            id="reset-assignment"
+            class="btn btn-outline-danger btn-sm align-self-end"
+            title="Reset entire assignment"
+          >
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+            <span class="d-none d-sm-inline">Reset Assignment</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="container-fluid px-0 main-wrapper d-flex justify-content-between"
+    >
+      <div class="overflow-y-scroll" style="width: 100%">
+        <div class="p-4">
+          <div id="mobile-qbar"></div>
+
+          <div class="card mb-4 flex-shrink-0">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <div>
+                <strong style="font-weight: 600"
+                  >Q-<span id="qNo">1</span></strong
+                >
+                <div class="small text-muted" id="assignmentDetails"></div>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <button
+                  id="bookmark-btn"
+                  class="btn btn-sm btn-outline-primary"
+                  title="Bookmark this question"
+                >
+                  <i class="bi bi-bookmark"></i>
+                </button>
+                <span id="timer" class="badge bg-dark text-info">00:11</span>
+                <span
+                  class="badge bg-dark-subtle text-info"
+                  id="qTypeInfo"
+                ></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-column flex-md-row passage-wrapper">
+                <div
+                  id="passageText"
+                  class="fonted card-text passage-text mb-3"
+                  style="display: none; width: 70%"
+                ></div>
+                <div
+                  id="passageImage"
+                  class="passage-image mb-3"
+                  style="display: none; width: 30%"
+                ></div>
+              </div>
+              <p id="questionText" class="fonted"></p>
+              <div
+                id="questionImage"
+                class="question-image mb-3"
+                style="display: none"
+              ></div>
+            </div>
+          </div>
+
+          <div class="mb-3 fonted" id="MCQOptionDiv">
+            <button
+              class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+              data-opt="A"
+            >
+              <span class="opt-badge" aria-hidden="true">A</span>
+              <span class="opt-text"><span id="AContent"></span></span>
+            </button>
+            <button
+              class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+              data-opt="B"
+            >
+              <span class="opt-badge" aria-hidden="true">B</span>
+              <span class="opt-text"><span id="BContent"></span></span>
+            </button>
+            <button
+              class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+              data-opt="C"
+            >
+              <span class="opt-badge" aria-hidden="true">C</span>
+              <span class="opt-text"><span id="CContent"></span></span>
+            </button>
+            <button
+              class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
+              data-opt="D"
+            >
+              <span class="opt-badge" aria-hidden="true">D</span>
+              <span class="opt-text"><span id="DContent"></span></span>
+            </button>
+          </div>
+
+          <div class="options-list flex-grow-1 mb-3" id="numericalDiv">
+            <input
+              id="numericalInput"
+              class="form-control"
+              type="number"
+              placeholder="Enter your answer..."
+              aria-label="Numerical Answer"
+            />
+            <div class="text-body-emphasis" style="display: none">
+              <strong>Correct Answer:</strong>
+              <span id="numericalAnswer"></span>
+            </div>
+          </div>
+
+          <hr />
+
+          <!-- Notes Section (visible for all question types) -->
+          <div class="mb-3" id="notesSection">
+            <label class="form-label h5" for="notesInput">Notes:</label>
+            <!-- CodeMirror host: we keep the same id so existing code can locate it -->
+            <textarea
+              id="notesInput"
+              class="form-control p-0 notes-editor-host"
+              style="min-height: 180px"
+              aria-label="Notes editor"
+            ></textarea>
+          </div>
+        </div>
+        <div id="question-actions" class="question-actions">
+          <div class="controls d-flex flex-shrink-0">
+            <button
+              id="nav-prev"
+              class="btn btn-outline-light question-nav-btn"
+              title="Previous question"
+            >
+              <i class="bi bi-chevron-left me-1" aria-hidden="true"></i>
+              Previous
+            </button>
+            <button
+              id="nav-next"
+              class="btn btn-outline-light question-nav-btn"
+              title="Next question"
+            >
+              Next
+              <i class="bi bi-chevron-right ms-1" aria-hidden="true"></i>
+            </button>
+            <button id="check-answer" class="btn btn-success">
+              Check Answer
+            </button>
+            <button
+              id="reset-question"
+              class="btn btn-outline-light d-none"
+              title="Reset this question"
+            >
+              Reset Question
             </button>
           </div>
         </div>
       </div>
 
-    <div class="container-fluid px-0 main-wrapper d-flex justify-content-between">
-
-      <div class=" p-4 overflow-y-scroll" style="width: 100%;">
-        <div id="mobile-qbar"></div>
-
-        <div class="card mb-4 flex-shrink-0">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
-              <strong style="font-weight: 600;">Q-<span id="qNo">1</span></strong>
-              <div class="small text-muted" id="assignmentDetails"></div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-              <button id="bookmark-btn" class="btn btn-sm btn-outline-primary" title="Bookmark this question">
-                <i class="bi bi-bookmark"></i>
-              </button>
-              <span id="timer" class="badge bg-dark text-info">00:11</span>
-              <span class="badge bg-dark-subtle text-info" id="qTypeInfo"></span>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="d-flex flex-column flex-md-row passage-wrapper">
-              <div id="passageText" class="fonted card-text passage-text mb-3" style="display:none; width:70%;"></div>
-              <div id="passageImage" class="passage-image mb-3" style="display:none; width: 30%;"></div>
-            </div>
-            <p id="questionText" class="fonted"></p>
-            <div id="questionImage" class="question-image mb-3" style="display:none"></div>
-          </div>
+      <div
+        class="right-col p-3 d-none d-lg-block overflow-y-scroll"
+        style="border: none"
+      >
+        <h6 class="mb-3">Questions</h6>
+        <div
+          class="controls d-flex justify-content-between flex-shrink-0"
+          style="padding-top: 1rem"
+        >
+          <div class="row row-cols-4 g-2" id="q_list"></div>
         </div>
+      </div><script defer src="./assignment.js"></script>
+      <!-- EasyMDE JS (after assignment.js so fallback textarea exists) -->
+      <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"
+      ></script>
+      
 
-        <div class="mb-3 fonted" id="MCQOptionDiv">
-          <button
-            class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
-            data-opt="A"
-          >
-            <span class="opt-badge" aria-hidden="true">A</span>
-            <span class="opt-text"><span id="AContent"></span></span>
-          </button>
-          <button
-            class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
-            data-opt="B"
-          >
-            <span class="opt-badge" aria-hidden="true">B</span>
-            <span class="opt-text"><span id="BContent"></span></span>
-          </button>
-          <button
-            class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
-            data-opt="C"
-          >
-            <span class="opt-badge" aria-hidden="true">C</span>
-            <span class="opt-text"><span id="CContent"></span></span>
-          </button>
-          <button
-            class="btn btn-outline-secondary text-body mcq-option text-start w-100 mb-2"
-            data-opt="D"
-          >
-            <span class="opt-badge" aria-hidden="true">D</span>
-            <span class="opt-text"><span id="DContent"></span></span>
-          </button>
-        </div>
+      <!-- Check answer bar alignment -->
+      <script>
+        (function () {
+          // === CONFIG: tweak selectors if you change layout ===
+          const col = document.querySelector(
+            ".main-wrapper > .overflow-y-scroll"
+          );
+          const bar = document.getElementById("question-actions");
+          if (!col || !bar) return;
 
-        <div class="options-list flex-grow-1 mb-3" id="numericalDiv">
-          <input
-            id="numericalInput"
-            class="form-control"
-            type="number"
-            placeholder="Enter your answer..."
-            aria-label="Numerical Answer"
-          />
-          <div class="text-body-emphasis" style="display: none;">
-            <strong>Correct Answer:</strong>
-            <span id="numericalAnswer"></span>
-          </div>
-        </div>
+          // --- helpers ---
+          const isVisible = (el) => {
+            const s = getComputedStyle(el);
+            return (
+              s.display !== "none" &&
+              s.visibility !== "hidden" &&
+              el.getClientRects().length > 0
+            );
+          };
 
-        <!-- Notes Section (visible for all question types) -->
-        <div class="mb-3" id="notesSection">
-          <label for="notesInput" class="form-label">Notes</label>
-          <textarea id="notesInput" class="form-control" rows="4" placeholder="Write your notes for this question..."></textarea>
-        </div>
+          let rafId = 0;
+          const schedule = (fn) => {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+              rafId = 0;
+              fn();
+            });
+          };
 
-        <div class="controls d-flex flex-shrink-0">
-          <button id="check-answer" class="btn btn-success">Check Answer</button>
-          <button id="reset-question" class="btn btn-outline-light d-none ms-2" title="Reset this question">Reset Question</button>
-        </div>
-      </div>
+          function alignAndReserve() {
+            // 1) Make sure the bar is fixed to the viewport bottom
+            bar.style.position = "fixed";
+            bar.style.bottom = "0";
+            bar.style.right = "auto";
+            bar.style.zIndex = "1000";
 
-          <div class="right-col p-3 d-none d-lg-block overflow-y-scroll" style="border: none;">
-              <h6 class="mb-3">Questions</h6>
-              <div class="controls d-flex justify-content-between flex-shrink-0" style="padding-top: 1rem;">
-              <div class="row row-cols-4 g-2" id="q_list"></div>
-          </div>
-      </div>
+            // 2) Align bar to the column's left edge & width
+            const r = col.getBoundingClientRect();
+            bar.style.left = r.left + "px";
+            bar.style.width = r.width + "px";
 
-    <script defer src="./assignment.js"></script>
+            // 3) Reserve space inside the scrollable column
+            col.style.paddingBottom = isVisible(bar)
+              ? bar.offsetHeight + "px"
+              : "0";
+          }
+
+          // Initial
+          alignAndReserve();
+
+          // React to size/layout changes (column resize, bar resize, responsive shifts)
+          const ro = new ResizeObserver(() => schedule(alignAndReserve));
+          ro.observe(col);
+          ro.observe(bar);
+          ro.observe(document.documentElement);
+
+          // If your layout toggles classes/styles (e.g., sidebar show/hide, d-none changes)
+          const mo = new MutationObserver(() => schedule(alignAndReserve));
+          mo.observe(document.body, {
+            attributes: true,
+            subtree: true,
+            childList: true,
+          });
+          mo.observe(bar, {
+            attributes: true,
+            attributeFilter: ["class", "style"],
+          });
+
+          // Viewport changes & scrolling that might affect left/width
+          window.addEventListener("resize", () => schedule(alignAndReserve), {
+            passive: true,
+          });
+          window.addEventListener("scroll", () => schedule(alignAndReserve), {
+            passive: true,
+          });
+          window.addEventListener("load", alignAndReserve);
+        })();
+      </script>
+      <!-- Keyboard hotkeys -->
+      <script>
+        // Keyboard shortcuts: arrows to navigate, A-D to pick, Space to check/reset, N to focus notes
+        (function () {
+          const isTypingContext = () => {
+            const ae = document.activeElement;
+            if (!ae) return false;
+            const tag = (ae.tagName || "").toLowerCase();
+            if (tag === "input" || tag === "textarea") return true;
+            if (ae.isContentEditable) return true;
+            return false;
+          };
+
+          const isVisible = (el) => {
+            if (!el) return false;
+            const s = getComputedStyle(el);
+            return (
+              s.display !== "none" &&
+              s.visibility !== "hidden" &&
+              el.offsetParent !== null
+            );
+          };
+
+          const clickIf = (el) => {
+            if (el) el.click();
+          };
+
+          const pickOption = (opt) => {
+            // Only allow picking when in MCQ before evaluation (Check button visible)
+            const checkBtn = document.getElementById("check-answer");
+            if (!isVisible(checkBtn)) return;
+            const btn = document.querySelector(
+              `#MCQOptionDiv .mcq-option[data-opt="${opt}"]`
+            );
+            if (!btn) return;
+            // Avoid bypassing lock state
+            if (btn.classList.contains("disabled")) return;
+            btn.click();
+          };
+
+          const focusNotes = () => {
+            // Prefer dedicated editor focus if provided by assignment.js
+            if (typeof window.focusNotesEditor === "function") {
+              try {
+                window.focusNotesEditor();
+              } catch {}
+              const host = document.getElementById("notesInput");
+              if (host)
+                host.scrollIntoView({ block: "nearest", behavior: "smooth" });
+              return;
+            }
+            // Fallback: treat #notesInput as a standard control/contentEditable
+            const notes = document.getElementById("notesInput");
+            if (!notes) return;
+            const tag = (notes.tagName || "").toLowerCase();
+            if (tag === "textarea" || tag === "input") {
+              try {
+                const len = (notes.value || "").length;
+                notes.setSelectionRange(len, len);
+              } catch {}
+              notes.focus();
+            } else if (notes.isContentEditable) {
+              try {
+                const range = document.createRange();
+                range.selectNodeContents(notes);
+                range.collapse(false);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+              } catch {}
+              notes.focus();
+            } else {
+              notes.focus();
+            }
+            notes.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          };
+
+          const overlayOpen = () => {
+            const el = document.getElementById("image-overlay");
+            if (!el) return false;
+            const s = getComputedStyle(el);
+            return s.display !== "none";
+          };
+
+          window.addEventListener("keydown", (e) => {
+            if (overlayOpen()) return; // Don't handle shortcuts while image overlay is open
+            // Ignore modified shortcuts (Ctrl/Cmd/Alt) to not conflict with system/browser
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            const key = e.key;
+
+            // Navigation with arrows (when not typing)
+            if (!isTypingContext()) {
+              if (key === "ArrowLeft") {
+                e.preventDefault();
+                const prev = document.getElementById("nav-prev");
+                if (prev && !prev.disabled) clickIf(prev);
+                return;
+              }
+              if (key === "ArrowRight") {
+                e.preventDefault();
+                const next = document.getElementById("nav-next");
+                if (next && !next.disabled) clickIf(next);
+                return;
+              }
+            }
+
+            // Space toggles Check/Reset when not typing
+            if (key === " " || key === "Spacebar") {
+              if (!isTypingContext()) {
+                e.preventDefault();
+                const check = document.getElementById("check-answer");
+                const reset = document.getElementById("reset-question");
+                if (isVisible(check)) clickIf(check);
+                else if (isVisible(reset)) clickIf(reset);
+              }
+              return;
+            }
+
+            // Letter shortcuts
+            const k = (key || "").toUpperCase();
+            if (!isTypingContext()) {
+              if (k === "A" || k === "B" || k === "C" || k === "D") {
+                pickOption(k);
+                return;
+              }
+              if (k === "N") {
+                e.preventDefault();
+                focusNotes();
+                return;
+              }
+            }
+          });
+        })();
+      </script>
+    </div>
   </body>
 </html>

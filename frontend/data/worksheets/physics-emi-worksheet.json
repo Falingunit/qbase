@@ -1,0 +1,16 @@
+{
+  "title": "EMI Worksheet",
+  "pages": [
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0001.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0002.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0003.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0004.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0005.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0006.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0007.png",
+    "../frontend/data/worksheets/physics-emi-worksheet/page_0008.png"
+  ],
+  "answers": [
+    "../frontend/data/worksheets/physics-emi-worksheet/answers.png"
+  ]
+}
