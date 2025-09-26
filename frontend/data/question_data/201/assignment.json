@@ -1,0 +1,373 @@
+{
+  "questions":
+  [
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\sqrt{\\frac{d^2 y}{dx^2}} = \\sqrt[3]{\\frac{dy}{dx} + 3} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 2, Degree 3", "Order 2, Degree 2", "Order 1, Degree 3", "Order 1, Degree 1"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\sqrt{\\frac{d^2 y}{dx^2}} = \\sin\\left(\\frac{dy}{dx}\\right) \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 2, Degree not defined", "Order 2, Degree 1", "Order 1, Degree not defined", "Order 1, Degree 1"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\frac{dy}{dx} = \\sqrt{3x + 5} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 1, Degree 1", "Order 1, Degree 2", "Order 2, Degree 1", "Order 2, Degree 2"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\left( \\frac{d^2 y}{dx^2} \\right)^2 + x^2 \\left( \\frac{dy}{dx} \\right)^6 + 4y = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 2, Degree 2", "Order 2, Degree 6", "Order 1, Degree 2", "Order 1, Degree 6"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\frac{dy}{dx} = \\sqrt{y} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 1, Degree 1", "Order 1, Degree 2", "Order 2, Degree 1", "Order 2, Degree 2"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\sqrt{1 - x^2} + \\sqrt{1 - y^2} \\frac{dy}{dx} = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 1, Degree 1", "Order 1, Degree 2", "Order 2, Degree 1", "Order 2, Degree 2"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Form the differential equation of the family of curves: \\[ x^2 y = a e^x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\frac{dy}{dx} + (2y - xy) = 0 \\]", "\\[ \\frac{dy}{dx} + (2y + xy) = 0 \\]", "\\[ \\frac{dy}{dx} - (2y - xy) = 0 \\]", "\\[ \\frac{dy}{dx} + (2y - x) = 0 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Form the differential equation for circles touching two given parallel lines \\( y = \\pm a \\). (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y^2 \\left( 1 + \\left( \\frac{dy}{dx} \\right)^2 \\right) = a^2 \\]", "\\[ y^2 \\left( 1 + \\left( \\frac{dy}{dx} \\right)^2 \\right) = 2a^2 \\]", "\\[ x^2 \\left( 1 + \\left( \\frac{dy}{dx} \\right)^2 \\right) = a^2 \\]", "\\[ y^2 \\left( 1 + \\left( \\frac{dy}{dx} \\right)^2 \\right) = 4a^2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order of the differential equation of the curve: \\[ y = C_1 \\sin^2 x + C_2 \\cos 2x + C_3 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["2", "1", "3", "4"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order of the differential equation of the family of parabolas having fixed directrix. (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["2", "1", "3", "4"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Form the differential equation by eliminating constants in: \\[ x^2 - y^2 = c(x^2 + y^2)^2 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\frac{dy}{dx} = \\frac{x(3y^2 - x^2)}{y(3x^2 - y^2)} \\]", "\\[ \\frac{dy}{dx} = \\frac{x(3y^2 + x^2)}{y(3x^2 - y^2)} \\]", "\\[ \\frac{dy}{dx} = \\frac{x(3y^2 - x^2)}{y(3x^2 + y^2)} \\]", "\\[ \\frac{dy}{dx} = \\frac{x(3y^2 + x^2)}{y(3x^2 + y^2)} \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Form the differential equation by eliminating constants in: \\[ y = e^{-2x} (A \\cos 2x + B \\sin 2x) \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\frac{d^2 y}{dx^2} + 4 \\frac{dy}{dx} + 8y = 0 \\]", "\\[ \\frac{d^2 y}{dx^2} - 4 \\frac{dy}{dx} + 8y = 0 \\]", "\\[ \\frac{d^2 y}{dx^2} + 4 \\frac{dy}{dx} - 8y = 0 \\]", "\\[ \\frac{d^2 y}{dx^2} - 4 \\frac{dy}{dx} - 8y = 0 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} = 2xy \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = c e^{x^2} \\]", "\\[ y = c e^{-x^2} \\]", "\\[ y = c e^{2x} \\]", "\\[ y = c e^{-2x} \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} + \\frac{x e^x \\sqrt{1 - y^2}}{y} = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\sqrt{1 - y^2} = (x - 1)e^x + c \\]", "\\[ \\sqrt{1 - y^2} = (x + 1)e^x + c \\]", "\\[ \\sqrt{1 - y^2} = (x - 1)e^{-x} + c \\]", "\\[ \\sqrt{1 - y^2} = (x + 1)e^{-x} + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Verify that \\( y = \\sin^{-1} x \\) is a solution of \\[ \\frac{d^2 y}{dx^2} = \\frac{x}{(1 - x^2)^{3/2}} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Yes, it is a solution", "No, it is not a solution", "It satisfies only for x > 0", "It satisfies only for x < 0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Verify that \\( y = \\tan x + \\sec x \\) is a solution of \\[ \\frac{d^2 y}{dx^2} = \\frac{\\cos x}{(1 - \\sin x)^2} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Yes, it is a solution", "No, it is not a solution", "It satisfies only for x ≠ π/2", "It satisfies only for x > 0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Verify that \\( y = x + \\tan x \\) is a solution of \\[ \\cos^2 x \\frac{d^2 y}{dx^2} - 2(y - x) = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Yes, it is a solution", "No, it is not a solution", "It satisfies only for x ≠ π/2", "It satisfies only for x > 0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ (x + y) \\frac{dy}{dx} = 4x + y \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\frac{1}{4} \\ln \\left| \\frac{y - 2x}{y + 2x} \\right| + \\frac{1}{2} \\ln \\left| \\frac{y^2 - 4x^2}{x^2} \\right| + \\ln |x| = c \\]", "\\[ \\frac{1}{4} \\ln \\left| \\frac{y + 2x}{y - 2x} \\right| + \\frac{1}{2} \\ln \\left| \\frac{y^2 - 4x^2}{x^2} \\right| + \\ln |x| = c \\]", "\\[ \\frac{1}{4} \\ln \\left| \\frac{y - 2x}{y + 2x} \\right| + \\frac{1}{2} \\ln \\left| \\frac{y^2 + 4x^2}{x^2} \\right| + \\ln |x| = c \\]", "\\[ \\frac{1}{4} \\ln \\left| \\frac{y + 2x}{y - 2x} \\right| + \\frac{1}{2} \\ln \\left| \\frac{y^2 + 4x^2}{x^2} \\right| + \\ln |x| = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ (x + y) dx + (x - y) dy = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\sec \\frac{y}{x} = c x \\]", "\\[ \\csc \\frac{y}{x} = c x \\]", "\\[ \\sec \\frac{y}{x} = c \\]", "\\[ \\csc \\frac{y}{x} = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ (x - 3y + 4) dy - (2x - 6y + 7) dx = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y^2 - 2xy - x^2 = c \\]", "\\[ y^2 + 2xy - x^2 = c \\]", "\\[ y^2 - 2xy + x^2 = c \\]", "\\[ y^2 + 2xy + x^2 = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} = x \\cot \\frac{y}{x} + y \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ x^2 + y^2 = c x \\]", "\\[ x^2 + y^2 = c y \\]", "\\[ x^2 - y^2 = c x \\]", "\\[ x^2 - y^2 = c y \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ (x^2 - y^2) dx + 2xy dy = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ 5(2x - y) + \\log(5x - 15y + 17) = c \\]", "\\[ 5(2x + y) + \\log(5x - 15y + 17) = c \\]", "\\[ 5(2x - y) + \\log(5x + 15y + 17) = c \\]", "\\[ 5(2x + y) + \\log(5x + 15y + 17) = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} = \\sin(x + y) \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\tan(x + y) - \\sec(x + y) = x + c \\]", "\\[ \\tan(x + y) + \\sec(x + y) = x + c \\]", "\\[ \\cot(x + y) - \\csc(x + y) = x + c \\]", "\\[ \\cot(x + y) + \\csc(x + y) = x + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} + 2xy = x^3 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y e^{x^2} = \\frac{1}{2} e^{x^2} (x^2 - 1) + c \\]", "\\[ y e^{x^2} = \\frac{1}{2} e^{x^2} (x^2 + 1) + c \\]", "\\[ y e^{x^2} = \\frac{1}{2} e^{x^2} (1 - x^2) + c \\]", "\\[ y e^{x^2} = \\frac{1}{2} e^{x^2} (-x^2 - 1) + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ x \\frac{dy}{dx} = x + y \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = x \\log x + c x \\]", "\\[ y = x \\log x + c \\]", "\\[ y = \\log x + c x \\]", "\\[ y = \\log x + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} + (\\sec x) y = \\tan x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = \\sec x + \\tan x - x + c \\]", "\\[ y = \\sec x + \\tan x + x + c \\]", "\\[ y = \\sec x - \\tan x - x + c \\]", "\\[ y = \\sec x - \\tan x + x + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ y \\frac{dy}{dx} = 1 + y^2 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y^2 = c e^{2x} - 1 \\]", "\\[ y^2 = c e^{2x} + 1 \\]", "\\[ y^2 = c e^{-2x} - 1 \\]", "\\[ y^2 = c e^{-2x} + 1 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{dy}{dx} + \\frac{y}{x} = \\frac{1}{\\sqrt{1 + x^2}} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = \\frac{\\sqrt{1 + x^2}}{x} + \\frac{c}{x} \\]", "\\[ y = \\frac{\\sqrt{1 + x^2}}{x} + c x \\]", "\\[ y = \\frac{\\sqrt{1 + x^2}}{x} + c \\]", "\\[ y = \\sqrt{1 + x^2} + \\frac{c}{x} \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ y dx - x dy + (\\log x) dx = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = -(1 + \\log x) + c x \\]", "\\[ y = -(1 + \\log x) + c \\]", "\\[ y = 1 + \\log x + c x \\]", "\\[ y = 1 + \\log x + c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ (x + \\ln y) dy + y dx = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ x y + y \\ln y - y = c \\]", "\\[ x y + y \\ln y + y = c \\]", "\\[ x y - y \\ln y - y = c \\]", "\\[ x y - y \\ln y + y = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ y dx - x dy + y^2 \\cos x dx = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = \\log \\sec x + c_1 x + c_2 \\]", "\\[ y = \\log \\sec x + c_1 \\]", "\\[ y = \\log \\sec x + c_1 x \\]", "\\[ y = \\log \\sec x + c_1 x^2 + c_2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{d^2 y}{dx^2} = \\sec^2 x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ x = -y \\sin x + c y \\]", "\\[ x = y \\sin x + c y \\]", "\\[ x = -y \\cos x + c y \\]", "\\[ x = y \\cos x + c y \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{d^2 y}{dx^2} = \\sin x + e^x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = e^x - \\sin x + c_1 x + c_2 \\]", "\\[ y = e^x + \\sin x + c_1 x + c_2 \\]", "\\[ y = e^x - \\cos x + c_1 x + c_2 \\]", "\\[ y = e^x + \\cos x + c_1 x + c_2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A moth-ball loses volume by evaporation at a rate proportional to its instantaneous surface area. If the radius decreases from 2 cm to 1 cm in 3 months, how long will it take until the ball has practically gone? (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["6 months", "3 months", "9 months", "12 months"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A tangent at a point P on the curve cuts the x-axis at A, and B is the foot of perpendicular from P on the x-axis. If the midpoint of AB is fixed at (α, 0) for any point P, find the curve. (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y^2 = c (x - \\alpha) \\]", "\\[ y^2 = c (x + \\alpha) \\]", "\\[ x^2 = c (y - \\alpha) \\]", "\\[ x^2 = c (y + \\alpha) \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the family of curves which are orthogonal to the family of curves \\( y = k x^2 \\). (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ x^2 + 2y^2 = c \\]", "\\[ x^2 - 2y^2 = c \\]", "\\[ 2x^2 + y^2 = c \\]", "\\[ 2x^2 - y^2 = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The population of a city increases at a rate proportional to the number of inhabitants. If the population was 200,000 in 1990 and 250,000 in 2000, what will be the population in 2010? (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["312,500", "300,000", "325,000", "350,000"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\frac{d^4 y}{dx^4} + \\sin \\left( \\frac{d^3 y}{dx^3} \\right) = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 4, Degree not defined", "Order 4, Degree 1", "Order 3, Degree not defined", "Order 3, Degree 1"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the order and degree of the differential equation: \\[ \\left( \\frac{d^2 y}{dx^2} \\right)^2 + \\left( \\frac{dy}{dx} \\right)^3 + \\sin y = 0 \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["Order 2, Degree 2", "Order 2, Degree 3", "Order 1, Degree 2", "Order 1, Degree 3"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the differential equation corresponding to \\[ y^2 = 4a(x + a) \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = 2x \\frac{dy}{dx} + y \\left( \\frac{dy}{dx} \\right)^2 \\]", "\\[ y = 2x \\frac{dy}{dx} - y \\left( \\frac{dy}{dx} \\right)^2 \\]", "\\[ y = x \\frac{dy}{dx} + y \\left( \\frac{dy}{dx} \\right)^2 \\]", "\\[ y = x \\frac{dy}{dx} - y \\left( \\frac{dy}{dx} \\right)^2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find a one-parameter family of solutions of: \\[ \\frac{dy}{dx} = e^{x+y} + e^{-x+y} \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ e^{-x} - e^{-y} = e^x + c \\]", "\\[ e^{-x} + e^{-y} = e^x + c \\]", "\\[ e^{-x} - e^{-y} = c \\]", "\\[ e^{-x} + e^{-y} = c \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find a one-parameter family of solutions of: \\[ e^{-y} \\sec^2 y  dy = dx + x  dy \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ x = e^{-y} (\\tan y + c) \\]", "\\[ x = e^{-y} (\\cot y + c) \\]", "\\[ x = e^{y} (\\tan y + c) \\]", "\\[ x = e^{y} (\\cot y + c) \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ x^2 \\frac{d^2 y}{dx^2} = \\log x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ y = -\\frac{1}{2} (\\log x)^2 - \\log |x| + c_1 x + c_2 \\]", "\\[ y = -\\frac{1}{2} (\\log x)^2 + \\log |x| + c_1 x + c_2 \\]", "\\[ y = \\frac{1}{2} (\\log x)^2 - \\log |x| + c_1 x + c_2 \\]", "\\[ y = \\frac{1}{2} (\\log x)^2 + \\log |x| + c_1 x + c_2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\frac{d^2 y}{dx^2} = \\sin^2 x \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ 8y = 2x^2 + \\cos 2x + c_1 x + c_2 \\]", "\\[ 8y = 2x^2 - \\cos 2x + c_1 x + c_2 \\]", "\\[ 8y = 2x^2 + \\sin 2x + c_1 x + c_2 \\]", "\\[ 8y = 2x^2 - \\sin 2x + c_1 x + c_2 \\]"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The slope of tangent at any point (x, y) of a curve is given by \\( \\frac{2}{y-2} \\) and it passes through (1, 2). Find the area of the region bounded by the curve and the line \\( 2x - y - 4 = 0 \\). (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["9 sq units", "6 sq units", "12 sq units", "18 sq units"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the differential equation: \\[ \\cos(y-x) \\frac{dy}{dx} - x \\sin(y-x) = \\cos(y-x) \\] (Options are generated; one is correct.)",
+    "image": null,
+    "qOptions": ["\\[ \\ln |\\sin(y-x)| = \\frac{x^2}{2} + c \\]", "\\[ \\ln |\\cos(y-x)| = \\frac{x^2}{2} + c \\]", "\\[ \\ln |\\sin(y-x)| = x + c \\]", "\\[ \\ln |\\cos(y-x)| = x + c \\]"],
+    "qAnswer": "A"
+  }
+]
+}
