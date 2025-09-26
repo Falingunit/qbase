@@ -1,0 +1,599 @@
+{
+  "questions":
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Level I subjective question 3 (Options are made-up distractors; one is correct.)",
+    "image": "1.png",
+    "qOptions": ["0", "1", "-1", "2"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Level II subjective question 4 (Options are made-up distractors; one is correct.)",
+    "image": "2.png",
+    "qOptions": ["\\(\\frac{x^2}{2} + c\\)",
+"\\(\\frac{x^2}{2} - c\\)",
+"\\(\\frac{x^2}{4} + c\\)",
+"\\(\\frac{x^3}{2} + c\\)"
+],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Level II subjective question 5 (Options are made-up distractors; one is correct.)",
+    "image": "3.png",
+    "qOptions": [
+  "\\(\\frac{x^2}{y^2} + c\\)",
+  "\\(\\frac{x^2}{y^2} - c\\)",
+  "\\(\\frac{x^2}{2y^2} + c\\)",
+  "\\(\\frac{x^3}{y^2} + c\\)"
+]
+,
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 1",
+    "image": "4.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 2",
+    "image": "5.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 3",
+    "image": "6.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 4",
+    "image": "7.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 5",
+    "image": "8.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 6",
+    "image": "9.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 7",
+    "image": "10.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 8",
+    "image": "11.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 9",
+    "image": "12.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MCQ Single Correct question 10",
+    "image": "13.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "MCQ Multi Correct question 1",
+    "image": "14.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "MCQ Multi Correct question 2",
+    "image": "15.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "MCQ Multi Correct question 3",
+    "image": "16.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "MCQ Multi Correct question 4",
+    "image": "17.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Numerical Based question 1",
+    "image": "18.png",
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Numerical Based question 2",
+    "image": "19.png",
+    "qOptions": [],
+    "qAnswer": 3
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Numerical Based question 3",
+    "image": "20.png",
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Numerical Based question 4",
+    "image": "21.png",
+    "qOptions": [],
+    "qAnswer": 3
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Numerical Based question 5",
+    "image": "22.png",
+    "qOptions": [],
+    "qAnswer": 9
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 1",
+    "image": "23.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 2",
+    "image": "24.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 3",
+    "image": "25.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 4",
+    "image": "26.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 5",
+    "image": "27.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 6",
+    "image": "28.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 7",
+    "image": "29.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 8",
+    "image": "30.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 9",
+    "image": "31.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 10",
+    "image": "32.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 11",
+    "image": "33.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 12",
+    "image": "34.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Single Correct question 13",
+    "image": "35.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Multi Correct question 1",
+    "image": "36.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["A", "C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Multi Correct question 2",
+    "image": "37.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["A", "B", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Multi Correct question 3",
+    "image": "38.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Section II Multi Choice Multi Correct question 4",
+    "image": "39.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Type question 1",
+    "image": "40.png",
+    "qOptions": [],
+    "qAnswer": 9
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Type question 2",
+    "image": "41.png",
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Type question 3",
+    "image": "42.png",
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Type question 4",
+    "image": "43.png",
+    "qOptions": [],
+    "qAnswer": 1
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Decimal Type question 1",
+    "image": "44.png",
+    "qOptions": [],
+    "qAnswer": 3.0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Decimal Type question 2",
+    "image": "45.png",
+    "qOptions": [],
+    "qAnswer": 1.0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Decimal Type question 3",
+    "image": "46.png",
+    "qOptions": [],
+    "qAnswer": 16.0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section II Numerical Based Decimal Type question 4",
+    "image": "47.png",
+    "qOptions": [],
+    "qAnswer": 1.0
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Linked Comprehension Type question 1",
+    "image": "48.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Linked Comprehension Type question 2",
+    "image": "49.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Linked Comprehension Type question 3",
+    "image": "50.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Linked Comprehension Type question 4",
+    "image": "51.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Linked Comprehension Type question 5",
+    "image": "52.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Assertion-Reasoning Type question 1",
+    "image": "53.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 1",
+    "image": "54.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 2",
+    "image": "55.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 3",
+    "image": "56.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 4",
+    "image": "57.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 5",
+    "image": "58.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 6",
+    "image": "59.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 7",
+    "image": "60.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 8",
+    "image": "61.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section III Multi Choice Single Correct question 9",
+    "image": "62.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section III Numerical Based Type question 1",
+    "image": "63.png",
+    "qOptions": [],
+    "qAnswer": 1
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section III Numerical Based Type question 2",
+    "image": "64.png",
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section III Numerical Based Decimal Type question 1",
+    "image": "65.png",
+    "qOptions": [],
+    "qAnswer": 9.0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section III Numerical Based Decimal Type question 2",
+    "image": "66.png",
+    "qOptions": [],
+    "qAnswer": 18.0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Section III Numerical Based Decimal Type question 3",
+    "image": "67.png",
+    "qOptions": [],
+    "qAnswer": 0.0
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Match Following Type question 1",
+    "image": "68.png",
+    "qOptions": ["(A) → (s), (B) → (s), (C) → (q), (D) → (p)", "(A) → (r), (B) → (q), (C) → (p), (D) → (s)", "(A) → (q), (B) → (r), (C) → (s), (D) → (p)", "(A) → (p), (B) → (s), (C) → (r), (D) → (q)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Match List Type question 1",
+    "image": "69.png",
+    "qOptions": ["List I → List II matching option A", "List I → List II matching option B", "List I → List II matching option C", "List I → List II matching option D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Matching Type question 1",
+    "image": "70.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Matching Type question 2",
+    "image": "71.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Matching Type question 3",
+    "image": "72.png",
+    "qOptions": ["Option A", "Option B", "Option C", "Option D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Section II Match List Type question 1",
+    "image": "73.png",
+    "qOptions": ["List I → List II matching option A", "List I → List II matching option B", "List I → List II matching option C", "List I → List II matching option D"],
+    "qAnswer": "B"
+  }
+]
+}
