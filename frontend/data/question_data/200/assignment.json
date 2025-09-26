@@ -1,0 +1,220 @@
+{
+  "questions":[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\( (1 + x^2) \\frac{dy}{dx} = x(1 - y), y(0) = \\frac{4}{3} \\), then the value of \\( y(\\sqrt{8}) + \\frac{8}{9} \\) is:",
+    "image": null,
+    "qOptions": ["4", "2", "3", "5"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solution of the differential \\( y' = \\frac{3yx^2}{x^3+2y^4} \\) is",
+    "image": null,
+    "qOptions": ["\\( x^3y^{-1} = \\frac{2}{3}y^3 + c \\)", "\\( x^2y^{-1} = \\frac{2}{3}y^3 + c \\)", "\\( xy^{-1} = \\frac{2}{3}y^3 + c \\)", "None of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\( ydx - dy = e^{-x}y^4dy \\) and \\( y = 1 \\) at \\( x = -\\ln 3 \\), then at \\( y = 3, x = \\ln k, k \\) is",
+    "image": null,
+    "qOptions": ["21", "24", "27", "81"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The solution of the differential equation \\( (x\\cot y + \\ln (\\cos x))dy + (\\ln (\\sin y) - y\\tan x)dx = 0 \\) is ______.",
+    "image": null,
+    "qOptions": ["\\( (\\sin x)^y(\\cos y)^x = c \\)", "\\( (\\sin y)^x(\\cos x)^y = c \\)", "\\( (\\sin x)^y(\\cos y)^x = c \\)", "\\( (\\cot x)^y(\\cot y)^x = c \\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\( x \\) and \\( y \\) are related, also \\( \\frac{d^2x}{dy^2} \\cdot \\left( \\frac{dy}{dx} \\right)^3 + k \\frac{d^2y}{dx^2} = 0 \\). Then value of \\( k \\) is ______.",
+    "image": null,
+    "qOptions": ["-1", "1", "-2", "2"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solution of the differential equation \\( y(xy + 2x^2y^2)dx + x(xy - x^2y^2)dy = 0 \\) is given by",
+    "image": null,
+    "qOptions": ["\\( 2\\log |x| - \\log |y| - \\frac{1}{xy} = C \\)", "\\( 2\\log |y| - \\log |x| - \\frac{1}{xy} = C \\)", "\\( 2\\log |x| + \\log |y| + \\frac{1}{xy} = C \\)", "\\( 2\\log |y| + \\log |x| + \\frac{1}{xy} = C \\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The solution of the differential equation \\(\\frac{dy}{dx} = \\frac{1}{xy(x^2 \\sin y^2 + 1)}\\) is, ('c' being an arbitrary constant).",
+    "image": null,
+    "qOptions": ["\\(x^2 (\\cos y^2 - \\sin y^2 - 2ce^{-y^2}) = 2\\)", "\\(x^2 (\\cos y^2 - \\sin y^2 - 2ce^{-y^2}) = 4c\\)", "\\(y^2 (\\cos x^2 - \\sin x^2 - 2ce^{-y^2}) = 2\\)", "\\(y^2 (\\cos x^2 - \\sin x^2 - ce^{-y^2}) = 4c\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The solution of \\(\\left( \\frac{dy}{dx} \\right)^2 - 2 \\left( x + \\frac{1}{4x} \\right) \\frac{dy}{dx} + 1 = 0\\)",
+    "image": null,
+    "qOptions": ["\\(y = x^2 + c\\)", "\\(y = \\frac{1}{2} \\ln (x) + c, x > 0\\)", "\\(y = \\frac{x}{2} + c\\)", "\\(y = \\frac{x^2}{2} + c\\)"],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A function \\(y = f(x)\\) satisfying the differential equation \\(\\frac{dy}{dx} \\cdot \\sin x - y \\cos x + \\frac{\\sin^2 x}{x^2} = 0\\) is such that, \\(y \\to 0\\) as \\(x \\to \\infty\\) then the statement which is correct is",
+    "image": null,
+    "qOptions": ["\\(\\lim_{x \\to 0} f(x) = 1\\)", "\\(\\int_0^{\\pi/2} f(x) dx\\) is less than \\(\\frac{\\pi}{2}\\)", "\\(\\int_0^{\\pi/2} f(x) dx\\) is greater than unity", "\\(f(x)\\) is an odd function"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let \\(T\\) be the triangle with vertices \\((0, 0), (0, c^2)\\) and \\((c, c^2)\\) and let \\(R\\) be the region between \\(y = cx\\) and \\(y = x^2\\) where \\(c > 0\\) then",
+    "image": null,
+    "qOptions": ["\\(\\text{Area}(R) = \\frac{c^3}{6}\\)", "\\(\\text{Area of } R = \\frac{c^3}{3}\\)", "\\(\\text{Lim}_{c \\to 0^+} \\frac{\\text{Area}(T)}{\\text{Area}(R)} = 3\\)", "\\(\\text{Lim}_{c \\to 0^+} \\frac{\\text{Area}(T)}{\\text{Area}(R)} = \\frac{3}{2}\\)"],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Suppose f(x) and g(x) are differentiable functions such that xg(f(x)) f'(g(x)) g'(x) = f(g(x)) g'(f(x)) f'(x) for all x in R and f(x) and g(x) are positive for all x in R. Also \\(\\int_0^x f(g(t)) dt = \\frac{1}{2} (1 - e^{-2x})\\) for all x in R, g(f(0)) = 1 and \\(h(x) = \\frac{g(f(x))}{f(g(x))}\\) for all x in R.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The graph of \\(y = h(x)\\) is symmetric with respect to the line:",
+    "image": null,
+    "qOptions": ["\\(x = -1\\)", "\\(x = 0\\)", "\\(x = 1\\)", "\\(x = 2\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The value of \\(f(g(0)) + g(f(0))\\) is equal to:",
+    "image": null,
+    "qOptions": ["1", "2", "3", "4"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The largest possible value of \\(h(x)\\) for all \\(x in R\\) is",
+    "image": null,
+    "qOptions": ["1", "\\(e^{1/3}\\)", "\\(e\\)", "\\(e^2\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "Let \\( y = f(x) \\) satisfy the equation \\( f(x) = (e^{-x} + e^x) \\cos x - 2x - \\int_0^x (x - t)f'(t)dt \\). Then,",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "\\( f(x) \\) satisfies the differential equation",
+    "image": null,
+    "qOptions": ["\\( \\frac{dy}{dx} + y = e^x (\\cos x - \\sin x) - e^{-x} (\\cos x + \\sin x) \\)", "\\( \\frac{dy}{dx} = y + e^x (\\cos x + \\sin x) + e^{-x} (\\cos x - \\sin x) \\)", "\\( \\frac{dy}{dx} + y = e^x (\\cos x + \\sin x) - e^{-x} (\\cos x + \\sin x) \\)", "None of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "\\( f'(0) + f''(0) = \\)",
+    "image": null,
+    "qOptions": ["-1", "2", "0", "1"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "\\( f(x) \\) as a function of \\( x \\) equals",
+    "image": null,
+    "qOptions": ["\\( e^{-x} (\\cos x - \\sin x) + \\frac{e^x}{5} (3\\cos x + \\sin x) + \\frac{2}{5} e^{-x} \\)", "\\( e^{-x} (\\cos x + \\sin x) + \\frac{e^x}{5} (3\\cos x - \\sin x) - \\frac{2}{5} e^{-x} \\)", "\\( e^{-x} (\\cos x - \\sin x) + \\frac{e^x}{5} (3\\cos x - \\sin x) + \\frac{2}{5} e^{-x} \\)", "None of these"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If \\( ye^y dx = (y^3 + 2xe^y) dy, y(0) = 1 \\), then the value of \\( x \\) when \\( y = 1 \\) is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If particular solution of \\( p + \\cos px \\sin y = \\sin px \\cos y \\) where \\( (p = \\frac{dy}{dx}) \\) is \\( y = a\\sqrt{x^2 - b} - \\sin^{-1} \\frac{\\sqrt{x^2 - c}}{x} \\) then evaluate \\( \\left| \\frac{b+c}{a} \\right|\\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The solution of \\( x^2 dy - y^2 dx + xy^2 (x - y) dy = 0 \\) is \\(\\ln \\left| \\frac{1}{x} - \\frac{1}{y} \\right| = \\frac{y^2}{k} + C\\), then the value of \\( k \\) is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Suppose a solution of the differential equation \\( (xy^3 + x^2 y^7) \\frac{dy}{dx} = 1 \\) satisfies the initial condition \\( y \\left( \\frac{1}{4} \\right) = 1 \\). Then the value of \\( -\\frac{5}{4} \\times \\frac{dy}{dx} \\) when \\( y = -1 \\), is ______.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Let \\( y = f(x) \\) be a curve \\( C_1 \\) passing through (2,2) and \\(\\left( 8, \\frac{1}{2} \\right)\\) and satisfying a differential equation \\( y \\left( \\frac{d^2 y}{dx^2} \\right) = 2 \\left( \\frac{dy}{dx} \\right)^2 \\). Curve \\( C_2 \\) is the director circle of the circle \\( x^2 + y^2 = 2 \\). If the shortest distance between the curves \\( C_1 \\) and \\( C_2 \\) is \\( (\\sqrt{p} - q) \\) where \\( p, q \\in N \\), then find the value of \\((p^2 - q)\\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 62
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Match the following",
+    "image": "Match 1.png",
+    "qOptions": ["A-p; B-q; C-r; D-s", "A-s; B-p; C-r; D-q", "A-p; B-q; C-s; D-r", "A-p; B-s; C-q; D-r"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Match the following",
+    "image": "Match 2.png",
+    "qOptions": ["A(R); B(Q); C(S); D(P)", "A(P); B(S); C(Q); D(R)", "A(Q); B(R); C(P); D(S)", "A(S); B(P); C(Q); D(R)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Let the curve \\( y = f(x) \\) passes through (4, -2) satisfy the differential equation, \\( y(x + y^3)dx = x(y^3 - x)  dy \\) and let \\( y = g(x) = \\int_{1/8}^{\\sin^2 x} \\sin^{-1} \\sqrt{t}  dt + \\int_{1/8}^{\\cos^2 x} \\cos^{-1} \\sqrt{t}  dt,  0 \\leq x \\leq \\frac{\\pi}{2} \\). Then find the area of the region bounded by curves \\( y = f(x), y = g(x) \\) and \\( x = 0 \\). (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": ["\\(\\frac{1}{8} \\left( \\frac{3\\pi}{16} \\right)^4\\)", "\\(\\frac{1}{4} \\left( \\frac{3\\pi}{16} \\right)^4\\)", "\\(\\frac{1}{8} \\left( \\frac{3\\pi}{16} \\right)^{-4}\\)", "\\(\\frac{1}{8} \\left( \\frac{\\pi}{16} \\right)^4\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solve the equation \\( x \\int_0^x y(t)dt = (x + 1) \\int_0^x ty(t)dt,  x > 0 \\) (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": ["\\(y = \\frac{c}{x^3} e^{-1/x}\\)", "\\(y = \\frac{c}{x^2} e^{-1/x}\\)", "\\(y = \\frac{c}{x^3} e^{1/x}\\)", "\\(y = \\frac{c}{x^4} e^{-1/x}\\)"],
+    "qAnswer": "A"
+  }
+]
+}
