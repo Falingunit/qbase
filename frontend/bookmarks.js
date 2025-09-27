@@ -618,7 +618,7 @@
       if (question.passageImage) {
         html += `<div class="mb-3"><img src="${imgSrc(
           question.passageImage
-        )}" class="img-fluid" alt="Passage Image"></div>`;
+        )}" class="img-fluid" alt="Passage Image" loading="lazy" decoding="async"></div>`;
       }
 
       // keep as plain text (safe for KaTeX render later)
@@ -637,7 +637,7 @@
     if (question.image) {
       html += `<div class="mb-3"><img src="${imgSrc(
         question.image
-      )}" class="img-fluid" alt="Question Image"></div>`;
+      )}" class="img-fluid" alt="Question Image" loading="lazy" decoding="async"></div>`;
     }
 
     // Options (SMCQ/MMCQ)

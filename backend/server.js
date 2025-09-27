@@ -529,6 +529,25 @@ app.get('/api/scores', async (req, res) => {
 // Delete account (cascade via FKs)
 app.delete('/account', (req, res) => {
   try {
+    // 1) Remove all uploaded images owned by this user (filenames prefixed with `${userId}-`)
+    try {
+      const prefix = `${req.userId}-`;
+      const files = fs.readdirSync(uploadsDir);
+      for (const f of files) {
+        try {
+          if (typeof f === 'string' && f.startsWith(prefix)) {
+            const p = path.join(uploadsDir, f);
+            if (fs.existsSync(p)) fs.unlinkSync(p);
+          }
+        } catch (e) {
+          console.warn('Failed to delete user image', f, e?.message || e);
+        }
+      }
+    } catch (e) {
+      console.warn('Error while cleaning user images:', e?.message || e);
+    }
+
+    // 2) Delete the user (cascades DB rows via FKs)
     db.prepare('DELETE FROM users WHERE id = ?').run(req.userId);
     res.json({ success: true });
   } catch (e) {
@@ -670,5 +689,30 @@ app.post('/api/upload-image', upload.single('image'), (req, res) => {
   } catch (e) {
     console.error('upload-image:', e);
     res.status(500).json({ error: 'Upload failed' });
+  }
+});
+
+// Delete an uploaded image by filename (must belong to the authenticated user)
+app.delete('/api/upload-image/:filename', (req, res) => {
+  try {
+    const raw = String(req.params.filename || '');
+    const fname = path.basename(raw); // prevent path traversal
+    if (!fname) return res.status(400).json({ error: 'Missing filename' });
+    // Filenames are formatted as `${userId}-${Date.now()}-${nanoid(8)}.ext`
+    // Ensure the caller owns this file
+    if (!fname.startsWith(`${req.userId}-`)) {
+      return res.status(403).json({ error: 'Not allowed to delete this file' });
+    }
+    const filePath = path.join(uploadsDir, fname);
+    try {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    } catch (e) {
+      console.error('delete upload:', e);
+      return res.status(500).json({ error: 'Failed to delete image' });
+    }
+    res.json({ success: true });
+  } catch (e) {
+    console.error('delete upload fatal:', e);
+    res.status(500).json({ error: 'Failed to delete image' });
   }
 });

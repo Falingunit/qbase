@@ -8,7 +8,16 @@
   "liveServer.settings.ignoreFiles": [
     "**/.vscode/**",
     "**/.git/**",
-    "**/node_modules/**"
+    "**/node_modules/**",
+    // Avoid Live Server auto-reloading the page when backend files change
+    // (image uploads, database writes, etc.). These changes are expected
+    // during use and shouldn't trigger a frontend refresh.
+    "**/backend/**",
+    "**/backend/uploads/**",
+    "**/backend/db.sqlite",
+    // Prevent reloads when images are added/removed anywhere
+    "**/*.{png,jpg,jpeg,gif,svg,webp,ico,bmp,avif}",
+    // Also ignore generic uploads folders in the workspace
+    "**/uploads/**"
   ]
 }
-

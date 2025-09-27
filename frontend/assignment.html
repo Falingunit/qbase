@@ -10,6 +10,8 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>QBase - Assignment</title>
+    <!-- Resource hints -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
@@ -51,8 +53,148 @@
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
     ></script>
-    <script src="config.js"></script>
-    <script defer src="./navbar.js"></script>
+    <script defer src="config.js"></script>
+    <!-- Modal helpers (same API as navbar.js) -->
+    <script>
+      (function () {
+        function ensureModalHost() {
+          if (document.getElementById("qbaseModal")) return;
+          const tpl = document.createElement("div");
+          tpl.innerHTML = `
+            <div class="modal fade" id="qbaseModal" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title" id="qbaseModalTitle">Message</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body" id="qbaseModalBody"></div>
+                  <div class="modal-footer border-0" id="qbaseModalFooter"></div>
+                </div>
+              </div>
+            </div>`;
+          document.body.appendChild(tpl.firstElementChild);
+        }
+
+        let __modalChain = Promise.resolve();
+        function queueModal(taskFn) {
+          __modalChain = __modalChain.then(() => taskFn()).catch(() => {});
+          return __modalChain;
+        }
+
+        function showModal({
+          title,
+          bodyHTML,
+          buttons,
+          focusSelector,
+          backdrop = "static",
+          keyboard = true,
+        }) {
+          return queueModal(
+            () =>
+              new Promise((resolve) => {
+                ensureModalHost();
+                const modalEl = document.getElementById("qbaseModal");
+                const titleEl = document.getElementById("qbaseModalTitle");
+                const bodyEl = document.getElementById("qbaseModalBody");
+                const footEl = document.getElementById("qbaseModalFooter");
+
+                titleEl.textContent = title || "Message";
+                bodyEl.innerHTML = bodyHTML || "";
+                footEl.innerHTML = "";
+
+                let result;
+                const onHidden = () => {
+                  modalEl.removeEventListener("hidden.bs.modal", onHidden);
+                  resolve(result);
+                };
+                modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
+
+                (buttons || []).forEach((b, i) => {
+                  const btn = document.createElement("button");
+                  btn.type = "button";
+                  btn.className = b.className || "btn btn-primary";
+                  btn.textContent = b.text || `Button ${i + 1}`;
+                  btn.addEventListener("click", () => {
+                    result = b.value;
+                    bsModal.hide();
+                  });
+                  footEl.appendChild(btn);
+                });
+
+                const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
+                if (focusSelector) {
+                  modalEl.addEventListener(
+                    "shown.bs.modal",
+                    () => {
+                      const el = modalEl.querySelector(focusSelector);
+                      if (el) el.focus();
+                    },
+                    { once: true }
+                  );
+                }
+                bsModal.show();
+              })
+          );
+        }
+
+        async function showConfirm({ title, message, okText = "OK", cancelText = "Cancel" }) {
+          return await showModal({
+            title,
+            bodyHTML: `<p class="mb-0">${message}</p>`,
+            buttons: [
+              { text: cancelText, className: "btn btn-outline-secondary", value: false },
+              { text: okText, className: "btn btn-success", value: true },
+            ],
+          });
+        }
+
+        async function showPrompt({
+          title,
+          // Accept either `label` or legacy `message`
+          label,
+          message,
+          placeholder = "",
+          okText = "OK",
+          cancelText = "Cancel",
+          // Accept either `initial` or legacy `defaultValue`
+          initial,
+          defaultValue,
+        }) {
+          const id = "qbasePromptInput";
+          const body = `
+            <label for="${id}" class="form-label">${(label ?? message) || "Enter value"}</label>
+            <input id="${id}" class="form-control" type="text" placeholder="${placeholder}" value="${(initial ?? defaultValue) ?? ""}">
+          `;
+          const res = await showModal({
+            title,
+            bodyHTML: body,
+            buttons: [
+              { text: cancelText, className: "btn btn-outline-secondary", value: null },
+              { text: okText, className: "btn btn-primary", value: "__OK__" },
+            ],
+            focusSelector: `#${id}`,
+          });
+          const input = document.getElementById(id);
+          if (res === "__OK__") return (input?.value || "").trim();
+          return null;
+        }
+
+        async function showNotice({ title, message, okText = "OK" }) {
+          await showModal({
+            title,
+            bodyHTML: `<p class="mb-0">${message}</p>`,
+            buttons: [{ text: okText, className: "btn btn-primary", value: true }],
+          });
+        }
+
+        // Expose globally for assignment.js
+        window.showModal = showModal;
+        window.showConfirm = showConfirm;
+        window.showPrompt = showPrompt;
+        window.showNotice = showNotice;
+      })();
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
@@ -60,83 +202,7 @@
     ></script>
   </head>
   <body class="bg-dark text-light" style="max-height: 10vh !important">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="./index.html">QBase</a>
-
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- Left nav -->
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="./index.html">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./bookmarks.html">Bookmarks</a>
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="./worksheet_index.html"
-                >Worksheets</a
-              >
-            </li>
-          </ul>
-
-          <!-- Right nav -->
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item" id="nav-login-item">
-              <a class="nav-link" href="#" id="nav-login">Login</a>
-            </li>
-            <li
-              class="nav-item dropdown d-none"
-              id="nav-user-item"
-              style="z-index: 1000000"
-            >
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarUserDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <span id="nav-username">User</span>
-              </a>
-              <ul
-                class="dropdown-menu dropdown-menu-end"
-                aria-labelledby="navbarUserDropdown"
-              >
-                <li>
-                  <a class="dropdown-item" href="#" id="nav-logout">Logout</a>
-                </li>
-                <li><hr class="dropdown-divider" /></li>
-                <li>
-                  <a
-                    class="dropdown-item text-danger"
-                    href="#"
-                    id="nav-delete-account"
-                    >Delete Account…</a
-                  >
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+<!-- navbar removed for assignment page -->
     <div
       class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center"
     >
@@ -316,6 +382,7 @@
             <textarea
               id="notesInput"
               class="form-control p-0 notes-editor-host"
+              placeholder="Add your notes..."
               style="min-height: 180px"
               aria-label="Notes editor"
             ></textarea>

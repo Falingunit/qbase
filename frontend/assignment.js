@@ -33,7 +33,7 @@
     <div class="io-backdrop" aria-hidden="true"></div>
     <div class="io-stage" role="dialog" aria-label="Image viewer" aria-modal="true">
       <img class="io-img" alt="">
-      <div class="io-hint">Scroll or pinch to zoom · Click and drag to pan· 0 to reset · Esc to close</div>
+      <div class="io-hint">Scroll or pinch to zoom · Click and drag to pan · 0 to reset · Esc to close</div>
     </div>
   `;
     document.body.appendChild(root);
@@ -593,19 +593,18 @@
     if (!dirty) return;
     try {
       if (authSource === "server") {
+        // Use fetch with keepalive so the Authorization header is sent.
+        // navigator.sendBeacon cannot include custom headers and would fail against
+        // our authenticated endpoint.
         const payload = JSON.stringify({ state: questionStates });
-        const ok = navigator.sendBeacon(
-          `${API_BASE}/api/state/${aID}`,
-          new Blob([payload], { type: "application/json" })
-        );
-        if (!ok) {
+        try {
           authFetch(`${API_BASE}/api/state/${aID}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: payload,
             keepalive: true,
           });
-        }
+        } catch {}
         dirty = false;
       } else {
         try {
@@ -684,6 +683,310 @@
   let fallbackTextarea = null;
   let fallbackInputHandler = null;
   let suppressNotesChange = false;
+  // Image widgets inside CodeMirror
+  let imageMarks = [];
+  let imageWidgetRefreshTimer = 0;
+  let internalImageOp = false; // allow programmatic replace/delete
+  let suppressWidgetRefresh = false; // skip widget rebuild on atomic ops
+  
+  
+
+  // Simple UI wrappers to use site modals if available
+  async function uiNotice(message, title = "") {
+    try {
+      if (typeof window.showNotice === 'function') return await window.showNotice({ title, message });
+    } catch {}
+    try { alert(message); } catch {}
+  }
+  async function uiConfirm(message, title = "") {
+    try {
+      if (typeof window.showConfirm === 'function') return await window.showConfirm({ title, message });
+    } catch {}
+    try { return confirm(message); } catch { return false; }
+  }
+  async function uiPrompt(message, def = "", title = "") {
+    try {
+      if (typeof window.showPrompt === 'function') return await window.showPrompt({ title, message, defaultValue: def });
+    } catch {}
+    try { return prompt(message, def); } catch { return null; }
+  }
+
+  function parseImageMeta(text) {
+    // Returns array of { from:idx, to:idx, alt, url, width, align }
+    const out = [];
+    const re = /!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})?/g; // markdown image + optional {..}
+    let m;
+    while ((m = re.exec(text)) != null) {
+      const alt = m[1] || '';
+      const url = m[2] || '';
+      let width = null;
+      let align = null;
+      if (m[3]) {
+        const meta = m[3];
+        const w = meta.match(/\bwidth\s*=\s*(\d{2,4})/i) || meta.match(/\bw\s*=\s*(\d{2,4})/i);
+        width = w ? parseInt(w[1], 10) : null;
+        const a = meta.match(/\balign\s*=\s*(left|right|center)/i) || meta.match(/\bfloat\s*=\s*(left|right|center)/i);
+        align = a ? a[1].toLowerCase() : null;
+      }
+      out.push({ from: m.index, to: m.index + m[0].length, alt, url, width, align });
+    }
+    return out;
+  }
+
+  
+
+  function extractUploadFilename(url) {
+    try {
+      const u = new URL(url, window.location.origin);
+      const parts = (u.pathname || '').split('/').filter(Boolean);
+      const i = parts.lastIndexOf('uploads');
+      if (i >= 0 && parts[i + 1]) return parts[i + 1];
+      return parts[parts.length - 1] || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function buildImageWidget(cm, meta, marker) {
+    const wrap = document.createElement('span');
+    wrap.className = 'cm-image-widget';
+    wrap.setAttribute('role', 'img');
+    wrap.setAttribute('aria-label', meta.alt || 'image');
+
+    const img = document.createElement('img');
+    img.src = meta.url;
+    img.alt = meta.alt || '';
+    img.draggable = false;
+    if (meta.width && Number.isFinite(meta.width)) img.style.width = meta.width + 'px';
+    wrap.appendChild(img);
+    try { img.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(img.src); } catch {} }); } catch {}
+    // initial alignment state
+    try { if (meta.align === 'right') wrap.classList.add('align-right'); } catch {}
+
+    // Delete button
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'img-del-btn';
+    del.title = 'Delete image';
+    del.className = 'img-btn img-del-btn';
+    del.innerHTML = '×';
+    del.addEventListener('click', async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      // Require login (server delete)
+      try {
+        const fn = typeof window.qbGetToken === 'function' ? window.qbGetToken : null;
+        const token = fn ? String(fn() || '') : '';
+        if (!token) {
+          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+          await uiNotice('Please log in to delete images.', 'Login required');
+          return;
+        }
+      } catch {}
+
+      const filename = extractUploadFilename(meta.url);
+      if (!filename) return uiNotice('Could not determine image filename', 'Delete image');
+      try {
+        const r = await authFetch(`${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+        if (r.status === 401) {
+          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+          alert('Please log in to delete images.');
+          return;
+        }
+        if (!r.ok) throw new Error('Delete failed');
+        // Remove token from doc
+        try {
+          const range = marker.find();
+          if (range) {
+            internalImageOp = true;
+            cm.replaceRange('', range.from, range.to);
+            internalImageOp = false;
+          }
+        } catch {}
+      } catch (err) {
+        await uiNotice('Failed to delete image', 'Error');
+      }
+    });
+    wrap.appendChild(del);
+    try { del.innerHTML = '<i class="bi bi-x"></i>'; } catch {}
+
+    // Align-right toggle button (stores align=right in token)
+    const alignBtn = document.createElement('button');
+    alignBtn.type = 'button';
+    alignBtn.className = 'img-btn img-align-right-btn';
+    const setAlignBtnState = () => {
+      const isRight = wrap.classList.contains('align-right') || meta.align === 'right';
+      alignBtn.title = isRight ? 'Move image to left' : 'Move image to right';
+      alignBtn.innerHTML = isRight ? '<i class="bi bi-arrow-left"></i>' : '<i class="bi bi-arrow-right"></i>';
+    };
+    setAlignBtnState();
+    alignBtn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      try {
+        const range = marker.find();
+        if (!range) return;
+        const fromIdx = cm.indexFromPos(range.from);
+        const toIdx = cm.indexFromPos(range.to);
+        const text = cm.getValue();
+        const token = text.slice(fromIdx, toIdx);
+        const body = token.replace(/\{[^}]*\}\s*$/, '');
+        const m = token.match(/\{([^}]*)\}\s*$/);
+        let curW = null;
+        if (m) {
+          const w = m[1].match(/\bwidth\s*=\s*(\d{2,4})/i) || m[1].match(/\bw\s*=\s*(\d{2,4})/i);
+          curW = w ? parseInt(w[1], 10) : null;
+        }
+        const isRight = /\balign\s*=\s*right/i.test(token) || /\bfloat\s*=\s*right/i.test(token) || wrap.classList.contains('align-right');
+        const parts = [];
+        if (Number.isFinite(curW)) parts.push(`width=${curW}`);
+        if (!isRight) parts.push('align=right');
+        const metaStr = parts.length ? `{${parts.join(', ')}}` : '';
+        const newTok = `${body}${metaStr}`;
+        internalImageOp = true;
+        const prev = suppressWidgetRefresh;
+        suppressWidgetRefresh = true;
+        cm.operation(() => {
+          cm.replaceRange(newTok, range.from, range.to);
+          // reflect state immediately
+          wrap.classList.toggle('align-right', !isRight);
+          meta.align = wrap.classList.contains('align-right') ? 'right' : null;
+          setAlignBtnState();
+          clearImageWidgets();
+          rebuildImageWidgets();
+        });
+        suppressWidgetRefresh = prev;
+        internalImageOp = false;
+      } catch {}
+    });
+    wrap.appendChild(alignBtn);
+
+    // Resize: right edge, bottom edge and bottom-right corner
+    const start = { x: 0, y: 0, w: 0, h: 0 };
+    let resizing = false; // 'x' | 'y' | 'xy'
+    function setWidth(px) {
+      const max = Math.max(80, Math.min(px, wrap.parentElement?.clientWidth ? wrap.parentElement.clientWidth - 16 : px));
+      img.style.width = Math.round(max) + 'px';
+    }
+    function applyWidthToMarkdown() {
+      try {
+        const range = marker.find();
+        if (!range) return;
+        const fromIdx = cm.indexFromPos(range.from);
+        const toIdx = cm.indexFromPos(range.to);
+        const text = cm.getValue();
+        const token = text.slice(fromIdx, toIdx);
+        const body = token.replace(/\{[^}]*\}\s*$/, '');
+        const curW = parseInt((img.style.width || '').replace(/px$/, ''), 10);
+        const alignMatch = token.match(/\b(align|float)\s*=\s*(left|right|center)/i);
+        const alignPart = alignMatch ? `, align=${alignMatch[2].toLowerCase()}` : '';
+        const newTok = `${body}{width=${Number.isFinite(curW) ? curW : 0}${alignPart}}`;
+        internalImageOp = true;
+        const prev = suppressWidgetRefresh;
+        suppressWidgetRefresh = true;
+        cm.operation(() => {
+          cm.replaceRange(newTok, range.from, range.to);
+          clearImageWidgets();
+          rebuildImageWidgets();
+        });
+        suppressWidgetRefresh = prev;
+        internalImageOp = false;
+      } catch {}
+    }
+    function onMove(ev) {
+      if (!resizing) return;
+      const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+      const dx = (pt.clientX || 0) - start.x;
+      const dy = (pt.clientY || 0) - start.y;
+      if (resizing === 'x') {
+        setWidth(start.w + dx);
+      } else if (resizing === 'y') {
+        const ratio = start.w / Math.max(1, start.h);
+        const newH = Math.max(10, start.h + dy);
+        setWidth(newH * ratio);
+      } else {
+        setWidth(start.w + dx);
+      }
+      ev.preventDefault();
+    }
+    function onUp(ev) {
+      if (!resizing) return;
+      resizing = false;
+      document.removeEventListener('mousemove', onMove, true);
+      document.removeEventListener('mouseup', onUp, true);
+      document.removeEventListener('touchmove', onMove, true);
+      document.removeEventListener('touchend', onUp, true);
+      applyWidthToMarkdown();
+    }
+    function beginResize(ev, mode) {
+      ev.preventDefault(); ev.stopPropagation();
+      const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+      start.x = pt.clientX || 0;
+      start.y = pt.clientY || 0;
+      const rect = img.getBoundingClientRect();
+      start.w = rect.width; start.h = rect.height;
+      resizing = mode || 'x';
+      document.addEventListener('mousemove', onMove, true);
+      document.addEventListener('mouseup', onUp, true);
+      document.addEventListener('touchmove', onMove, true);
+      document.addEventListener('touchend', onUp, true);
+    }
+    const edge = document.createElement('span');
+    edge.className = 'img-resize-handle';
+    edge.addEventListener('mousedown', (e) => beginResize(e, 'x'));
+    edge.addEventListener('touchstart', (e) => beginResize(e, 'x'), { passive: false });
+    wrap.appendChild(edge);
+    const corner = document.createElement('span');
+    corner.className = 'img-resize-corner';
+    corner.addEventListener('mousedown', (e) => beginResize(e, 'xy'));
+    corner.addEventListener('touchstart', (e) => beginResize(e, 'xy'), { passive: false });
+    wrap.appendChild(corner);
+    const bottom = document.createElement('span');
+    bottom.className = 'img-resize-bottom';
+    bottom.addEventListener('mousedown', (e) => beginResize(e, 'y'));
+    bottom.addEventListener('touchstart', (e) => beginResize(e, 'y'), { passive: false });
+    wrap.appendChild(bottom);
+
+    return wrap;
+  }
+
+  function clearImageWidgets() {
+    try { imageMarks.forEach((mk) => mk.clear()); } catch {}
+    imageMarks = [];
+  }
+
+  function rebuildImageWidgets() {
+    if (!notesMDE || !notesMDE.codemirror) return;
+    const cm = notesMDE.codemirror;
+    clearImageWidgets();
+    const text = cm.getValue();
+    const metas = parseImageMeta(text);
+    metas.forEach((meta) => {
+      try {
+        const from = cm.posFromIndex(meta.from);
+        const to = cm.posFromIndex(meta.to);
+        const widget = buildImageWidget(cm, meta, {
+          find: () => mk.find()
+        });
+        const mk = cm.getDoc().markText(from, to, {
+          replacedWith: widget,
+          atomic: true,
+          clearOnEnter: false,
+          handleMouseEvents: true,
+        });
+        // Rebind widget marker resolver with the created marker
+        widget.__marker = mk;
+        imageMarks.push(mk);
+      } catch {}
+    });
+  }
+
+  // (MathQuill inline editor removed)
+
+  
+
+  function scheduleImageWidgets() {
+    clearTimeout(imageWidgetRefreshTimer);
+    imageWidgetRefreshTimer = setTimeout(rebuildImageWidgets, 120);
+  }
 
   function updateNotesState(val) {
     try {
@@ -734,6 +1037,12 @@
         html = val;
       }
       pv.innerHTML = html;
+      // Make preview images clickable to open overlay
+      try {
+        pv.querySelectorAll('img').forEach((im) => {
+          im.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(im.src); } catch {} });
+        });
+      } catch {}
     } catch {}
   }
 
@@ -779,11 +1088,43 @@
             forceSync: true,
             placeholder: "Add your notes...",
             status: false,
+            previewRender: function (plainText, preview) {
+              // Render markdown with image metadata support; strip {..} from visible HTML
+              let html;
+              try {
+                const stripped = String(plainText).replace(/!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})/g, '![$1]($2)');
+                html = (notesMDE && typeof notesMDE.markdown === 'function') ? notesMDE.markdown(stripped) : stripped;
+              } catch { html = plainText; }
+              try {
+                const widthMap = new Map();
+                const alignMap = new Map();
+                parseImageMeta(plainText).forEach(m => {
+                  if (m.width) widthMap.set(m.url, m.width);
+                  if (m.align) alignMap.set(m.url, (m.align || '').toLowerCase());
+                });
+                const doc = new DOMParser().parseFromString(String(html), 'text/html');
+                doc.querySelectorAll('img').forEach((img) => {
+                  const src = img.getAttribute('src');
+                  const w = widthMap.get(src);
+                  const al = alignMap.get(src);
+                  if (w) {
+                    img.style.maxWidth = '100%';
+                    img.style.width = String(w) + 'px';
+                    img.style.height = 'auto';
+                  }
+                  if (al === 'right') {
+                    img.classList.add('preview-align-right');
+                  }
+                });
+                return doc.body.innerHTML;
+              } catch { return html; }
+            },
             toolbar: [
               { name: "bold", action: EasyMDE.toggleBold, className: "bi bi-type-bold", title: "Bold" },
               { name: "italic", action: EasyMDE.toggleItalic, className: "bi bi-type-italic", title: "Italic" },
               { name: "heading", action: EasyMDE.toggleHeadingSmaller, className: "bi bi-type-h1", title: "Heading" },
               "|",
+              
               {
                 name: "image-upload",
                 className: "bi bi-image",
@@ -797,7 +1138,7 @@
                       const token = getTok ? String(getTok() || "") : "";
                       if (!token) {
                         try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
-                        alert("Please log in to upload images.");
+                        uiNotice("Please log in to upload images.", 'Login required');
                         return false;
                       }
                     } catch {}
@@ -814,13 +1155,13 @@
                       const file = pick.files && pick.files[0];
                       if (!file) return;
                       const fn = editor?.options?.imageUploadFunction;
-                      if (typeof fn !== "function") { alert("Image upload not available."); return; }
+                      if (typeof fn !== "function") { uiNotice("Image upload not available."); return; }
                       fn(
                         file,
                         function (url) {
                           try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
                         },
-                        function (err) { alert(err || "Upload failed"); }
+                        function (err) { uiNotice(err || "Upload failed", 'Upload'); }
                       );
                       try { pick.remove(); } catch {}
                     };
@@ -828,6 +1169,18 @@
                   } catch {}
                   return false;
                 },
+              },
+              {
+                name: "image-url",
+                className: "bi bi-link-45deg",
+                title: "Insert Image by URL",
+                action: async function (editor, ev) {
+                  try { if (ev && typeof ev.preventDefault === 'function') ev.preventDefault(); } catch {}
+                  const url = await uiPrompt('Enter image URL (https://...)', 'https://', 'Insert image');
+                  if (!url) return false;
+                  try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
+                  return false;
+                }
               },
             ],
             imageUpload: true,
@@ -867,11 +1220,38 @@
               try { updateNotesState(notesMDE.value()); } catch {}
               // If in preview, refresh its content lazily
               try { refreshPreview(notesMDE); } catch {}
+              // Refresh image widgets for any newly-added tokens
+              if (!suppressWidgetRefresh) {
+                scheduleImageWidgets();
+              }
             });
           } catch {}
 
-          // Start in preview mode by default (unfocused state)
-          try { if (!notesMDE.isPreviewActive()) notesMDE.togglePreview(); } catch {}
+          // Prevent manual deletion of image markdown; require using delete button
+          try {
+            notesMDE.codemirror.on('beforeChange', function (cm, change) {
+              try {
+                if (internalImageOp) return; // allow our own programmatic edits
+                if (!change || !change.from || !change.to) return;
+                const doc = cm.getDoc();
+                const fromIdx = doc.indexFromPos(change.from);
+                const toIdx = doc.indexFromPos(change.to);
+                const metas = parseImageMeta(doc.getValue());
+                const intersects = metas.some(m => fromIdx < m.to && toIdx > m.from);
+                if (intersects && (change.origin || '') !== 'setValue') {
+                  change.cancel();
+                  try { uiNotice('Use the image delete button to remove images.', 'Images'); } catch {}
+                }
+              } catch {}
+            });
+          } catch {}
+
+          // Start in preview mode only if there is content; keep editor visible when empty so placeholder shows
+          try {
+            const _initVal = String(notesMDE.value() || "").trim();
+            const shouldPreview = _initVal.length > 0;
+            if (shouldPreview && !notesMDE.isPreviewActive()) notesMDE.togglePreview();
+          } catch {}
 
           // Toggle preview based on focus/blur
           try {
@@ -885,8 +1265,14 @@
                     const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
                     const ae = document.activeElement;
                     if (container && ae && container.contains(ae)) return; // still in toolbar
-                    if (!notesMDE.isPreviewActive()) notesMDE.togglePreview();
-                    refreshPreview(notesMDE);
+                    const _val = String(notesMDE.value() || "").trim();
+                    if (_val.length > 0) {
+                      if (!notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                      refreshPreview(notesMDE);
+                    } else {
+                      // Keep editor visible when empty so placeholder remains visible
+                      if (notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                    }
                   } catch {}
                 }, 0);
               } catch {}
@@ -903,7 +1289,15 @@
                   if (!notesMDE.isPreviewActive()) return; // already in edit mode
                   if (ev.target.closest('.editor-toolbar')) return; // toolbar interactions
                   const pv = container.querySelector('.editor-preview, .editor-preview-active');
+                  // Do not toggle to edit if clicking an image; let image handler open overlay
                   if (pv && pv.contains(ev.target)) {
+                    if (ev.target && (String(ev.target.tagName||'').toLowerCase()==='img' || ev.target.closest('img'))) {
+                      try {
+                        const img = ev.target.closest('img');
+                        if (img && typeof showImageOverlay === 'function') showImageOverlay(img.src);
+                      } catch {}
+                      return;
+                    }
                     ev.preventDefault();
                     notesMDE.togglePreview();
                     notesMDE.codemirror.focus();
@@ -969,6 +1363,8 @@
 
           // Focus helper for hotkeys
           window.focusNotesEditor = () => { try { notesMDE?.codemirror?.focus(); } catch {} };
+          // Build initial image widgets
+          scheduleImageWidgets();
         } catch (e) {
           if (tries++ < maxTries) return setTimeout(tryInit, 150);
         }
@@ -987,6 +1383,11 @@
       try { notesMDE.value(val); } catch {}
       suppressNotesChange = false;
       try {
+        const _trim = val.trim();
+        // If notes are empty, ensure editor mode so placeholder shows
+        if (_trim.length === 0 && notesMDE.isPreviewActive()) {
+          try { notesMDE.togglePreview(); } catch {}
+        }
         if (notesMDE.isPreviewActive()) {
           const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
           const pv = container?.querySelector('.editor-preview');
@@ -1001,6 +1402,7 @@
           }
         }
       } catch {}
+      try { scheduleImageWidgets(); } catch {}
     } else if (fallbackTextarea) {
       fallbackTextarea.value = val;
     } else {
@@ -1507,7 +1909,7 @@
       if (question.passageImage) {
         passageImgDiv.style.display = "block";
         const imgSrc = `./data/question_data/${aID}/${question.passageImage}`;
-        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image">`;
+        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image" loading="lazy" decoding="async">`;
         passageImgDiv.querySelector("img").addEventListener("click", () => {
           showImageOverlay(imgSrc);
         });
@@ -1531,7 +1933,7 @@
     if (question.image) {
       qImgDiv.style.display = "block";
       const imgSrc = `./data/question_data/${aID}/${question.image}`;
-      qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image">`;
+      qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image" loading="lazy" decoding="async">`;
       qImgDiv.querySelector("img").addEventListener("click", () => {
         showImageOverlay(imgSrc);
       });
