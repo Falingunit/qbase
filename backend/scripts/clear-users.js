@@ -1,4 +1,4 @@
-// Delete ALL users and cascading data. Use with caution.
+// Delete ALL users and cascading data. Use with caution. (moved to backend/scripts)
 import path from "path";
 import { fileURLToPath } from "url";
 import Database from "better-sqlite3";

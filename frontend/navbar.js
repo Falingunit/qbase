@@ -83,6 +83,18 @@
   document.head.appendChild(style);
   nav.classList.add("js-autohide");
 
+  // In assignment mode, make the navbar overlay the page (fixed) so it doesn't push content
+  if (document.querySelector(".assignment-topbar")) {
+    const overlayCss = document.createElement("style");
+    overlayCss.textContent = `
+      .navbar.js-autohide { position: fixed; top: 0; left: 0; right: 0; width: 100%; z-index: 1050; }
+    `;
+    document.head.appendChild(overlayCss);
+  }
+
+  // Detect Assignment mode (page with special topbar)
+  const IS_ASSIGNMENT = !!document.querySelector(".assignment-topbar");
+
   // ======= State =======
   let lastY = Math.max(0, window.scrollY || window.pageYOffset);
   let lastT = performance.now();
@@ -132,25 +144,174 @@
     ticking = false;
   }
 
-  // Use rAF to keep things smooth
-  window.addEventListener(
-    "scroll",
-    () => {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
+  // Autohide behavior differs on Assignment page vs others
+  if (!IS_ASSIGNMENT) {
+    // Generic pages: scroll-driven autohide
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+
+    // Re-evaluate on resize or orientation change (safe default)
+    window.addEventListener("resize", () => {
+      requestAnimationFrame(update);
+    });
+
+    // Initial position on load
+    update();
+  } else {
+    // Assignment page: always start hidden and reveal only by hover-at-top (desktop)
+    // or scroll gesture on the assignment topbar (touch devices)
+    hide();
+
+    const REVEAL_ZONE_PX = 14; // top area for desktop hover reveal
+    const hasFinePointer = (() => {
+      try { return !!(window.matchMedia && window.matchMedia('(pointer: fine)').matches); } catch { return false; }
+    })();
+    const hasCoarsePointer = (() => {
+      try { return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches); } catch { return false; }
+    })();
+    const topbar = document.querySelector(".assignment-topbar");
+
+    const isMenuOpen = () => !!document.querySelector(".navbar-collapse.show");
+
+    // Keep visible while the collapse menu is open
+    const collEl = nav.querySelector(".navbar-collapse");
+    if (collEl) {
+      collEl.addEventListener("shown.bs.collapse", () => show());
+      collEl.addEventListener("hidden.bs.collapse", () => {
+        // Hide unless cursor is still in reveal zone or hovering on navbar
+        if (hasFinePointer) {
+          const lastMouseY = window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY;
+          if (!nav.matches(":hover") && lastMouseY > REVEAL_ZONE_PX) hide();
+        } else {
+          hide();
+        }
+      });
+    }
+
+    let navHovered = false;
+    // Desktop hover-hide: introduce a short grace period to avoid accidental hides
+    let hoverHideTimer = 0;
+    const scheduleHoverHide = (ms = 300) => {
+      if (hoverHideTimer) clearTimeout(hoverHideTimer);
+      hoverHideTimer = window.setTimeout(() => {
+        if (!navHovered && !isMenuOpen()) hide();
+      }, ms);
+    };
+    const cancelHoverHide = () => {
+      if (hoverHideTimer) clearTimeout(hoverHideTimer);
+      hoverHideTimer = 0;
+    };
+    if (hasFinePointer) {
+      // Desktop: reveal when mouse is near the top edge, hide otherwise
+      document.addEventListener(
+        "mousemove",
+        (e) => {
+          const y = e.clientY || 0;
+          window.__qbase_lastMouseY__ = y;
+          if (y <= REVEAL_ZONE_PX || navHovered) {
+            cancelHoverHide();
+            show();
+          } else if (!isMenuOpen()) {
+            scheduleHoverHide(320);
+          }
+        },
+        { passive: true }
+      );
+      nav.addEventListener("mouseenter", () => { navHovered = true; cancelHoverHide(); show(); }, { passive: true });
+      nav.addEventListener(
+        "mouseleave",
+        (e) => {
+          navHovered = false;
+          const y = (window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY);
+          if (y > REVEAL_ZONE_PX && !isMenuOpen()) scheduleHoverHide(320);
+        },
+        { passive: true }
+      );
+    }
+
+    // Touch devices: reveal only if the user scrolls (drags) on the assignment topbar
+    // Prefer Pointer Events when available; fall back to touch events.
+    let hideTimer = 0;
+    const scheduleHide = (ms = 1400) => {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = window.setTimeout(() => {
+        if (!isMenuOpen()) hide();
+      }, ms);
+    };
+    // Also keep visible while user interacts with navbar itself.
+    nav.addEventListener('pointerdown', () => { if (hideTimer) clearTimeout(hideTimer); show(); }, { passive: true });
+    nav.addEventListener('pointerleave', () => { if (!isMenuOpen()) scheduleHide(); }, { passive: true });
+
+    const startTracker = { active: false, id: null, y: 0 };
+    const onRevealGesture = () => {
+      show();
+      scheduleHide();
+    };
+
+    if (topbar) {
+      if ("onpointerdown" in window) {
+        topbar.addEventListener(
+          "pointerdown",
+          (e) => {
+            if (e.pointerType === "mouse") return; // only touch/pen
+            startTracker.active = true;
+            startTracker.id = e.pointerId;
+            startTracker.y = e.clientY;
+          },
+          { passive: true }
+        );
+        topbar.addEventListener(
+          "pointermove",
+          (e) => {
+            if (!startTracker.active || e.pointerId !== startTracker.id) return;
+            const dy = Math.abs((e.clientY || 0) - startTracker.y);
+            if (dy > 8) onRevealGesture();
+          },
+          { passive: true }
+        );
+        const end = () => {
+          startTracker.active = false;
+        };
+        topbar.addEventListener("pointerup", end, { passive: true });
+        topbar.addEventListener("pointercancel", end, { passive: true });
+      } else {
+        // Fallback: touch events
+        let y0 = 0;
+        topbar.addEventListener(
+          "touchstart",
+          (e) => {
+            const t = e.touches?.[0];
+            if (!t) return;
+            y0 = t.clientY || 0;
+          },
+          { passive: true }
+        );
+        topbar.addEventListener(
+          "touchmove",
+          (e) => {
+            const t = e.touches?.[0];
+            if (!t) return;
+            const dy = Math.abs((t.clientY || 0) - y0);
+            if (dy > 8) onRevealGesture();
+          },
+          { passive: true }
+        );
+        topbar.addEventListener(
+          "touchend",
+          () => scheduleHide(),
+          { passive: true }
+        );
       }
-    },
-    { passive: true }
-  );
-
-  // Re-evaluate on resize or orientation change (safe default)
-  window.addEventListener("resize", () => {
-    requestAnimationFrame(update);
-  });
-
-  // Initial position on load
-  update();
+    }
+  }
 
   window.addEventListener("qbase:login", (e) => {
     isAuthenticated = true; // <-- make other instances aware

@@ -1,7 +1,7 @@
 "use strict";
 
 (async () => {
-  // --- Simple Image Overlay: centered + wheel & pinch zoom (no pan) ---
+  // --- Image Overlay: centered + wheel/pinch zoom + pan ---
   (() => {
     const style = document.createElement("style");
     style.textContent = `
@@ -33,7 +33,7 @@
     <div class="io-backdrop" aria-hidden="true"></div>
     <div class="io-stage" role="dialog" aria-label="Image viewer" aria-modal="true">
       <img class="io-img" alt="">
-      <div class="io-hint">Scroll or pinch to zoom · 0 to reset · Esc to close</div>
+      <div class="io-hint">Scroll or pinch to zoom · Click and drag to pan · 0 to reset · Esc to close</div>
     </div>
   `;
     document.body.appendChild(root);
@@ -44,17 +44,43 @@
     // Config: start slightly smaller than fit (e.g., 90%)
     const FIT_SCALE_FACTOR = 0.9;
 
-    // State (no panning)
+    // State (with panning)
     let open = false;
     let naturalW = 0,
       naturalH = 0;
     let baseScale = 1; // fits image to stage
     let zoom = 1; // user-controlled multiplier
+    let panX = 0, panY = 0; // translation in screen px
     const minZoom = 0.2,
       maxZoom = 8;
 
     function setTransform() {
-      img.style.transform = `scale(${baseScale * zoom})`;
+      // Use translate() before scale() so translate is in screen pixels
+      img.style.transform = `translate(${panX}px, ${panY}px) scale(${baseScale * zoom})`;
+      updateCursor();
+    }
+
+    function clampPan() {
+      // Allow panning even if the image is smaller than the stage.
+      // Clamp generously so the image can be moved entirely out of view if desired.
+      const rect = stage.getBoundingClientRect();
+      const dispW = naturalW * baseScale * zoom;
+      const dispH = naturalH * baseScale * zoom;
+      const halfStageW = rect.width / 2;
+      const halfStageH = rect.height / 2;
+      // When image is larger: bounds by half the overflow.
+      // When image is smaller: allow at least half the stage in any direction.
+      const maxX = Math.max(halfStageW, Math.abs((dispW - rect.width) / 2));
+      const maxY = Math.max(halfStageH, Math.abs((dispH - rect.height) / 2));
+      if (panX > maxX) panX = maxX;
+      if (panX < -maxX) panX = -maxX;
+      if (panY > maxY) panY = maxY;
+      if (panY < -maxY) panY = -maxY;
+    }
+
+    function updateCursor() {
+      // Always allow panning; show grab/grabbing
+      stage.style.cursor = pointers.size > 0 ? "grabbing" : "grab";
     }
 
     function fitToStage() {
@@ -62,16 +88,42 @@
       const sx = rect.width / naturalW;
       const sy = rect.height / naturalH;
       baseScale = Math.min(sx, sy) * FIT_SCALE_FACTOR; // contain, then shrink a bit
+      panX = 0; panY = 0;
       setTransform();
     }
 
     function zoomBy(factor) {
       zoom = Math.min(maxZoom, Math.max(minZoom, zoom * factor));
+      clampPan();
+      setTransform();
+    }
+
+    function getStageCenterClient() {
+      const rect = stage.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+
+    function zoomToAt(newZoom, clientX, clientY) {
+      const rect = stage.getBoundingClientRect();
+      const cx = clientX - rect.left - rect.width / 2;
+      const cy = clientY - rect.top - rect.height / 2;
+      const sOld = baseScale * zoom;
+      const sNew = baseScale * newZoom;
+      if (sOld > 0 && sNew > 0) {
+        const k = sNew / sOld;
+        // Keep the point under the cursor anchored
+        panX = (1 - k) * cx + k * panX;
+        panY = (1 - k) * cy + k * panY;
+      }
+      zoom = Math.min(maxZoom, Math.max(minZoom, newZoom));
+      clampPan();
       setTransform();
     }
 
     function reset() {
       zoom = 1;
+      panX = 0;
+      panY = 0;
       fitToStage();
     }
 
@@ -137,19 +189,20 @@
       passive: true,
     });
 
-    // Wheel = zoom (centered; no pan)
+    // Wheel = zoom (cursor-centered)
     stage.addEventListener(
       "wheel",
       (e) => {
         if (!open) return;
         e.preventDefault();
-        const delta = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-        zoomBy(delta);
+        const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+        const target = Math.min(maxZoom, Math.max(minZoom, zoom * factor));
+        zoomToAt(target, e.clientX, e.clientY);
       },
       { passive: false }
     );
 
-    // --- Pinch-to-zoom via PointerEvents (no panning) ---
+    // --- Pinch-to-zoom + pan via PointerEvents ---
     const pointers = new Map();
     let lastPinchDist = null;
 
@@ -157,6 +210,7 @@
       if (!open) return;
       stage.setPointerCapture?.(e.pointerId);
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      updateCursor();
     });
 
     stage.addEventListener(
@@ -165,21 +219,36 @@
         if (!open) return;
         const p = pointers.get(e.pointerId);
         if (!p) return;
-        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
         if (pointers.size === 2) {
           // Two fingers => pinch
           const [a, b] = [...pointers.values()];
           const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          const midX = (a.x + b.x) / 2;
+          const midY = (a.y + b.y) / 2;
           if (lastPinchDist != null) {
             const factor = dist / lastPinchDist;
             // gentle clamp per event to avoid jumps
             const perMoveClamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-            zoomBy(perMoveClamp(factor, 0.9, 1.1));
+            const target = Math.min(maxZoom, Math.max(minZoom, zoom * perMoveClamp(factor, 0.9, 1.1)));
+            // Anchor zoom at pinch midpoint
+            zoomToAt(target, midX, midY);
             suppressNextClick = true; // avoid accidental click after pinch
           }
           lastPinchDist = dist;
+        } else if (pointers.size === 1) {
+          // Single pointer drag => pan
+          const dx = e.clientX - p.x;
+          const dy = e.clientY - p.y;
+          if (dx !== 0 || dy !== 0) {
+            panX += dx;
+            panY += dy;
+            clampPan();
+            setTransform();
+            suppressNextClick = true;
+          }
         }
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       },
       { passive: false }
     );
@@ -190,6 +259,7 @@
       } catch {}
       pointers.delete(e.pointerId);
       if (pointers.size < 2) lastPinchDist = null;
+      updateCursor();
     }
     stage.addEventListener("pointerup", endPointer);
     stage.addEventListener("pointercancel", endPointer);
@@ -201,11 +271,13 @@
       if (e.key === "Escape") closeOverlay();
       if (e.key === "+" || e.key === "=") {
         e.preventDefault();
-        zoomBy(1.2);
+        const c = getStageCenterClient();
+        zoomToAt(Math.min(maxZoom, zoom * 1.2), c.x, c.y);
       }
       if (e.key === "-") {
         e.preventDefault();
-        zoomBy(1 / 1.2);
+        const c = getStageCenterClient();
+        zoomToAt(Math.max(minZoom, zoom / 1.2), c.x, c.y);
       }
       if (e.key === "0") {
         e.preventDefault();
@@ -218,7 +290,7 @@
       if (open) fitToStage();
     });
   })();
-  // --- End simple overlay (pinch supported) ---
+  // --- End overlay (pinch + pan supported) ---
 
   await loadConfig();
 
@@ -403,6 +475,10 @@
           isAnswerEvaluated: !!(l.isAnswerEvaluated || s.isAnswerEvaluated),
           evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
+          // Prefer local notes if present, else server's
+          notes: (l.notes && String(l.notes).length > 0)
+            ? l.notes
+            : (s.notes || ""),
         };
       });
     return out;
@@ -438,9 +514,8 @@
     authSource = me?.source || "none";
 
     if (!loggedInUser) {
-      // Force login to proceed
-      window.dispatchEvent(new Event("qbase:force-login"));
-      return;
+      try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
+      // Continue offline: will try local storage below
     }
 
     // Logged in → use server if available; fallback to local only if server has nothing
@@ -457,7 +532,19 @@
       /* ignore */
     }
 
-    // If server empty/unreachable, initialize fresh default states
+    // Local storage fallback
+    try {
+      const raw = localStorage.getItem(`qbase:${aID}:state`);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length) {
+          questionStates = arr;
+          return;
+        }
+      }
+    } catch { /* ignore */ }
+
+    // If nothing found, initialize fresh default states
     questionStates = Array(window.displayQuestions.length)
       .fill()
       .map(defaultState);
@@ -492,6 +579,13 @@
         console.warn("Server save failed; will retry later.", e);
         // keep dirty=true so periodic/next user action can retry
       }
+      // Also save locally when not using server auth
+      if (authSource !== "server") {
+        try {
+          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          dirty = false;
+        } catch {}
+      }
     }, 800);
   }
 
@@ -499,20 +593,24 @@
     if (!dirty) return;
     try {
       if (authSource === "server") {
+        // Use fetch with keepalive so the Authorization header is sent.
+        // navigator.sendBeacon cannot include custom headers and would fail against
+        // our authenticated endpoint.
         const payload = JSON.stringify({ state: questionStates });
-        const ok = navigator.sendBeacon(
-          `${API_BASE}/api/state/${aID}`,
-          new Blob([payload], { type: "application/json" })
-        );
-        if (!ok) {
+        try {
           authFetch(`${API_BASE}/api/state/${aID}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: payload,
             keepalive: true,
           });
-        }
+        } catch {}
         dirty = false;
+      } else {
+        try {
+          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          dirty = false;
+        } catch {}
       }
     } catch (e) {
       console.warn("flushSave error", e);
@@ -580,6 +678,756 @@
     ],
   };
 
+  // ---------- Notes editor (EasyMDE with textarea fallback) ----------
+  let notesMDE = null;
+  let fallbackTextarea = null;
+  let fallbackInputHandler = null;
+  let suppressNotesChange = false;
+  // Image widgets inside CodeMirror
+  let imageMarks = [];
+  let imageWidgetRefreshTimer = 0;
+  let internalImageOp = false; // allow programmatic replace/delete
+  let suppressWidgetRefresh = false; // skip widget rebuild on atomic ops
+  
+  
+
+  // Simple UI wrappers to use site modals if available
+  async function uiNotice(message, title = "") {
+    try {
+      if (typeof window.showNotice === 'function') return await window.showNotice({ title, message });
+    } catch {}
+    try { alert(message); } catch {}
+  }
+  async function uiConfirm(message, title = "") {
+    try {
+      if (typeof window.showConfirm === 'function') return await window.showConfirm({ title, message });
+    } catch {}
+    try { return confirm(message); } catch { return false; }
+  }
+  async function uiPrompt(message, def = "", title = "") {
+    try {
+      if (typeof window.showPrompt === 'function') return await window.showPrompt({ title, message, defaultValue: def });
+    } catch {}
+    try { return prompt(message, def); } catch { return null; }
+  }
+
+  function parseImageMeta(text) {
+    // Returns array of { from:idx, to:idx, alt, url, width, align }
+    const out = [];
+    const re = /!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})?/g; // markdown image + optional {..}
+    let m;
+    while ((m = re.exec(text)) != null) {
+      const alt = m[1] || '';
+      const url = m[2] || '';
+      let width = null;
+      let align = null;
+      if (m[3]) {
+        const meta = m[3];
+        const w = meta.match(/\bwidth\s*=\s*(\d{2,4})/i) || meta.match(/\bw\s*=\s*(\d{2,4})/i);
+        width = w ? parseInt(w[1], 10) : null;
+        const a = meta.match(/\balign\s*=\s*(left|right|center)/i) || meta.match(/\bfloat\s*=\s*(left|right|center)/i);
+        align = a ? a[1].toLowerCase() : null;
+      }
+      out.push({ from: m.index, to: m.index + m[0].length, alt, url, width, align });
+    }
+    return out;
+  }
+
+  
+
+  function extractUploadFilename(url) {
+    try {
+      const u = new URL(url, window.location.origin);
+      const parts = (u.pathname || '').split('/').filter(Boolean);
+      const i = parts.lastIndexOf('uploads');
+      if (i >= 0 && parts[i + 1]) return parts[i + 1];
+      return parts[parts.length - 1] || null;
+    } catch {
+      return null;
+    }
+  }
+
+  function buildImageWidget(cm, meta, marker) {
+    const wrap = document.createElement('span');
+    wrap.className = 'cm-image-widget';
+    wrap.setAttribute('role', 'img');
+    wrap.setAttribute('aria-label', meta.alt || 'image');
+
+    const img = document.createElement('img');
+    img.src = meta.url;
+    img.alt = meta.alt || '';
+    img.draggable = false;
+    if (meta.width && Number.isFinite(meta.width)) img.style.width = meta.width + 'px';
+    wrap.appendChild(img);
+    try { img.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(img.src); } catch {} }); } catch {}
+    // initial alignment state
+    try { if (meta.align === 'right') wrap.classList.add('align-right'); } catch {}
+
+    // Delete button
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'img-del-btn';
+    del.title = 'Delete image';
+    del.className = 'img-btn img-del-btn';
+    del.innerHTML = '×';
+    del.addEventListener('click', async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      // Require login (server delete)
+      try {
+        const fn = typeof window.qbGetToken === 'function' ? window.qbGetToken : null;
+        const token = fn ? String(fn() || '') : '';
+        if (!token) {
+          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+          await uiNotice('Please log in to delete images.', 'Login required');
+          return;
+        }
+      } catch {}
+
+      const filename = extractUploadFilename(meta.url);
+      if (!filename) return uiNotice('Could not determine image filename', 'Delete image');
+      try {
+        const r = await authFetch(`${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+        if (r.status === 401) {
+          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+          alert('Please log in to delete images.');
+          return;
+        }
+        if (!r.ok) throw new Error('Delete failed');
+        // Remove token from doc
+        try {
+          const range = marker.find();
+          if (range) {
+            internalImageOp = true;
+            cm.replaceRange('', range.from, range.to);
+            internalImageOp = false;
+          }
+        } catch {}
+      } catch (err) {
+        await uiNotice('Failed to delete image', 'Error');
+      }
+    });
+    wrap.appendChild(del);
+    try { del.innerHTML = '<i class="bi bi-x"></i>'; } catch {}
+
+    // Align-right toggle button (stores align=right in token)
+    const alignBtn = document.createElement('button');
+    alignBtn.type = 'button';
+    alignBtn.className = 'img-btn img-align-right-btn';
+    const setAlignBtnState = () => {
+      const isRight = wrap.classList.contains('align-right') || meta.align === 'right';
+      alignBtn.title = isRight ? 'Move image to left' : 'Move image to right';
+      alignBtn.innerHTML = isRight ? '<i class="bi bi-arrow-left"></i>' : '<i class="bi bi-arrow-right"></i>';
+    };
+    setAlignBtnState();
+    alignBtn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      try {
+        const range = marker.find();
+        if (!range) return;
+        const fromIdx = cm.indexFromPos(range.from);
+        const toIdx = cm.indexFromPos(range.to);
+        const text = cm.getValue();
+        const token = text.slice(fromIdx, toIdx);
+        const body = token.replace(/\{[^}]*\}\s*$/, '');
+        const m = token.match(/\{([^}]*)\}\s*$/);
+        let curW = null;
+        if (m) {
+          const w = m[1].match(/\bwidth\s*=\s*(\d{2,4})/i) || m[1].match(/\bw\s*=\s*(\d{2,4})/i);
+          curW = w ? parseInt(w[1], 10) : null;
+        }
+        const isRight = /\balign\s*=\s*right/i.test(token) || /\bfloat\s*=\s*right/i.test(token) || wrap.classList.contains('align-right');
+        const parts = [];
+        if (Number.isFinite(curW)) parts.push(`width=${curW}`);
+        if (!isRight) parts.push('align=right');
+        const metaStr = parts.length ? `{${parts.join(', ')}}` : '';
+        const newTok = `${body}${metaStr}`;
+        internalImageOp = true;
+        const prev = suppressWidgetRefresh;
+        suppressWidgetRefresh = true;
+        cm.operation(() => {
+          cm.replaceRange(newTok, range.from, range.to);
+          // reflect state immediately
+          wrap.classList.toggle('align-right', !isRight);
+          meta.align = wrap.classList.contains('align-right') ? 'right' : null;
+          setAlignBtnState();
+          clearImageWidgets();
+          rebuildImageWidgets();
+        });
+        suppressWidgetRefresh = prev;
+        internalImageOp = false;
+      } catch {}
+    });
+    wrap.appendChild(alignBtn);
+
+    // Resize: right edge, bottom edge and bottom-right corner
+    const start = { x: 0, y: 0, w: 0, h: 0 };
+    let resizing = false; // 'x' | 'y' | 'xy'
+    function setWidth(px) {
+      const max = Math.max(80, Math.min(px, wrap.parentElement?.clientWidth ? wrap.parentElement.clientWidth - 16 : px));
+      img.style.width = Math.round(max) + 'px';
+    }
+    function applyWidthToMarkdown() {
+      try {
+        const range = marker.find();
+        if (!range) return;
+        const fromIdx = cm.indexFromPos(range.from);
+        const toIdx = cm.indexFromPos(range.to);
+        const text = cm.getValue();
+        const token = text.slice(fromIdx, toIdx);
+        const body = token.replace(/\{[^}]*\}\s*$/, '');
+        const curW = parseInt((img.style.width || '').replace(/px$/, ''), 10);
+        const alignMatch = token.match(/\b(align|float)\s*=\s*(left|right|center)/i);
+        const alignPart = alignMatch ? `, align=${alignMatch[2].toLowerCase()}` : '';
+        const newTok = `${body}{width=${Number.isFinite(curW) ? curW : 0}${alignPart}}`;
+        internalImageOp = true;
+        const prev = suppressWidgetRefresh;
+        suppressWidgetRefresh = true;
+        cm.operation(() => {
+          cm.replaceRange(newTok, range.from, range.to);
+          clearImageWidgets();
+          rebuildImageWidgets();
+        });
+        suppressWidgetRefresh = prev;
+        internalImageOp = false;
+      } catch {}
+    }
+    function onMove(ev) {
+      if (!resizing) return;
+      const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+      const dx = (pt.clientX || 0) - start.x;
+      const dy = (pt.clientY || 0) - start.y;
+      if (resizing === 'x') {
+        setWidth(start.w + dx);
+      } else if (resizing === 'y') {
+        const ratio = start.w / Math.max(1, start.h);
+        const newH = Math.max(10, start.h + dy);
+        setWidth(newH * ratio);
+      } else {
+        setWidth(start.w + dx);
+      }
+      ev.preventDefault();
+    }
+    function onUp(ev) {
+      if (!resizing) return;
+      resizing = false;
+      document.removeEventListener('mousemove', onMove, true);
+      document.removeEventListener('mouseup', onUp, true);
+      document.removeEventListener('touchmove', onMove, true);
+      document.removeEventListener('touchend', onUp, true);
+      applyWidthToMarkdown();
+    }
+    function beginResize(ev, mode) {
+      ev.preventDefault(); ev.stopPropagation();
+      const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+      start.x = pt.clientX || 0;
+      start.y = pt.clientY || 0;
+      const rect = img.getBoundingClientRect();
+      start.w = rect.width; start.h = rect.height;
+      resizing = mode || 'x';
+      document.addEventListener('mousemove', onMove, true);
+      document.addEventListener('mouseup', onUp, true);
+      document.addEventListener('touchmove', onMove, true);
+      document.addEventListener('touchend', onUp, true);
+    }
+    const edge = document.createElement('span');
+    edge.className = 'img-resize-handle';
+    edge.addEventListener('mousedown', (e) => beginResize(e, 'x'));
+    edge.addEventListener('touchstart', (e) => beginResize(e, 'x'), { passive: false });
+    wrap.appendChild(edge);
+    const corner = document.createElement('span');
+    corner.className = 'img-resize-corner';
+    corner.addEventListener('mousedown', (e) => beginResize(e, 'xy'));
+    corner.addEventListener('touchstart', (e) => beginResize(e, 'xy'), { passive: false });
+    wrap.appendChild(corner);
+    const bottom = document.createElement('span');
+    bottom.className = 'img-resize-bottom';
+    bottom.addEventListener('mousedown', (e) => beginResize(e, 'y'));
+    bottom.addEventListener('touchstart', (e) => beginResize(e, 'y'), { passive: false });
+    wrap.appendChild(bottom);
+
+    return wrap;
+  }
+
+  function clearImageWidgets() {
+    try { imageMarks.forEach((mk) => mk.clear()); } catch {}
+    imageMarks = [];
+  }
+
+  function rebuildImageWidgets() {
+    if (!notesMDE || !notesMDE.codemirror) return;
+    const cm = notesMDE.codemirror;
+    clearImageWidgets();
+    const text = cm.getValue();
+    const metas = parseImageMeta(text);
+    metas.forEach((meta) => {
+      try {
+        const from = cm.posFromIndex(meta.from);
+        const to = cm.posFromIndex(meta.to);
+        const widget = buildImageWidget(cm, meta, {
+          find: () => mk.find()
+        });
+        const mk = cm.getDoc().markText(from, to, {
+          replacedWith: widget,
+          atomic: true,
+          clearOnEnter: false,
+          handleMouseEvents: true,
+        });
+        // Rebind widget marker resolver with the created marker
+        widget.__marker = mk;
+        imageMarks.push(mk);
+      } catch {}
+    });
+  }
+
+  // (MathQuill inline editor removed)
+
+  
+
+  function scheduleImageWidgets() {
+    clearTimeout(imageWidgetRefreshTimer);
+    imageWidgetRefreshTimer = setTimeout(rebuildImageWidgets, 120);
+  }
+
+  function updateNotesState(val) {
+    try {
+      if (currentQuestionID != null && Array.isArray(questionStates)) {
+        ensureStateLength(window.displayQuestions?.length || 0);
+        if (questionStates[currentQuestionID]) {
+          questionStates[currentQuestionID].notes = val;
+          markDirty();
+          scheduleSave(aID);
+        }
+      }
+    } catch {}
+  }
+
+  function bindFallbackTextarea(textarea) {
+    if (!textarea || textarea.dataset.bound === "1") return;
+    textarea.dataset.bound = "1";
+    textarea.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        try { textarea.blur(); } catch {}
+      }
+    });
+    const onInput = () => {
+      updateNotesState(textarea.value || "");
+    };
+    textarea.addEventListener("input", onInput);
+    fallbackInputHandler = onInput;
+  }
+
+  function refreshPreview(easyMDE) {
+    try {
+      if (!easyMDE || !easyMDE.isPreviewActive()) return;
+      const container = easyMDE.codemirror
+        .getWrapperElement()
+        .closest(".EasyMDEContainer");
+      if (!container) return;
+      const pv = container.querySelector(".editor-preview");
+      if (!pv) return;
+      const val = easyMDE.value();
+      let html;
+      if (typeof easyMDE.options.previewRender === "function") {
+        html = easyMDE.options.previewRender(val, pv);
+      } else if (typeof easyMDE.markdown === "function") {
+        html = easyMDE.markdown(val);
+      } else {
+        html = val;
+      }
+      pv.innerHTML = html;
+      // Make preview images clickable to open overlay
+      try {
+        pv.querySelectorAll('img').forEach((im) => {
+          im.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(im.src); } catch {} });
+        });
+      } catch {}
+    } catch {}
+  }
+
+  function initNotesEditor() {
+    const host = document.getElementById("notesInput");
+    if (!host || notesMDE) return;
+
+    // Ensure the textarea works as a fallback while EasyMDE loads
+    if (!fallbackTextarea && String(host.tagName || "").toLowerCase() === "textarea") {
+      fallbackTextarea = host;
+      bindFallbackTextarea(fallbackTextarea);
+      if (typeof window.focusNotesEditor !== 'function') {
+        window.focusNotesEditor = () => { try { fallbackTextarea?.focus(); } catch {} };
+      }
+    }
+
+    // Wait for EasyMDE (loaded via CDN in assignment.html) then initialize
+    let tries = 0;
+    const maxTries = 40;
+    (function tryInit() {
+      if (window.EasyMDE && document.getElementById("notesInput")) {
+        try {
+          let el = document.getElementById("notesInput");
+          if (String(el.tagName || "").toLowerCase() !== "textarea") {
+            const ta = document.createElement("textarea");
+            ta.id = "notesInput";
+            ta.className = "form-control";
+            ta.placeholder = "Add your notes...";
+            el.replaceWith(ta);
+            el = ta;
+          }
+
+          // If we bound fallback listeners, remove them to avoid duplicate updates
+          if (fallbackTextarea && fallbackInputHandler) {
+            try { fallbackTextarea.removeEventListener("input", fallbackInputHandler); } catch {}
+            fallbackInputHandler = null;
+          }
+
+          notesMDE = new EasyMDE({
+            element: el,
+            autofocus: false,
+            spellChecker: false,
+            forceSync: true,
+            placeholder: "Add your notes...",
+            status: false,
+            previewRender: function (plainText, preview) {
+              // Render markdown with image metadata support; strip {..} from visible HTML
+              let html;
+              try {
+                const stripped = String(plainText).replace(/!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})/g, '![$1]($2)');
+                html = (notesMDE && typeof notesMDE.markdown === 'function') ? notesMDE.markdown(stripped) : stripped;
+              } catch { html = plainText; }
+              try {
+                const widthMap = new Map();
+                const alignMap = new Map();
+                parseImageMeta(plainText).forEach(m => {
+                  if (m.width) widthMap.set(m.url, m.width);
+                  if (m.align) alignMap.set(m.url, (m.align || '').toLowerCase());
+                });
+                const doc = new DOMParser().parseFromString(String(html), 'text/html');
+                doc.querySelectorAll('img').forEach((img) => {
+                  const src = img.getAttribute('src');
+                  const w = widthMap.get(src);
+                  const al = alignMap.get(src);
+                  if (w) {
+                    img.style.maxWidth = '100%';
+                    img.style.width = String(w) + 'px';
+                    img.style.height = 'auto';
+                  }
+                  if (al === 'right') {
+                    img.classList.add('preview-align-right');
+                  }
+                });
+                return doc.body.innerHTML;
+              } catch { return html; }
+            },
+            toolbar: [
+              { name: "bold", action: EasyMDE.toggleBold, className: "bi bi-type-bold", title: "Bold" },
+              { name: "italic", action: EasyMDE.toggleItalic, className: "bi bi-type-italic", title: "Italic" },
+              { name: "heading", action: EasyMDE.toggleHeadingSmaller, className: "bi bi-type-h1", title: "Heading" },
+              "|",
+              
+              {
+                name: "image-upload",
+                className: "bi bi-image",
+                title: "Upload Image",
+                action: function (editor, ev) {
+                  try {
+                    if (ev && typeof ev.preventDefault === "function") ev.preventDefault();
+                    // Auth gate
+                    try {
+                      const getTok = (typeof window.qbGetToken === "function" && window.qbGetToken) || null;
+                      const token = getTok ? String(getTok() || "") : "";
+                      if (!token) {
+                        try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
+                        uiNotice("Please log in to upload images.", 'Login required');
+                        return false;
+                      }
+                    } catch {}
+                    // Hidden file input
+                    const pick = document.createElement("input");
+                    pick.type = "file";
+                    pick.accept = "image/*";
+                    pick.style.position = "fixed";
+                    pick.style.left = "-9999px";
+                    pick.style.width = "1px";
+                    pick.style.height = "1px";
+                    document.body.appendChild(pick);
+                    pick.onchange = function () {
+                      const file = pick.files && pick.files[0];
+                      if (!file) return;
+                      const fn = editor?.options?.imageUploadFunction;
+                      if (typeof fn !== "function") { uiNotice("Image upload not available."); return; }
+                      fn(
+                        file,
+                        function (url) {
+                          try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
+                        },
+                        function (err) { uiNotice(err || "Upload failed", 'Upload'); }
+                      );
+                      try { pick.remove(); } catch {}
+                    };
+                    setTimeout(() => { try { pick.click(); } catch {} }, 0);
+                  } catch {}
+                  return false;
+                },
+              },
+              {
+                name: "image-url",
+                className: "bi bi-link-45deg",
+                title: "Insert Image by URL",
+                action: async function (editor, ev) {
+                  try { if (ev && typeof ev.preventDefault === 'function') ev.preventDefault(); } catch {}
+                  const url = await uiPrompt('Enter image URL (https://...)', 'https://', 'Insert image');
+                  if (!url) return false;
+                  try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
+                  return false;
+                }
+              },
+            ],
+            imageUpload: true,
+            imageAccept: "image/*",
+            imageMaxSize: 5 * 1024 * 1024,
+            imageUploadFunction: function (file, onSuccess, onError) {
+              (async function () {
+                try {
+                  try { if (typeof loadConfig === "function" && (!window.API_BASE || !String(window.API_BASE))) await loadConfig(); } catch {}
+                  const fd = new FormData();
+                  fd.append("image", file);
+                  const base = (typeof API_BASE === "string" && API_BASE)
+                    ? API_BASE
+                    : (location.origin && location.origin.startsWith("http") ? location.origin : "http://localhost:3000");
+                  const url = base.replace(/\/$/, "") + "/api/upload-image";
+                  const fetcher = (typeof authFetch === "function") ? authFetch : fetch;
+                  const r = await fetcher(url, { method: "POST", body: fd });
+                  if (r && r.status === 401) {
+                    try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
+                    throw new Error("Please log in to upload images");
+                  }
+                  if (!r.ok) throw new Error(`Upload failed (${r.status})`);
+                  const data = await r.json();
+                  if (data && data.url) onSuccess(data.url);
+                  else throw new Error("Invalid upload response");
+                } catch (e) {
+                  onError(e && e.message ? e.message : "Upload error");
+                }
+              })();
+            },
+          });
+
+          // Keep app state updated on content changes
+          try {
+            notesMDE.codemirror.on("change", function () {
+              if (suppressNotesChange) return;
+              try { updateNotesState(notesMDE.value()); } catch {}
+              // If in preview, refresh its content lazily
+              try { refreshPreview(notesMDE); } catch {}
+              // Refresh image widgets for any newly-added tokens
+              if (!suppressWidgetRefresh) {
+                scheduleImageWidgets();
+              }
+            });
+          } catch {}
+
+          // Prevent manual deletion of image markdown; require using delete button
+          try {
+            notesMDE.codemirror.on('beforeChange', function (cm, change) {
+              try {
+                if (internalImageOp) return; // allow our own programmatic edits
+                if (!change || !change.from || !change.to) return;
+                const doc = cm.getDoc();
+                const fromIdx = doc.indexFromPos(change.from);
+                const toIdx = doc.indexFromPos(change.to);
+                const metas = parseImageMeta(doc.getValue());
+                const intersects = metas.some(m => fromIdx < m.to && toIdx > m.from);
+                if (intersects && (change.origin || '') !== 'setValue') {
+                  change.cancel();
+                  try { uiNotice('Use the image delete button to remove images.', 'Images'); } catch {}
+                }
+              } catch {}
+            });
+          } catch {}
+
+          // Start in preview mode only if there is content; keep editor visible when empty so placeholder shows
+          try {
+            const _initVal = String(notesMDE.value() || "").trim();
+            const shouldPreview = _initVal.length > 0;
+            if (shouldPreview && !notesMDE.isPreviewActive()) notesMDE.togglePreview();
+          } catch {}
+
+          // Toggle preview based on focus/blur
+          try {
+            notesMDE.codemirror.on("focus", function () {
+              try { if (notesMDE.isPreviewActive()) notesMDE.togglePreview(); } catch {}
+            });
+            notesMDE.codemirror.on("blur", function () {
+              try {
+                setTimeout(function () {
+                  try {
+                    const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+                    const ae = document.activeElement;
+                    if (container && ae && container.contains(ae)) return; // still in toolbar
+                    const _val = String(notesMDE.value() || "").trim();
+                    if (_val.length > 0) {
+                      if (!notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                      refreshPreview(notesMDE);
+                    } else {
+                      // Keep editor visible when empty so placeholder remains visible
+                      if (notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                    }
+                  } catch {}
+                }, 0);
+              } catch {}
+            });
+          } catch {}
+
+          // Allow clicking the preview area to enter edit mode
+          try {
+            const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+            if (container && !container.dataset.previewClickBound) {
+              container.dataset.previewClickBound = "1";
+              container.addEventListener("click", function (ev) {
+                try {
+                  if (!notesMDE.isPreviewActive()) return; // already in edit mode
+                  if (ev.target.closest('.editor-toolbar')) return; // toolbar interactions
+                  const pv = container.querySelector('.editor-preview, .editor-preview-active');
+                  // Do not toggle to edit if clicking an image; let image handler open overlay
+                  if (pv && pv.contains(ev.target)) {
+                    if (ev.target && (String(ev.target.tagName||'').toLowerCase()==='img' || ev.target.closest('img'))) {
+                      try {
+                        const img = ev.target.closest('img');
+                        if (img && typeof showImageOverlay === 'function') showImageOverlay(img.src);
+                      } catch {}
+                      return;
+                    }
+                    ev.preventDefault();
+                    notesMDE.togglePreview();
+                    notesMDE.codemirror.focus();
+                  }
+                } catch {}
+              }, true);
+              const style = document.createElement('style');
+              style.textContent = ".EasyMDEContainer .editor-preview{cursor:text;}";
+              document.head.appendChild(style);
+            }
+          } catch {}
+
+          // Enable paste/drag image upload while in preview
+          try {
+            (function bindPreviewUploadHandlers() {
+              const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+              if (!container || container.dataset.previewUploadBound === '1') return;
+              container.dataset.previewUploadBound = '1';
+
+              function maybeUpload(files) {
+                try {
+                  const list = Array.from(files || []).filter((f) => f && /^image\//i.test(f.type));
+                  if (!list.length) return false;
+                  const fn = notesMDE?.options?.imageUploadFunction;
+                  if (typeof fn !== 'function') return false;
+                  const file = list[0];
+                  fn(
+                    file,
+                    function (url) {
+                      try {
+                        if (notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                        notesMDE.codemirror.replaceSelection(`![](${url})`);
+                        notesMDE.codemirror.focus();
+                      } catch {}
+                    },
+                    function (err) { try { alert(err || 'Upload failed'); } catch {} }
+                  );
+                  return true;
+                } catch { return false; }
+              }
+
+              function hasFiles(e) { const dt = e && e.dataTransfer; return !!(dt && dt.files && dt.files.length); }
+
+              container.addEventListener('dragover', function (e) { if (!hasFiles(e)) return; e.preventDefault(); try { e.dataTransfer.dropEffect = 'copy'; } catch {} }, true);
+              container.addEventListener('drop', function (e) { if (!hasFiles(e)) return; e.preventDefault(); maybeUpload(e.dataTransfer.files); }, true);
+
+              function handlePasteEvent(e) {
+                try {
+                  const cd = e.clipboardData; if (!cd) return;
+                  const files = [];
+                  for (let i = 0; i < cd.items.length; i++) { const it = cd.items[i]; if (it && it.kind === 'file') { const f = it.getAsFile(); if (f) files.push(f); } }
+                  if (files.length) { e.preventDefault(); maybeUpload(files); }
+                } catch {}
+              }
+              container.addEventListener('paste', handlePasteEvent, true);
+              document.addEventListener('paste', handlePasteEvent, true);
+
+              function globalGuard(e) { const dt = e && e.dataTransfer; if (dt && dt.files && dt.files.length) { e.preventDefault(); } }
+              window.addEventListener('dragover', globalGuard, true);
+              window.addEventListener('drop', globalGuard, true);
+            })();
+          } catch {}
+
+          // Focus helper for hotkeys
+          window.focusNotesEditor = () => { try { notesMDE?.codemirror?.focus(); } catch {} };
+          // Build initial image widgets
+          scheduleImageWidgets();
+        } catch (e) {
+          if (tries++ < maxTries) return setTimeout(tryInit, 150);
+        }
+        return; // done
+      }
+      if (tries++ < maxTries) setTimeout(tryInit, 150);
+    })();
+  }
+
+  // Expose setter used when switching questions
+  window.setNotesInEditor = function setNotesInEditor(text) {
+    try { initNotesEditor(); } catch {}
+    const val = String(text || "");
+    if (notesMDE) {
+      suppressNotesChange = true;
+      try { notesMDE.value(val); } catch {}
+      suppressNotesChange = false;
+      try {
+        const _trim = val.trim();
+        // If notes are empty, ensure editor mode so placeholder shows
+        if (_trim.length === 0 && notesMDE.isPreviewActive()) {
+          try { notesMDE.togglePreview(); } catch {}
+        }
+        if (notesMDE.isPreviewActive()) {
+          const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+          const pv = container?.querySelector('.editor-preview');
+          if (pv) {
+            let html;
+            try {
+              html = typeof notesMDE.options.previewRender === 'function'
+                ? notesMDE.options.previewRender(val, pv)
+                : (typeof notesMDE.markdown === 'function' ? notesMDE.markdown(val) : val);
+            } catch { html = val; }
+            pv.innerHTML = html;
+          }
+        }
+      } catch {}
+      try { scheduleImageWidgets(); } catch {}
+    } else if (fallbackTextarea) {
+      fallbackTextarea.value = val;
+    } else {
+      const host = document.getElementById("notesInput");
+      if (host && host.tagName.toLowerCase() === "textarea") {
+        fallbackTextarea = host;
+        bindFallbackTextarea(fallbackTextarea);
+        fallbackTextarea.value = val;
+      }
+    }
+  };
+
+  // Provide a default focus helper that initializes editor on demand
+  if (typeof window.focusNotesEditor !== 'function') {
+    window.focusNotesEditor = () => {
+      try {
+        initNotesEditor();
+        if (notesMDE) notesMDE.codemirror.focus();
+        else if (fallbackTextarea) fallbackTextarea.focus();
+      } catch {}
+    };
+  }
+
+  
+
   // ---------- App state ----------
   let questionData;
   let currentQuestionID;
@@ -620,15 +1468,8 @@
     scheduleSave(aID);
   });
 
-  // Notes input
-  const notesInput = document.getElementById("notesInput");
-  notesInput.addEventListener("input", () => {
-    if (currentQuestionID == null) return;
-    const qState = questionStates[currentQuestionID];
-    qState.notes = notesInput.value;
-    markDirty();
-    scheduleSave(aID);
-  });
+  // Initialize the notes editor once the DOM is ready
+  try { initNotesEditor(); } catch {}
 
   // Reuse modal helper from navbar.js if available, else fallback to confirm
   async function confirmReset() {
@@ -700,8 +1541,10 @@
     const originalIdx = window.questionIndexMap[qID];
     const q = questionData.questions[originalIdx];
 
-    // Fully reset state (time = 0 now)
+    // Fully reset state (time = 0 now) (without resetting notes)
+    const originalNotes = questionStates[qID]['notes']
     questionStates[qID] = { ...defaultState(), time: 0 };
+    questionStates[qID]['notes'] = originalNotes
 
     // Clear visuals + unlock
     if (q.qType === "SMCQ" || q.qType === "MMCQ") {
@@ -1046,7 +1889,7 @@
     const typeInfo = document.getElementById("qTypeInfo");
     const qNo = document.getElementById("qNo");
     const numericalAnswer = document.getElementById("numericalAnswer");
-    const notesInput = document.getElementById("notesInput");
+    // Notes editor now renders inline; no textarea reference
     const questionState = questionStates[qID];
     const question = questionData.questions[originalIdx];
 
@@ -1066,7 +1909,7 @@
       if (question.passageImage) {
         passageImgDiv.style.display = "block";
         const imgSrc = `./data/question_data/${aID}/${question.passageImage}`;
-        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image">`;
+        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image" loading="lazy" decoding="async">`;
         passageImgDiv.querySelector("img").addEventListener("click", () => {
           showImageOverlay(imgSrc);
         });
@@ -1076,7 +1919,7 @@
       }
       passageDiv.style.display = "block";
       passageDiv.textContent = question.passage;
-      renderMathInElement(passageDiv, katexOptions);
+      try { renderMathInElement && renderMathInElement(passageDiv, katexOptions); } catch {}
     } else {
       passageImgDiv.style.display = "none";
       passageDiv.style.display = "none";
@@ -1090,7 +1933,7 @@
     if (question.image) {
       qImgDiv.style.display = "block";
       const imgSrc = `./data/question_data/${aID}/${question.image}`;
-      qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image">`;
+      qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image" loading="lazy" decoding="async">`;
       qImgDiv.querySelector("img").addEventListener("click", () => {
         showImageOverlay(imgSrc);
       });
@@ -1099,7 +1942,7 @@
       qImgDiv.innerHTML = "";
     }
     qTextElm.innerHTML = escapeHtml(question.qText || "").replace(/\n/g, "<br>");
-    renderMathInElement(qTextElm, katexOptions);
+    try { renderMathInElement && renderMathInElement(qTextElm, katexOptions); } catch {}
 
     // --- Timer control ---
     if (timerInterval) clearInterval(timerInterval);
@@ -1188,15 +2031,17 @@
       C.textContent = question.qOptions[2];
       D.textContent = question.qOptions[3];
 
-      renderMathInElement(A, katexOptions);
-      renderMathInElement(B, katexOptions);
-      renderMathInElement(C, katexOptions);
-      renderMathInElement(D, katexOptions);
+      try {
+        renderMathInElement && renderMathInElement(A, katexOptions);
+        renderMathInElement && renderMathInElement(B, katexOptions);
+        renderMathInElement && renderMathInElement(C, katexOptions);
+        renderMathInElement && renderMathInElement(D, katexOptions);
+      } catch {}
 
       numerical.style.display = "none";
       // Allow CSS to control the layout (grid on larger screens)
       MCQOptions.style.display = "";
-      renderMathInElement(MCQOptions, katexOptions);
+      try { renderMathInElement && renderMathInElement(MCQOptions, katexOptions); } catch {}
     }
 
     // Toggle which action button to show for this question
@@ -1211,8 +2056,10 @@
       checkBtn.classList.remove("d-none");
     }
 
-    // Populate notes for this question
-    if (notesInput) notesInput.value = questionState.notes || "";
+    // Populate notes for this question (Markdown editor)
+    try {
+      setNotesInEditor(questionState.notes || "");
+    } catch {}
 
     // Update bookmark button state
     updateBookmarkButton();
