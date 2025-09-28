@@ -747,6 +747,17 @@
     }
   }
 
+  function isServerUploadUrl(url) {
+    try {
+      const u = new URL(url, window.location.href);
+      const path = String(u.pathname || "");
+      // Treat images under our origin '/uploads/' as server-managed uploads
+      return (u.origin === window.location.origin) && /\/uploads\//.test(path);
+    } catch {
+      return false;
+    }
+  }
+
   function buildImageWidget(cm, meta, marker) {
     const wrap = document.createElement('span');
     wrap.className = 'cm-image-widget';
@@ -772,39 +783,55 @@
     del.innerHTML = '×';
     del.addEventListener('click', async (e) => {
       e.preventDefault(); e.stopPropagation();
-      // Require login (server delete)
       try {
-        const fn = typeof window.qbGetToken === 'function' ? window.qbGetToken : null;
-        const token = fn ? String(fn() || '') : '';
-        if (!token) {
-          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
-          await uiNotice('Please log in to delete images.', 'Login required');
+        const serverManaged = isServerUploadUrl(meta.url);
+        if (!serverManaged) {
+          // External/linked image: delete locally without server/auth
+          try {
+            const range = marker.find();
+            if (range) {
+              internalImageOp = true;
+              cm.replaceRange('', range.from, range.to);
+              internalImageOp = false;
+            }
+          } catch {}
           return;
         }
-      } catch {}
 
-      const filename = extractUploadFilename(meta.url);
-      if (!filename) return uiNotice('Could not determine image filename', 'Delete image');
-      try {
-        const r = await authFetch(`${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
-        if (r.status === 401) {
-          try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
-          alert('Please log in to delete images.');
-          return;
-        }
-        if (!r.ok) throw new Error('Delete failed');
-        // Remove token from doc
+        // Server-managed upload: require auth and delete on server first
         try {
-          const range = marker.find();
-          if (range) {
-            internalImageOp = true;
-            cm.replaceRange('', range.from, range.to);
-            internalImageOp = false;
+          const fn = typeof window.qbGetToken === 'function' ? window.qbGetToken : null;
+          const token = fn ? String(fn() || '') : '';
+          if (!token) {
+            try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+            await uiNotice('Please log in to delete images.', 'Login required');
+            return;
           }
         } catch {}
-      } catch (err) {
-        await uiNotice('Failed to delete image', 'Error');
-      }
+
+        const filename = extractUploadFilename(meta.url);
+        if (!filename) return uiNotice('Could not determine image filename', 'Delete image');
+        try {
+          const r = await authFetch(`${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+          if (r.status === 401) {
+            try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
+            alert('Please log in to delete images.');
+            return;
+          }
+          if (!r.ok) throw new Error('Delete failed');
+          // Remove token from doc
+          try {
+            const range = marker.find();
+            if (range) {
+              internalImageOp = true;
+              cm.replaceRange('', range.from, range.to);
+              internalImageOp = false;
+            }
+          } catch {}
+        } catch (err) {
+          await uiNotice('Failed to delete image', 'Error');
+        }
+      } catch {}
     });
     wrap.appendChild(del);
     try { del.innerHTML = '<i class="bi bi-x"></i>'; } catch {}
@@ -1346,14 +1373,16 @@
 
               function handlePasteEvent(e) {
                 try {
+                  // Only handle when preview is active; avoid duplicating EasyMDE's edit-mode paste handler
+                  if (!notesMDE || !notesMDE.isPreviewActive()) return;
+                  if (e.__notesPasteHandled) return;
                   const cd = e.clipboardData; if (!cd) return;
                   const files = [];
                   for (let i = 0; i < cd.items.length; i++) { const it = cd.items[i]; if (it && it.kind === 'file') { const f = it.getAsFile(); if (f) files.push(f); } }
-                  if (files.length) { e.preventDefault(); maybeUpload(files); }
+                  if (files.length) { e.preventDefault(); e.__notesPasteHandled = true; maybeUpload(files); }
                 } catch {}
               }
               container.addEventListener('paste', handlePasteEvent, true);
-              document.addEventListener('paste', handlePasteEvent, true);
 
               function globalGuard(e) { const dt = e && e.dataTransfer; if (dt && dt.files && dt.files.length) { e.preventDefault(); } }
               window.addEventListener('dragover', globalGuard, true);
