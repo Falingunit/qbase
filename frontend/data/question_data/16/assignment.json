@@ -108,7 +108,7 @@
       "passageId": null,
       "qText": "A thin rod of length \\(f/3\\) is placed along the principal axis of a concave mirror of focal length \\(f\\) such that its image that is real and elongated just touches the rod. What is the magnification?",
       "image": null,
-      "qOptions": ["\\(-\\tfrac{3}{2}\\)", "\\(-2\\)", "+2", "+\\tfrac{3}{2}"],
+      "qOptions": ["\\(-\\tfrac{3}{2}\\)", "\\(-2\\)", "+2", "+1.5"],
       "qAnswer": "A"
     },
     {
@@ -248,7 +248,7 @@
       "qText": "A point object located at a distance 15 cm from the pole of a concave mirror of focal length 10 cm on its principal axis is moving with velocity \\((8\\hat\\imath+11\\hat\\jmath)\\) cm/s. The velocity of the mirror is \\((4\\hat\\imath+2\\hat\\jmath)\\) cm/s. If the speed of the image is \\(4k\\) cm/s, find the value of \\(k\\). [No official answer was provided in the key.]",
       "image": "21.png",
       "qOptions": [],
-      "qAnswer": 0
+      "qAnswer": 5
     },
     {
       "qType": "SMCQ",
