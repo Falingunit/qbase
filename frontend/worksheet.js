@@ -132,6 +132,7 @@
       const img = document.createElement("img");
       img.className = "ws-img";
       img.loading = "lazy";
+      img.decoding = "async";
       img.src = src;
 
       const canvas = document.createElement("canvas");
@@ -363,6 +364,7 @@
       const img = document.createElement("img");
       img.className = "ws-ans-img";
       img.loading = "lazy";
+      img.decoding = "async";
       img.src = src;
       const mask = document.createElement("canvas");
       mask.className = "ws-ans-mask";

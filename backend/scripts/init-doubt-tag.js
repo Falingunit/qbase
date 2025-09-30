@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import Database from "better-sqlite3"; // moved to backend/scripts
 import { nanoid } from "nanoid";
 import path from "path";
 import { fileURLToPath } from "url";

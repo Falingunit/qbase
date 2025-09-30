@@ -1,11 +1,12 @@
-/* Base design tokens and background moved to theme.css */
+﻿/* Base design tokens and background moved to theme.css */
 
 /* Assignment page layout: internal column scrolling */
 body {
   margin: 0;
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
   line-height: 1.55;
   min-block-size: 100dvh;
   overflow: hidden;
@@ -14,13 +15,24 @@ body {
 }
 
 /* Question font-size scale (question text + MCQ option text only) */
-:root { --qa-scale: 1; }
-#questionText { font-size: calc(1rem * var(--qa-scale)); }
-#MCQOptionDiv .opt-text { font-size: calc(1rem * var(--qa-scale)); }
+:root {
+  --qa-scale: 1;
+}
+#questionText {
+  font-size: calc(1rem * var(--qa-scale));
+  color: whitesmoke
+}
+#MCQOptionDiv .opt-text {
+  font-size: calc(1rem * var(--qa-scale));
+}
 
 /* iOS fallback if 100dvh unsupported */
 @supports not (height: 100dvh) {
-  body { block-size: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  body {
+    block-size: calc(
+      100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    );
+  }
 }
 
 /* =========================
@@ -43,7 +55,7 @@ body {
   flex: 3;
   display: flex;
   flex-direction: column;
-  gap: .75rem;
+  gap: 0.75rem;
   min-block-size: 0;
   overflow: auto; /* internal scroll */
 }
@@ -52,12 +64,15 @@ body {
   flex: 1;
   min-block-size: 0;
   overflow: auto; /* internal scroll */
-  border-left: 1px solid rgba(255,255,255,0.06);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Desktop sizing for right column */
 @media (min-width: 992px) {
-  .right-col { flex: 0 0 320px; max-width: 320px; }
+  .right-col {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
 }
 
 /* =========================
@@ -65,29 +80,99 @@ body {
    ========================= */
 .assignment-topbar {
   position: sticky;
-  padding: .5rem .75rem;
-  background: rgba(17,19,23,0.6);
+  padding: 0.5rem 0.75rem;
+  background: rgba(17, 19, 23, 0.6);
   backdrop-filter: saturate(120%) blur(8px);
   -webkit-backdrop-filter: saturate(120%) blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
+  box-shadow: 0px 4px 13px -2px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 4px 13px -2px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 4px 13px -2px rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+  top: 0;              /* ensure sticky sticks to very top */
+  z-index: 20;         /* sit above content so shadow overlays cards */
 }
-.assignment-topbar h5 { margin: 0; letter-spacing: 0.02em; }
-.assignment-topbar .btn { border-radius: 999px; }
+.assignment-topbar h5 {
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+/* Desktop: add internal padding at the top so controls sit lower, but keep the topbar background extending to the top */
+@media (pointer: fine) {
+  .assignment-topbar {
+    margin-top: 0;                      /* no external gap */
+    padding-top: calc(0.5rem + 24px);   /* more internal spacing above controls */
+  }
+}
+
+/* Back button (icon-only) */
+.assignment-topbar .topbar-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #fff;
+  text-decoration: none !important;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 999px;
+}
+.assignment-topbar .topbar-back:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.assignment-topbar .topbar-back:focus {
+  outline: none;
+  box-shadow: none;
+}
+.assignment-topbar .topbar-back i {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.assignment-topbar .btn {
+  border-radius: 999px;
+}
 /* Topbar grouping and separators */
-.assignment-topbar .topbar-actions { display: inline-flex; align-items: center; gap: .75rem; }
-.assignment-topbar .topbar-group { display: inline-flex; align-items: center; gap: .5rem; }
-.assignment-topbar .topbar-sep { opacity: .35; user-select: none; }
+.assignment-topbar .topbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.assignment-topbar .topbar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.assignment-topbar .topbar-sep {
+  opacity: 0.35;
+  user-select: none;
+}
 /* Compact slider styling in topbar */
-.assignment-topbar .qa-font-control { gap: .25rem; }
-.assignment-topbar .qa-font-range { width: 120px; height: 1.25rem; padding: 0; }
-.assignment-topbar .qa-font-range::-webkit-slider-runnable-track { height: .25rem; }
-.assignment-topbar .qa-font-range::-moz-range-track { height: .25rem; }
-.assignment-topbar .qa-font-range::-ms-track { height: .25rem; }
+.assignment-topbar .qa-font-control {
+  gap: 0.25rem;
+}
+.assignment-topbar .qa-font-range {
+  width: 120px;
+  height: 1.25rem;
+  padding: 0;
+}
+.assignment-topbar .qa-font-range::-webkit-slider-runnable-track {
+  height: 0.25rem;
+}
+.assignment-topbar .qa-font-range::-moz-range-track {
+  height: 0.25rem;
+}
+.assignment-topbar .qa-font-range::-ms-track {
+  height: 0.25rem;
+}
 
 /* Cards are themed globally; page-specific sizing */
-.left-col .card { max-width: 760px; }
+.left-col .card {
+  max-width: 760px;
+}
 
 /* =========================
    Pills / controls
@@ -95,18 +180,57 @@ body {
 #timer,
 #qTypeInfo {
   font-variant-numeric: tabular-nums;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: .35rem .6rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.6rem;
   border-radius: 999px;
 }
 
 .controls {
   align-items: center;
   justify-content: space-between;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }
-.controls .btn { border-radius: 999px; padding-inline: 1rem; }
-.controls #check-answer { min-width: 150px; }
+.controls .btn {
+  border-radius: 999px;
+  padding-inline: 1rem;
+}
+.controls #check-answer {
+  min-width: 150px;
+}
+
+.question-scroll {
+  padding-bottom: 0 !important;
+}
+
+.question-scroll > :last-child {
+  margin-bottom: 0 !important;
+}
+#question-column {
+  scroll-padding-bottom: 0;
+}
+#question-actions {
+  position: fixed;
+  bottom: 0;
+  padding: 0.75rem 1.5rem; /* no extra bottom gap */
+  background: rgba(17, 19, 23, 0.404);
+  backdrop-filter: saturate(120%) blur(8px);
+  box-shadow: 0px -4px 13px -2px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px -4px 13px -2px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px -4px 13px -2px rgba(0, 0, 0, 0.75);
+  -webkit-backdrop-filter: saturate(120%) blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 10;
+}
+#question-actions .controls {
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-bottom: 0;
+}
+
+#question-actions .btn {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
 
 /* =========================
    Mobile question bar
@@ -115,22 +239,34 @@ body {
   display: none;
   white-space: nowrap;
   overflow-x: auto;
-  padding: .5rem .25rem .25rem;
+  padding: 0.5rem 0.25rem 0.25rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  
-    gap: .5rem;
+
+  gap: 0.5rem;
   margin-bottom: 1rem;
   z-index: 2;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 20px,
+    #000 calc(100% - 20px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 20px,
+    #000 calc(100% - 20px),
+    transparent
+  );
 }
 #mobile-qbar button {
   display: inline-block;
-  margin: 0 .4rem .4rem 0;
-  padding: .35rem .65rem;
+  margin: 0 0.4rem 0.4rem 0;
+  padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   background: #1a1d21;
   color: #e8edf2;
 }
@@ -139,8 +275,12 @@ body {
   outline-offset: 1px;
 }
 @media (max-width: 991.98px) {
-  #mobile-qbar { display: block; }
-  .right-col { display: none; }
+  #mobile-qbar {
+    display: block;
+  }
+  .right-col {
+    display: none;
+  }
 }
 
 /* =========================
@@ -156,7 +296,7 @@ body {
 #q_list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: .6rem;
+  gap: 0.6rem;
 }
 
 .q-btn {
@@ -165,18 +305,21 @@ body {
   line-height: 44px;
   padding: 0;
   font-weight: 600;
-  font-size: .95rem;
+  font-size: 0.95rem;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: #1b1e23;
   color: #dfe6ee;
-  transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+  transition: transform 0.06s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
-.q-btn:hover { transform: translateY(-1px); }
+.q-btn:hover {
+  transform: translateY(-1px);
+}
 .q-btn.selected {
   outline: 2px solid var(--ring) !important;
   outline-offset: 0;
-  border-color: rgba(13,202,240,0.4);
+  border-color: rgba(13, 202, 240, 0.4);
   box-shadow: none;
 }
 
@@ -205,33 +348,44 @@ body {
 /* =========================
    Options (MCQ)
    ========================= */
-#MCQOptionDiv { display: grid; grid-template-columns: 1fr; 
-  margin-bottom: 1rem; }
+#MCQOptionDiv {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 1rem;
+}
 @media (min-width: 768px) {
-  #MCQOptionDiv { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  #MCQOptionDiv {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
 }
 /* Neutralize vertical spacing from markup on grid */
-#MCQOptionDiv .mcq-option { margin-bottom: 0 !important; }
+#MCQOptionDiv .mcq-option {
+  margin-bottom: 0 !important;
+}
 
 .mcq-option {
   cursor: pointer;
   background: #1a1d21;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #e8edf2;
   border-radius: 12px;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: flex-start;
-  gap: .75rem;
+  gap: 0.75rem;
   position: relative; /* allow evaluation ring pseudo-element */
-  overflow: hidden;   /* keep effects within button; no intersection */
-  transition: transform .06s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+  overflow: hidden; /* keep effects within button; no intersection */
+  transition: transform 0.06s ease, background 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .mcq-option:hover {
   background: #20252b;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
-.mcq-option:active { transform: translateY(.5px); }
+.mcq-option:active {
+  transform: translateY(0.5px);
+}
 
 /* Letter badge (A/B/C/D) */
 .mcq-option .opt-badge {
@@ -243,17 +397,25 @@ body {
   flex: 0 0 2rem;
   font-weight: 400;
   line-height: 1;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #dfe6ee;
   border-radius: 999px; /* default: circle */
 }
 
 /* Shape by question type */
-body[data-qtype="SMCQ"] .mcq-option .opt-badge { border-radius: 999px; }
-body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
+body[data-qtype="SMCQ"] .mcq-option .opt-badge {
+  border-radius: 999px;
+}
+body[data-qtype="MMCQ"] .mcq-option .opt-badge {
+  border-radius: 10px;
+}
 
-.mcq-option .opt-text { flex: 1 1 auto; min-width: 0; }
+.mcq-option .opt-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: whitesmoke;
+}
 
 .mcq-option-selected {
   outline-offset: 1px;
@@ -267,49 +429,85 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 }
 
 .mcq-option-selected .opt-badge {
-  border-color: #53b2ffc0 !important; color: #ffffff !important; background-color: #339bf03b !important;
+  border-color: #53b2ffc0 !important;
+  color: #ffffff !important;
+  background-color: #339bf03b !important;
 }
 
 /* MCQ feedback states */
 .mcq-option.correct {
   border-color: #2ea043 !important;
-  background: rgba(46,160,67,0.12) !important;
+  background: rgba(46, 160, 67, 0.12) !important;
   color: #dff6e5 !important;
 }
-.mcq-option.correct .opt-badge { background: #2ea04363 !important; color: #ffffff !important; border-color: #2ea043 !important; }
+.mcq-option.correct .opt-badge {
+  background: #2ea04363 !important;
+  color: #ffffff !important;
+  border-color: #2ea043 !important;
+}
 .mcq-option.wrong {
   border-color: #dc3545 !important;
-  background: rgba(220,53,69,0.10) !important;
+  background: rgba(220, 53, 69, 0.1) !important;
   color: #ffdfe1 !important;
 }
-.mcq-option.wrong .opt-badge { background: #dc354675 !important; color: #ffffff !important; border-color: #dc3545 !important; }
+.mcq-option.wrong .opt-badge {
+  background: #dc354675 !important;
+  color: #ffffff !important;
+  border-color: #dc3545 !important;
+}
 .mcq-option.missed {
   outline: 2px solid #2ea043 !important;
   outline-offset: 2px;
 }
-.mcq-option.disabled { pointer-events: none; opacity: 0.85; }
+.mcq-option.disabled {
+  pointer-events: none;
+  opacity: 0.85;
+}
 
 .fonted {
   font-family: "Noto Serif", serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
-  font-variation-settings:
-    "wdth" 100;
+  font-variation-settings: "wdth" 100;
 }
 /* =========================
    Evaluation ring animations (MCQ)
    ========================= */
 /* Base: expand slightly and fade while thinning (kept inside button) */
 @keyframes mcq-ring-green {
-  0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
-  10% { opacity: .95; transform: scale(0.70); border-width: 100px;}
-  100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
+  0% {
+    opacity: 0.25;
+    transform: scale(0.58);
+    border-width: 200px;
+  }
+  10% {
+    opacity: 0.95;
+    transform: scale(0.7);
+    border-width: 100px;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+    border-width: 0px;
+  }
 }
 @keyframes mcq-ring-red {
-  0% { opacity: .25; transform: scale(0.58); border-width: 200px; }
-  10% { opacity: .95; transform: scale(0.70); border-width: 100px;}
-  100% { opacity: 0; transform: scale(1.05); border-width: 0px; }
+  0% {
+    opacity: 0.25;
+    transform: scale(0.58);
+    border-width: 200px;
+  }
+  10% {
+    opacity: 0.95;
+    transform: scale(0.7);
+    border-width: 100px;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+    border-width: 0px;
+  }
 }
 
 /* When a correct option is picked: play green ring once and disappear */
@@ -339,7 +537,7 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 }
 
 /* Missed correct option (unpicked but correct): grow a subtle green ring while keeping the steady outline */
-/* No animation for missed (unpicked but correct) — keep persistent outline only */
+/* No animation for missed (unpicked but correct) â€” keep persistent outline only */
 
 /* =========================
    Numerical inputs
@@ -347,13 +545,13 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
 #numericalDiv input[type="number"] {
   width: 100%;
   background: #1a1d21;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #e8edf2;
   border-radius: 12px;
-  padding: .75rem 1rem;
+  padding: 0.75rem 1rem;
 }
 #numericalDiv .text-body-emphasis {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   color: #cbd5df;
 }
 
@@ -362,14 +560,26 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge { border-radius: 10px; }
    Note: use box-shadow animation since inputs are replaced elements
    ========================= */
 @keyframes num-ring-green {
-  0% { box-shadow: 0 0 0 0 rgba(46,160,67,0.45); }
-  70% { box-shadow: 0 0 0 8px rgba(46,160,67,0.35); }
-  100% { box-shadow: 0 0 0 10px rgba(46,160,67,0.00); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 160, 67, 0.45);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(46, 160, 67, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(46, 160, 67, 0);
+  }
 }
 @keyframes num-ring-red {
-  0% { box-shadow: 0 0 0 0 rgba(220,53,69,0.50); }
-  70% { box-shadow: 0 0 0 8px rgba(220,53,69,0.40); }
-  100% { box-shadow: 0 0 0 10px rgba(220,53,69,0.00); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(220, 53, 69, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+  }
 }
 input.is-correct {
   border-color: #2ea043 !important;
@@ -403,21 +613,24 @@ body.suppress-eval-anim input.is-wrong {
   display: block;
   height: auto;
   max-width: min(100%, 720px);
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   cursor: pointer;
 }
 
-img, video {
+img,
+video {
   max-inline-size: 100%;
   max-block-size: 100%;
   object-fit: contain;
 }
 
 .passage-text {
+  font-size: calc(1rem * var(--qa-scale));
+  color: white;
   background: var(--card-bg);
   border-left: 4px solid var(--ring);
-  padding: .75rem 1rem;
-  border-radius: .5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
 }
 
 /* Stack passage text and image on mobile */
@@ -428,32 +641,53 @@ img, video {
   }
 }
 
-#notesInput {
-  background: linear-gradient(#00000000, #2c2c2c2a);
-}
+/* (Notes WYSIWYG removed; simple textarea is used now) */
 
-hr.divider { border-color: rgba(255,255,255,0.08); }
+/* (removed HyperMD/CodeMirror theming) */
+
+hr.divider {
+  border-color: rgba(255, 255, 255, 0.08);
+}
 
 /* =========================
    Typography / sizing
    ========================= */
-html { font-size: 16px; }
+html {
+  font-size: 16px;
+}
 
 @media (max-width: 575.98px) {
-  body { font-size: 1rem; }
-  .container.main-wrapper { padding-inline: .75rem; }
-  .left-col { gap: .75rem; }
-  .left-col .card { border-radius: var(--radius); }
-  .card-header { padding: .75rem 1rem; }
-  #MCQOptionDiv .mcq-option { padding: .75rem 1rem; font-size: 1rem; }
-  .controls .btn { padding: .5rem .9rem; }
-  #notesInput { font-size: 1rem; }
+  body {
+    font-size: 1rem;
+  }
+  .container.main-wrapper {
+    padding-inline: 0.75rem;
+  }
+  .left-col {
+    gap: 0.75rem;
+  }
+  .left-col .card {
+    border-radius: var(--radius);
+  }
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+  #MCQOptionDiv .mcq-option {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  .controls .btn {
+    padding: 0.5rem 0.9rem;
+  }
+  #notesInput {
+    font-size: 1rem;
+  }
   /* On mobile, move the blue outline to wrap both text and image */
   .passage-wrapper {
     background: var(--card-bg);
     border-left: 4px solid var(--ring);
-    padding: .75rem 1rem;
-    border-radius: .5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
   }
   /* Avoid double styling inside the wrapper on mobile */
   .passage-text {
@@ -464,22 +698,34 @@ html { font-size: 16px; }
 }
 
 @media (min-width: 576px) and (max-width: 991.98px) {
-  body { font-size: 1rem; }
-  .container.main-wrapper { padding-inline: 1rem; }
+  body {
+    font-size: 1rem;
+  }
+  .container.main-wrapper {
+    padding-inline: 1rem;
+  }
 }
 
 /* Prevent overly tall images on larger viewports while keeping aspect */
 @media (min-width: 576px) {
-  .question-image img { max-height: 70vh; }
-  .passage-image img { max-height: 60vh; }
+  .question-image img {
+    max-height: 70vh;
+  }
+  .passage-image img {
+    max-height: 60vh;
+  }
 }
 
 @media (min-width: 992px) {
-  .q-btn { font-size: .95rem; }
+  .q-btn {
+    font-size: 0.95rem;
+  }
 }
 
 /* Bookmark indicator on question circles (mobile + sidebar) */
-.q-btn { position: relative; }
+.q-btn {
+  position: relative;
+}
 .q-btn .q-bookmark-indicator {
   position: absolute;
   top: -4px;
@@ -492,13 +738,18 @@ html { font-size: 16px; }
   border-radius: 999px;
   background: #0d6efd; /* bootstrap primary */
   color: white;
-  border: 1px solid rgba(0,0,0,0.2);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
   font-size: 10px; /* small icon sizing */
   line-height: 1;
 }
-.q-btn .q-bookmark-indicator i { font-size: 10px; line-height: 1; }
-.q-btn .q-bookmark-indicator.hidden { display: none !important; }
+.q-btn .q-bookmark-indicator i {
+  font-size: 10px;
+  line-height: 1;
+}
+.q-btn .q-bookmark-indicator.hidden {
+  display: none !important;
+}
 
 /* Scrollbars are themed globally */
 
@@ -513,7 +764,8 @@ html { font-size: 16px; }
     transform: translateY(-6px);
     margin-bottom: 0;
     pointer-events: none;
-    transition: max-height .28s ease, opacity .18s ease, transform .28s ease, margin-bottom .28s ease;
+    transition: max-height 0.28s ease, opacity 0.18s ease, transform 0.28s ease,
+      margin-bottom 0.28s ease;
   }
   body.desktop-qbar-visible #mobile-qbar {
     /* accommodate up to ~2 lines of buttons comfortably */
@@ -526,7 +778,7 @@ html { font-size: 16px; }
 
   /* Sidebar: animate width/opacity instead of display */
   .right-col {
-    transition: max-width .3s ease, opacity .2s ease, transform .3s ease;
+    transition: max-width 0.3s ease, opacity 0.2s ease, transform 0.3s ease;
   }
   body.questions-hidden .right-col {
     max-width: 0 !important;
@@ -554,3 +806,274 @@ html { font-size: 16px; }
     animation: none !important;
   }
 }
+
+     /* CM6 selectors removed (using EasyMDE/CM5) */
+
+/* EasyMDE (CodeMirror 5) — match app’s card style */
+.notes-editor-host .EasyMDEContainer,
+.EasyMDEContainer {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: .5rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.notes-editor-host .EasyMDEContainer .editor-toolbar,
+.EasyMDEContainer .editor-toolbar {
+  background: transparent;
+  border: 0 !important; /* remove default white border */
+  border-bottom: 1px solid var(--card-border) !important; /* subtle divider */
+}
+.notes-editor-host .EasyMDEContainer .editor-toolbar a,
+.notes-editor-host .EasyMDEContainer .editor-toolbar button,
+.EasyMDEContainer .editor-toolbar a,
+.EasyMDEContainer .editor-toolbar button {
+  color: var(--muted);
+}
+.notes-editor-host .EasyMDEContainer .editor-toolbar a:hover,
+.notes-editor-host .EasyMDEContainer .editor-toolbar a.active,
+.EasyMDEContainer .editor-toolbar a:hover,
+.EasyMDEContainer .editor-toolbar a.active {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+}
+.EasyMDEContainer .editor-toolbar i.separator,
+.EasyMDEContainer .editor-toolbar span.separator {
+  border-color: var(--card-border) !important;
+}
+.notes-editor-host .EasyMDEContainer .CodeMirror,
+.notes-editor-host .EasyMDEContainer .CodeMirror-scroll,
+.EasyMDEContainer .CodeMirror,
+.EasyMDEContainer .CodeMirror-scroll {
+  background: var(--card-bg) !important;
+  color: var(--text);
+  min-height: 180px;
+  border: 0 !important; /* remove default white border */
+}
+.EasyMDEContainer .CodeMirror-gutters {
+  background: var(--card-bg) !important;
+  border-right: 1px solid var(--card-border);
+}
+.EasyMDEContainer .CodeMirror-lines,
+.EasyMDEContainer .CodeMirror pre {
+  color: var(--text) !important;
+}
+
+/* Make text caret (cursor) clearly visible on dark background */
+.EasyMDEContainer .CodeMirror { caret-color: #fff; }
+.EasyMDEContainer .CodeMirror-cursor { border-left: 1px solid #fff !important; }
+.EasyMDEContainer .cm-fat-cursor .CodeMirror-cursor { background: #fff !important; }
+#notesInput { caret-color: #fff; }
+
+/* Toolbar buttons with Bootstrap Icons */
+.EasyMDEContainer .editor-toolbar a { border-radius: .25rem; }
+
+.notes-editor-host .EasyMDEContainer .CodeMirror .CodeMirror-placeholder,
+.EasyMDEContainer .CodeMirror .CodeMirror-placeholder {
+  color: var(--muted);
+}
+.notes-editor-host .EasyMDEContainer .editor-statusbar,
+.EasyMDEContainer .editor-statusbar {
+  background: transparent;
+  color: var(--muted);
+  border-top: 1px solid var(--card-border);
+}
+.notes-editor-host .EasyMDEContainer .editor-preview,
+.EasyMDEContainer .editor-preview,
+.EasyMDEContainer .editor-preview-side,
+.EasyMDEContainer .editor-preview-active {
+  background: var(--card-bg) !important;
+  color: var(--text) !important;
+  padding: .75rem 1rem;
+  border: 0 !important; /* remove default white border */
+}
+
+/* Remove default form-control chrome from the host wrapper to avoid double borders */
+.notes-editor-host.form-control {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.notes-editor-host .EasyMDEContainer .editor-preview h1,
+.notes-editor-host .EasyMDEContainer .editor-preview h2,
+.notes-editor-host .EasyMDEContainer .editor-preview h3,
+.notes-editor-host .EasyMDEContainer .editor-preview h4,
+.notes-editor-host .EasyMDEContainer .editor-preview h5,
+.notes-editor-host .EasyMDEContainer .editor-preview h6,
+.EasyMDEContainer .editor-preview h1,
+.EasyMDEContainer .editor-preview h2,
+.EasyMDEContainer .editor-preview h3,
+.EasyMDEContainer .editor-preview h4,
+.EasyMDEContainer .editor-preview h5,
+.EasyMDEContainer .editor-preview h6 {
+  color: #cfd7df; /* similar to card header text */
+}
+.notes-editor-host .EasyMDEContainer .editor-preview a,
+.EasyMDEContainer .editor-preview a { color: var(--primary); }
+.notes-editor-host .EasyMDEContainer .editor-preview code,
+.EasyMDEContainer .editor-preview code {
+  background: rgba(255,255,255,0.06);
+  border-radius: .25rem;
+  padding: .1rem .3rem;
+}
+
+/* --- Image widgets inside the editor (edit mode) --- */
+.cm-image-widget {
+  display: inline-block;
+  position: relative;
+  max-width: 100%;
+  overflow: hidden; /* for resize handles overlay */
+  border-radius: 6px;
+  /* default: float left so text wraps on the right */
+  float: left;
+  margin: 0 12px 8px 0; /* space to the right and below */
+}
+.cm-image-widget img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.cm-image-widget .img-btn {
+  position: absolute;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 14px;
+  border: 1px solid var(--card-border);
+  background: rgba(17,19,23,0.75);
+  color: var(--text);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  backdrop-filter: saturate(120%) blur(6px);
+  -webkit-backdrop-filter: saturate(120%) blur(6px);
+  cursor: pointer;
+  opacity: 0.95;
+}
+.cm-image-widget .img-btn:hover { opacity: 1; transform: translateY(-1px); }
+.cm-image-widget .img-btn:active { transform: translateY(0); }
+.cm-image-widget .img-btn i { font-size: 14px; line-height: 1; }
+
+.cm-image-widget .img-del-btn { right: 6px; }
+.cm-image-widget .img-align-right-btn { right: 36px; }
+
+/* Accented variants to match page palette */
+.cm-image-widget .img-del-btn {
+  background: rgba(220,53,69,0.18);
+  border-color: rgba(220,53,69,0.35);
+  color: #ffdfe1;
+}
+.cm-image-widget .img-del-btn:hover { background: rgba(220,53,69,0.28); }
+
+.cm-image-widget .img-align-right-btn {
+  background: rgba(51,154,240,0.18);
+  border-color: rgba(51,154,240,0.35);
+  color: #b3dcff;
+}
+.cm-image-widget .img-align-right-btn:hover { background: rgba(51,154,240,0.28); }
+
+/* Align-right toggle button (next to delete) */
+.cm-image-widget .img-align-right-btn {
+  position: absolute;
+  top: 6px;
+  right: 34px; /* just left of delete */
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(13,110,253,0.95);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  cursor: pointer;
+  opacity: 0.95;
+}
+.cm-image-widget .img-align-right-btn:hover { opacity: 1; transform: scale(1.04); }
+
+/* Resize handles: right edge and bottom-right corner */
+.cm-image-widget .img-resize-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+  background: transparent;
+}
+.cm-image-widget .img-resize-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  background: rgba(255,255,255,0.35);
+  border-top-left-radius: 4px;
+  border-bottom-right-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.2);
+  cursor: nwse-resize;
+}
+
+/* Bottom edge resize handle */
+.cm-image-widget .img-resize-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 10px;
+  cursor: ns-resize;
+  background: transparent;
+}
+
+/* Highlight on hover to suggest interactivity */
+.cm-image-widget:hover { outline: 1px dashed rgba(255,255,255,0.35); }
+
+/* Float right style in editor too (best-effort) */
+.cm-image-widget.align-right {
+  float: right;
+  margin-left: 12px;
+  margin-bottom: 8px;
+}
+
+
+/* Notes preview images: separate line, rounded, clickable */
+.EasyMDEContainer .editor-preview img,
+.EasyMDEContainer .editor-preview-active img {
+  display: inline-block;
+  float: left; /* default left float */
+  margin: 0 14px 10px 0; /* room for wrapping text */
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+  cursor: zoom-in;
+}
+
+/* Right-aligned image in preview */
+.EasyMDEContainer .editor-preview img.preview-align-right,
+.EasyMDEContainer .editor-preview-active img.preview-align-right {
+  float: right;
+  margin-left: 14px;
+  margin-bottom: 10px;
+}
+
+/* Notes area height behavior */
+.EasyMDEContainer .CodeMirror,
+.EasyMDEContainer .editor-preview,
+.EasyMDEContainer .editor-preview-active {
+  max-height: 90vh; /* stop auto-growing after 90% viewport */
+  resize: vertical; /* allow user to drag bottom edge */
+}
+.EasyMDEContainer .CodeMirror-scroll,
+.EasyMDEContainer .editor-preview,
+.EasyMDEContainer .editor-preview-active {
+  overflow: auto; /* scroll inside notes area */
+}
+
+/* (removed) expand control styles */
