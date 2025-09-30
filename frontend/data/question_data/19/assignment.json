@@ -1,0 +1,731 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Figure shows the path of a ray of light as it passes through three different materials with refractive indices \\(n_1, n_2, n_3\\). The refractive indices in increasing order are",
+      "image": "1.png",
+      "qOptions": ["n_3>n_2>n_1", "n_3>n_1>n_2", "n_1>n_2>n_3", "n_1>n_3>n_2"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Glass has refractive index of \\(3/2\\) and water has refractive index \\(4/3\\). If the speed of light in glass is \\(2.00\\times10^8\\) m/s then the speed of light in water (in m/s) is",
+      "image": null,
+      "qOptions": [
+        "1.5\\times10^8",
+        "1.78\\times10^8",
+        "2.25\\times10^8",
+        "2.67\\times10^8"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light is incident upon an air–water interface (it passes from air into water) at an angle of \\(45^\\circ\\). Which of the following quantities change as the light enters water? (I) Wavelength (II) Frequency (III) Speed of propagation (IV) Direction of propagation",
+      "image": null,
+      "qOptions": [
+        "I, III only",
+        "III, IV only",
+        "I, II, IV only",
+        "I, III, IV only"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "When a light ray enters medium 2 from medium 1, it deviates by \\(15^\\circ\\) which is \\(1/3\\)rd the angle of incidence. If medium 2 has refractive index of 2, then the refractive index of medium 1 can be",
+      "image": null,
+      "qOptions": [
+        "\\(\\frac{2\\sqrt{2}}{3}\\)",
+        "\\(\\sqrt{2}\\)",
+        "\\(2\\sqrt{3}\\)",
+        "\\(\\sqrt{6}\\)"
+      ],
+      "qAnswer": ["B", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light travelling horizontally is incident on a glass sphere of refractive index \\(4/3\\) as shown. Left half of the sphere is polished. The angle of deviation of the emergent ray w.r.t. incident ray is",
+      "image": "5.png",
+      "qOptions": [
+        "\\(15^\\circ\\)",
+        "\\(116^\\circ\\)",
+        "\\(138^\\circ\\)",
+        "\\(144^\\circ\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A beam of light travelling in air is incident at an angle \\(\\theta=75^\\circ\\) to a medium of refractive index \\(\\mu\\). It gets partially reflected and partially transmitted. It is observed the reflected light and refracted light are equally deflected from the incident direction. Then \\(\\mu=\\)",
+      "image": "6.png",
+      "qOptions": [
+        "\\(\\dfrac{\\sqrt{3}-1}{\\sqrt{3}+1}\\)",
+        "\\(\\dfrac{\\sqrt{3}+1}{2}\\)",
+        "\\(\\dfrac{2\\sqrt{2}}{\\sqrt{3}+1}\\)",
+        "None of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A parallel beam of light of beam diameter \\(b\\) enters a glass of refractive index \\(\\mu\\) at an angle \\(\\theta\\). Find the ratio \\(b'/b\\) as a function of \\(\\theta\\) where \\(b'\\) is the beam diameter of the refracted light.",
+      "image": "7.png",
+      "qOptions": [
+        "\\(\\dfrac{\\sqrt{\\mu^2-\\sin^2\\theta}}{\\mu\\cos\\theta}\\,b\\)",
+        "\\(\\dfrac{\\sqrt{\\mu^2-\\sin^2\\theta}}{\\cos\\theta}\\,b\\)",
+        "\\(\\dfrac{\\sqrt{\\mu^2-\\cos^2\\theta}}{\\mu\\sin\\theta}\\,b\\)",
+        "\\(\\dfrac{\\sqrt{\\mu^2-\\cos^2\\theta}}{\\sin\\theta}\\,b\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A concave mirror of radius of curvature \\(R\\) is filled with water (refractive index \\(\\mu\\)). Focal power of the system is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{\\mu}{R}\\)",
+        "\\(\\dfrac{2\\mu}{R}\\)",
+        "\\(\\dfrac{\\mu}{2R}\\)",
+        "\\(\\dfrac{\\mu-1}{R}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A container contains liquid up to a height of 40 cm and there is a point source at the center of the bottom of the container. A rubber ring of radius 15 cm floats centrally on the water surface. The ceiling of the room is 3 m above the water surface. The radius of the shadow of the ring formed on the ceiling is",
+      "image": null,
+      "qOptions": ["\\(\\sqrt{7}\\,\\text{m}\\)", "4.3 m", "5.3 m", "5.79 m"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An observer can see through a pinhole the top end of a thin rod of height \\(h\\), placed as shown. The beaker height is \\(3h\\) and its radius is \\(h\\). When the beaker is filled with a liquid up to a height \\(2h\\), he can see the lower end of the rod. Then the refractive index of the liquid is",
+      "image": "10.png",
+      "qOptions": [
+        "\\(\\dfrac{5}{2}\\)",
+        "\\(\\dfrac{\\sqrt{5}}{2}\\)",
+        "\\(\\dfrac{\\sqrt{3}}{2}\\)",
+        "\\(\\dfrac{3}{2}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A ray of light is incident on a glass sphere at an angle of incidence \\(60^\\circ\\) as shown. The angles \\(r, r'\\) and the total deviation \\(\\delta\\) after two refractions are",
+      "image": "11.png",
+      "qOptions": [
+        "\\(r=30^\\circ\\)",
+        "\\(r'=70^\\circ\\)",
+        "\\(\\varepsilon=60^\\circ\\)",
+        "\\(\\delta=60^\\circ\\)"
+      ],
+      "qAnswer": ["A", "C", "D"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A ray of light moving along vector \\(3\\sqrt{2}\\,\\hat{i}-3\\hat{j}-3\\hat{k}\\) undergoes refraction at an interface of two media, which is the \\(y\\)-\\(z\\) plane. The refractive index for \\(x\\le0\\) is 1 while for \\(x\\ge0\\) it is \\(\\sqrt{2}\\). Then,",
+      "image": null,
+      "qOptions": [
+        "Refracted ray bends towards y-axis",
+        "Refracted ray bends towards x-axis",
+        "The unit vector along the refracted ray is \\(\\dfrac{\\sqrt{6}\\,\\hat{i}-\\hat{j}-\\hat{k}}{2}\\)",
+        "The unit vector along the refracted ray is \\(\\dfrac{\\sqrt{6}\\,\\hat{i}-\\hat{j}-\\hat{k}}{\\sqrt{8}}\\)"
+      ],
+      "qAnswer": ["B", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light moving along the unit vector \\((-\\hat{i}-2\\hat{j})\\) undergoes refraction at an interface of two media which is the X–Z plane. The refractive index of \\(y>0\\) is 2 while for \\(y<0\\) is \\(\\dfrac{\\sqrt{5}}{2}\\). The unit vector along which the refracted ray moves is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{-3\\hat{i}-5\\hat{j}}{\\sqrt{34}}\\)",
+        "\\(\\dfrac{-4\\hat{i}-3\\hat{j}}{5}\\)",
+        "\\(\\dfrac{-3\\hat{i}-4\\hat{j}}{5}\\)",
+        "none of these"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two media A and B of refractive indices \\(\\mu_1=1.5\\) and \\(\\mu_2=2\\) are separated by XZ plane. A ray of light travels from A to B. The incident ray and the reflected ray are represented by unit vectors \\(\\vec{u}_1=a\\hat{i}+b\\hat{j}\\) and \\(\\vec{u}_2=c\\hat{i}+d\\hat{j}\\). Then",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{a}{c}=\\dfrac{3}{4}\\)",
+        "\\(\\dfrac{c}{a}=\\dfrac{4}{3}\\)",
+        "\\(\\dfrac{b}{d}=\\dfrac{3}{4}\\)",
+        "\\(\\dfrac{d}{c}=\\dfrac{4}{3}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A circular disc of diameter \\(d\\) lies horizontally inside a metallic hemispherical bowl of radius \\(a\\). The rightmost part of the disc is just visible to an eye while looking over the edge. The bowl is now filled with a liquid of refractive index \\(\\mu\\). Now, the whole of the disc is just visible to the eye in the same position. Then \\(d\\) equals (Options are made-up distractors; one is correct.)",
+      "image": "15.png",
+      "qOptions": [
+        "\\(2a\\,\\dfrac{\\mu^2-1}{\\mu^2+1}\\)",
+        "\\(2a\\,\\dfrac{\\mu-1}{\\mu+1}\\)",
+        "\\(a\\,\\dfrac{\\mu^2-1}{\\mu^2+1}\\)",
+        "\\(2a\\,\\dfrac{\\mu^2+1}{\\mu^2-1}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A diverging beam of light from a point source S having divergence angle \\(\\alpha\\) falls symmetrically on a glass slab of thickness \\(t\\) and refractive index \\(n\\). The angles of incidence of the two extreme rays are equal. The divergence angle of the emergent beam is",
+      "image": "16.png",
+      "qOptions": [
+        "zero",
+        "\\(\\alpha\\)",
+        "\\(\\sin^{-1}(1/n)\\)",
+        "\\(2\\sin^{-1}(1/n)\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "A fixed cylinder tank of height \\(H=4\\,\\text{m}\\) and radius \\(R=3\\,\\text{m}\\) is filled up with a liquid. An observer observes through a telescope fitted at the top of the wall of the tank and inclined at \\(\\theta=45^\\circ\\) with the vertical. When the tank is completely filled with liquid, he notices an insect at the center of the bottom of the tank. At \\(t=0\\), he opens a cork of radius \\(r=3\\,\\text{cm}\\) at the bottom of tank. The insect moves in such a way that it is visible for a certain time \\(t\\).",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The refractive index of the liquid is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{5}{3\\sqrt{2}}\\)",
+        "\\(\\dfrac{7}{3\\sqrt{2}}\\)",
+        "\\(\\dfrac{5}{2\\sqrt{2}}\\)",
+        "\\(\\dfrac{1}{3\\sqrt{2}}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The velocity of insect is \\(t=\\dfrac{1}{2.21\\times10^{-4}}\\)",
+      "image": null,
+      "qOptions": [
+        "\\(1.1\\times10^{-4}\\)",
+        "\\(7.1\\times10^{-4}\\)",
+        "\\(5.1\\times10^{-4}\\)",
+        "\\(1\\times10^{-4}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A light ray is incident at an angle of \\(45^\\circ\\) with the normal to a \\(\\sqrt{2}\\,\\text{cm}\\) thick plate (\\(\\mu=2.0\\)). As the light emerges out from the plate, the shift in the path of light is",
+      "image": null,
+      "qOptions": ["1.62 cm", "3.62 cm", "0.62 cm", "4.62 cm"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a lake 2 m deep, a measuring post of height 3 m is fixed vertically. For an angle of incidence of \\(45^\\circ\\) of Sun’s radiation, find the length of the shadow of the post at the bottom surface. \\([\\mu_w=\\frac{4}{3}]\\) (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(1+\\dfrac{6}{\\sqrt{23}}\\)",
+        "\\(1+\\dfrac{6}{23}\\)",
+        "\\(1+\\dfrac{3}{\\sqrt{23}}\\)",
+        "\\(1+\\dfrac{6}{\\sqrt{21}}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A stone lies at the bottom of a stream. A boy wants to hit it with a stick. Taking aim, the boy holds the stick in the air at an angle of \\(45^\\circ\\). At what distance from the stone will the stick hit the bottom if the depth is 32 cm.",
+      "image": null,
+      "qOptions": ["8 cm", "12 cm", "16 cm", "\\(12\\sqrt{2}\\) cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The X–Y plane is the boundary between two transparent media. Medium 1 with \\(z\\ge0\\) has refractive index \\(\\sqrt{2}\\) and medium 2 with \\(z\\le0\\) has refractive index \\(\\sqrt{3}\\). A ray of light in medium 1 given by vector \\(\\vec{A}=6\\sqrt{3}\\,\\hat{i}+8\\sqrt{3}\\,\\hat{j}-10\\hat{k}\\) is incident on the plane of separation. Find the unit vector in the direction of the refracted ray in medium 2. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{5\\sqrt{2}}\\,(3\\hat{i}+4\\hat{j}-5\\hat{k})\\)",
+        "\\(\\dfrac{1}{5\\sqrt{2}}\\,(4\\hat{i}+3\\hat{j}-5\\hat{k})\\)",
+        "\\(\\dfrac{1}{5\\sqrt{2}}\\,(3\\hat{i}+4\\hat{j}+5\\hat{k})\\)",
+        "\\(\\dfrac{1}{5}\\,(3\\hat{i}+4\\hat{j}-5\\hat{k})\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "Refer to the situation shown: A bird is in air above a water surface (\\(\\mu=1\\)) and a fish is at depth in water (\\(\\mu=4/3\\)). Distances are as labeled in the figure.",
+      "image": "p2.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "At what distance from itself will the fish see the bird?",
+      "image": null,
+      "qOptions": ["63 cm", "84 cm", "72 cm", "96 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "At what distance from itself will the bird see the fish?",
+      "image": null,
+      "qOptions": ["63 cm", "84 cm", "72 cm", "96 cm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "If the bird starts moving downwards with speed 5 cm/s and the fish starts moving upwards with speed 2 cm/s, then the speed of the bird as seen from the fish (with respect to the fish) is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{2}{3}\\) cm/s",
+        "\\(\\dfrac{22}{3}\\) cm/s",
+        "\\(\\dfrac{26}{3}\\) cm/s",
+        "\\(\\dfrac{14}{3}\\) cm/s"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "A vessel of depth ‘d’ is half filled with a liquid of refractive index \\(\\mu_1\\) and the other half is filled with a liquid of refractive index \\(\\mu_2\\). The apparent depth of the vessel when looked at normally is",
+      "image": null,
+      "qOptions": [
+        "\\(d(\\mu_1+\\mu_2)\\)",
+        "\\(\\dfrac{d}{4}\\Big(\\dfrac{1}{\\mu_1}+\\dfrac{1}{\\mu_2}\\Big)\\)",
+        "\\(\\dfrac{d}{2}(\\mu_1+\\mu_2)\\)",
+        "\\(\\dfrac{d}{2}\\Big(\\dfrac{1}{\\mu_1}+\\dfrac{1}{\\mu_2}\\Big)\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A concave mirror of focal length 20 cm is kept inside a rectangular tank filled with water. The mirror is at a depth of 30 cm from the water surface. A paraxial beam parallel to the principal axis is incident on the water surface. At what distance from the water surface do the parallel rays converge? (Answer in cm.)",
+      "image": "27.png",
+      "qOptions": [],
+      "qAnswer": 7.5
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A tank of height 60 cm is completely filled with liquid (\\(\\mu=2.0\\)). An object is placed at the bottom of the tank on the axis of a concave mirror as shown. Final image of the object is formed 30 cm below the liquid surface. Then focal length of the mirror is",
+      "image": "28.png",
+      "qOptions": ["10 cm", "18 cm", "20 cm", "25 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A vessel, whose bottom is flat and perfectly reflecting, is filled with water (index 4/3) up to a height = 40 cm. A point object in air above is moving towards the water surface with a constant speed = 4 m/s. What is the relative speed of its final image (in m/s), as seen by the object itself, at a moment when the object is 30 cm above the water surface?",
+      "image": "29.png",
+      "qOptions": [],
+      "qAnswer": 8
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "An illuminated object lies 40 cm under the surface of water (\\(n=4/3\\)), 80 cm above a concave spherical mirror whose radius of curvature is 120 cm. An observer looking down from above in the air (\\(n=1\\)) sees two images. Find the distance between the two images (in cm).",
+      "image": "30.png",
+      "qOptions": [],
+      "qAnswer": 120
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A particle lies on the bottom of a tank filled with water up to a height of 90 cm. The medium above the surface of water is of R.I. = 1.2 above which there is a mirror M. The distance of the image formed by the mirror after reflection of the rays coming from P is (in cm).",
+      "image": "31.png",
+      "qOptions": [],
+      "qAnswer": 150
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Water level in the tank is decreasing at a constant rate of 1 cm/s. A small metal sphere is moving downwards with a constant velocity 5 cm/s. Base of the tank is a concave mirror of radius 40 cm. Find the velocity of the image seen. Take \\(\\mu_w=4/3\\).",
+      "image": "33.png",
+      "qOptions": [
+        "\\(\\dfrac{59}{8}\\) cm/s",
+        "\\(\\dfrac{59}{4}\\) cm/s",
+        "\\(\\dfrac{29}{4}\\) cm/s",
+        "\\(\\dfrac{19}{4}\\) cm/s"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ball is dropped from a height of 20 m above the surface of the water in a lake (\\(\\mu=4/3\\)). A fish inside the lake, in the line of fall of the ball, is looking at the ball. At an instant, where the ball is 12.8 m above the water surface, the fish sees the speed of the ball as (take \\(g=10\\,\\text{m/s}^2\\))",
+      "image": "34.png",
+      "qOptions": ["9 m/s", "12 m/s", "16 m/s", "21.33 m/s"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Prove-type to SMCQ conversion: The lateral shift \\(d\\) in the path of a ray of light when it passes through a glass slab (incident at angle \\(\\theta\\)) is (Options are made-up distractors; one is correct.)",
+      "image": "35.png",
+      "qOptions": [
+        "\\(d=t\\sin\\theta\\left(1-\\dfrac{\\mu_1\\cos\\theta}{\\sqrt{\\mu_2^2-\\mu_1^2\\sin^2\\theta}}\\right)\\)",
+        "\\(d=t\\cos\\theta\\left(1-\\dfrac{\\mu_1\\sin\\theta}{\\sqrt{\\mu_2^2-\\mu_1^2\\cos^2\\theta}}\\right)\\)",
+        "\\(d=t\\sin\\theta\\left(1-\\dfrac{\\mu_2\\cos\\theta}{\\sqrt{\\mu_1^2-\\mu_2^2\\sin^2\\theta}}\\right)\\)",
+        "\\(d=t\\cos\\theta\\left(1-\\dfrac{\\mu_2\\sin\\theta}{\\sqrt{\\mu_1^2-\\mu_2^2\\cos^2\\theta}}\\right)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is kept on the principal axis of a concave mirror at a distance of 30 cm. By how much distance should the mirror be moved so that the image of the object is formed at the object itself, when there is no slab between the object and the mirror?",
+      "image": "36.png",
+      "qOptions": ["0 cm", "1 cm", "2 cm", "3 cm"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "An object is kept on the principal axis of a concave mirror at a distance of 30 cm. By how much distance should the mirror be moved so that the image of the object is formed at the object itself, when there is a glass slab of thickness 6 cm and \\(\\mu=1.5\\) between object and mirror?",
+      "image": "36.png",
+      "qOptions": ["0 cm", "1 cm", "2 cm", "3 cm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Find at what distance from C does the ray intersect line AB. Assume \\(\\theta\\) to be small. (Answer in cm.)",
+      "image": "37.png",
+      "qOptions": [],
+      "qAnswer": 17
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "‘n’ transparent fluids are present one over another as shown. A coin is placed at the bottom of the last fluid. The apparent depth of the coin as seen by an observer in air is (Options are made-up distractors; one is correct.)",
+      "image": "38.png",
+      "qOptions": [
+        "\\(\\dfrac{d_1}{\\mu_1}+\\dfrac{d_2}{\\mu_2}+\\dfrac{d_3}{\\mu_3}+\\cdots+\\dfrac{d_n}{\\mu_n}\\)",
+        "\\(\\mu_1d_1+\\mu_2d_2+\\mu_3d_3+\\cdots+\\mu_nd_n\\)",
+        "\\(\\dfrac{d_1}{\\mu_1^2}+\\dfrac{d_2}{\\mu_2^2}+\\cdots+\\dfrac{d_n}{\\mu_n^2}\\)",
+        "\\(\\dfrac{d_1+d_2+\\cdots+d_n}{\\mu_1+\\mu_2+\\cdots+\\mu_n}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Find at what distance from slab B will the two light rays converge. Assume the angle of incidence to be small. (Answer in cm.)",
+      "image": "39.png",
+      "qOptions": [],
+      "qAnswer": 8
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "An object is placed at a distance of 10 cm from a glass slab as shown. Lower surface of the slab is polished. At what distance from the upper surface of the mirror does the observer see the image of the object? Consider the image formed by nearly normal incident rays. (Answer in cm.)",
+      "image": "40.png",
+      "qOptions": [],
+      "qAnswer": 11
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Find the location of final image if \\(x=5\\,\\text{cm}\\). (Answer in cm.)",
+      "image": "41.png",
+      "qOptions": [],
+      "qAnswer": 17
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Find the location of final image if \\(x=20\\,\\text{cm}\\). (Answer in cm.)",
+      "image": "41.png",
+      "qOptions": [],
+      "qAnswer": 15
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P3",
+      "qText": "COMPREHENSION: A light ray enters into a medium whose refractive index varies along the x-axis as \\(\\mu(x)=\\mu_0\\sqrt{1+0.25x}\\) where \\(\\mu_0=1\\). The medium is bounded by the planes \\(x=0\\), \\(x=1\\,\\text{m}\\) and \\(y=0\\). The ray enters at the origin at angle \\(\\theta_0=30^\\circ\\) with the horizontal.",
+      "image": "p3.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "The slope of the trajectory as a function of refractive index of the medium is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{dy}{dx}=\\dfrac{1}{\\sqrt{4\\mu^2-1}}\\)",
+        "\\(\\dfrac{dy}{dx}=\\dfrac{1}{\\sqrt{4\\mu^2+1}}\\)",
+        "\\(\\dfrac{dy}{dx}=\\dfrac{1}{\\sqrt{4\\mu^2+2}}\\)",
+        "\\(\\dfrac{dy}{dx}=\\dfrac{1}{\\sqrt{4\\mu^2+3}}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P3",
+      "qText": "The equation of the trajectory is",
+      "image": null,
+      "qOptions": [
+        "\\(y=2\\,[\\sqrt{3+x}-\\sqrt{3}]\\)",
+        "\\(y=2\\,[\\sqrt{3-x}-\\sqrt{3}]\\)",
+        "\\(y=5\\,[\\sqrt{3+x}-\\sqrt{3}]\\)",
+        "\\(2[\\sqrt{3+x}+\\sqrt{3}]\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A long rectangular slab of transparent medium of thickness d is placed on a table with length parallel to x-axis and width parallel to y-axis. A ray of light travelling along y-axis enters at origin such that angle of incidence (\\(\\theta\\to90^\\circ\\)). The refractive index \\(\\mu\\) of the medium varies as \\(\\mu=\\sqrt{1+e^{\\alpha d}}\\). The refractive index of air is 1. If the x-coordinate of the point A, where the ray intersects the upper surface of the slab–air boundary is \\(kd\\ln 2\\), find \\(k\\).",
+      "image": "47.png",
+      "qOptions": ["1", "2", "3", "4"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A long rectangular slab of transparent medium is placed on a horizontal table with its length parallel to the x-axis and width parallel to the y-axis as shown. A ray of light travelling in air makes a normal incidence on the slab. The refractive index \\(\\mu\\) of the medium varies as \\(\\mu=\\dfrac{\\mu_0}{\\left[1-\\left(\\dfrac{y}{r}\\right)^2\\right]}\\), where \\(\\mu_0\\) and \\(r(>d)\\) are constants. Then the ray travels in which path inside the slab?",
+      "image": "48.png",
+      "qOptions": ["parabolic", "hyperbolic", "circular", "elliptical"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Consider a hemisphere of radius \\(R\\) with center of curvature as origin \\(O\\) as shown. Refractive index of the material of the hemisphere varies as \\(\\mu=\\dfrac{2R}{2R-x}\\) where \\(x\\) is the x-coordinate of a material point. A ray travelling in air in the \\(XY\\) plane is grazing incident at \\(O\\) as shown. Choose the correct statements.",
+      "image": "49.png",
+      "qOptions": [
+        "Trajectory followed by ray as it travels inside the hemisphere is circular",
+        "Y coordinate of the point of hemisphere where the ray comes out of the hemisphere lies between \\(0.5R\\) and \\(0.75R\\)",
+        "Deviation suffered by the ray just before it comes out of the hemispherical surface lies between \\(0^\\circ\\) and \\(30^\\circ\\)",
+        "Deviation suffered by the ray just before it comes out of the hemispherical surface lies between \\(30^\\circ\\) and \\(45^\\circ\\)"
+      ],
+      "qAnswer": ["A", "C"]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A ray of light travelling in a transparent medium falls on a surface separating the medium from air at an angle of incidence \\(45^\\circ\\). The ray undergoes total internal reflection. If \\(n\\) is the refractive index of the medium with respect to air, select the possible value(s) of \\(n\\).",
+      "image": null,
+      "qOptions": ["1.3", "1.4", "1.5", "1.6"],
+      "qAnswer": ["C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The critical angle for glass to air refraction is least for which color?",
+      "image": null,
+      "qOptions": ["Orange", "Blue", "Violet", "red"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A small source of light is 4 m below the surface of a liquid of refractive index \\(5/3\\). In order to cut off all the light coming out of the liquid surface, minimum diameter of the disc placed on the surface of the liquid is",
+      "image": null,
+      "qOptions": ["3 m", "4 m", "6 m", "infinite"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Light is incident normally on the face AB of a prism as shown. A liquid of refractive index \\(\\mu\\) is placed on face AC of the prism. The prism is made of glass of refractive index \\(3/2\\). The limits of \\(\\mu\\) for which total internal reflection takes place on the face AC is",
+      "image": "53.png",
+      "qOptions": [
+        "\\(\\mu>\\dfrac{\\sqrt{3}}{2}\\)",
+        "\\(\\mu<\\dfrac{3\\sqrt{3}}{4}\\)",
+        "\\(\\mu>\\sqrt{3}\\)",
+        "\\(\\mu<\\dfrac{\\sqrt{3}}{2}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A cubicle block of glass of refractive index \\(n_1\\) is in contact with a surface of water of refractive index \\(n_2\\). A beam of light is incident on vertical face of the block (see figure). After refraction, a total internal reflection at the base and refraction at the opposite vertical face, the ray emerges out at an angle \\(\\theta\\). Then",
+      "image": "54.png",
+      "qOptions": [
+        "\\(\\sin\\theta<\\sqrt{n_1^{2}-n_2^{2}}\\)",
+        "\\(\\tan\\theta<\\sqrt{n_1^{2}-n_2^{2}}\\)",
+        "\\(\\sin\\theta<\\dfrac{1}{\\sqrt{n_1^{2}-n_2^{2}}}\\)",
+        "\\(\\tan\\theta<\\dfrac{1}{\\sqrt{n_1^{2}-n_2^{2}}}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "In the diagram shown, a ray of light is incident on the interface between media 1 and 2 at angle slightly greater than critical angle and suffers total internal reflection. After that the light ray falls at the interface of 1 and 3, and again it suffers total internal reflection. Which of the following relations should hold true?",
+      "image": "56.png",
+      "qOptions": [
+        "\\(\\mu_1<\\mu_2<\\mu_3\\)",
+        "\\(\\mu_1^{2}-\\mu_2^{2}>\\mu_3^{2}\\)",
+        "\\(\\mu_1^{2}-\\mu_3^{2}<\\mu_2^{2}\\)",
+        "\\(\\mu_1^{2}+\\mu_2^{2}>\\mu_3^{2}\\)"
+      ],
+      "qAnswer": ["A", "B", "C", "D"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light travelling in glass (\\(\\mu=1.5\\)) is incident on a horizontal glass–air surface at the critical angle. If a thin layer of water (\\(\\mu=1.33\\)) is now poured on the glass–air surface, the angle at which the ray of light emerges into air at the water–air surface will nearly be",
+      "image": null,
+      "qOptions": ["90°", "50°", "40°", "42°"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A rectangular block of glass is placed on a printed page lying on a horizontal surface. The minimum value of the refractive index of glass for which the letters on the page are not visible from any of the vertical faces of the block is",
+      "image": null,
+      "qOptions": [
+        "\\(\\sqrt{3}\\)",
+        "\\(\\sqrt{5}\\)",
+        "\\(\\sqrt{2}\\)",
+        "\\(\\sqrt{7}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A light ray travelling in glass medium is incident on a glass–air interface at an angle of incidence \\(\\theta\\). The reflected (R) and the transmitted (T) intensities as a function of \\(\\theta\\) are plotted. The correct sketch is",
+      "image": "59.png",
+      "qOptions": ["a", "b", "c", "d"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A light beam is travelling from region I to region IV. The refractive index of the four regions I, II, III and IV are \\(n_0,\\ n_0/2,\\ n_0/4,\\ n_0/8\\) respectively. The angle of incidence \\(\\theta\\) for which the beam just misses entering region IV is",
+      "image": "60.png",
+      "qOptions": [
+        "\\(\\sin^{-1}\\dfrac{3}{4}\\)",
+        "\\(\\sin^{-1}\\dfrac{1}{8}\\)",
+        "\\(\\sin^{-1}\\dfrac{1}{4}\\)",
+        "\\(\\sin^{-1}\\dfrac{1}{3}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A beam of white light is incident on glass–air interface from glass to air such that green light just suffers total internal reflection. The colors of light which will come out to air are",
+      "image": null,
+      "qOptions": [
+        "Violet, indigo blue",
+        "all colors except green",
+        "yellow, orange, red",
+        "white light"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The optical fiber in the figure is 2 km long and has a diameter of 20 mm. If a ray of light is incident on one end of the fiber at an angle \\(\\theta_1=40^\\circ\\), how many reflections does it make before emerging from the other end? (Index of refraction is 1.3 and \\(\\sin40^\\circ=0.6427\\))",
+      "image": "62.png",
+      "qOptions": ["57000", "28500", "14250", "104000"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Bottom face of a glass cube is silvered as shown. A ray of light incident on the top face of the cube is \\(45^\\circ\\). Find the deviation of the ray when it comes out of the glass cube.",
+      "image": "63.png",
+      "qOptions": ["0°", "90°", "180°", "270°"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light passes through a rectangular glass block completely placed in a homogeneous medium. It is refracted and totally internally reflected. Which diagram shows a possible path of this ray?",
+      "image": "64.png",
+      "qOptions": ["A", "B", "C", "D"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P4",
+      "qText": "Light guidance in an optical fiber: a thin solid glass cylinder of refractive index \\(n_1\\) surrounded by medium of lower refractive index \\(n_2\\). Guidance occurs by successive total internal reflections. Numerical aperture (NA) is defined as \\(\\sin i_m\\).",
+      "image": "p4.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": "P4",
+      "qText": "For two structures namely \\(S_1\\) with \\(n_1=\\dfrac{\\sqrt{45}}{4}\\) and \\(n_2=3/2\\), and \\(S_2\\) with \\(n_1=\\dfrac{8}{5}\\) and \\(n_2=7/5\\) and taking the refractive index of water to be \\(4/3\\) and that of air to be 1, the correct option(s) is(are)",
+      "image": null,
+      "qOptions": [
+        "NA of \\(S_1\\) immersed in water is the same as that of \\(S_2\\) immersed in a liquid of refractive index \\(\\dfrac{16}{3\\sqrt{15}}\\)",
+        "NA of \\(S_1\\) immersed in liquid of refractive index \\(\\dfrac{6}{\\sqrt{15}}\\) is the same as that of \\(S_2\\) in water",
+        "NA of \\(S_1\\) placed in air is the same as that of \\(S_2\\) immersed in a liquid of refractive index \\(\\dfrac{4}{\\sqrt{15}}\\)",
+        "NA of \\(S_1\\) placed in air is the same as that of \\(S_2\\) placed in water"
+      ],
+      "qAnswer": ["A", "C"]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "If two structures of same cross-sectional area but different numerical apertures \\(\\text{NA}_1\\) and \\(\\text{NA}_2\\) (\\(\\text{NA}_2<\\text{NA}_1\\)) are joined longitudinally, the numerical aperture of the combined structure is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{\\text{NA}_1\\text{NA}_2}{\\text{NA}_1+\\text{NA}_2}\\)",
+        "\\(\\text{NA}_1+\\text{NA}_2\\)",
+        "\\(\\text{NA}_1\\)",
+        "\\(\\text{NA}_2\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "A glass sphere (\\(\\mu=5/3\\)) with an inbuilt point source of light \\(P\\) is placed on a table. The source \\(P\\) is just inside the surface of glass and lies on the lower end of the vertical diameter. The apparatus is placed in a dark room. Find the surface area of the glowing portion of the glass sphere as observed by the eyes. Given \\(R=50\\,\\text{cm}\\). (Give numerical value in cm².)",
+      "image": "67.png",
+      "qOptions": [],
+      "qAnswer": 502.654824574
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "The figure shows a ray incident at an angle of \\(i=\\dfrac{\\pi}{3}\\). \\(r'\\) represents the angle of refraction. If the plot shows the variation of angle of deviation \\(|r'-i|\\) vs \\(k=\\dfrac{\\mu_1}{\\mu_2}\\), choose the correct statements.",
+      "image": "68.png",
+      "qOptions": [
+        "The value of \\(k_1\\) is \\(\\dfrac{2}{\\sqrt{3}}\\)",
+        "The value of \\(\\theta_1\\) is \\(\\dfrac{\\pi}{6}\\)",
+        "The value of \\(\\theta_1\\) is \\(\\dfrac{\\pi}{3}\\)",
+        "The value of \\(k_2\\) is 1"
+      ],
+      "qAnswer": ["B", "C", "D"]
+    }
+  ]
+}

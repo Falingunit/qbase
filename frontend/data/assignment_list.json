@@ -87,7 +87,7 @@
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "Ray Optics",
-    "title": "Ray Optics Assignment #1 (Plane Mirror)",
+    "title": "Plane Mirrors",
     "aID": 12
   },
   {
@@ -115,7 +115,7 @@
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "Ray Optics",
-    "title": "Ray Optics Assignment #2 (Spherical Mirror)",
+    "title": "Spherical Mirrors",
     "aID": 16
   },
   {
@@ -132,6 +132,13 @@
     "title": "Group 17",
     "aID": 18
   },
+    {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "P-Block",
+    "title": "Refraction through plane surfaces",
+    "aID": 19
+  },
   {
     "subject": "Mathematics",
     "faculty": "MJG",
@@ -146,7 +153,7 @@
     "title": "Package Exercises",
     "aID": 201
   },
-   {
+  {
     "subject": "Mathematics",
     "faculty": "Fiitjee",
     "chapter": "Differential Equations",
