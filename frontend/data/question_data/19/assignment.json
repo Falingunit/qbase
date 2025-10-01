@@ -5,7 +5,7 @@
       "passageId": null,
       "qText": "Figure shows the path of a ray of light as it passes through three different materials with refractive indices \\(n_1, n_2, n_3\\). The refractive indices in increasing order are",
       "image": "1.png",
-      "qOptions": ["n_3>n_2>n_1", "n_3>n_1>n_2", "n_1>n_2>n_3", "n_1>n_3>n_2"],
+      "qOptions": ["\\(n_3>n_2>n_1\\)", "\\(n_3>n_1>n_2\\)", "\\(n_1>n_2>n_3\\)", "\\(n_1>n_3>n_2\\)"],
       "qAnswer": "C"
     },
     {
@@ -14,10 +14,10 @@
       "qText": "Glass has refractive index of \\(3/2\\) and water has refractive index \\(4/3\\). If the speed of light in glass is \\(2.00\\times10^8\\) m/s then the speed of light in water (in m/s) is",
       "image": null,
       "qOptions": [
-        "1.5\\times10^8",
-        "1.78\\times10^8",
-        "2.25\\times10^8",
-        "2.67\\times10^8"
+        "\\(1.5\\times10^8\\)",
+        "\\(1.78\\times10^8\\)",
+        "\\(2.25\\times10^8\\)",
+        "\\(2.67\\times10^8\\)"
       ],
       "qAnswer": "C"
     },

@@ -132,12 +132,19 @@
     "title": "Group 17",
     "aID": 18
   },
-    {
-    "subject": "Chemistry",
-    "faculty": "CVR",
-    "chapter": "P-Block",
-    "title": "Refraction through plane surfaces",
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Refraction through Plane Surfaces",
     "aID": 19
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Thin Lenses",
+    "aID": 20
   },
   {
     "subject": "Mathematics",
