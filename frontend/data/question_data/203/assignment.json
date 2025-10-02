@@ -1,0 +1,407 @@
+
+{
+  "questions":
+
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The species which does not undergo disproportionation reaction is :",
+    "image": null,
+    "qOptions": ["\\( \\text{ClO}_3^- \\)", "\\( \\text{ClO}^- \\)", "\\( \\text{ClO}_2^- \\)", "\\( \\text{ClO}_4^- \\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In acidic medium, \\( K_2 \\, \\text{Cr}_2 \\, \\text{O}_7 \\) shows oxidising action as represented in the half reaction \\[ \\text{Cr}_2 \\, \\text{O}_7^{2-} + X\\text{H}^+ + Ye^- \\rightarrow 2 \\, \\text{A} + Z\\text{H}_2 \\, \\text{O} \\] X, Y, Z and A are respectively are:",
+    "image": null,
+    "qOptions": ["8, 6, 4 and \\( \\text{Cr}_2 \\, \\text{O}_3 \\)", "14, 7, 6 and \\( \\text{Cr}^{3+} \\)", "8, 4, 6 and \\( \\text{Cr}_2 \\, \\text{O}_3 \\)", "14, 6, 7 and \\( \\text{Cr}^{3+} \\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Given below are two statements : Statement (I) : Potassium hydrogen phthalate is a primary standard for standardisation of sodium hydroxide solution. Statement (II) : In this titration phenolphthalein can be used as indicator. In the light of the above statements, choose the most appropriate answer from the options given below:",
+    "image": null,
+    "qOptions": ["Both Statement I and Statement II are correct", "Statement I is incorrect but Statement II is correct", "Statement I is correct but Statement II is incorrect", "Both Statement I and Statement II are incorrect"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Given below are two statements: one is labelled as Assertion A and the other is labelled as Reason R. Assertion A : Phenolphthalein is a pH dependent indicator, remains colourless in acidic solution and gives pink colour in basic medium Reason R : Phenolphthalein is a weak acid. It doesn't dissociate in basic medium. In the light of the above statements, choose the most appropriate answer from the options given below",
+    "image": null,
+    "qOptions": ["Both A and R are true and R is the correct explanation of A", "Both A and R are true but R is NOT the correct explanation of A", "A is true but R is false", "A is false but R is true"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The oxidation states of \\( \\text{}^7P' \\) in \\( H_4P_2O_7 \\), \\( H_4P_2O_5 \\) and \\( H_4P_2O_6 \\), respectively, are:",
+    "image": null,
+    "qOptions": ["7, 5 and 6", "5, 4 and 3", "5, 3 and 4", "6, 4 and 5"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "\\[ \\begin{align*} E_{O_2/H_2O}^0 &= +1.23 \\, V; \\\\ E_{S_2O_8^{2-}/SO_4^{2-}}^0 &= 2.05 \\, V \\\\ E_{Br_2/Br^-}^0 &= +1.09 \\, V; \\\\ E_{Au^{3+}/Au}^0 &= 1.4 \\, V \\end{align*} \\] The strongest oxidizing agent is",
+    "image": null,
+    "qOptions": ["\\( O_2 \\)", "\\( S_2O_8^{2-} \\)", "\\( Br_2 \\)", "\\( Au^{3+} \\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Identify the process in which change in the oxidation state is five:",
+    "image": null,
+    "qOptions": ["\\( Cr_2O_7^{2-} \\rightarrow 2Cr^{3+} \\)", "\\( MnO_4^- \\rightarrow Mn^{2+} \\)", "\\( CrO_4^{2-} \\rightarrow Cr^{3+} \\)", "\\( C_2O_4^{2-} \\rightarrow 2CO_2 \\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "\\( Cu^{2+} \\) salt reacts with potassium iodide to give",
+    "image": null,
+    "qOptions": ["\\( Cu_2I_2 \\)", "\\( Cu_2I_3 \\)", "\\( CuI \\)", "\\( Cu(I_3)_2 \\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In polythionic acid, \\( H_2S_xO_6(x = 3 \\, \\text{to} \\, 5) \\) the oxidation state(s) of sulphur is/are:",
+    "image": null,
+    "qOptions": ["+6 only", "+5 only", "0 and +5 only", "+3 and +5 only"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "During the reaction of permanganate with thiosulphate, the change in oxidation of manganese occurs by value of 3. Identify which of the below medium will favour the reaction.",
+    "image": null,
+    "qOptions": ["Both aqueous acidic and neutral", "Aqueous neutral", "Both aqueous acidic and faintly alkaline", "Aqueous acidic"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "(A) HOCl + H\\(_2\\)O\\(_2\\) → H\\(_3\\)O\\(^+\\) + Cl\\(^-\\) + O\\(_2\\) (B) I\\(_2\\) + H\\(_2\\)O\\(_2\\) + 2OH\\(^-\\) → 2I\\(^-\\) + 2H\\(_2\\)O + O\\(_2\\) Choose the correct option.",
+    "image": null,
+    "qOptions": ["H\\(_2\\)O\\(_2\\) act as oxidizing and reducing agent respectively in equations (A) and (B)", "H\\(_2\\)O\\(_2\\) acts as oxidising agent in equations (A) and (B)", "H\\(_2\\)O\\(_2\\) acts as reducing and oxidising agent respectively in equations (A) and (B)", "H\\(_2\\)O\\(_2\\) acts as reducing agent in equations (A) and (B)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The exact volumes of 1 M NaOH solution required to neutralise 50 mL of 1 M H\\(_3\\)PO\\(_3\\) solution and 100 mL of 2 M H\\(_3\\)PO\\(_2\\) solution, respectively, are :",
+    "image": null,
+    "qOptions": ["100 mL and 100 mL", "100 mL and 50 mL", "100 mL and 200 mL", "50 mL and 50 mL"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The compound that cannot act both as oxidizing and reducing agent is",
+    "image": null,
+    "qOptions": ["H\\(_3\\)PO\\(_4\\)", "HNO\\(_2\\)", "H\\(_2\\)SO\\(_3\\)", "H\\(_2\\)O\\(_2\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Oxidation number of potassium in K\\(_2\\)O, K\\(_2\\)O\\(_2\\) and KO\\(_2\\), respectively, is:",
+    "image": null,
+    "qOptions": ["+2, +1 and +\\(\\frac{1}{2}\\)", "+1, +1 and +1", "+1, +4 and +2", "+1, +2 and +4"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "50 mL of 0.5 M oxalic acid is needed to neutralize 25 mL of sodium hydroxide solution. What is the amount of NaOH in 50 mL of the given sodium hydroxide solution?",
+    "image": null,
+    "qOptions": ["2g", "4g", "1g", "8g"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Compounds that should not be used as primary standards in titrimetric analysis are : A. Na\\(_2\\)Cr\\(_2\\)O\\(_7\\) B. Oxalic acid C. NaOH D. FeSO\\(_4\\) · 6H\\(_2\\)O E. Sodium tetraborate Choose the most appropriate answer from the options given below:",
+    "image": null,
+    "qOptions": ["B and D Only", "D and E Only", "C, D and E Only", "A, C and D Only"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Identify the incorrect statements regarding primary standard of titrimetric analysis. (A) It should be purely available in dry form. (B) It should not undergo chemical change in air. (C) It should be hygroscopic and should react with another chemical instantaneously and stoichiometrically. (D) It should be readily soluble in water. (E) KMnO₄ & NaOH can be used as primary standard. Choose the correct answer from the options given below :",
+    "image": null,
+    "qOptions": ["(A) and (B) only", "(C) and (E) only", "(B) and (E) only", "(C) and (D) only"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A compound 'X' is a weak acid and it exhibits colour change at pH close to the equivalence point during neutralization of NaOH with CH₃ COOH. Compound 'X' exists in ionized form in basic medium. The compound 'X' is",
+    "image": null,
+    "qOptions": ["methyl orange", "methyl red", "phenolphthalein", "erichrome Black T"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "In the compound NOClO₄, the oxidation state of (a) nitrogen is +1 (b) nitrogen is +3 (c) chlorine is +5 (d) chlorine is +7",
+    "image": null,
+    "qOptions": ["nitrogen is +1", "nitrogen is +3", "chlorine is +5", "chlorine is +7"],
+    "qAnswer": ["B", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following is/are peroxide(s)? (a) PbO₂ (b) H₂O₂ (c) SrO₂ (d) BaO₂",
+    "image": null,
+    "qOptions": ["PbO₂", "H₂O₂", "SrO₂", "BaO₂"],
+    "qAnswer": ["B", "C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following is a non-redox process? (a) SO₄²⁻ → SO₃ (b) Cr₂O₇²⁻ → CrO₄²⁻ (c) PO₄³⁻ → P₂O₇⁺ (d) C₂O₄²⁻ → CO₂",
+    "image": null,
+    "qOptions": ["SO₄²⁻ → SO₃", "Cr₂O₇²⁻ → CrO₄²⁻", "PO₄³⁻ → P₂O₇⁺", "C₂O₄²⁻ → CO₂"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following compound does not decolourized an acidified solution of KMnO₄?",
+    "image": null,
+    "qOptions": ["SO₂", "FeCl₃", "H₂O₂", "FeSO₄"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following statement(s) is/are true regarding the change CN⁻ → CNO⁻? (a) Carbon is losing two electrons per atom. (b) The oxidation state of carbon changes from +2 to +4. (c) Oxidation state of nitrogen is not changing. (d) Oxidation state of nitrogen changes from −3 to −1.",
+    "image": null,
+    "qOptions": ["Carbon is losing two electrons per atom", "The oxidation state of carbon changes from +2 to +4", "Oxidation state of nitrogen is not changing", "Oxidation state of nitrogen changes from −3 to −1"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Substances which may be oxidized as well as reduced are",
+    "image": null,
+    "qOptions": ["HCl", "HClO", "HClO₃", "HClO₄"],
+    "qAnswer": ["B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A quantity of 15.8 g of KMnO₄ can be decolourized in acidic medium by (K = 39, Mn = 55, Fe = 56)",
+    "image": null,
+    "qOptions": ["18.25 g HCl", "22.5 g H₂C₂O₄", "32 g SO₂", "38 g FeSO₄"],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "When copper is treated with a certain concentration of nitric acid, nitric oxide and nitrogen dioxide are liberated in equal volumes according to the following equation. \\[XCu + YHNO₃ \\rightarrow Cu(NO₃)₂ + NO + NO₂ + H₂O\\] The coefficients of X and Y are, respectively,",
+    "image": null,
+    "qOptions": ["2 and 3", "2 and 6", "1 and 3", "3 and 8"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The equivalent volume of a gaseous substance is 5.6 L at 0°C and 1 atm. The substance may be",
+    "image": null,
+    "qOptions": ["CH₄ gas in combustion", "O₃ gas as oxidizing agent", "H₂S gas as reducing agent", "CO₂ formed from carbon"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A quantity of 0.5 g of a metal nitrate gave 0.43 g of metal sulphate. (a) The equivalent weight of the metal is 38. (b) The equivalent weight of the metal is 76. (c) The atomic weight of metal may be 76. (d) The atomic weight of metal may be 19.",
+    "image": null,
+    "qOptions": ["The equivalent weight of the metal is 38", "The equivalent weight of the metal is 76", "The atomic weight of metal may be 76", "The atomic weight of metal may be 19"],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Consider the following series of reactions : \\[Cl_2 + 2NaOH \\longrightarrow NaCl + NaClO + H_2O\\] \\[3NaClO \\longrightarrow 2NaCl + NaClO_3\\] \\[4NaClO_3 \\longrightarrow 3NaClO_4 + NaCl\\]",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "How much Cl_2 is required to prepare 122.5 g of NaClO_4 by above sequential reactions ?",
+    "image": null,
+    "qOptions": ["284 g", "213 g", "142 g", "71 g"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "How many moles of NaCl will be formed by using 1 mole Cl_2 and other reagents in excess ?",
+    "image": null,
+    "qOptions": ["\\(\\frac{1}{12}\\) mole", "1.67 mole", "1.75 mole", "0.75 mole"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "A water is said to be a soft water if it produces sufficient foam with the soap and water that does not produce foam with soap is known as hard water. Hardness has been classified into two types (i) Temporary hardness (ii) Permanent hardness. Temporary hardness is due to presence of calcium and magnesium bicarbonate. It is simply removed by boiling as \\[Ca(HCO_3)_2 \\xrightarrow{\\Delta} CaCO_3 \\downarrow + CO_2 \\uparrow + H_2O\\] \\[Mg(HCO_3)_2 \\xrightarrow{\\Delta} MgCO_3 \\downarrow + CO_2 \\uparrow + H_2O\\] Temporary hardness can also be removed by addition of slaked lime, \\[Ca(OH)_2\\] \\[Ca(HCO_3)_2 + Ca(OH)_2 \\longrightarrow 2CaCO_3 \\downarrow + 2H_2O\\] Permanent hardness is due to presence of sulphates and chlorides of Ca, Mg, etc. It is removed by washing soda as \\[CaCl_2 + Na_2CO_3 \\longrightarrow CaCO_3 \\downarrow + 2NaCl\\] \\[CaSO_4 + Na_2CO_3 \\longrightarrow CaCO_3 \\downarrow + Na_2SO_4\\] Permanent hardness also removed by ion exchange resin process as \\[2RH + Ca^{2+} \\longrightarrow R_2Ca + 2H^+\\] \\[2ROH + SO_4^{2-} \\longrightarrow R_2SO_4 + 2OH^-\\] The degree of hardness of water is measured in terms of ppm of CaCO_3. 100 ppm means 100 g of CaCO_3 is present in \\(10^6\\) g of \\(H_2O\\). If any other water sample which contain 120 ppm of MgSO_4, hardness in terms of CaCO_3 is equal to = 100 ppm.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "One litre of a sample of hard water (\\(d = 1 \\, \\text{g/mL}\\)) contains 136 mg of CaSO_4 and 190 mg of MgCl_2. What is the total hardness of water in terms of CaCO_3?",
+    "image": null,
+    "qOptions": ["100 ppm", "200 ppm", "300 ppm", "None of these"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "What is the mass of Ca(OH)_2 required for 10 litre of water remove temporary hardness of 100 ppm due to Ca(HCO_3)_2?",
+    "image": null,
+    "qOptions": ["1.62 g", "0.74 g", "7.4 g", "None of these"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "A 200 g sample of hard water is passed through the column of cation exchange resin, in which \\( H^+ \\) is exchanged by \\( Ca^{2+} \\). The outlet water of column required 50 mL of 0.1 M NaOH for complete neutralization. What is the hardness of \\( Ca^{2+} \\) ion in ppm?",
+    "image": null,
+    "qOptions": ["250 ppm", "500 ppm", "750 ppm", "1000 ppm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "200 mL of 1 M HCl is mixed with 300 mL of 6 M HCl and the final solution is diluted \\[ 1000 \\, \\text{mL} \\]. Calculate molar concentration of \\([H^+]\\) ion.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "2.0 g of polybasic organic acid (Molecular mass = 600) required 100 mL of a \\(\\frac{M}{M}\\) NaOH solution",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "When BrO\\(_3^{-}\\) ion reacts with Br\\(^{-}\\) ion in acidic medium, Br\\(_2\\) is liberated. Calculate the ratio of",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A 0.276 g impure sample of copper ore is dissolved and Cu\\(^{2+}\\) is titrated with KI solution. I\\(_2\\) liberated required 40 mL of 0.1 M Na\\(_2\\)S\\(_2\\)O\\(_3\\) solution for titration. What is the % of impurities in the ore ?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A sample of 28 mL of H\\(_2\\)O\\(_2\\) (aq) solution required 10 mL of 0.1 M KMnO\\(_4\\) (aq) solution for complete reaction in acidic medium. What is the volume strength of H\\(_2\\)O\\(_2\\) ?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The value of n in the following processes: AO\\(_4^{2-}\\) + 2e → HAO\\(_n^{2-}\\) is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 3
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "AO\\(_2\\) disproportionates into AO\\(_4^{-}\\) and A\\(^{n+}\\) ion. If the mole ratio of AO\\(_2\\) undergone oxidation and reduction is 2 : 3, the value of n is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A volume of 1.12 L dry chlorine gas at 0°C and 1 atm was passed over a heated metal when 5.55 g of chloride of the metal was formed. If the atomic mass of the metal is 40, then its valency is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The equivalent weight of Br\\(_2\\) is 96 in the following disproportionation reaction. Br\\(_2\\) + OH\\(^{-}\\) → Br\\(^{-}\\) + H\\(_2\\)O + ? (Oxidized product) The oxidation state of Br in the oxidized product is (Br = 80)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "HCHO disproportionates to HCOO\\(^{-}\\) and CH\\(_3\\)OH in the presence of OH\\(^{-}\\) (Cannizzaro's reaction). 2HCHO + OH\\(^{-}\\) → HCOO\\(^{-}\\) + CH\\(_3\\)OH If the equivalent weight of HCHO is E, then the value of \\(\\frac{E}{10}\\) is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 3
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Some CO\\(_2\\) gas was kept in a sealed container at a pressure of 1 atm and at 273 K . This entire amount of CO\\(_2\\) gas was later passed through an aqueous solution of Ca(OH)\\(_2\\). The excess unreacted Ca(OH)\\(_2\\) was later neutralized with 0.1 M of 40 mL HCl . If the volume of the sealed container of CO\\(_2\\) was \\(x\\), then \\(x\\) is ______ cm³ (nearest integer). [Given : The entire amount of CO\\(_2\\)( g ) reacted with exactly half the initial amount of Ca(OH)\\(_2\\) present in the aqueous solution.]",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 45
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Only 2 mL of KMnO\\(_4\\) solution of unknown molarity is required to reach the end point of a titration of 20 mL of oxalic acid (2M) in acidic medium. The molarity of KMnO\\(_4\\) solution should be ______ M.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A 2.0 g sample containing MnO\\(_2\\) is treated with HCl liberating Cl\\(_2\\). The Cl\\(_2\\) gas is passed into a solution of KI and 60.0 mL of 0.1 MNaS\\(_2\\) O\\(_3\\) is required to titrate the liberated iodine. The percentage of MnO\\(_2\\) in the sample is ___ . Nearest integer) [Atomic masses (in u) Mn = 55; Cl = 35.5 : O = 16, I = 127, N: ]",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 13
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A 0.166 g sample of an organic compound was digested with conc. H\\(_2\\) SO\\(_4\\) and then distilled with NaOH. The ammonia gas evolved was passed through 50.0 mL of 0.5 N H\\(_2\\) SO\\(_4\\). The used acid required 30.0 mL of 0.25 N NaOH for complete neutralization. The mass percentage of nitrogen in the organic compound is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 63
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "In mildly alkaline medium, thiosulphate ion is oxidized by MnO\\(_4^{-}\\) to \" A \" . The oxidation state of sulphur in \" A \" is ______",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 6
+  }
+]
+}
