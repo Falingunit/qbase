@@ -1,0 +1,223 @@
+
+{
+  "questions":
+  [
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a prism, angle of deviation is observed to be 30° for angle of incidence of 30° and 60°. The prism angle is",
+    "image": null,
+    "qOptions": ["30°", "60°", "90°", "120°"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A certain prism is found to produce a minimum deviation of 38°. It produces a deviation of 44° when the angle of incidence is either 42° or 62°. What will be the angle of incidence when it undergoes minimum deviation?",
+    "image": null,
+    "qOptions": ["45°", "49°", "40°", "55°"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "One face of a prism with a refracting angle of 30° is coated with silver. A ray of light is incident on the other surface at an angle of 45° and after reflection from the silvered surface retraces its path. The refractive index of the prism is",
+    "image": null,
+    "qOptions": ["2", "\\(\\sqrt{3}\\)", "\\(\\sqrt{3}/2\\)", "\\(\\sqrt{2}\\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Light ray is incident on a prism of angle A = 60° and refractive index μ = √2. The angle of incidence at which the emergent ray grazes the surface is given by",
+    "image": null,
+    "qOptions": ["\\(\\sin^{-1}\\left(\\frac{\\sqrt{3}-1}{2}\\right)\\)", "\\(\\sin^{-1}\\left(\\frac{1-\\sqrt{3}}{2}\\right)\\)", "\\(\\sin^{-1}\\left(\\frac{\\sqrt{3}}{2}\\right)\\)", "\\(\\sin^{-1}\\left(\\frac{2}{\\sqrt{3}}\\right)\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray incident at an angle of 53° on a prism emerges at an angle 37° as shown. If the angle of incidence is made 50°, which of the following is a possible value for the angle of emergence?",
+    "image": "5.png",
+    "qOptions": ["35°", "42°", "40°", "38°"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray of light is incident on a prism of refractive index 1.5 as shown. Surrounding is a liquid of refractive index μ. The largest value of the angle ACB, so that the ray is totally reflected at the face AC is 30°. Then the value of μ should be",
+    "image": "6.png",
+    "qOptions": ["\\(\\sqrt{3}/2\\)", "5/3", "4/3", "3√3/4"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Light is incident normally on the face AB of a prism as shown in figure. A liquid of refractive index μ is placed on face AC of the prism. The prism is made of glass of refractive index 1.5. The limits of μ for which total internal reflection takes place from face AC is",
+    "image": "7.png",
+    "qOptions": ["μ > √3/2", "μ < 3√3/4", "μ > √3", "μ < √3/2"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The angle of incidence for an equilateral prism is 60°. What should be the refractive index of prism so that the ray is parallel to the base inside the prism?",
+    "image": null,
+    "qOptions": ["√2", "√3", "4/3", "9/8"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For an equilateral prism, it is observed that when a ray of light strikes grazing at one face, it emerges grazing at the other. Refractive index will be",
+    "image": null,
+    "qOptions": ["√3", "2/√3", "2", "3/2"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray of light is incident normally on the first refracting face of the prism of refracting angle A. The ray of light comes out at grazing incidence. If one half of the prism (shaded portion) is removed, the same ray will",
+    "image": "10.png",
+    "qOptions": ["emerge at an angle of sin⁻¹(½ sec A)", "not emerge out of prism", "emerge at an angle of sin⁻¹(½ sec A)", "emerge at an angle of sin⁻¹(sec A)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray of light strikes a plane mirror at an angle of 45° as shown in the figure. After reflection, the ray passes through a prism of refractive index 1.5 whose apex angle is 4°. The angle through which the mirror should be rotated if the total deviation of the ray is to be 90° is",
+    "image": "11.png",
+    "qOptions": ["1° clockwise", "2° clockwise", "1° anticlockwise", "2° anticlockwise"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A parallel beam of light is incident on the upper part of a prism of angle 11° and refractive index 1.5. The light coming out of the prism is incident on a concave mirror of radius of curvature 20 cm. The distance of the point (where the rays are focused after reflection from the mirror) from the principal axis is",
+    "image": "12.png",
+    "qOptions": ["9 cm", "0.157 cm", "0.314 cm", "None of these"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the co-ordinates of the image of the point O formed after reflection from concave mirror as shown in the figure, assuming prism to be thin and small in size and of prism angle 2°. Refractive index of the prism material is 3/2.",
+    "image": "13.png",
+    "qOptions": ["(175, π/2)", "(175, 15)", "(175, 30)", "(175, π/12)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "For the refraction of light through a prism",
+    "image": null,
+    "qOptions": ["for every angle of deviation there are two angles of deviation", "the light travelling inside an equilateral prism is necessarily parallel to the base when prism is set for minimum deviation", "there are two angles of incidences for maximum deviation (for A<20°)", "angle of minimum deviation will increase if refractive index of the prism is increased (keeping the outside medium unchanged provided μprism > μsurrounding)"],
+    "qAnswer": ["B", "C", "D"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Refracting angle of a prism A = 60° and its refractive index is 1.5. What is the angle of incidence 'i' to get minimum deviation. Also find the minimum deviation. Assume the surrounding medium to be air. (Options are made-up distractors; one is correct.)",
+    "image": "15.png",
+    "qOptions": ["\\(\\sin^{-1}\\frac{3}{4}, \\cos^{-1}\\frac{2}{3}\\)", "\\(\\cos^{-1}\\frac{3}{4}, \\sin^{-1}\\frac{2}{3}\\)", "\\(\\tan^{-1}\\frac{3}{4}, \\cos^{-1}\\frac{2}{3}\\)", "\\(\\sin^{-1}\\frac{3}{5}, \\cos^{-1}\\frac{2}{5}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "What should be the value of angle θ such that light entering normally through surface AC does not cross the second refracting surface? (Given: μprism = 1.5) (Options are made-up distractors; one is correct.)",
+    "image": "16.png",
+    "qOptions": ["θ < cos⁻¹(2/3)", "θ < sin⁻¹(2/3)", "θ < tan⁻¹(2/3)", "θ < cos⁻¹(3/4)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For a prism, A = 60°, n = √(7/3). Find the minimum possible angle of incidence such that total internal reflection does not take place from the second surface. Also find the maximum angle of deviation possible.",
+    "image": "17.png",
+    "qOptions": [],
+    "qAnswer": 30
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the case shown in the figure, prove the relations r' − r = A and δ = (i − e) + A. (Options are made-up distractors; one is correct.)",
+    "image": "18.png",
+    "qOptions": ["Relations hold true", "Relations are false", "Only δ relation holds", "Only r' − r relation holds"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A ray of light from a liquid (μ=√3) is incident on a system of two right-angled prisms of refractive indices √3 and √2. The ray suffers zero deviation when it emerges into the air from the surface CD. Find the angle of incidence.",
+    "image": "19.png",
+    "qOptions": [],
+    "qAnswer": 45
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray of light enters a diamond (n=2) from air and is being internally reflected near the bottom as shown in the figure. Find the maximum value of possible angle θ. (Options are made-up distractors; one is correct.)",
+    "image": "20.png",
+    "qOptions": ["\\(\\sin^{-1}\\frac{\\sqrt{3}-1}{\\sqrt{2}}\\)", "\\(\\cos^{-1}\\frac{\\sqrt{3}-1}{\\sqrt{2}}\\)", "\\(\\tan^{-1}\\frac{\\sqrt{3}-1}{\\sqrt{2}}\\)", "\\(\\sin^{-1}\\frac{\\sqrt{3}}{2}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "An equilateral prism deviates a ray through 23° for two angles of incidence differing by 23°. Find refractive index of prism.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.31
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A ray of light is incident on a prism of angle A and refractive index μ at an angle i and emerges at an angle e. The angle of refraction inside prism are r1 and r2 respectively. The angle of deviation is δ. Match List I with List II.",
+    "image": "22.png",
+    "qOptions": ["2 1 4 3", "2 4 1 3", "3 4 1 2", "3 2 1 4"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "P1 and P2 are identical prisms arranged as shown in figure. A ray of white light incident on face of P1 undergoes dispersion and falls on face of P2. The facing surfaces of the prisms are parallel to each other and separation between them is negligible. Then,",
+    "image": "23.png",
+    "qOptions": ["Light emerging from P2 will be white", "In the light emerging from P2 dispersion will be greater", "The direction of light emerging from P2 will be parallel to the direction of ray incident on P1", "The ray emerging from P2 will be white even if prisms P1 and P2 have identical geometry but different material"],
+    "qAnswer": ["A","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "ABC is a right-angled prism kept in air. A ray (1) is incident on the face AB along the normal. Refractive index of the material of prism is the minimum value that will be required so that ray (1) undergoes total internal reflection at the face AC. Another ray (2) is incident on the face AB such that it emerges from face AC along the normal to AC. A third ray (3) falls on the face BC and emerges from face AC such that its angle of emergence is the same as that of incidence. Assuming light (1), (2) and (3) have the same wavelength, then",
+    "image": "24.png",
+    "qOptions": ["Refractive index of the material of prism is 2", "Angle of incidence in degree of ray (2) is 90°", "Deviation in degree suffered by ray (2) is 60°", "Deviation in degree suffered by ray (3) is 150°"],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The figure shows a ray incident at an angle i = π/3. If the plot shows the variation of |r−i| versus μ1/μ2 = k, then choose the correct statement. (r = angle of refraction)",
+    "image": "25.png",
+    "qOptions": ["k1 = 2/√3", "θ1 = π/6", "k=1", "θ2 = π/3"],
+    "qAnswer": ["A","B","C","D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A ray OP of monochromatic light is incident on the face AB of a prism ABCD near vertex B at an incidence of 60°. If the refractive index of the material of the prism is √3, which of the following statement(s) is/are correct?",
+    "image": "26.png",
+    "qOptions": ["The ray gets totally internally reflected at the face CD", "The ray comes out through face AD", "The angle between the incident ray and the emergent ray is 90°", "The angle between the incident ray and the emergent ray is 120°"],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A glass prism is immersed in a liquid. The curves showing the refractive index n as a function of wavelength λ for glass and liquid are as shown in the figure. When a ray of white light is incident on the prism parallel to the base,",
+    "image": "27.png",
+    "qOptions": ["yellow ray travels without deviation", "blue ray is deviated towards the vertex", "red ray is deviated towards the base", "there is no dispersion"],
+    "qAnswer": ["A","B","C"]
+  }
+]
+
+}
