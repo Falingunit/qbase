@@ -1,0 +1,280 @@
+
+{
+  "questions":
+ [
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal lengths of the objective and eye-lens of a microscope are 1 cm and 5 cm respectively. If the magnifying power for the relaxed eye is 45, then the length of the tube is",
+    "image": null,
+    "qOptions": ["30 cm", "25 cm", "15 cm", "12 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The length of the compound microscope is 14 cm. The magnifying power for relaxed eye is 25. If the focal length of eye lens is 5 cm, then the object distance for objective lens will be",
+    "image": null,
+    "qOptions": ["1. 8 cm", "1.5 cm", "2.1 cm", "2.4 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If the focal length of objective and eye lens are 1.2 cm and 3 cm respectively and the object is put 1.25 cm away from the objective lens and the final image is formed at infinity. The magnifying power of the microscope is",
+    "image": null,
+    "qOptions": ["150", "200", "250", "400"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal length of objective and eye lens of a microscope are 4 cm and 8 cm respectively. If the least distance of distinct vision is 24 cm and object distance is 4.5 cm from the objective lens, then the magnifying power of the microscope will be",
+    "image": null,
+    "qOptions": ["18", "32", "64", "20"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The magnifying power of a microscope with an objective of 5 mm focal length is 400. The length of its tube is 20 cm. Then the focal length of the eye-piece is",
+    "image": null,
+    "qOptions": ["200 cm", "160 cm", "2.5 cm", "0.1 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If the focal length of the objective lens is increased then",
+    "image": null,
+    "qOptions": ["Magnifying power of microscope will increase but that of telescope will decrease", "Magnifying power of microscope and telescope both will increase", "Magnifying power of microscope and telescope both will decrease", "Magnifying power of microscope will decrease but that of telescope will increase"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal lengths of the objective and the eye-piece of a compound microscope are 2.0 cm and 3.0 cm respectively. The distance between the objective and the eye-piece is 15.0 cm. The final image formed by the eye-piece is at infinity. The two lenses are thin. The distances in cm of the object and the image produced by the objective measured from the objective has are respectively",
+    "image": null,
+    "qOptions": ["2.4 and 12.0", "2.4 and 15.0", "2.3 and 12.0", "2.3 and 3.0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The objective lens of a compound microscope produces magnification of 10. In order to get an overall magnification of 100 when image is formed at 25 cm from the eye, the focal length of the eye lens should be",
+    "image": null,
+    "qOptions": ["4 cm", "10 cm", "\\(\\frac{25}{9}\\) cm", "9 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a compound microscope, the focal lengths of two lenses are 1.5 cm and 6.25 cm an object is placed at 2 cm from objective and the final image is formed at 25 cm from eye lens. The distance between the two lenses is",
+    "image": null,
+    "qOptions": ["6.00 cm", "7.75 cm", "9.25 cm", "11.00 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A simple telescope, consisting of an objective of focal length 60 cm and a single eye lens of focal length 5 cm is focussed on a distant object is such a way that parallel rays comes out from the eye lens. If object subtends an angle 2° at the objective, the angular width of the image",
+    "image": null,
+    "qOptions": ["10°", "24°", "50°", "1/6°"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The diameter of the objective of the telescope is 0.1 mete and wavelength of light is 6000 Å. Its resolving power would be approximately",
+    "image": null,
+    "qOptions": ["7.32 × 10⁻⁶ rad", "1.36 × 10⁶ rad", "7.32 × 10⁻⁵ rad", "1.36 × 10⁵ rad"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal length of objective and eye lens of a astronomical telescope are respectively 2 m and 5 cm. Final image is formed at (i) least distance of distinct vision (ii) infinity. The magnifying power in both cases will be",
+    "image": null,
+    "qOptions": ["-48, -40", "-40, -48", "-40, 48", "-48, 40"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An astronomical telescope has an angular magnification of magnitude 5 for distant objects. The separation between the objective and the eye piece is 36 cm and the final image is formed at infinity. The focal length fₒ of the objective and the focal length fₑ of the eye piece are",
+    "image": null,
+    "qOptions": ["fₒ = 45 cm and fₑ = -9 cm", "fₒ = 7.2 cm and fₑ = 5 cm", "fₒ = 50 cm and fₑ = 10 cm", "fₒ = 30 cm and fₑ = 6 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In Galilean telescope, if the powers of an objective and eye lens are respectively +1.25 D and -20 D, then for relaxed vision, the length and magnification will be",
+    "image": null,
+    "qOptions": ["21.25 cm and 16", "75 cm and 20", "75 cm and 16", "8.5 cm and 21.25"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The magnifying power of an astronomical telescope is 8 and the distance between the two lenses is 54 cm. The focal length of eye lens and objective lens will be respectively",
+    "image": null,
+    "qOptions": ["6 cm and 48 cm", "48 cm and 6 cm", "8 cm and 64 cm", "64 cm and 8 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An opera glass (Galilean telescope) measures 98 cm from the objective to the eyepiece. The focal length of the objective is 15 cm. Its magnifying power is",
+    "image": null,
+    "qOptions": ["2.5", "2/5", "5/3", "0.4"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "When a telescope is adjusted for parallel light, the distance of the objective from the eye piece is found to the 80 cm. The magnifying power of the telescope is 19. The focal lengths of the lenses are",
+    "image": null,
+    "qOptions": ["61 cm, 19 cm", "40 cm, 40 cm", "76 cm, 4 cm", "50 cm, 30 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two convex lenses of focal length 0.3 m and 0.05 m are used to make a telescope. The distance kept between the two is",
+    "image": null,
+    "qOptions": ["0.35 m", "0.25 m", "0.175", "0.15 m"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The diameter of the objective lens of a telescope is 5.0 m and wavelength of light is 6000 Å. The limit of resolution of this telescope will be",
+    "image": null,
+    "qOptions": ["0.03 sec", "3.03 sec", "0.06 sec", "0.15 sec"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A Galilean telescope has objective and eye-piece of focal lengths 200 cm and 2 cm respectively. The magnifying power of the telescope for normal vision is",
+    "image": null,
+    "qOptions": ["90", "100", "108", "198"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An astronomical telescope of ten-fold angular magnification has length of 44 cm. The focal length (in cm) of the objective is",
+    "image": null,
+    "qOptions": ["4 cm", "40 cm", "44 cm", "440 cm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal lengths of the lenses of an astronomical telescope are 50 cm and 5 cm. The length of the telescope when the image is formed at the least distance of distinct vision is",
+    "image": null,
+    "qOptions": ["45 cm", "55 cm", "\\(\\frac{275}{6}\\) cm", "\\(\\frac{325}{6}\\) cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a terrestrial telescope, the focal length of objective is 90 cm, of inverting lens is 5 cm an of eye lens is 6 cm. If the final image is at 30 cm, then the magnification will be",
+    "image": null,
+    "qOptions": ["21", "12", "18", "15"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A telescope has an objective of focal length 50 cm and an eye piece of focal length 5 cm. The least distance of distinct vision is 25 cm. The telescope is focussed for distinct vision on a scale 200 cm away. The separation (in cm) between the objective and the eye-piece is",
+    "image": null,
+    "qOptions": ["75 cm", "60 cm", "71 cm", "74 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A telescope of diameter 2 m uses light of wavelength 5000 Å for viewing stars. The minimum angular separation between two stars whose image is just resolved by this telescope is",
+    "image": null,
+    "qOptions": ["4 × 10⁻⁴ rad", "0.25 × 10⁻⁶ rad", "0.31 × 10⁻⁶ rad", "5.0 × 10⁻³ rad"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A simple magnifying lens is used in such a way that an image is formed at 25 cm away from the eye. In order to have 10 times magnification, the focal length (in cm) of the lens should be",
+    "image": null,
+    "qOptions": ["5 cm", "2 cm", "5 mm", "None of these"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a simple microscope, if the final image is located at infinity then its magnifying power is",
+    "image": null,
+    "qOptions": ["25/f", "F/25", "f/25", "f/(D+1)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a compound microscopes the objective of fₒ and eyepiece of fₑ are placed at distance L such that L equals",
+    "image": null,
+    "qOptions": ["fₒ + fₑ", "fₒ – fₑ", "Much greater than fₒ or fₑ", "Much less than fₒ or fₑ"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a compound microscope, the focal lengths of object lens and eye lens are fₒ and fₑ respectively, then magnification will be done by microscope when",
+    "image": null,
+    "qOptions": ["fₒ = fₑ", "fₒ > fₑ", "fₒ < fₑ", "None of these"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The angular resolution of a 10 cm diameter telescope at a wavelength of 5000 Å is of the order",
+    "image": null,
+    "qOptions": ["10⁶ rad", "10⁻² rad", "10⁻⁴ rad", "10⁻⁶ rad"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The diameter of objective of a telescope is 1 m. Its resolving limit for the light of wave length 4538 Å, will be",
+    "image": null,
+    "qOptions": ["5.54 × 10⁻⁷ rad", "2.54 × 10⁻⁴ rad", "6.54 × 10⁻⁷ rad", "None of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Magnification of a compound microscope is 30. Focal length of eye-piece is 5 cm and the image is formed at a distance of distinct vision of 25 cm. The magnification of the objective lens is",
+    "image": null,
+    "qOptions": ["6", "5", "7.5", "10"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A Galileo telescope has an objective of focal length 100 cm and magnifying power 50. The distance (in cm) between the two lenses in normal adjustment will be",
+    "image": null,
+    "qOptions": ["98 cm", "100 cm", "150 cm", "200 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A compound microscope has an eye pieces of focal length 10 cm and an objective of focal length 4 cm. Calculate the magnification, if an object is kept at a distance of 5 cm form the objective so that final image is formed at the least distance of vision (20 cm)",
+    "image": null,
+    "qOptions": ["12", "11", "10", "13"],
+    "qAnswer": "A"
+  }
+]
+
+
+}
