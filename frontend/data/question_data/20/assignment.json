@@ -1,0 +1,566 @@
+{
+  "questions":[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An object is placed at a distance f/2 from a convex lens. The image will be",
+    "image": null,
+    "qOptions": ["At one of its foci, virtual and double in size", "At 3f/2, real and inverted", "At 3f/4, virtual and erect", "At f, real and inverted"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A point object is placed at a distance of 25 cm from a convex lens of focal length 20 cm. If a glass slab of thickness t and refractive index 1.5 is inserted between the lens and the object, the image is formed at infinity. The thickness ‘t’ is",
+    "image": null,
+    "qOptions": ["18 cm", "10 cm", "15 cm", "12 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The minimum distance between the object and its real image formed by the convex lens is",
+    "image": null,
+    "qOptions": ["Zero", "4f", "2f", "6f"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A concave lens of glass, refractive index 1.5, has both surfaces of same radius of curvature R. On immersion in a medium of refractive index 1.75, it will behave as a",
+    "image": null,
+    "qOptions": ["Convergent lens of focal length 3.5R", "Convergent lens of focal length 3.0R", "Divergent lens of focal length 3.5R", "Divergent lens of focal length 3.0R"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens of focal length 0.15 m is made of a material of refractive index 3/2. When it is placed in a liquid, its focal length is increased by 0.225 m. The refractive index of the liquid is",
+    "image": null,
+    "qOptions": ["7/4", "5/4", "9/2", "3/2"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The distance between the object and the screen is 100 cm. Real images of the object are formed on the screen for two positions of a lens separated by a distance 40 cm apart. The power of the lens is",
+    "image": null,
+    "qOptions": ["~3 D", "~5 D", "~7 D", "~9 D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Aperture of a Plano-convex lens is 6 cm and thickness at the center is 3 mm. If speed of light in the material of the lens is 2 × 10^8 m/s. Focal length of the lens is",
+    "image": null,
+    "qOptions": ["15 cm", "20 cm", "30 cm", "10 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A double convex lens of focal length 6 cm is made of glass of refractive index 1.5. The radius of curvature of one surface is double that of the other surface. The value of smaller radius of curvature is",
+    "image": null,
+    "qOptions": ["6 cm", "4.5 cm", "9 cm", "4 cm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two point sources P and Q are 24 cm apart. Where should a convex lens of focal length 9 cm be placed in between them so that the images of both sources are formed at the same place?",
+    "image": null,
+    "qOptions": ["3 cm from P", "15 cm from Q", "9 cm from Q", "18 cm from P"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A convex lens forms an image of an object on a screen. The height of the image is 9 cm. The lens is now displaced until an image is again obtained on the screen. The height of the image is 4 cm. The distance between the object and the screen is 90 cm.",
+    "image": null,
+    "qOptions": ["The distance between the two positions of the lens is 30 cm", "The distance of the object from the lens in its first position in its first position is 36 cm", "The height of the object is 6 cm", "The focal length of the lens is 21.6 cm"],
+    "qAnswer": ["B","C","D"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A converging lens of focal length 30 cm and a converging mirror of focal length 40 cm are placed at a distance S′ from each other as shown in the figure. Their principal axis are same. An object is kept at a distance of 40 cm from the lens such that the final image of the object is formed at the focus of the lens. Then the distance ‘S’ is",
+    "image": "11.png",
+    "qOptions": ["160 cm", "120 cm", "200 cm", "none of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A lamp is placed 6.0 m from the wall. On putting a lens between the lamp and the wall at a distance of 1.2 m from the lamp, a real image of the lamp is formed on the wall. The magnification of the image is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A magnifying glass is to be used at the fixed object distance of 2 cm. If it is to produce an erect image magnified 5 times, its focal length should be",
+    "image": null,
+    "qOptions": ["2.5 cm", "-2.5 cm", "4 cm", "3 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The focal length of a convex lens is 30 cm and the size of the image is quarter of the object. The object distance is",
+    "image": null,
+    "qOptions": ["90 cm", "120 cm", "150 cm", "40 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An object is kept at a distance of 16 cm from a thin lens and the image formed is real. If the object is kept at a distance of 6 cm from the same lens, the image formed is virtual. If the size of the images formed are same, the focal length of the lens will be",
+    "image": null,
+    "qOptions": ["15 cm", "17 cm", "21 cm", "11 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A concave lens forms the image of an object such that the distance between the object and the image is 10 cm and the magnification produced is 0.25. The focal length of the lens will be",
+    "image": null,
+    "qOptions": ["8.6 cm", "6.2 cm", "10 cm", "4.4 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The optical axis of a thin equiconvex lens is the x-axis. The co-ordinate of the point object and its image are \\((-40,1)\\) and \\((50,-2)\\) respectively. The optical center is located at",
+    "image": null,
+    "qOptions": ["x = -10 cm", "x = -30 cm", "x = -20 cm", "origin"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The magnification of the object placed in front of a convex lens of focal length 20 cm is +2. To obtain a magnification of -2, the object has to be moved a distance equal to",
+    "image": null,
+    "qOptions": ["10 cm", "20 cm", "30 cm", "40 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A converging lens forms an image of an object on a screen. The image is real and twice the size of the object. If the positions of the screen and the object are interchanged, leaving the lens in the original position, the new image size on the screen is",
+    "image": null,
+    "qOptions": ["Twice the object size", "Same as the object size", "Half the object size", "Can't say"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two thin convex lenses of focal lengths 20 cm and 5 cm are placed at a distance d. If a parallel beam of light incident on the first lens emerges parallel from the second lens, then value of d is",
+    "image": null,
+    "qOptions": ["5 cm", "15 cm", "20 cm", "25 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens A of focal length 20 cm and a concave lens B of focal length 5 cm are kept along the same axis with a distance d between them. If a beam parallel to principal axis of convex lens emerges parallel after refraction from the concave mirror, d =",
+    "image": null,
+    "qOptions": ["15 cm", "20 cm", "22.5 cm", "25 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An object is placed 12 cm to the left of a converging lens of focal length 8 cm. Another converging lens of 6 cm focal length is placed at a distance of 30 cm to the right of the first lens. The second lens will produce",
+    "image": null,
+    "qOptions": ["A virtual enlarged image", "No image", "A real inverted image", "A real enlarged image"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "You are given two lenses, a converging lens with focal length +10 cm and a diverging lens of focal length -20 cm. Which of the following would produce a virtual image that is larger than the object?",
+    "image": null,
+    "qOptions": ["Placing the object 5 cm from the converging lens", "Placing the object 8 cm from the converging lens", "Placing the object 25 cm from the converging lens", "Placing the object 15 cm from the diverging lens"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens of focal length 30 cm forms an image of height 2 cm for an object situated at infinity. If a concave lens of focal length 20 cm is placed coaxially at a distance of 26 cm from the convex lens such that rays of light after passing through the convex lens are incident on the concave mirror, then size of the image is",
+    "image": null,
+    "qOptions": ["2.5 cm", "5.0 cm", "1.25 cm", "None"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Object and screen are kept on the optical bench at a distance of 250 cm from each other. A lens of focal length 40 cm is kept between the object and the screen such that a sharp enlarged image of the object is formed on the screen. Then",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "Numerical",
+    "passageId": "P1",
+    "qText": "Distance of the object from the screen is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 200
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "For getting a sharp image again on the screen, lens should be moved by a distance of",
+    "image": null,
+    "qOptions": ["150 cm towards the screen", "150 cm towards the object", "100 cm towards the screen", "100 cm towards the object"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The ratio of the images formed in the two cases is",
+    "image": null,
+    "qOptions": ["4:1", "16:1", "64:1", "none of these"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Object and screen are kept on the optical bench at a distance of 250 cm from each other. A lens of focal length 40 cm is kept between the object and the screen such that a sharp image of the object is formed on the screen. Now the lens is moved by 50 cm so that again sharp image is obtained. Focal length of the lens is",
+    "image": null,
+    "qOptions": ["40 cm", "60 cm", "50 cm", "30 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens forms a real image of an object for its two different positions of a movable lens on a fixed screen. If the heights of the images in two cases be 8 cm and 2 cm, then the height of the object is",
+    "image": null,
+    "qOptions": ["8 cm", "16 cm", "4 cm", "none of these"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A concave lens of focal length 20 cm placed in contact with a plane mirror acts as a",
+    "image": null,
+    "qOptions": ["Convex mirror of focal length 10 cm", "Concave mirror of focal length 40 cm", "Concave mirror of focal length 60 cm", "Concave mirror of focal length 10 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A luminous object is placed at a distance of 30 cm from the convex lens of focal length 20 cm. On the other side of the lens, at what distance from the lens must a convex mirror of radius of curvature 10 cm be placed in order to have an upright image of the object coincident with it?",
+    "image": null,
+    "qOptions": ["12 cm", "30 cm", "50 cm", "60 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A bi-convex lens of focal length 15 cm is in front of a plane mirror. The distance between the lens and the mirror is 10 cm. A small object is kept at a distance of 30 cm from the lens. The final image is",
+    "image": "32.png",
+    "qOptions": ["Virtual and at a distance of 16 cm from the mirror", "Real and at a distance of 16 cm from the mirror", "Virtual and at a distance of 20 cm from the mirror", "Real and at a distance of 20 cm from the mirror"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two thin lenses are in contact and the focal length of the combination is 80 cm. If the focal length of one of the lenses is 20 cm, then the power of the other lens is",
+    "image": null,
+    "qOptions": ["1.66 D", "4 D", "-1 D", "-3.75 D"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens of power +6D is placed in contact with a concave lens of power -4D. What is the nature and focal length of the combination?",
+    "image": null,
+    "qOptions": ["Concave, 50 cm", "Convex, 50 cm", "Concave, 20 cm", "Convex, 20 cm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the situation given below, height of the doll is 8 cm. The height of the image seen by the observer is",
+    "image": "35.png",
+    "qOptions": ["40 cm", "20 cm", "16 cm", "24 cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A convex lens forms a real image. If we put it in contact with a concave lens and the combination again forms a real image, which of the following is true for the new image from the combination",
+    "image": null,
+    "qOptions": ["Shifts towards the lens system", "Shifts away from the lens system", "Remains at the original position", "No image is formed"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A concave and a convex lens have the same focal length of 20 cm and are put in contact to form a lens combination. The combination is used to view an object of 5 cm length kept at 20 cm from the lens combination. As compared to the object, the image will be",
+    "image": null,
+    "qOptions": ["Magnified and inverted", "Reduced and erect", "Of the same size as the object and would be erect", "Of the same size as the object and would be inverted"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The curved surfaces in the lens combination shown have same radius of curvature R. R =",
+    "image": "38.png",
+    "qOptions": ["15 cm", "10 cm", "12 cm", "18 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A bi-convex lens is formed with two thin Plano-convex lenses as shown in the figure. Refractive index n of the first lens is 1.5 and that of the second lens is 1.2. Both the curved surfaces are of the same radius of curvature R = 14 cm. For this bi-convex lens, for an object distance of 40 cm, the image distance will be",
+    "image": "39.png",
+    "qOptions": ["20 cm", "40.0 cm", "21.5 cm", "13.3 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A thin concave and a thin convex lens are in contact. The ratio of the magnitude of power of two lenses is 2/3 and focal length of the combination is 30 cm. Then the focal length of individual lenses are",
+    "image": null,
+    "qOptions": ["-15 cm, 10 cm", "-75 cm, 50 cm", "75 cm, -50 cm", "75 cm, 50 cm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A Plano-convex lens of focal length 20 cm silvered at the plane surface will behave as convergent mirror of focal length",
+    "image": null,
+    "qOptions": ["20 cm", "30 cm", "40 cm", "10 cm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A thin equi-convex lens has focal length 10 cm and 1.5. One of its faces is silvered and for an object at a distance u in front of the lens, the image coincides with the object. The value of u is",
+    "image": null,
+    "qOptions": ["10 cm", "5 cm", "20 cm", "15 cm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A point object is placed at a distance of 20 cm from a thin Plano-convex lens of focal length 15 cm. If the plane surface is silvered the image will form at",
+    "image": "43.png",
+    "qOptions": ["60 cm from left of AB", "30 cm from left of AB", "12 cm from the left of AB", "60 cm from the right of AB"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The diagram shows a silvered equi-convex lens. An object of length 1 cm has been placed in front of the lens. What will be the final image properties? The refractive index of the lens is \\( \\mu \\) and the refractive index of the medium is \\( 2\\mu \\). Both the surface has the radius R.",
+    "image": "44.png",
+    "qOptions": ["Half size, erect and virtual", "Same size, erect and real", "Same size, erect and virtual", "None"],
+    "qAnswer": "B"
+  },
+  
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A concave mirror is placed in a medium of refractive index \\(\\mu_1 = 1.2\\). An object placed at 30 cm from pole of the mirror and its image coincide. Now a liquid of refractive index \\(\\mu\\) is placed in the concave mirror in the shaded region and it is found that object needs to be shifted by 7.5 cm below O for the object and image to coincide. The refractive index of the liquid \\(\\mu\\) is",
+    "image": "45.png",
+    "qOptions": ["\\(\\tfrac{4}{3}\\)", "1.2", "1.6", "None of the above"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An object is placed at 30 cm from a convex lens of focal length 15 cm. On the other side of the lens a convex mirror of focal length 12 cm is placed so that the principal axis of both coincide. It is observed that the object and image coincide. What is the separation between the lens and mirror?",
+    "image": null,
+    "qOptions": ["6 cm", "30 cm", "both (A) and (B)", "none of the above"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "A student performs an experiment to find the radius (R) of an equi-convex thin lens and refractive index \\(\\mu (>1)\\) of a liquid. The refractive index of lens is 1.5. Experiment 1: The student puts the lens in air and keeps an object at point O, whose image is formed at point I as shown. Experiment 2: The student again performs the experiment keeping the object and lens at same positions and putting a liquid of refractive index \\(\\mu\\) to the left side of the lens only. Now the ray diagram is as shown. Choose the INCORRECT statements.",
+    "image": "47.png",
+    "qOptions": ["R = 60 cm", "R = 30 cm", "\\(\\mu = \\tfrac{4}{3}\\)", "\\(\\mu = \\tfrac{5}{3}\\)"],
+    "qAnswer": ["A","D"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The curvature radii of a concavo-convex glass lens are 20 cm and 60 cm. Convex surface of the lens is silvered. With the lens horizontal, the concave surface is filled with water. Focal length of the effective mirror is (\\(\\mu_{glass}=1.5,\\ \\mu_{water}=4/3\\))",
+    "image": null,
+    "qOptions": ["\\(\\tfrac{90}{13}\\ \\text{cm}\\)", "\\(\\tfrac{80}{13}\\ \\text{cm}\\)", "\\(\\tfrac{20}{3}\\ \\text{cm}\\)", "\\(\\tfrac{45}{8}\\ \\text{cm}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A Plano-convex lens, when silvered at its plane surface is equivalent to a concave mirror of focal length 28 cm. When its curved surface is silvered and the plane surface is not silvered, it is equivalent to a concave mirror of focal length 10 cm. Then the refractive index of the material of the lens is",
+    "image": null,
+    "qOptions": ["\\(\\tfrac{9}{14}\\)", "\\(\\tfrac{14}{9}\\)", "\\(\\tfrac{17}{9}\\)", "None"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The radius of curvature of the left and right surface of the concave lens is 10 cm and 15 cm respectively. The radius of curvature of the mirror is 15 cm. Which of the following statements is/are correct?",
+    "image": "50.png",
+    "qOptions": ["Equivalent focal length of the combination is -18 cm", "Equivalent focal length of the combination is +36 cm", "The system behaves like a concave mirror", "The system behaves like a convex mirror"],
+    "qAnswer": ["A","C"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "In the adjacent figure, a thin silvered lens is shown. \\(\\mu_A = 1.8\\) and \\(\\mu_B = 1.1\\). \\(R_1 = 40\\ \\text{cm}, R_2 = 20\\ \\text{cm}, R_3 = 10\\ \\text{cm}\\). A point object is placed at a distance 12 cm from this lens on its principal axis. Find the distance (in cm) of the image formed from the lens.",
+    "image": "69.png",
+    "qOptions": [],
+    "qAnswer": 51
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A person cannot see objects clearly beyond 2.0 m. The power of the lens required to correct his vision will be",
+    "image": null,
+    "qOptions": ["+2.0 D", "-1.0 D", "+1.0 D", "-0.5 D"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The far point of a shortsighted eye is 200 cm. The power of the lens required is",
+    "image": null,
+    "qOptions": ["-0.5 D", "2 D", "1 D", "-1.5 D"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An eye specialist prescribes spectacles having a combination of convex lens of focal length 40 cm in contact with a concave lens of focal length 25 cm. The power of this lens combination in diopters is",
+    "image": null,
+    "qOptions": ["+1.5", "-1.5", "+6.67", "-6.67"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The maximum angular magnification that can be obtained with a convex lens of focal length 2.5 cm (the least distance of distinct vision is 25 cm) is",
+    "image": null,
+    "qOptions": ["10", "0.1", "62.5", "11"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A thin symmetric double-convex lens of power P is cut into three parts A, B and C as shown. The power of",
+    "image": "55.png",
+    "qOptions": ["A is P", "A is 2P", "B is P", "B is P/4"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A converging lens of focal length 20 cm and diameter 5 cm is cut along the line AB. The part of the lens shown shaded is now used to form an image of a point P placed 30 cm away from it on the line XY that is perpendicular to the plane of the lens. The image of P will be formed",
+    "image": "56.png",
+    "qOptions": ["0.5 cm above XY", "1 cm below XY", "on XY", "1.5 cm below XY"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A point object O moves from the principal axis of a converging lens in a direction OP. I is the image of O, will move initially in the direction",
+    "image": "57.png",
+    "qOptions": ["IQ", "IR", "IS", "IU"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "An object is moving towards a converging lens on its axis. The image is also found to be moving towards the lens. Then, the magnitude of object distance 'u' must satisfy",
+    "image": null,
+    "qOptions": ["2f < u < 4f", "f < u < 2f", "u > 4f", "u < f"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A point is kept at the first focus of a convex lens. If the lens starts moving towards right with a constant velocity, the image will",
+    "image": null,
+    "qOptions": ["Always move towards right", "Always move towards left", "First move towards right and then towards left", "First move towards left and then towards right"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the diagram shown, the lens is moving towards the object with a velocity V m/s and the object is also moving towards the lens with the same speed. What speed of the image with respect to earth when the object is at a distance 2f from the lens? (f is the focal length.)",
+    "image": "60.png",
+    "qOptions": ["2V", "4V", "3V", "V"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A particle is dropped to move along the axis of a concave mirror of focal length f from a height f/2 as shown in the figure. The acceleration due to gravity is g. Find the maximum speed of the image.",
+    "image": "61.png",
+    "qOptions": ["\\(\\sqrt{\\tfrac{3fg}{16}}\\)", "\\(\\sqrt{\\tfrac{27fg}{16}}\\)", "\\(\\tfrac{3}{4}\\sqrt{fg}\\)", "\\(\\sqrt{\\tfrac{fg}{16}}\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the velocity (in cm/s) of the image of the object placed in front of a stationary lens at the instant shown in the figure. Given \\(\\theta = 45^\\circ\\). Given that at the instant shown, speed of the object is \\(4\\sqrt{2}\\) cm/s. (Options are made-up distractors; one is correct.)",
+    "image": "62.png",
+    "qOptions": ["\\(\\hat{\\imath} + \\tfrac{39}{20}\\hat{\\jmath}\\)", "\\(2\\hat{\\imath} + \\tfrac{10}{3}\\hat{\\jmath}\\)", "\\(\\tfrac{3}{2}\\hat{\\imath} + 2\\hat{\\jmath}\\)", "\\(\\hat{\\imath} + \\tfrac{25}{12}\\hat{\\jmath}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the velocity (in cm/s) of the image of the object at the instant shown in the figure in terms of f and j. Given that at the instant shown, speed of the object is 5 mm/s. (Options are made-up distractors; one is correct.)",
+    "image": "63.png",
+    "qOptions": ["\\(\\hat{\\imath} - \\tfrac{74}{50}\\hat{\\jmath}\\)", "\\(\\hat{\\imath} - \\tfrac{50}{25}\\hat{\\jmath}\\)", "\\(2\\hat{\\imath} - \\tfrac{30}{50}\\hat{\\jmath}\\)", "\\(\\tfrac{3}{2}\\hat{\\imath} - \\tfrac{70}{60}\\hat{\\jmath}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two particles P and Q are present at almost the same point but are moving in different directions at the instant shown. Find the relative velocity (in cm/s) of the image of P with respect to image of Q in vector form. (Options are made-up distractors; one is correct.)",
+    "image": "64.png",
+    "qOptions": ["\\(32\\hat{\\imath} - \\tfrac{4}{25}\\hat{\\jmath}\\)", "\\(30\\hat{\\imath} - \\tfrac{5}{25}\\hat{\\jmath}\\)", "\\(25\\hat{\\imath} - \\tfrac{6}{20}\\hat{\\jmath}\\)", "\\(35\\hat{\\imath} - \\tfrac{3}{30}\\hat{\\jmath}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "State true or false: \"P and Q are very close points. The relative velocity between image of P and Q is only along \\(\\pm \\hat{\\imath}\\) since relative velocity of P and Q are also along \\(\\pm \\hat{\\imath}\\) only.\"",
+    "image": "65.png",
+    "qOptions": ["True", "False"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Find the velocity of the image formed after refraction from the two lens at the instant shown. (Options are made-up distractors; one is correct.)",
+    "image": "66.png",
+    "qOptions": ["\\(-\\tfrac{16}{25}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-\\tfrac{20}{25}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-\\tfrac{10}{15}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-\\tfrac{18}{30}\\hat{\\imath}\\ \\text{mm/s}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Converging rays always wanting to converge at a fixed point A are falling on a moving lens of focal length 40 cm. At the instant shown, lens is at distance of 120 cm from A and is moving towards A at rate of 6 mm/s. Find the velocity of the image (converging point of rays) at the instant shown. (Options are made-up distractors; one is correct.)",
+    "image": "67.png",
+    "qOptions": ["\\(\\tfrac{45}{8}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(\\tfrac{40}{8}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(\\tfrac{35}{8}\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(\\tfrac{50}{8}\\hat{\\imath}\\ \\text{mm/s}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Converging rays always wanting to converge at fixed point A are falling on a system of 2 moving lens A’ and B’ at the instant shown. Find the velocity of the point at which these rays are converging. Velocity of both the lens is given. Focal length of A’ is 50 cm and that of B’ is 10 cm. (Options are made-up distractors; one is correct.)",
+    "image": "68.png",
+    "qOptions": ["\\(-3\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-2\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-4\\hat{\\imath}\\ \\text{mm/s}\\)", "\\(-5\\hat{\\imath}\\ \\text{mm/s}\\)"],
+    "qAnswer": "A"
+  }
+]
+
+}
