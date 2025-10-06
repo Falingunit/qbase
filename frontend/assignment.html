@@ -89,6 +89,7 @@
           focusSelector,
           backdrop = "static",
           keyboard = true,
+          onContentReady,
         }) {
           return queueModal(
             () =>
@@ -102,6 +103,11 @@
                 titleEl.textContent = title || "Message";
                 bodyEl.innerHTML = bodyHTML || "";
                 footEl.innerHTML = "";
+
+                // Allow caller to attach event listeners to freshly inserted content
+                try {
+                  if (typeof onContentReady === "function") onContentReady(modalEl);
+                } catch {}
 
                 let result;
                 const onHidden = () => {
