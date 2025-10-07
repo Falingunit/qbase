@@ -285,6 +285,29 @@
     >
       <div class="overflow-y-scroll" style="width: 100%">
         <div class="p-4">
+          <!-- Initial load skeleton overlay (fades while questions fetch) -->
+          <div id="q-skeleton" class="q-skeleton-overlay" aria-hidden="true">
+            <div class="sk-card">
+              <div class="sk-header">
+                <div class="sk-line sk-w-20"></div>
+                <div>
+                  <span class="sk-pill sk-w-12"></span>
+                  <span class="sk-pill sk-w-10"></span>
+                </div>
+              </div>
+              <div class="sk-body">
+                <div class="sk-line sk-w-90"></div>
+                <div class="sk-line sk-w-80"></div>
+                <div class="sk-line sk-w-60"></div>
+              </div>
+            </div>
+            <div class="sk-options">
+              <div class="sk-option"></div>
+              <div class="sk-option"></div>
+              <div class="sk-option"></div>
+              <div class="sk-option"></div>
+            </div>
+          </div>
           <div id="mobile-qbar"></div>
 
           <div class="card mb-4 flex-shrink-0">
@@ -305,6 +328,13 @@
                 >
                   <i class="bi bi-bookmark"></i>
                 </button>
+                <!-- Quick color marks -->
+                <div id="qcolor-picker" class="qcolor-picker" title="Mark question">
+                  <button type="button" class="qcolor-chip" data-color="#6f42c1" style="--qc:#6f42c1" aria-label="Mark purple"></button>
+                  <button type="button" class="qcolor-chip" data-color="#dc3545" style="--qc:#dc3545" aria-label="Mark red"></button>
+                  <button type="button" class="qcolor-chip" data-color="#ffc107" style="--qc:#ffc107" aria-label="Mark yellow"></button>
+                  <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
+                </div>
                 <span id="timer" class="badge bg-dark text-info">00:11</span>
                 <span
                   class="badge bg-dark-subtle text-info"

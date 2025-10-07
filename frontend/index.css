@@ -98,6 +98,10 @@
   border-color: rgba(13, 110, 253, 0.35);
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
+.as-card-opening {
+  transform: scale(0.985) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+}
 .as-card .card-title {
   font-size: 1.05rem;
 }
@@ -164,6 +168,18 @@ mark {
 /* state helpers */
 .d-none {
   display: none !important;
+}
+
+/* Subtle page fade when navigating into assignment */
+body .container-lg {
+  transition: opacity 120ms ease;
+}
+body.page-leave .container-lg {
+  opacity: 0.0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body .container-lg { transition: none !important; }
 }
 
 ::-webkit-scrollbar {

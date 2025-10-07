@@ -144,6 +144,18 @@ db.exec(`
     UNIQUE(userId, assignmentId, questionIndex, tagId)
   );
 
+  -- Per-question color marks
+  CREATE TABLE IF NOT EXISTS question_marks (
+    userId TEXT NOT NULL,
+    assignmentId INTEGER NOT NULL,
+    questionIndex INTEGER NOT NULL,
+    color TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, assignmentId, questionIndex),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
   -- Starred assignments
   CREATE TABLE IF NOT EXISTS starred_assignments (
     userId TEXT NOT NULL,
@@ -414,6 +426,79 @@ app.get('/api/bookmarks/:assignmentId/:questionIndex', (req, res) => {
   } catch (e) {
     console.error('check bookmark:', e);
     res.status(500).json({ error: 'Failed to check bookmarks' });
+  }
+});
+
+// Question color marks
+app.get('/api/question-marks', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT assignmentId, questionIndex, color
+      FROM question_marks
+      WHERE userId = ?
+      ORDER BY created_at DESC
+    `).all(req.userId);
+    res.json(rows);
+  } catch (e) {
+    console.error('list question-marks:', e);
+    res.status(500).json({ error: 'Failed to get question marks' });
+  }
+});
+
+app.get('/api/question-marks/:assignmentId/:questionIndex', (req, res) => {
+  try {
+    const { assignmentId, questionIndex } = req.params;
+    const row = db.prepare(`
+      SELECT color
+      FROM question_marks
+      WHERE userId = ? AND assignmentId = ? AND questionIndex = ?
+    `).get(req.userId, assignmentId, questionIndex);
+    if (!row) return res.status(404).json({ error: 'Not found' });
+    res.json(row);
+  } catch (e) {
+    console.error('get question-mark:', e);
+    res.status(500).json({ error: 'Failed to get question mark' });
+  }
+});
+
+app.post('/api/question-marks', (req, res) => {
+  try {
+    const { assignmentId, questionIndex, color } = req.body || {};
+    if (assignmentId == null || questionIndex == null || !color || typeof color !== 'string') {
+      return res.status(400).json({ error: 'assignmentId, questionIndex and color are required' });
+    }
+    // simple sanitize: trim and limit length
+    const c = String(color).trim().slice(0, 32);
+    // Upsert: try update first
+    const upd = db.prepare(`
+      UPDATE question_marks
+      SET color = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE userId = ? AND assignmentId = ? AND questionIndex = ?
+    `).run(c, req.userId, assignmentId, questionIndex);
+    if (upd.changes === 0) {
+      db.prepare(`
+        INSERT INTO question_marks (userId, assignmentId, questionIndex, color)
+        VALUES (?, ?, ?, ?)
+      `).run(req.userId, assignmentId, questionIndex, c);
+    }
+    res.json({ success: true });
+  } catch (e) {
+    console.error('set question-mark:', e);
+    res.status(500).json({ error: 'Failed to set question mark' });
+  }
+});
+
+app.delete('/api/question-marks/:assignmentId/:questionIndex', (req, res) => {
+  try {
+    const { assignmentId, questionIndex } = req.params;
+    db.prepare(`
+      DELETE FROM question_marks
+      WHERE userId = ? AND assignmentId = ? AND questionIndex = ?
+    `).run(req.userId, assignmentId, questionIndex);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('delete question-mark:', e);
+    res.status(500).json({ error: 'Failed to delete question mark' });
   }
 });
 

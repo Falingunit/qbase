@@ -453,12 +453,19 @@
 
     card.append(starBtn, body, footer);
 
-    // Entire card clickable (non-interactive areas)
+    // Entire card clickable (non-interactive areas) with a quick press + page fade
     card.addEventListener("click", (e) => {
       if (e.target.closest("a, button, input, textarea, select, label")) return;
-      window.location.href = `./assignment.html?aID=${encodeURIComponent(
-        entry.aID
-      )}`;
+      // play a tiny press animation and fade the page before navigating
+      try {
+        card.classList.add("as-card-opening");
+        document.body.classList.add("page-leave");
+      } catch {}
+      const goto = () => {
+        window.location.href = `./assignment.html?aID=${encodeURIComponent(entry.aID)}`;
+      };
+      // keep it snappy; respect reduced motion automatically via CSS
+      setTimeout(goto, 120);
     });
 
     return card;

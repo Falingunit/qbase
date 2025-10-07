@@ -670,12 +670,19 @@
 
   // ---------- KaTeX render options ----------
   const katexOptions = {
+    // Prefer standard delimiters first so nested \(\ce{..}\) works reliably.
     delimiters: [
       { left: "$$", right: "$$", display: true },
       { left: "$", right: "$", display: false },
       { left: "\\(", right: "\\)", display: false },
       { left: "\\[", right: "\\]", display: true },
+      // Also allow bare mhchem usage without math wrappers
+      { left: "\\ce{", right: "}", display: false },
+      { left: "\\pu{", right: "}", display: false },
     ],
+    throwOnError: false,
+    strict: "ignore",
+    trust: true,
   };
 
   // ---------- Notes editor (EasyMDE with textarea fallback) ----------
@@ -746,6 +753,21 @@
       return null;
     }
   }
+
+  // --------- Page leave animation (back navigation) ---------
+  (function wireLeaveAnimation() {
+    const links = document.querySelectorAll('a.topbar-back');
+    links.forEach((a) => {
+      a.addEventListener('click', (e) => {
+        // allow modified clicks to open new tab/window
+        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || a.target === '_blank') return;
+        e.preventDefault();
+        try { document.body.classList.add('page-leave'); } catch {}
+        const href = a.getAttribute('href') || './index.html';
+        setTimeout(() => { window.location.href = href; }, 120);
+      });
+    });
+  })();
 
   function isServerUploadUrl(url) {
     try {
@@ -1413,10 +1435,19 @@
       suppressNotesChange = false;
       try {
         const _trim = val.trim();
-        // If notes are empty, ensure editor mode so placeholder shows
-        if (_trim.length === 0 && notesMDE.isPreviewActive()) {
-          try { notesMDE.togglePreview(); } catch {}
+        // Ensure correct initial mode immediately when setting notes
+        if (_trim.length > 0) {
+          // Non-empty: show preview right away
+          if (!notesMDE.isPreviewActive()) {
+            try { notesMDE.togglePreview(); } catch {}
+          }
+        } else {
+          // Empty: keep editor visible so placeholder shows
+          if (notesMDE.isPreviewActive()) {
+            try { notesMDE.togglePreview(); } catch {}
+          }
         }
+        // If in preview now, render the preview content
         if (notesMDE.isPreviewActive()) {
           const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
           const pv = container?.querySelector('.editor-preview');
@@ -1609,14 +1640,45 @@
   // Hook up the Check Answer button once
   document.getElementById("check-answer").addEventListener("click", () => {
     if (currentQuestionID == null) return;
+    // micro pulse for feedback
+    try {
+      const b = document.getElementById("check-answer");
+      b.classList.remove("btn-pulse");
+      void b.offsetWidth; // reflow
+      b.classList.add("btn-pulse");
+    } catch {}
     checkCurrentAnswer();
   });
 
   // Bookmark functionality
   document.getElementById("bookmark-btn").addEventListener("click", () => {
     if (currentQuestionID == null) return;
+    // micro pulse for feedback
+    try {
+      const b = document.getElementById("bookmark-btn");
+      b.classList.remove("btn-pulse");
+      void b.offsetWidth; // reflow
+      b.classList.add("btn-pulse");
+    } catch {}
     showBookmarkDialog();
   });
+
+  // Quick color picker near bookmark icon
+  (function wireQColorPicker() {
+    const picker = document.getElementById('qcolor-picker');
+    if (!picker) return;
+    picker.addEventListener('click', async (e) => {
+      const chip = e.target.closest('.qcolor-chip');
+      if (!chip) return;
+      if (currentQuestionID == null) return;
+      const color = String(chip.getAttribute('data-color') || '').trim();
+      if (!color) return;
+      const ok = await setQuestionColor(color);
+      if (ok) {
+        updateColorPickerSelection();
+      }
+    });
+  })();
 
   function checkCurrentAnswer() {
     const qID = currentQuestionID;
@@ -1699,6 +1761,8 @@
   }
 
   // ---------- Bootstrap: fetch assignment, build UI, load state ----------
+  // Show loading skeleton while fetching questions
+  try { document.body.classList.add("q-loading"); } catch {}
   fetch(`./data/question_data/${aID}/assignment.json`)
     .then((res) => res.json())
     .then(async (data) => {
@@ -1734,6 +1798,12 @@
       } else {
         clickQuestionButton(0); // default to first question
       }
+    })
+    .catch((err) => {
+      console.error("Failed to load assignment.json", err);
+    })
+    .finally(() => {
+      try { document.body.classList.remove("q-loading"); } catch {}
     });
 
   // ---------- UI builders & handlers ----------
@@ -1765,6 +1835,10 @@
       dInd.className = "q-bookmark-indicator hidden";
       dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
       dbtn.appendChild(dInd);
+      // Color indicator (hidden by default)
+      const dColor = document.createElement('span');
+      dColor.className = 'q-color-indicator hidden';
+      dbtn.appendChild(dColor);
       dcol.appendChild(dbtn);
       desktop.appendChild(dcol);
 
@@ -1779,12 +1853,18 @@
       mInd.className = "q-bookmark-indicator hidden";
       mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
       mbtn.appendChild(mInd);
+      // Color indicator (hidden by default)
+      const mColor = document.createElement('span');
+      mColor.className = 'q-color-indicator hidden';
+      mbtn.appendChild(mColor);
       mobile.appendChild(mbtn);
     });
 
     questionButtons = Array.from(document.getElementsByClassName("q-btn"));
     // initial bookmark badges
     updateBookmarkIndicators();
+    // initial color badges
+    updateColorIndicators();
   }
 
   function MCQOptionClicked(optionElement) {
@@ -1882,6 +1962,17 @@
     currentQuestionID = qID;
     setQuestion(qID);
     evaluateQuestionButtonColor(qID);
+  }
+
+  // Small helper to replay a quick fade/slide on question content
+  function qReplayEnterAnim(el) {
+    if (!el) return;
+    try {
+      el.classList.remove("q-anim-enter");
+      // force reflow to restart animation
+      void el.offsetWidth;
+      el.classList.add("q-anim-enter");
+    } catch {}
   }
 
   function setQuestion(qID) {
@@ -2073,6 +2164,14 @@
       try { renderMathInElement && renderMathInElement(MCQOptions, katexOptions); } catch {}
     }
 
+    // Trigger a quick enter animation on main question body and visible answer area
+    try {
+      const body = document.querySelector(".card.mb-4 .card-body");
+      qReplayEnterAnim(body || document.querySelector(".card.mb-4"));
+      if (question.qType === "Numerical") qReplayEnterAnim(numerical);
+      else qReplayEnterAnim(MCQOptions);
+    } catch {}
+
     // Toggle which action button to show for this question
     const checkBtn = document.getElementById("check-answer");
     const resetBtn = document.getElementById("reset-question");
@@ -2092,6 +2191,8 @@
 
     // Update bookmark button state
     updateBookmarkButton();
+    // Update color picker selected state for current question
+    updateColorPickerSelection();
 
     // Update prev/next button disabled state
     updateTopbarNavButtons();
@@ -2144,6 +2245,7 @@
         throw new Error(`HTTP ${response.status}`);
       }
       bookmarkTags = await response.json();
+
 
       // Create dialog content
       const currentTagIds = currentBookmarks.map((b) => b.tagId);
@@ -2233,6 +2335,7 @@
           // Create new tag
           const createTagBtn = modalBody.querySelector("#create-tag-btn");
           const newTagInput = modalBody.querySelector("#new-tag-input");
+
 
           createTagBtn.addEventListener("click", async () => {
             const tagName = newTagInput.value.trim();
@@ -2374,6 +2477,7 @@
       // Create new tag
       const createTagBtn = modalBody.querySelector("#create-tag-btn");
       const newTagInput = modalBody.querySelector("#new-tag-input");
+
 
       createTagBtn.addEventListener("click", async () => {
         const tagName = newTagInput.value.trim();
@@ -2621,11 +2725,103 @@
     }
   }
 
+  // --- Question color mark helpers ---
+  async function setQuestionColor(color) {
+    try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const response = await authFetch(`${API_BASE}/api/question-marks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ assignmentId: aID, questionIndex: originalIdx, color })
+      });
+      if (!response.ok) throw new Error('Failed to set color');
+      updateColorIndicators();
+      return true;
+    } catch (e) {
+      console.error('Failed to set question color:', e);
+      return false;
+    }
+  }
+
+  async function clearQuestionColor() {
+    try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const response = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to clear color');
+      return true;
+    } catch (e) {
+      console.error('Failed to clear question color:', e);
+      return false;
+    }
+  }
+
+  async function updateColorPickerSelection() {
+    try {
+      const picker = document.getElementById('qcolor-picker');
+      if (!picker) return;
+      const chips = Array.from(picker.querySelectorAll('.qcolor-chip'));
+      chips.forEach((c) => c.classList.remove('selected'));
+      if (currentQuestionID == null) return;
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const color = (data?.color || '').trim().toLowerCase();
+      if (!color) return;
+      const match = chips.find((c) => String(c.getAttribute('data-color') || '').trim().toLowerCase() === color);
+      if (match) match.classList.add('selected');
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  // ---------- Color badges on question circles ----------
+  async function updateColorIndicators() {
+    try {
+      const res = await authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" });
+      if (!res.ok) {
+        questionButtons?.forEach((btn) => {
+          btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
+        });
+        return;
+      }
+      const all = await res.json();
+      const mine = Array.isArray(all)
+        ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+        : [];
+      const byIdx = new Map();
+      for (const m of mine) byIdx.set(Number(m.questionIndex), String(m.color));
+
+      const qMap = window.questionIndexMap || [];
+      questionButtons?.forEach((btn) => {
+        const idx = Number(btn.dataset.qid);
+        const orig = qMap[idx];
+        let el = btn.querySelector('.q-color-indicator');
+        if (!el) {
+          el = document.createElement('span');
+          el.className = 'q-color-indicator hidden';
+          btn.appendChild(el);
+        }
+        const color = byIdx.get(Number(orig));
+        if (color) {
+          el.style.backgroundColor = color;
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+          try { el.style.removeProperty('background-color'); } catch {}
+        }
+      });
+    } catch (err) {
+      console.warn('updateColorIndicators failed', err);
+    }
+  }
+
   // Refresh badges on login/logout
-  window.addEventListener('qbase:login', () => updateBookmarkIndicators());
+  window.addEventListener('qbase:login', () => { updateBookmarkIndicators(); updateColorIndicators(); updateColorPickerSelection(); });
   window.addEventListener('qbase:logout', () => {
     questionButtons?.forEach((btn) => {
       btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+      btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
     });
   });
 })();

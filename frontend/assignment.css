@@ -233,6 +233,18 @@ body {
 }
 
 /* =========================
+   Question change animation
+   ========================= */
+.q-anim-enter {
+  animation: qbaseFadeIn 160ms cubic-bezier(.2,.6,.3,1) both;
+}
+
+@keyframes qbaseFadeIn {
+  from { opacity: 0; transform: translateY(6px); filter: saturate(85%); }
+  to   { opacity: 1; transform: translateY(0); filter: saturate(100%); }
+}
+
+/* =========================
    Mobile question bar
    ========================= */
 #mobile-qbar {
@@ -751,6 +763,36 @@ html {
   display: none !important;
 }
 
+/* Per-question color marker (small dot on bottom-right) */
+.q-btn .q-color-indicator {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.14);
+}
+.q-btn .q-color-indicator.hidden { display: none !important; }
+
+/* Quick color chips in topbar */
+.qcolor-picker { display: inline-flex; gap: 6px; }
+.qcolor-chip {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+  background: var(--qc, transparent);
+  padding: 0;
+  cursor: pointer;
+}
+.qcolor-chip.selected {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85), inset 0 0 0 2px rgba(0,0,0,0.25);
+}
+
 /* Scrollbars are themed globally */
 
 /* --------- Desktop toggles with animation --------- */
@@ -794,6 +836,7 @@ html {
   .right-col {
     transition: none !important;
   }
+  .q-anim-enter { animation: none !important; }
   /* Disable decorative evaluation animations if user prefers reduced motion */
   .mcq-option.correct::after,
   .mcq-option.wrong::after,
@@ -807,6 +850,90 @@ html {
   }
 }
 
+/* =========================
+   Initial load skeleton overlay
+   ========================= */
+.main-wrapper > .overflow-y-scroll > .p-4 { position: relative; }
+#q-skeleton.q-skeleton-overlay {
+  position: absolute;
+  inset: 0;
+  padding: 1rem;
+  background: rgba(17, 19, 23, 0.65);
+  backdrop-filter: saturate(120%) blur(4px);
+  -webkit-backdrop-filter: saturate(120%) blur(4px);
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+body.q-loading #q-skeleton.q-skeleton-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Dim and block interactions on controls during loading */
+body.q-loading #question-actions {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Skeleton primitives */
+.sk-line,
+.sk-pill,
+.sk-rect,
+.sk-option {
+  border-radius: 10px;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0.06) 0%,
+    rgba(255,255,255,0.13) 20%,
+    rgba(255,255,255,0.06) 40%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.1s linear infinite;
+}
+@keyframes sk-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+.sk-line { height: 14px; margin: 10px 0; }
+.sk-pill { height: 22px; display: inline-block; margin-left: 8px; border-radius: 999px; }
+.sk-rect { height: 90px; }
+.sk-w-20 { width: 20%; }
+.sk-w-30 { width: 30%; }
+.sk-w-60 { width: 60%; }
+.sk-w-80 { width: 80%; }
+.sk-w-90 { width: 90%; }
+.sk-w-12 { width: 12ch; }
+.sk-w-10 { width: 10ch; }
+
+.sk-card { padding: 1rem; margin-bottom: 1rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(20,22,26,0.65); }
+.sk-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.sk-body { padding: .25rem 0; }
+.sk-options { display: grid; gap: .75rem; }
+.sk-option { height: 48px; border-radius: 12px; }
+
+/* =========================
+   Page leave fade (back to index)
+   ========================= */
+body .assignment-topbar,
+body .main-wrapper {
+  transition: opacity 120ms ease;
+}
+body.page-leave .assignment-topbar,
+body.page-leave .main-wrapper {
+  opacity: 0;
+}
+
+/* =========================
+   Micro-interaction pulses
+   ========================= */
+.btn-pulse {
+  animation: btnPulse 220ms ease;
+}
+@keyframes btnPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
      /* CM6 selectors removed (using EasyMDE/CM5) */
 
 /* EasyMDE (CodeMirror 5) — match app’s card style */

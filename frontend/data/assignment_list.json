@@ -147,6 +147,13 @@
     "aID": 20
   },
   {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Electrochemistry",
+    "title": "Electrolytic Cells",
+    "aID": 21
+  },
+  {
     "subject": "Mathematics",
     "faculty": "MJG",
     "chapter": "Differential Equations",
@@ -157,10 +164,10 @@
     "subject": "Chemistry",
     "faculty": "CVR",
     "chapter": "Redox Reactions",
-    "title": "REvision Assignment",
+    "title": "Redox Reactions Revision Assignment",
     "aID": 203
   },
-   {
+  {
     "subject": "Physics",
     "faculty": "PGR",
     "chapter": "Ray Optics",
