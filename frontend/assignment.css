@@ -750,7 +750,7 @@ html {
   border-radius: 999px;
   background: #0d6efd; /* bootstrap primary */
   color: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.15); /* thinner */
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
   font-size: 10px; /* small icon sizing */
   line-height: 1;
@@ -772,26 +772,48 @@ html {
   height: 12px;
   display: inline-block;
   border-radius: 999px;
-  border: 2px solid rgba(0,0,0,0.5);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.14);
+  border: 1px solid rgba(0,0,0,0.4); /* thinner outline */
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
 }
 .q-btn .q-color-indicator.hidden { display: none !important; }
 
 /* Quick color chips in topbar */
-.qcolor-picker { display: inline-flex; gap: 6px; }
-.qcolor-chip {
+.qcolor-picker { display: inline-flex; gap: 6px; align-items: center; }
+.qcolor-picker.collapsed { gap: 0; }
+.filter-color-chip {
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
   background: var(--qc, transparent);
   padding: 0;
   cursor: pointer;
 }
-.qcolor-chip.selected {
-  box-shadow: 0 0 0 2px rgba(255,255,255,0.85), inset 0 0 0 2px rgba(0,0,0,0.25);
+.filter-color-chip.selected {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.9), inset 0 0 0 1px rgba(0,0,0,0.2);
 }
+.qcolor-chip {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2); /* thinner outline */
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.25);
+  background: var(--qc, transparent);
+  padding: 0;
+  cursor: pointer;
+  transition: width .2s ease, height .2s ease, margin .2s ease, opacity .2s ease, transform .15s ease;
+}
+.qcolor-chip.selected {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.9), inset 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+/* Collapsing behavior: show only selected chip when collapsed */
+.qcolor-picker.collapsed .qcolor-chip { width: 0; height: 0; margin: 0; opacity: 0; pointer-events: none; border-width: 0; }
+.qcolor-picker.collapsed .qcolor-chip.selected { width: 16px; height: 16px; opacity: 1; pointer-events: auto; border-width: 1px; }
+
+.qcolor-picker:not(.collapsed) .qcolor-chip { opacity: 1; }
+.qcolor-picker:not(.collapsed) .qcolor-chip:hover { transform: scale(1.08); }
 
 /* Scrollbars are themed globally */
 

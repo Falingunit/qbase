@@ -329,8 +329,9 @@
                   <i class="bi bi-bookmark"></i>
                 </button>
                 <!-- Quick color marks -->
-                <div id="qcolor-picker" class="qcolor-picker" title="Mark question">
-                  <button type="button" class="qcolor-chip" data-color="#6f42c1" style="--qc:#6f42c1" aria-label="Mark purple"></button>
+                <div id="qcolor-picker" class="qcolor-picker collapsed" title="Mark question">
+                  <button type="button" class="qcolor-chip" data-color="none" aria-label="No color (clear)"></button>
+                  <button type="button" class="qcolor-chip" data-color="#0d6efd" style="--qc:#0d6efd" aria-label="Mark blue"></button>
                   <button type="button" class="qcolor-chip" data-color="#dc3545" style="--qc:#dc3545" aria-label="Mark red"></button>
                   <button type="button" class="qcolor-chip" data-color="#ffc107" style="--qc:#ffc107" aria-label="Mark yellow"></button>
                   <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
@@ -460,7 +461,22 @@
         class="right-col p-3 d-none d-lg-block overflow-y-scroll"
         style="border: none"
       >
-        <h6 class="mb-3">Questions</h6>
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h6 class="mb-0">Questions</h6>
+          <div class="dropdown" style="display: none;">
+            <button id="filter-btn" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Filter questions"><i class="bi bi-funnel" aria-hidden="true"></i><span class="visually-hidden">Filter</span></button>
+            <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 260px;">
+              <div class="mb-2"><strong>Tags</strong></div>
+              <div id="filter-tags" class="mb-2 small" style="max-height: 180px; overflow:auto;"></div>
+              <div class="mb-2"><strong>Colors</strong></div>
+              <div id="filter-colors" class="d-flex flex-wrap gap-2 mb-2"></div>
+              <div class="d-flex justify-content-between mt-2">
+                <button id="filter-clear" class="btn btn-sm btn-outline-secondary">Clear</button>
+                <button id="filter-apply" class="btn btn-sm btn-primary">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           class="controls d-flex justify-content-between flex-shrink-0"
           style="padding-top: 1rem"

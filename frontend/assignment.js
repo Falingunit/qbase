@@ -1667,16 +1667,36 @@
   (function wireQColorPicker() {
     const picker = document.getElementById('qcolor-picker');
     if (!picker) return;
+    // Toggle expand/collapse when clicking the picker background
     picker.addEventListener('click', async (e) => {
       const chip = e.target.closest('.qcolor-chip');
-      if (!chip) return;
-      if (currentQuestionID == null) return;
-      const color = String(chip.getAttribute('data-color') || '').trim();
-      if (!color) return;
-      const ok = await setQuestionColor(color);
-      if (ok) {
-        updateColorPickerSelection();
+      if (!chip) {
+        picker.classList.toggle('collapsed');
+        return;
       }
+      // If collapsed and clicking the selected chip, expand instead of re-setting
+      if (picker.classList.contains('collapsed') && chip.classList.contains('selected')) {
+        picker.classList.remove('collapsed');
+        return;
+      }
+      // Select a color (or none)
+      if (currentQuestionID == null) return;
+      const val = String(chip.getAttribute('data-color') || '').trim();
+      let ok = true;
+      if (!val || val.toLowerCase() === 'none') ok = await clearQuestionColor();
+      else ok = await setQuestionColor(val);
+      if (ok) {
+        updateColorIndicators();
+        updateColorPickerSelection();
+        // collapse after choosing
+        picker.classList.add('collapsed');
+      }
+    });
+    // Click outside to collapse
+    document.addEventListener('click', (e) => {
+      if (!picker) return;
+      if (picker.contains(e.target)) return;
+      picker.classList.add('collapsed');
     });
   })();
 
@@ -1825,6 +1845,7 @@
       // desktop button
       const dcol = document.createElement("div");
       dcol.className = "col";
+      dcol.dataset.qid = i;
       const dbtn = document.createElement("button");
       dbtn.className = "btn btn-secondary w-100 q-btn";
       dbtn.textContent = i + 1;
@@ -1865,6 +1886,8 @@
     updateBookmarkIndicators();
     // initial color badges
     updateColorIndicators();
+    // initialize filters UI
+    try { setupFilterDropdown(); } catch {}
   }
 
   function MCQOptionClicked(optionElement) {
@@ -2202,6 +2225,10 @@
 
   let currentBookmarks = [];
   let bookmarkTags = [];
+  // Filters: selected tag ids and colors (lowercase hex or 'none')
+  let activeTagFilters = new Set();
+  let activeColorFilters = new Set();
+  let filteredQuestionIDs = null; // null => no filter; else Array of display indices
 
   async function updateBookmarkButton() {
     const bookmarkBtn = document.getElementById("bookmark-btn");
@@ -2665,9 +2692,11 @@
     const prev = document.getElementById("nav-prev");
     const next = document.getElementById("nav-next");
     if (!prev || !next || currentQuestionID == null) return;
-    const last = (window.displayQuestions?.length || 1) - 1;
-    prev.disabled = currentQuestionID <= 0;
-    next.disabled = currentQuestionID >= last;
+    const filtered = getActiveFilteredIDs();
+    const pos = filtered.indexOf(Number(currentQuestionID));
+    const last = filtered.length - 1;
+    prev.disabled = pos <= 0;
+    next.disabled = pos < 0 || pos >= last;
   }
 
   // Wire prev/next click handlers
@@ -2676,12 +2705,15 @@
     const next = document.getElementById("nav-next");
     if (prev) prev.addEventListener("click", () => {
       if (currentQuestionID == null) return;
-      if (currentQuestionID > 0) clickQuestionButton(currentQuestionID - 1);
+      const filtered = getActiveFilteredIDs();
+      const pos = filtered.indexOf(Number(currentQuestionID));
+      if (pos > 0) clickQuestionButton(filtered[pos - 1]);
     });
     if (next) next.addEventListener("click", () => {
       if (currentQuestionID == null) return;
-      const last = (window.displayQuestions?.length || 1) - 1;
-      if (currentQuestionID < last) clickQuestionButton(currentQuestionID + 1);
+      const filtered = getActiveFilteredIDs();
+      const pos = filtered.indexOf(Number(currentQuestionID));
+      if (pos >= 0 && pos < filtered.length - 1) clickQuestionButton(filtered[pos + 1]);
     });
     updateTopbarNavButtons();
   })();
@@ -2764,11 +2796,16 @@
       if (currentQuestionID == null) return;
       const originalIdx = window.questionIndexMap[currentQuestionID];
       const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
-      if (!res.ok) return;
+      if (!res.ok) {
+        // No color saved, mark 'none' chip as selected
+        const none = chips.find((c) => String(c.getAttribute('data-color') || '').toLowerCase() === 'none');
+        if (none) none.classList.add('selected');
+        return;
+      }
       const data = await res.json();
       const color = (data?.color || '').trim().toLowerCase();
-      if (!color) return;
-      const match = chips.find((c) => String(c.getAttribute('data-color') || '').trim().toLowerCase() === color);
+      const sel = color || 'none';
+      const match = chips.find((c) => String(c.getAttribute('data-color') || '').trim().toLowerCase() === sel);
       if (match) match.classList.add('selected');
     } catch (e) {
       // ignore
@@ -2824,6 +2861,177 @@
       btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
     });
   });
+
+  // -------------------- Filter UI (tags + colors) --------------------
+  function setupFilterDropdown() {
+    const btn = document.getElementById('filter-btn');
+    const tagsHost = document.getElementById('filter-tags');
+    const colorsHost = document.getElementById('filter-colors');
+    const applyBtn = document.getElementById('filter-apply');
+    const clearBtn = document.getElementById('filter-clear');
+    if (!btn || !tagsHost || !colorsHost || !applyBtn || !clearBtn) return;
+
+    // Populate on dropdown show to keep fresh
+    btn.addEventListener('shown.bs.dropdown', async () => {
+      await populateFilterTags(tagsHost);
+      populateFilterColors(colorsHost);
+    });
+
+    applyBtn.addEventListener('click', async () => {
+      // Read selected tags
+      activeTagFilters = new Set(Array.from(tagsHost.querySelectorAll('input[type="checkbox"][data-tag-id]:checked')).map((el) => el.getAttribute('data-tag-id')));
+      // Read selected colors
+      activeColorFilters = new Set(Array.from(colorsHost.querySelectorAll('.filter-color-chip.selected')).map((el) => String(el.getAttribute('data-color') || '').toLowerCase()));
+      await applyQuestionFilters();
+      // Mark button active state
+      const active = activeTagFilters.size > 0 || activeColorFilters.size > 0;
+      btn.classList.toggle('btn-primary', active);
+      btn.classList.toggle('btn-outline-secondary', !active);
+      // Close dropdown
+      try { bootstrap.Dropdown.getInstance(btn)?.hide(); } catch {}
+    });
+
+    clearBtn.addEventListener('click', async () => {
+      activeTagFilters.clear();
+      activeColorFilters.clear();
+      // Reset UI state in dropdown
+      try {
+        tagsHost.querySelectorAll('input[type="checkbox"]').forEach((el) => (el.checked = false));
+        colorsHost.querySelectorAll('.filter-color-chip').forEach((el) => el.classList.remove('selected'));
+      } catch {}
+      await applyQuestionFilters();
+      btn.classList.remove('btn-primary');
+      btn.classList.add('btn-outline-secondary');
+      try { bootstrap.Dropdown.getInstance(btn)?.hide(); } catch {}
+    });
+  }
+
+  async function populateFilterTags(host) {
+    try {
+      const res = await authFetch(`${API_BASE}/api/bookmark-tags`);
+      if (!res.ok) { host.innerHTML = '<div class="text-muted small">Sign in to use tags</div>'; return; }
+      const tags = await res.json();
+      const items = tags.map(t => {
+        const id = `ftag-${t.id}`;
+        const checked = activeTagFilters.has(String(t.id)) ? 'checked' : '';
+        const name = escapeHtml(t.name);
+        return `<div class="form-check form-check-sm">
+          <input class="form-check-input" type="checkbox" id="${id}" data-tag-id="${t.id}" ${checked}>
+          <label class="form-check-label" for="${id}">${name}</label>
+        </div>`;
+      }).join('');
+      host.innerHTML = items || '<div class="text-muted small">No tags yet</div>';
+    } catch (e) {
+      host.innerHTML = '<div class="text-muted small">Failed to load tags</div>';
+    }
+  }
+
+  function populateFilterColors(host) {
+    const colors = [
+      { color: 'none', label: 'None' },
+      { color: '#0d6efd', label: 'Blue' },
+      { color: '#dc3545', label: 'Red' },
+      { color: '#ffc107', label: 'Yellow' },
+      { color: '#198754', label: 'Green' },
+    ];
+    host.innerHTML = colors.map(c => {
+      const selected = activeColorFilters.has(c.color.toLowerCase()) ? 'selected' : '';
+      const style = c.color === 'none' ? '' : `style="--qc:${c.color}"`;
+      return `<button type="button" class="filter-color-chip ${selected}" data-color="${c.color}" ${style} title="${c.label}"></button>`;
+    }).join('');
+    host.querySelectorAll('.filter-color-chip').forEach((el) => {
+      el.addEventListener('click', () => {
+        el.classList.toggle('selected');
+      });
+    });
+  }
+
+  async function applyQuestionFilters() {
+    try {
+      // If no selections, show all
+      const hasTag = activeTagFilters.size > 0;
+      const hasColor = activeColorFilters.size > 0;
+      if (!hasTag && !hasColor) {
+        filteredQuestionIDs = null;
+        // show all buttons
+        questionButtons?.forEach((btn) => btn.classList.remove('d-none'));
+        updateTopbarNavButtons();
+        return;
+      }
+
+      // Build tag map and color map
+      const [bmRes, cmRes] = await Promise.all([
+        authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' }),
+        authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' }),
+      ]);
+      let byQTags = new Map(); // origIdx -> Set(tagId)
+      if (bmRes.ok) {
+        const all = await bmRes.json();
+        const mine = Array.isArray(all) ? all.filter(b => Number(b.assignmentId) === Number(aID)) : [];
+        for (const b of mine) {
+          const key = Number(b.questionIndex);
+          if (!byQTags.has(key)) byQTags.set(key, new Set());
+          byQTags.get(key).add(String(b.tagId));
+        }
+      }
+      let byQColor = new Map(); // origIdx -> color (lower)
+      if (cmRes.ok) {
+        const all = await cmRes.json();
+        const mine = Array.isArray(all) ? all.filter(m => Number(m.assignmentId) === Number(aID)) : [];
+        for (const m of mine) {
+          byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+        }
+      }
+
+      const qMap = window.questionIndexMap || [];
+      const total = window.displayQuestions?.length || 0;
+      const keep = [];
+      for (let i = 0; i < total; i++) {
+        const orig = qMap[i];
+        let ok = false;
+        if (hasTag) {
+          const tags = byQTags.get(Number(orig));
+          if (tags) for (const t of activeTagFilters) { if (tags.has(String(t))) { ok = true; break; } }
+        }
+        if (hasColor && !ok) {
+          const col = (byQColor.get(Number(orig)) || '').toLowerCase();
+          if (activeColorFilters.has('none') && !col) ok = true;
+          if (!ok && col && activeColorFilters.has(col)) ok = true;
+        }
+        if (ok) keep.push(i);
+      }
+      filteredQuestionIDs = keep;
+
+      // Apply to UI
+      const keepSet = new Set(keep);
+      questionButtons?.forEach((btn) => {
+        const idx = Number(btn.dataset.qid);
+        const show = keepSet.has(idx);
+        if (show) btn.classList.remove('d-none');
+        else btn.classList.add('d-none');
+        const p = btn.parentElement;
+        if (p && p.classList && p.classList.contains('col')) {
+          if (show) p.classList.remove('d-none');
+          else p.classList.add('d-none');
+        }
+      });
+
+      // If current question is filtered out, jump to first kept
+      if (currentQuestionID != null && !keepSet.has(currentQuestionID) && keep.length > 0) {
+        clickQuestionButton(keep[0]);
+      }
+      updateTopbarNavButtons();
+    } catch (e) {
+      console.warn('applyQuestionFilters failed', e);
+    }
+  }
+
+  function getActiveFilteredIDs() {
+    if (Array.isArray(filteredQuestionIDs) && filteredQuestionIDs.length > 0) return filteredQuestionIDs;
+    // default: all indices
+    const n = window.displayQuestions?.length || 0;
+    return Array.from({ length: n }, (_, i) => i);
+  }
 })();
   // --- Question font size slider (question + options only) ---
   (function initQAFontSlider() {
