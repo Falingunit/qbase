@@ -1,0 +1,185 @@
+
+{
+  "questions":
+ [
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The conductivity of a decinormal solution of KCl at 18°C is 0.0112 S cm⁻¹. The resistance of a cell containing the solution at 18°C was found to be 55 ohm. What is the cell constant?",
+    "image": null,
+    "qOptions": ["0.516 cm⁻¹", "0.616 cm⁻¹", "0.716 cm⁻¹", "0.816 cm⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The resistance of a 0.05 N solution of an electrolyte was found to be 210 ohm at 25°C. Calculate the equivalent conductivity of the solution at 25°C. Cell constant = 0.88 cm⁻¹.",
+    "image": null,
+    "qOptions": ["83.18 S cm² eq⁻¹", "83.51 S cm² eq⁻¹", "83.81 S cm² eq⁻¹", "84.00 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The resistance of N/2 solution of an electrolyte in a cell was found to be 45 ohm. Calculate the equivalent conductivity of the solution, if the electrodes in the cell are 2.2 cm apart and have an area of 3.8 cm².",
+    "image": null,
+    "qOptions": ["25.12 S cm² eq⁻¹", "25.42 S cm² eq⁻¹", "25.72 S cm² eq⁻¹", "25.92 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A conductance cell was filled with 0.01 molar KCl. Its resistance was found to be 150 ohm at 25°C. The conductivity was observed to be 0.00177 S cm⁻¹. The cell was then washed and filled with 0.05 molar NaCl whose resistance was found to be 325 ohm. Calculate the conductivity and equivalent conductivity of NaCl solution.",
+    "image": null,
+    "qOptions": ["7.969×10⁻⁴ S cm⁻¹; 15.34 S cm² eq⁻¹", "8.169×10⁻⁴ S cm⁻¹; 16.34 S cm² eq⁻¹", "8.369×10⁻⁴ S cm⁻¹; 17.34 S cm² eq⁻¹", "8.569×10⁻⁴ S cm⁻¹; 18.34 S cm² eq⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A conductance cell when filled with 0.05 M solution of KCl records a resistance of 410.5 ohm at 25°C. When filled with CaCl₂ solution (11 g in 500 mL) it records 990 ohm. If conductivity of 0.05 M KCl is 0.00189 S cm⁻¹, calculate the molar conductivity of CaCl₂ solution.",
+    "image": null,
+    "qOptions": ["3.756 S cm² mol⁻¹", "3.856 S cm² mol⁻¹", "3.956 S cm² mol⁻¹", "4.056 S cm² mol⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A particular cell when filled with 0.05 M solution of NaCl gave a resistance of 140 ohm at 20°C, while with 0.05 M solution of HCl gave a resistance of 75 ohm. Calculate the equivalent conductivity of HCl solution. Given conductivity of 0.05 M NaCl is 0.00141 S cm⁻¹.",
+    "image": null,
+    "qOptions": ["52.14 S cm² eq⁻¹", "52.44 S cm² eq⁻¹", "52.64 S cm² eq⁻¹", "52.84 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A salt solution of 0.25 N placed in a cell whose electrodes are 1.9 cm apart and 3.6 cm² in area offers a resistance of 200 ohm. Calculate equivalent conductivity of solution.",
+    "image": null,
+    "qOptions": ["105.0 S cm² eq⁻¹", "105.3 S cm² eq⁻¹", "105.5 S cm² eq⁻¹", "105.7 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the equivalent conductivity of a salt solution of 0.75 N which in a conductance cell whose electrodes are 2 cm apart and 6.6 cm² in area was found to offer a resistance of 50 ohm.",
+    "image": null,
+    "qOptions": ["7.88 S cm² eq⁻¹", "7.98 S cm² eq⁻¹", "8.08 S cm² eq⁻¹", "8.18 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The resistance of 0.02 M KCl solution was 225 ohm. The conductivity of 0.02 M KCl solution was 0.0027 S cm⁻¹. The resistance of 0.1 M CuSO₄ solution was found to be 37.5 ohm using the same cell. Find the equivalent and molar conductivities of CuSO₄ solution.",
+    "image": null,
+    "qOptions": ["80 S cm² eq⁻¹; 160 S cm² mol⁻¹", "81 S cm² eq⁻¹; 162 S cm² mol⁻¹", "82 S cm² eq⁻¹; 164 S cm² mol⁻¹", "83 S cm² eq⁻¹; 166 S cm² mol⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "0.1 N solution of NaCl at 18°C has a conductivity of 0.039 S cm⁻¹. Its equivalent conductivity at infinite dilution is recorded to be 450 S cm² eq⁻¹. Calculate the degree of dissociation of NaCl in solution.",
+    "image": null,
+    "qOptions": ["85.66%", "86.16%", "86.66%", "87.16%"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the equivalent conductivity at infinite dilution of the salt NaKC₂O₄. Given ionic equivalent conductance of oxalate, Na⁺ and K⁺ ions are 74.1, 50.1 and 73.5 S cm² eq⁻¹ respectively.",
+    "image": null,
+    "qOptions": ["97.85 S cm² eq⁻¹", "98.15 S cm² eq⁻¹", "98.85 S cm² eq⁻¹", "99.15 S cm² eq⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the molar and equivalent conductivities of AgCl at infinite dilution. Given molar conductivities of AgNO₃, KCl and KNO₃ are 133.4, 149.9 and 144.9 S cm² mol⁻¹ respectively at infinite dilution.",
+    "image": null,
+    "qOptions": ["137.8 S cm² mol⁻¹", "138.4 S cm² mol⁻¹", "139.4 S cm² mol⁻¹", "140.4 S cm² mol⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The conductivity of a weak monobasic acid in 0.2 N solution at 20°C is 0.0023 S cm⁻¹ and the equivalent conductivity at infinite dilution is 160.2 S cm² eq⁻¹. Calculate the degree of dissociation of weak acid.",
+    "image": null,
+    "qOptions": ["6.18%", "6.68%", "7.18%", "7.68%"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 291 K, the equivalent conductivity of Ag⁺ and NO₃⁻ are 54.14 and 61.27 at infinite dilution. Calculate the ionic mobilities and transport number of Ag⁺ and NO₃⁻ at infinite dilution.",
+    "image": null,
+    "qOptions": ["t₍Ag⁺₎=0.45, t₍NO₃⁻₎=0.55", "t₍Ag⁺₎=0.47, t₍NO₃⁻₎=0.53", "t₍Ag⁺₎=0.49, t₍NO₃⁻₎=0.51", "t₍Ag⁺₎=0.51, t₍NO₃⁻₎=0.49"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The absolute velocity of Ag⁺ is 5.7×10⁻⁴ cm s⁻¹ and of NO₃⁻ is 6.9×10⁻⁴ cm s⁻¹. Assuming complete dissociation, calculate the equivalent conductivity of 0.01 M AgNO₃ at infinite dilution.",
+    "image": null,
+    "qOptions": ["120.59 S cm² eq⁻¹", "121.59 S cm² eq⁻¹", "122.59 S cm² eq⁻¹", "123.59 S cm² eq⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 291 K, the conductivity of saturated solution of CaF₂ is 3.86×10⁻⁵ S cm⁻¹ and that of water used for solution is 0.15×10⁻⁵ S cm⁻¹. The ionic conductances of Ca²⁺ and F⁻ at infinite dilution are 51.0 and 47.0 S cm² eq⁻¹ respectively. Calculate the solubility of CaF₂ in solution.",
+    "image": null,
+    "qOptions": ["1.79×10⁻² g L⁻¹", "1.89×10⁻² g L⁻¹", "1.99×10⁻² g L⁻¹", "2.09×10⁻² g L⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The conductivity of a saturated solution of AgCl at 25°C after subtracting the conductivity of water is 2.28×10⁻⁶ S cm⁻¹. Calculate the solubility of AgCl in water at this temperature. Given λ°₍AgCl₎ = 138.3 S cm² eq⁻¹.",
+    "image": null,
+    "qOptions": ["2.165×10⁻³ g L⁻¹", "2.265×10⁻³ g L⁻¹", "2.365×10⁻³ g L⁻¹", "2.465×10⁻³ g L⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The equivalent conductivities of 0.0625 N solution and that at infinite dilution of a weak monobasic acid are 22.4 and 421 S cm² eq⁻¹ respectively. Calculate dissociation constant of acid.",
+    "image": null,
+    "qOptions": ["1.56×10⁻⁴", "1.66×10⁻⁴", "1.76×10⁻⁴", "1.86×10⁻⁴"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 20°C, the equivalent conductivity of LiNO₃ at infinite dilution is 100.0 and in 0.2 N solution 79.0 S cm² eq⁻¹. Determine concentration of Li⁺ in solution.",
+    "image": null,
+    "qOptions": ["1.006 g L⁻¹", "1.056 g L⁻¹", "1.106 g L⁻¹", "1.156 g L⁻¹"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 291 K, the equivalent conductivities at infinite dilution of NH₄Cl, NaOH and NaCl are 129.8, 217.5 and 108.9 S cm² eq⁻¹ respectively. Calculate the equivalent conductivity at infinite dilution of NH₄OH.",
+    "image": null,
+    "qOptions": ["237.4 S cm² eq⁻¹", "238.4 S cm² eq⁻¹", "239.4 S cm² eq⁻¹", "240.4 S cm² eq⁻¹"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 291 K, the equivalent conductivities of HCl, NaCl, CH₃COONa are 369.3, 101.7 and 71.7 respectively at infinite dilution. If equivalent conductivity of centinormal solution of acetic acid is 14.3 S cm² eq⁻¹, calculate the degree of dissociation of CH₃COOH and [H⁺] in solution of acetic acid.",
+    "image": null,
+    "qOptions": ["3.2%, 3.2×10⁻⁴", "4.2%, 4.2×10⁻⁴", "5.2%, 5.2×10⁻⁴", "6.2%, 6.2×10⁻⁴"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The equivalent conductivities of NaCl, HCl and CH₃COONa at infinite dilution are 126.45, 426.16, 91.0 respectively. Calculate equivalent conductivity of acetic acid at infinite dilution. Also if equivalent conductivity of given acetic acid at a dilution is 48.15, calculate its degree of dissociation.",
+    "image": null,
+    "qOptions": ["389.7 S cm² eq⁻¹; 11.3%", "390.7 S cm² eq⁻¹; 12.3%", "391.7 S cm² eq⁻¹; 13.3%", "392.7 S cm² eq⁻¹; 14.3%"],
+    "qAnswer": "B"
+  }
+]
+
+
+
+}

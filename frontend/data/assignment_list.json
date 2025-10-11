@@ -180,5 +180,12 @@
     "chapter": "Ray Optics",
     "title": "Optical Instruments",
     "aID": 205
+  },
+   {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Electrochemistry",
+    "title": "Conductance",
+    "aID": 206
   }
 ]
