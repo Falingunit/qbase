@@ -1,0 +1,292 @@
+
+{
+  "questions":
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q1(I). In a YDSE setup (\\(\\lambda = 500\\,\\text{nm}, d = 2\\,\\text{mm}, D = 4\\,\\text{m}\\)), with light incident at \\(\\theta = 30^{\\circ}\\), find the location of the central maxima on the screen.",
+    "image": "1.png",
+    "qOptions": ["\\(\\frac{4}{\\sqrt{3}}\\,\\text{mm}\\)", "\\(2\\,\\text{mm}\\)", "\\(1\\,\\text{mm}\\)", "\\(0.5\\,\\text{mm}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q1(II). For the same setup, find the order of the bright fringe at point O.",
+    "image": "1.png",
+    "qOptions": ["2000", "1000", "1500", "2500"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q1(III). Find the fringe width of the pattern formed near O for the same data.",
+    "image": "1.png",
+    "qOptions": ["1\\,\\text{mm}", "0.5\\,\\text{mm}", "2\\,\\text{mm}", "1.5\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q1(IV). Find the location of the 10th order bright fringe on either side of the central maxima.",
+    "image": "1.png",
+    "qOptions": ["2.293\\,\\text{mm}", "2.0\\,\\text{mm}", "2.5\\,\\text{mm}", "3.0\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q2(I). In YDSE (\\(\\lambda = 600\\,\\text{nm}, d = 2.5\\,\\text{mm}, D = 2\\,\\text{m}\\)) where \\(\\sin\\theta = \\frac{25\\lambda}{6d}\\), find the location of the central maxima.",
+    "image": "2.png",
+    "qOptions": ["2\\,\\text{mm}", "1\\,\\text{mm}", "1.5\\,\\text{mm}", "0.5\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q2(II). Find the intensity at point O in the same setup, given intensity from one slit is \\(I_0\\).",
+    "image": "2.png",
+    "qOptions": ["3I_0", "2I_0", "I_0", "4I_0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q2(III). Find the fringe width on the screen near O.",
+    "image": "2.png",
+    "qOptions": ["0.48\\,\\text{mm}", "0.24\\,\\text{mm}", "0.6\\,\\text{mm}", "1.0\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q2(IV). Find the location of the 10th order bright fringe on either side of the central maxima.",
+    "image": "2.png",
+    "qOptions": ["y = 6.8\\,\\text{mm and } -2.8\\,\\text{mm}", "y = 3.4\\,\\text{mm and } -1.4\\,\\text{mm}", "y = 8.0\\,\\text{mm and } -4.0\\,\\text{mm}", "y = 10.0\\,\\text{mm and } -5.0\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q2(V). Find the y-coordinate of the nearest bright spots on either side of O.",
+    "image": "2.png",
+    "qOptions": ["y = 0.08\\,\\text{mm and } -0.40\\,\\text{mm}", "y = 0.05\\,\\text{mm and } -0.25\\,\\text{mm}", "y = 0.10\\,\\text{mm and } -0.50\\,\\text{mm}", "y = 0.20\\,\\text{mm and } -0.60\\,\\text{mm}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q3. In the shown Young’s double-slit experiment, the central maxima is formed at:",
+    "image": "3.png",
+    "qOptions": ["2d below O", "2d above O", "d above O", "none of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q4(a). In YDSE, a monochromatic source of wavelength \\(\\lambda\\) is placed at distance \\(\\frac{d}{2}\\) from central axis (see figure). Find the position of the central maxima.",
+    "image": "4.png",
+    "qOptions": ["4\\,\\text{mm above O}", "4\\,\\text{mm below O}", "2\\,\\text{mm above O}", "2\\,\\text{mm below O}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q4(b). Find the order of interference formed at point O in the same setup.",
+    "image": "4.png",
+    "qOptions": ["20th order bright", "10th order bright", "15th order bright", "25th order bright"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q4(c). The source is placed on the center dotted line. Find the minimum thickness of a film (\\(\\mu = 1.5\\)) to be placed in front of one slit so that intensity at O becomes \\(\\tfrac{3}{4}\\)th of maximum.",
+    "image": "4.png",
+    "qOptions": ["2000\\,\\text{Å}", "2500\\,\\text{Å}", "1500\\,\\text{Å}", "1000\\,\\text{Å}"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q5. In the adjacent diagram, CP represents a wavefront and A0, BP are rays. Find the condition on \\(\\theta\\) for constructive interference at P between BP and reflected OP.",
+    "image": "5.png",
+    "qOptions": ["\\(\\cos\\theta = \\tfrac{3\\lambda}{2d}\\)", "\\(\\cos\\theta = \\tfrac{\\lambda}{4d}\\)", "\\(\\sec\\theta - \\cos\\theta = \\tfrac{\\lambda}{d}\\)", "\\(\\sec\\theta - \\cos\\theta = \\tfrac{4\\lambda}{d}\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q6. In a modified YDSE (\\(\\lambda = 6000\\,\\text{Å}\\)), zero-order and 10th-order maxima occur at 12.34 mm and 14.73 mm. If \\(\\lambda\\) is changed to 5000 Å, find new positions of these maxima.",
+    "image": null,
+    "qOptions": ["12.34 mm and 14.73 mm", "12.00 mm and 14.00 mm", "12.25 mm and 14.60 mm", "12.10 mm and 14.50 mm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q7. Match the following for the given figure (\\(S_1,S_2,S_3,S_4\\)), where line PO is bisector and screen intensities are given.",
+    "image": "7.png",
+    "qOptions": ["A→Q, B→P, C→S, D→R", "A→P, B→R, C→Q, D→S", "A→R, B→S, C→P, D→Q", "A→S, B→Q, C→P, D→R"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q8. Light of wavelength \\(\\lambda\\) in air enters a medium of refractive index \\(\\mu\\). Two points separated by distance x have phase difference equal to:",
+    "image": null,
+    "qOptions": ["\\(\\tfrac{2\\pi\\mu x}{\\lambda}\\)", "\\(\\tfrac{2\\pi x}{\\mu\\lambda}\\)", "\\(\\tfrac{2\\pi(\\mu-1)x}{\\lambda}\\)", "\\(\\tfrac{2\\pi x}{(\\mu-1)\\lambda}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q9. A double-slit setup immersed in liquid of refractive index 1.33 has slit separation 0.7 mm, screen distance 4 m, and light of \\(\\lambda = 6300\\,\\text{Å}\\). Find the fringe width.",
+    "image": null,
+    "qOptions": ["1.4 mm", "1.8 mm", "2.7 mm", "no fringes formed"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q10. In YDSE inside water (\\(\\mu = \\tfrac{4}{3}\\), \\(f = 6\\times10^{14}\\,\\text{Hz}\\)), slit separation 0.2 mm, screen 1 m. Find fringe width in water and in air.",
+    "image": null,
+    "qOptions": ["1.5 mm and 1.875 mm", "1.0 mm and 1.33 mm", "1.2 mm and 1.6 mm", "1.5 mm and 15/8 mm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q11. When the YDSE apparatus is moved from air into water, the fringe pattern:",
+    "image": null,
+    "qOptions": ["shrinks", "enlarges", "remains unchanged", "shifts laterally"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q12. In YDSE, if one slit transmits half the intensity of the other, the fringe system will:",
+    "image": null,
+    "qOptions": ["Shift towards covered slit", "Shift away from covered slit", "Fringes less bright, positions same", "Disappear completely"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q13. In YDSE, a plate of refractive index \\(\\mu\\) and thickness \\(t\\) is placed before one slit. Find minimum \\(t\\) to make central intensity zero.",
+    "image": null,
+    "qOptions": ["\\((\\mu-1)\\tfrac{\\lambda}{2}\\)", "\\((\\mu-1)\\lambda\\)", "\\(\\tfrac{\\lambda}{2(\\mu-1)}\\)", "\\(\\tfrac{\\lambda}{\\mu-1}\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q14. Light of \\(\\lambda = 5890\\,\\text{Å}\\) used in YDSE. One slit covered with sheet (\\(\\mu=1.3\\), thickness 1.4×10⁻⁵ m). Number of fringes shifted is:",
+    "image": null,
+    "qOptions": ["6", "4", "5", "3"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q15. For light of 5000 Å on two slits 1 mm apart at 1 m, a glass plate (\\(\\mu=1.5, t=1.5×10^{-6}\\,\\text{m}\\)) is placed before one slit. Find lateral shift of central maximum.",
+    "image": null,
+    "qOptions": ["0", "1 mm", "0.1 mm", "0.5 mm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q16. Light travels through glass plate (thickness \\(t\\), index \\(\\mu\\)). If c is speed in vacuum, time to travel is:",
+    "image": null,
+    "qOptions": ["\\(\\mu t/c\\)", "\\(t/\\mu c\\)", "\\(t/\\mu C\\)", "\\(\\mu c/t\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q17. In ideal YDSE, glass plate (\\(\\mu=1.5\\)) of thickness t introduced in one path without changing central intensity. Find t.",
+    "image": null,
+    "qOptions": ["\\(\\tfrac{\\lambda}{\\mu-1}\\)", "\\(\\tfrac{\\lambda}{2(\\mu-1)}\\)", "\\(2(\\mu-1)\\lambda\\)", "\\(t(\\mu-1)\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q18. In YDSE, fringes shift by x when plate (\\(\\mu=1.5\\)) inserted. If another plate of same t but index \\(\\mu_2\\) causes shift (3/2)x, find \\(\\mu_2\\).",
+    "image": null,
+    "qOptions": ["1.75", "1.50", "1.25", "1.00"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q19. In the shown YDSE, mica sheet (thickness \\(t\\), index \\(\\mu\\)) in front of \\(S_1\\). If shifted to \\(S_2\\), number of fringes crossing centre O is:",
+    "image": "19.png",
+    "qOptions": ["\\(2t(\\mu-1)/\\lambda\\)", "\\(t(\\mu-1)/\\lambda\\)", "\\((\\mu-1)t/(2\\lambda)\\)", "\\(4t(\\mu-1)/\\lambda\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q20. Interference fringes produced by double slit; glass plate \\(\\mu=1.5\\) causes 30 fringe shift for \\(\\lambda=6\\times10^{-5}\\,\\text{cm}\\). Find \\(t/6\\).",
+    "image": null,
+    "qOptions": ["1.0×10⁻⁴ cm", "2.0×10⁻⁴ cm", "3.0×10⁻⁴ cm", "0.5×10⁻⁴ cm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q21. In YDSE with medium \\(\\mu\\): transparent slab \\(\\mu=1.2\\) before upper slit shifts central max down. If slab of 2t and 2µ placed before lower slit restores position, find \\(\\mu\\).",
+    "image": null,
+    "qOptions": ["2", "1.5", "1.2", "1.0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q22(a). Double slit in liquid \\(\\mu=1.33\\), d=1 mm, D=1.33 m, \\(\\lambda=6300\\,\\text{Å}\\). Find fringe width.",
+    "image": null,
+    "qOptions": ["0.63 mm", "0.60 mm", "0.70 mm", "0.80 mm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q22(b). For Q22(a), one slit has glass plate (\\(\\mu=1.53\\)). Find smallest thickness for adjacent minima on same axis.",
+    "image": null,
+    "qOptions": ["1.575 μm", "1.000 μm", "2.000 μm", "0.800 μm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q23. YDSE shown; glass slab in front of \\(S_2\\). Match Column I with II.",
+    "image": "23.png",
+    "qOptions": ["A→P,B→R,C→T,D→R", "A→P,B→Q,C→R,D→T", "A→Q,B→P,C→T,D→R", "A→R,B→Q,C→R,D→T"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q24. Fringes (\\(\\lambda=4800\\,\\text{Å}\\)), thin glass \\(\\mu_1=1.4\\), \\(\\mu_2=1.7\\) before slits. Central bright shifts to 5th bright. Find t.",
+    "image": null,
+    "qOptions": ["2.4 μm", "1.8 μm", "3.0 μm", "1.2 μm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Q25(a). In YDSE, d=1.2 mm, D=1 m, \\(\\beta=0.25\\,\\text{mm}\\). When D reduced, fringe width becomes 2/3 of original. Find refractive index of medium.",
+    "image": null,
+    "qOptions": ["2.4 μm, λ=600 nm in air", "2.0 μm, λ=500 nm in air", "3.0 μm, λ=700 nm in air", "1.8 μm, λ=550 nm in air"],
+    "qAnswer": "A"
+  }
+]
+
+
+
+
+
+
+}

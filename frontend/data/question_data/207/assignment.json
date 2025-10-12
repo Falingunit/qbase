@@ -1,0 +1,462 @@
+
+{
+  "questions":
+ [
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The wavelength of light coming from a sodium source is 589 nm in vacuum (or air). Its wavelength in water is [Refractive index of water = 4/3]",
+    "image": null,
+    "qOptions": ["442 nm", "543 nm", "736 nm", "843 nm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the above question, the frequency of light in vacuum and water are respectively",
+    "image": null,
+    "qOptions": [
+      "\\(5.1 \\times 10^{14}\\,\\text{Hz},\\, 3.82 \\times 10^{14}\\,\\text{Hz}\\)",
+      "\\(3.82 \\times 10^{14}\\,\\text{Hz},\\, 3.82 \\times 10^{14}\\,\\text{Hz}\\)",
+      "\\(5.1 \\times 10^{14}\\,\\text{Hz},\\, 5.1 \\times 10^{14}\\,\\text{Hz}\\)",
+      "\\(3.8 \\times 10^{14}\\,\\text{Hz},\\, 5.1 \\times 10^{14}\\,\\text{Hz}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following is not an essential condition for sustained interference of light waves",
+    "image": null,
+    "qOptions": [
+      "The two interfering waves must be propagated in almost the same direction or must intersect at very small angle.",
+      "The waves must have the same period and wavelength.",
+      "The amplitude of the two waves must be equal.",
+      "The two interfering beams of light must originate from the same source."
+    ],
+    "qAnswer": ["A","C"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "When a wave is refracted,",
+    "image": null,
+    "qOptions": [
+      "its path must change",
+      "its amplitude must change",
+      "its velocity must change",
+      "its frequency must change"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two waves create sinusoidal displacements at a point represented by \\(y_1 = 10\\sin(2000\\pi t)\\) and \\(y_2 = 20\\sin(2000\\pi t + \\pi/2)\\). The amplitude of the resultant SHM of that point is _____. (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": ["\\(10\\sqrt{5}\\)", "\\(20\\sqrt{3}\\)", "\\(15\\sqrt{2}\\)", "\\(30\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Two coherent point sources of sound wave \\(S_1\\) and \\(S_2\\) produce sound of same frequency 50 Hz and wavelength 2 cm with amplitude \\(2\\times10^{-3}\\,\\text{m}\\). Each circular arc represents a wavefront at a particular time and is separated from next arc by a distance 1 cm. Both sound waves propagate through the medium and interfere with each other. Bold circular lines denote wavefront of \\(S_1\\) and dotted circular lines denote wavefront of \\(S_2\\).",
+    "image": "p1.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The points of minimum intensity will occur at",
+    "image": null,
+    "qOptions": ["F and R", "G and D", "G and F", "F and P"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "How many of the points shown in the figure represent maxima",
+    "image": null,
+    "qOptions": ["10", "12", "13", "14"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A radio station operating at a frequency of 1.5 MHz has two identical vertical dipole antennas spaced 400 m apart oscillating in the same phase. Choose the correct statements. [Given \\(c = 3\\times10^8\\,\\text{m/s},\\; \\cos(2\\pi\\sin4^{\\circ}) = \\sqrt{0.8}\\)]",
+    "image": "7.png",
+    "qOptions": [
+      "At distances ≫ 400 m, if \\(\\theta = \\pm30^{\\circ}\\), the intensity will be greatest.",
+      "At distances ≫ 400 m, if \\(\\theta = \\pm60^{\\circ}\\), the intensity will be greatest.",
+      "If antennas are 10 m apart and frequency 60 MHz, intensity at \\(P\\) (700 m on y-axis, \\(\\theta=0^{\\circ}\\)) is 0.020 W m⁻²; then at \\(A\\) (\\(\\theta=4^{\\circ}\\)) it is 0.008 W m⁻².",
+      "Same as above but intensity at \\(A\\) is 0.016 W m⁻²."
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE experiment, distance between two slits is \\(4.7\\lambda\\). The number of points on the screen having maximum and zero brightness are respectively",
+    "image": null,
+    "qOptions": ["9, 10", "9, 8", "8, 10", "8, 9"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If the distance between the slits was \\(4.2\\lambda\\), then the answer would be",
+    "image": null,
+    "qOptions": ["9, 10", "9, 8", "8, 10", "8, 9"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE experiment, distance between two slits is \\(5\\lambda\\). Choose the correct statement(s).",
+    "image": null,
+    "qOptions": [
+      "Angular separation between \\(n\\)th and \\((n+1)\\)th maxima increases with \\(n\\).",
+      "Angular separation between \\(n\\)th and \\((n+1)\\)th maxima decreases with \\(n\\).",
+      "Distance between \\(n\\)th and \\((n+1)\\)th maxima on screen increases with \\(n\\).",
+      "Distance between \\(n\\)th and \\((n+1)\\)th maxima on screen decreases with \\(n\\)."
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE experiment, distance between two slits is \\(5\\lambda\\). The distance between 4th and 3rd maxima from the central maxima on the same side is",
+    "image": null,
+    "qOptions": ["\\(\\tfrac{2D}{5}\\)", "\\(\\tfrac{D}{5}\\)", "\\(\\tfrac{7D}{12}\\)", "\\(\\tfrac{3D}{10}\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the above question, the distance of 1st dark spot from the central bright spot is",
+    "image": null,
+    "qOptions": ["\\(0.1D\\)", "\\(0.05D\\)", "\\(0.15D\\)", "\\(0.2D\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the above question, the location of 3rd dark spot from the central bright spot is",
+    "image": null,
+    "qOptions": ["\\(0.2D\\)", "\\(0.3D\\)", "\\(0.577D\\)", "\\(0.5D\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two identical coherent sources of wavelength \\(\\lambda\\) are placed at \\((100\\lambda, 0)\\) and \\((-50\\lambda, 0)\\). A detector moves from origin to \\((50\\lambda, 0)\\) along x-axis. The number of maxima and minima detected respectively are",
+    "image": null,
+    "qOptions": ["101 and 98", "101 and 100", "50 and 48", "50 and 49"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Interference is observed due to two coherent sources ‘A’ and ‘B’ having phase constant 0, separated by a distance \\(6\\lambda\\) along y-axis. A detector D moves along x-axis. Number of points (excluding x = 0 and ∞) where maximum occurs is",
+    "image": null,
+    "qOptions": [
+      "6 if both A and B have positive Y and A at (0, 2λ)",
+      "2 if A has positive Y and B negative Y, A at (0, 2λ)",
+      "1 if A has positive Y and B negative Y, A at (0, 2.2λ)",
+      "5 if A has positive Y and B negative Y, A at (0, 2.2λ)"
+    ],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two coherent sources \\(S_1\\) and \\(S_2\\) separated by \\(2\\lambda\\) emit light of wavelength \\(\\lambda\\) in phase as shown. A circular wire of radius \\(100\\lambda\\) is placed so that \\(S_1S_2\\) lies in its plane and midpoint of \\(S_1S_2\\) is at the centre. Find the angular position \\(\\theta\\) on the wire for which intensity reduces to half of maximum.",
+    "image": "16.png",
+    "qOptions": [
+      "\\(\\pi - \\sin^{-1}\\tfrac{1}{8},\\, \\pi - \\sin^{-1}\\tfrac{3}{8},\\, \\pi - \\sin^{-1}\\tfrac{5}{8},\\, \\pi - \\sin^{-1}\\tfrac{7}{8}\\)",
+      "\\(\\pi/2 - \\sin^{-1}\\tfrac{1}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{3}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{5}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{7}{8}\\)",
+      "\\(\\pi - \\sin^{-1}\\tfrac{1}{8},\\, \\pi - \\sin^{-1}\\tfrac{3}{8},\\, \\pi - \\sin^{-1}\\tfrac{5}{8},\\, \\pi - \\sin^{-1}\\tfrac{7}{8}\\)",
+      "\\(\\pi/2 - \\sin^{-1}\\tfrac{1}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{3}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{5}{8},\\, \\pi/2 - \\sin^{-1}\\tfrac{7}{8}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "O is the center of a circular screen and \\(S_1, S_2\\) are two coherent point sources of light separated by \\(5\\lambda\\). Find number of maxima on screen.",
+    "image": "17.png",
+    "qOptions": ["16", "20", "18", "22"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the above question, number of minima on the screen is",
+    "image": "17.png",
+    "qOptions": ["16", "20", "18", "22"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE, if separation between slits and screen are halved and doubled respectively, the fringe width will be",
+    "image": null,
+    "qOptions": ["unchanged", "halved", "doubled", "quadrupled"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "With two slits spaced 0.2 mm apart and a screen at 1 m, the third bright fringe is 7.5 mm from center. The wavelength is",
+    "image": null,
+    "qOptions": ["4000 Å", "4890 Å", "5000 Å", "5500 Å"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the above question, the distance between the 4th bright fringe on one side of central maxima and 5th dark fringe on the other side is",
+    "image": null,
+    "qOptions": ["16.25 mm", "21.25 mm", "15 mm", "17.25 mm"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The total number of maxima that can be formed on a large screen (excluding the bright spots at infinity) is",
+    "image": null,
+    "qOptions": ["400", "398", "799", "798"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a Young’s double slit experiment, 12 fringes are observed in a certain segment of the screen when light of wavelength \\(600\\,\\text{nm}\\) is used. If the wavelength of light is changed to \\(400\\,\\text{nm}\\), the number of fringes observed in the same segment of the screen is",
+    "image": null,
+    "qOptions": ["12", "18", "24", "30"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a double slit experiment, the distance between the slits is \\(d\\). The screen is at a distance \\(D\\). If a bright fringe is formed directly opposite a slit, the order of fringe is",
+    "image": null,
+    "qOptions": ["\\(2d^2/D\\lambda\\)", "\\(d^2/2D\\lambda\\)", "\\(d^2/D\\lambda\\)", "\\(d/2\\lambda\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "In Young’s double slit experiment, the slits are separated by \\(0.3\\,\\text{mm}\\) and the interference pattern is observed on a screen placed \\(100\\,\\text{cm}\\) away. The wavelength of light used is \\(6000\\,\\text{Å}\\). Choose the correct statements.",
+    "image": null,
+    "qOptions": [
+      "The distance of 4th bright fringe from the central fringe is 8 mm.",
+      "The distance of 4th dark fringe from the central fringe is 7 mm.",
+      "The distance between the 9th dark and 2nd bright fringe on same side is 15 mm.",
+      "The distance between the first dark and second bright fringes on opposite sides is 5 mm."
+    ],
+    "qAnswer": ["A","B","D"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A beam of light consisting of two wavelengths \\(6500\\,\\text{Å}\\) and \\(5200\\,\\text{Å}\\) is used in a Young’s double slit experiment. The least distance from the central maximum where bright fringes due to both wavelengths coincide is (\\(d=2\\,\\text{mm}\\), \\(D=120\\,\\text{cm}\\)). (Options are made-up distractors; one is correct.)",
+    "image": "27.png",
+    "qOptions": ["\\(1.56\\,\\text{cm}\\)", "\\(2.08\\,\\text{cm}\\)", "\\(1.30\\,\\text{cm}\\)", "\\(1.80\\,\\text{cm}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If the screen is shifted in \\(x\\)-direction away from the source, which of the following is incorrect?",
+    "image": "28.png",
+    "qOptions": [
+      "Central maxima is shifted along y-axis",
+      "Position of all maxima except the central maxima change",
+      "Fringe width remains constant",
+      "Angular width changes due to shifting"
+    ],
+    "qAnswer": ["A","C","D"]
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a Young’s double slit experiment, the separation between the slits is \\(0.10\\,\\text{mm}\\), the wavelength of light used is \\(6000\\,\\text{Å}\\), and the interference pattern is observed on a screen \\(1.0\\,\\text{m}\\) away. The separation between successive bright fringes is",
+    "image": null,
+    "qOptions": ["10 mm", "8 mm", "6 mm", "4 mm"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In Young’s experiment, wavelength of red light is \\(7.8\\times10^{-7}\\,\\text{m}\\) and that of blue light is \\(5.2\\times10^{-7}\\,\\text{m}\\). Find \\(n\\) for which \\((n+1)\\)th blue fringe coincides with nth red fringe. If \\(d=2\\,\\text{mm}\\) and \\(D=2\\,\\text{m}\\), find least distance from central maxima where both colors overlap.",
+    "image": null,
+    "qOptions": ["\\(0.7n\\,\\text{mm}\\)", "\\(0.9n\\,\\text{mm}\\)", "\\(1.1n\\,\\text{mm}\\)", "\\(1.3n\\,\\text{mm}\\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a Young’s double slit experiment, the slits are illuminated by two wavelengths of \\(400\\,\\text{nm}\\) and \\(600\\,\\text{nm}\\). If \\(d=1\\,\\text{mm}\\), \\(D=10\\,\\text{m}\\), the smallest distance from the central maximum where there is complete darkness is:",
+    "image": null,
+    "qOptions": ["2 mm", "3 mm", "12 mm", "there is no such point"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A Young’s double slit experiment is performed with white light. Then",
+    "image": null,
+    "qOptions": [
+      "The central brightness will be red",
+      "The brightness next to central will be red",
+      "The central brightness will be violet",
+      "The brightness next to central will be violet"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE, bi-chromatic light of wavelengths \\(400\\,\\text{nm}\\) and \\(560\\,\\text{nm}\\) are used. The distance between the slits is \\(0.1\\,\\text{mm}\\) and between the slits and screen is \\(1\\,\\text{m}\\). The minimum distance between two successive regions of complete darkness is",
+    "image": null,
+    "qOptions": ["4 mm", "5.6 mm", "14 mm", "28 mm"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A parallel beam of light consisting of two wavelengths \\(14000\\,\\text{Å}\\) and \\(26000\\,\\text{Å}\\) falls on a double slit apparatus. The separation between the two slits is \\(2\\,\\text{mm}\\) and between the plane of the slits and the screen is \\(1\\,\\text{m}\\). Find the location of the central maxima for both wavelengths and the point where their maxima coincide for the first time after central maxima. (Options are made-up distractors; one is correct.)",
+    "image": "34.png",
+    "qOptions": ["\\(9.1\\,\\text{mm}\\)", "\\(4.55\\,\\text{mm}\\)", "\\(5.0\\,\\text{mm}\\)", "\\(8.9\\,\\text{mm}\\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White light is used to illuminate two slits in Young’s double slit experiment. The separation between slits is \\(b\\) and screen is at a distance \\(d\\). At a point directly in front of one slit, certain wavelengths are missing. The missing wavelength is:",
+    "image": null,
+    "qOptions": ["\\(\\lambda = b^2/d\\)", "\\(\\lambda = 2b^2/d\\)", "\\(\\lambda = b^2/3d\\)", "\\(\\lambda = 2b^2/3d\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE, \\(D\\) equals the distance of the screen and \\(d\\) is slit separation. The distance of the nearest point to central maximum where the intensity is same as that due to a single slit is:",
+    "image": null,
+    "qOptions": ["\\(D\\lambda/d\\)", "\\(D\\lambda/2d\\)", "\\(D\\lambda/3d\\)", "\\(D\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a double slit experiment, initially both slits had width \\(W\\). Now one slit’s width is reduced. Then in the interference pattern:",
+    "image": null,
+    "qOptions": [
+      "The intensities of both maxima and minima increase",
+      "The intensity of maxima increases and minima have zero intensity",
+      "The intensity of maxima decreases and minima increase",
+      "The intensity of maxima decreases and minima have zero intensity"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a Young’s double slit experiment, the path difference of waves for a point P on screen is one-third of wavelength. The ratio of intensity at P to that at maximum is:",
+    "image": null,
+    "qOptions": ["1:4", "1:2", "1:3", "1:6"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In Young’s experiment, the slits (\\(d = 0.8\\,\\text{mm}\\)) are illuminated with light of \\(7200\\,\\text{Å}\\). Interference pattern is obtained on a screen \\(2\\,\\text{m}\\) from slits. Find the minimum distance from central maximum at which intensity is 50% of maximum.",
+    "image": null,
+    "qOptions": ["0.45 mm", "0.5 mm", "0.55 mm", "0.6 mm"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two identical glass plates reflect 20% of light incident on them and rest is transmitted. If slits are illuminated with equal intensity, the ratio of minimum to maximum intensity in interference pattern formed is:",
+    "image": null,
+    "qOptions": ["1/81", "1/9", "1/4", "1/16"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two beams of light having intensities \\(I\\) and \\(4I\\) interfere to produce a fringe pattern. The phase difference between beams is \\(\\pi/2\\) at A and \\(\\pi\\) at B. The ratio of resultant intensities at A and B is:",
+    "image": null,
+    "qOptions": ["2I", "4I", "5I", "7I"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In Young’s experiment, light of wavelength \\(600\\,\\text{nm}\\) falls on double slits separated by \\(0.1\\,\\text{mm}\\). What is the highest order of maximum observed on screen kept \\(3\\,\\text{m}\\) away?",
+    "image": null,
+    "qOptions": ["166", "150", "200", "300"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Two light waves of intensities \\(I_0\\) and \\(4I_0\\) interfere at a point P. The maximum and minimum intensities produced are:",
+    "image": null,
+    "qOptions": ["\\(5I_0, 3I_0\\)", "\\(9I_0, I_0\\)", "\\(9I_0, 3I_0\\)", "\\(5I_0, I_0\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a YDSE arrangement, the intensity at the central maximum is \\(I\\). When either of the two slits is closed, intensity becomes \\(I_0\\). Then:",
+    "image": null,
+    "qOptions": ["\\(I = I_0\\)", "\\(I_0 = 2I\\)", "\\(I = 4I_0\\)", "No exact relation between \\(I\\) and \\(I_0\\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a Young’s double slit experiment, contrast between fringes is given by \\(I_{\\max}:I_{\\min} = 9:4\\). The ratio of intensities of the two sources is:",
+    "image": null,
+    "qOptions": ["5:1", "25:1", "\\(\\sqrt{5}:1\\)", "13:4"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a modified YDSE, a monochromatic uniform parallel beam of wavelength \\(6000\\,\\text{Å}\\) and intensity \\(\\tfrac{10}{\\pi}\\,\\text{W/m}^2\\) is incident normally on two circular apertures A and B of radii 1 mm and 2 mm respectively. Find the ratio of intensities of two sources \\(\\tfrac{I_B}{I_A}\\). (Options are made-up distractors; one is correct.)",
+    "image": "46.png",
+    "qOptions": ["4", "2", "3", "6"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a usual YDSE, if average intensity between \\(y_1 = \\tfrac{\\lambda D}{4d}\\) and \\(y_2 = +\\tfrac{\\lambda D}{4d}\\) equals \\(n\\) times the intensity of maxima, then \\(n\\) equals",
+    "image": "47.png",
+    "qOptions": [
+      "\\(\\tfrac{1}{2}\\left(1 + \\tfrac{2}{\\pi}\\right)\\)",
+      "\\(2\\left(1 + \\tfrac{2}{\\pi}\\right)\\)",
+      "\\(1 + \\tfrac{2}{\\pi}\\)",
+      "\\(\\tfrac{1}{2}\\left(1 - \\tfrac{2}{\\pi}\\right)\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In YDSE, \\(d/D = 10^{-4}\\) and \\(\\lambda = 600\\,\\text{nm}\\). At a point P, resulting intensity equals that due to one slit. Find minimum distance of point P from central maximum in mm. (Options are made-up distractors; one is correct.)",
+    "image": "48.png",
+    "qOptions": ["1 mm", "2 mm", "3 mm", "4 mm"],
+    "qAnswer": "B"
+  }
+]
+
+
+
+
+}
