@@ -1,0 +1,228 @@
+
+{
+  "questions":
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Let \\( a = \\lim_{x \\to 1} \\frac{x}{\\ln x} - \\frac{1}{x \\ln x} \\) ; \\( b = \\lim_{x \\to 0} \\frac{x^{3-16x}}{4x+x^2} \\) ; \\( c = \\lim_{x \\to 0} \\frac{\\ln (1+\\sin x)}{x} \\) and \\( d = \\lim_{x \\to -1} \\frac{(x+1)^3}{3(\\sin (x+1)-(x+1))} \\), then the matrix \\(\\begin{bmatrix} a & b \\\\ c & d \\end{bmatrix}\\) is",
+    "image": null,
+    "qOptions": ["Idempotent", "Involutary", "Non singular", "Nilpotent"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A is a \\( 2 \\times 2 \\) matrix such that \\( A \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix} = \\begin{bmatrix} -1 \\\\ 2 \\end{bmatrix} \\) and \\( A^2 \\begin{bmatrix} 1 \\\\ -1 \\end{bmatrix} = \\begin{bmatrix} 1 \\\\ 0 \\end{bmatrix} \\). Find the sum of the elements of A.",
+    "image": null,
+    "qOptions": ["-1", "0", "2", "5"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Matrix A satisfies \\( A^2 = 2A - I \\) where I is the identity matrix then for \\( n \\geq 2 \\), \\( A^n \\) is equal to (n ∈ N)",
+    "image": null,
+    "qOptions": ["\\( nA - I \\)", "\\( 2^{n-1}A - (n - 1)I \\)", "\\( nA - (n - 1)I \\)", "\\( 2^{n-1}A - I \\)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\( A = \\begin{bmatrix} 0 & 1 & 2 \\\\ 1 & 2 & 3 \\\\ 3 & a & 1 \\end{bmatrix} \\), \\( A^{-1} = \\begin{bmatrix} \\frac{1}{2} & -\\frac{1}{2} & \\frac{1}{2} \\\\ -\\frac{4}{3} & \\frac{c}{2} \\\\ \\frac{5}{2} & -\\frac{3}{2} & \\frac{1}{2} \\end{bmatrix} \\), then",
+    "image": null,
+    "qOptions": ["\\( a = 1, c = -1 \\)", "\\( a = 2, c = -\\frac{1}{2} \\)", "\\( a = -1, c = 1 \\)", "\\( a = \\frac{1}{2}, c = \\frac{1}{2} \\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The number of solution of the matrix equation \\( X^2 = \\begin{pmatrix} 1 & 1 \\\\ 2 & 3 \\end{pmatrix} \\) is",
+    "image": null,
+    "qOptions": ["more than 2", "2", "1", "0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "'\\( A' \\) is a \\( 3 \\times 3 \\) matrix with entries from the set \\( \\{-1, 0, 1\\} \\). The probability that '\\( A' \\) is neither symmetric nor skew symmetric is",
+    "image": null,
+    "qOptions": ["\\( \\frac{3^9 - 3^6 - 3^3 + 1}{3^9} \\)", "\\( \\frac{3^9 - 3^6 - 3^3}{3^9} \\)", "\\( \\frac{3^9 - 1}{3^{10}} \\)", "\\( \\frac{3^9 - 3^3 + 1}{3^9} \\)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "\\( A = \\begin{bmatrix} a & b \\\\ b & -a \\end{bmatrix} \\) and \\( MA = A^{2m}, m \\in N \\) for some matrix \\( M \\), then which one of the following is correct?",
+    "image": null,
+    "qOptions": ["\\( M = \\begin{bmatrix} a^{2m} & b^{2m} \\\\ b^{2m} & -a^{2m} \\end{bmatrix} \\)", "\\( M = (a^2 + b^2)^m \\begin{bmatrix} 1 & 0 \\\\ 1 & 0 \\end{bmatrix} \\)", "\\( M = (a^m + b^m) \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} \\)", "\\( M = (a^2 + b^2)^{m-1} \\begin{bmatrix} a & b \\\\ b & -a \\end{bmatrix} \\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Let 'A' and 'B' be two given matrices such that \\( AB = A \\) and \\( BA = B \\), then \\( A^2B^2 \\) equals",
+    "image": null,
+    "qOptions": ["A", "B", "I", "0"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "P is a non-singular matrix and \\( A, B \\) are two matrices such that \\( B = P^{-1}AP \\) then the true statements among the following are",
+    "image": null,
+    "qOptions": ["\\( A \\) is invertible iff \\( B \\) is invertible", "\\( B^n = P^{-1}A^nPn \\in N \\)", "\\( \\forall \\lambda \\in R, B - \\lambda I = P^{-1}(A - \\lambda I)P \\) (I is the identity matrix)", "\\( A, B \\) are both singular matrices"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If \\( A \\) and \\( B \\) are respectively a symmetric and a skew symmetric matrix such that \\( AB = BA \\) then",
+    "image": null,
+    "qOptions": ["\\( (A - B)^{-1}(A + B) \\) is orthogonal matrix when \\( (A - B) \\) is non-singular", "\\( (A + B)^{-1}(A - B) \\) is orthogonal matrix when \\( (A + B) \\) is non-singular", "\\( \\det[(A - B)^{-1}(A + B)] = 1 \\) and \\( \\det[(A + B)^{-1}(A - B)] = -1 \\)", "\\( \\det[(A - B)^{-1}(A + B)] = -1 \\) and \\( \\det[(A + B)^{-1}(A - B)] = 1 \\)"],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If \\( A = \\begin{bmatrix} \\alpha_1 & \\alpha_2 \\\\ \\beta_1 & \\beta_2 \\end{bmatrix} \\) (where \\( \\alpha_2 \\neq \\beta_1 \\) and \\( \\alpha_1, \\alpha_2, \\beta_1, \\beta_2 \\) are non-zero) satisfies the equation \\( x^2 + k = 0 \\), then",
+    "image": null,
+    "qOptions": ["trace \\( A = 0 \\)", "\\( \\alpha_1\\beta_2 < 0 \\)", "\\( \\det A = k \\)", "\\( \\det A = -k \\)"],
+    "qAnswer": ["A", "B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let \\( A \\) is a \\( n \\times n \\) matrix in which diagonal elements are \\( 1, 2, 3, ..., n \\) (i.e., \\( a_{11} = 1, a_{22} = 2, a_{33} = 3, ..., a_{ii} = i, ..., a_{nn} = n \\)) and all other elements are equal to 'n' then",
+    "image": null,
+    "qOptions": ["\\( A_n \\) is singular for all 'n'", "\\( A_n \\) is non-singular for all 'n'", "\\( \\det A_s = 120 \\)", "\\( \\det A_n = 0 \\)"],
+    "qAnswer": ["B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If the matrix A and B are of 3 × 3 and (I – AB)\\(^{-1}\\)A is invertible, then which of the following statements is/are correct?",
+    "image": null,
+    "qOptions": ["I – BA is not invertible", "I – BA is invertible", "I – BA has for its inverse I + B(I – AB)\\(^{-1}\\)A", "I – BA has for its inverse I + A(I – BA)\\(^{-1}\\)B"],
+    "qAnswer": ["B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If A, B are two square matrices of same order such that A + B = AB and I is identity matrix of order same as that of A, B, then",
+    "image": null,
+    "qOptions": ["AB = BA", "|A – I| = 0", "|B – I| ≠ 0", "|A – B| = 0"],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "A Pythagorean triple is triplet of positive integers (a, b, c) such that a\\(^2\\) + b\\(^2\\) = c\\(^2\\). Define the matrices A, B and C by \\[A = \\begin{bmatrix} 1 & 2 & 3 \\\\ 2 & 1 & 2 \\\\ 2 & 2 & 3 \\end{bmatrix}, \\quad B = \\begin{bmatrix} 1 & 2 & 2 \\\\ -2 & -1 & -2 \\\\ 2 & 2 & 3 \\end{bmatrix} \\quad \\text{and} \\quad C = \\begin{bmatrix} -1 & -2 & -2 \\\\ 2 & 1 & 2 \\\\ 2 & 2 & 3 \\end{bmatrix}\\]",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "If we write Pythagorean triples (a, b, c) in matrix form as[a, b, c] then which of the following matrix product is not a Pythagorean triplet?",
+    "image": null,
+    "qOptions": ["[3,4,5]A", "[3,4,5]B", "[3,4,5]C", "None of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Which one of the following does not hold good?",
+    "image": null,
+    "qOptions": ["A\\(^{-1}\\) = adj. A", "(AB)\\(^{-1}\\) = adj. (AB)", "(BC)\\(^{-1}\\) = adj. (BC)", "(ABC)\\(^{-1}\\) ≠ adj. (ABC)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Tr(A + B\\(^T\\) + 3C) equals",
+    "image": null,
+    "qOptions": ["17", "15", "19", "18"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "Consider the matrix function \\[A(x) = \\begin{bmatrix} \\cos^{-1}x & \\sin^{-1}x & \\cos e^{-1}x \\\\ \\sin^{-1}x & \\sec^{-1}x & \\tan^{-1}x \\\\ \\cos e^{-1}x & \\tan^{-1}x & \\cot^{-1}x \\end{bmatrix} \\quad \\text{and} \\quad B = A^{-1}. \\quad \\text{Also, det. (A(x)) denotes the determinant of square matrix A(x).}\\]",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": "P2",
+    "qText": "Which of the following statement(s) is(are) correct?",
+    "image": null,
+    "qOptions": ["A(-x) = A(x).", "A(x) + A(-x) = πI₃", "A(-x) = −A(x).", "A(x) + A(-x) = −πI₃"],
+    "qAnswer": ["B"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": "P2",
+    "qText": "Which of the following statement(s) is (are) correct?",
+    "image": null,
+    "qOptions": ["A(x) is a symmetric matrix.", "A(x) is a skew symmetric matrix.", "Maximum value of det. \\( (A(x)) \\) equals \\(\\frac{\\pi^3}{8}\\)", "Minimum value of det. \\( (A(x)) \\) equals \\(\\frac{\\pi^3}{16}\\)."],
+    "qAnswer": ["A", "C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": "P2",
+    "qText": "Which of the following statement(s) is(are) correct?",
+    "image": null,
+    "qOptions": ["det. \\( (A(x)) \\) is a continuous function in its domain but not differentiable in its domain.", "det. \\( (A(x)) \\) is a continuous and differentiable function in its domain.", "det. \\( (A(x)) \\) is a bounded function.", "det\\( (A(x)) \\) is one-one and odd function."],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": "P2",
+    "qText": "Which of the following statement(s) is(are) correct?",
+    "image": null,
+    "qOptions": ["If a = det. (B) + det. (B\\(^2\\)) + det. (B\\(^3\\)) + ⋯⋯∞, then minimum value of a equals \\(\\frac{8}{\\pi^3-8}\\).", "If b = det. adj. (B) + det. adj. (B\\(^2\\)) + det. adj. (B\\(^3\\)) + ⋯⋯∞, then maximum value of b is \\(\\frac{256}{\\pi^6-256}\\).", "If a = det. (B) + det. (B\\(^2\\)) + det. (B\\(^3\\)) + ⋯⋯∞, then maximum value of a equals \\(\\frac{16}{\\pi^3-16}\\).", "If b = det. adj. (B) + det. adj. (B\\(^2\\)) + det. adj. (B\\(^3\\)) + ⋯⋯∞, then minimum value of b is \\(\\frac{64}{\\pi^6-64}\\)."],
+    "qAnswer": ["A", "B", "C", "D"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If \\( (\\alpha \\beta)(\\delta \\beta) = \\gamma \\gamma \\gamma \\) such that \\( \\alpha, \\beta, \\delta, \\gamma \\) represents a number from 1 to 9&\\\\(\\alpha, \\beta, \\delta, \\gamma\\) are all different digits & \\( \\alpha \\beta, \\delta \\beta \\) are two digit numbers & \\( \\gamma \\gamma \\gamma \\) is a three digit number, \\( \\alpha > \\delta \\), and the trace of the matrix \\[A = \\begin{bmatrix} \\alpha & 1 & 2 & 0 \\\\ 0 & \\beta & 1 & 1 \\\\ 0 & 0 & \\gamma & 3 \\\\ 1 & 1 & 0 & \\gamma \\end{bmatrix} \\] is a , then \\(\\frac{a}{\\gamma}\\) is equal to",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Let A be the set of all \\( 3 \\times 3 \\) symmetric matrices all of whose entries either 0 or 1 . Five of these entries are 1 and four of them are 0 . If n is the number of such matrices, then n/2 is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 6
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Match the following: Column-I: A) \\( a_{ij} + a_{jk} + a_{ki} = 0 \\), then B) \\( a_{ij} - a_{jk} - a_{ki} = 0 \\), then C) \\( (-1)^{i+j}a_{ij} + (-1)^{j+k}a_{jk} + (-1)^{k+1}a_{ki} = 0 \\), then Column-II: p) This represents a symmetric matrix q) This represents a skew symmetric matrix r) This represents a matrix whose all diagonal elements are zeros s) Value of determinant is zero. Choose the correct code from the options.",
+    "image": null,
+    "qOptions": ["A → (q, r, s); B → (p, q, r, s); C → (q, r, s)", "A → (q, s); B → (p, q, r, s); C → (q, r, s)", "A → (q, r, s); B → (p, q, s); C → (q, r, s)", "A → (q, r, s); B → (p, q, r, s); C → (q, s)"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Match the following: Column-I: A) If \\( |A| = 2 \\) then \\( |2 A^{-1}| = \\) (where A is a matrix of order 3) B) If \\( |A| = \\frac{1}{8} \\) then \\( |adj(adj2A)| = \\) (where A is matrix of order 3) C) If \\( (A + B)^2 = A^2 + B^2 \\) and \\( |A| = 2 \\) & \\( |B| = \\) (where A and B are matrices of odd order) D) \\( |A_{2x2}| = 2, |B_{3x3}| = 3 \\) and \\( |C_{4x4}| = 4\\)& \\( |ABC| = \\) Column-II: p) 1, q) 4, r) Does not exist, s) 0. Choose the correct code from the options.",
+    "image": null,
+    "qOptions": ["A → q; B → p; C → s; D → r", "A → q; B → r; C → p; D → s", "A → q; B → r; C → r; D → s", "A → q; B → q; C → s; D → r"],
+    "qAnswer": "A"
+  }
+]
+
+
+
+
+
+
+}
