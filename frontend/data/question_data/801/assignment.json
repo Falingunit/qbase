@@ -1,0 +1,603 @@
+
+{
+  "questions":
+[
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate \\( E_{OP} \\) for half cell: \\( \\text{Ag} \\, | \\, \\text{AgNO}_3 \\, (0.1 \\, \\text{M}) \\). Given \\( E^{\\circ}_{\\text{Ag}^+/\\text{Ag}} = 1.1 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -1.041
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the emf of the cell at 25°C: \\( \\text{Fe} \\, | \\, \\text{Fe}^{2+} \\, (0.3 \\, \\text{M}) \\, || \\, \\text{Sn}^{2+} \\, (0.1 \\, \\text{M}) \\, | \\, \\text{Sn} \\). Given \\( E^{\\circ}_{\\text{OP,H}} = 0 \\, \\text{V} \\), \\( E^{\\circ}_{\\text{OP,Fe}} = 0.44 \\, \\text{V} \\), and \\( E^{\\circ}_{\\text{OP,Sn}} = 0.14 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.286
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the emf of the cell at 25°C: \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, (2 \\, \\text{atm}) \\, | \\, \\text{HCl} \\, | \\, \\text{H}_2 \\, (10 \\, \\text{atm}) \\, | \\, \\text{Pt} \\). Given \\( E^{\\circ}_{\\text{OP,H}} = 0 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.0206
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The standard electrode potential of Cu/Cu\\(^{2+}\\) is -0.34 volt. At what concentration of Cu\\(^{2+}\\) ions, will this electrode potential be zero?",
+    "image": null,
+    "qOptions": [
+      "\\( 3.98 \\times 10^{-12} \\, \\text{M} \\)",
+      "\\( 2.98 \\times 10^{-12} \\, \\text{M} \\)",
+      "\\( 2.98 \\times 10^{-11} \\, \\text{M} \\)",
+      "\\( 3.98 \\times 10^{-11} \\, \\text{M} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell \\( \\text{Zn} \\, | \\, \\text{Zn}^{2+} \\, (1 \\, \\text{M}) \\, || \\, \\text{Cu}^{2+} \\, (1 \\, \\text{M}) \\, | \\, \\text{Cu} \\), given that \\( E^{\\circ}_{\\text{Cu}^{2+}/\\text{Cu}} = 0.35 \\, \\text{V} \\) and \\( E^{\\circ}_{\\text{Zn}^{2+}/\\text{Zn}} = -0.763 \\, \\text{V} \\), calculate the emf of the cell initially.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.113
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell \\( \\text{Zn} \\, | \\, \\text{Zn}^{2+} \\, (1 \\, \\text{M}) \\, || \\, \\text{Cu}^{2+} \\, (1 \\, \\text{M}) \\, | \\, \\text{Cu} \\), if the cell is allowed to operate spontaneously and [Cu\\(^{2+}\\)] has fallen to 0.500 M, what will be the emf of the cell?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.099
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell \\( \\text{Zn} \\, | \\, \\text{Zn}^{2+} \\, (1 \\, \\text{M}) \\, || \\, \\text{Cu}^{2+} \\, (1 \\, \\text{M}) \\, | \\, \\text{Cu} \\), what will be the [Zn\\(^{2+}\\)] when \\( E_{\\text{cell}} = 1.10 \\, \\text{V} \\)?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.47
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The emf of a cell corresponding to the reaction \\( \\text{Zn(s)} + 2\\text{H}^+(aq.) \\longrightarrow \\text{Zn}^{2+} (0.1 \\, \\text{M}) + \\text{H}_2(g) (1 \\, \\text{atm}) \\) is 0.28 V at 25°C and \\( E^{\\circ}_{\\text{Zn}/\\text{Zn}^{2+}} = 0.76 \\, \\text{V} \\). Calculate the pH of the solution at H electrode.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8.635
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "From the standard emf: \\( 2\\text{Ag} + \\text{Pt}^{2+} \\longrightarrow 2\\text{Ag}^+ + \\text{Pt}; \\quad E^\\circ = 0.4 \\, \\text{V} \\) and \\( 2\\text{Ag} + \\text{F}_2 \\longrightarrow 2\\text{Ag}^+ + 2\\text{F}^-; \\quad E^\\circ = 2.07 \\, \\text{V} \\), if standard potential for the reaction Pt → Pt\\(^{2+}\\) + 2e is assigned as zero, determine the standard potential for Ag → Ag\\(^+\\) + e.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "From the standard emf: \\( 2\\text{Ag} + \\text{Pt}^{2+} \\longrightarrow 2\\text{Ag}^+ + \\text{Pt}; \\quad E^\\circ = 0.4 \\, \\text{V} \\) and \\( 2\\text{Ag} + \\text{F}_2 \\longrightarrow 2\\text{Ag}^+ + 2\\text{F}^-; \\quad E^\\circ = 2.07 \\, \\text{V} \\), if standard potential for the reaction Pt → Pt\\(^{2+}\\) + 2e is assigned as zero, determine the standard potential for F\\(^-\\) → \\( \\frac{1}{2} \\) F\\(_2\\) + e.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -1.67
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the equilibrium constant at 25°C for the reaction: \\( \\text{Hg}_2(\\text{NO}_3)_2 + 2\\text{Fe}(\\text{NO}_3)_2 \\rightleftharpoons 2\\text{Hg} + 2\\text{Fe}(\\text{NO}_3)_3 \\). Given \\( E^{\\circ}_{\\text{Hg}_2^{2+}/\\text{Hg}} = 0.79 \\, \\text{V} \\) and \\( E^{\\circ}_{\\text{Fe}^{3+}/\\text{Fe}^{2+}} = 0.77 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 4.76
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the equilibrium constant for the reaction: \\( \\text{Cu} + \\text{Cu}^{2+} \\rightleftharpoons 2\\text{Cu}^+ \\). Given \\( E^{\\circ}_{\\text{Cu}^{2+}/\\text{Cu}} = 0.34 \\, \\text{V} \\) and \\( E^{\\circ}_{\\text{Cu}^{+}/\\text{Cu}} = 0.15 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [
+      "\\( 3.75 \\times 10^{6} \\)",
+      "\\( 2.75 \\times 10^{5} \\)",
+      "\\( 2.75 \\times 10^{6} \\)",
+      "\\( 3.75 \\times 10^{5} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the emf of the cell at 25°C: \\( \\text{PbSO}_4 \\, | \\, \\text{saturated solution} \\, || \\, \\text{PbI}_2 \\, | \\, \\text{saturated solution} \\). \\( K_{sp} \\) of \\( \\text{PbSO}_4 = 1.6 \\times 10^{-8} \\) and \\( K_{sp} \\) of \\( \\text{PbI}_2 = 8 \\times 10^{-9} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.0295
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "How much \\( \\text{Cu}^{2+} \\) ions are present at equilibrium when finely divided Ni is mixed with 0.05 M solution of \\( \\text{CuSO}_4 \\)? Given \\( E^{\\circ}_{\\text{Cu}/\\text{Cu}^{2+}} = -0.337 \\, \\text{V} \\) and \\( E^{\\circ}_{\\text{Ni}/\\text{Ni}^{2+}} = 0.25 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [
+      "\\( 7.33 \\times 10^{-22} \\, \\text{M} \\)",
+      "\\( 6.33 \\times 10^{-21} \\, \\text{M} \\)",
+      "\\( 7.33 \\times 10^{-21} \\, \\text{M} \\)",
+      "\\( 6.33 \\times 10^{-22} \\, \\text{M} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The \\( E^\\circ \\) for \\( \\text{Zn}^{2+}/\\text{Zn} \\) and \\( E^\\circ \\) for \\( \\text{Cu}^{2+}/\\text{Cu} \\) are -0.76 and 0.34 V respectively at 25°C. When excess of Zn is added to a solution of \\( \\text{CuSO}_4 \\), the zinc displaces Cu till equilibrium is reached. What is the ratio of concentration of \\( \\text{Zn}^{2+} \\) and \\( \\text{Cu}^{2+} \\) ion at equilibrium?",
+    "image": null,
+    "qOptions": [
+      "\\( 1.942 \\times 10^{37} \\)",
+      "\\( 1.542 \\times 10^{37} \\)",
+      "\\( 1.942 \\times 10^{36} \\)",
+      "\\( 1.542 \\times 10^{36} \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The reaction \\( \\text{H}_2 + \\text{Cl}_2 + 2\\text{H}_2\\text{O} \\rightleftharpoons 2\\text{H}_3\\text{O}^+ + 2\\text{Cl}^- \\) has an equilibrium constant \\( K = 10^{46} \\) at 25°C. Calculate \\( E^\\circ \\) at 25°C for the cell \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, | \\, \\text{HCl}(aq.) \\, | \\, \\text{Cl}_2 \\, | \\, \\text{Pt} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.357
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The cell \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, (1 \\, \\text{atm}) \\, | \\, \\text{H}^+ \\, (pH = X) \\, || \\, \\text{Normal calomel electrode} \\) has emf of 0.67 V at 25°C. Calculate pH of solution. The oxidation potential of calomel electrode on H scale is -0.28 V.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 6.6102
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A cell is set up where the overall reaction is \\( \\text{H}_2(g) + \\text{Sn}^{4+} \\rightarrow 2\\text{H}^+ + \\text{Sn}^{2+} \\). The hydrogen electrode is under standard condition and \\( E_{cell} \\) is found to be +0.20 V. What is the ratio of \\( \\text{Sn}^{2+} \\) to \\( \\text{Sn}^{4+} \\) around the other electrode? Given \\( E^{\\circ}_{\\text{Sn}^{4+}/\\text{Sn}^{2+}} = 0.15 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.02
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A hydrogen electrode having \\( P_{H_2} = 1.00 \\) atm is combined with a standard calomel electrode, whose half-reaction is: \\( \\text{Hg}_2\\text{Cl}_2(s) + 2e \\longrightarrow 2\\text{Hg}(l) + 2\\text{Cl}^-; \\quad E^\\circ = 0.242 \\, \\text{V} \\). If the cell potential is 0.800 V, what is the pH of the solution around the hydrogen electrode?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 9.457
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell in question 58, what will the cell potential be if the hydrogen electrode is immersed in a neutral solution?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.655
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A complete cell is made by combining a standard copper electrode with another copper electrode in which \\( [\\text{Cu}^{2+}] = 10^{-2} \\, \\text{M} \\). When this cell functions as a voltaic cell, what will be the overall cell potential?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.059
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "At 25°C, the free energy of formation of \\( \\text{H}_2\\text{O}(l) \\) is -56700 cal mol^{-1} while that of its ionisation to (\\( \\text{H}^+ + \\text{OH}^- \\)) is 19050 cal mol^{-1}. What is the reversible emf of the cell \\( \\text{H}_2(g) (1 \\, \\text{atm}) \\, || \\, \\text{H}^+ \\, || \\, \\text{OH}^- \\, || \\, \\text{O}_2(g) \\, (1 \\, \\text{atm}) \\)?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.405
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "What is emf of a cell containing two H electrodes, the negative one in contact with \\( 10^{-6} \\, \\text{M} \\, \\text{OH}^- \\) and the positive one in contact with 0.05 M \\( \\text{H}^+ \\)?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.3952
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate \\( K_C \\) for \\( \\text{Hg}^{2+} + \\text{Hg} \\rightleftharpoons \\text{Hg}_2^{2+} \\). Given that, \\( E^\\circ_{2\\text{Hg}/\\text{Hg}_2^{2+}} = -0.788 \\, \\text{V} \\) and \\( E^\\circ_{\\text{Hg}_2^{2+}/2\\text{Hg}^{2+}} = -0.920 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 172.6
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A Galvanic cell is constructed with \\( \\text{Ag}^+ / \\text{Ag} \\) and \\( \\text{Fe}^{3+} / \\text{Fe}^{2+} \\) electrodes. Find the concentration of \\( \\text{Ag}^+ \\) at which the emf of the cell is zero at equimolar concentration of \\( \\text{Fe}^{2+} \\) and \\( \\text{Fe}^{3+} \\). Given \\( E^{\\circ}_{\\text{Ag}^+ / \\text{Ag}} = 0.80 \\, \\text{V} \\) and \\( E^{\\circ}_{\\text{Fe}^{3+} / \\text{Fe}^{2+}} = 0.77 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.3101
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The emf of cell \\( \\text{Zn} \\, | \\, \\text{Zn}^{2+} \\, (0.01 \\, \\text{M}) \\, || \\, \\text{Fe}^{3+} \\, (0.001 \\, \\text{M}) \\, | \\, \\text{Fe}^{2+} \\) is 1.71 volt at 25°C. Calculate equilibrium constant of the cell reaction \\( \\text{Zn} + 2\\text{Fe}^{3+} \\rightleftharpoons \\text{Zn}^{2+} + 2\\text{Fe}^{2+} \\) at 25°C.",
+    "image": null,
+    "qOptions": [
+      "\\( 9.75 \\times 10^{53} \\)",
+      "\\( 9.25 \\times 10^{53} \\)",
+      "\\( 9.25 \\times 10^{52} \\)",
+      "\\( 9.75 \\times 10^{52} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The potential for the reaction: \\( \\text{O}_2 (g) + 4\\text{H}^+ + 4e \\longrightarrow 2\\text{H}_2\\text{O} \\) is 1.23 V in 0.1 N strong acid solution. Calculate the potential of this couple in aqueous solution of pH = 10.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.699
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The potential for the reaction: \\( \\text{O}_2 (g) + 4\\text{H}^+ + 4e \\longrightarrow 2\\text{H}_2\\text{O} \\) is 1.23 V in 0.1 N strong acid solution. Calculate the potential of this couple in aqueous solution of pH = 14.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.463
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For AgI, the solubility product \\( K_{sp} = 1 \\times 10^{-16} \\). What will be the electrode potential of \\( \\text{Ag}^+ / \\text{Ag} \\) electrode at 25°C in a saturated solution of AgI in water? \\( E^{\\circ}_{\\text{Ag}^+ / \\text{Ag}} = 0.80 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.328
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A silver wire dipped in 0.1M HCl solution saturated with AgCl develops a potential of -0.250 V. Calculate \\( K_{sp} \\) of AgCl in pure water if \\( E^{\\circ}_{\\text{Ag}^+ / \\text{Ag}} = -0.799 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [
+      "\\( 5.95 \\times 10^{-11} \\)",
+      "\\( 4.95 \\times 10^{-10} \\)",
+      "\\( 4.95 \\times 10^{-11} \\)",
+      "\\( 5.95 \\times 10^{-10} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "\\( K_{sp} \\) of AgCl is \\( 1.8 \\times 10^{-10} \\). Calculate oxidation electrode potential for Ag-AgCl electrode having \\( [\\text{Cl}^-] = 1 \\, \\text{M} \\). Given \\( E^{\\circ}_{\\text{OP, Ag}^+ / \\text{Ag}} = -0.799 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.2241
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "\\( K_{sp} \\) of Cu(OH)\\(_2\\) is \\( 1.0 \\times 10^{-19} \\). Calculate the reduction potential at pH = 14 for the couple Cu\\(^{2+}\\)/Cu. Given \\( E^\\circ_{RP} \\) of Cu\\(^{2+}\\)/Cu = 0.34 V.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.22
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "What is the minimum conc. of Ag\\(^+\\) that would remain unreduced by a standard Fe\\(^{3+}\\)/Fe\\(^{2+}\\) electrode at equilibrium? \\( E^\\circ_{\\text{Fe}^{3+}/\\text{Fe}^{2+}} = 0.771 \\, \\text{V} \\) and \\( E^\\circ_{\\text{Ag}^+/ \\text{Ag}} = 0.799 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.3353
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The free energy change accompanying a given process is -85.77 kJ mol^{-1} at 25°C and -83.68 kJ mol^{-1} at 35°C. Calculate the heat of reaction of process at 30°C.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -148.05
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The standard free energy change for the reaction, \\( \\text{H}_2(g) + 2\\text{AgCl}(s) \\longrightarrow 2\\text{Ag}(s) + 2\\text{H}^+(aq.) + 2\\text{Cl}^-(aq.) \\) is -10.26 kcal mol^{-1} at 25°C. A cell using above reaction is operated at 25°C under \\( P_{H_2} = 1 \\, \\text{atm} \\), [H\\(^+\\)] and [Cl\\(^-\\)] = 0.1 M. Calculate emf of cell.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.34
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the reaction Fe\\(^{3+}\\) + 3e \\( \\rightleftharpoons \\) Fe, \\( E^\\circ \\) is -0.036 V and the standard electrode potential for Fe\\(^{3+}\\) + e \\( \\rightleftharpoons \\) Fe\\(^{2+}\\) is 0.771 V. Calculate the \\( E^\\circ \\) for Fe\\(^{2+}\\) + 2e \\( \\rightleftharpoons \\) Fe.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.4395
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Evaluate \\( E^\\circ \\) for Sn\\(^{4+}\\) + 2e \\( \\rightarrow \\) Sn\\(^{2+} \\). Given that \\( E^\\circ_{\\text{Sn}/\\text{Sn}^{2+}} = +0.14 \\, \\text{V} \\) and \\( E^\\circ_{\\text{Sn}/\\text{Sn}^{4+}} = 0.15 \\, \\text{V} \\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.16
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "From the following informations, calculate the overall stability constant \\( K_{sp} \\) of Ag(S\\(_2\\)O\\(_3\\))\\(_2^{3-}\\) at 25°C. \\( \\text{Ag}^+ + e \\longrightarrow \\text{Ag}; \\quad E^\\circ = 0.799 \\, \\text{V} \\) and \\( \\text{Ag}(\\text{S}_2\\text{O}_3)_2^{3-} + e \\longrightarrow \\text{Ag} + 2\\text{S}_2\\text{O}_3^{2-}; \\quad E^\\circ = 0.017 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [
+      "\\( 1.5 \\times 10^{13} \\)",
+      "\\( 1.8 \\times 10^{12} \\)",
+      "\\( 1.5 \\times 10^{12} \\)",
+      "\\( 1.8 \\times 10^{13} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The emf of a cell \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, | \\, \\text{HCl} \\, (0.1 \\, \\text{M}) \\, | \\, \\text{AgCl}(s) \\, | \\, \\text{Ag} \\) is 0.03525 V at 27°C and 0.03705 V at 17°C. Calculate heat of reaction for \\( \\frac{1}{2} \\text{H}_2 + \\text{Ag}^+ \\rightarrow \\text{H}^+ + \\text{Ag} \\) at 27°C.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -8.613
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Neglecting the liquid junction potential, calculate the emf of following cell at 25°C: \\( \\text{H}_2 \\, (1 \\, \\text{atm}) \\, | \\, 0.5 \\, \\text{M} \\, \\text{HCOOH} \\, || \\, 1 \\, \\text{M} \\, \\text{CH}_3\\text{COOH} \\, | \\, \\text{H}_2 \\, (1 \\, \\text{atm}) \\). \\( K_a \\) for HCOOH and CH\\(_3\\)COOH are \\( 1.77 \\times 10^{-4} \\) and \\( 1.8 \\times 10^{-5} \\) respectively.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.0206
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The emf of the cell \\( \\text{Cd} \\, | \\, \\text{CdCl}_2 \\, (1 \\, \\text{M}) \\, | \\, \\text{AgCl}(s) \\, | \\, \\text{Ag} \\) is 0.675 volt at 25°C. The temperature coefficient of the cell is \\( -6.5 \\times 10^{-4} \\) volt deg.^{-1}. Calculate heat of reaction.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -167.659
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The \\( \\Delta H \\) for the reaction, at 0°C, Zn + 2AgCl = ZnCl\\(_2\\) + 2Ag is -52.05 kcal. If the emf of the cell is 1.015 volt, what is temperature coefficient of the cell at 0°C?",
+    "image": null,
+    "qOptions": [
+      "\\( -4.311 \\times 10^{-4} \\)",
+      "\\( -4.511 \\times 10^{-4} \\)",
+      "\\( -4.311 \\times 10^{-3} \\)",
+      "\\( -4.511 \\times 10^{-3} \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell Ag | AgCl | KCl(aq.) | Hg\\(_2\\)Cl\\(_2\\) | Hg, the emf is 0.0455 V at 298 K and the temperature coefficient is \\( 3.38 \\times 10^{-4} \\) VK^{-1}. What is the free energy change?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -8.78
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell Ag | AgCl | KCl(aq.) | Hg\\(_2\\)Cl\\(_2\\) | Hg, the emf is 0.0455 V at 298 K and the temperature coefficient is \\( 3.38 \\times 10^{-4} \\) VK^{-1}. What is the enthalpy change?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 10.65
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell Ag | AgCl | KCl(aq.) | Hg\\(_2\\)Cl\\(_2\\) | Hg, the emf is 0.0455 V at 298 K and the temperature coefficient is \\( 3.38 \\times 10^{-4} \\) VK^{-1}. What is the entropy change?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 65.22
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Write the cell reaction and calculate the emf of cell for Cl\\(_2\\) (1 atm) | NaCl(aq.) | Cl\\(_2\\) (0.1 atm). Will the cell reaction be spontaneous?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.0295
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The emf of a galvanic cell composed of two H electrodes is 272 millivolt. What is the pH of the solution in which the anode is immersed if the cathode is in the solution of pH = 3?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 7.6
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the potential of a cell in which H electrodes are immersed in a solution with a pH of 3.5 and in a solution with a pH of 10.7.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.425
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The reversible reduction potential of water is -0.414 V under 1 atm H\\(_2\\) pressure. If the reduction is \\( 2\\text{H}^+ + 2e \\rightarrow \\text{H}_2 \\), calculate [H\\(^+\\)] in pure water.",
+    "image": null,
+    "qOptions": [
+      "\\( 8.6 \\times 10^{-8} \\, \\text{M} \\)",
+      "\\( 9.6 \\times 10^{-8} \\, \\text{M} \\)",
+      "\\( 9.6 \\times 10^{-9} \\, \\text{M} \\)",
+      "\\( 8.6 \\times 10^{-9} \\, \\text{M} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "A cell contains one litre of buffer mixture of CH\\(_3\\)COOH and CH\\(_3\\)COONa each 1 M in two compartments using platinum electrodes. p\\(K_a\\) for CH\\(_3\\)COOH = 4.74. Calculate the emf of the cell.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "For the cell in question 85, after passage of 1.25 A current for 241.25 minute, calculate the emf of the cell.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.019
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Calculate the emf of the cell at 18°C for: \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, (1 \\, \\text{atm}) \\, | \\, N/10 \\, \\text{HCl} \\, || \\, N \\, \\text{KOH} \\, | \\, \\text{H}_2 \\, (1 \\, \\text{atm}) \\). HCl is 90% dissociated and KOH is 75% ionised.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": -0.756
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The emf of the cell \\( \\text{Pt} \\, | \\, \\text{H}_2 \\, (1 \\, \\text{atm}) \\, | \\, \\text{HOCN} \\, (1.3 \\times 10^{-3} \\, M) \\, || \\, \\text{Ag}^+ \\, (0.8 \\, M) \\, | \\, \\text{Ag}(s) \\) is 0.982 V. Calculate the \\( K_a \\) for HOCN. \\( \\text{Ag}^+ + e \\longrightarrow \\text{Ag}(s); \\quad E^\\circ = 0.80 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [
+      "\\( 3.63 \\times 10^{-4} \\)",
+      "\\( 3.33 \\times 10^{-3} \\)",
+      "\\( 3.33 \\times 10^{-4} \\)",
+      "\\( 3.63 \\times 10^{-3} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Determine the potential of a Daniel cell, initially containing 1 litre solution of each 1.0 M copper (II) ion and 1.0 M zinc (II) ion after passage of \\( 1 \\times 10^5 \\) coulomb of charge. Given \\( E^\\circ_{\\text{Zn}/\\text{Zn}^{2+}} = 0.76 \\, \\text{V} \\) and \\( E^\\circ_{\\text{Cu}/\\text{Cu}^{2+}} = -0.34 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.09
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "In a zinc-manganese dioxide cell, the anode is made up of Zn and cathode of carbon rod surrounded by a mixture of MnO\\(_2\\), carbon, NH\\(_4\\)Cl and ZnCl\\(_2\\) in aqueous base. The cathodic reaction is, \\( 2\\text{MnO}_2(s) + \\text{Zn}^{2+} + 2e \\longrightarrow \\text{ZnMn}_2\\text{O}_4(s) \\). If 8 g MnO\\(_2\\) is present in cathodic compartment, how many day the dry cell will continue to give a current of \\( 4 \\times 10^{-3} \\) ampere?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 25.675
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "\\( I_2 \\) and \\( Br_2 \\) are added to a solution containing \\( I^- \\) and \\( Br^- \\). What reaction would occur? Also calculate \\( E^\\circ \\) for the reaction taking place. Given \\( E^\\circ_{I_2/I^-} = +0.54 \\, \\text{V} \\) and \\( E^\\circ_{Br_2/Br^-} = +1.09 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.55
+  },
+  
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Given standard electrode potentials: \\( I_2 + 2e \\longrightarrow 2I^- \\); \\( E^\\circ = +0.54 \\, \\text{V} \\) \\( Cl_2 + 2e \\longrightarrow 2Cl^- \\); \\( E^\\circ = +1.36 \\, \\text{V} \\) \\( Fe^{3+} + e \\longrightarrow Fe^{2+} \\); \\( E^\\circ = +0.77 \\, \\text{V} \\) \\( Ce^{4+} + e \\longrightarrow Ce^{3+} \\); \\( E^\\circ = +1.60 \\, \\text{V} \\) \\( Sn^{4+} + 2e \\longrightarrow Sn^{2+} \\); \\( E^\\circ = +0.15 \\, \\text{V} \\)",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Identify the strongest oxidant and weakest oxidant.",
+    "image": null,
+    "qOptions": [
+      "\\( Ce^{4+} \\) and \\( Sn^{4+} \\)",
+      "\\( Cl_2 \\) and \\( I_2 \\)",
+      "\\( Fe^{3+} \\) and \\( Sn^{4+} \\)",
+      "\\( Ce^{4+} \\) and \\( Fe^{3+} \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Identify the strongest reductant and weakest reductant.",
+    "image": null,
+    "qOptions": [
+      "\\( Sn^{2+} \\) and \\( Ce^{3+} \\)",
+      "\\( I^- \\) and \\( Cl^- \\)",
+      "\\( Fe^{2+} \\) and \\( Ce^{3+} \\)",
+      "\\( Sn^{2+} \\) and \\( I^- \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Will \\( Fe^{3+} \\) oxidise \\( Ce^{3+} \\)?",
+    "image": null,
+    "qOptions": [
+      "Yes",
+      "No"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Will \\( I_2 \\) replace \\( Cl_2 \\) from KCl?",
+    "image": null,
+    "qOptions": [
+      "Yes",
+      "No"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "What reaction will occur if \\( SnCl_2 \\) and \\( FeCl_3 \\) are mixed?",
+    "image": null,
+    "qOptions": [
+      "\\( Sn^{2+} + 2Fe^{3+} \\longrightarrow Sn^{4+} + 2Fe^{2+} \\)",
+      "\\( Sn^{4+} + 2Fe^{2+} \\longrightarrow Sn^{2+} + 2Fe^{3+} \\)",
+      "No reaction",
+      "\\( Sn^{2+} + Fe^{3+} \\longrightarrow Sn^{3+} + Fe^{2+} \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "Will \\( I_2 \\) be set free on addition of \\( FeCl_3 \\) in KI?",
+    "image": null,
+    "qOptions": [
+      "Yes",
+      "No"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "\\( I_2 \\) and \\( Br_2 \\) are added to a solution containing \\( I^- \\) and \\( Br^- \\). What reaction would occur? Given \\( E^\\circ_{I_2/I^-} = +0.54 \\, \\text{V} \\) and \\( E^\\circ_{Br_2/Br^-} = +1.09 \\, \\text{V} \\). Also calculate \\( E^\\circ \\) for the reaction taking place.",
+    "image": null,
+    "qOptions": [
+      "\\( Br_2 + 2I^- \\longrightarrow 2Br^- + I_2 \\) with \\( E^\\circ = 0.55 \\, \\text{V} \\)",
+      "\\( I_2 + 2Br^- \\longrightarrow 2I^- + Br_2 \\) with \\( E^\\circ = -0.55 \\, \\text{V} \\)",
+      "No reaction",
+      "\\( Br_2 + I^- \\longrightarrow Br^- + I_2 \\) with \\( E^\\circ = 0.55 \\, \\text{V} \\)"
+    ],
+    "qAnswer": "A"
+  }
+]
+ 
+
+
+
+
+}
