@@ -851,6 +851,10 @@
     const idCon = "qbaseProfCon";
     const delBtnId = "qbaseProfDeleteBtn";
     const saveBtnId = "qbaseProfSaveBtn";
+    const marksTokId = "qbaseMarksToken";
+    const marksSaveId = "qbaseMarksSave";
+    const marksClearId = "qbaseMarksClear";
+    const marksStatusId = "qbaseMarksStatus";
     const errId = "qbaseProfErr";
     const body = `
       <div class="mb-3">
@@ -886,6 +890,74 @@
         const saveBtn = modalEl.querySelector(`#${saveBtnId}`);
         const delBtn = modalEl.querySelector(`#${delBtnId}`);
         const err = modalEl.querySelector(`#${errId}`);
+
+        // Inject Marks App Authentication section before Danger Zone
+        try {
+          const bodyEl = modalEl.querySelector('.modal-body');
+          const danger = delBtn?.closest('.mt-3');
+          const sect = document.createElement('div');
+          sect.className = 'mt-3';
+          sect.innerHTML = `
+            <h6 class="mb-2">Marks App Authentication</h6>
+            <p class="small text-muted">Paste your GetMarks Bearer token. It will be used to fetch exams, subjects, chapters and questions for you. We do not display the saved token.</p>
+            <div class="mb-2">
+              <label for="${marksTokId}" class="form-label">Bearer Token</label>
+              <input id="${marksTokId}" class="form-control" type="text" placeholder="eyJhbGciOi..." autocomplete="off" />
+              <div class="form-text">Leave blank to keep existing. Use Clear to remove.</div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <button id="${marksSaveId}" class="btn btn-outline-primary">Save Token</button>
+              <button id="${marksClearId}" class="btn btn-outline-secondary">Clear Token</button>
+              <span id="${marksStatusId}" class="small text-muted"></span>
+            </div>`;
+          if (bodyEl) {
+            if (danger && danger.parentElement === bodyEl) {
+              bodyEl.insertBefore(sect, danger);
+            } else {
+              bodyEl.appendChild(sect);
+            }
+          }
+          // Wire up handlers
+          const mTok = sect.querySelector(`#${marksTokId}`);
+          const mSave = sect.querySelector(`#${marksSaveId}`);
+          const mClear = sect.querySelector(`#${marksClearId}`);
+          const mStatus = sect.querySelector(`#${marksStatusId}`);
+          (async () => {
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`);
+              if (r.ok) {
+                const d = await r.json();
+                if (mStatus) mStatus.textContent = d?.hasToken ? 'Token configured' : 'No token set';
+              }
+            } catch {}
+          })();
+          mSave?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const token = (mTok?.value || '').trim();
+            if (!token) { try { await showNotice({ title: 'Nothing to save', message: 'Enter a token first.' }); } catch {}; return; }
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bearerToken: token }) });
+              if (!r.ok) throw new Error(String(r.status));
+              if (mStatus) mStatus.textContent = 'Token configured';
+              if (mTok) mTok.value = '';
+              try { await showNotice({ title: 'Saved', message: 'Marks App token saved.' }); } catch {}
+            } catch (e) {
+              try { await showNotice({ title: 'Error', message: 'Failed to save token.' }); } catch {}
+            }
+          });
+          mClear?.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`, { method: 'DELETE' });
+              if (!r.ok) throw new Error(String(r.status));
+              if (mStatus) mStatus.textContent = 'No token set';
+              if (mTok) mTok.value = '';
+              try { await showNotice({ title: 'Cleared', message: 'Marks App token cleared.' }); } catch {}
+            } catch (e) {
+              try { await showNotice({ title: 'Error', message: 'Failed to clear token.' }); } catch {}
+            }
+          });
+        } catch {}
         const getVals = () => {
           const cur = modalEl.querySelector(`#${idCur}`);
           const nw = modalEl.querySelector(`#${idNew}`);

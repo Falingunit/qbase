@@ -27,3 +27,5 @@ frontend/dev.config.json
 # Local uploads and DB artifacts
 backend/uploads/
 backend/db.sqlite
+
+utils/scraper/output/

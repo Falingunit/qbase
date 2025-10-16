@@ -103,7 +103,8 @@ db.exec(`
     id TEXT PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
     password_hash TEXT,
-    force_pw_reset INTEGER DEFAULT 0
+    force_pw_reset INTEGER DEFAULT 0,
+    getmarks_token TEXT
   );
 
   CREATE TABLE IF NOT EXISTS states (
@@ -164,6 +165,31 @@ db.exec(`
     PRIMARY KEY (userId, assignmentId),
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
+
+  -- Starred PYQ resources (exams, chapters)
+  CREATE TABLE IF NOT EXISTS starred_pyqs (
+    userId TEXT NOT NULL,
+    kind TEXT NOT NULL, -- 'exam' | 'chapter'
+    examId TEXT,
+    subjectId TEXT,
+    chapterId TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, kind, examId, subjectId, chapterId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  -- PYQs per-user state (exam/subject/chapter keyed)
+  CREATE TABLE IF NOT EXISTS pyqs_states (
+    userId TEXT NOT NULL,
+    examId TEXT NOT NULL,
+    subjectId TEXT NOT NULL,
+    chapterId TEXT NOT NULL,
+    state TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, examId, subjectId, chapterId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -176,6 +202,10 @@ try {
   const hasForce = cols.some((c) => String(c.name).toLowerCase() === 'force_pw_reset');
   if (!hasForce) {
     db.exec("ALTER TABLE users ADD COLUMN force_pw_reset INTEGER DEFAULT 0");
+  }
+  const hasMarks = cols.some((c) => String(c.name).toLowerCase() === 'getmarks_token');
+  if (!hasMarks) {
+    db.exec("ALTER TABLE users ADD COLUMN getmarks_token TEXT");
   }
 } catch (e) {
   console.warn('users.password_hash migration check failed:', e?.message || e);
@@ -216,6 +246,190 @@ function auth(req, res, next) {
 
 // ---------- Public routes ----------
 app.get('/healthz', (_req, res) => res.send('ok'));
+
+// ---------- PYQs proxy (public) ----------
+// Uses per-user token when available (from profile), otherwise falls back to server-side token.
+const GETMARKS_AUTH_TOKEN = process.env.GETMARKS_AUTH_TOKEN || '';
+const GM_BASE = {
+  dashboard: 'https://web.getmarks.app/api/v3/dashboard/platform/web',
+  exam_subjects: (examId) => `https://web.getmarks.app/api/v4/cpyqb/exam/${encodeURIComponent(examId)}`,
+  subject_chapters: (examId, subjectId) => `https://web.getmarks.app/api/v4/cpyqb/exam/${encodeURIComponent(examId)}/subject/${encodeURIComponent(subjectId)}`,
+  questions: (examId, subjectId, chapterId) => `https://web.getmarks.app/api/v4/cpyqb/exam/${encodeURIComponent(examId)}/subject/${encodeURIComponent(subjectId)}/chapter/${encodeURIComponent(chapterId)}/questions`,
+};
+
+function getUserIdOptional(req) {
+  try {
+    const h = req?.headers?.authorization || '';
+    const m = h.match(/^Bearer\s+(.+)$/i);
+    if (!m) return null;
+    const { sub } = jwt.verify(m[1], JWT_SECRET);
+    return String(sub || '');
+  } catch {
+    return null;
+  }
+}
+
+function buildUrlWithParams(url, params = {}) {
+  const qs = new URL(url);
+  for (const [k, v] of Object.entries(params || {})) qs.searchParams.set(k, v);
+  return qs.toString();
+}
+
+async function gmFetchWithToken(url, params = {}, token) {
+  if (!token) {
+    const e = new Error('Missing GetMarks token');
+    e.status = 503;
+    throw e;
+  }
+  const target = buildUrlWithParams(url, params);
+  const r = await fetch(target, { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' });
+  if (!r.ok) {
+    const e = new Error(`GetMarks fetch failed: ${r.status}`);
+    e.status = r.status;
+    throw e;
+  }
+  return await r.json();
+}
+
+async function gmFetch(req, url, params = {}) {
+  // Prefer per-user token if a valid Qbase JWT is provided
+  try {
+    const uid = getUserIdOptional(req);
+    if (uid) {
+      const row = db.prepare('SELECT getmarks_token FROM users WHERE id = ?').get(uid);
+      const userTok = row?.getmarks_token;
+      if (userTok && String(userTok).trim()) {
+        return await gmFetchWithToken(url, params, String(userTok).trim());
+      }
+    }
+  } catch {}
+  // Fallback to server token
+  if (!GETMARKS_AUTH_TOKEN) {
+    const e = new Error('GETMARKS_AUTH_TOKEN not configured');
+    e.status = 503;
+    throw e;
+  }
+  return await gmFetchWithToken(url, params, GETMARKS_AUTH_TOKEN);
+}
+
+// GET /api/pyqs/exams -> [{ id, name, icon }]
+app.get('/api/pyqs/exams', async (req, res) => {
+  try {
+    const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
+    const items = data?.data?.items || [];
+    const comp = items.find((it) => it?.componentTitle === 'ChapterwiseExams');
+    const exams = (comp?.items || []).map((ex) => ({
+      id: ex?.examId,
+      name: ex?.title,
+      icon: ex?.icon?.dark || ex?.icon?.light || '',
+    })).filter((x) => x.id && x.name);
+    return res.json(exams);
+  } catch (e) {
+    const code = e.status || 500;
+    return res.status(code).json({ error: String(e.message || e) });
+  }
+});
+
+// GET /api/pyqs/exams/:examId/subjects -> [{ id, name, icon }]
+app.get('/api/pyqs/exams/:examId/subjects', async (req, res) => {
+  try {
+    const { examId } = req.params;
+    const data = await gmFetch(req, GM_BASE.exam_subjects(examId), { limit: 10000 });
+    const subjects = (data?.data?.subjects || []).map((s) => ({
+      id: s?._id,
+      name: s?.title,
+      icon: s?.icon || '',
+    })).filter((x) => x.id && x.name);
+    return res.json(subjects);
+  } catch (e) {
+    const code = e.status || 500;
+    return res.status(code).json({ error: String(e.message || e) });
+  }
+});
+
+// GET /api/pyqs/exams/:examId/subjects/:subjectId/chapters -> [{ id, name, icon_name, total_questions }]
+app.get('/api/pyqs/exams/:examId/subjects/:subjectId/chapters', async (req, res) => {
+  try {
+    const { examId, subjectId } = req.params;
+    const data = await gmFetch(req, GM_BASE.subject_chapters(examId, subjectId), { limit: 10000 });
+    const chapters = (data?.data?.chapters?.data || []).map((c) => ({
+      id: c?._id,
+      name: c?.title,
+      icon_name: c?.icon,
+      total_questions: c?.allPyqs?.totalQs ?? 0,
+    })).filter((x) => x.id && x.name);
+    return res.json(chapters);
+  } catch (e) {
+    const code = e.status || 500;
+    return res.status(code).json({ error: String(e.message || e) });
+  }
+});
+
+// GET /api/pyqs/exams/:examId/subjects/:subjectId/chapters/:chapterId/questions
+// -> [{ type, diffuculty, pyqInfo, qText, qImage, options:[{oText,oImage}], correctAnswer, solution:{sText,sImage} }]
+app.get('/api/pyqs/exams/:examId/subjects/:subjectId/chapters/:chapterId/questions', async (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    const data = await gmFetch(req, GM_BASE.questions(examId, subjectId, chapterId), { limit: 10000, hideOutOfSyllabus: 'false' });
+    const questions = (data?.data?.questions || []).map((q) => {
+      const opts = Array.isArray(q?.options) ? q.options : [];
+      const correctLetters = [];
+      if (Array.isArray(opts)) {
+        const letters = ['A','B','C','D'];
+        opts.forEach((o, i) => { if (o?.isCorrect) correctLetters.push(letters[i] || String(i+1)); });
+      }
+      return {
+        type: q?.type,
+        diffuculty: q?.level,
+        pyqInfo: (Array.isArray(q?.previousYearPapers) && q.previousYearPapers[0]?.title) || '',
+        qText: q?.question?.text || '',
+        qImage: q?.question?.image || '',
+        options: opts.map((o) => ({ oText: o?.text || '', oImage: o?.image || '' })),
+        correctAnswer: q?.type === 'numerical' ? q?.correctValue : correctLetters,
+        solution: { sText: q?.solution?.text || '', sImage: q?.solution?.image || '' },
+      };
+    });
+    return res.json(questions);
+  } catch (e) {
+    const code = e.status || 500;
+    return res.status(code).json({ error: String(e.message || e) });
+  }
+});
+
+// ---------- PYQs per-user state (protected) ----------
+// GET state
+app.get('/api/pyqs/state/:examId/:subjectId/:chapterId', auth, (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    const row = db
+      .prepare('SELECT state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?')
+      .get(req.userId, String(examId), String(subjectId), String(chapterId));
+    const state = row ? safeParseJSON(row.state, []) : [];
+    res.json(Array.isArray(state) ? state : []);
+  } catch (e) {
+    console.error('pyqs get state:', e);
+    res.status(500).json({ error: 'Failed to get PYQs state' });
+  }
+});
+
+// POST/UPSERT state
+app.post('/api/pyqs/state/:examId/:subjectId/:chapterId', auth, (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    const state = req.body?.state ?? [];
+    const text = JSON.stringify(state);
+    db.prepare(`
+      INSERT INTO pyqs_states (userId, examId, subjectId, chapterId, state)
+      VALUES (?, ?, ?, ?, ?)
+      ON CONFLICT(userId, examId, subjectId, chapterId)
+      DO UPDATE SET state = excluded.state, updated_at = CURRENT_TIMESTAMP
+    `).run(req.userId, String(examId), String(subjectId), String(chapterId), text);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs save state:', e);
+    res.status(500).json({ error: 'Failed to save PYQs state' });
+  }
+});
 
 // Sign up: create or set password for existing username without password
 app.post('/signup', (req, res) => {
@@ -287,9 +501,9 @@ app.get('/me', (req, res) => {
   if (!m) return res.json(null);
   try {
     const { sub } = jwt.verify(m[1], JWT_SECRET);
-    const u = db.prepare('SELECT id, username, force_pw_reset FROM users WHERE id = ?').get(String(sub));
+    const u = db.prepare('SELECT id, username, force_pw_reset, getmarks_token FROM users WHERE id = ?').get(String(sub));
     if (!u) return res.json(null);
-    res.json({ id: u.id, username: u.username, mustChangePassword: !!u.force_pw_reset });
+    res.json({ id: u.id, username: u.username, mustChangePassword: !!u.force_pw_reset, hasMarksAuth: !!(u.getmarks_token && String(u.getmarks_token).trim()) });
   } catch {
     res.json(null);
   }
@@ -502,6 +716,91 @@ app.delete('/api/question-marks/:assignmentId/:questionIndex', (req, res) => {
   }
 });
 
+
+// PYQs: starred resources (protected)
+app.get('/api/pyqs/starred/exams', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT examId FROM starred_pyqs
+      WHERE userId = ? AND kind = 'exam' AND examId IS NOT NULL
+      ORDER BY created_at DESC
+    `).all(req.userId);
+    res.json(rows.map(r => String(r.examId)));
+  } catch (e) {
+    console.error('pyqs starred exams list:', e);
+    res.status(500).json({ error: 'Failed to get starred exams' });
+  }
+});
+app.post('/api/pyqs/starred/exams/:examId', (req, res) => {
+  try {
+    const { examId } = req.params;
+    if (!examId) return res.status(400).json({ error: 'examId required' });
+    db.prepare(`
+      INSERT INTO starred_pyqs (userId, kind, examId)
+      VALUES (?, 'exam', ?)
+      ON CONFLICT(userId, kind, examId, subjectId, chapterId) DO NOTHING
+    `).run(req.userId, String(examId));
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs star exam:', e);
+    res.status(500).json({ error: 'Failed to star exam' });
+  }
+});
+app.delete('/api/pyqs/starred/exams/:examId', (req, res) => {
+  try {
+    const { examId } = req.params;
+    db.prepare(`
+      DELETE FROM starred_pyqs WHERE userId = ? AND kind = 'exam' AND examId = ?
+    `).run(req.userId, String(examId));
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs unstar exam:', e);
+    res.status(500).json({ error: 'Failed to unstar exam' });
+  }
+});
+
+app.get('/api/pyqs/starred/chapters', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT examId, subjectId, chapterId
+      FROM starred_pyqs
+      WHERE userId = ? AND kind = 'chapter' AND examId IS NOT NULL AND subjectId IS NOT NULL AND chapterId IS NOT NULL
+      ORDER BY created_at DESC
+    `).all(req.userId);
+    res.json(rows.map(r => ({ examId: String(r.examId), subjectId: String(r.subjectId), chapterId: String(r.chapterId) })));
+  } catch (e) {
+    console.error('pyqs starred chapters list:', e);
+    res.status(500).json({ error: 'Failed to get starred chapters' });
+  }
+});
+app.post('/api/pyqs/starred/chapters/:examId/:subjectId/:chapterId', (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    if (!examId || !subjectId || !chapterId) return res.status(400).json({ error: 'examId, subjectId, chapterId required' });
+    db.prepare(`
+      INSERT INTO starred_pyqs (userId, kind, examId, subjectId, chapterId)
+      VALUES (?, 'chapter', ?, ?, ?)
+      ON CONFLICT(userId, kind, examId, subjectId, chapterId) DO NOTHING
+    `).run(req.userId, String(examId), String(subjectId), String(chapterId));
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs star chapter:', e);
+    res.status(500).json({ error: 'Failed to star chapter' });
+  }
+});
+app.delete('/api/pyqs/starred/chapters/:examId/:subjectId/:chapterId', (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    db.prepare(`
+      DELETE FROM starred_pyqs
+      WHERE userId = ? AND kind = 'chapter' AND examId = ? AND subjectId = ? AND chapterId = ?
+    `).run(req.userId, String(examId), String(subjectId), String(chapterId));
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs unstar chapter:', e);
+    res.status(500).json({ error: 'Failed to unstar chapter' });
+  }
+});
 // Starred assignments
 app.get('/api/starred', (req, res) => {
   try {
@@ -664,6 +963,40 @@ app.patch('/account/password', (req, res) => {
   } catch (e) {
     console.error('change password:', e);
     res.status(500).json({ error: 'Failed to change password' });
+  }
+});
+
+// Configure/clear Marks App authentication token (GetMarks)
+app.get('/account/marks-auth', auth, (req, res) => {
+  try {
+    const row = db.prepare('SELECT getmarks_token FROM users WHERE id = ?').get(req.userId);
+    const has = !!(row?.getmarks_token && String(row.getmarks_token).trim());
+    res.json({ hasToken: has });
+  } catch (e) {
+    console.error('get marks-auth:', e);
+    res.status(500).json({ error: 'Failed to load marks auth' });
+  }
+});
+
+app.patch('/account/marks-auth', auth, (req, res) => {
+  try {
+    const token = String(req.body?.bearerToken || req.body?.token || '').trim();
+    if (!token) return res.status(400).json({ error: 'Token is required' });
+    db.prepare('UPDATE users SET getmarks_token = ? WHERE id = ?').run(token, req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('set marks-auth:', e);
+    res.status(500).json({ error: 'Failed to save marks auth' });
+  }
+});
+
+app.delete('/account/marks-auth', auth, (req, res) => {
+  try {
+    db.prepare('UPDATE users SET getmarks_token = NULL WHERE id = ?').run(req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('clear marks-auth:', e);
+    res.status(500).json({ error: 'Failed to clear marks auth' });
   }
 });
 
