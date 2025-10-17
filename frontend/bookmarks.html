@@ -18,9 +18,9 @@
       integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
       crossorigin="anonymous"
     />
-    <link href="./theme.css" rel="stylesheet" />
-    <link href="./index.css" rel="stylesheet" />
-    <link href="./bookmarks.css" rel="stylesheet" />
+    <link href="./common/theme.css" rel="stylesheet" />
+    <link href="./common/index.css" rel="stylesheet" />
+    <link href="./bookmarks/bookmarks.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
@@ -41,8 +41,10 @@
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
     ></script>
-    <script defer src="config.js"></script>
-    <script defer src="./navbar.js"></script>
+    <script defer src="./common/config.js"></script>
+    <script defer src="./common/navbar.js"></script>
+    <script defer src="./bookmarks/bookmarks.service.js"></script>
+    <script defer src="./bookmarks/bookmarks.view.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
@@ -188,6 +190,6 @@
       </div>
     </div>
 
-    <script defer src="./bookmarks.js"></script>
+    <script defer src="./bookmarks/bookmarks.js"></script>
   </body>
 </html>

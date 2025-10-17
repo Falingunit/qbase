@@ -30,13 +30,13 @@
       crossorigin="anonymous"
     />
 
-    <link href="./theme.css" rel="stylesheet" />
+    <link href="./common/theme.css" rel="stylesheet" />
     <!-- EasyMDE CSS before our local overrides so our assignment.css can win -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"
     />
-    <link href="./assignment.css" rel="stylesheet" />
+    <link href="./assignment/assignment.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
@@ -53,7 +53,7 @@
       defer
       src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
     ></script>
-    <script defer src="config.js"></script>
+    <script defer src="./common/config.js"></script>
     <style>
       /* Invert question/option/passage/solution images for dark theme readability */
       #questionText img,
@@ -604,13 +604,13 @@
                 diffuculty: String(q?.diffuculty || q?.level || ''),
               };
             });
-            // Apply filters from sessionStorage (from list view)
+            // Apply filters from server preferences (from list view)
             try {
-              const key = `pyqs:f:${exam}:${subject}:${chapter}`;
-              const raw = sessionStorage.getItem(key);
-              if (raw) {
-                const f = JSON.parse(raw);
-                window.__ASSIGNMENT_FILTER_OBJECT__ = f;
+              const url = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(exam)}/${encodeURIComponent(subject)}/${encodeURIComponent(chapter)}`;
+              const resp = await authFetch(url);
+              if (resp.ok) {
+                const f = await resp.json();
+                if (f && typeof f === 'object') window.__ASSIGNMENT_FILTER_OBJECT__ = f;
                 const normDiff = (d) => { d=String(d||'').toLowerCase(); if (d.startsWith('e')) return 'easy'; if (d.startsWith('m')) return 'medium'; if (d.startsWith('h')) return 'hard'; return ''; };
                 const parseYear = (info) => { const m = String(info||'').match(/(19|20)\d{2}/); return m?Number(m[0]):null; };
                 const hasSol = (q) => (String(q.solutionText||'').trim().length || String(q.solutionImage||'').trim().length);
@@ -653,7 +653,7 @@
           };
         })();
       </script>
-      <script defer src="./pyqs-questions.js"></script>
+      <script defer src="./pyqs/pyqs-questions.js"></script>
       <!-- EasyMDE JS (after assignment.js so fallback textarea exists) -->
       <script
         defer

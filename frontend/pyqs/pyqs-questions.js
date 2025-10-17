@@ -304,56 +304,6 @@
     }
   } catch {}
 
-  let assignmentTitle = `Assignment ${aID}`;
-
-  const assignmentTitlePromise = (async () => {
-    // External override (e.g., PYQs viewer) for title
-    try {
-      if (typeof window !== "undefined" && window.__PYQS_ASSIGNMENT_TITLE__) {
-        assignmentTitle = String(window.__PYQS_ASSIGNMENT_TITLE__);
-        const el = document.getElementById("assignmentDetails");
-        if (el) el.textContent = assignmentTitle;
-        return; // Skip fetching assignment_list.json
-      }
-    } catch {}
-    try {
-      const raw = await (await fetch("./data/assignment_list.json")).json();
-      const items = normalizeAssignmentsForLookup(raw);
-      const meta = items.find((it) => Number(it.aID) === Number(aID));
-      if (meta?.title) assignmentTitle = meta.title;
-
-      // If the page UI is already up, refresh the header
-      const el = document.getElementById("assignmentDetails");
-      if (el) el.textContent = assignmentTitle;
-    } catch (e) {
-      console.warn(
-        "Could not load assignment title from assignment_list.json",
-        e
-      );
-    }
-  })();
-
-  function normalizeAssignmentsForLookup(input) {
-    const out = [];
-    const pushItem = (raw) => {
-      if (!raw || typeof raw !== "object") return;
-      const id = Number(
-        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
-      );
-      if (!Number.isFinite(id)) return;
-      out.push({ aID: id, title: String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`) });
-    };
-    if (Array.isArray(input)) input.forEach(pushItem);
-    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
-    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
-    else if (input && typeof input === "object") {
-      Object.values(input).forEach((arr) => {
-        if (Array.isArray(arr)) arr.forEach(pushItem);
-      });
-    }
-    return out;
-  }
-
   let saveTimeout;
 
   // ---------- Local keys & auth tracking ----------
@@ -524,6 +474,24 @@
   }
 
   // ---------- Load saved state (server/local with migration prompt) ----------
+  // ---------- Load saved state (server/local with migration prompt) ----------
+  function getPyqsIds() {
+    try { if (typeof window !== 'undefined' && window.__PYQS_IDS__) return window.__PYQS_IDS__; } catch {}
+    try {
+      const u = new URL(window.location.href);
+      const examId = u.searchParams.get('exam');
+      const subjectId = u.searchParams.get('subject');
+      const chapterId = u.searchParams.get('chapter');
+      if (examId && subjectId && chapterId) return { examId, subjectId, chapterId };
+    } catch {}
+    return null;
+  }
+  function stateKey(aID) {
+    const ids = getPyqsIds();
+    if (ids) return `qbase:pyqs:${ids.examId}:${ids.subjectId}:${ids.chapterId}:state`;
+    return `qbase:${aID}:state`;
+  }
+
   async function loadSavedState(aID) {
     const me = await whoAmI();
     loggedInUser = me?.username || null;
@@ -536,7 +504,11 @@
 
     // Logged in → use server if available; fallback to local only if server has nothing
     try {
-      const res = await authFetch(`${API_BASE}/api/state/${aID}`);
+      const ids = getPyqsIds();
+      const url = ids
+        ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`
+        : `${API_BASE}/api/state/${aID}`;
+      const res = await authFetch(url);
       if (res.ok) {
         const server = await res.json();
         if (Array.isArray(server) && server.length) {
@@ -548,17 +520,19 @@
       /* ignore */
     }
 
-    // Local storage fallback
-    try {
-      const raw = localStorage.getItem(`qbase:${aID}:state`);
-      if (raw) {
-        const arr = JSON.parse(raw);
-        if (Array.isArray(arr) && arr.length) {
-          questionStates = arr;
-          return;
+    // Local storage fallback (disabled for PYQs)
+    if (!getPyqsIds()) {
+      try {
+        const raw = localStorage.getItem(stateKey(aID));
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr) && arr.length) {
+            questionStates = arr;
+            return;
+          }
         }
-      }
-    } catch { /* ignore */ }
+      } catch { /* ignore */ }
+    }
 
     // If nothing found, initialize fresh default states
     questionStates = Array(window.displayQuestions.length)
@@ -568,7 +542,11 @@
 
   // ---------- Server POST helper ----------
   async function postState(aID, state) {
-    const res = await authFetch(`${API_BASE}/api/state/${aID}`, {
+    const ids = getPyqsIds();
+    const url = ids
+      ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`
+      : `${API_BASE}/api/state/${aID}`;
+    const res = await authFetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ state }),
@@ -595,10 +573,10 @@
         console.warn("Server save failed; will retry later.", e);
         // keep dirty=true so periodic/next user action can retry
       }
-      // Also save locally when not using server auth
-      if (authSource !== "server") {
+      // Also save locally when not using server auth (disabled for PYQs)
+      if (authSource !== "server" && !getPyqsIds()) {
         try {
-          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          localStorage.setItem(stateKey(aID), JSON.stringify(questionStates));
           dirty = false;
         } catch {}
       }
@@ -614,7 +592,11 @@
         // our authenticated endpoint.
         const payload = JSON.stringify({ state: questionStates });
         try {
-          authFetch(`${API_BASE}/api/state/${aID}`, {
+          const ids = getPyqsIds();
+          const url = ids
+            ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`
+            : `${API_BASE}/api/state/${aID}`;
+          authFetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: payload,
@@ -622,9 +604,9 @@
           });
         } catch {}
         dirty = false;
-      } else {
+      } else if (!getPyqsIds()) {
         try {
-          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          localStorage.setItem(stateKey(aID), JSON.stringify(questionStates));
           dirty = false;
         } catch {}
       }
@@ -656,7 +638,11 @@
       try {
         // Fetch latest state from server and merge with any local progress
         try {
-          const res = await authFetch(`${API_BASE}/api/state/${aID}`);
+          const ids = getPyqsIds();
+          const url = ids
+            ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`
+            : `${API_BASE}/api/state/${aID}`;
+          const res = await authFetch(url);
           if (res.ok) {
             const server = await res.json();
             if (Array.isArray(server) && server.length) {
@@ -1584,11 +1570,12 @@
           // Write reset state (with notes kept) to server
           await postState(aID, resetStates);
           questionStates = resetStates;
+        } else if (!getPyqsIds()) {
+          // Local fallback for non-PYQs only
+          try { localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(resetStates)); } catch {}
+          questionStates = resetStates;
         } else {
-          // Local fallback: replace stored state instead of removing it
-          try {
-            localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(resetStates));
-          } catch {}
+          // In PYQs mode without server auth: keep in-memory only
           questionStates = resetStates;
         }
 
@@ -1641,7 +1628,8 @@
       if (numericalAnswer) numericalAnswer.parentElement.style.display = "none";
     }
 
-    // Hide reset, show check answer again
+    // Hide solution; Hide reset, show check answer again
+    try { document.getElementById('solutionSection').style.display = 'none'; } catch {}
     document.getElementById("reset-question").classList.add("d-none");
     document.getElementById("check-answer").classList.remove("d-none");
 
@@ -1665,6 +1653,21 @@
     } catch {}
     checkCurrentAnswer();
   });
+
+  // Filters info button (from list view)
+  try {
+    const btnInfo = document.getElementById('filters-info-btn');
+    if (btnInfo) {
+      btnInfo.addEventListener('click', async () => {
+        const info = (typeof window !== 'undefined' && (window.__ASSIGNMENT_FILTER_INFO__ || 'No filters'));
+        try {
+          if (typeof window.showModal === 'function') {
+            await window.showModal({ title: 'Active Filters', bodyHTML: `<div class="small">${(info||'No filters')}</div>`, buttons: [{ text: 'OK', className: 'btn btn-primary', value: true }] });
+          } else { alert(info); }
+        } catch { alert(info); }
+      });
+    }
+  } catch {}
 
   // Bookmark functionality
   document.getElementById("bookmark-btn").addEventListener("click", () => {
@@ -1792,8 +1795,31 @@
     markDirty();
     scheduleSave(aID);
 
+    // Show solution now that it's evaluated
+    try { showSolution(q); } catch {}
+
     // Update question grid color
     evaluateQuestionButtonColor(qID);
+  }
+
+  function showSolution(question) {
+    const host = document.getElementById('solutionSection');
+    if (!host) return;
+    const textEl = document.getElementById('solutionText');
+    const imgWrap = document.getElementById('solutionImage');
+    const hasText = !!(question && question.solutionText && String(question.solutionText).trim());
+    const hasImage = !!(question && question.solutionImage);
+    if (hasText) {
+      renderHTML(textEl, String(question.solutionText || ''));
+      try { renderMathInElement && renderMathInElement(textEl, katexOptions); } catch {}
+    } else { textEl.innerHTML = ''; }
+    if (hasImage) {
+      const imgSrc = String(question.solutionImage || '');
+      imgWrap.style.display = '';
+      imgWrap.innerHTML = `<img src="${imgSrc}" alt="Solution image" class="q-image" loading="lazy" decoding="async">`;
+      try { imgWrap.querySelector('img').addEventListener('click', () => showImageOverlay(imgSrc)); } catch {}
+    } else { imgWrap.style.display = 'none'; imgWrap.innerHTML = ''; }
+    host.style.display = (hasText || hasImage) ? '' : 'none';
   }
 
   // ---------- Bootstrap: fetch assignment, build UI, load state ----------
@@ -1845,6 +1871,87 @@
   })();
 
   // ---------- UI builders & handlers ----------
+  // Lazy-render config for question buttons to reduce initial DOM work
+  const QBTN_INITIAL = 120;
+  const QBTN_BATCH = 120;
+  let qbtnRenderLimit = QBTN_INITIAL;
+  let qbtnObserverDesktop = null;
+  let qbtnObserverMobile = null;
+  let qbtnSentinelDesktop = null;
+  let qbtnSentinelMobile = null;
+
+  function teardownQbtnObservers() {
+    try { if (qbtnObserverDesktop) qbtnObserverDesktop.disconnect(); } catch {}
+    try { if (qbtnObserverMobile) qbtnObserverMobile.disconnect(); } catch {}
+    qbtnObserverDesktop = null; qbtnObserverMobile = null;
+  }
+
+  function ensureQbtnSentinels() {
+    if (!qbtnSentinelDesktop) {
+      qbtnSentinelDesktop = document.createElement('div');
+      qbtnSentinelDesktop.id = 'qbtn-sentinel-desktop';
+      qbtnSentinelDesktop.className = 'text-center text-muted small py-2';
+      qbtnSentinelDesktop.textContent = '';
+    }
+    if (!qbtnSentinelMobile) {
+      qbtnSentinelMobile = document.createElement('div');
+      qbtnSentinelMobile.id = 'qbtn-sentinel-mobile';
+      qbtnSentinelMobile.className = 'text-center text-muted small py-2';
+      qbtnSentinelMobile.textContent = '';
+    }
+  }
+
+  function appendQuestionButtonsRange(mobile, desktop, start, end) {
+    const dfrag = document.createDocumentFragment();
+    const mfrag = document.createDocumentFragment();
+    for (let i = start; i < end; i++) {
+      // desktop button
+      const dcol = document.createElement("div");
+      dcol.className = "col";
+      dcol.dataset.qid = i;
+      const dbtn = document.createElement("button");
+      dbtn.className = "btn btn-secondary q-btn";
+      dbtn.textContent = i + 1;
+      dbtn.dataset.qid = i;
+      dbtn.addEventListener("click", () => clickQuestionButton(i));
+      const dInd = document.createElement("span");
+      dInd.className = "q-bookmark-indicator hidden";
+      dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      dbtn.appendChild(dInd);
+      const dColor = document.createElement('span');
+      dColor.className = 'q-color-indicator hidden';
+      dbtn.appendChild(dColor);
+      dcol.appendChild(dbtn);
+      dfrag.appendChild(dcol);
+
+      // mobile button
+      const mbtn = document.createElement("button");
+      mbtn.className = "btn btn-secondary q-btn";
+      mbtn.textContent = i + 1;
+      mbtn.dataset.qid = i;
+      mbtn.addEventListener("click", () => clickQuestionButton(i));
+      const mInd = document.createElement("span");
+      mInd.className = "q-bookmark-indicator hidden";
+      mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      mbtn.appendChild(mInd);
+      const mColor = document.createElement('span');
+      mColor.className = 'q-color-indicator hidden';
+      mbtn.appendChild(mColor);
+      mfrag.appendChild(mbtn);
+    }
+    desktop.appendChild(dfrag);
+    mobile.appendChild(mfrag);
+    // Refresh cached collection and indicators for new buttons
+    questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    try { updateBookmarkIndicators(); } catch {}
+    try { updateColorIndicators(); } catch {}
+    if (currentQuestionID != null) {
+      questionButtons.forEach((button) => {
+        const qid = Number(button.dataset.qid);
+        if (qid === currentQuestionID) button.classList.add('selected');
+      });
+    }
+  }
   function fillQuestionData(questionsParam) {
     const questions = Array.isArray(questionsParam)
       ? questionsParam
@@ -1857,49 +1964,44 @@
 
     mobile.innerHTML = "";
     desktop.innerHTML = "";
-    questions.forEach((_, i) => {
-      questionStates[i] = defaultState();
-
-      // desktop button
-      const dcol = document.createElement("div");
-      dcol.className = "col";
-      dcol.dataset.qid = i;
-      const dbtn = document.createElement("button");
-      dbtn.className = "btn btn-secondary q-btn";
-      dbtn.textContent = i + 1;
-      dbtn.dataset.qid = i;
-      dbtn.addEventListener("click", () => clickQuestionButton(i));
-      // Bookmark indicator (hidden by default)
-      const dInd = document.createElement("span");
-      dInd.className = "q-bookmark-indicator hidden";
-      dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
-      dbtn.appendChild(dInd);
-      // Color indicator (hidden by default)
-      const dColor = document.createElement('span');
-      dColor.className = 'q-color-indicator hidden';
-      dbtn.appendChild(dColor);
-      dcol.appendChild(dbtn);
-      desktop.appendChild(dcol);
-
-      // mobile button
-      const mbtn = document.createElement("button");
-      mbtn.className = "btn btn-secondary q-btn";
-      mbtn.textContent = i + 1;
-      mbtn.dataset.qid = i;
-      mbtn.addEventListener("click", () => clickQuestionButton(i));
-      // Bookmark indicator (hidden by default)
-      const mInd = document.createElement("span");
-      mInd.className = "q-bookmark-indicator hidden";
-      mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
-      mbtn.appendChild(mInd);
-      // Color indicator (hidden by default)
-      const mColor = document.createElement('span');
-      mColor.className = 'q-color-indicator hidden';
-      mbtn.appendChild(mColor);
-      mobile.appendChild(mbtn);
-    });
-
-    questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    for (let i = 0; i < questions.length; i++) questionStates[i] = defaultState();
+    // Lazy initial chunk
+    qbtnRenderLimit = Math.min(QBTN_INITIAL, questions.length);
+    appendQuestionButtonsRange(mobile, desktop, 0, qbtnRenderLimit);
+    // Sentinels + observers
+    ensureQbtnSentinels();
+    if (!qbtnSentinelDesktop.isConnected) desktop.parentElement.appendChild(qbtnSentinelDesktop);
+    if (!qbtnSentinelMobile.isConnected) mobile.parentElement.appendChild(qbtnSentinelMobile);
+    teardownQbtnObservers();
+    try {
+      const rightCol = document.querySelector('.right-col');
+      qbtnObserverDesktop = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          if (qbtnRenderLimit < questions.length) {
+            const from = qbtnRenderLimit;
+            qbtnRenderLimit = Math.min(questions.length, qbtnRenderLimit + QBTN_BATCH);
+            appendQuestionButtonsRange(mobile, desktop, from, qbtnRenderLimit);
+          }
+          qbtnSentinelDesktop.textContent = qbtnRenderLimit < questions.length ? 'Loading…' : '';
+        }
+      }, { root: rightCol || null, rootMargin: '400px 0px', threshold: 0 });
+      qbtnObserverDesktop.observe(qbtnSentinelDesktop);
+    } catch {}
+    try {
+      qbtnObserverMobile = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          if (qbtnRenderLimit < questions.length) {
+            const from = qbtnRenderLimit;
+            qbtnRenderLimit = Math.min(questions.length, qbtnRenderLimit + QBTN_BATCH);
+            appendQuestionButtonsRange(mobile, desktop, from, qbtnRenderLimit);
+          }
+          qbtnSentinelMobile.textContent = qbtnRenderLimit < questions.length ? 'Loading…' : '';
+        }
+      }, { root: null, rootMargin: '400px 0px', threshold: 0 });
+      qbtnObserverMobile.observe(qbtnSentinelMobile);
+    } catch {}
     // initial bookmark badges
     updateBookmarkIndicators();
     // initial color badges
@@ -2004,7 +2106,7 @@
     setQuestion(qID);
     evaluateQuestionButtonColor(qID);
   }
-
+let assignmentTitle = ""
   // Small helper to replay a quick fade/slide on question content
   function qReplayEnterAnim(el) {
     if (!el) return;
@@ -2046,7 +2148,6 @@
     const MCQOptions = document.getElementById("MCQOptionDiv");
     const assignmentDetails = document.getElementById("assignmentDetails");
     const assignmentTitleElem = document.getElementById("assignment-title")
-    const pageTitle = document.getElementsByTagName("title")
     const typeInfo = document.getElementById("qTypeInfo");
     const qNo = document.getElementById("qNo");
     const numericalAnswer = document.getElementById("numericalAnswer");
@@ -2059,9 +2160,19 @@
     try {
       document.body.setAttribute("data-qtype", String(question.qType || "").toUpperCase());
     } catch {}
-    assignmentDetails.textContent = assignmentTitle;
+    try {
+      const meta = (typeof window !== 'undefined' && window.__PYQS_META__) || null;
+      if (meta) {
+        const e = meta.examName || meta.examId || '';
+        const s = meta.subjectName || meta.subjectId || '';
+        const c = meta.chapterName || meta.chapterId || '';
+        const metaStr = [e, s, c].filter(Boolean).join(' - ');
+        assignmentDetails.textContent = metaStr || assignmentTitle;
+      } else {
+        assignmentDetails.textContent = assignmentTitle;
+      }
+    } catch { assignmentDetails.textContent = assignmentTitle; }
     assignmentTitleElem.textContent = assignmentTitle
-    pageTitle.textContent = `QBase - ${assignmentTitle} - Q${qID + 1}`
 
     // Passage (text + image)
     const passageImgDiv = document.getElementById("passageImage");
@@ -2079,7 +2190,7 @@
         passageImgDiv.innerHTML = "";
       }
       passageDiv.style.display = "block";
-      passageDiv.textContent = question.passage;
+      renderHTML(passageDiv, String(question.passage || ''));
       try { renderMathInElement && renderMathInElement(passageDiv, katexOptions); } catch {}
     } else {
       passageImgDiv.style.display = "none";
@@ -2105,8 +2216,18 @@
       qImgDiv.style.display = "none";
       qImgDiv.innerHTML = "";
     }
-    qTextElm.innerHTML = escapeHtml(question.qText || "").replace(/\n/g, "<br>");
+    renderHTML(qTextElm, String(question.qText || ""));
     try { renderMathInElement && renderMathInElement(qTextElm, katexOptions); } catch {}
+
+    // Per-question PYQ info line (e.g., year/paper)
+    try {
+      const infoEl = document.getElementById('pyq-info');
+      if (infoEl) {
+        const t = String(question.pyqInfo || '').trim();
+        infoEl.textContent = t;
+        infoEl.style.display = t ? '' : 'none';
+      }
+    } catch {}
 
     // --- Timer control ---
     if (timerInterval) clearInterval(timerInterval);
@@ -2142,6 +2263,7 @@
       });
     }
 
+    try { document.getElementById('solutionSection').style.display = 'none'; } catch {}
     if (questionState.isAnswerEvaluated) {
       // Suppress animations when restoring evaluated state on navigation
       document.body.classList.add("suppress-eval-anim");
@@ -2164,6 +2286,7 @@
           applyNumericalEvaluationStyles(isCorrect);
           if (numericalAnswer)
             numericalAnswer.parentElement.style.display = "block";
+          try { showSolution(question); } catch {}
         }
       } finally {
         // Remove on next tick to avoid triggering animations
@@ -2190,10 +2313,10 @@
       const C = document.getElementById("CContent");
       const D = document.getElementById("DContent");
 
-      A.textContent = question.qOptions[0];
-      B.textContent = question.qOptions[1];
-      C.textContent = question.qOptions[2];
-      D.textContent = question.qOptions[3];
+      renderHTML(A, String(question.qOptions[0] || ""));
+      renderHTML(B, String(question.qOptions[1] || ""));
+      renderHTML(C, String(question.qOptions[2] || ""));
+      renderHTML(D, String(question.qOptions[3] || ""));
 
       try {
         renderMathInElement && renderMathInElement(A, katexOptions);
@@ -2645,6 +2768,109 @@
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
+  }
+  
+  // Sanitize limited HTML so PYQ content with markup renders safely.
+  // If DOMPurify is available on the page, use it; else use a conservative fallback.
+  function sanitizeHtml(html) {
+    try {
+      if (typeof window !== 'undefined' && window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+        // Extend allowed tags to include MathML so inline MathML from PYQs renders.
+        // KaTeX auto-render will still process TeX delimiters; MathML is left as-is for the browser.
+        const MATHML_TAGS = [
+          'math','mrow','mi','mn','mo','ms','mtext','mspace',
+          'msub','msup','msubsup','munder','mover','munderover',
+          'mfrac','msqrt','mroot','mfenced','menclose','mpadded','mphantom','mstyle',
+          'mtable','mtr','mtd','mlabeledtr','semantics','annotation','annotation-xml'
+        ];
+        const ALLOWED_TAGS = [
+          'b','i','em','strong','u','sup','sub','br','p','ul','ol','li','span','div','img','a','code','pre','blockquote','hr','table','thead','tbody','tr','td','th',
+          ...MATHML_TAGS
+        ];
+        const ALLOWED_ATTR = [
+          'class','style','href','src','alt','title','width','height','loading','decoding','rel','target',
+          // Common MathML attributes (safe subset)
+          'display','mathvariant','mathsize','open','close','separators','notation','rowalign','columnalign','rowspan','columnspan','fence','form','accent','accentunder','displaystyle','scriptlevel'
+        ];
+        return window.DOMPurify.sanitize(String(html || ''), {
+          ALLOWED_TAGS,
+          ALLOWED_ATTR,
+          FORBID_TAGS: ['script','style','iframe','object','embed','link','meta','form','svg'],
+          ADD_ATTR: ['aria-label','role'],
+        });
+      }
+    } catch {}
+
+    // Fallback sanitizer: strips dangerous tags + event handlers + javascript: URLs
+    try {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = String(html || '');
+      const disallowed = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','LINK','META','FORM','SVG']);
+      (function walk(node) {
+        const children = Array.from(node.childNodes || []);
+        for (const child of children) {
+          if (child.nodeType === 1) {
+            if (disallowed.has(child.nodeName)) { child.remove(); continue; }
+            for (const attr of Array.from(child.attributes || [])) {
+              const name = attr.name.toLowerCase();
+              const val = String(attr.value || '');
+              if (name.startsWith('on')) child.removeAttribute(attr.name);
+              if (name === 'style') { child.removeAttribute(attr.name); continue; }
+              if (name === 'href' || name === 'src' || name === 'xlink:href') {
+                if (/^\s*javascript:/i.test(val)) child.removeAttribute(attr.name);
+                if (/^\s*data:text\//i.test(val)) child.removeAttribute(attr.name);
+              }
+            }
+            if (child.nodeName.toLowerCase() === 'a') {
+              try {
+                const t = (child.getAttribute('target') || '').toLowerCase();
+                if (t.includes('_blank')) child.setAttribute('rel', 'noopener noreferrer');
+                const href = child.getAttribute('href') || '';
+                if (!/^(https?:|mailto:|#|\/|\/\/|data:image)/i.test(href)) child.removeAttribute('href');
+              } catch {}
+            }
+          }
+          walk(child);
+        }
+      })(wrapper);
+      return wrapper.innerHTML;
+    } catch {
+      return escapeHtml(String(html || ''));
+    }
+  }
+
+  // Render HTML or plain text with newline preservation; normalizes CRLF
+  // Additionally: make any <img> inside clickable to open the image overlay
+  function renderHTML(el, value) {
+    try {
+      const raw = String(value || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      const sanitized = sanitizeHtml(raw);
+      // Do not convert newlines to <br> before KaTeX; it breaks delimiter matching across nodes.
+      // Preserve newlines via CSS (white-space: pre-wrap) instead.
+      el.innerHTML = sanitized;
+
+      // Bind image click-to-expand for any images inside this container
+      try {
+        // Use event delegation if not already bound on this element
+        if (!el.dataset.imgOverlayBound) {
+          el.addEventListener('click', (ev) => {
+            const target = ev.target;
+            if (!target) return;
+            // If click is on or within an <img>, open overlay for its src
+            const img = target.closest && target.closest('img');
+            if (img && img.src) {
+              try { ev.preventDefault(); ev.stopPropagation(); } catch {}
+              try { if (typeof showImageOverlay === 'function') showImageOverlay(img.src); } catch {}
+            }
+          });
+          el.dataset.imgOverlayBound = '1';
+        }
+        // Also set cursor for images to hint interactivity
+        el.querySelectorAll('img').forEach((img) => { try { img.style.cursor = 'zoom-in'; } catch {} });
+      } catch {}
+    } catch {
+      el.textContent = String(value || '');
+    }
   }
   
   // -------------------- UI toggles: Questions sidebar and desktop Q-bar --------------------

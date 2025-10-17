@@ -190,6 +190,19 @@ db.exec(`
     PRIMARY KEY (userId, examId, subjectId, chapterId),
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
+
+  -- PYQs per-user preferences (filters, view state)
+  CREATE TABLE IF NOT EXISTS pyqs_prefs (
+    userId TEXT NOT NULL,
+    examId TEXT NOT NULL,
+    subjectId TEXT NOT NULL,
+    chapterId TEXT NOT NULL,
+    prefs TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, examId, subjectId, chapterId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -428,6 +441,41 @@ app.post('/api/pyqs/state/:examId/:subjectId/:chapterId', auth, (req, res) => {
   } catch (e) {
     console.error('pyqs save state:', e);
     res.status(500).json({ error: 'Failed to save PYQs state' });
+  }
+});
+
+// ---------- PYQs per-user preferences (protected) ----------
+// GET prefs
+app.get('/api/pyqs/prefs/:examId/:subjectId/:chapterId', auth, (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    const row = db
+      .prepare('SELECT prefs FROM pyqs_prefs WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?')
+      .get(req.userId, String(examId), String(subjectId), String(chapterId));
+    const prefs = row ? safeParseJSON(row.prefs, {}) : {};
+    res.json(prefs && typeof prefs === 'object' ? prefs : {});
+  } catch (e) {
+    console.error('pyqs get prefs:', e);
+    res.status(500).json({ error: 'Failed to get PYQs prefs' });
+  }
+});
+
+// POST/UPSERT prefs
+app.post('/api/pyqs/prefs/:examId/:subjectId/:chapterId', auth, (req, res) => {
+  try {
+    const { examId, subjectId, chapterId } = req.params;
+    const prefs = req.body?.prefs ?? {};
+    const text = JSON.stringify(prefs && typeof prefs === 'object' ? prefs : {});
+    db.prepare(`
+      INSERT INTO pyqs_prefs (userId, examId, subjectId, chapterId, prefs)
+      VALUES (?, ?, ?, ?, ?)
+      ON CONFLICT(userId, examId, subjectId, chapterId)
+      DO UPDATE SET prefs = excluded.prefs, updated_at = CURRENT_TIMESTAMP
+    `).run(req.userId, String(examId), String(subjectId), String(chapterId), text);
+    res.json({ success: true });
+  } catch (e) {
+    console.error('pyqs save prefs:', e);
+    res.status(500).json({ error: 'Failed to save PYQs prefs' });
   }
 });
 

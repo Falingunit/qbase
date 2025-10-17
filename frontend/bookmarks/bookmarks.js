@@ -1,174 +1,44 @@
 "use strict";
 (async () => {
-  const katexOptions = {
-    delimiters: [
-      { left: "$$", right: "$$", display: true },
-      { left: "$", right: "$", display: false },
-      { left: "\\(", right: "\\)", display: false },
-      { left: "\\[", right: "\\]", display: true },
-    ],
-  };
-
-  //
-  // Attach UI handlers ASAP (works whether DOM is loading or already loaded)
-  //
-  const onReady = () => {
-    // These elements exist on the page layout
-    const refreshBtn = document.getElementById("refresh-bookmarks");
-    const openBtn = document.getElementById("open-assignment-btn");
-
-    if (refreshBtn) refreshBtn.addEventListener("click", loadBookmarks);
-    if (openBtn) openBtn.addEventListener("click", openInAssignment);
-
-    // Initial load
-    loadBookmarks();
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", onReady, { once: true });
-  } else {
-    onReady();
-  }
-
-  // Map aID -> title from assignment_list.json (best-effort)
-  const assignmentTitles = new Map();
-  (async () => {
-    try {
-      const raw = await (
-        await fetch("./data/assignment_list.json", { cache: "no-store" })
-      ).json();
-      const items = normalizeAssignmentsForTitles(raw);
-      items.forEach((it) => assignmentTitles.set(Number(it.aID), it.title));
-    } catch {
-      /* ignore */
-    }
-  })();
-
-  function normalizeAssignmentsForTitles(input) {
-    const out = [];
-    const pushItem = (raw) => {
-      if (!raw || typeof raw !== "object") return;
-      const id = Number(
-        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
-      );
-      if (!Number.isFinite(id)) return;
-      const title = String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`);
-      out.push({ aID: id, title });
-    };
-    if (Array.isArray(input)) input.forEach(pushItem);
-    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
-    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
-    else if (input && typeof input === "object") {
-      Object.values(input).forEach((arr) => {
-        if (Array.isArray(arr)) arr.forEach(pushItem);
-      });
-    }
-    return out;
-  }
-
-  //
-  // Do async config after handlers are registered
-  //
   await loadConfig();
 
-  // Refresh on login / bfcache restore
-  window.addEventListener("qbase:login", loadBookmarks);
-  window.addEventListener("pageshow", loadBookmarks);
+  const katexOptions = { delimiters: [ { left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }, { left: "\\(", right: "\\)", display: false }, { left: "\\[", right: "\\]", display: true } ] };
 
-  // Show logged-out state
-  window.addEventListener("qbase:logout", () => {
-    const loadingEl = document.getElementById("loading");
-    const noBookmarksEl = document.getElementById("no-bookmarks");
-    const contentEl = document.getElementById("bookmarks-content");
-    if (!loadingEl || !noBookmarksEl || !contentEl) return;
-
-    loadingEl.style.display = "none";
-    contentEl.style.display = "none";
-    noBookmarksEl.style.display = "block";
-    noBookmarksEl.innerHTML = `
-      <h3>Login required</h3>
-      <p class="text-muted">Please sign in to view your bookmarks.</p>
-    `;
-  });
-
-  let currentBookmarks = [];
-  let __bookmarksLoadSeq = 0; // prevent overlapping load races
+  const assignmentTitles = await BookmarksService.fetchAssignmentTitlesMap();
   const assignmentData = new Map();
 
-  async function loadBookmarks() {
-    const mySeq = ++__bookmarksLoadSeq;
-    const loadingEl = document.getElementById("loading");
-    const noBookmarksEl = document.getElementById("no-bookmarks");
-    const contentEl = document.getElementById("bookmarks-content");
-    if (!loadingEl || !noBookmarksEl || !contentEl) return;
+  const onReady = () => {
+    const refreshBtn = document.getElementById('refresh-bookmarks');
+    const openBtn = document.getElementById('open-assignment-btn');
+    if (refreshBtn) refreshBtn.addEventListener('click', loadBookmarks);
+    if (openBtn) openBtn.addEventListener('click', BookmarksView.openInAssignment);
+    loadBookmarks();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady, { once: true }); else onReady();
 
-    loadingEl.style.display = "block";
-    noBookmarksEl.style.display = "none";
-    contentEl.style.display = "none";
+  window.addEventListener('qbase:login', loadBookmarks);
+  window.addEventListener('pageshow', loadBookmarks);
+  window.addEventListener('qbase:logout', () => {
+    const loadingEl = document.getElementById('loading'); const noBookmarksEl = document.getElementById('no-bookmarks'); const contentEl = document.getElementById('bookmarks-content'); if (!loadingEl || !noBookmarksEl || !contentEl) return; loadingEl.style.display='none'; contentEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p>';
+  });
 
+  let __bookmarksLoadSeq = 0;
+  async function loadBookmarks(){
+    const mySeq = ++__bookmarksLoadSeq; const loadingEl = document.getElementById('loading'); const noBookmarksEl = document.getElementById('no-bookmarks'); const contentEl = document.getElementById('bookmarks-content'); if (!loadingEl || !noBookmarksEl || !contentEl) return; loadingEl.style.display='block'; noBookmarksEl.style.display='none'; contentEl.style.display='none';
     try {
-      const response = await authFetch(`${API_BASE}/api/bookmarks`, {
-        cache: "no-store",
-      });
-      if (mySeq !== __bookmarksLoadSeq) return; // outdated response
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          if (mySeq !== __bookmarksLoadSeq) return;
-          loadingEl.style.display = "none";
-          noBookmarksEl.style.display = "block";
-          noBookmarksEl.innerHTML = `
-            <h3>Login required</h3>
-            <p class="text-muted">Please sign in to view your bookmarks.</p>
-            <button class="btn btn-primary" onclick="window.dispatchEvent(new Event('qbase:force-login'))">
-              Sign in
-            </button>
-          `;
-          window.dispatchEvent(new Event("qbase:logout"));
-          return;
-        }
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      currentBookmarks = await response.json();
-      if (mySeq !== __bookmarksLoadSeq) return;
-
-      if (!Array.isArray(currentBookmarks) || currentBookmarks.length === 0) {
-        loadingEl.style.display = "none";
-        noBookmarksEl.style.display = "block";
-        noBookmarksEl.textContent = "No bookmarks yet.";
-        return;
-      }
-
-      const bookmarksByTag = groupBookmarksByTag(currentBookmarks);
-      await loadAssignmentData(bookmarksByTag);
-      if (mySeq !== __bookmarksLoadSeq) return;
-      renderBookmarks(bookmarksByTag);
-
-      loadingEl.style.display = "none";
-      contentEl.style.display = "block";
-    } catch (error) {
-      console.error("Failed to load bookmarks:", error);
-      if (mySeq !== __bookmarksLoadSeq) return;
-      loadingEl.style.display = "none";
-      noBookmarksEl.style.display = "block";
-      noBookmarksEl.innerHTML = `
-        <h3>Error loading bookmarks</h3>
-        <p class="text-muted">Failed to load bookmarks. Please try again.</p>
-        <button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>
-      `;
+      const bookmarks = await BookmarksService.fetchBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
+      if (!Array.isArray(bookmarks) || bookmarks.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
+      const grouped = BookmarksService.groupBookmarksByTag(bookmarks);
+      const ids = new Set(); Object.values(grouped).forEach(list => list.forEach(b => ids.add(b.assignmentId)));
+      const dataMap = await BookmarksService.fetchAssignmentDataForIds(ids); if (mySeq !== __bookmarksLoadSeq) return; dataMap.forEach((v,k)=>assignmentData.set(k,v));
+      BookmarksView.renderBookmarks(grouped, assignmentData, { katexOptions, onRemove: async (aid, qidx, tid) => { if (await BookmarksService.removeBookmark(aid, qidx, tid)) loadBookmarks(); }, onDeleteTag: async (tagId) => { if (await BookmarksService.deleteBookmarkTag(tagId)) loadBookmarks(); }, onShow: (aid, qidx) => BookmarksView.showQuestion(aid, qidx, assignmentData, assignmentTitles) });
+      loadingEl.style.display='none'; contentEl.style.display='block';
+    } catch (err){
+      if (mySeq !== __bookmarksLoadSeq) return; loadingEl.style.display='none'; if (err && err.status === 401){ noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p><button class="btn btn-primary" onclick="window.dispatchEvent(new Event(\'qbase:force-login\'))">Sign in</button>'; window.dispatchEvent(new Event('qbase:logout')); return; } noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Error loading bookmarks</h3><p class="text-muted">Failed to load bookmarks. Please try again.</p><button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>';
     }
   }
 
-  function groupBookmarksByTag(bookmarks) {
-    const grouped = {};
-    for (const b of bookmarks) {
-      const tagName = b.tagName;
-      if (!grouped[tagName]) grouped[tagName] = [];
-      grouped[tagName].push(b);
-    }
-    return grouped;
-  }
+  // legacy export for retry button
 
   function processPassageQuestions(questions) {
     let currentPassage = null;
@@ -190,32 +60,7 @@
     });
   }
 
-  async function loadAssignmentData(bookmarksByTag) {
-    const ids = new Set();
-    for (const tagBookmarks of Object.values(bookmarksByTag)) {
-      for (const bookmark of tagBookmarks) {
-        ids.add(bookmark.assignmentId);
-      }
-    }
-
-    for (const id of ids) {
-      if (!assignmentData.has(id)) {
-        try {
-          const resp = await fetch(
-            `./data/question_data/${id}/assignment.json`,
-            { cache: "no-store" }
-          );
-          if (resp.ok) {
-            const data = await resp.json();
-            processPassageQuestions(data.questions);
-            assignmentData.set(id, data);
-          }
-        } catch (err) {
-          console.error(`Failed to load assignment ${id}:`, err);
-        }
-      }
-    }
-  }
+  window.qbLoadBookmarks = loadBookmarks;
 
   // KaTeX-safe truncation: avoids cutting through math blocks
   function truncateKaTeXSafe(input, limit = 100, katexDelimiters) {
@@ -841,5 +686,4 @@
   }
   
   // Expose retry for inline button
-  window.qbLoadBookmarks = loadBookmarks;
 })();

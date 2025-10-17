@@ -34,6 +34,25 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   border-radius: 999px;
 }
 
+.questions-list {
+  background-color: #41454913;
+}
+
+.dropdown-item .active{
+  background-color: white !important;
+}
+
+/* Year headers within the question list */
+.q-year-header {
+  font-weight: 600;
+  color: #dfe6ee;
+  position: sticky;
+  top: 0; /* stick to viewport top */
+  z-index: 3;
+  background-color: rgba(20, 22, 26, 0.92); /* reduce transparency for readability */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .topbar-back i { font-size: 1.1rem; }
 .topbar-back:hover { background: rgba(255, 255, 255, 0.08); }
 
@@ -117,6 +136,7 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  white-space: pre-wrap; /* preserve newlines without injecting <br> */
 }
 .pyq-options .pyq-option {
   display: flex;

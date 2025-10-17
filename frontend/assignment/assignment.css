@@ -20,10 +20,18 @@ body {
 }
 #questionText {
   font-size: calc(1rem * var(--qa-scale));
-  color: whitesmoke
+  color: whitesmoke;
+  white-space: pre-wrap; /* preserve newlines; safer for KaTeX than inserting <br> */
+}
+#passageText {
+  white-space: pre-wrap;
+}
+#solutionText {
+  white-space: pre-wrap;
 }
 #MCQOptionDiv .opt-text {
   font-size: calc(1rem * var(--qa-scale));
+  white-space: pre-wrap;
 }
 
 /* iOS fallback if 100dvh unsupported */
@@ -429,6 +437,7 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge {
   flex: 1 1 auto;
   min-width: 0;
   color: whitesmoke;
+  white-space: pre-wrap;
 }
 
 .mcq-option-selected {
