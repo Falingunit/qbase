@@ -1,0 +1,850 @@
+
+{
+  "questions":
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The experimental data for the reaction \\(2A + B_{2} \\longrightarrow 2AB\\) are as follows. Write probable rate expression. \\[\\begin{array}{ccc} [A] & [B_{2}] & \\text{Rate} \\\\ {[\\mathrm{mol\\,L^{-1}}]} & {[\\mathrm{mol\\,L^{-1}}]} & {[\\mathrm{mol\\,L^{-1}\\,s^{-1}}]} \\\\ 0.50 & 0.50 & \\left(1.6\\times 10^{-4}\\right) \\\\ 0.50 & 1.00 & \\left(3.2\\times 10^{-4}\\right) \\\\ 1.00 & 1.00 & \\left(3.2\\times 10^{-4}\\right) \\end{array}\\] (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": [
+      "\\(\\dfrac{dx}{dt} = k\\,[A]^2\\)",
+      "\\(\\dfrac{dx}{dt} = k\\,[A]\\,[B_2]\\)",
+      "\\(\\dfrac{dx}{dt} = k\\,[B_2]\\)",
+      "\\(\\dfrac{dx}{dt} = k\\,[A]\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate order of reaction \\(A + B \\longrightarrow \\text{Product}\\), w.r.t. \\(A\\) from the following data: \\[\\begin{array}{ccc} [A] & [B] & \\text{Rate} \\\\ \\text{(Rate in }\\times 10^{-5}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\text{)} \\\\ (i) & 0.01 & 0.010 & 5.0 \\\\ (ii) & 0.01 & 0.015 & 5.0 \\\\ (iii) & 0.02 & 0.010 & 14.1 \\end{array}\\]",
+    "image": null,
+    "qOptions": [
+      "2.0",
+      "0.5",
+      "1.5",
+      "1.0"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate order of reaction \\(A + B \\longrightarrow \\text{Product}\\), w.r.t. \\(B\\) from the following data: \\[\\begin{array}{ccc} [A] & [B] & \\text{Rate} \\\\ \\text{(Rate in }\\times 10^{-5}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\text{)} \\\\ (i) & 0.01 & 0.010 & 5.0 \\\\ (ii) & 0.01 & 0.015 & 5.0 \\\\ (iii) & 0.02 & 0.010 & 14.1 \\end{array}\\]",
+    "image": null,
+    "qOptions": [
+      "1.5",
+      "1.0",
+      "0",
+      "2.0"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The virus prepared in a chemical bath shows an inactivation process obeying first order kinetics. Calculate the rate constant for the viral inactivation if initially 1.5% of the virus is inactivated per minute.",
+    "image": null,
+    "qOptions": [
+      "\\(2.5\\times 10^{-3}\\,\\mathrm{s^{-1}}\\)",
+      "\\(1.5\\times 10^{-4}\\,\\mathrm{s^{-1}}\\)",
+      "\\(2.5\\times 10^{-4}\\,\\mathrm{s^{-1}}\\)",
+      "\\(2.5\\times 10^{-5}\\,\\mathrm{s^{-1}}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The virus prepared in a chemical bath shows an inactivation process obeying first order kinetics. Calculate the time required for 50% inactivation.",
+    "image": null,
+    "qOptions": [
+      "\\(40.0\\,\\mathrm{min}\\)",
+      "\\(50.0\\,\\mathrm{min}\\)",
+      "\\(60.0\\,\\mathrm{min}\\)",
+      "\\(46.2\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The virus prepared in a chemical bath shows an inactivation process obeying first order kinetics. Calculate the time required for 80% inactivation.",
+    "image": null,
+    "qOptions": [
+      "\\(100.0\\,\\mathrm{min}\\)",
+      "\\(120.0\\,\\mathrm{min}\\)",
+      "\\(107.3\\,\\mathrm{min}\\)",
+      "\\(110.0\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a first order reaction, the time required for 99.9% decomposition of the reaction is how many times the time required for half of the reaction?",
+    "image": null,
+    "qOptions": [
+      "5 times",
+      "20 times",
+      "10 times",
+      "15 times"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The time required for 20% completion for a first order reaction is 10 minutes. Calculate the specific reaction rate.",
+    "image": null,
+    "qOptions": [
+      "\\(2.232\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.500\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(3.000\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(2.000\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The time required for 20% completion for a first order reaction is 10 minutes. Calculate the time required for 75% completion.",
+    "image": null,
+    "qOptions": [
+      "\\(50.00\\,\\mathrm{min}\\)",
+      "\\(70.00\\,\\mathrm{min}\\)",
+      "\\(62.12\\,\\mathrm{min}\\)",
+      "\\(60.00\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The half life for a first order reaction \\(A \\longrightarrow \\text{Product}\\) is 10 minutes. What percent of \\(A\\) remains after 1 hour?",
+    "image": null,
+    "qOptions": [
+      "\\(2.00\\%\\)",
+      "\\(1.56\\%\\)",
+      "\\(3.00\\%\\)",
+      "\\(0.50\\%\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The reaction \\(\\mathrm{SO_{2}Cl_{2} \\rightarrow SO_{2} + Cl_{2}}\\) obeys first order kinetics with rate constant \\(3.2\\times 10^{-5}\\,\\mathrm{s^{-1}}\\) at 320 \\(^{\\circ}\\mathrm{C}\\). What percent of \\(\\mathrm{SO_{2}Cl_{2}}\\) will be decomposed on heating the gas for 90 minutes?",
+    "image": null,
+    "qOptions": [
+      "\\(10.00\\%\\)",
+      "\\(15.86\\%\\)",
+      "\\(20.00\\%\\)",
+      "\\(12.50\\%\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Thermal decomposition of a compound is first order. If 50% of the sample decomposes in 120 minutes, how long will it take for 90% of the compound to decompose?",
+    "image": null,
+    "qOptions": [
+      "\\(300.00\\,\\mathrm{min}\\)",
+      "\\(398.78\\,\\mathrm{min}\\)",
+      "\\(350.00\\,\\mathrm{min}\\)",
+      "\\(400.00\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A reaction, \\(2A \\longrightarrow \\text{Products}\\); has a rate constant \\(3.5\\times 10^{-4}\\,\\mathrm{mol^{-1}\\,L\\,s^{-1}}\\). Find the time required for the concentration of \\(A\\) to change from \\(0.26\\,\\mathrm{M}\\) to \\(0.011\\,\\mathrm{M}\\). (Hint: unit of \\(k\\) suggests second order.)",
+    "image": null,
+    "qOptions": [
+      "\\(2.00\\times 10^{5}\\,\\mathrm{s}\\)",
+      "\\(2.49\\times 10^{5}\\,\\mathrm{s}\\)",
+      "\\(3.00\\times 10^{5}\\,\\mathrm{s}\\)",
+      "\\(2.20\\times 10^{5}\\,\\mathrm{s}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The rate constant for the decomposition of ozone following second order kinetics is \\(5\\times 10^{-3}\\,\\mathrm{L\\,mol^{-1}\\,s^{-1}}\\) at a certain temperature. What is the rate of reaction if the concentration of ozone is \\(2\\times 10^{-8}\\,\\mathrm{mol\\,L^{-1}}\\)?",
+    "image": null,
+    "qOptions": [
+      "\\(2\\times 10^{-18}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\)",
+      "\\(1\\times 10^{-18}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\)",
+      "\\(3\\times 10^{-18}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\)",
+      "\\(4\\times 10^{-18}\\,\\mathrm{mol\\,L^{-1}\\,s^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+  "qType": "SMCQ",
+  "passageId": null,
+  "qText": "The rate constant for the decomposition of ozone (following second order kinetics) is \\(5\\times10^{-3}\\) L mol^-1 s^-1 at a certain temperature. What is the rate of reaction if the concentration of ozone is \\(2\\times10^{-8}\\) mol L^-1? Calculate the rate in terms of number of molecules decomposed per mL per minute.",
+  "image": null,
+  "qOptions": [
+    "\\(2.0000\\times10^{4}\\) molecules per mL per minute",
+    "\\(7.2276\\times10^{4}\\) molecules per mL per minute",
+    "\\(3.0000\\times10^{4}\\) molecules per mL per minute",
+    "\\(8.0000\\times10^{4}\\) molecules per mL per minute"]
+  ,"qAnswer": "B"
+},
+
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A reaction obeying second order in \\(A\\) is 50% complete after 450 minutes. If \\([A]_0 = 1.35\\,\\mathrm{M}\\), calculate its rate constant.",
+    "image": null,
+    "qOptions": [
+      "\\(1.646\\times 10^{-3}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(2.000\\times 10^{-3}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(1.500\\times 10^{-3}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(1.800\\times 10^{-3}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Decomposition of a substance \\(A\\) follows first order kinetics. Starting initially with \\([A] = 2.0\\,\\mathrm{M}\\) and after 200 minutes \\([A] = 0.25\\,\\mathrm{M}\\), calculate half life period.",
+    "image": null,
+    "qOptions": [
+      "\\(60.0\\,\\mathrm{min}\\)",
+      "\\(66.6\\,\\mathrm{min}\\)",
+      "\\(70.0\\,\\mathrm{min}\\)",
+      "\\(50.0\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Decomposition of a substance \\(A\\) follows first order kinetics. Starting initially with \\([A] = 2.0\\,\\mathrm{M}\\) and after 200 minutes \\([A] = 0.25\\,\\mathrm{M}\\), calculate rate constant.",
+    "image": null,
+    "qOptions": [
+      "\\(1.04\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.20\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(9.00\\times 10^{-3}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.50\\times 10^{-2}\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a homogeneous gaseous reaction, \\(A \\longrightarrow B + C + D\\); the initial pressure was \\(P_0\\) while pressure after time \\(t\\) was \\(P\\). Derive an expression for rate constant \\(K\\) in terms of \\(P_0\\), \\(P\\) and \\(t\\). Assume first order reaction. (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": [
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{P_0}{P}\\)",
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{2P_0}{3P_0 - P}\\)",
+      "\\(K = \\dfrac{1}{t} \\ln \\dfrac{P_0}{P}\\)",
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{3P_0 - P}{2P_0}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A second order reaction with two reactants is started with 0.1 M concentration of each. After 30 minutes, 10% has reacted. Calculate the specific reaction rate.",
+    "image": null,
+    "qOptions": [
+      "\\(3.7 \\times 10^{-2}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(4.0 \\times 10^{-2}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(3.0 \\times 10^{-2}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)",
+      "\\(4.5 \\times 10^{-2}\\,\\mathrm{L\\,mol^{-1}\\,min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A second order reaction with two reactants is started with 0.1 M concentration of each. After 30 minutes, 10% has reacted. Calculate the half-life period.",
+    "image": null,
+    "qOptions": [
+      "\\(250\\,\\mathrm{min}\\)",
+      "\\(270\\,\\mathrm{min}\\)",
+      "\\(300\\,\\mathrm{min}\\)",
+      "\\(200\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A substance is reduced to one-third of its original concentration in 100 minutes. Calculate the time in which it will be reduced to one-ninth of its original value. Assume first order kinetics.",
+    "image": null,
+    "qOptions": [
+      "\\(150\\,\\mathrm{min}\\)",
+      "\\(200\\,\\mathrm{min}\\)",
+      "\\(250\\,\\mathrm{min}\\)",
+      "\\(300\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "From the following data for the decomposition of diazobenzene chloride, show that the reaction is first order and report the rate constant. \\\\[\\text{Time (min): }20, 50, 70, \\infty;\\; \\text{Vol. of }N_2(\\mathrm{mL}):10, 25, 33, 162\\]",
+    "image": null,
+    "qOptions": [
+      "\\(3.2 \\times 10^{-3}\\,\\mathrm{min^{-1}}\\)",
+      "\\(4.0 \\times 10^{-3}\\,\\mathrm{min^{-1}}\\)",
+      "\\(2.5 \\times 10^{-3}\\,\\mathrm{min^{-1}}\\)",
+      "\\(3.5 \\times 10^{-3}\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The specific rate constant of the decomposition of \\(\\ce{N2O5}\\) is \\(0.008\\,\\mathrm{min^{-1}}\\). The volume of \\(\\ce{O2}\\) collected after 20 minutes is 16 mL. Find the volume that would be collected at the end of reaction. \\(\\ce{NO2}\\) formed is dissolved in \\(\\ce{CCl4}\\).",
+    "image": null,
+    "qOptions": [
+      "\\(100.00\\,\\mathrm{mL}\\)",
+      "\\(108.23\\,\\mathrm{mL}\\)",
+      "\\(110.00\\,\\mathrm{mL}\\)",
+      "\\(105.00\\,\\mathrm{mL}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dimethyl ether gaseous-phase decomposition is \\(\\ce{CH3OCH3 -> CH4 + H2 + CO}\\) at 750 K having rate constant \\(6.72 \\times 10^{-3}\\,\\mathrm{min^{-1}}\\). Calculate the time in which initial pressure of 400 mm in a closed container becomes 750 mm.",
+    "image": null,
+    "qOptions": [
+      "\\(80.00\\,\\mathrm{min}\\)",
+      "\\(85.64\\,\\mathrm{min}\\)",
+      "\\(90.00\\,\\mathrm{min}\\)",
+      "\\(75.00\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A solution of \\(\\ce{N2O5}\\) in \\(\\ce{CCl4}\\) at 45\\,^{\\circ}\\mathrm{C} produces 5.02 mL of \\(\\ce{O2}\\) in 1198 s and 9.58 mL \\(\\ce{O2}\\) after a long time. Calculate the rate constant assuming first order for the reaction \\(\\ce{N2O5 -> N2O4 + 1/2 O2}\\).",
+    "image": null,
+    "qOptions": [
+      "\\(6.2 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\)",
+      "\\(5.5 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\)",
+      "\\(6.5 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\)",
+      "\\(7.0 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the decomposition of \\(\\ce{N2O5}\\), the rate constant is \\(6.2 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\) at 45\\,^{\\circ}\\mathrm{C}. It begins with one mole of \\(\\ce{N2O5}\\) in a litre flask. How long would it take for 20% of \\(\\ce{N2O5}\\) to decompose?",
+    "image": null,
+    "qOptions": [
+      "\\(3.00 \\times 10^{2}\\,\\mathrm{s}\\)",
+      "\\(3.59 \\times 10^{2}\\,\\mathrm{s}\\)",
+      "\\(4.00 \\times 10^{2}\\,\\mathrm{s}\\)",
+      "\\(3.20 \\times 10^{2}\\,\\mathrm{s}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the decomposition of \\(\\ce{N2O5}\\), the rate constant is \\(6.2 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\) at 45\\,^{\\circ}\\mathrm{C}. It begins with one mole of \\(\\ce{N2O5}\\) in a litre flask. How long would it take for 50% of \\(\\ce{N2O5}\\) to decompose?",
+    "image": null,
+    "qOptions": [
+      "\\(1.0 \\times 10^{3}\\,\\mathrm{s}\\)",
+      "\\(1.1 \\times 10^{3}\\,\\mathrm{s}\\)",
+      "\\(1.2 \\times 10^{3}\\,\\mathrm{s}\\)",
+      "\\(9.0 \\times 10^{2}\\,\\mathrm{s}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The decomposition of \\(\\ce{Cl2O7}\\) at 400 K in the gaseous phase to \\(\\ce{Cl2}\\) and \\(\\ce{O2}\\) is a first-order reaction. After 55 s at 400 K, the pressure of the reaction mixture increases from 0.62 atm to 1.88 atm. Calculate the rate constant.",
+    "image": null,
+    "qOptions": [
+      "\\(1.58 \\times 10^{-2}\\,\\mathrm{s^{-1}}\\)",
+      "\\(1.50 \\times 10^{-2}\\,\\mathrm{s^{-1}}\\)",
+      "\\(1.70 \\times 10^{-2}\\,\\mathrm{s^{-1}}\\)",
+      "\\(1.60 \\times 10^{-2}\\,\\mathrm{s^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The decomposition of \\(\\ce{Cl2O7}\\) at 400 K in the gaseous phase to \\(\\ce{Cl2}\\) and \\(\\ce{O2}\\) is first order. After 55 s at 400 K, the pressure increases from 0.62 atm to 1.88 atm. Calculate the pressure after 100 s.",
+    "image": null,
+    "qOptions": [
+      "\\(2.00\\,\\mathrm{atm}\\)",
+      "\\(2.33\\,\\mathrm{atm}\\)",
+      "\\(2.50\\,\\mathrm{atm}\\)",
+      "\\(2.20\\,\\mathrm{atm}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The vapour-phase decomposition of ethylene oxide into methane and CO at 414.5\\,^{\\circ}\\mathrm{C} is given below. Calculate \\(k\\) for a first-order reaction: Time (min): 0, 5, 7, 12, 18; Pressure (mm Hg): 116.51, 122.72, 125.72, 133.23, 141.37.",
+    "image": null,
+    "qOptions": [
+      "\\(1.12 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.20 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.00 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(1.05 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In the vapour-phase decomposition of ethylene oxide, \\(\\ce{C2H4O -> CH4 + CO}\\) at 414.5\\,^{\\circ}\\mathrm{C}, the initial pressure and the pressure after 5 minutes were 116.51 mm Hg and 122.56 mm Hg respectively. If the reaction follows first-order kinetics, what must be the pressure after 12 minutes?",
+    "image": null,
+    "qOptions": [
+      "\\(130.41\\,\\mathrm{mm}\\)",
+      "\\(128.00\\,\\mathrm{mm}\\)",
+      "\\(132.00\\,\\mathrm{mm}\\)",
+      "\\(135.00\\,\\mathrm{mm}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Decomposition of diazobenzene chloride was followed at constant temperature by measuring the volume of \\(\\ce{N2}\\) evolved at definite intervals of time. Calculate the order of reaction. \\\\[\\text{Time (min): }0, 2.0, 5.5, 7.0, \\infty;\\; V_{N_2}(\\mathrm{mL}): 0, 10, 25, 35, 163\\]",
+    "image": null,
+    "qOptions": [
+      "Zero order",
+      "First order",
+      "Second order",
+      "Third order"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Decomposition of diazobenzene chloride was followed at constant temperature by measuring the volume of \\(\\ce{N2}\\) evolved at definite intervals of time. Calculate the rate constant. \\\\[\\text{Time (min): }0, 2.0, 5.5, 7.0, \\infty;\\; V_{N_2}(\\mathrm{mL}): 0, 10, 25, 35, 163\\]",
+    "image": null,
+    "qOptions": [
+      "\\(3.2 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(4.0 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(2.5 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)",
+      "\\(3.5 \\times 10^{-2}\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the partial pressure of \\(\\ce{(CH3)2N2}\\) when azomethane decomposes at an initial pressure of 200 mm for 30 minutes according to \\(\\ce{(CH3)2N2 -> C2H6 + N2}\\). The rate constant is \\(2.5 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\).",
+    "image": null,
+    "qOptions": [
+      "\\(120.00\\,\\mathrm{mm}\\)",
+      "\\(127.55\\,\\mathrm{mm}\\)",
+      "\\(130.00\\,\\mathrm{mm}\\)",
+      "\\(125.00\\,\\mathrm{mm}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the partial pressure of \\(\\ce{C2H6}\\) when azomethane decomposes at an initial pressure of 200 mm for 30 minutes according to \\(\\ce{(CH3)2N2 -> C2H6 + N2}\\). The rate constant is \\(2.5 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\).",
+    "image": null,
+    "qOptions": [
+      "\\(70.00\\,\\mathrm{mm}\\)",
+      "\\(72.45\\,\\mathrm{mm}\\)",
+      "\\(75.00\\,\\mathrm{mm}\\)",
+      "\\(80.00\\,\\mathrm{mm}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calculate the partial pressure of \\(\\ce{N2}\\) when azomethane decomposes at an initial pressure of 200 mm for 30 minutes according to \\(\\ce{(CH3)2N2 -> C2H6 + N2}\\). The rate constant is \\(2.5 \\times 10^{-4}\\,\\mathrm{s^{-1}}\\).",
+    "image": null,
+    "qOptions": [
+      "\\(72.45\\,\\mathrm{mm}\\)",
+      "\\(70.00\\,\\mathrm{mm}\\)",
+      "\\(75.00\\,\\mathrm{mm}\\)",
+      "\\(80.00\\,\\mathrm{mm}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The thermal decomposition of azoisopropane to hexane and nitrogen follows first order kinetics. If \\(P_i\\) is the initial pressure of the reactant and \\(P\\) is the total pressure after reaction, derive an expression for the rate constant \\(K\\) in terms of \\(P_i\\), \\(P\\), and \\(t\\). (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": [
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{P_i}{2P_i - P}\\)",
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{2P_i}{P}\\)",
+      "\\(K = \\dfrac{1}{t} \\ln \\dfrac{P_i}{P}\\)",
+      "\\(K = \\dfrac{2.303}{t} \\log_{10} \\dfrac{2P_i - P}{P_i}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The thermal decomposition of \\(\\ce{N2O5}\\) occurs in the following steps: Step I \\(\\ce{N2O5 ->[Slow] NO2 + NO3}\\); Step II \\(\\ce{NO3 + NO2 ->[Fast] N2O5}\\). Find the rate-determining step and the rate law. (Options are made-up distractors; one is correct.)",
+    "image": null,
+    "qOptions": [
+      "\\(\\text{Rate} = k[\\ce{N2O5}]\\)",
+      "\\(\\text{Rate} = k[\\ce{NO2}][\\ce{NO3}]\\)",
+      "\\(\\text{Rate} = k[\\ce{NO2}]^2\\)",
+      "\\(\\text{Rate} = k[\\ce{N2O5}]^{1/2}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The reaction \\(\\ce{H2 + I2 -> 2HI}\\) is elementary. What is the rate law?",
+    "image": null,
+    "qOptions": [
+      "\\(k[\\ce{H2}][\\ce{I2}]\\)",
+      "\\(k[\\ce{HI}]^2\\)",
+      "\\(k[\\ce{H2}]^{1/2}[\\ce{I2}]^{1/2}\\)",
+      "\\(k[\\ce{H2}]^2[\\ce{I2}]\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which one of the following will have the largest half-life period at the same temperature?",
+    "image": null,
+    "qOptions": [
+      "Zero-order reaction",
+      "First-order reaction",
+      "Second-order reaction",
+      "Third-order reaction"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The hydrolysis of an ester in acid medium is an example of what order?",
+    "image": null,
+    "qOptions": [
+      "Zero order",
+      "First order",
+      "Pseudo-first order",
+      "Second order"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The energy difference between reactants and activated complex is called what?",
+    "image": null,
+    "qOptions": [
+      "Activation energy",
+      "Potential energy",
+      "Bond energy",
+      "Lattice energy"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a reaction mechanism, the slowest step is known as what?",
+    "image": null,
+    "qOptions": [
+      "Rate-determining step",
+      "Initiation step",
+      "Propagation step",
+      "Termination step"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If a reaction has a half-life independent of initial concentration, the reaction must be of which order?",
+    "image": null,
+    "qOptions": [
+      "Zero order",
+      "First order",
+      "Second order",
+      "Third order"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The decomposition of hydrogen peroxide in aqueous solution follows first-order kinetics. If its rate constant is \\(0.04\\,\\mathrm{min^{-1}}\\), what fraction decomposes in 25 min?",
+    "image": null,
+    "qOptions": [
+      "\\(0.63\\)",
+      "\\(0.45\\)",
+      "\\(0.66\\)",
+      "\\(0.71\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A radioactive isotope decays with a half-life of 30 min. What fraction of the isotope remains after 2 h?",
+    "image": null,
+    "qOptions": [
+      "\\(\\dfrac{1}{4}\\)",
+      "\\(\\dfrac{1}{8}\\)",
+      "\\(\\dfrac{1}{16}\\)",
+      "\\(\\dfrac{1}{32}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If the rate constant doubles when temperature rises by 10 K, what is the activation energy approximately (take \\(R = 8.314\\,\\mathrm{J\\,mol^{-1}\\,K^{-1}}\\))?",
+    "image": null,
+    "qOptions": [
+      "57\\,\\mathrm{kJ\\,mol^{-1}}",
+      "69\\,\\mathrm{kJ\\,mol^{-1}}",
+      "83\\,\\mathrm{kJ\\,mol^{-1}}",
+      "92\\,\\mathrm{kJ\\,mol^{-1}}"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a first-order reaction, if \\(k = 1.15 \\times 10^{-3}\\,\\mathrm{s^{-1}}\\), what is the half-life?",
+    "image": null,
+    "qOptions": [
+      "\\(1003\\,\\mathrm{s}\\)",
+      "\\(602\\,\\mathrm{s}\\)",
+      "\\(845\\,\\mathrm{s}\\)",
+      "\\(350\\,\\mathrm{s}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a zero-order reaction, the half-life \\(t_{1/2} = \\dfrac{[A]_0}{2k}\\). If the initial concentration is doubled, what happens to the half-life?",
+    "image": null,
+    "qOptions": [
+      "Halved",
+      "Doubled",
+      "Unchanged",
+      "Becomes fourfold"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If the half-life of a first-order reaction is 2 h, how long will it take for 75\\% completion?",
+    "image": null,
+    "qOptions": [
+      "\\(2\\,\\mathrm{h}\\)",
+      "\\(3\\,\\mathrm{h}\\)",
+      "\\(4\\,\\mathrm{h}\\)",
+      "\\(5\\,\\mathrm{h}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "At 400\\,^{\\circ}\\mathrm{C}, decomposition of phosphine (\\(\\ce{PH3}\\)) follows first-order kinetics. If 75\\% decomposes in 50 s, find the rate constant.",
+    "image": null,
+    "qOptions": [
+      "\\(0.028\\,\\mathrm{s^{-1}}\\)",
+      "\\(0.035\\,\\mathrm{s^{-1}}\\)",
+      "\\(0.040\\,\\mathrm{s^{-1}}\\)",
+      "\\(0.025\\,\\mathrm{s^{-1}}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the reaction \\(\\ce{2HI -> H2 + I2}\\), the rate doubles when temperature increases from 298 K to 308 K. Find \\(E_a\\) using Arrhenius relation.",
+    "image": null,
+    "qOptions": [
+      "54\\,\\mathrm{kJ\\,mol^{-1}}",
+      "68\\,\\mathrm{kJ\\,mol^{-1}}",
+      "75\\,\\mathrm{kJ\\,mol^{-1}}",
+      "82\\,\\mathrm{kJ\\,mol^{-1}}"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In a bimolecular reaction, doubling both reactant concentrations increases the rate four times. What is the overall order?",
+    "image": null,
+    "qOptions": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For the first-order reaction, \\(k = \\dfrac{2.303}{t} \\log_{10}\\left(\\dfrac{a}{a - x}\\right)\\). If \\(a = 0.1\\,\\mathrm{M}\\) and after 50 min \\(x = 0.075\\,\\mathrm{M}\\), find \\(k\\).",
+    "image": null,
+    "qOptions": [
+      "\\(0.0276\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0461\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0300\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0400\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a second-order reaction \\(2A \\rightarrow \\text{Products}\\), rate law is \\(r = k[A]^2\\). If \\(t_{1/2} = \\dfrac{1}{k[A]_0}\\), what happens to \\(t_{1/2}\\) when \\([A]_0\\) doubles?",
+    "image": null,
+    "qOptions": [
+      "It doubles",
+      "It halves",
+      "It becomes one-fourth",
+      "It becomes fourfold"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If rate constant \\(k\\) has units of \\(\\mathrm{mol^{-1}\\,L\\,s^{-1}}\\), what is the order of reaction?",
+    "image": null,
+    "qOptions": [
+      "Zero",
+      "First",
+      "Second",
+      "Third"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A first-order reaction is 40\\% complete in 20 min. Calculate its half-life.",
+    "image": null,
+    "qOptions": [
+      "\\(27\\,\\mathrm{min}\\)",
+      "\\(30\\,\\mathrm{min}\\)",
+      "\\(32\\,\\mathrm{min}\\)",
+      "\\(25\\,\\mathrm{min}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a first-order reaction, when concentration decreases from \\(0.5\\,\\mathrm{M}\\) to \\(0.125\\,\\mathrm{M}\\) in 60 min, find \\(k\\).",
+    "image": null,
+    "qOptions": [
+      "\\(0.0231\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0276\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0310\\,\\mathrm{min^{-1}}\\)",
+      "\\(0.0350\\,\\mathrm{min^{-1}}\\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The reaction \\(\\ce{2NO + Cl2 -> 2NOCl}\\) has rate law \\(r = k[NO]^2[Cl2]\\). What happens to the rate if \\([NO]\\) doubles and \\([Cl2]\\) triples?",
+    "image": null,
+    "qOptions": [
+      "Increases 6×",
+      "Increases 12×",
+      "Increases 9×",
+      "Increases 18×"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A first-order reaction has \\(k = 1.0\\times10^{-3}\\,\\mathrm{s^{-1}}\\). In what time will 90\\% react?",
+    "image": null,
+    "qOptions": [
+      "\\(2300\\,\\mathrm{s}\\)",
+      "\\(4600\\,\\mathrm{s}\\)",
+      "\\(5300\\,\\mathrm{s}\\)",
+      "\\(6900\\,\\mathrm{s}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The temperature coefficient of a reaction is 2.5. If rate at 300 K is \\(1.2\\times10^{-3}\\), find the rate at 330 K.",
+    "image": null,
+    "qOptions": [
+      "\\(7.5\\times10^{-3}\\)",
+      "\\(9.4\\times10^{-3}\\)",
+      "\\(1.0\\times10^{-2}\\)",
+      "\\(8.0\\times10^{-3}\\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "For a radioactive decay process, activity drops to \\(\\tfrac{1}{16}\\) in 24 days. Find its half-life.",
+    "image": null,
+    "qOptions": [
+      "\\(4\\,\\mathrm{days}\\)",
+      "\\(6\\,\\mathrm{days}\\)",
+      "\\(8\\,\\mathrm{days}\\)",
+      "\\(12\\,\\mathrm{days}\\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which graph correctly represents a zero-order reaction?",
+    "image": "graph_zero_order.png",
+    "qOptions": [
+      "Straight line between \\([A]\\) and \\(t\\)",
+      "Straight line between \\(\\ln[A]\\) and \\(t\\)",
+      "Straight line between \\(1/[A]\\) and \\(t\\)",
+      "Curve between \\([A]\\) and \\(t\\)"
+    ],
+    "qAnswer": "A"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+}
