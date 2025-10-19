@@ -1,5 +1,5 @@
 ﻿// PYQs Question List view (sidebar + list with filters)
-import { ensureConfig, fetchQuestions } from "./pyqs-service.js";
+import { ensureConfig, fetchQuestions, fetchChapters } from "./pyqs-service.js";
 import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
 
 (async () => {
@@ -103,11 +103,17 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
   // Fetch questions + state
   let questions = [];
   let states = [];
+  let chapterName = "";
   try {
-    const [qs] = await Promise.all([
+    const [qs, chs] = await Promise.all([
       fetchQuestions(examId, subjectId, chapterId),
+      fetchChapters(examId, subjectId).catch(() => []),
     ]);
     questions = Array.isArray(qs) ? qs : [];
+    try {
+      const match = (Array.isArray(chs) ? chs : []).find((c) => String(c.id) === String(chapterId));
+      if (match && match.name) chapterName = String(match.name);
+    } catch {}
   } catch (e) {
     els.err.classList.remove("d-none");
     els.err.textContent = "Failed to load questions";
@@ -342,11 +348,11 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     view.render(mappedCache, questions.length);
     // Title/sub line
     try {
-      els.title.textContent = "All PYQs";
+      if (els.title) els.title.textContent = chapterName || "PYQs";
       const activeN = countActiveFilters(filters);
       const base = `${mappedCache.length} of ${questions.length} shown`;
       const badge = activeN ? ` <span class="badge bg-warning-subtle text-warning-emphasis ms-2">Filters ${activeN > 1 ? `(${activeN})` : "on"}</span> <a href="#" class="ms-2 link-warning q-clear-filters">Clear</a>` : "";
-      els.sub.innerHTML = `${base}${badge}`;
+      if (els.sub) els.sub.innerHTML = `${base}${badge}`;
     } catch {}
     // Also reflect on the count area below the toolbar
     try {

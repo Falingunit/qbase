@@ -16,7 +16,6 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 .pyqs-sidenav {
   width: 260px;
   flex: 0 0 260px;
-  margin-top: 1.25rem;
 }
 
 .topbar-back {
@@ -56,6 +55,23 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 .topbar-back i { font-size: 1.1rem; }
 .topbar-back:hover { background: rgba(255, 255, 255, 0.08); }
 
+
+.diff-bg-success{
+  background-color: rgba(0, 128, 0, 0.432);
+}
+
+.diff-bg-warning{
+  background-color: rgba(218, 165, 32, 0.459);
+}
+
+.diff-bg-danger{
+  background-color: rgba(165, 42, 42, 0.459);
+}
+
+.diff-bg-info{
+  display: none;
+}
+
 .pyqs-exam-icon { width: 24px; height: 24px; object-fit: contain; }
 .pyqs-side-item {
   display: flex;
@@ -75,7 +91,6 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 .pyqs-side-item .chev { opacity: .7; }
 
 .pyqs-toolbar {
-  margin-top: 0.5rem;
   margin-bottom: 1rem;
 }
 

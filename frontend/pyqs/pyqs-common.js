@@ -64,7 +64,7 @@ export function checkEmpty(elContent, selector = ".card:not(.d-none)") {
 // Toolbar builder (search + optional sort + optional filters)
 export function buildToolbar(toolbarEl, onChange, opts = {}) {
   const wrap = toolbarEl;
-  wrap.className = "pyqs-toolbar d-flex flex-wrap align-items-center justify-content-between pt-3 pt-md-5 gap-3";
+  wrap.className = "pyqs-toolbar d-flex flex-wrap align-items-center justify-content-between gap-3";
 
   // Compact mode: only the search bar, left-aligned
   const onlySearch = !!opts.onlySearch;
@@ -91,7 +91,7 @@ export function buildToolbar(toolbarEl, onChange, opts = {}) {
   searchWrap.append(pre, input, clear);
 
   if (onlySearch) {
-    wrap.className = "pyqs-toolbar d-flex flex-wrap align-items-center pt-3 pt-md-5 gap-3";
+    wrap.className = "pyqs-toolbar d-flex flex-wrap align-items-center gap-3";
     wrap.innerHTML = "";
     wrap.appendChild(searchWrap);
     trigger();

@@ -1905,10 +1905,64 @@
           questionStates = resetStates;
         }
 
+        // Also clear all saved question colors for this assignment/chapter
+        try {
+          const ids = getPyqsIds();
+          if (ids) {
+            // Fetch all PYQs marks for this chapter and delete them one by one
+            try {
+              const listResp = await authFetch(
+                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`,
+                { cache: 'no-store' }
+              );
+              if (listResp.ok) {
+                const arr = await listResp.json();
+                if (Array.isArray(arr)) {
+                  for (const m of arr) {
+                    const qi = Number(m?.questionIndex);
+                    if (!Number.isNaN(qi)) {
+                      try {
+                        await authFetch(
+                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}/${qi}`,
+                          { method: 'DELETE' }
+                        );
+                      } catch {}
+                    }
+                  }
+                }
+              }
+            } catch {}
+          } else {
+            // Regular assignment fallback: clear all marks for this assignment
+            try {
+              const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+              if (listResp.ok) {
+                const all = await listResp.json();
+                const mine = Array.isArray(all)
+                  ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+                  : [];
+                for (const m of mine) {
+                  const qi = Number(m?.questionIndex);
+                  if (!Number.isNaN(qi)) {
+                    try {
+                      await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' });
+                    } catch {}
+                  }
+                }
+              }
+            } catch {}
+          }
+        } catch {}
+
         // Refresh UI to first question
-        questionButtons.forEach((btn) =>
-          evaluateQuestionButtonColor(btn.dataset.qid)
-        );
+        // Use display index for PYQs buttons (dataset.displayIdx), not legacy dataset.qid
+        questionButtons.forEach((btn) => {
+          const idx = Number(btn?.dataset?.displayIdx);
+          if (!Number.isNaN(idx)) evaluateQuestionButtonColor(idx);
+        });
+        // Refresh color indicators and picker selection
+        try { updateColorIndicators(); } catch {}
+        try { updateColorPickerSelection(); } catch {}
         clickQuestionButton(0);
         dirty = false;
       } catch (e) {
@@ -2769,11 +2823,13 @@
           const picked = getUserSelection(questionState, "SMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
+          try { showSolution(question); } catch {}
         } else if (question.qType === "MMCQ") {
           const correct = normalizeAnswer(question);
           const picked = getUserSelection(questionState, "MMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
+          try { showSolution(question); } catch {}
         } else if (question.qType === "Numerical") {
           const ans = normalizeAnswer(question);
           const user = getUserSelection(questionState, "Numerical");
@@ -2879,28 +2935,55 @@
 
   async function updateBookmarkButton() {
     const bookmarkBtn = document.getElementById("bookmark-btn");
-    const icon = bookmarkBtn.querySelector("i");
+    const icon = bookmarkBtn?.querySelector("i");
 
     try {
-      // Use original question index (not display index) for bookmark lookups
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
-      );
-      if (response.ok) {
+      const ids = getPyqsIds();
+
+      // Prefer PYQs endpoint when available, fallback to assignment endpoint
+      let response = null;
+      if (ids) {
+        try {
+          const url = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`;
+          response = await authFetch(url);
+          if (response.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            return;
+          }
+          if (!response.ok) response = null; // try fallback
+        } catch {}
+      }
+
+      if (!response) {
+        response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${originalIdx}`);
+        if (response.status === 401) {
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
+          return;
+        }
+      }
+
+      if (response && response.ok) {
         currentBookmarks = await response.json();
         if (currentBookmarks.length > 0) {
           bookmarkBtn.classList.remove("btn-outline-primary");
           bookmarkBtn.classList.add("btn-primary");
-          icon.className = "bi bi-bookmark-fill";
+          if (icon) icon.className = "bi bi-bookmark-fill";
           bookmarkBtn.title = `Bookmarked with ${currentBookmarks.length} tag(s)`;
         } else {
           bookmarkBtn.classList.remove("btn-primary");
           bookmarkBtn.classList.add("btn-outline-primary");
-          icon.className = "bi bi-bookmark";
+          if (icon) icon.className = "bi bi-bookmark";
           bookmarkBtn.title = "Bookmark this question";
         }
-        // refresh small badges on circles as well
         updateBookmarkIndicators();
       }
     } catch (error) {
@@ -2913,7 +2996,10 @@
       const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
       if (!response.ok) {
         if (response.status === 401) {
-          window.dispatchEvent(new Event("qbase:logout"));
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
+          await uiNotice("Please log in to manage bookmarks.", "Login required");
           return;
         }
         throw new Error(`HTTP ${response.status}`);
@@ -3048,7 +3134,9 @@
       const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
       if (!response.ok) {
         if (response.status === 401) {
-          window.dispatchEvent(new Event("qbase:logout"));
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
           return;
         }
         throw new Error(`HTTP ${response.status}`);
@@ -3058,10 +3146,25 @@
       // Reload current bookmarks for this question
       // Use original question index for current question
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const bookmarkResponse = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
-      );
-      if (bookmarkResponse.ok) {
+      const ids = getPyqsIds();
+      let bookmarkResponse = null;
+      if (ids) {
+        try {
+          const url = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`;
+          bookmarkResponse = await authFetch(url);
+          if (!bookmarkResponse.ok) bookmarkResponse = null;
+        } catch {}
+      }
+      if (!bookmarkResponse) {
+        bookmarkResponse = await authFetch(
+          `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        );
+      }
+      if (bookmarkResponse && bookmarkResponse.ok) {
         currentBookmarks = await bookmarkResponse.json();
       } else {
         currentBookmarks = [];
@@ -3178,23 +3281,59 @@
 
   async function addBookmark(tagId) {
     try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const ids = getPyqsIds();
+
+      // Try PYQs endpoint first
+      if (ids) {
+        try {
+          const respPyqs = await authFetch(`${API_BASE}/api/pyqs/bookmarks`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              examId: ids.examId,
+              subjectId: ids.subjectId,
+              chapterId: ids.chapterId,
+              questionIndex: originalIdx,
+              tagId: tagId,
+            }),
+          });
+          if (respPyqs.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            await uiNotice("Please log in to bookmark questions.", "Login required");
+            return false;
+          }
+          if (respPyqs.ok) {
+            updateBookmarkIndicators();
+            return true;
+          }
+          // fallthrough to assignment fallback on non-OK
+        } catch {}
+      }
+
       const response = await authFetch(`${API_BASE}/api/bookmarks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignmentId: aID,
-          // Persist original index from assignment.json
-          questionIndex: window.questionIndexMap[currentQuestionID],
+          questionIndex: originalIdx,
           tagId: tagId,
         }),
       });
-
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to bookmark questions.", "Login required");
+        return false;
+      }
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
         throw new Error(error.error || "Failed to add bookmark");
       }
 
-      // Update badges across question circles
       updateBookmarkIndicators();
       return true;
     } catch (error) {
@@ -3209,20 +3348,46 @@
 
   async function removeBookmark(tagId) {
     try {
-      // Remove by original index
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const ids = getPyqsIds();
 
-      if (!response.ok) {
-        throw new Error("Failed to remove bookmark");
+      if (ids) {
+        try {
+          const respPyqs = await authFetch(
+            `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+              ids.examId
+            )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+              ids.chapterId
+            )}/${originalIdx}/${encodeURIComponent(tagId)}`,
+            { method: "DELETE" }
+          );
+          if (respPyqs.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            await uiNotice("Please log in to manage bookmarks.", "Login required");
+            return false;
+          }
+          if (respPyqs.ok) {
+            updateBookmarkIndicators();
+            return true;
+          }
+        } catch {}
       }
 
-      // Update badges across question circles
+      const response = await authFetch(
+        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
+        { method: "DELETE" }
+      );
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to manage bookmarks.", "Login required");
+        return false;
+      }
+      if (!response.ok) throw new Error("Failed to remove bookmark");
+
       updateBookmarkIndicators();
       return true;
     } catch (error) {
@@ -3242,9 +3407,15 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: tagName }),
       });
-
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to create tags.", "Login required");
+        return false;
+      }
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
         throw new Error(error.error || "Failed to create tag");
       }
 
@@ -3456,7 +3627,10 @@
     try {
       const raw = String(value || "")
         .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n");
+        .replace(/\r/g, "\n")
+        // Normalize any HTML <br> tags to newlines so KaTeX delimiters are contiguous
+        // and do not get split across nodes (common in scraped PYQ content).
+        .replace(/<br\s*\/?>/gi, "\n");
       const sanitized = sanitizeHtml(raw);
       // Do not convert newlines to <br> before KaTeX; it breaks delimiter matching across nodes.
       // Preserve newlines via CSS (white-space: pre-wrap) instead.
@@ -3595,10 +3769,20 @@
   // ---------- Bookmark badges on question circles ----------
   async function updateBookmarkIndicators() {
     try {
-      const res = await authFetch(`${API_BASE}/api/bookmarks`, {
-        cache: "no-store",
-      });
-      if (!res.ok) {
+      const ids = getPyqsIds();
+      let res = null;
+      if (ids) {
+        try {
+          res = await authFetch(`${API_BASE}/api/pyqs/bookmarks`, {
+            cache: "no-store",
+          });
+          if (!res.ok) res = null; // fallback
+        } catch {}
+      }
+      if (!res) {
+        res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+      }
+      if (!res || !res.ok) {
         questionButtons?.forEach((btn) => {
           btn
             .querySelectorAll(".q-bookmark-indicator")
@@ -3607,9 +3791,20 @@
         return;
       }
       const all = await res.json();
-      const mine = Array.isArray(all)
-        ? all.filter((b) => Number(b.assignmentId) === Number(aID))
-        : [];
+      let mine;
+      if (ids && Array.isArray(all) && all.length && all[0]?.examId !== undefined) {
+        // PYQs bookmarks payload
+        mine = all.filter(
+          (b) =>
+            String(b.examId) === String(ids.examId) &&
+            String(b.subjectId) === String(ids.subjectId) &&
+            String(b.chapterId) === String(ids.chapterId)
+        );
+      } else {
+        mine = Array.isArray(all)
+          ? all.filter((b) => Number(b.assignmentId) === Number(aID))
+          : [];
+      }
       const bookmarkedOriginalIdx = new Set(
         mine.map((b) => Number(b.questionIndex))
       );

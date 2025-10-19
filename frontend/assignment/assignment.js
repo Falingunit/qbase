@@ -1592,6 +1592,24 @@
           questionStates = resetStates;
         }
 
+        // Also clear all saved question colors for this assignment
+        try {
+          const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+          if (listResp.ok) {
+            const all = await listResp.json();
+            const mine = Array.isArray(all)
+              ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+              : [];
+            for (const m of mine) {
+              const qi = Number(m?.questionIndex);
+              if (!Number.isNaN(qi)) {
+                try { await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' }); } catch {}
+              }
+            }
+          }
+          try { updateColorIndicators(); } catch {}
+        } catch {}
+
         // Refresh UI to first question
         questionButtons.forEach((btn) =>
           evaluateQuestionButtonColor(btn.dataset.qid)

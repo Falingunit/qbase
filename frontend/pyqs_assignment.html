@@ -258,7 +258,7 @@
           <i class="bi bi-arrow-left" aria-hidden="true"></i>
           <span class="visually-hidden">Back</span>
         </a>
-        <h5 class="mb-0" id="assignment-title">Assignment</h5>
+        <h5 class="mb-0" id="assignment-title"></h5>
       </div>
       <div class="topbar-actions">
         <div class="topbar-group" aria-label="View controls">
@@ -486,10 +486,11 @@
               <span id="numericalAnswer"></span>
             </div>
           </div>
-
           <!-- Solution (hidden until answer is checked) -->
           <div id="solutionSection" class="mb-3" style="display: none">
-            <h5 class="h6 text-info mb-2">Solution</h5>
+            <hr />
+
+            <h5 class="h5 text-info mb-2">Solution</h5>
             <div id="solutionText" class="fonted"></div>
             <div
               id="solutionImage"
@@ -667,7 +668,8 @@
                 }
               }
               if (chapterName) {
-                window.__PYQS_ASSIGNMENT_TITLE__ = `PYQs - ${chapterName}`;
+                // Show only the PYQ chapter name in the header
+                window.__PYQS_ASSIGNMENT_TITLE__ = String(chapterName);
                 try {
                   document.title = `QBase - ${window.__PYQS_ASSIGNMENT_TITLE__}`;
                 } catch {}

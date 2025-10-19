@@ -114,7 +114,7 @@ export function initQListView(
     const item = document.createElement("a");
     item.href = "#";
     item.className =
-      "list-group-item list-group-item-action bg-transparent text-light border-secondary-subtle";
+      "list-group-item list-group-item-action bg-transparent text-light border-secondary-subtle pt-3";
     item.setAttribute("data-mapped-idx", String(idxInMapped));
     const yr = parseYear(q.pyqInfo);
     const st = getStatusForIndex(i);
@@ -129,11 +129,20 @@ export function initQListView(
         ? "bi-pencil text-info"
         : "bi-circle text-secondary";
     const qhtml = sanitizeHtml(q.qText || "");
-    item.innerHTML = `<div class="d-flex align-items-start gap-2"><div class="" style="width: 20px; height: 20px;">${
-      i + 1
-    }</div><i class="bi ${icon}" aria-hidden="true"></i><div class="flex-grow-1"><div class="pyq-qtext">${qhtml}</div><div class="text-muted small">${escapeHtml(
-      q.pyqInfo || ""
-    )}</div></div><div class="text-muted small">${yr || ""}</div></div>`;
+    const color = q.diffuculty === 1 ? "success" : q.diffuculty === 2 ? "warning" : q.diffuculty === 3 ? "danger" : "info";
+    const diffuculty = q.diffuculty === 1 ? "Easy" : q.diffuculty === 2 ? "Moderate" : q.diffuculty === 3 ? "Hard" : "-";
+    item.innerHTML = `<div class="d-flex justify-content-between gap-2 pb-2">
+      <div class="" style="width: 20px; height: 20px;">${i + 1}</div>
+      <i class="bi ${icon}" aria-hidden="true"></i>
+      <div class="flex-grow-1">
+        <div class="pyq-qtext mb-3 lh-sm">${qhtml}</div>
+        <div class="d-flex justify-content-between">
+          <div class="text-muted small">${escapeHtml(q.pyqInfo || "")}</div>
+          <div class="badge diff-bg-${color} fw-normal">${diffuculty}</div>
+        </div>
+      </div>
+      <div class="text-muted small">${yr || ""}</div>
+    </div>`;
     try {
       if (renderMath && window.renderMathInElement)
         window.renderMathInElement(item, {

@@ -148,6 +148,20 @@ db.exec(`
     UNIQUE(userId, assignmentId, questionIndex, tagId)
   );
 
+  -- PYQs bookmarks (per exam/subject/chapter question)
+  CREATE TABLE IF NOT EXISTS pyqs_bookmarks (
+    userId TEXT NOT NULL,
+    examId TEXT NOT NULL,
+    subjectId TEXT NOT NULL,
+    chapterId TEXT NOT NULL,
+    questionIndex INTEGER NOT NULL,
+    tagId TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, examId, subjectId, chapterId, questionIndex, tagId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (tagId) REFERENCES bookmark_tags(id) ON DELETE CASCADE
+  );
+
   -- Per-question color marks
   CREATE TABLE IF NOT EXISTS question_marks (
     userId TEXT NOT NULL,
@@ -272,7 +286,7 @@ app.get("/healthz", (_req, res) => res.send("ok"));
 
 // ---------- PYQs proxy (public) ----------
 // Uses per-user token when available (from profile), otherwise falls back to server-side token.
-const GETMARKS_AUTH_TOKEN = process.env.GETMARKS_AUTH_TOKEN || "";
+const GETMARKS_AUTH_TOKEN = process.env.GETMARKS_AUTH_TOKEN || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTkxNzVmNjcwMTY3ODUwOTBiZGI0ZiIsImlhdCI6MTc2MDE4ODAyOCwiZXhwIjoxNzYyNzgwMDI4fQ.v7tZWhoru3bC6c4H8RjtaGdkHm4luZQWvQ1kivF1Jl0";
 const GM_BASE = {
   dashboard: "https://web.getmarks.app/api/v3/dashboard/platform/web",
   exam_subjects: (examId) =>
@@ -778,6 +792,125 @@ app.post("/api/bookmarks", (req, res) => {
     res.status(500).json({ error: "Failed to add bookmark" });
   }
 });
+
+// PYQs Bookmarks
+// Add bookmark for a PYQs question
+app.post("/api/pyqs/bookmarks", (req, res) => {
+  try {
+    if (!req.userId) return res.status(401).json({ error: "Unauthorized" });
+    const { examId, subjectId, chapterId, questionIndex, tagId } = req.body || {};
+    if (
+      !examId || !subjectId || !chapterId ||
+      questionIndex === undefined || questionIndex === null || !tagId
+    ) {
+      return res.status(400).json({ error: "examId, subjectId, chapterId, questionIndex, and tagId are required" });
+    }
+    const idx = Number(questionIndex);
+    if (!Number.isFinite(idx) || idx < 0)
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    // Insert; uniqueness enforced by PK
+    try {
+      db.prepare(
+        `
+        INSERT INTO pyqs_bookmarks (userId, examId, subjectId, chapterId, questionIndex, tagId)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `
+      ).run(req.userId, String(examId), String(subjectId), String(chapterId), idx, String(tagId));
+    } catch (e) {
+      if (e && e.code === "SQLITE_CONSTRAINT_PRIMARYKEY") {
+        return res.status(400).json({ error: "Question already bookmarked with this tag" });
+      }
+      throw e;
+    }
+    res.json({ success: true });
+  } catch (e) {
+    console.error("pyqs add bookmark:", e);
+    res.status(500).json({ error: "Failed to add PYQs bookmark" });
+  }
+});
+
+// Remove bookmark for a PYQs question
+app.delete(
+  "/api/pyqs/bookmarks/:examId/:subjectId/:chapterId/:questionIndex/:tagId",
+  (req, res) => {
+    try {
+      if (!req.userId) return res.status(401).json({ error: "Unauthorized" });
+      const { examId, subjectId, chapterId, questionIndex, tagId } = req.params;
+      db.prepare(
+        `
+        DELETE FROM pyqs_bookmarks
+        WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?
+              AND questionIndex = ? AND tagId = ?
+      `
+      ).run(
+        req.userId,
+        String(examId),
+        String(subjectId),
+        String(chapterId),
+        Number(questionIndex),
+        String(tagId)
+      );
+      res.json({ success: true });
+    } catch (e) {
+      console.error("pyqs remove bookmark:", e);
+      res.status(500).json({ error: "Failed to remove PYQs bookmark" });
+    }
+  }
+);
+
+// List all PYQs bookmarks for the current user
+app.get("/api/pyqs/bookmarks", (req, res) => {
+  try {
+    if (!req.userId) return res.status(401).json({ error: "Unauthorized" });
+    const rows = db
+      .prepare(
+        `
+        SELECT p.examId, p.subjectId, p.chapterId, p.questionIndex, p.created_at,
+               bt.id AS tagId, bt.name AS tagName
+        FROM pyqs_bookmarks p
+        JOIN bookmark_tags bt ON p.tagId = bt.id
+        WHERE p.userId = ?
+        ORDER BY bt.name = 'Doubt' DESC, bt.name ASC, p.created_at DESC
+      `
+      )
+      .all(req.userId);
+    res.json(rows);
+  } catch (e) {
+    console.error("pyqs list bookmarks:", e);
+    res.status(500).json({ error: "Failed to get PYQs bookmarks" });
+  }
+});
+
+// List bookmarks for a specific PYQs question (for the button state UI)
+app.get(
+  "/api/pyqs/bookmarks/:examId/:subjectId/:chapterId/:questionIndex",
+  (req, res) => {
+    try {
+      if (!req.userId) return res.status(401).json({ error: "Unauthorized" });
+      const { examId, subjectId, chapterId, questionIndex } = req.params;
+      const rows = db
+        .prepare(
+          `
+          SELECT p.tagId, bt.name AS tagName
+          FROM pyqs_bookmarks p
+          JOIN bookmark_tags bt ON p.tagId = bt.id
+          WHERE p.userId = ? AND p.examId = ? AND p.subjectId = ? AND p.chapterId = ? AND p.questionIndex = ?
+        `
+        )
+        .all(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(chapterId),
+          Number(questionIndex)
+        );
+      res.json(rows);
+    } catch (e) {
+      console.error("pyqs check bookmark:", e);
+      res.status(500).json({ error: "Failed to check PYQs bookmarks" });
+    }
+  }
+);
 
 app.delete("/api/bookmarks/:assignmentId/:questionIndex/:tagId", (req, res) => {
   try {

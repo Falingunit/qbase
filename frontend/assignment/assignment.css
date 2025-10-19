@@ -27,6 +27,8 @@ body {
   white-space: pre-wrap;
 }
 #solutionText {
+  /* Make solution text obey the same font scale as question and options */
+  font-size: calc(1rem * var(--qa-scale));
   white-space: pre-wrap;
 }
 #MCQOptionDiv .opt-text {
