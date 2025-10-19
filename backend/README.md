@@ -27,6 +27,10 @@ JWT_EXPIRES_IN=7d
 # Where the backend fetches assignment JSON (the data/ folder is hosted here)
 ASSETS_BASE=https://falingunit.github.io/qbase
 
+# PYQs (proxy scraper website)
+# Required to enable /api/pyqs/* endpoints
+GETMARKS_AUTH_TOKEN=ey...your_token_here
+
 # Development helper (do not use in production)
 # 1 = temporarily allow all CORS origins
 ALLOW_ALL_ORIGINS=0
@@ -36,6 +40,8 @@ Notes:
 - `JWT_SECRET` should be a strong, random string in any non-dev environment.
 - `PORT` defaults to `3000` if not set.
 - `ASSETS_BASE` controls where assignment data is fetched; set this to where your `data/` is hosted.
+- `ASSETS_BASE` controls where assignment data is fetched; set this to where your `data/` is hosted.
+- `GETMARKS_AUTH_TOKEN` is the Bearer token the scraper uses to call `web.getmarks.app`; required for the PYQs proxy.
 
 ## Run
 Linux/macOS:
@@ -115,4 +121,3 @@ cp backend/db.sqlite* /backups/qbase-$(date +%F-%H%M)/
 - CORS during local dev: set `ALLOW_ALL_ORIGINS=1` temporarily while testing.
 - Invalid token: clear the frontend token with `localStorage.removeItem('qb_token')` and sign in again.
 - 404 for assignment data: make sure `ASSETS_BASE` matches where your `data/` is hosted.
-

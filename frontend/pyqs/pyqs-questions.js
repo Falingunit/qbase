@@ -50,13 +50,16 @@
       naturalH = 0;
     let baseScale = 1; // fits image to stage
     let zoom = 1; // user-controlled multiplier
-    let panX = 0, panY = 0; // translation in screen px
+    let panX = 0,
+      panY = 0; // translation in screen px
     const minZoom = 0.2,
       maxZoom = 8;
 
     function setTransform() {
       // Use translate() before scale() so translate is in screen pixels
-      img.style.transform = `translate(${panX}px, ${panY}px) scale(${baseScale * zoom})`;
+      img.style.transform = `translate(${panX}px, ${panY}px) scale(${
+        baseScale * zoom
+      })`;
       updateCursor();
     }
 
@@ -88,7 +91,8 @@
       const sx = rect.width / naturalW;
       const sy = rect.height / naturalH;
       baseScale = Math.min(sx, sy) * FIT_SCALE_FACTOR; // contain, then shrink a bit
-      panX = 0; panY = 0;
+      panX = 0;
+      panY = 0;
       setTransform();
     }
 
@@ -230,7 +234,10 @@
             const factor = dist / lastPinchDist;
             // gentle clamp per event to avoid jumps
             const perMoveClamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-            const target = Math.min(maxZoom, Math.max(minZoom, zoom * perMoveClamp(factor, 0.9, 1.1)));
+            const target = Math.min(
+              maxZoom,
+              Math.max(minZoom, zoom * perMoveClamp(factor, 0.9, 1.1))
+            );
             // Anchor zoom at pinch midpoint
             zoomToAt(target, midX, midY);
             suppressNextClick = true; // avoid accidental click after pinch
@@ -295,48 +302,17 @@
   await loadConfig();
 
   const params = new URLSearchParams(window.location.search);
-  const aID = parseInt(params.get("aID"), 10);
-
-  let assignmentTitle = `Assignment ${aID}`;
-
-  const assignmentTitlePromise = (async () => {
-    try {
-      const raw = await (await fetch("./data/assignment_list.json")).json();
-      const items = normalizeAssignmentsForLookup(raw);
-      const meta = items.find((it) => Number(it.aID) === Number(aID));
-      if (meta?.title) assignmentTitle = meta.title;
-
-      // If the page UI is already up, refresh the header
-      const el = document.getElementById("assignmentDetails");
-      if (el) el.textContent = assignmentTitle;
-    } catch (e) {
-      console.warn(
-        "Could not load assignment title from assignment_list.json",
-        e
-      );
+  let aID = parseInt(params.get("aID"), 10);
+  // Allow external override (e.g., PYQs viewer)
+  try {
+    if (
+      typeof window !== "undefined" &&
+      window.__PYQS_ASSIGNMENT_ID__ != null
+    ) {
+      const v = Number(window.__PYQS_ASSIGNMENT_ID__);
+      if (Number.isFinite(v)) aID = v;
     }
-  })();
-
-  function normalizeAssignmentsForLookup(input) {
-    const out = [];
-    const pushItem = (raw) => {
-      if (!raw || typeof raw !== "object") return;
-      const id = Number(
-        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
-      );
-      if (!Number.isFinite(id)) return;
-      out.push({ aID: id, title: String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`) });
-    };
-    if (Array.isArray(input)) input.forEach(pushItem);
-    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
-    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
-    else if (input && typeof input === "object") {
-      Object.values(input).forEach((arr) => {
-        if (Array.isArray(arr)) arr.forEach(pushItem);
-      });
-    }
-    return out;
-  }
+  } catch {}
 
   let saveTimeout;
 
@@ -476,9 +452,8 @@
           evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
           // Prefer local notes if present, else server's
-          notes: (l.notes && String(l.notes).length > 0)
-            ? l.notes
-            : (s.notes || ""),
+          notes:
+            l.notes && String(l.notes).length > 0 ? l.notes : s.notes || "",
         };
       });
     return out;
@@ -508,51 +483,91 @@
   }
 
   // ---------- Load saved state (server/local with migration prompt) ----------
+  // ---------- Load saved state (server/local with migration prompt) ----------
+  function getPyqsIds() {
+    try {
+      if (typeof window !== "undefined" && window.__PYQS_IDS__)
+        return window.__PYQS_IDS__;
+    } catch {}
+    try {
+      const u = new URL(window.location.href);
+      const examId = u.searchParams.get("exam");
+      const subjectId = u.searchParams.get("subject");
+      const chapterId = u.searchParams.get("chapter");
+      if (examId && subjectId && chapterId)
+        return { examId, subjectId, chapterId };
+    } catch {}
+    return null;
+  }
+  function stateKey(aID) {
+    const ids = getPyqsIds();
+    if (ids)
+      return `qbase:pyqs:${ids.examId}:${ids.subjectId}:${ids.chapterId}:state`;
+    return `qbase:${aID}:state`;
+  }
+
   async function loadSavedState(aID) {
     const me = await whoAmI();
     loggedInUser = me?.username || null;
     authSource = me?.source || "none";
 
     if (!loggedInUser) {
-      try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
-      // Continue offline: will try local storage below
+      try {
+        window.dispatchEvent(new Event("qbase:force-login"));
+      } catch {}
     }
 
-    // Logged in → use server if available; fallback to local only if server has nothing
     try {
-      const res = await authFetch(`${API_BASE}/api/state/${aID}`);
+      const ids = getPyqsIds();
+      const url = ids
+        ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}`
+        : `${API_BASE}/api/state/${aID}`;
+      const res = await authFetch(url);
       if (res.ok) {
         const server = await res.json();
+
         if (Array.isArray(server) && server.length) {
-          questionStates = server;
+          // ✓ Server state is indexed by original positions
+          // Ensure it matches originalTotalCount
+          const n = window.originalTotalCount || server.length;
+          const out = Array(n)
+            .fill(null)
+            .map(() => defaultState());
+          for (let i = 0; i < Math.min(n, server.length); i++) {
+            const s = server[i];
+            if (s) out[i] = { ...defaultState(), ...s };
+          }
+          questionStates = out;
           return;
         }
       }
-    } catch {
-      /* ignore */
+    } catch (e) {
+      console.warn("Server state load failed:", e);
     }
 
-    // Local storage fallback
-    try {
-      const raw = localStorage.getItem(`qbase:${aID}:state`);
-      if (raw) {
-        const arr = JSON.parse(raw);
-        if (Array.isArray(arr) && arr.length) {
-          questionStates = arr;
-          return;
-        }
-      }
-    } catch { /* ignore */ }
-
-    // If nothing found, initialize fresh default states
-    questionStates = Array(window.displayQuestions.length)
+    // Fallback: initialize with original total count
+    questionStates = Array(
+      window.originalTotalCount || window.displayQuestions.length
+    )
       .fill()
       .map(defaultState);
   }
 
   // ---------- Server POST helper ----------
   async function postState(aID, state) {
-    const res = await authFetch(`${API_BASE}/api/state/${aID}`, {
+    const ids = getPyqsIds();
+    const url = ids
+      ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+          ids.examId
+        )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+          ids.chapterId
+        )}`
+      : `${API_BASE}/api/state/${aID}`;
+    const res = await authFetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ state }),
@@ -579,10 +594,10 @@
         console.warn("Server save failed; will retry later.", e);
         // keep dirty=true so periodic/next user action can retry
       }
-      // Also save locally when not using server auth
-      if (authSource !== "server") {
+      // Also save locally when not using server auth (disabled for PYQs)
+      if (authSource !== "server" && !getPyqsIds()) {
         try {
-          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          localStorage.setItem(stateKey(aID), JSON.stringify(questionStates));
           dirty = false;
         } catch {}
       }
@@ -598,7 +613,15 @@
         // our authenticated endpoint.
         const payload = JSON.stringify({ state: questionStates });
         try {
-          authFetch(`${API_BASE}/api/state/${aID}`, {
+          const ids = getPyqsIds();
+          const url = ids
+            ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+                ids.examId
+              )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+                ids.chapterId
+              )}`
+            : `${API_BASE}/api/state/${aID}`;
+          authFetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: payload,
@@ -606,9 +629,9 @@
           });
         } catch {}
         dirty = false;
-      } else {
+      } else if (!getPyqsIds()) {
         try {
-          localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(questionStates));
+          localStorage.setItem(stateKey(aID), JSON.stringify(questionStates));
           dirty = false;
         } catch {}
       }
@@ -640,12 +663,22 @@
       try {
         // Fetch latest state from server and merge with any local progress
         try {
-          const res = await authFetch(`${API_BASE}/api/state/${aID}`);
+          const ids = getPyqsIds();
+          const url = ids
+            ? `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+                ids.examId
+              )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+                ids.chapterId
+              )}`
+            : `${API_BASE}/api/state/${aID}`;
+          const res = await authFetch(url);
           if (res.ok) {
             const server = await res.json();
             if (Array.isArray(server) && server.length) {
               questionStates = mergeStates(server, questionStates);
-              ensureStateLength(window.displayQuestions.length);
+              ensureStateLength(
+                window.originalTotalCount || window.displayQuestions.length
+              );
               questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
               if (currentQuestionID != null) setQuestion(currentQuestionID);
             }
@@ -695,27 +728,38 @@
   let imageWidgetRefreshTimer = 0;
   let internalImageOp = false; // allow programmatic replace/delete
   let suppressWidgetRefresh = false; // skip widget rebuild on atomic ops
-  
-  
 
   // Simple UI wrappers to use site modals if available
   async function uiNotice(message, title = "") {
     try {
-      if (typeof window.showNotice === 'function') return await window.showNotice({ title, message });
+      if (typeof window.showNotice === "function")
+        return await window.showNotice({ title, message });
     } catch {}
-    try { alert(message); } catch {}
+    try {
+      alert(message);
+    } catch {}
   }
   async function uiConfirm(message, title = "") {
     try {
-      if (typeof window.showConfirm === 'function') return await window.showConfirm({ title, message });
+      if (typeof window.showConfirm === "function")
+        return await window.showConfirm({ title, message });
     } catch {}
-    try { return confirm(message); } catch { return false; }
+    try {
+      return confirm(message);
+    } catch {
+      return false;
+    }
   }
   async function uiPrompt(message, def = "", title = "") {
     try {
-      if (typeof window.showPrompt === 'function') return await window.showPrompt({ title, message, defaultValue: def });
+      if (typeof window.showPrompt === "function")
+        return await window.showPrompt({ title, message, defaultValue: def });
     } catch {}
-    try { return prompt(message, def); } catch { return null; }
+    try {
+      return prompt(message, def);
+    } catch {
+      return null;
+    }
   }
 
   function parseImageMeta(text) {
@@ -724,29 +768,38 @@
     const re = /!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})?/g; // markdown image + optional {..}
     let m;
     while ((m = re.exec(text)) != null) {
-      const alt = m[1] || '';
-      const url = m[2] || '';
+      const alt = m[1] || "";
+      const url = m[2] || "";
       let width = null;
       let align = null;
       if (m[3]) {
         const meta = m[3];
-        const w = meta.match(/\bwidth\s*=\s*(\d{2,4})/i) || meta.match(/\bw\s*=\s*(\d{2,4})/i);
+        const w =
+          meta.match(/\bwidth\s*=\s*(\d{2,4})/i) ||
+          meta.match(/\bw\s*=\s*(\d{2,4})/i);
         width = w ? parseInt(w[1], 10) : null;
-        const a = meta.match(/\balign\s*=\s*(left|right|center)/i) || meta.match(/\bfloat\s*=\s*(left|right|center)/i);
+        const a =
+          meta.match(/\balign\s*=\s*(left|right|center)/i) ||
+          meta.match(/\bfloat\s*=\s*(left|right|center)/i);
         align = a ? a[1].toLowerCase() : null;
       }
-      out.push({ from: m.index, to: m.index + m[0].length, alt, url, width, align });
+      out.push({
+        from: m.index,
+        to: m.index + m[0].length,
+        alt,
+        url,
+        width,
+        align,
+      });
     }
     return out;
   }
 
-  
-
   function extractUploadFilename(url) {
     try {
       const u = new URL(url, window.location.origin);
-      const parts = (u.pathname || '').split('/').filter(Boolean);
-      const i = parts.lastIndexOf('uploads');
+      const parts = (u.pathname || "").split("/").filter(Boolean);
+      const i = parts.lastIndexOf("uploads");
       if (i >= 0 && parts[i + 1]) return parts[i + 1];
       return parts[parts.length - 1] || null;
     } catch {
@@ -756,15 +809,26 @@
 
   // --------- Page leave animation (back navigation) ---------
   (function wireLeaveAnimation() {
-    const links = document.querySelectorAll('a.topbar-back');
+    const links = document.querySelectorAll("a.topbar-back");
     links.forEach((a) => {
-      a.addEventListener('click', (e) => {
+      a.addEventListener("click", (e) => {
         // allow modified clicks to open new tab/window
-        if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || a.target === '_blank') return;
+        if (
+          e.ctrlKey ||
+          e.metaKey ||
+          e.shiftKey ||
+          e.altKey ||
+          a.target === "_blank"
+        )
+          return;
         e.preventDefault();
-        try { document.body.classList.add('page-leave'); } catch {}
-        const href = a.getAttribute('href') || './index.html';
-        setTimeout(() => { window.location.href = href; }, 120);
+        try {
+          document.body.classList.add("page-leave");
+        } catch {}
+        const href = a.getAttribute("href") || "./index.html";
+        setTimeout(() => {
+          window.location.href = href;
+        }, 120);
       });
     });
   })();
@@ -774,37 +838,49 @@
       const u = new URL(url, window.location.href);
       const path = String(u.pathname || "");
       // Treat images under our origin '/uploads/' as server-managed uploads
-      return (u.origin === window.location.origin) && /\/uploads\//.test(path);
+      return u.origin === window.location.origin && /\/uploads\//.test(path);
     } catch {
       return false;
     }
   }
 
   function buildImageWidget(cm, meta, marker) {
-    const wrap = document.createElement('span');
-    wrap.className = 'cm-image-widget';
-    wrap.setAttribute('role', 'img');
-    wrap.setAttribute('aria-label', meta.alt || 'image');
+    const wrap = document.createElement("span");
+    wrap.className = "cm-image-widget";
+    wrap.setAttribute("role", "img");
+    wrap.setAttribute("aria-label", meta.alt || "image");
 
-    const img = document.createElement('img');
+    const img = document.createElement("img");
     img.src = meta.url;
-    img.alt = meta.alt || '';
+    img.alt = meta.alt || "";
     img.draggable = false;
-    if (meta.width && Number.isFinite(meta.width)) img.style.width = meta.width + 'px';
+    if (meta.width && Number.isFinite(meta.width))
+      img.style.width = meta.width + "px";
     wrap.appendChild(img);
-    try { img.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(img.src); } catch {} }); } catch {}
+    try {
+      img.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+          showImageOverlay(img.src);
+        } catch {}
+      });
+    } catch {}
     // initial alignment state
-    try { if (meta.align === 'right') wrap.classList.add('align-right'); } catch {}
+    try {
+      if (meta.align === "right") wrap.classList.add("align-right");
+    } catch {}
 
     // Delete button
-    const del = document.createElement('button');
-    del.type = 'button';
-    del.className = 'img-del-btn';
-    del.title = 'Delete image';
-    del.className = 'img-btn img-del-btn';
-    del.innerHTML = '×';
-    del.addEventListener('click', async (e) => {
-      e.preventDefault(); e.stopPropagation();
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "img-del-btn";
+    del.title = "Delete image";
+    del.className = "img-btn img-del-btn";
+    del.innerHTML = "×";
+    del.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       try {
         const serverManaged = isServerUploadUrl(meta.url);
         if (!serverManaged) {
@@ -813,7 +889,7 @@
             const range = marker.find();
             if (range) {
               internalImageOp = true;
-              cm.replaceRange('', range.from, range.to);
+              cm.replaceRange("", range.from, range.to);
               internalImageOp = false;
             }
           } catch {}
@@ -822,54 +898,69 @@
 
         // Server-managed upload: require auth and delete on server first
         try {
-          const fn = typeof window.qbGetToken === 'function' ? window.qbGetToken : null;
-          const token = fn ? String(fn() || '') : '';
+          const fn =
+            typeof window.qbGetToken === "function" ? window.qbGetToken : null;
+          const token = fn ? String(fn() || "") : "";
           if (!token) {
-            try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
-            await uiNotice('Please log in to delete images.', 'Login required');
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            await uiNotice("Please log in to delete images.", "Login required");
             return;
           }
         } catch {}
 
         const filename = extractUploadFilename(meta.url);
-        if (!filename) return uiNotice('Could not determine image filename', 'Delete image');
+        if (!filename)
+          return uiNotice("Could not determine image filename", "Delete image");
         try {
-          const r = await authFetch(`${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`, { method: 'DELETE' });
+          const r = await authFetch(
+            `${API_BASE}/api/upload-image/${encodeURIComponent(filename)}`,
+            { method: "DELETE" }
+          );
           if (r.status === 401) {
-            try { window.dispatchEvent(new Event('qbase:force-login')); } catch {}
-            alert('Please log in to delete images.');
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            alert("Please log in to delete images.");
             return;
           }
-          if (!r.ok) throw new Error('Delete failed');
+          if (!r.ok) throw new Error("Delete failed");
           // Remove token from doc
           try {
             const range = marker.find();
             if (range) {
               internalImageOp = true;
-              cm.replaceRange('', range.from, range.to);
+              cm.replaceRange("", range.from, range.to);
               internalImageOp = false;
             }
           } catch {}
         } catch (err) {
-          await uiNotice('Failed to delete image', 'Error');
+          await uiNotice("Failed to delete image", "Error");
         }
       } catch {}
     });
     wrap.appendChild(del);
-    try { del.innerHTML = '<i class="bi bi-x"></i>'; } catch {}
+    try {
+      del.innerHTML = '<i class="bi bi-x"></i>';
+    } catch {}
 
     // Align-right toggle button (stores align=right in token)
-    const alignBtn = document.createElement('button');
-    alignBtn.type = 'button';
-    alignBtn.className = 'img-btn img-align-right-btn';
+    const alignBtn = document.createElement("button");
+    alignBtn.type = "button";
+    alignBtn.className = "img-btn img-align-right-btn";
     const setAlignBtnState = () => {
-      const isRight = wrap.classList.contains('align-right') || meta.align === 'right';
-      alignBtn.title = isRight ? 'Move image to left' : 'Move image to right';
-      alignBtn.innerHTML = isRight ? '<i class="bi bi-arrow-left"></i>' : '<i class="bi bi-arrow-right"></i>';
+      const isRight =
+        wrap.classList.contains("align-right") || meta.align === "right";
+      alignBtn.title = isRight ? "Move image to left" : "Move image to right";
+      alignBtn.innerHTML = isRight
+        ? '<i class="bi bi-arrow-left"></i>'
+        : '<i class="bi bi-arrow-right"></i>';
     };
     setAlignBtnState();
-    alignBtn.addEventListener('click', (e) => {
-      e.preventDefault(); e.stopPropagation();
+    alignBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       try {
         const range = marker.find();
         if (!range) return;
@@ -877,18 +968,23 @@
         const toIdx = cm.indexFromPos(range.to);
         const text = cm.getValue();
         const token = text.slice(fromIdx, toIdx);
-        const body = token.replace(/\{[^}]*\}\s*$/, '');
+        const body = token.replace(/\{[^}]*\}\s*$/, "");
         const m = token.match(/\{([^}]*)\}\s*$/);
         let curW = null;
         if (m) {
-          const w = m[1].match(/\bwidth\s*=\s*(\d{2,4})/i) || m[1].match(/\bw\s*=\s*(\d{2,4})/i);
+          const w =
+            m[1].match(/\bwidth\s*=\s*(\d{2,4})/i) ||
+            m[1].match(/\bw\s*=\s*(\d{2,4})/i);
           curW = w ? parseInt(w[1], 10) : null;
         }
-        const isRight = /\balign\s*=\s*right/i.test(token) || /\bfloat\s*=\s*right/i.test(token) || wrap.classList.contains('align-right');
+        const isRight =
+          /\balign\s*=\s*right/i.test(token) ||
+          /\bfloat\s*=\s*right/i.test(token) ||
+          wrap.classList.contains("align-right");
         const parts = [];
         if (Number.isFinite(curW)) parts.push(`width=${curW}`);
-        if (!isRight) parts.push('align=right');
-        const metaStr = parts.length ? `{${parts.join(', ')}}` : '';
+        if (!isRight) parts.push("align=right");
+        const metaStr = parts.length ? `{${parts.join(", ")}}` : "";
         const newTok = `${body}${metaStr}`;
         internalImageOp = true;
         const prev = suppressWidgetRefresh;
@@ -896,8 +992,8 @@
         cm.operation(() => {
           cm.replaceRange(newTok, range.from, range.to);
           // reflect state immediately
-          wrap.classList.toggle('align-right', !isRight);
-          meta.align = wrap.classList.contains('align-right') ? 'right' : null;
+          wrap.classList.toggle("align-right", !isRight);
+          meta.align = wrap.classList.contains("align-right") ? "right" : null;
           setAlignBtnState();
           clearImageWidgets();
           rebuildImageWidgets();
@@ -912,8 +1008,16 @@
     const start = { x: 0, y: 0, w: 0, h: 0 };
     let resizing = false; // 'x' | 'y' | 'xy'
     function setWidth(px) {
-      const max = Math.max(80, Math.min(px, wrap.parentElement?.clientWidth ? wrap.parentElement.clientWidth - 16 : px));
-      img.style.width = Math.round(max) + 'px';
+      const max = Math.max(
+        80,
+        Math.min(
+          px,
+          wrap.parentElement?.clientWidth
+            ? wrap.parentElement.clientWidth - 16
+            : px
+        )
+      );
+      img.style.width = Math.round(max) + "px";
     }
     function applyWidthToMarkdown() {
       try {
@@ -923,11 +1027,17 @@
         const toIdx = cm.indexFromPos(range.to);
         const text = cm.getValue();
         const token = text.slice(fromIdx, toIdx);
-        const body = token.replace(/\{[^}]*\}\s*$/, '');
-        const curW = parseInt((img.style.width || '').replace(/px$/, ''), 10);
-        const alignMatch = token.match(/\b(align|float)\s*=\s*(left|right|center)/i);
-        const alignPart = alignMatch ? `, align=${alignMatch[2].toLowerCase()}` : '';
-        const newTok = `${body}{width=${Number.isFinite(curW) ? curW : 0}${alignPart}}`;
+        const body = token.replace(/\{[^}]*\}\s*$/, "");
+        const curW = parseInt((img.style.width || "").replace(/px$/, ""), 10);
+        const alignMatch = token.match(
+          /\b(align|float)\s*=\s*(left|right|center)/i
+        );
+        const alignPart = alignMatch
+          ? `, align=${alignMatch[2].toLowerCase()}`
+          : "";
+        const newTok = `${body}{width=${
+          Number.isFinite(curW) ? curW : 0
+        }${alignPart}}`;
         internalImageOp = true;
         const prev = suppressWidgetRefresh;
         suppressWidgetRefresh = true;
@@ -945,9 +1055,9 @@
       const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
       const dx = (pt.clientX || 0) - start.x;
       const dy = (pt.clientY || 0) - start.y;
-      if (resizing === 'x') {
+      if (resizing === "x") {
         setWidth(start.w + dx);
-      } else if (resizing === 'y') {
+      } else if (resizing === "y") {
         const ratio = start.w / Math.max(1, start.h);
         const newH = Math.max(10, start.h + dy);
         setWidth(newH * ratio);
@@ -959,46 +1069,56 @@
     function onUp(ev) {
       if (!resizing) return;
       resizing = false;
-      document.removeEventListener('mousemove', onMove, true);
-      document.removeEventListener('mouseup', onUp, true);
-      document.removeEventListener('touchmove', onMove, true);
-      document.removeEventListener('touchend', onUp, true);
+      document.removeEventListener("mousemove", onMove, true);
+      document.removeEventListener("mouseup", onUp, true);
+      document.removeEventListener("touchmove", onMove, true);
+      document.removeEventListener("touchend", onUp, true);
       applyWidthToMarkdown();
     }
     function beginResize(ev, mode) {
-      ev.preventDefault(); ev.stopPropagation();
+      ev.preventDefault();
+      ev.stopPropagation();
       const pt = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
       start.x = pt.clientX || 0;
       start.y = pt.clientY || 0;
       const rect = img.getBoundingClientRect();
-      start.w = rect.width; start.h = rect.height;
-      resizing = mode || 'x';
-      document.addEventListener('mousemove', onMove, true);
-      document.addEventListener('mouseup', onUp, true);
-      document.addEventListener('touchmove', onMove, true);
-      document.addEventListener('touchend', onUp, true);
+      start.w = rect.width;
+      start.h = rect.height;
+      resizing = mode || "x";
+      document.addEventListener("mousemove", onMove, true);
+      document.addEventListener("mouseup", onUp, true);
+      document.addEventListener("touchmove", onMove, true);
+      document.addEventListener("touchend", onUp, true);
     }
-    const edge = document.createElement('span');
-    edge.className = 'img-resize-handle';
-    edge.addEventListener('mousedown', (e) => beginResize(e, 'x'));
-    edge.addEventListener('touchstart', (e) => beginResize(e, 'x'), { passive: false });
+    const edge = document.createElement("span");
+    edge.className = "img-resize-handle";
+    edge.addEventListener("mousedown", (e) => beginResize(e, "x"));
+    edge.addEventListener("touchstart", (e) => beginResize(e, "x"), {
+      passive: false,
+    });
     wrap.appendChild(edge);
-    const corner = document.createElement('span');
-    corner.className = 'img-resize-corner';
-    corner.addEventListener('mousedown', (e) => beginResize(e, 'xy'));
-    corner.addEventListener('touchstart', (e) => beginResize(e, 'xy'), { passive: false });
+    const corner = document.createElement("span");
+    corner.className = "img-resize-corner";
+    corner.addEventListener("mousedown", (e) => beginResize(e, "xy"));
+    corner.addEventListener("touchstart", (e) => beginResize(e, "xy"), {
+      passive: false,
+    });
     wrap.appendChild(corner);
-    const bottom = document.createElement('span');
-    bottom.className = 'img-resize-bottom';
-    bottom.addEventListener('mousedown', (e) => beginResize(e, 'y'));
-    bottom.addEventListener('touchstart', (e) => beginResize(e, 'y'), { passive: false });
+    const bottom = document.createElement("span");
+    bottom.className = "img-resize-bottom";
+    bottom.addEventListener("mousedown", (e) => beginResize(e, "y"));
+    bottom.addEventListener("touchstart", (e) => beginResize(e, "y"), {
+      passive: false,
+    });
     wrap.appendChild(bottom);
 
     return wrap;
   }
 
   function clearImageWidgets() {
-    try { imageMarks.forEach((mk) => mk.clear()); } catch {}
+    try {
+      imageMarks.forEach((mk) => mk.clear());
+    } catch {}
     imageMarks = [];
   }
 
@@ -1013,7 +1133,7 @@
         const from = cm.posFromIndex(meta.from);
         const to = cm.posFromIndex(meta.to);
         const widget = buildImageWidget(cm, meta, {
-          find: () => mk.find()
+          find: () => mk.find(),
         });
         const mk = cm.getDoc().markText(from, to, {
           replacedWith: widget,
@@ -1030,8 +1150,6 @@
 
   // (MathQuill inline editor removed)
 
-  
-
   function scheduleImageWidgets() {
     clearTimeout(imageWidgetRefreshTimer);
     imageWidgetRefreshTimer = setTimeout(rebuildImageWidgets, 120);
@@ -1040,12 +1158,12 @@
   function updateNotesState(val) {
     try {
       if (currentQuestionID != null && Array.isArray(questionStates)) {
-        ensureStateLength(window.displayQuestions?.length || 0);
-        if (questionStates[currentQuestionID]) {
-          questionStates[currentQuestionID].notes = val;
-          markDirty();
-          scheduleSave(aID);
-        }
+        const orig = (window.questionIndexMap || [])[currentQuestionID];
+        if (orig == null) return;
+        if (!questionStates[orig]) questionStates[orig] = defaultState();
+        questionStates[orig].notes = val;
+        markDirty();
+        scheduleSave(aID);
       }
     } catch {}
   }
@@ -1057,7 +1175,9 @@
       if (e.key === "Escape") {
         e.preventDefault();
         e.stopPropagation();
-        try { textarea.blur(); } catch {}
+        try {
+          textarea.blur();
+        } catch {}
       }
     });
     const onInput = () => {
@@ -1088,8 +1208,14 @@
       pv.innerHTML = html;
       // Make preview images clickable to open overlay
       try {
-        pv.querySelectorAll('img').forEach((im) => {
-          im.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); try { showImageOverlay(im.src); } catch {} });
+        pv.querySelectorAll("img").forEach((im) => {
+          im.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            try {
+              showImageOverlay(im.src);
+            } catch {}
+          });
         });
       } catch {}
     } catch {}
@@ -1100,11 +1226,18 @@
     if (!host || notesMDE) return;
 
     // Ensure the textarea works as a fallback while EasyMDE loads
-    if (!fallbackTextarea && String(host.tagName || "").toLowerCase() === "textarea") {
+    if (
+      !fallbackTextarea &&
+      String(host.tagName || "").toLowerCase() === "textarea"
+    ) {
       fallbackTextarea = host;
       bindFallbackTextarea(fallbackTextarea);
-      if (typeof window.focusNotesEditor !== 'function') {
-        window.focusNotesEditor = () => { try { fallbackTextarea?.focus(); } catch {} };
+      if (typeof window.focusNotesEditor !== "function") {
+        window.focusNotesEditor = () => {
+          try {
+            fallbackTextarea?.focus();
+          } catch {}
+        };
       }
     }
 
@@ -1126,7 +1259,12 @@
 
           // If we bound fallback listeners, remove them to avoid duplicate updates
           if (fallbackTextarea && fallbackInputHandler) {
-            try { fallbackTextarea.removeEventListener("input", fallbackInputHandler); } catch {}
+            try {
+              fallbackTextarea.removeEventListener(
+                "input",
+                fallbackInputHandler
+              );
+            } catch {}
             fallbackInputHandler = null;
           }
 
@@ -1141,53 +1279,91 @@
               // Render markdown with image metadata support; strip {..} from visible HTML
               let html;
               try {
-                const stripped = String(plainText).replace(/!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})/g, '![$1]($2)');
-                html = (notesMDE && typeof notesMDE.markdown === 'function') ? notesMDE.markdown(stripped) : stripped;
-              } catch { html = plainText; }
+                const stripped = String(plainText).replace(
+                  /!\[(.*?)\]\(([^)]+?)\)(\{[^}]*\})/g,
+                  "![$1]($2)"
+                );
+                html =
+                  notesMDE && typeof notesMDE.markdown === "function"
+                    ? notesMDE.markdown(stripped)
+                    : stripped;
+              } catch {
+                html = plainText;
+              }
               try {
                 const widthMap = new Map();
                 const alignMap = new Map();
-                parseImageMeta(plainText).forEach(m => {
+                parseImageMeta(plainText).forEach((m) => {
                   if (m.width) widthMap.set(m.url, m.width);
-                  if (m.align) alignMap.set(m.url, (m.align || '').toLowerCase());
+                  if (m.align)
+                    alignMap.set(m.url, (m.align || "").toLowerCase());
                 });
-                const doc = new DOMParser().parseFromString(String(html), 'text/html');
-                doc.querySelectorAll('img').forEach((img) => {
-                  const src = img.getAttribute('src');
+                const doc = new DOMParser().parseFromString(
+                  String(html),
+                  "text/html"
+                );
+                doc.querySelectorAll("img").forEach((img) => {
+                  const src = img.getAttribute("src");
                   const w = widthMap.get(src);
                   const al = alignMap.get(src);
                   if (w) {
-                    img.style.maxWidth = '100%';
-                    img.style.width = String(w) + 'px';
-                    img.style.height = 'auto';
+                    img.style.maxWidth = "100%";
+                    img.style.width = String(w) + "px";
+                    img.style.height = "auto";
                   }
-                  if (al === 'right') {
-                    img.classList.add('preview-align-right');
+                  if (al === "right") {
+                    img.classList.add("preview-align-right");
                   }
                 });
                 return doc.body.innerHTML;
-              } catch { return html; }
+              } catch {
+                return html;
+              }
             },
             toolbar: [
-              { name: "bold", action: EasyMDE.toggleBold, className: "bi bi-type-bold", title: "Bold" },
-              { name: "italic", action: EasyMDE.toggleItalic, className: "bi bi-type-italic", title: "Italic" },
-              { name: "heading", action: EasyMDE.toggleHeadingSmaller, className: "bi bi-type-h1", title: "Heading" },
+              {
+                name: "bold",
+                action: EasyMDE.toggleBold,
+                className: "bi bi-type-bold",
+                title: "Bold",
+              },
+              {
+                name: "italic",
+                action: EasyMDE.toggleItalic,
+                className: "bi bi-type-italic",
+                title: "Italic",
+              },
+              {
+                name: "heading",
+                action: EasyMDE.toggleHeadingSmaller,
+                className: "bi bi-type-h1",
+                title: "Heading",
+              },
               "|",
-              
+
               {
                 name: "image-upload",
                 className: "bi bi-image",
                 title: "Upload Image",
                 action: function (editor, ev) {
                   try {
-                    if (ev && typeof ev.preventDefault === "function") ev.preventDefault();
+                    if (ev && typeof ev.preventDefault === "function")
+                      ev.preventDefault();
                     // Auth gate
                     try {
-                      const getTok = (typeof window.qbGetToken === "function" && window.qbGetToken) || null;
+                      const getTok =
+                        (typeof window.qbGetToken === "function" &&
+                          window.qbGetToken) ||
+                        null;
                       const token = getTok ? String(getTok() || "") : "";
                       if (!token) {
-                        try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
-                        uiNotice("Please log in to upload images.", 'Login required');
+                        try {
+                          window.dispatchEvent(new Event("qbase:force-login"));
+                        } catch {}
+                        uiNotice(
+                          "Please log in to upload images.",
+                          "Login required"
+                        );
                         return false;
                       }
                     } catch {}
@@ -1204,17 +1380,31 @@
                       const file = pick.files && pick.files[0];
                       if (!file) return;
                       const fn = editor?.options?.imageUploadFunction;
-                      if (typeof fn !== "function") { uiNotice("Image upload not available."); return; }
+                      if (typeof fn !== "function") {
+                        uiNotice("Image upload not available.");
+                        return;
+                      }
                       fn(
                         file,
                         function (url) {
-                          try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
+                          try {
+                            editor.codemirror.replaceSelection(`![](${url})`);
+                            editor.codemirror.focus();
+                          } catch {}
                         },
-                        function (err) { uiNotice(err || "Upload failed", 'Upload'); }
+                        function (err) {
+                          uiNotice(err || "Upload failed", "Upload");
+                        }
                       );
-                      try { pick.remove(); } catch {}
+                      try {
+                        pick.remove();
+                      } catch {}
                     };
-                    setTimeout(() => { try { pick.click(); } catch {} }, 0);
+                    setTimeout(() => {
+                      try {
+                        pick.click();
+                      } catch {}
+                    }, 0);
                   } catch {}
                   return false;
                 },
@@ -1224,12 +1414,22 @@
                 className: "bi bi-link-45deg",
                 title: "Insert Image by URL",
                 action: async function (editor, ev) {
-                  try { if (ev && typeof ev.preventDefault === 'function') ev.preventDefault(); } catch {}
-                  const url = await uiPrompt('Enter image URL (https://...)', 'https://', 'Insert image');
+                  try {
+                    if (ev && typeof ev.preventDefault === "function")
+                      ev.preventDefault();
+                  } catch {}
+                  const url = await uiPrompt(
+                    "Enter image URL (https://...)",
+                    "https://",
+                    "Insert image"
+                  );
                   if (!url) return false;
-                  try { editor.codemirror.replaceSelection(`![](${url})`); editor.codemirror.focus(); } catch {}
+                  try {
+                    editor.codemirror.replaceSelection(`![](${url})`);
+                    editor.codemirror.focus();
+                  } catch {}
                   return false;
-                }
+                },
               },
             ],
             imageUpload: true,
@@ -1238,17 +1438,29 @@
             imageUploadFunction: function (file, onSuccess, onError) {
               (async function () {
                 try {
-                  try { if (typeof loadConfig === "function" && (!window.API_BASE || !String(window.API_BASE))) await loadConfig(); } catch {}
+                  try {
+                    if (
+                      typeof loadConfig === "function" &&
+                      (!window.API_BASE || !String(window.API_BASE))
+                    )
+                      await loadConfig();
+                  } catch {}
                   const fd = new FormData();
                   fd.append("image", file);
-                  const base = (typeof API_BASE === "string" && API_BASE)
-                    ? API_BASE
-                    : (location.origin && location.origin.startsWith("http") ? location.origin : "http://localhost:3000");
+                  const base =
+                    typeof API_BASE === "string" && API_BASE
+                      ? API_BASE
+                      : location.origin && location.origin.startsWith("http")
+                      ? location.origin
+                      : "http://localhost:3000";
                   const url = base.replace(/\/$/, "") + "/api/upload-image";
-                  const fetcher = (typeof authFetch === "function") ? authFetch : fetch;
+                  const fetcher =
+                    typeof authFetch === "function" ? authFetch : fetch;
                   const r = await fetcher(url, { method: "POST", body: fd });
                   if (r && r.status === 401) {
-                    try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
+                    try {
+                      window.dispatchEvent(new Event("qbase:force-login"));
+                    } catch {}
                     throw new Error("Please log in to upload images");
                   }
                   if (!r.ok) throw new Error(`Upload failed (${r.status})`);
@@ -1266,9 +1478,13 @@
           try {
             notesMDE.codemirror.on("change", function () {
               if (suppressNotesChange) return;
-              try { updateNotesState(notesMDE.value()); } catch {}
+              try {
+                updateNotesState(notesMDE.value());
+              } catch {}
               // If in preview, refresh its content lazily
-              try { refreshPreview(notesMDE); } catch {}
+              try {
+                refreshPreview(notesMDE);
+              } catch {}
               // Refresh image widgets for any newly-added tokens
               if (!suppressWidgetRefresh) {
                 scheduleImageWidgets();
@@ -1278,7 +1494,7 @@
 
           // Prevent manual deletion of image markdown; require using delete button
           try {
-            notesMDE.codemirror.on('beforeChange', function (cm, change) {
+            notesMDE.codemirror.on("beforeChange", function (cm, change) {
               try {
                 if (internalImageOp) return; // allow our own programmatic edits
                 if (!change || !change.from || !change.to) return;
@@ -1286,10 +1502,17 @@
                 const fromIdx = doc.indexFromPos(change.from);
                 const toIdx = doc.indexFromPos(change.to);
                 const metas = parseImageMeta(doc.getValue());
-                const intersects = metas.some(m => fromIdx < m.to && toIdx > m.from);
-                if (intersects && (change.origin || '') !== 'setValue') {
+                const intersects = metas.some(
+                  (m) => fromIdx < m.to && toIdx > m.from
+                );
+                if (intersects && (change.origin || "") !== "setValue") {
                   change.cancel();
-                  try { uiNotice('Use the image delete button to remove images.', 'Images'); } catch {}
+                  try {
+                    uiNotice(
+                      "Use the image delete button to remove images.",
+                      "Images"
+                    );
+                  } catch {}
                 }
               } catch {}
             });
@@ -1299,19 +1522,24 @@
           try {
             const _initVal = String(notesMDE.value() || "").trim();
             const shouldPreview = _initVal.length > 0;
-            if (shouldPreview && !notesMDE.isPreviewActive()) notesMDE.togglePreview();
+            if (shouldPreview && !notesMDE.isPreviewActive())
+              notesMDE.togglePreview();
           } catch {}
 
           // Toggle preview based on focus/blur
           try {
             notesMDE.codemirror.on("focus", function () {
-              try { if (notesMDE.isPreviewActive()) notesMDE.togglePreview(); } catch {}
+              try {
+                if (notesMDE.isPreviewActive()) notesMDE.togglePreview();
+              } catch {}
             });
             notesMDE.codemirror.on("blur", function () {
               try {
                 setTimeout(function () {
                   try {
-                    const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+                    const container = notesMDE.codemirror
+                      .getWrapperElement()
+                      .closest(".EasyMDEContainer");
                     const ae = document.activeElement;
                     if (container && ae && container.contains(ae)) return; // still in toolbar
                     const _val = String(notesMDE.value() || "").trim();
@@ -1330,31 +1558,46 @@
 
           // Allow clicking the preview area to enter edit mode
           try {
-            const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
+            const container = notesMDE.codemirror
+              .getWrapperElement()
+              .closest(".EasyMDEContainer");
             if (container && !container.dataset.previewClickBound) {
               container.dataset.previewClickBound = "1";
-              container.addEventListener("click", function (ev) {
-                try {
-                  if (!notesMDE.isPreviewActive()) return; // already in edit mode
-                  if (ev.target.closest('.editor-toolbar')) return; // toolbar interactions
-                  const pv = container.querySelector('.editor-preview, .editor-preview-active');
-                  // Do not toggle to edit if clicking an image; let image handler open overlay
-                  if (pv && pv.contains(ev.target)) {
-                    if (ev.target && (String(ev.target.tagName||'').toLowerCase()==='img' || ev.target.closest('img'))) {
-                      try {
-                        const img = ev.target.closest('img');
-                        if (img && typeof showImageOverlay === 'function') showImageOverlay(img.src);
-                      } catch {}
-                      return;
+              container.addEventListener(
+                "click",
+                function (ev) {
+                  try {
+                    if (!notesMDE.isPreviewActive()) return; // already in edit mode
+                    if (ev.target.closest(".editor-toolbar")) return; // toolbar interactions
+                    const pv = container.querySelector(
+                      ".editor-preview, .editor-preview-active"
+                    );
+                    // Do not toggle to edit if clicking an image; let image handler open overlay
+                    if (pv && pv.contains(ev.target)) {
+                      if (
+                        ev.target &&
+                        (String(ev.target.tagName || "").toLowerCase() ===
+                          "img" ||
+                          ev.target.closest("img"))
+                      ) {
+                        try {
+                          const img = ev.target.closest("img");
+                          if (img && typeof showImageOverlay === "function")
+                            showImageOverlay(img.src);
+                        } catch {}
+                        return;
+                      }
+                      ev.preventDefault();
+                      notesMDE.togglePreview();
+                      notesMDE.codemirror.focus();
                     }
-                    ev.preventDefault();
-                    notesMDE.togglePreview();
-                    notesMDE.codemirror.focus();
-                  }
-                } catch {}
-              }, true);
-              const style = document.createElement('style');
-              style.textContent = ".EasyMDEContainer .editor-preview{cursor:text;}";
+                  } catch {}
+                },
+                true
+              );
+              const style = document.createElement("style");
+              style.textContent =
+                ".EasyMDEContainer .editor-preview{cursor:text;}";
               document.head.appendChild(style);
             }
           } catch {}
@@ -1362,58 +1605,111 @@
           // Enable paste/drag image upload while in preview
           try {
             (function bindPreviewUploadHandlers() {
-              const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
-              if (!container || container.dataset.previewUploadBound === '1') return;
-              container.dataset.previewUploadBound = '1';
+              const container = notesMDE.codemirror
+                .getWrapperElement()
+                .closest(".EasyMDEContainer");
+              if (!container || container.dataset.previewUploadBound === "1")
+                return;
+              container.dataset.previewUploadBound = "1";
 
               function maybeUpload(files) {
                 try {
-                  const list = Array.from(files || []).filter((f) => f && /^image\//i.test(f.type));
+                  const list = Array.from(files || []).filter(
+                    (f) => f && /^image\//i.test(f.type)
+                  );
                   if (!list.length) return false;
                   const fn = notesMDE?.options?.imageUploadFunction;
-                  if (typeof fn !== 'function') return false;
+                  if (typeof fn !== "function") return false;
                   const file = list[0];
                   fn(
                     file,
                     function (url) {
                       try {
-                        if (notesMDE.isPreviewActive()) notesMDE.togglePreview();
+                        if (notesMDE.isPreviewActive())
+                          notesMDE.togglePreview();
                         notesMDE.codemirror.replaceSelection(`![](${url})`);
                         notesMDE.codemirror.focus();
                       } catch {}
                     },
-                    function (err) { try { alert(err || 'Upload failed'); } catch {} }
+                    function (err) {
+                      try {
+                        alert(err || "Upload failed");
+                      } catch {}
+                    }
                   );
                   return true;
-                } catch { return false; }
+                } catch {
+                  return false;
+                }
               }
 
-              function hasFiles(e) { const dt = e && e.dataTransfer; return !!(dt && dt.files && dt.files.length); }
+              function hasFiles(e) {
+                const dt = e && e.dataTransfer;
+                return !!(dt && dt.files && dt.files.length);
+              }
 
-              container.addEventListener('dragover', function (e) { if (!hasFiles(e)) return; e.preventDefault(); try { e.dataTransfer.dropEffect = 'copy'; } catch {} }, true);
-              container.addEventListener('drop', function (e) { if (!hasFiles(e)) return; e.preventDefault(); maybeUpload(e.dataTransfer.files); }, true);
+              container.addEventListener(
+                "dragover",
+                function (e) {
+                  if (!hasFiles(e)) return;
+                  e.preventDefault();
+                  try {
+                    e.dataTransfer.dropEffect = "copy";
+                  } catch {}
+                },
+                true
+              );
+              container.addEventListener(
+                "drop",
+                function (e) {
+                  if (!hasFiles(e)) return;
+                  e.preventDefault();
+                  maybeUpload(e.dataTransfer.files);
+                },
+                true
+              );
 
               function handlePasteEvent(e) {
                 try {
                   // Only handle when preview is active; avoid duplicating EasyMDE's edit-mode paste handler
                   if (!notesMDE || !notesMDE.isPreviewActive()) return;
                   if (e.__notesPasteHandled) return;
-                  const cd = e.clipboardData; if (!cd) return;
+                  const cd = e.clipboardData;
+                  if (!cd) return;
                   const files = [];
-                  for (let i = 0; i < cd.items.length; i++) { const it = cd.items[i]; if (it && it.kind === 'file') { const f = it.getAsFile(); if (f) files.push(f); } }
-                  if (files.length) { e.preventDefault(); e.__notesPasteHandled = true; maybeUpload(files); }
+                  for (let i = 0; i < cd.items.length; i++) {
+                    const it = cd.items[i];
+                    if (it && it.kind === "file") {
+                      const f = it.getAsFile();
+                      if (f) files.push(f);
+                    }
+                  }
+                  if (files.length) {
+                    e.preventDefault();
+                    e.__notesPasteHandled = true;
+                    maybeUpload(files);
+                  }
                 } catch {}
               }
-              container.addEventListener('paste', handlePasteEvent, true);
+              container.addEventListener("paste", handlePasteEvent, true);
 
-              function globalGuard(e) { const dt = e && e.dataTransfer; if (dt && dt.files && dt.files.length) { e.preventDefault(); } }
-              window.addEventListener('dragover', globalGuard, true);
-              window.addEventListener('drop', globalGuard, true);
+              function globalGuard(e) {
+                const dt = e && e.dataTransfer;
+                if (dt && dt.files && dt.files.length) {
+                  e.preventDefault();
+                }
+              }
+              window.addEventListener("dragover", globalGuard, true);
+              window.addEventListener("drop", globalGuard, true);
             })();
           } catch {}
 
           // Focus helper for hotkeys
-          window.focusNotesEditor = () => { try { notesMDE?.codemirror?.focus(); } catch {} };
+          window.focusNotesEditor = () => {
+            try {
+              notesMDE?.codemirror?.focus();
+            } catch {}
+          };
           // Build initial image widgets
           scheduleImageWidgets();
         } catch (e) {
@@ -1427,11 +1723,15 @@
 
   // Expose setter used when switching questions
   window.setNotesInEditor = function setNotesInEditor(text) {
-    try { initNotesEditor(); } catch {}
+    try {
+      initNotesEditor();
+    } catch {}
     const val = String(text || "");
     if (notesMDE) {
       suppressNotesChange = true;
-      try { notesMDE.value(val); } catch {}
+      try {
+        notesMDE.value(val);
+      } catch {}
       suppressNotesChange = false;
       try {
         const _trim = val.trim();
@@ -1439,30 +1739,43 @@
         if (_trim.length > 0) {
           // Non-empty: show preview right away
           if (!notesMDE.isPreviewActive()) {
-            try { notesMDE.togglePreview(); } catch {}
+            try {
+              notesMDE.togglePreview();
+            } catch {}
           }
         } else {
           // Empty: keep editor visible so placeholder shows
           if (notesMDE.isPreviewActive()) {
-            try { notesMDE.togglePreview(); } catch {}
+            try {
+              notesMDE.togglePreview();
+            } catch {}
           }
         }
         // If in preview now, render the preview content
         if (notesMDE.isPreviewActive()) {
-          const container = notesMDE.codemirror.getWrapperElement().closest('.EasyMDEContainer');
-          const pv = container?.querySelector('.editor-preview');
+          const container = notesMDE.codemirror
+            .getWrapperElement()
+            .closest(".EasyMDEContainer");
+          const pv = container?.querySelector(".editor-preview");
           if (pv) {
             let html;
             try {
-              html = typeof notesMDE.options.previewRender === 'function'
-                ? notesMDE.options.previewRender(val, pv)
-                : (typeof notesMDE.markdown === 'function' ? notesMDE.markdown(val) : val);
-            } catch { html = val; }
+              html =
+                typeof notesMDE.options.previewRender === "function"
+                  ? notesMDE.options.previewRender(val, pv)
+                  : typeof notesMDE.markdown === "function"
+                  ? notesMDE.markdown(val)
+                  : val;
+            } catch {
+              html = val;
+            }
             pv.innerHTML = html;
           }
         }
       } catch {}
-      try { scheduleImageWidgets(); } catch {}
+      try {
+        scheduleImageWidgets();
+      } catch {}
     } else if (fallbackTextarea) {
       fallbackTextarea.value = val;
     } else {
@@ -1476,7 +1789,7 @@
   };
 
   // Provide a default focus helper that initializes editor on demand
-  if (typeof window.focusNotesEditor !== 'function') {
+  if (typeof window.focusNotesEditor !== "function") {
     window.focusNotesEditor = () => {
       try {
         initNotesEditor();
@@ -1485,8 +1798,6 @@
       } catch {}
     };
   }
-
-  
 
   // ---------- App state ----------
   let questionData;
@@ -1512,7 +1823,10 @@
   // Numerical input
   const numericalInput = document.getElementById("numericalInput");
   numericalInput.addEventListener("input", () => {
-    const qState = questionStates[currentQuestionID];
+    const origIdx = window.questionIndexMap?.[currentQuestionID];
+    if (origIdx == null) return;
+    const qState =
+      questionStates[origIdx] || (questionStates[origIdx] = defaultState());
     const raw = numericalInput.value.trim();
 
     if (raw === "") {
@@ -1529,7 +1843,9 @@
   });
 
   // Initialize the notes editor once the DOM is ready
-  try { initNotesEditor(); } catch {}
+  try {
+    initNotesEditor();
+  } catch {}
 
   // Reuse modal helper from navbar.js if available, else fallback to confirm
   async function confirmReset() {
@@ -1556,30 +1872,97 @@
       try {
         // Preserve per-question notes while resetting progress/answers
         const preservedNotes = Array.isArray(questionStates)
-          ? questionStates.map((s) => (s && typeof s.notes === "string" ? s.notes : ""))
+          ? questionStates.map((s) =>
+              s && typeof s.notes === "string" ? s.notes : ""
+            )
           : [];
 
         // Build a fresh state array with notes carried over
-        const resetStates = Array(window.displayQuestions.length)
+        const resetStates = Array(
+          window.originalTotalCount || window.displayQuestions.length
+        )
           .fill()
-          .map((_, i) => ({ ...defaultState(), notes: preservedNotes[i] || "" }));
+          .map((_, i) => ({
+            ...defaultState(),
+            notes: preservedNotes[i] || "",
+          }));
 
         if (authSource === "server") {
           // Write reset state (with notes kept) to server
           await postState(aID, resetStates);
           questionStates = resetStates;
-        } else {
-          // Local fallback: replace stored state instead of removing it
+        } else if (!getPyqsIds()) {
+          // Local fallback for non-PYQs only
           try {
-            localStorage.setItem(`qbase:${aID}:state`, JSON.stringify(resetStates));
+            localStorage.setItem(
+              `qbase:${aID}:state`,
+              JSON.stringify(resetStates)
+            );
           } catch {}
+          questionStates = resetStates;
+        } else {
+          // In PYQs mode without server auth: keep in-memory only
           questionStates = resetStates;
         }
 
+        // Also clear all saved question colors for this assignment/chapter
+        try {
+          const ids = getPyqsIds();
+          if (ids) {
+            // Fetch all PYQs marks for this chapter and delete them one by one
+            try {
+              const listResp = await authFetch(
+                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`,
+                { cache: 'no-store' }
+              );
+              if (listResp.ok) {
+                const arr = await listResp.json();
+                if (Array.isArray(arr)) {
+                  for (const m of arr) {
+                    const qi = Number(m?.questionIndex);
+                    if (!Number.isNaN(qi)) {
+                      try {
+                        await authFetch(
+                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}/${qi}`,
+                          { method: 'DELETE' }
+                        );
+                      } catch {}
+                    }
+                  }
+                }
+              }
+            } catch {}
+          } else {
+            // Regular assignment fallback: clear all marks for this assignment
+            try {
+              const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+              if (listResp.ok) {
+                const all = await listResp.json();
+                const mine = Array.isArray(all)
+                  ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+                  : [];
+                for (const m of mine) {
+                  const qi = Number(m?.questionIndex);
+                  if (!Number.isNaN(qi)) {
+                    try {
+                      await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' });
+                    } catch {}
+                  }
+                }
+              }
+            } catch {}
+          }
+        } catch {}
+
         // Refresh UI to first question
-        questionButtons.forEach((btn) =>
-          evaluateQuestionButtonColor(btn.dataset.qid)
-        );
+        // Use display index for PYQs buttons (dataset.displayIdx), not legacy dataset.qid
+        questionButtons.forEach((btn) => {
+          const idx = Number(btn?.dataset?.displayIdx);
+          if (!Number.isNaN(idx)) evaluateQuestionButtonColor(idx);
+        });
+        // Refresh color indicators and picker selection
+        try { updateColorIndicators(); } catch {}
+        try { updateColorPickerSelection(); } catch {}
         clickQuestionButton(0);
         dirty = false;
       } catch (e) {
@@ -1599,12 +1982,18 @@
     if (currentQuestionID == null) return;
     const qID = currentQuestionID;
     const originalIdx = window.questionIndexMap[qID];
-    const q = questionData.questions[originalIdx];
+
+    // ✓ FIX: Use allQuestionsMap
+    const q = window.allQuestionsMap
+      ? window.allQuestionsMap[originalIdx]
+      : questionData.questions[originalIdx];
 
     // Fully reset state (time = 0 now) (without resetting notes)
-    const originalNotes = questionStates[qID]['notes']
-    questionStates[qID] = { ...defaultState(), time: 0 };
-    questionStates[qID]['notes'] = originalNotes
+    const originalNotes =
+      (questionStates[originalIdx] && questionStates[originalIdx]["notes"]) ||
+      "";
+    questionStates[originalIdx] = { ...defaultState(), time: 0 };
+    questionStates[originalIdx]["notes"] = originalNotes;
 
     // Clear visuals + unlock
     if (q.qType === "SMCQ" || q.qType === "MMCQ") {
@@ -1625,7 +2014,10 @@
       if (numericalAnswer) numericalAnswer.parentElement.style.display = "none";
     }
 
-    // Hide reset, show check answer again
+    // Hide solution; Hide reset, show check answer again
+    try {
+      document.getElementById("solutionSection").style.display = "none";
+    } catch {}
     document.getElementById("reset-question").classList.add("d-none");
     document.getElementById("check-answer").classList.remove("d-none");
 
@@ -1650,6 +2042,33 @@
     checkCurrentAnswer();
   });
 
+  // Filters info button (from list view)
+  try {
+    const btnInfo = document.getElementById("filters-info-btn");
+    if (btnInfo) {
+      btnInfo.addEventListener("click", async () => {
+        const info =
+          typeof window !== "undefined" &&
+          (window.__ASSIGNMENT_FILTER_INFO__ || "No filters");
+        try {
+          if (typeof window.showModal === "function") {
+            await window.showModal({
+              title: "Active Filters",
+              bodyHTML: `<div class="small">${info || "No filters"}</div>`,
+              buttons: [
+                { text: "OK", className: "btn btn-primary", value: true },
+              ],
+            });
+          } else {
+            alert(info);
+          }
+        } catch {
+          alert(info);
+        }
+      });
+    }
+  } catch {}
+
   // Bookmark functionality
   document.getElementById("bookmark-btn").addEventListener("click", () => {
     if (currentQuestionID == null) return;
@@ -1665,46 +2084,56 @@
 
   // Quick color picker near bookmark icon
   (function wireQColorPicker() {
-    const picker = document.getElementById('qcolor-picker');
+    const picker = document.getElementById("qcolor-picker");
     if (!picker) return;
     // Toggle expand/collapse when clicking the picker background
-    picker.addEventListener('click', async (e) => {
-      const chip = e.target.closest('.qcolor-chip');
+    picker.addEventListener("click", async (e) => {
+      const chip = e.target.closest(".qcolor-chip");
       if (!chip) {
-        picker.classList.toggle('collapsed');
+        picker.classList.toggle("collapsed");
         return;
       }
       // If collapsed and clicking the selected chip, expand instead of re-setting
-      if (picker.classList.contains('collapsed') && chip.classList.contains('selected')) {
-        picker.classList.remove('collapsed');
+      if (
+        picker.classList.contains("collapsed") &&
+        chip.classList.contains("selected")
+      ) {
+        picker.classList.remove("collapsed");
         return;
       }
       // Select a color (or none)
       if (currentQuestionID == null) return;
-      const val = String(chip.getAttribute('data-color') || '').trim();
+      const val = String(chip.getAttribute("data-color") || "").trim();
       let ok = true;
-      if (!val || val.toLowerCase() === 'none') ok = await clearQuestionColor();
+      if (!val || val.toLowerCase() === "none") ok = await clearQuestionColor();
       else ok = await setQuestionColor(val);
       if (ok) {
         updateColorIndicators();
         updateColorPickerSelection();
         // collapse after choosing
-        picker.classList.add('collapsed');
+        picker.classList.add("collapsed");
       }
     });
     // Click outside to collapse
-    document.addEventListener('click', (e) => {
+    document.addEventListener("click", (e) => {
       if (!picker) return;
       if (picker.contains(e.target)) return;
-      picker.classList.add('collapsed');
+      picker.classList.add("collapsed");
     });
   })();
 
   function checkCurrentAnswer() {
     const qID = currentQuestionID;
     const originalIdx = window.questionIndexMap[qID];
-    const q = questionData.questions[originalIdx];
-    const st = questionStates[qID];
+
+    // ✓ FIX: Use allQuestionsMap
+    const q = window.allQuestionsMap
+      ? window.allQuestionsMap[originalIdx]
+      : questionData.questions[originalIdx];
+
+    const st =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
 
     if (!st) return;
 
@@ -1776,39 +2205,117 @@
     markDirty();
     scheduleSave(aID);
 
+    // Show solution now that it's evaluated
+    try {
+      showSolution(q);
+    } catch {}
+
     // Update question grid color
     evaluateQuestionButtonColor(qID);
   }
 
+  function showSolution(question) {
+    const host = document.getElementById("solutionSection");
+    if (!host) return;
+    const textEl = document.getElementById("solutionText");
+    const imgWrap = document.getElementById("solutionImage");
+    const hasText = !!(
+      question &&
+      question.solutionText &&
+      String(question.solutionText).trim()
+    );
+    const hasImage = !!(question && question.solutionImage);
+    if (hasText) {
+      renderHTML(textEl, String(question.solutionText || ""));
+      try {
+        renderMathInElement && renderMathInElement(textEl, katexOptions);
+      } catch {}
+    } else {
+      textEl.innerHTML = "";
+    }
+    if (hasImage) {
+      const imgSrc = String(question.solutionImage || "");
+      imgWrap.style.display = "";
+      imgWrap.innerHTML = `<img src="${imgSrc}" alt="Solution image" class="q-image" loading="lazy" decoding="async">`;
+      try {
+        imgWrap
+          .querySelector("img")
+          .addEventListener("click", () => showImageOverlay(imgSrc));
+      } catch {}
+    } else {
+      imgWrap.style.display = "none";
+      imgWrap.innerHTML = "";
+    }
+    host.style.display = hasText || hasImage ? "" : "none";
+  }
+
   // ---------- Bootstrap: fetch assignment, build UI, load state ----------
   // Show loading skeleton while fetching questions
-  try { document.body.classList.add("q-loading"); } catch {}
-  fetch(`./data/question_data/${aID}/assignment.json`)
-    .then((res) => res.json())
-    .then(async (data) => {
+  try {
+    document.body.classList.add("q-loading");
+  } catch {}
+  const __customLoader =
+    (typeof window !== "undefined" && window.__ASSIGNMENT_CUSTOM_LOADER__) ||
+    null;
+  (async () => {
+    try {
+      const data = __customLoader
+        ? await __customLoader()
+        : await (
+            await fetch(`./data/question_data/${aID}/assignment.json`)
+          ).json();
+
+      // ✓ CRITICAL: Store the complete unfiltered array for state access
+      if (data.allQuestionsMap) {
+        // PYQs mode: we have a complete map
+        window.allQuestionsMap = data.allQuestionsMap;
+      }
+
       // 1) passages
       processPassageQuestions(data.questions);
       questionData = data;
 
       // 2) filter out Passage markers for display
       const allQuestions = data.questions;
+      // Map displayed index -> original index from server if provided by custom loader (PYQs), else identity.
+      const baseIndexMap = Array.isArray(data.originalIndexMap)
+        ? data.originalIndexMap.map((n) => Number(n))
+        : allQuestions.map((_, i) => i);
       const displayQuestions = [];
       const questionIndexMap = [];
       allQuestions.forEach((q, idx) => {
         if (q.qType !== "Passage") {
           displayQuestions.push(q);
-          questionIndexMap.push(idx);
+          questionIndexMap.push(baseIndexMap[idx] ?? idx);
         }
       });
       window.displayQuestions = displayQuestions;
       window.questionIndexMap = questionIndexMap;
+      // Total questions in the original unfiltered source (for stable state array length)
+      try {
+        const calcTotal = () => {
+          if (
+            typeof data.originalTotalCount === "number" &&
+            data.originalTotalCount > 0
+          )
+            return Number(data.originalTotalCount);
+          const arr = Array.isArray(data.originalIndexMap)
+            ? data.originalIndexMap.map((n) => Number(n))
+            : [];
+          if (arr.length) return Math.max(...arr) + 1;
+          return allQuestions.length;
+        };
+        window.originalTotalCount = calcTotal();
+      } catch {
+        window.originalTotalCount = allQuestions.length;
+      }
 
-      // 3) build UI and states
+      // 3) build UI
       fillQuestionData(displayQuestions);
 
-      // 4) load saved state (server/local), then pad
+      // 4) load saved state (server/local), then pad to original length
       await loadSavedState(aID);
-      ensureStateLength(displayQuestions.length);
+      ensureStateLength(window.originalTotalCount || displayQuestions.length);
 
       // 5) paint buttons + open first
       questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
@@ -1818,15 +2325,118 @@
       } else {
         clickQuestionButton(0); // default to first question
       }
-    })
-    .catch((err) => {
-      console.error("Failed to load assignment.json", err);
-    })
-    .finally(() => {
-      try { document.body.classList.remove("q-loading"); } catch {}
-    });
+    } catch (err) {
+      console.error("Failed to load assignment data", err);
+    } finally {
+      try {
+        document.body.classList.remove("q-loading");
+      } catch {}
+    }
+  })();
 
   // ---------- UI builders & handlers ----------
+  // Lazy-render config for question buttons to reduce initial DOM work
+  const QBTN_INITIAL = 120;
+  const QBTN_BATCH = 120;
+  let qbtnRenderLimit = QBTN_INITIAL;
+  let qbtnObserverDesktop = null;
+  let qbtnObserverMobile = null;
+  let qbtnSentinelDesktop = null;
+  let qbtnSentinelMobile = null;
+
+  function teardownQbtnObservers() {
+    try {
+      if (qbtnObserverDesktop) qbtnObserverDesktop.disconnect();
+    } catch {}
+    try {
+      if (qbtnObserverMobile) qbtnObserverMobile.disconnect();
+    } catch {}
+    qbtnObserverDesktop = null;
+    qbtnObserverMobile = null;
+  }
+
+  function ensureQbtnSentinels() {
+    if (!qbtnSentinelDesktop) {
+      qbtnSentinelDesktop = document.createElement("div");
+      qbtnSentinelDesktop.id = "qbtn-sentinel-desktop";
+      qbtnSentinelDesktop.className = "text-center text-muted small py-2";
+      qbtnSentinelDesktop.textContent = "";
+    }
+    if (!qbtnSentinelMobile) {
+      qbtnSentinelMobile = document.createElement("div");
+      qbtnSentinelMobile.id = "qbtn-sentinel-mobile";
+      qbtnSentinelMobile.className = "text-center text-muted small py-2";
+      qbtnSentinelMobile.textContent = "";
+    }
+  }
+
+  function appendQuestionButtonsRange(mobile, desktop, start, end) {
+    const dfrag = document.createDocumentFragment();
+    const mfrag = document.createDocumentFragment();
+    const qMap = window.questionIndexMap || [];
+
+    for (let i = start; i < end; i++) {
+      const displayIdx = i; // Position in filtered list
+      const originalIdx = qMap[i]; // Original server index
+      const displayNum = i + 1; // Human-readable number
+
+      // desktop button
+      const dcol = document.createElement("div");
+      dcol.className = "col";
+      dcol.dataset.displayIdx = displayIdx; // ✓ For filtering logic
+      dcol.dataset.originalIdx = originalIdx; // ✓ For state access
+
+      const dbtn = document.createElement("button");
+      dbtn.className = "btn btn-secondary q-btn";
+      dbtn.textContent = displayNum;
+      dbtn.dataset.displayIdx = displayIdx; // ✓ Display position
+      dbtn.dataset.originalIdx = originalIdx; // ✓ Original index
+      dbtn.addEventListener("click", () => clickQuestionButton(displayIdx));
+
+      const dInd = document.createElement("span");
+      dInd.className = "q-bookmark-indicator hidden";
+      dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      dbtn.appendChild(dInd);
+
+      const dColor = document.createElement("span");
+      dColor.className = "q-color-indicator hidden";
+      dbtn.appendChild(dColor);
+      dcol.appendChild(dbtn);
+      dfrag.appendChild(dcol);
+
+      // mobile button (same pattern)
+      const mbtn = document.createElement("button");
+      mbtn.className = "btn btn-secondary q-btn";
+      mbtn.textContent = displayNum;
+      mbtn.dataset.displayIdx = displayIdx;
+      mbtn.dataset.originalIdx = originalIdx;
+      mbtn.addEventListener("click", () => clickQuestionButton(displayIdx));
+
+      const mInd = document.createElement("span");
+      mInd.className = "q-bookmark-indicator hidden";
+      mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+      mbtn.appendChild(mInd);
+
+      const mColor = document.createElement("span");
+      mColor.className = "q-color-indicator hidden";
+      mbtn.appendChild(mColor);
+      mfrag.appendChild(mbtn);
+    }
+    desktop.appendChild(dfrag);
+    mobile.appendChild(mfrag);
+
+    // Refresh cached collection
+    questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    updateBookmarkIndicators();
+    updateColorIndicators();
+
+    if (currentQuestionID != null) {
+      questionButtons.forEach((button) => {
+        const qid = Number(button.dataset.displayIdx);
+        if (qid === currentQuestionID) button.classList.add("selected");
+      });
+    }
+  }
   function fillQuestionData(questionsParam) {
     const questions = Array.isArray(questionsParam)
       ? questionsParam
@@ -1834,67 +2444,94 @@
     const mobile = document.getElementById("mobile-qbar");
     const desktop = document.getElementById("q_list");
 
-    // init clean state array matching display length
-    questionStates = Array(questions.length);
-
     mobile.innerHTML = "";
     desktop.innerHTML = "";
-    questions.forEach((_, i) => {
-      questionStates[i] = defaultState();
-
-      // desktop button
-      const dcol = document.createElement("div");
-      dcol.className = "col";
-      dcol.dataset.qid = i;
-      const dbtn = document.createElement("button");
-      dbtn.className = "btn btn-secondary w-100 q-btn";
-      dbtn.textContent = i + 1;
-      dbtn.dataset.qid = i;
-      dbtn.addEventListener("click", () => clickQuestionButton(i));
-      // Bookmark indicator (hidden by default)
-      const dInd = document.createElement("span");
-      dInd.className = "q-bookmark-indicator hidden";
-      dInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
-      dbtn.appendChild(dInd);
-      // Color indicator (hidden by default)
-      const dColor = document.createElement('span');
-      dColor.className = 'q-color-indicator hidden';
-      dbtn.appendChild(dColor);
-      dcol.appendChild(dbtn);
-      desktop.appendChild(dcol);
-
-      // mobile button
-      const mbtn = document.createElement("button");
-      mbtn.className = "btn btn-secondary q-btn";
-      mbtn.textContent = i + 1;
-      mbtn.dataset.qid = i;
-      mbtn.addEventListener("click", () => clickQuestionButton(i));
-      // Bookmark indicator (hidden by default)
-      const mInd = document.createElement("span");
-      mInd.className = "q-bookmark-indicator hidden";
-      mInd.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
-      mbtn.appendChild(mInd);
-      // Color indicator (hidden by default)
-      const mColor = document.createElement('span');
-      mColor.className = 'q-color-indicator hidden';
-      mbtn.appendChild(mColor);
-      mobile.appendChild(mbtn);
-    });
-
-    questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    // Do not initialize questionStates here; it will be loaded from server/local
+    // Lazy initial chunk
+    qbtnRenderLimit = Math.min(QBTN_INITIAL, questions.length);
+    appendQuestionButtonsRange(mobile, desktop, 0, qbtnRenderLimit);
+    // Sentinels + observers
+    ensureQbtnSentinels();
+    if (!qbtnSentinelDesktop.isConnected)
+      desktop.parentElement.appendChild(qbtnSentinelDesktop);
+    if (!qbtnSentinelMobile.isConnected)
+      mobile.parentElement.appendChild(qbtnSentinelMobile);
+    teardownQbtnObservers();
+    try {
+      const rightCol = document.querySelector(".right-col");
+      qbtnObserverDesktop = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            if (qbtnRenderLimit < questions.length) {
+              const from = qbtnRenderLimit;
+              qbtnRenderLimit = Math.min(
+                questions.length,
+                qbtnRenderLimit + QBTN_BATCH
+              );
+              appendQuestionButtonsRange(
+                mobile,
+                desktop,
+                from,
+                qbtnRenderLimit
+              );
+            }
+            qbtnSentinelDesktop.textContent =
+              qbtnRenderLimit < questions.length ? "Loading…" : "";
+          }
+        },
+        { root: rightCol || null, rootMargin: "400px 0px", threshold: 0 }
+      );
+      qbtnObserverDesktop.observe(qbtnSentinelDesktop);
+    } catch {}
+    try {
+      qbtnObserverMobile = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            if (qbtnRenderLimit < questions.length) {
+              const from = qbtnRenderLimit;
+              qbtnRenderLimit = Math.min(
+                questions.length,
+                qbtnRenderLimit + QBTN_BATCH
+              );
+              appendQuestionButtonsRange(
+                mobile,
+                desktop,
+                from,
+                qbtnRenderLimit
+              );
+            }
+            qbtnSentinelMobile.textContent =
+              qbtnRenderLimit < questions.length ? "Loading…" : "";
+          }
+        },
+        { root: null, rootMargin: "400px 0px", threshold: 0 }
+      );
+      qbtnObserverMobile.observe(qbtnSentinelMobile);
+    } catch {}
     // initial bookmark badges
     updateBookmarkIndicators();
     // initial color badges
     updateColorIndicators();
     // initialize filters UI
-    try { setupFilterDropdown(); } catch {}
+    try {
+      setupFilterDropdown();
+    } catch {}
   }
 
   function MCQOptionClicked(optionElement) {
     const clickedOption = optionElement.dataset.opt;
     const originalIdx = window.questionIndexMap[currentQuestionID];
-    const question = questionData.questions[originalIdx];
-    const questionState = questionStates[currentQuestionID];
+
+    // ✓ FIX: Use allQuestionsMap
+    const question = window.allQuestionsMap
+      ? window.allQuestionsMap[originalIdx]
+      : questionData.questions[originalIdx];
+
+    const questionState =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
     const questionType = question.qType;
 
     if (questionType === "SMCQ") {
@@ -1926,11 +2563,14 @@
 
   function evaluateQuestionButtonColor(qID) {
     const idx = Number(qID);
-    const qs = questionStates[idx] || defaultState();
+    const orig = (window.questionIndexMap || [])[idx];
+    const qs =
+      (orig != null ? questionStates[orig] : undefined) || defaultState();
 
     // Remove previous states
     questionButtons.forEach((button) => {
-      if (Number(button.dataset.qid) === idx) {
+      const btnDisplayIdx = Number(button.dataset.displayIdx); // ✓ Changed from dataset.qid
+      if (btnDisplayIdx === idx) {
         button.classList.remove(
           "unevaluated",
           "correct",
@@ -1940,18 +2580,17 @@
       }
     });
 
-    // Unevaluated but picked → yellow marker (“unevaluated” pill you already had)
+    // Apply new state
     if (!qs.isAnswerEvaluated) {
       if (qs.isAnswerPicked) {
         questionButtons.forEach((button) => {
-          if (Number(button.dataset.qid) === idx)
-            button.classList.add("unevaluated");
+          const btnDisplayIdx = Number(button.dataset.displayIdx);
+          if (btnDisplayIdx === idx) button.classList.add("unevaluated");
         });
       }
       return;
     }
 
-    // Evaluated → correct/partial/incorrect
     const cls =
       qs.evalStatus === "correct"
         ? "correct"
@@ -1960,21 +2599,25 @@
         : "incorrect";
 
     questionButtons.forEach((button) => {
-      if (Number(button.dataset.qid) === idx) button.classList.add(cls);
+      const btnDisplayIdx = Number(button.dataset.displayIdx);
+      if (btnDisplayIdx === idx) button.classList.add(cls);
     });
   }
 
   function clickQuestionButton(qID) {
-    // Save any pending changes from the previously open question only after the first selection.
+    // Add debug logging
+    const originalIdx = window.questionIndexMap[qID];
+    // Save any pending changes from the previously open question
     if (currentQuestionID != null) {
       markDirty();
       scheduleSave(aID);
     }
 
     questionButtons.forEach((button) => {
-      if (Number(button.dataset.qid) === currentQuestionID)
+      const btnDisplayIdx = Number(button.dataset.displayIdx); // ✓ Changed
+      if (btnDisplayIdx === currentQuestionID)
         button.classList.remove("selected");
-      if (Number(button.dataset.qid) === qID) button.classList.add("selected");
+      if (btnDisplayIdx === qID) button.classList.add("selected");
     });
 
     if (timerInterval) {
@@ -1986,7 +2629,7 @@
     setQuestion(qID);
     evaluateQuestionButtonColor(qID);
   }
-
+  let assignmentTitle = "";
   // Small helper to replay a quick fade/slide on question content
   function qReplayEnterAnim(el) {
     if (!el) return;
@@ -2021,29 +2664,55 @@
     const resetIcon = document.getElementById("reset-question-icon");
     if (resetIcon) resetIcon.classList.add("d-none");
 
-    ensureStateLength(window.displayQuestions.length);
+    ensureStateLength(
+      window.originalTotalCount || window.displayQuestions.length
+    );
 
     const originalIdx = window.questionIndexMap[qID];
     const numerical = document.getElementById("numericalDiv");
     const MCQOptions = document.getElementById("MCQOptionDiv");
     const assignmentDetails = document.getElementById("assignmentDetails");
-    const assignmentTitleElem = document.getElementById("assignment-title")
-    const pageTitle = document.getElementsByTagName("title")
+    const assignmentTitleElem = document.getElementById("assignment-title");
     const typeInfo = document.getElementById("qTypeInfo");
     const qNo = document.getElementById("qNo");
     const numericalAnswer = document.getElementById("numericalAnswer");
     // Notes editor now renders inline; no textarea reference
-    const questionState = questionStates[qID];
-    const question = questionData.questions[originalIdx];
+    const questionState =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
+    const question = window.allQuestionsMap
+      ? window.allQuestionsMap[originalIdx] // PYQs: use complete map
+      : questionData.questions[originalIdx]; // Regular assignments: use original array
 
     qNo.textContent = qID + 1;
+    try {
+      const origNoEl = document.getElementById("origNo");
+      if (origNoEl)
+        origNoEl.textContent = String((Number(originalIdx) || 0) + 1);
+    } catch {}
     typeInfo.textContent = question.qType;
     try {
-      document.body.setAttribute("data-qtype", String(question.qType || "").toUpperCase());
+      document.body.setAttribute(
+        "data-qtype",
+        String(question.qType || "").toUpperCase()
+      );
     } catch {}
-    assignmentDetails.textContent = assignmentTitle;
-    assignmentTitleElem.textContent = assignmentTitle
-    pageTitle.textContent = `QBase - ${assignmentTitle} - Q${qID + 1}`
+    try {
+      const meta =
+        (typeof window !== "undefined" && window.__PYQS_META__) || null;
+      if (meta) {
+        const e = meta.examName || meta.examId || "";
+        const s = meta.subjectName || meta.subjectId || "";
+        const c = meta.chapterName || meta.chapterId || "";
+        const metaStr = [e, s, c].filter(Boolean).join(" - ");
+        assignmentDetails.textContent = metaStr || assignmentTitle;
+      } else {
+        assignmentDetails.textContent = assignmentTitle;
+      }
+    } catch {
+      assignmentDetails.textContent = assignmentTitle;
+    }
+    assignmentTitleElem.textContent = assignmentTitle;
 
     // Passage (text + image)
     const passageImgDiv = document.getElementById("passageImage");
@@ -2061,8 +2730,10 @@
         passageImgDiv.innerHTML = "";
       }
       passageDiv.style.display = "block";
-      passageDiv.textContent = question.passage;
-      try { renderMathInElement && renderMathInElement(passageDiv, katexOptions); } catch {}
+      renderHTML(passageDiv, String(question.passage || ""));
+      try {
+        renderMathInElement && renderMathInElement(passageDiv, katexOptions);
+      } catch {}
     } else {
       passageImgDiv.style.display = "none";
       passageDiv.style.display = "none";
@@ -2075,7 +2746,10 @@
     const qTextElm = document.getElementById("questionText");
     if (question.image) {
       qImgDiv.style.display = "block";
-      const imgSrc = `./data/question_data/${aID}/${question.image}`;
+      let imgSrc = String(question.image || "");
+      if (!/^https?:|^data:|^\/\//i.test(imgSrc)) {
+        imgSrc = `./data/question_data/${aID}/${imgSrc}`;
+      }
       qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image" loading="lazy" decoding="async">`;
       qImgDiv.querySelector("img").addEventListener("click", () => {
         showImageOverlay(imgSrc);
@@ -2084,20 +2758,36 @@
       qImgDiv.style.display = "none";
       qImgDiv.innerHTML = "";
     }
-    qTextElm.innerHTML = escapeHtml(question.qText || "").replace(/\n/g, "<br>");
-    try { renderMathInElement && renderMathInElement(qTextElm, katexOptions); } catch {}
+    renderHTML(qTextElm, String(question.qText || ""));
+    try {
+      renderMathInElement && renderMathInElement(qTextElm, katexOptions);
+    } catch {}
+
+    // Per-question PYQ info line (e.g., year/paper)
+    try {
+      const infoEl = document.getElementById("pyq-info");
+      if (infoEl) {
+        const t = String(question.pyqInfo || "").trim();
+        infoEl.textContent = t;
+        infoEl.style.display = t ? "" : "none";
+      }
+    } catch {}
 
     // --- Timer control ---
     if (timerInterval) clearInterval(timerInterval);
 
     const timerElem = document.getElementById("timer");
-    timerElem.textContent = formatTime(questionStates[qID].time);
+    timerElem.textContent = formatTime(
+      (questionStates[originalIdx] || defaultState()).time
+    );
 
     // Only tick if the question is NOT yet evaluated
-    if (!questionStates[qID].isAnswerEvaluated) {
+    if (!(questionStates[originalIdx] || defaultState()).isAnswerEvaluated) {
       timerInterval = setInterval(() => {
-        questionStates[qID].time++;
-        timerElem.textContent = formatTime(questionStates[qID].time);
+        if (!questionStates[originalIdx])
+          questionStates[originalIdx] = defaultState();
+        questionStates[originalIdx].time++;
+        timerElem.textContent = formatTime(questionStates[originalIdx].time);
         markDirty(); // keep local change; don't scheduleSave here
       }, 1000);
     } else {
@@ -2121,6 +2811,9 @@
       });
     }
 
+    try {
+      document.getElementById("solutionSection").style.display = "none";
+    } catch {}
     if (questionState.isAnswerEvaluated) {
       // Suppress animations when restoring evaluated state on navigation
       document.body.classList.add("suppress-eval-anim");
@@ -2130,11 +2823,13 @@
           const picked = getUserSelection(questionState, "SMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
+          try { showSolution(question); } catch {}
         } else if (question.qType === "MMCQ") {
           const correct = normalizeAnswer(question);
           const picked = getUserSelection(questionState, "MMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
+          try { showSolution(question); } catch {}
         } else if (question.qType === "Numerical") {
           const ans = normalizeAnswer(question);
           const user = getUserSelection(questionState, "Numerical");
@@ -2143,6 +2838,9 @@
           applyNumericalEvaluationStyles(isCorrect);
           if (numericalAnswer)
             numericalAnswer.parentElement.style.display = "block";
+          try {
+            showSolution(question);
+          } catch {}
         }
       } finally {
         // Remove on next tick to avoid triggering animations
@@ -2162,17 +2860,20 @@
       numericalAnswer.textContent = question.qAnswer;
       numerical.style.display = "block";
       MCQOptions.style.display = "none";
-      numericalInput.value = questionStates[qID].pickedNumerical ?? "";
+      numericalInput.value =
+        (questionStates[originalIdx]
+          ? questionStates[originalIdx].pickedNumerical
+          : "") ?? "";
     } else {
       const A = document.getElementById("AContent");
       const B = document.getElementById("BContent");
       const C = document.getElementById("CContent");
       const D = document.getElementById("DContent");
 
-      A.textContent = question.qOptions[0];
-      B.textContent = question.qOptions[1];
-      C.textContent = question.qOptions[2];
-      D.textContent = question.qOptions[3];
+      renderHTML(A, String(question.qOptions[0] || ""));
+      renderHTML(B, String(question.qOptions[1] || ""));
+      renderHTML(C, String(question.qOptions[2] || ""));
+      renderHTML(D, String(question.qOptions[3] || ""));
 
       try {
         renderMathInElement && renderMathInElement(A, katexOptions);
@@ -2184,7 +2885,9 @@
       numerical.style.display = "none";
       // Allow CSS to control the layout (grid on larger screens)
       MCQOptions.style.display = "";
-      try { renderMathInElement && renderMathInElement(MCQOptions, katexOptions); } catch {}
+      try {
+        renderMathInElement && renderMathInElement(MCQOptions, katexOptions);
+      } catch {}
     }
 
     // Trigger a quick enter animation on main question body and visible answer area
@@ -2232,28 +2935,55 @@
 
   async function updateBookmarkButton() {
     const bookmarkBtn = document.getElementById("bookmark-btn");
-    const icon = bookmarkBtn.querySelector("i");
+    const icon = bookmarkBtn?.querySelector("i");
 
     try {
-      // Use original question index (not display index) for bookmark lookups
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
-      );
-      if (response.ok) {
+      const ids = getPyqsIds();
+
+      // Prefer PYQs endpoint when available, fallback to assignment endpoint
+      let response = null;
+      if (ids) {
+        try {
+          const url = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`;
+          response = await authFetch(url);
+          if (response.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            return;
+          }
+          if (!response.ok) response = null; // try fallback
+        } catch {}
+      }
+
+      if (!response) {
+        response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${originalIdx}`);
+        if (response.status === 401) {
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
+          return;
+        }
+      }
+
+      if (response && response.ok) {
         currentBookmarks = await response.json();
         if (currentBookmarks.length > 0) {
           bookmarkBtn.classList.remove("btn-outline-primary");
           bookmarkBtn.classList.add("btn-primary");
-          icon.className = "bi bi-bookmark-fill";
+          if (icon) icon.className = "bi bi-bookmark-fill";
           bookmarkBtn.title = `Bookmarked with ${currentBookmarks.length} tag(s)`;
         } else {
           bookmarkBtn.classList.remove("btn-primary");
           bookmarkBtn.classList.add("btn-outline-primary");
-          icon.className = "bi bi-bookmark";
+          if (icon) icon.className = "bi bi-bookmark";
           bookmarkBtn.title = "Bookmark this question";
         }
-        // refresh small badges on circles as well
         updateBookmarkIndicators();
       }
     } catch (error) {
@@ -2266,13 +2996,15 @@
       const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
       if (!response.ok) {
         if (response.status === 401) {
-          window.dispatchEvent(new Event("qbase:logout"));
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
+          await uiNotice("Please log in to manage bookmarks.", "Login required");
           return;
         }
         throw new Error(`HTTP ${response.status}`);
       }
       bookmarkTags = await response.json();
-
 
       // Create dialog content
       const currentTagIds = currentBookmarks.map((b) => b.tagId);
@@ -2363,7 +3095,6 @@
           const createTagBtn = modalBody.querySelector("#create-tag-btn");
           const newTagInput = modalBody.querySelector("#new-tag-input");
 
-
           createTagBtn.addEventListener("click", async () => {
             const tagName = newTagInput.value.trim();
             if (tagName) {
@@ -2403,7 +3134,9 @@
       const response = await authFetch(`${API_BASE}/api/bookmark-tags`);
       if (!response.ok) {
         if (response.status === 401) {
-          window.dispatchEvent(new Event("qbase:logout"));
+          try {
+            window.dispatchEvent(new Event("qbase:force-login"));
+          } catch {}
           return;
         }
         throw new Error(`HTTP ${response.status}`);
@@ -2413,10 +3146,25 @@
       // Reload current bookmarks for this question
       // Use original question index for current question
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const bookmarkResponse = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
-      );
-      if (bookmarkResponse.ok) {
+      const ids = getPyqsIds();
+      let bookmarkResponse = null;
+      if (ids) {
+        try {
+          const url = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`;
+          bookmarkResponse = await authFetch(url);
+          if (!bookmarkResponse.ok) bookmarkResponse = null;
+        } catch {}
+      }
+      if (!bookmarkResponse) {
+        bookmarkResponse = await authFetch(
+          `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        );
+      }
+      if (bookmarkResponse && bookmarkResponse.ok) {
         currentBookmarks = await bookmarkResponse.json();
       } else {
         currentBookmarks = [];
@@ -2505,7 +3253,6 @@
       const createTagBtn = modalBody.querySelector("#create-tag-btn");
       const newTagInput = modalBody.querySelector("#new-tag-input");
 
-
       createTagBtn.addEventListener("click", async () => {
         const tagName = newTagInput.value.trim();
         if (tagName) {
@@ -2534,23 +3281,59 @@
 
   async function addBookmark(tagId) {
     try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const ids = getPyqsIds();
+
+      // Try PYQs endpoint first
+      if (ids) {
+        try {
+          const respPyqs = await authFetch(`${API_BASE}/api/pyqs/bookmarks`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              examId: ids.examId,
+              subjectId: ids.subjectId,
+              chapterId: ids.chapterId,
+              questionIndex: originalIdx,
+              tagId: tagId,
+            }),
+          });
+          if (respPyqs.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            await uiNotice("Please log in to bookmark questions.", "Login required");
+            return false;
+          }
+          if (respPyqs.ok) {
+            updateBookmarkIndicators();
+            return true;
+          }
+          // fallthrough to assignment fallback on non-OK
+        } catch {}
+      }
+
       const response = await authFetch(`${API_BASE}/api/bookmarks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignmentId: aID,
-          // Persist original index from assignment.json
-          questionIndex: window.questionIndexMap[currentQuestionID],
+          questionIndex: originalIdx,
           tagId: tagId,
         }),
       });
-
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to bookmark questions.", "Login required");
+        return false;
+      }
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
         throw new Error(error.error || "Failed to add bookmark");
       }
 
-      // Update badges across question circles
       updateBookmarkIndicators();
       return true;
     } catch (error) {
@@ -2565,20 +3348,46 @@
 
   async function removeBookmark(tagId) {
     try {
-      // Remove by original index
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const ids = getPyqsIds();
 
-      if (!response.ok) {
-        throw new Error("Failed to remove bookmark");
+      if (ids) {
+        try {
+          const respPyqs = await authFetch(
+            `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(
+              ids.examId
+            )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+              ids.chapterId
+            )}/${originalIdx}/${encodeURIComponent(tagId)}`,
+            { method: "DELETE" }
+          );
+          if (respPyqs.status === 401) {
+            try {
+              window.dispatchEvent(new Event("qbase:force-login"));
+            } catch {}
+            await uiNotice("Please log in to manage bookmarks.", "Login required");
+            return false;
+          }
+          if (respPyqs.ok) {
+            updateBookmarkIndicators();
+            return true;
+          }
+        } catch {}
       }
 
-      // Update badges across question circles
+      const response = await authFetch(
+        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
+        { method: "DELETE" }
+      );
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to manage bookmarks.", "Login required");
+        return false;
+      }
+      if (!response.ok) throw new Error("Failed to remove bookmark");
+
       updateBookmarkIndicators();
       return true;
     } catch (error) {
@@ -2598,9 +3407,15 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: tagName }),
       });
-
+      if (response.status === 401) {
+        try {
+          window.dispatchEvent(new Event("qbase:force-login"));
+        } catch {}
+        await uiNotice("Please log in to create tags.", "Login required");
+        return false;
+      }
       if (!response.ok) {
-        const error = await response.json();
+        const error = await response.json().catch(() => ({}));
         throw new Error(error.error || "Failed to create tag");
       }
 
@@ -2625,7 +3440,236 @@
     div.textContent = text;
     return div.innerHTML;
   }
-  
+
+  // Sanitize limited HTML so PYQ content with markup renders safely.
+  // If DOMPurify is available on the page, use it; else use a conservative fallback.
+  function sanitizeHtml(html) {
+    try {
+      if (
+        typeof window !== "undefined" &&
+        window.DOMPurify &&
+        typeof window.DOMPurify.sanitize === "function"
+      ) {
+        // Extend allowed tags to include MathML so inline MathML from PYQs renders.
+        // KaTeX auto-render will still process TeX delimiters; MathML is left as-is for the browser.
+        const MATHML_TAGS = [
+          "math",
+          "mrow",
+          "mi",
+          "mn",
+          "mo",
+          "ms",
+          "mtext",
+          "mspace",
+          "msub",
+          "msup",
+          "msubsup",
+          "munder",
+          "mover",
+          "munderover",
+          "mfrac",
+          "msqrt",
+          "mroot",
+          "mfenced",
+          "menclose",
+          "mpadded",
+          "mphantom",
+          "mstyle",
+          "mtable",
+          "mtr",
+          "mtd",
+          "mlabeledtr",
+          "semantics",
+          "annotation",
+          "annotation-xml",
+        ];
+        const ALLOWED_TAGS = [
+          "b",
+          "i",
+          "em",
+          "strong",
+          "u",
+          "sup",
+          "sub",
+          "br",
+          "p",
+          "ul",
+          "ol",
+          "li",
+          "span",
+          "div",
+          "img",
+          "a",
+          "code",
+          "pre",
+          "blockquote",
+          "hr",
+          "table",
+          "thead",
+          "tbody",
+          "tr",
+          "td",
+          "th",
+          ...MATHML_TAGS,
+        ];
+        const ALLOWED_ATTR = [
+          "class",
+          "style",
+          "href",
+          "src",
+          "alt",
+          "title",
+          "width",
+          "height",
+          "loading",
+          "decoding",
+          "rel",
+          "target",
+          // Common MathML attributes (safe subset)
+          "display",
+          "mathvariant",
+          "mathsize",
+          "open",
+          "close",
+          "separators",
+          "notation",
+          "rowalign",
+          "columnalign",
+          "rowspan",
+          "columnspan",
+          "fence",
+          "form",
+          "accent",
+          "accentunder",
+          "displaystyle",
+          "scriptlevel",
+        ];
+        return window.DOMPurify.sanitize(String(html || ""), {
+          ALLOWED_TAGS,
+          ALLOWED_ATTR,
+          FORBID_TAGS: [
+            "script",
+            "style",
+            "iframe",
+            "object",
+            "embed",
+            "link",
+            "meta",
+            "form",
+            "svg",
+          ],
+          ADD_ATTR: ["aria-label", "role"],
+        });
+      }
+    } catch {}
+
+    // Fallback sanitizer: strips dangerous tags + event handlers + javascript: URLs
+    try {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = String(html || "");
+      const disallowed = new Set([
+        "SCRIPT",
+        "STYLE",
+        "IFRAME",
+        "OBJECT",
+        "EMBED",
+        "LINK",
+        "META",
+        "FORM",
+        "SVG",
+      ]);
+      (function walk(node) {
+        const children = Array.from(node.childNodes || []);
+        for (const child of children) {
+          if (child.nodeType === 1) {
+            if (disallowed.has(child.nodeName)) {
+              child.remove();
+              continue;
+            }
+            for (const attr of Array.from(child.attributes || [])) {
+              const name = attr.name.toLowerCase();
+              const val = String(attr.value || "");
+              if (name.startsWith("on")) child.removeAttribute(attr.name);
+              if (name === "style") {
+                child.removeAttribute(attr.name);
+                continue;
+              }
+              if (name === "href" || name === "src" || name === "xlink:href") {
+                if (/^\s*javascript:/i.test(val))
+                  child.removeAttribute(attr.name);
+                if (/^\s*data:text\//i.test(val))
+                  child.removeAttribute(attr.name);
+              }
+            }
+            if (child.nodeName.toLowerCase() === "a") {
+              try {
+                const t = (child.getAttribute("target") || "").toLowerCase();
+                if (t.includes("_blank"))
+                  child.setAttribute("rel", "noopener noreferrer");
+                const href = child.getAttribute("href") || "";
+                if (!/^(https?:|mailto:|#|\/|\/\/|data:image)/i.test(href))
+                  child.removeAttribute("href");
+              } catch {}
+            }
+          }
+          walk(child);
+        }
+      })(wrapper);
+      return wrapper.innerHTML;
+    } catch {
+      return escapeHtml(String(html || ""));
+    }
+  }
+
+  // Render HTML or plain text with newline preservation; normalizes CRLF
+  // Additionally: make any <img> inside clickable to open the image overlay
+  function renderHTML(el, value) {
+    try {
+      const raw = String(value || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        // Normalize any HTML <br> tags to newlines so KaTeX delimiters are contiguous
+        // and do not get split across nodes (common in scraped PYQ content).
+        .replace(/<br\s*\/?>/gi, "\n");
+      const sanitized = sanitizeHtml(raw);
+      // Do not convert newlines to <br> before KaTeX; it breaks delimiter matching across nodes.
+      // Preserve newlines via CSS (white-space: pre-wrap) instead.
+      el.innerHTML = sanitized;
+
+      // Bind image click-to-expand for any images inside this container
+      try {
+        // Use event delegation if not already bound on this element
+        if (!el.dataset.imgOverlayBound) {
+          el.addEventListener("click", (ev) => {
+            const target = ev.target;
+            if (!target) return;
+            // If click is on or within an <img>, open overlay for its src
+            const img = target.closest && target.closest("img");
+            if (img && img.src) {
+              try {
+                ev.preventDefault();
+                ev.stopPropagation();
+              } catch {}
+              try {
+                if (typeof showImageOverlay === "function")
+                  showImageOverlay(img.src);
+              } catch {}
+            }
+          });
+          el.dataset.imgOverlayBound = "1";
+        }
+        // Also set cursor for images to hint interactivity
+        el.querySelectorAll("img").forEach((img) => {
+          try {
+            img.style.cursor = "zoom-in";
+          } catch {}
+        });
+      } catch {}
+    } catch {
+      el.textContent = String(value || "");
+    }
+  }
+
   // -------------------- UI toggles: Questions sidebar and desktop Q-bar --------------------
   try {
     const btnSidebar = document.getElementById("toggle-questions");
@@ -2664,7 +3708,8 @@
 
     // Wire events
     btnSidebar?.addEventListener("click", () => {
-      const currentlyVisible = !document.body.classList.contains("questions-hidden");
+      const currentlyVisible =
+        !document.body.classList.contains("questions-hidden");
       const next = !currentlyVisible;
       applySidebarVisible(next);
       setBool(LS_SIDEBAR, next);
@@ -2703,74 +3748,128 @@
   (function wireTopbarNav() {
     const prev = document.getElementById("nav-prev");
     const next = document.getElementById("nav-next");
-    if (prev) prev.addEventListener("click", () => {
-      if (currentQuestionID == null) return;
-      const filtered = getActiveFilteredIDs();
-      const pos = filtered.indexOf(Number(currentQuestionID));
-      if (pos > 0) clickQuestionButton(filtered[pos - 1]);
-    });
-    if (next) next.addEventListener("click", () => {
-      if (currentQuestionID == null) return;
-      const filtered = getActiveFilteredIDs();
-      const pos = filtered.indexOf(Number(currentQuestionID));
-      if (pos >= 0 && pos < filtered.length - 1) clickQuestionButton(filtered[pos + 1]);
-    });
+    if (prev)
+      prev.addEventListener("click", () => {
+        if (currentQuestionID == null) return;
+        const filtered = getActiveFilteredIDs();
+        const pos = filtered.indexOf(Number(currentQuestionID));
+        if (pos > 0) clickQuestionButton(filtered[pos - 1]);
+      });
+    if (next)
+      next.addEventListener("click", () => {
+        if (currentQuestionID == null) return;
+        const filtered = getActiveFilteredIDs();
+        const pos = filtered.indexOf(Number(currentQuestionID));
+        if (pos >= 0 && pos < filtered.length - 1)
+          clickQuestionButton(filtered[pos + 1]);
+      });
     updateTopbarNavButtons();
   })();
-  
+
   // ---------- Bookmark badges on question circles ----------
   async function updateBookmarkIndicators() {
     try {
-      // Fetch all bookmarks and filter to current assignment
-      const res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
-      if (!res.ok) {
-        // On unauthorized, hide all indicators
+      const ids = getPyqsIds();
+      let res = null;
+      if (ids) {
+        try {
+          res = await authFetch(`${API_BASE}/api/pyqs/bookmarks`, {
+            cache: "no-store",
+          });
+          if (!res.ok) res = null; // fallback
+        } catch {}
+      }
+      if (!res) {
+        res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+      }
+      if (!res || !res.ok) {
         questionButtons?.forEach((btn) => {
-          btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+          btn
+            .querySelectorAll(".q-bookmark-indicator")
+            .forEach((el) => el.classList.add("hidden"));
         });
         return;
       }
       const all = await res.json();
-      const mine = Array.isArray(all)
-        ? all.filter((b) => Number(b.assignmentId) === Number(aID))
-        : [];
+      let mine;
+      if (ids && Array.isArray(all) && all.length && all[0]?.examId !== undefined) {
+        // PYQs bookmarks payload
+        mine = all.filter(
+          (b) =>
+            String(b.examId) === String(ids.examId) &&
+            String(b.subjectId) === String(ids.subjectId) &&
+            String(b.chapterId) === String(ids.chapterId)
+        );
+      } else {
+        mine = Array.isArray(all)
+          ? all.filter((b) => Number(b.assignmentId) === Number(aID))
+          : [];
+      }
       const bookmarkedOriginalIdx = new Set(
         mine.map((b) => Number(b.questionIndex))
       );
 
-      const qMap = window.questionIndexMap || [];
       questionButtons?.forEach((btn) => {
-        const idx = Number(btn.dataset.qid);
-        const orig = qMap[idx];
-        let ind = btn.querySelector('.q-bookmark-indicator');
+        const originalIdx = Number(btn.dataset.originalIdx); // ✓ Changed
+        let ind = btn.querySelector(".q-bookmark-indicator");
         if (!ind) {
-          ind = document.createElement('span');
-          ind.className = 'q-bookmark-indicator hidden';
-          ind.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
+          ind = document.createElement("span");
+          ind.className = "q-bookmark-indicator hidden";
+          ind.innerHTML =
+            '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
           btn.appendChild(ind);
         }
-        if (bookmarkedOriginalIdx.has(Number(orig))) ind.classList.remove('hidden');
-        else ind.classList.add('hidden');
+        if (bookmarkedOriginalIdx.has(originalIdx))
+          ind.classList.remove("hidden");
+        else ind.classList.add("hidden");
       });
     } catch (err) {
-      console.warn('updateBookmarkIndicators failed', err);
+      console.warn("updateBookmarkIndicators failed", err);
     }
   }
-
   // --- Question color mark helpers ---
+
   async function setQuestionColor(color) {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(`${API_BASE}/api/question-marks`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ assignmentId: aID, questionIndex: originalIdx, color })
-      });
-      if (!response.ok) throw new Error('Failed to set color');
+      const ids = getPyqsIds();
+
+      let response;
+      if (ids) {
+        // PYQs mode
+        response = await authFetch(
+          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              questionIndex: originalIdx,
+              color,
+            }),
+          }
+        );
+      } else {
+        // Regular assignment mode
+        response = await authFetch(`${API_BASE}/api/question-marks`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            assignmentId: aID,
+            questionIndex: originalIdx,
+            color,
+          }),
+        });
+      }
+
+      if (!response.ok) throw new Error("Failed to set color");
       updateColorIndicators();
       return true;
     } catch (e) {
-      console.error('Failed to set question color:', e);
+      console.error("Failed to set question color:", e);
       return false;
     }
   }
@@ -2778,170 +3877,284 @@
   async function clearQuestionColor() {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`, { method: 'DELETE' });
-      if (!response.ok) throw new Error('Failed to clear color');
+      const ids = getPyqsIds();
+
+      let response;
+      if (ids) {
+        // PYQs mode
+        response = await authFetch(
+          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`,
+          { method: "DELETE" }
+        );
+      } else {
+        // Regular assignment mode
+        response = await authFetch(
+          `${API_BASE}/api/question-marks/${aID}/${originalIdx}`,
+          { method: "DELETE" }
+        );
+      }
+
+      if (!response.ok) throw new Error("Failed to clear color");
       return true;
     } catch (e) {
-      console.error('Failed to clear question color:', e);
+      console.error("Failed to clear question color:", e);
       return false;
     }
   }
 
   async function updateColorPickerSelection() {
     try {
-      const picker = document.getElementById('qcolor-picker');
+      const picker = document.getElementById("qcolor-picker");
       if (!picker) return;
-      const chips = Array.from(picker.querySelectorAll('.qcolor-chip'));
-      chips.forEach((c) => c.classList.remove('selected'));
+      const chips = Array.from(picker.querySelectorAll(".qcolor-chip"));
+      chips.forEach((c) => c.classList.remove("selected"));
       if (currentQuestionID == null) return;
+
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
+      const ids = getPyqsIds();
+
+      let res;
+      if (ids) {
+        // PYQs mode
+        res = await authFetch(
+          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}/${originalIdx}`
+        );
+      } else {
+        // Regular assignment mode
+        res = await authFetch(
+          `${API_BASE}/api/question-marks/${aID}/${originalIdx}`
+        );
+      }
+
       if (!res.ok) {
         // No color saved, mark 'none' chip as selected
-        const none = chips.find((c) => String(c.getAttribute('data-color') || '').toLowerCase() === 'none');
-        if (none) none.classList.add('selected');
+        const none = chips.find(
+          (c) =>
+            String(c.getAttribute("data-color") || "").toLowerCase() === "none"
+        );
+        if (none) none.classList.add("selected");
         return;
       }
       const data = await res.json();
-      const color = (data?.color || '').trim().toLowerCase();
-      const sel = color || 'none';
-      const match = chips.find((c) => String(c.getAttribute('data-color') || '').trim().toLowerCase() === sel);
-      if (match) match.classList.add('selected');
+      const color = (data?.color || "").trim().toLowerCase();
+      const sel = color || "none";
+      const match = chips.find(
+        (c) =>
+          String(c.getAttribute("data-color") || "")
+            .trim()
+            .toLowerCase() === sel
+      );
+      if (match) match.classList.add("selected");
     } catch (e) {
       // ignore
     }
   }
 
-  // ---------- Color badges on question circles ----------
   async function updateColorIndicators() {
     try {
-      const res = await authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" });
+      const ids = getPyqsIds();
+
+      let res;
+      if (ids) {
+        // PYQs mode
+        res = await authFetch(
+          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+            ids.examId
+          )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+            ids.chapterId
+          )}`,
+          { cache: "no-store" }
+        );
+      } else {
+        // Regular assignment mode
+        res = await authFetch(`${API_BASE}/api/question-marks`, {
+          cache: "no-store",
+        });
+      }
+
       if (!res.ok) {
         questionButtons?.forEach((btn) => {
-          btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
+          btn
+            .querySelectorAll(".q-color-indicator")
+            .forEach((el) => el.classList.add("hidden"));
         });
         return;
       }
+
       const all = await res.json();
-      const mine = Array.isArray(all)
-        ? all.filter((m) => Number(m.assignmentId) === Number(aID))
-        : [];
+      let mine;
+
+      if (ids) {
+        // PYQs returns array like: [{ questionIndex: 0, color: "#0d6efd" }, ...]
+        mine = Array.isArray(all) ? all : [];
+      } else {
+        // Regular assignments: filter by assignmentId
+        mine = Array.isArray(all)
+          ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+          : [];
+      }
+
       const byIdx = new Map();
       for (const m of mine) byIdx.set(Number(m.questionIndex), String(m.color));
 
-      const qMap = window.questionIndexMap || [];
       questionButtons?.forEach((btn) => {
-        const idx = Number(btn.dataset.qid);
-        const orig = qMap[idx];
-        let el = btn.querySelector('.q-color-indicator');
+        const originalIdx = Number(btn.dataset.originalIdx);
+        let el = btn.querySelector(".q-color-indicator");
         if (!el) {
-          el = document.createElement('span');
-          el.className = 'q-color-indicator hidden';
+          el = document.createElement("span");
+          el.className = "q-color-indicator hidden";
           btn.appendChild(el);
         }
-        const color = byIdx.get(Number(orig));
+        const color = byIdx.get(originalIdx);
         if (color) {
           el.style.backgroundColor = color;
-          el.classList.remove('hidden');
+          el.classList.remove("hidden");
         } else {
-          el.classList.add('hidden');
-          try { el.style.removeProperty('background-color'); } catch {}
+          el.classList.add("hidden");
+          try {
+            el.style.removeProperty("background-color");
+          } catch {}
         }
       });
     } catch (err) {
-      console.warn('updateColorIndicators failed', err);
+      console.warn("updateColorIndicators failed", err);
     }
   }
-
   // Refresh badges on login/logout
-  window.addEventListener('qbase:login', () => { updateBookmarkIndicators(); updateColorIndicators(); updateColorPickerSelection(); });
-  window.addEventListener('qbase:logout', () => {
+  window.addEventListener("qbase:login", () => {
+    updateBookmarkIndicators();
+    updateColorIndicators();
+    updateColorPickerSelection();
+  });
+  window.addEventListener("qbase:logout", () => {
     questionButtons?.forEach((btn) => {
-      btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
-      btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
+      btn
+        .querySelectorAll(".q-bookmark-indicator")
+        .forEach((el) => el.classList.add("hidden"));
+      btn
+        .querySelectorAll(".q-color-indicator")
+        .forEach((el) => el.classList.add("hidden"));
     });
   });
 
   // -------------------- Filter UI (tags + colors) --------------------
   function setupFilterDropdown() {
-    const btn = document.getElementById('filter-btn');
-    const tagsHost = document.getElementById('filter-tags');
-    const colorsHost = document.getElementById('filter-colors');
-    const applyBtn = document.getElementById('filter-apply');
-    const clearBtn = document.getElementById('filter-clear');
+    const btn = document.getElementById("filter-btn");
+    const tagsHost = document.getElementById("filter-tags");
+    const colorsHost = document.getElementById("filter-colors");
+    const applyBtn = document.getElementById("filter-apply");
+    const clearBtn = document.getElementById("filter-clear");
     if (!btn || !tagsHost || !colorsHost || !applyBtn || !clearBtn) return;
 
     // Populate on dropdown show to keep fresh
-    btn.addEventListener('shown.bs.dropdown', async () => {
+    btn.addEventListener("shown.bs.dropdown", async () => {
       await populateFilterTags(tagsHost);
       populateFilterColors(colorsHost);
     });
 
-    applyBtn.addEventListener('click', async () => {
+    applyBtn.addEventListener("click", async () => {
       // Read selected tags
-      activeTagFilters = new Set(Array.from(tagsHost.querySelectorAll('input[type="checkbox"][data-tag-id]:checked')).map((el) => el.getAttribute('data-tag-id')));
+      activeTagFilters = new Set(
+        Array.from(
+          tagsHost.querySelectorAll(
+            'input[type="checkbox"][data-tag-id]:checked'
+          )
+        ).map((el) => el.getAttribute("data-tag-id"))
+      );
       // Read selected colors
-      activeColorFilters = new Set(Array.from(colorsHost.querySelectorAll('.filter-color-chip.selected')).map((el) => String(el.getAttribute('data-color') || '').toLowerCase()));
+      activeColorFilters = new Set(
+        Array.from(
+          colorsHost.querySelectorAll(".filter-color-chip.selected")
+        ).map((el) => String(el.getAttribute("data-color") || "").toLowerCase())
+      );
       await applyQuestionFilters();
       // Mark button active state
       const active = activeTagFilters.size > 0 || activeColorFilters.size > 0;
-      btn.classList.toggle('btn-primary', active);
-      btn.classList.toggle('btn-outline-secondary', !active);
+      btn.classList.toggle("btn-primary", active);
+      btn.classList.toggle("btn-outline-secondary", !active);
       // Close dropdown
-      try { bootstrap.Dropdown.getInstance(btn)?.hide(); } catch {}
+      try {
+        bootstrap.Dropdown.getInstance(btn)?.hide();
+      } catch {}
     });
 
-    clearBtn.addEventListener('click', async () => {
+    clearBtn.addEventListener("click", async () => {
       activeTagFilters.clear();
       activeColorFilters.clear();
       // Reset UI state in dropdown
       try {
-        tagsHost.querySelectorAll('input[type="checkbox"]').forEach((el) => (el.checked = false));
-        colorsHost.querySelectorAll('.filter-color-chip').forEach((el) => el.classList.remove('selected'));
+        tagsHost
+          .querySelectorAll('input[type="checkbox"]')
+          .forEach((el) => (el.checked = false));
+        colorsHost
+          .querySelectorAll(".filter-color-chip")
+          .forEach((el) => el.classList.remove("selected"));
       } catch {}
       await applyQuestionFilters();
-      btn.classList.remove('btn-primary');
-      btn.classList.add('btn-outline-secondary');
-      try { bootstrap.Dropdown.getInstance(btn)?.hide(); } catch {}
+      btn.classList.remove("btn-primary");
+      btn.classList.add("btn-outline-secondary");
+      try {
+        bootstrap.Dropdown.getInstance(btn)?.hide();
+      } catch {}
     });
   }
 
   async function populateFilterTags(host) {
     try {
       const res = await authFetch(`${API_BASE}/api/bookmark-tags`);
-      if (!res.ok) { host.innerHTML = '<div class="text-muted small">Sign in to use tags</div>'; return; }
+      if (!res.ok) {
+        host.innerHTML =
+          '<div class="text-muted small">Sign in to use tags</div>';
+        return;
+      }
       const tags = await res.json();
-      const items = tags.map(t => {
-        const id = `ftag-${t.id}`;
-        const checked = activeTagFilters.has(String(t.id)) ? 'checked' : '';
-        const name = escapeHtml(t.name);
-        return `<div class="form-check form-check-sm">
+      const items = tags
+        .map((t) => {
+          const id = `ftag-${t.id}`;
+          const checked = activeTagFilters.has(String(t.id)) ? "checked" : "";
+          const name = escapeHtml(t.name);
+          return `<div class="form-check form-check-sm">
           <input class="form-check-input" type="checkbox" id="${id}" data-tag-id="${t.id}" ${checked}>
           <label class="form-check-label" for="${id}">${name}</label>
         </div>`;
-      }).join('');
-      host.innerHTML = items || '<div class="text-muted small">No tags yet</div>';
+        })
+        .join("");
+      host.innerHTML =
+        items || '<div class="text-muted small">No tags yet</div>';
     } catch (e) {
-      host.innerHTML = '<div class="text-muted small">Failed to load tags</div>';
+      host.innerHTML =
+        '<div class="text-muted small">Failed to load tags</div>';
     }
   }
 
   function populateFilterColors(host) {
     const colors = [
-      { color: 'none', label: 'None' },
-      { color: '#0d6efd', label: 'Blue' },
-      { color: '#dc3545', label: 'Red' },
-      { color: '#ffc107', label: 'Yellow' },
-      { color: '#198754', label: 'Green' },
+      { color: "none", label: "None" },
+      { color: "#0d6efd", label: "Blue" },
+      { color: "#dc3545", label: "Red" },
+      { color: "#ffc107", label: "Yellow" },
+      { color: "#198754", label: "Green" },
     ];
-    host.innerHTML = colors.map(c => {
-      const selected = activeColorFilters.has(c.color.toLowerCase()) ? 'selected' : '';
-      const style = c.color === 'none' ? '' : `style="--qc:${c.color}"`;
-      return `<button type="button" class="filter-color-chip ${selected}" data-color="${c.color}" ${style} title="${c.label}"></button>`;
-    }).join('');
-    host.querySelectorAll('.filter-color-chip').forEach((el) => {
-      el.addEventListener('click', () => {
-        el.classList.toggle('selected');
+    host.innerHTML = colors
+      .map((c) => {
+        const selected = activeColorFilters.has(c.color.toLowerCase())
+          ? "selected"
+          : "";
+        const style = c.color === "none" ? "" : `style="--qc:${c.color}"`;
+        return `<button type="button" class="filter-color-chip ${selected}" data-color="${c.color}" ${style} title="${c.label}"></button>`;
+      })
+      .join("");
+    host.querySelectorAll(".filter-color-chip").forEach((el) => {
+      el.addEventListener("click", () => {
+        el.classList.toggle("selected");
       });
     });
   }
@@ -2954,20 +4167,22 @@
       if (!hasTag && !hasColor) {
         filteredQuestionIDs = null;
         // show all buttons
-        questionButtons?.forEach((btn) => btn.classList.remove('d-none'));
+        questionButtons?.forEach((btn) => btn.classList.remove("d-none"));
         updateTopbarNavButtons();
         return;
       }
 
       // Build tag map and color map
       const [bmRes, cmRes] = await Promise.all([
-        authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' }),
-        authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' }),
+        authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" }),
+        authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" }),
       ]);
       let byQTags = new Map(); // origIdx -> Set(tagId)
       if (bmRes.ok) {
         const all = await bmRes.json();
-        const mine = Array.isArray(all) ? all.filter(b => Number(b.assignmentId) === Number(aID)) : [];
+        const mine = Array.isArray(all)
+          ? all.filter((b) => Number(b.assignmentId) === Number(aID))
+          : [];
         for (const b of mine) {
           const key = Number(b.questionIndex);
           if (!byQTags.has(key)) byQTags.set(key, new Set());
@@ -2977,9 +4192,16 @@
       let byQColor = new Map(); // origIdx -> color (lower)
       if (cmRes.ok) {
         const all = await cmRes.json();
-        const mine = Array.isArray(all) ? all.filter(m => Number(m.assignmentId) === Number(aID)) : [];
+        const mine = Array.isArray(all)
+          ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+          : [];
         for (const m of mine) {
-          byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+          byQColor.set(
+            Number(m.questionIndex),
+            String(m.color || "")
+              .trim()
+              .toLowerCase()
+          );
         }
       }
 
@@ -2991,73 +4213,87 @@
         let ok = false;
         if (hasTag) {
           const tags = byQTags.get(Number(orig));
-          if (tags) for (const t of activeTagFilters) { if (tags.has(String(t))) { ok = true; break; } }
+          if (tags)
+            for (const t of activeTagFilters) {
+              if (tags.has(String(t))) {
+                ok = true;
+                break;
+              }
+            }
         }
         if (hasColor && !ok) {
-          const col = (byQColor.get(Number(orig)) || '').toLowerCase();
-          if (activeColorFilters.has('none') && !col) ok = true;
+          const col = (byQColor.get(Number(orig)) || "").toLowerCase();
+          if (activeColorFilters.has("none") && !col) ok = true;
           if (!ok && col && activeColorFilters.has(col)) ok = true;
         }
         if (ok) keep.push(i);
       }
       filteredQuestionIDs = keep;
 
-      // Apply to UI
+      // Apply to UI - Use displayIdx instead of qid
       const keepSet = new Set(keep);
       questionButtons?.forEach((btn) => {
-        const idx = Number(btn.dataset.qid);
+        const idx = Number(btn.dataset.displayIdx); // ✓ Changed from dataset.qid
         const show = keepSet.has(idx);
-        if (show) btn.classList.remove('d-none');
-        else btn.classList.add('d-none');
+        if (show) btn.classList.remove("d-none");
+        else btn.classList.add("d-none");
+
         const p = btn.parentElement;
-        if (p && p.classList && p.classList.contains('col')) {
-          if (show) p.classList.remove('d-none');
-          else p.classList.add('d-none');
+        if (p && p.classList && p.classList.contains("col")) {
+          if (show) p.classList.remove("d-none");
+          else p.classList.add("d-none");
         }
       });
 
       // If current question is filtered out, jump to first kept
-      if (currentQuestionID != null && !keepSet.has(currentQuestionID) && keep.length > 0) {
+      if (
+        currentQuestionID != null &&
+        !keepSet.has(currentQuestionID) &&
+        keep.length > 0
+      ) {
         clickQuestionButton(keep[0]);
       }
       updateTopbarNavButtons();
     } catch (e) {
-      console.warn('applyQuestionFilters failed', e);
+      console.warn("applyQuestionFilters failed", e);
     }
   }
 
   function getActiveFilteredIDs() {
-    if (Array.isArray(filteredQuestionIDs) && filteredQuestionIDs.length > 0) return filteredQuestionIDs;
+    if (Array.isArray(filteredQuestionIDs) && filteredQuestionIDs.length > 0)
+      return filteredQuestionIDs;
     // default: all indices
     const n = window.displayQuestions?.length || 0;
     return Array.from({ length: n }, (_, i) => i);
   }
 })();
-  // --- Question font size slider (question + options only) ---
-  (function initQAFontSlider() {
-    const slider = document.getElementById("qa-font-range");
-    if (!slider) return;
-    const LS_KEY = "qbase:qa-scale";
-    const applyScale = (scale) => {
-      const clamped = Math.min(1.6, Math.max(0.6, scale));
-      document.documentElement.style.setProperty("--qa-scale", String(clamped));
-    };
+// --- Question font size slider (question + options only) ---
+(function initQAFontSlider() {
+  const slider = document.getElementById("qa-font-range");
+  if (!slider) return;
+  const LS_KEY = "qbase:qa-scale";
+  const applyScale = (scale) => {
+    const clamped = Math.min(1.6, Math.max(0.6, scale));
+    document.documentElement.style.setProperty("--qa-scale", String(clamped));
+  };
+  try {
+    const saved = localStorage.getItem(LS_KEY);
+    if (saved) {
+      const pct = Math.round(parseFloat(saved) * 100);
+      if (!Number.isNaN(pct)) slider.value = String(pct);
+      applyScale(parseFloat(saved));
+    }
+  } catch {}
+  slider.addEventListener("input", () => {
+    const pct = Number(slider.value || 100);
+    const scale = pct / 100;
+    applyScale(scale);
+  });
+  slider.addEventListener("change", () => {
+    const pct = Number(slider.value || 100);
+    const scale = pct / 100;
     try {
-      const saved = localStorage.getItem(LS_KEY);
-      if (saved) {
-        const pct = Math.round(parseFloat(saved) * 100);
-        if (!Number.isNaN(pct)) slider.value = String(pct);
-        applyScale(parseFloat(saved));
-      }
+      localStorage.setItem(LS_KEY, String(scale));
     } catch {}
-    slider.addEventListener("input", () => {
-      const pct = Number(slider.value || 100);
-      const scale = pct / 100;
-      applyScale(scale);
-    });
-    slider.addEventListener("change", () => {
-      const pct = Number(slider.value || 100);
-      const scale = pct / 100;
-      try { localStorage.setItem(LS_KEY, String(scale)); } catch {}
-    });
-  })();
+  });
+})();

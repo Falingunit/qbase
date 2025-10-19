@@ -90,8 +90,8 @@
     toggle(els.empty, false);
 
     try {
-      const raw = await fetchJson(DATA_URL);
-      allData = normalizeWorksheets(raw);
+      const raw = await WorksheetsService.fetchJson(DATA_URL);
+      allData = WorksheetsService.normalizeWorksheets(raw);
       renderGroups(allData);
       bindSearch();
 
@@ -111,85 +111,6 @@
     }
   }
 
-  // === Fetch helpers ===
-  async function fetchJson(url) {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-    return await r.json();
-  }
-
-  // === Data normalization (accept a few common shapes) ===
-  function normalizeWorksheets(input) {
-    const out = [];
-
-    const pushItem = (raw, subjHint) => {
-      if (!raw) return;
-      const subject = (raw.subject || subjHint || "(No subject)").toString();
-      const chapter = (
-        raw.chapter ||
-        raw.chapterName ||
-        raw.topic ||
-        ""
-      ).toString();
-      const title = (
-        raw.title ||
-        raw.name ||
-        raw.worksheetTitle ||
-        raw.label ||
-        raw.file ||
-        "Worksheet"
-      ).toString();
-      const fileField =
-        raw.file || raw.path || raw.url || raw.pdf || raw.href || "";
-      const fileUrl = resolveFile(fileField);
-      const chapterIndex = parseChapterIndex(chapter, raw.chapterIndex);
-      const wID = String(
-        raw.wID || raw.id || raw.wid || generateWID(subject, chapter, title)
-      );
-      out.push({ subject, chapter, title, wID, fileUrl, chapterIndex });
-    };
-
-    if (Array.isArray(input)) {
-      input.forEach((it) => pushItem(it));
-    } else if (input && Array.isArray(input.worksheets)) {
-      input.worksheets.forEach((it) => pushItem(it));
-    } else if (input && Array.isArray(input.items)) {
-      input.items.forEach((it) => pushItem(it));
-    } else if (input && typeof input === "object") {
-      // Possibly an object: { "Physics": [..], "Chemistry": [..] }
-      Object.entries(input).forEach(([subj, arr]) => {
-        if (Array.isArray(arr)) arr.forEach((it) => pushItem(it, subj));
-      });
-    }
-
-    // Stable sort by subject, then chapterIndex/chapter, then title
-    out.sort(
-      (a, b) =>
-        a.subject.localeCompare(b.subject, undefined, {
-          sensitivity: "base",
-        }) ||
-        (a.chapterIndex ?? 1e9) - (b.chapterIndex ?? 1e9) ||
-        a.chapter.localeCompare(b.chapter, undefined, {
-          sensitivity: "base",
-        }) ||
-        a.title.localeCompare(b.title, undefined, { sensitivity: "base" })
-    );
-
-    return out;
-  }
-
-  function parseChapterIndex(chapter, fallback) {
-    if (typeof fallback === "number") return fallback;
-    const m = /(^|\b)(\d{1,3})(\b|\D)/.exec(String(chapter || ""));
-    return m ? parseInt(m[2], 10) : 1e9; // put non-numbered at the end
-  }
-
-  function resolveFile(v) {
-    if (!v) return "";
-    // pass through absolute/relative URLs
-    return String(v);
-  }
-
   function bindSearch() {
     if (!els.search) return;
     let t;
@@ -199,19 +120,7 @@
     });
   }
 
-  function generateWID(subject, chapter, title) {
-    const slug = (s) =>
-      String(s || "")
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-");
-    const base = [slug(subject), slug(chapter), slug(title)]
-      .filter(Boolean)
-      .join("-");
-    return base.slice(0, 96) || String(Date.now());
-  }
+  // id generation moved to service when needed
 
   // === Rendering (match index.js structure/classes) ===
   function renderGroups(data) {

@@ -20,10 +20,20 @@ body {
 }
 #questionText {
   font-size: calc(1rem * var(--qa-scale));
-  color: whitesmoke
+  color: whitesmoke;
+  white-space: pre-wrap; /* preserve newlines; safer for KaTeX than inserting <br> */
+}
+#passageText {
+  white-space: pre-wrap;
+}
+#solutionText {
+  /* Make solution text obey the same font scale as question and options */
+  font-size: calc(1rem * var(--qa-scale));
+  white-space: pre-wrap;
 }
 #MCQOptionDiv .opt-text {
   font-size: calc(1rem * var(--qa-scale));
+  white-space: pre-wrap;
 }
 
 /* iOS fallback if 100dvh unsupported */
@@ -111,8 +121,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
   color: #fff;
   text-decoration: none !important;
   background: transparent;
@@ -306,19 +316,21 @@ body {
 }
 
 #q_list {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.6rem;
+  /* Use Bootstrap row/cols for layout; no custom grid here */
 }
 
 .q-btn {
-  height: 3rem;
-  min-width: 3rem;
-  line-height: 44px;
+  height: 3.25rem;
+  width: 3.25rem;
   padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
   font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 12px;
+  font-size: 1.05rem;
+  border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: #1b1e23;
   color: #dfe6ee;
@@ -427,6 +439,7 @@ body[data-qtype="MMCQ"] .mcq-option .opt-badge {
   flex: 1 1 auto;
   min-width: 0;
   color: whitesmoke;
+  white-space: pre-wrap;
 }
 
 .mcq-option-selected {
@@ -730,7 +743,7 @@ html {
 
 @media (min-width: 992px) {
   .q-btn {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
   }
 }
 

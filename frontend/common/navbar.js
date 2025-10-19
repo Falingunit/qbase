@@ -172,10 +172,22 @@
 
     const REVEAL_ZONE_PX = 14; // top area for desktop hover reveal
     const hasFinePointer = (() => {
-      try { return !!(window.matchMedia && window.matchMedia('(pointer: fine)').matches); } catch { return false; }
+      try {
+        return !!(
+          window.matchMedia && window.matchMedia("(pointer: fine)").matches
+        );
+      } catch {
+        return false;
+      }
     })();
     const hasCoarsePointer = (() => {
-      try { return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches); } catch { return false; }
+      try {
+        return !!(
+          window.matchMedia && window.matchMedia("(pointer: coarse)").matches
+        );
+      } catch {
+        return false;
+      }
     })();
     const topbar = document.querySelector(".assignment-topbar");
 
@@ -188,7 +200,8 @@
       collEl.addEventListener("hidden.bs.collapse", () => {
         // Hide unless cursor is still in reveal zone or hovering on navbar
         if (hasFinePointer) {
-          const lastMouseY = window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY;
+          const lastMouseY =
+            window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY;
           if (!nav.matches(":hover") && lastMouseY > REVEAL_ZONE_PX) hide();
         } else {
           hide();
@@ -225,12 +238,20 @@
         },
         { passive: true }
       );
-      nav.addEventListener("mouseenter", () => { navHovered = true; cancelHoverHide(); show(); }, { passive: true });
+      nav.addEventListener(
+        "mouseenter",
+        () => {
+          navHovered = true;
+          cancelHoverHide();
+          show();
+        },
+        { passive: true }
+      );
       nav.addEventListener(
         "mouseleave",
         (e) => {
           navHovered = false;
-          const y = (window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY);
+          const y = window.__qbase_lastMouseY__ ?? Number.POSITIVE_INFINITY;
           if (y > REVEAL_ZONE_PX && !isMenuOpen()) scheduleHoverHide(320);
         },
         { passive: true }
@@ -247,8 +268,21 @@
       }, ms);
     };
     // Also keep visible while user interacts with navbar itself.
-    nav.addEventListener('pointerdown', () => { if (hideTimer) clearTimeout(hideTimer); show(); }, { passive: true });
-    nav.addEventListener('pointerleave', () => { if (!isMenuOpen()) scheduleHide(); }, { passive: true });
+    nav.addEventListener(
+      "pointerdown",
+      () => {
+        if (hideTimer) clearTimeout(hideTimer);
+        show();
+      },
+      { passive: true }
+    );
+    nav.addEventListener(
+      "pointerleave",
+      () => {
+        if (!isMenuOpen()) scheduleHide();
+      },
+      { passive: true }
+    );
 
     const startTracker = { active: false, id: null, y: 0 };
     const onRevealGesture = () => {
@@ -304,11 +338,9 @@
           },
           { passive: true }
         );
-        topbar.addEventListener(
-          "touchend",
-          () => scheduleHide(),
-          { passive: true }
-        );
+        topbar.addEventListener("touchend", () => scheduleHide(), {
+          passive: true,
+        });
       }
     }
   }
@@ -326,8 +358,10 @@
   const userItem = document.getElementById("nav-user-item");
   const logoutLink = document.getElementById("nav-logout");
   const deleteAccountLink = document.getElementById("nav-delete-account");
-  const userDropdownMenu = document.querySelector('#nav-user-item .dropdown-menu');
-  let profileLink = document.getElementById('nav-profile');
+  const userDropdownMenu = document.querySelector(
+    "#nav-user-item .dropdown-menu"
+  );
+  let profileLink = document.getElementById("nav-profile");
   const usernameSpan = document.getElementById("nav-username");
   let loginGateEl = null;
   let isAuthenticated = false;
@@ -456,7 +490,9 @@
     el.classList.add("d-flex");
     document.body.style.overflow = "hidden";
     setTimeout(() => {
-      const target = el.querySelector("#qbaseLoginUsername") || el.querySelector("#qbaseSignupUsername");
+      const target =
+        el.querySelector("#qbaseLoginUsername") ||
+        el.querySelector("#qbaseSignupUsername");
       target?.focus();
     }, 0);
   }
@@ -628,7 +664,8 @@
 
       if (!username || username.length < 2) {
         if (upErr) {
-          upErr.textContent = "Please enter a valid username (min 2 characters).";
+          upErr.textContent =
+            "Please enter a valid username (min 2 characters).";
           upErr.style.display = "block";
         }
         upUser?.focus();
@@ -774,12 +811,12 @@
       buttons: [],
       focusSelector: `#${idNew}`,
       backdrop: "static", // cannot close by clicking outside
-      keyboard: false,     // cannot close with ESC
+      keyboard: false, // cannot close with ESC
       onContentReady: (modalEl) => {
         // Hide the header close button to prevent dismissal
         try {
-          const closeBtn = modalEl.querySelector('.btn-close');
-          if (closeBtn) closeBtn.style.display = 'none';
+          const closeBtn = modalEl.querySelector(".btn-close");
+          if (closeBtn) closeBtn.style.display = "none";
         } catch {}
 
         const btn = modalEl.querySelector(`#${btnId}`);
@@ -800,30 +837,30 @@
         const setBusy = (busy) => {
           if (!btn) return;
           btn.disabled = !!busy;
-          btn.textContent = busy ? 'Updating…' : 'Update Password';
+          btn.textContent = busy ? "Updating…" : "Update Password";
         };
-        btn?.addEventListener('click', async (e) => {
+        btn?.addEventListener("click", async (e) => {
           e.preventDefault();
           const { newPassword, confirm } = getVals();
           // Client validations with clear errors
           if (!newPassword || newPassword.length < 6) {
-            showErr('New password must be at least 6 characters.');
+            showErr("New password must be at least 6 characters.");
             return;
           }
           if (newPassword !== confirm) {
-            showErr('New passwords do not match.');
+            showErr("New passwords do not match.");
             return;
           }
           setBusy(true);
           try {
             const r = await authFetch(`${API_BASE}/account/password`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ newPassword }),
             });
             if (!r.ok) {
               // Attempt to show specific error messages
-              let msg = 'Failed to update password. Please try again.';
+              let msg = "Failed to update password. Please try again.";
               try {
                 const data = await r.json();
                 if (data && data.error) msg = String(data.error);
@@ -832,12 +869,21 @@
               setBusy(false);
               return;
             }
-            showErr('');
-            try { await showNotice({ title: 'Password Updated', message: 'Your password has been changed.' }); } catch {}
+            showErr("");
+            try {
+              await showNotice({
+                title: "Password Updated",
+                message: "Your password has been changed.",
+              });
+            } catch {}
             // Close modal after successful update
-            try { bootstrap.Modal.getInstance(modalEl)?.hide(); } catch {}
+            try {
+              bootstrap.Modal.getInstance(modalEl)?.hide();
+            } catch {}
           } catch {
-            showErr('Failed to update password. Please check your connection and try again.');
+            showErr(
+              "Failed to update password. Please check your connection and try again."
+            );
             setBusy(false);
           }
         });
@@ -851,6 +897,10 @@
     const idCon = "qbaseProfCon";
     const delBtnId = "qbaseProfDeleteBtn";
     const saveBtnId = "qbaseProfSaveBtn";
+    const marksTokId = "qbaseMarksToken";
+    const marksSaveId = "qbaseMarksSave";
+    const marksClearId = "qbaseMarksClear";
+    const marksStatusId = "qbaseMarksStatus";
     const errId = "qbaseProfErr";
     const body = `
       <div class="mb-3">
@@ -880,12 +930,120 @@
     await showModal({
       title: "Profile",
       bodyHTML: body,
-      buttons: [{ text: "Close", className: "btn btn-outline-secondary", value: true }],
+      buttons: [
+        { text: "Close", className: "btn btn-outline-secondary", value: true },
+      ],
       focusSelector: `#${idCur}`,
       onContentReady: (modalEl) => {
         const saveBtn = modalEl.querySelector(`#${saveBtnId}`);
         const delBtn = modalEl.querySelector(`#${delBtnId}`);
         const err = modalEl.querySelector(`#${errId}`);
+
+        // Inject Marks App Authentication section before Danger Zone
+        try {
+          const bodyEl = modalEl.querySelector(".modal-body");
+          const danger = delBtn?.closest(".mt-3");
+          const sect = document.createElement("div");
+          sect.className = "mt-3";
+          sect.innerHTML = `
+            <h6 class="mb-2">Marks App Authentication</h6>
+            <p class="small text-muted">Paste your Bearer token. It will be used to PYQs for you. We do not display the saved token.</p>
+            <div class="mb-2">
+              <label for="${marksTokId}" class="form-label">Bearer Token</label>
+              <input id="${marksTokId}" class="form-control" type="text" placeholder="eyJhbGciOi..." autocomplete="off" />
+              <div class="form-text">Leave blank to keep using the default (may not always work). Use Clear to remove.</div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+            <button id="${marksSaveId}" class="btn btn-outline-primary">Save Token</button>
+            <button id="${marksClearId}" class="btn btn-outline-secondary">Clear Token</button>
+            <span id="${marksStatusId}" class="small"></span>
+            </div>            <hr>
+`;
+          if (bodyEl) {
+            if (danger && danger.parentElement === bodyEl) {
+              bodyEl.insertBefore(sect, danger);
+            } else {
+              bodyEl.appendChild(sect);
+            }
+          }
+          // Wire up handlers
+          const mTok = sect.querySelector(`#${marksTokId}`);
+          const mSave = sect.querySelector(`#${marksSaveId}`);
+          const mClear = sect.querySelector(`#${marksClearId}`);
+          const mStatus = sect.querySelector(`#${marksStatusId}`);
+          (async () => {
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`);
+              if (r.ok) {
+                const d = await r.json();
+                if (mStatus)
+                  mStatus.textContent = d?.hasToken
+                    ? "Token configured"
+                    : "No token set";
+              }
+            } catch {}
+          })();
+          mSave?.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const token = (mTok?.value || "").trim();
+            if (!token) {
+              try {
+                await showNotice({
+                  title: "Nothing to save",
+                  message: "Enter a token first.",
+                });
+              } catch {}
+              return;
+            }
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ bearerToken: token }),
+              });
+              if (!r.ok) throw new Error(String(r.status));
+              if (mStatus) mStatus.textContent = "Token configured";
+              if (mTok) mTok.value = "";
+              try {
+                await showNotice({
+                  title: "Saved",
+                  message: "Marks App token saved.",
+                });
+              } catch {}
+            } catch (e) {
+              try {
+                await showNotice({
+                  title: "Error",
+                  message: "Failed to save token.",
+                });
+              } catch {}
+            }
+          });
+          mClear?.addEventListener("click", async (e) => {
+            e.preventDefault();
+            try {
+              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
+                method: "DELETE",
+              });
+              if (!r.ok) throw new Error(String(r.status));
+              if (mStatus) mStatus.textContent = "No token set";
+              if (mTok) mTok.value = "";
+              try {
+                await showNotice({
+                  title: "Cleared",
+                  message: "Marks App token cleared.",
+                });
+              } catch {}
+            } catch (e) {
+              try {
+                await showNotice({
+                  title: "Error",
+                  message: "Failed to clear token.",
+                });
+              } catch {}
+            }
+          });
+        } catch {}
         const getVals = () => {
           const cur = modalEl.querySelector(`#${idCur}`);
           const nw = modalEl.querySelector(`#${idNew}`);
@@ -902,7 +1060,7 @@
             err.style.display = msg ? "block" : "none";
           }
         };
-        saveBtn?.addEventListener('click', async (e) => {
+        saveBtn?.addEventListener("click", async (e) => {
           e.preventDefault();
           const { currentPassword, newPassword, confirm } = getVals();
           if (!newPassword || newPassword.length < 6) {
@@ -915,18 +1073,23 @@
           }
           try {
             const r = await authFetch(`${API_BASE}/account/password`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ currentPassword, newPassword }),
             });
             if (!r.ok) throw new Error(String(r.status));
             showErr("");
-            await showNotice({ title: 'Password Updated', message: 'Your password has been changed.' });
+            await showNotice({
+              title: "Password Updated",
+              message: "Your password has been changed.",
+            });
           } catch (e) {
-            showErr('Failed to update password. Check current password and try again.');
+            showErr(
+              "Failed to update password. Check current password and try again."
+            );
           }
         });
-        delBtn?.addEventListener('click', async (e) => {
+        delBtn?.addEventListener("click", async (e) => {
           e.preventDefault();
           await doDeleteAccountFlow();
         });
@@ -982,7 +1145,9 @@
       new Promise((resolve) => {
         // If stacking is requested, create an ephemeral modal element
         if (stack) {
-          const uid = `qbaseModal_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+          const uid = `qbaseModal_${Date.now()}_${Math.random()
+            .toString(36)
+            .slice(2, 8)}`;
           const tpl = document.createElement("div");
           tpl.innerHTML = `
             <div class="modal fade" id="${uid}" tabindex="-1" aria-hidden="true">
@@ -1017,7 +1182,9 @@
           const onHidden = () => {
             modalEl.removeEventListener("hidden.bs.modal", onHidden);
             // remove the ephemeral modal from DOM on close
-            try { modalEl.parentElement?.removeChild(modalEl); } catch {}
+            try {
+              modalEl.parentElement?.removeChild(modalEl);
+            } catch {}
             resolve(result);
           };
           modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
@@ -1037,16 +1204,21 @@
           const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
 
           // Raise z-index to appear above any currently open modal and adjust backdrop
-          modalEl.addEventListener("shown.bs.modal", () => {
-            try {
-              const openCount = document.querySelectorAll('.modal.show').length;
-              const z = 1055 + openCount * 20;
-              modalEl.style.zIndex = String(z);
-              const bds = document.querySelectorAll('.modal-backdrop');
-              const lastBd = bds[bds.length - 1];
-              if (lastBd) lastBd.style.zIndex = String(z - 5);
-            } catch {}
-          }, { once: true });
+          modalEl.addEventListener(
+            "shown.bs.modal",
+            () => {
+              try {
+                const openCount =
+                  document.querySelectorAll(".modal.show").length;
+                const z = 1055 + openCount * 20;
+                modalEl.style.zIndex = String(z);
+                const bds = document.querySelectorAll(".modal-backdrop");
+                const lastBd = bds[bds.length - 1];
+                if (lastBd) lastBd.style.zIndex = String(z - 5);
+              } catch {}
+            },
+            { once: true }
+          );
 
           if (focusSelector) {
             modalEl.addEventListener(
@@ -1399,7 +1571,9 @@
       await authFetch(`${API_BASE}/logout`, { method: "POST" });
     } catch {}
     qbClearToken();
-    try { sessionStorage.setItem("qbase.dev.noAutoLogin", "1"); } catch {}
+    try {
+      sessionStorage.setItem("qbase.dev.noAutoLogin", "1");
+    } catch {}
     setLoggedOutUI();
     broadcastLogout();
     showLoginGate();
@@ -1455,22 +1629,25 @@
     try {
       // Hide existing Delete Account item if present
       if (deleteAccountLink) {
-        const li = deleteAccountLink.closest('li');
-        if (li) li.classList.add('d-none');
+        const li = deleteAccountLink.closest("li");
+        if (li) li.classList.add("d-none");
       }
       if (!profileLink && userDropdownMenu) {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.className = 'dropdown-item';
-        a.href = '#';
-        a.id = 'nav-profile';
-        a.textContent = 'Profile';
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.className = "dropdown-item";
+        a.href = "#";
+        a.id = "nav-profile";
+        a.textContent = "Profile";
         li.appendChild(a);
         // Insert as first item
-        userDropdownMenu.insertBefore(li, userDropdownMenu.firstElementChild || null);
+        userDropdownMenu.insertBefore(
+          li,
+          userDropdownMenu.firstElementChild || null
+        );
         profileLink = a;
       }
-      profileLink?.addEventListener('click', (e) => {
+      profileLink?.addEventListener("click", (e) => {
         e.preventDefault();
         showProfileModal();
       });

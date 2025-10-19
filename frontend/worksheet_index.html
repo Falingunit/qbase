@@ -24,13 +24,14 @@
     />
 
     <!-- Site styles: global theme + page styles -->
-    <link href="./theme.css" rel="stylesheet" />
-    <link href="./index.css" rel="stylesheet" />
-    <link href="./worksheet_index.css" rel="stylesheet" />
+    <link href="./common/theme.css" rel="stylesheet" />
+    <link href="./common/index.css" rel="stylesheet" />
+    <link href="./worksheets/worksheet_index.css" rel="stylesheet" />
 
     <!-- Site scripts (config/login/navbar) -->
-    <script defer src="config.js"></script>
-    <script defer src="./navbar.js"></script>
+    <script defer src="./common/config.js"></script>
+    <script defer src="./common/navbar.js"></script>
+    <script defer src="./worksheets/worksheets.service.js"></script>
   </head>
   <body class="bg-dark text-light" data-active="worksheets">
     <!-- NAVBAR (same structure as index.html) -->
@@ -66,6 +67,9 @@
                 href="./worksheet_index.html"
                 >Worksheets</a
               >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./pyqs.html">PYQs</a>
             </li>
           </ul>
 
@@ -174,6 +178,6 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
     ></script>
-    <script defer src="./worksheet_index.js"></script>
+    <script defer src="./worksheets/worksheet_index.js"></script>
   </body>
 </html>
