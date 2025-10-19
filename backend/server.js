@@ -174,6 +174,20 @@ db.exec(`
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
 
+  -- PYQs per-question color marks
+  CREATE TABLE IF NOT EXISTS pyqs_question_marks (
+    userId TEXT NOT NULL,
+    examId TEXT NOT NULL,
+    subjectId TEXT NOT NULL,
+    chapterId TEXT NOT NULL,
+    questionIndex INTEGER NOT NULL,
+    color TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, examId, subjectId, chapterId, questionIndex),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
   -- Starred assignments
   CREATE TABLE IF NOT EXISTS starred_assignments (
     userId TEXT NOT NULL,
