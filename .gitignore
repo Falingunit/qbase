@@ -29,3 +29,5 @@ backend/uploads/
 backend/db.sqlite
 
 utils/scraper/output/
+
+backend/dbbackupold
