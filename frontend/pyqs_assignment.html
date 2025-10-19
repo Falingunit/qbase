@@ -782,17 +782,37 @@
               )}/${encodeURIComponent(subject)}/${encodeURIComponent(chapter)}`;
               const prefResp = await authFetch(prefUrl);
               if (prefResp.ok) {
-                const f = await prefResp.json();
-                if (f && typeof f === "object")
-                  window.__ASSIGNMENT_FILTER_OBJECT__ = f;
+                const raw = await prefResp.json();
 
-                const normDiff = (d) => {
-                  d = String(d || "").toLowerCase();
-                  if (d.startsWith("e")) return "easy";
-                  if (d.startsWith("m")) return "medium";
-                  if (d.startsWith("h")) return "hard";
-                  return "";
+                // Unwrap if server returns {prefs: {...}}
+                const serverPrefs =
+                  raw &&
+                  typeof raw === "object" &&
+                  raw.prefs &&
+                  typeof raw.prefs === "object"
+                    ? raw.prefs
+                    : raw;
+
+                // Merge with safe defaults so .sort is always defined
+                const defaults = {
+                  q: "",
+                  years: [],
+                  status: "",
+                  diff: "",
+                  hasSol: false,
+                  sort: "index",
                 };
+                const f = Object.assign({}, defaults, serverPrefs);
+
+                window.__ASSIGNMENT_FILTER_OBJECT__ = f;
+
+                function normDiff(d) {
+                  const s = String(d || "").toLowerCase();
+                  if (s.startsWith("1") || s.startsWith("e")) return "easy";
+                  if (s.startsWith("2") || s.startsWith("m")) return "medium";
+                  if (s.startsWith("3") || s.startsWith("h")) return "hard";
+                  return "";
+                }
                 const parseYear = (info) => {
                   const m = String(info || "").match(/(19|20)\d{2}/);
                   return m ? Number(m[0]) : null;
@@ -865,10 +885,122 @@
                 window.__ASSIGNMENT_FILTER_INFO__ = parts.length
                   ? parts.join(" • ")
                   : "No filters";
+                if (f.sort && f.sort !== "index") {
+                  window.__ASSIGNMENT_FILTER_INFO__ += ` • Sort: ${f.sort}`;
+                }
               }
             } catch (e) {
               console.warn("Filter application failed:", e);
             }
+
+            // --- Apply sort according to saved prefs (year/difficulty/index) ---
+            try {
+              const f = window.__ASSIGNMENT_FILTER_OBJECT__ || {};
+              const sort = String(f.sort || "index").toLowerCase();
+
+              // Fallback if parseYear wasn't available (e.g., prefs fetch failed)
+              const parseYearSafe = (info) => {
+                try {
+                  if (typeof parseYear === "function") return parseYear(info);
+                } catch {}
+                const m = String(info || "").match(/(19|20)\d{2}/);
+                return m ? Number(m[0]) : null;
+              };
+
+              // Map difficulty to a rank for sorting
+              const diffRank = (d) => {
+                const s = String(d || "")
+                  .trim()
+                  .toLowerCase();
+
+                // direct matches
+                if (s === "easy" || s === "e" || s === "1") return 1;
+                if (s === "medium" || s === "med" || s === "m" || s === "2")
+                  return 2;
+                if (s === "hard" || s === "h" || s === "3") return 3;
+
+                // partials / variants
+                if (/^e(as(y)?)?$/.test(s)) return 1;
+                if (/^m(e(d(iu)?m)?)?$/.test(s)) return 2;
+                if (/^h(ar(d)?)?$/.test(s)) return 3;
+
+                // phrases like "level 1", "lvl 2"
+                if (/^(level|lvl)\s*1$/.test(s)) return 1;
+                if (/^(level|lvl)\s*2$/.test(s)) return 2;
+                if (/^(level|lvl)\s*3$/.test(s)) return 3;
+
+                // fallback: prefix-based (your old behavior)
+                if (s.startsWith("e")) return 1;
+                if (s.startsWith("m")) return 2;
+                if (s.startsWith("h")) return 3;
+
+                // unknown
+                return null;
+              };
+
+              // Stable sort wrapper so ties keep original order
+              const withPos = filteredWithIndices.map((row) => ({
+                row,
+                orig: row.originalIdx, // for stable tiebreak
+              }));
+
+              const cmp = (a, b) => {
+                const A = a.row.Q;
+                const B = b.row.Q;
+
+                switch (sort) {
+                  case "year-asc": {
+                    const ay = parseYearSafe(A.pyqInfo) ?? -Infinity;
+                    const by = parseYearSafe(B.pyqInfo) ?? -Infinity;
+                    if (ay !== by) return ay - by;
+                    break;
+                  }
+                  case "year-desc": {
+                    const ay = parseYearSafe(A.pyqInfo) ?? -Infinity;
+                    const by = parseYearSafe(B.pyqInfo) ?? -Infinity;
+                    if (ay !== by) return by - ay;
+                    break;
+                  }
+                  case "diff-asc": {
+                    const ad = diffRank(A.diffuculty);
+                    const bd = diffRank(B.diffuculty);
+
+                    // Put unknowns LAST
+                    if (ad == null && bd == null) break; // tie → tiebreaker
+                    if (ad == null) return 1; // A unknown → after B
+                    if (bd == null) return -1; // B unknown → after A
+
+                    if (ad !== bd) return ad - bd; // easy→medium→hard
+                    break;
+                  }
+
+                  case "diff-desc": {
+                    const ad = diffRank(A.diffuculty);
+                    const bd = diffRank(B.diffuculty);
+
+                    // Put unknowns LAST
+                    if (ad == null && bd == null) break; // tie → tiebreaker
+                    if (ad == null) return 1; // A unknown → after B
+                    if (bd == null) return -1; // B unknown → after A
+
+                    if (ad !== bd) return bd - ad; // hard→medium→easy
+                    break;
+                  }
+                  case "index":
+                  default:
+                    // keep API/list order
+                    break;
+                }
+                // Stable tiebreak: original source order
+                return a.orig - b.orig;
+              };
+
+              withPos.sort(cmp);
+              filteredWithIndices = withPos.map((x) => x.row);
+            } catch (e) {
+              console.warn("Sort application failed:", e);
+            }
+            // --- END sort ---
 
             // Extract filtered questions and build index map
             const questions = filteredWithIndices.map((x) => x.Q);
