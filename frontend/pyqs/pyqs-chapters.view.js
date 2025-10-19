@@ -152,6 +152,15 @@ function chapterCard(state, chapter, { onToggleStar }) {
   if (isStarred) card.classList.add('as-starred');
 
   card.append(starBtn, body); body.append(icoWrap, info);
+
+  // Progress bar (green-red-grey) flush at bottom
+  const bar = document.createElement('div');
+  bar.className = 'pyqs-chapbar';
+  bar.innerHTML = '<div class="seg seg-green" style="width:0%"></div><div class="seg seg-red" style="width:0%"></div><div class="seg seg-grey" style="width:100%"></div>';
+  card.appendChild(bar);
+
+  // Asynchronously compute chapter progress under current saved filters
+  try { updateChapterProgressBar(bar, state.exam.id, state.subject?.id, chapter.id); } catch {}
   card.addEventListener('click', () => {
     const url = new URL('./pyqs_questions.html', location.href);
     url.searchParams.set('exam', state.exam.id);
@@ -162,3 +171,81 @@ function chapterCard(state, chapter, { onToggleStar }) {
   return card;
 }
 
+// -------- Helpers: fetch + compute progress per chapter (green/red/grey) --------
+async function updateChapterProgressBar(host, examId, subjectId, chapterId) {
+  try {
+    const PREF_URL = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
+    const STATE_URL = `${API_BASE}/api/pyqs/state/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
+    const Q_URL = `${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`;
+
+    // Load filters (if unavailable, defaults to all)
+    const defaultFilters = () => ({ q: '', years: [], status: '', diff: '', hasSol: false, sort: 'index' });
+    let filters = defaultFilters();
+    try { const r = await authFetch(PREF_URL); if (r?.ok) { const obj = await r.json(); if (obj && typeof obj === 'object') filters = { ...filters, ...obj }; } } catch {}
+
+    // Fetch questions + state concurrently
+    const [qs, st] = await Promise.all([
+      authFetch(Q_URL).then(r => (r && r.ok ? r.json() : [])).catch(() => []),
+      authFetch(STATE_URL).then(r => (r && r.ok ? r.json() : [])).catch(() => []),
+    ]);
+    const questions = Array.isArray(qs) ? qs : [];
+    const states = normalizeStates(st);
+
+    // Apply filters similar to question list
+    const parseYear = (pyqInfo) => { try { const m = String(pyqInfo || '').match(/(19|20)\d{2}/); return m ? Number(m[0]) : null; } catch { return null; } };
+    const normDiff = (d) => { const s = String(d || '').toLowerCase(); if (s.startsWith('1')||s.startsWith('e')) return 'easy'; if (s.startsWith('2')||s.startsWith('m')) return 'medium'; if (s.startsWith('3')||s.startsWith('h')) return 'hard'; return ''; };
+    const statusFromState = (st) => { if (!st) return 'not-started'; if (st.isAnswerEvaluated) { if (st.evalStatus === 'correct') return 'correct'; if (st.evalStatus === 'partial') return 'partial'; if (st.evalStatus === 'incorrect') return 'incorrect'; return 'completed'; } if (st.isAnswerPicked) return 'in-progress'; return 'not-started'; };
+
+    // Map then filter
+    let mapped = questions.map((q, i) => ({ q, i }));
+    if (filters.q) { const qq = String(filters.q).trim().toLowerCase(); mapped = mapped.filter(o => (o.q.qText || '').toLowerCase().includes(qq)); }
+    if (Array.isArray(filters.years) && filters.years.length) { const set = new Set(filters.years); mapped = mapped.filter(o => { const y = parseYear(o.q.pyqInfo); return y && set.has(y); }); }
+    if (filters.diff) { mapped = mapped.filter(o => normDiff(o.q.diffuculty) === filters.diff); }
+    if (filters.hasSol) { mapped = mapped.filter(o => String(o.q?.solution?.sText||'').trim().length || String(o.q?.solution?.sImage||'').trim().length); }
+    if (filters.status) { mapped = mapped.filter(o => { const s = statusFromState(states[o.i]); return s === filters.status || (filters.status === 'completed' && states[o.i]?.isAnswerEvaluated); }); }
+
+    const total = mapped.length || 0;
+    let green = 0, red = 0, grey = 0;
+    if (total > 0) {
+      for (const o of mapped) {
+        const s = statusFromState(states[o.i]);
+        if (s === 'correct') green++;
+        else if (s === 'incorrect' || s === 'partial') red++;
+        else grey++; // includes not-started and in-progress
+      }
+    } else {
+      // No questions after filters — show empty grey bar
+      grey = 1; // width 100%
+    }
+
+    const gPct = total ? (green * 100) / total : 0;
+    const rPct = total ? (red * 100) / total : 0;
+    const grPct = total ? Math.max(0, 100 - gPct - rPct) : 100;
+
+    const gEl = host.querySelector('.seg-green');
+    const rEl = host.querySelector('.seg-red');
+    const grEl = host.querySelector('.seg-grey');
+    if (gEl) gEl.style.width = `${gPct.toFixed(2)}%`;
+    if (rEl) rEl.style.width = `${rPct.toFixed(2)}%`;
+    if (grEl) grEl.style.width = `${grPct.toFixed(2)}%`;
+
+    try { host.title = total ? `${green} correct • ${red} incorrect • ${grey} pending (${total} in filter)` : 'No questions in filter'; } catch {}
+  } catch (e) {
+    // On error, keep default grey bar
+    // Optionally set a tooltip
+    try { host.title = 'Progress unavailable'; } catch {}
+  }
+}
+
+function normalizeStates(raw) {
+  // Accept array or sparse object keyed by original index
+  if (Array.isArray(raw)) return raw;
+  const out = [];
+  if (raw && typeof raw === 'object') {
+    for (const k of Object.keys(raw)) {
+      const idx = Number(k);
+      if (!Number.isNaN(idx)) out[idx] = raw[k];
+    }
+  }
+  return out;
+}

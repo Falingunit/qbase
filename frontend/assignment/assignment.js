@@ -2813,21 +2813,21 @@
       const picker = document.getElementById('qcolor-picker');
       if (!picker) return;
       const chips = Array.from(picker.querySelectorAll('.qcolor-chip'));
-      chips.forEach((c) => c.classList.remove('selected'));
       if (currentQuestionID == null) return;
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
-      if (!res.ok) {
-        // No color saved, mark 'none' chip as selected
-        const none = chips.find((c) => String(c.getAttribute('data-color') || '').toLowerCase() === 'none');
-        if (none) none.classList.add('selected');
-        return;
-      }
-      const data = await res.json();
-      const color = (data?.color || '').trim().toLowerCase();
-      const sel = color || 'none';
-      const match = chips.find((c) => String(c.getAttribute('data-color') || '').trim().toLowerCase() === sel);
-      if (match) match.classList.add('selected');
+      let sel = 'none';
+      try {
+        const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
+        if (res.ok) {
+          const data = await res.json();
+          const color = (data?.color || '').trim().toLowerCase();
+          sel = color || 'none';
+        }
+      } catch {}
+      chips.forEach((c) => {
+        const val = String(c.getAttribute('data-color') || '').trim().toLowerCase();
+        c.classList.toggle('selected', val === sel);
+      });
     } catch (e) {
       // ignore
     }
@@ -2876,15 +2876,53 @@
 
   // Refresh badges on login/logout
   window.addEventListener('qbase:login', () => { updateBookmarkIndicators(); updateColorIndicators(); updateColorPickerSelection(); });
-  window.addEventListener('qbase:logout', () => {
-    questionButtons?.forEach((btn) => {
-      btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
-      btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
-    });
-  });
+      window.addEventListener('qbase:logout', () => {
+        questionButtons?.forEach((btn) => {
+          btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+          btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
+        });
+      });
 
-  // -------------------- Filter UI (tags + colors) --------------------
-  function setupFilterDropdown() {
+      // ---------- Alt+Digit color hotkeys ----------
+      (function wireAltColorHotkeys() {
+        function isTypingContext() {
+          const ae = document.activeElement; if (!ae) return false;
+          const tag = (ae.tagName || '').toLowerCase();
+          if (tag === 'input' || tag === 'textarea') return true;
+          if (ae.isContentEditable) return true;
+          return false;
+        }
+        function overlayOpen() {
+          const el = document.getElementById('image-overlay');
+          if (!el) return false; const s = getComputedStyle(el); return s.display !== 'none';
+        }
+        const COLOR_MAP = {
+          '1': '#0d6efd', // blue
+          '2': '#dc3545', // red
+          '3': '#ffc107', // yellow
+          '4': '#198754', // green
+          '5': 'none',    // clear
+        };
+        window.addEventListener('keydown', async (e) => {
+          if (!e.altKey) return;
+          if (overlayOpen()) return;
+          const k = String(e.key || '').toLowerCase();
+          if (!Object.prototype.hasOwnProperty.call(COLOR_MAP, k)) return;
+          if (isTypingContext()) return;
+          e.preventDefault();
+          if (currentQuestionID == null) return;
+          const val = COLOR_MAP[k];
+          let ok = true;
+          if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
+          if (ok) {
+            try { updateColorIndicators(); } catch {}
+            try { updateColorPickerSelection(); } catch {}
+          }
+        });
+      })();
+
+      // -------------------- Filter UI (tags + colors) --------------------
+      function setupFilterDropdown() {
     const btn = document.getElementById('filter-btn');
     const tagsHost = document.getElementById('filter-tags');
     const colorsHost = document.getElementById('filter-colors');

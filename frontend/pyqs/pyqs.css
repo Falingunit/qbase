@@ -183,3 +183,19 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 
 /* Space between Starred header and grid */
 #pyqs-starred-chapters-wrap .as-header { margin-bottom: 0.75rem; }
+
+/* Chapter progress bar (bottom of cards) */
+.pyqs-chapbar {
+  height: 6px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.pyqs-chapbar .seg { height: 100%; transition: width 200ms ease; }
+.pyqs-chapbar .seg-green { background-color: #198754; }
+.pyqs-chapbar .seg-red { background-color: #dc3545; }
+.pyqs-chapbar .seg-grey { background-color: rgba(255, 255, 255, 0.2); }

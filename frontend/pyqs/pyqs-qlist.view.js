@@ -129,7 +129,7 @@ export function initQListView(
         ? "bi-pencil text-info"
         : "bi-circle text-secondary";
     const qhtml = sanitizeHtml(q.qText || "");
-    item.innerHTML = `<div class="d-flex align-items-start gap-2"><div class="rounded-circle bg-info-subtle" style="width: 20px; height: 20px;">${
+    item.innerHTML = `<div class="d-flex align-items-start gap-2"><div class="" style="width: 20px; height: 20px;">${
       i + 1
     }</div><i class="bi ${icon}" aria-hidden="true"></i><div class="flex-grow-1"><div class="pyq-qtext">${qhtml}</div><div class="text-muted small">${escapeHtml(
       q.pyqInfo || ""
@@ -155,7 +155,8 @@ export function initQListView(
   }
   function yearHeader(y) {
     const h = document.createElement("div");
-    h.className = "list-group-item text-white border-secondary-subtle q-year-header";
+    h.className =
+      "list-group-item text-white border-secondary-subtle q-year-header";
     h.textContent = y ? String(y) : "Unknown Year";
     return h;
   }
@@ -166,7 +167,8 @@ export function initQListView(
     const frag = document.createDocumentFragment();
     for (let idx = from; idx < to; idx++) {
       const curY = parseYear(mappedCache[idx].q.pyqInfo);
-      const prevY = idx > 0 ? parseYear(mappedCache[idx - 1].q.pyqInfo) : undefined;
+      const prevY =
+        idx > 0 ? parseYear(mappedCache[idx - 1].q.pyqInfo) : undefined;
       if (idx === 0 || curY !== prevY) {
         frag.appendChild(yearHeader(curY));
       }
@@ -225,4 +227,3 @@ export function initQListView(
 
   return { render };
 }
-

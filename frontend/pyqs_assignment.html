@@ -61,7 +61,9 @@
       #passageText img,
       #solutionText img,
       #questionImage img,
-      #solutionImage img { filter: invert(1) hue-rotate(180deg) contrast(1.05); }
+      #solutionImage img {
+        filter: invert(1) hue-rotate(180deg) contrast(1.05);
+      }
     </style>
     <!-- Modal helpers (same API as navbar.js) -->
     <script>
@@ -115,7 +117,8 @@
 
                 // Allow caller to attach event listeners to freshly inserted content
                 try {
-                  if (typeof onContentReady === "function") onContentReady(modalEl);
+                  if (typeof onContentReady === "function")
+                    onContentReady(modalEl);
                 } catch {}
 
                 let result;
@@ -123,7 +126,9 @@
                   modalEl.removeEventListener("hidden.bs.modal", onHidden);
                   resolve(result);
                 };
-                modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
+                modalEl.addEventListener("hidden.bs.modal", onHidden, {
+                  once: true,
+                });
 
                 (buttons || []).forEach((b, i) => {
                   const btn = document.createElement("button");
@@ -137,7 +142,10 @@
                   footEl.appendChild(btn);
                 });
 
-                const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
+                const bsModal = new bootstrap.Modal(modalEl, {
+                  backdrop,
+                  keyboard,
+                });
                 if (focusSelector) {
                   modalEl.addEventListener(
                     "shown.bs.modal",
@@ -153,12 +161,21 @@
           );
         }
 
-        async function showConfirm({ title, message, okText = "OK", cancelText = "Cancel" }) {
+        async function showConfirm({
+          title,
+          message,
+          okText = "OK",
+          cancelText = "Cancel",
+        }) {
           return await showModal({
             title,
             bodyHTML: `<p class="mb-0">${message}</p>`,
             buttons: [
-              { text: cancelText, className: "btn btn-outline-secondary", value: false },
+              {
+                text: cancelText,
+                className: "btn btn-outline-secondary",
+                value: false,
+              },
               { text: okText, className: "btn btn-success", value: true },
             ],
           });
@@ -178,14 +195,22 @@
         }) {
           const id = "qbasePromptInput";
           const body = `
-            <label for="${id}" class="form-label">${(label ?? message) || "Enter value"}</label>
-            <input id="${id}" class="form-control" type="text" placeholder="${placeholder}" value="${(initial ?? defaultValue) ?? ""}">
+            <label for="${id}" class="form-label">${
+            (label ?? message) || "Enter value"
+          }</label>
+            <input id="${id}" class="form-control" type="text" placeholder="${placeholder}" value="${
+            initial ?? defaultValue ?? ""
+          }">
           `;
           const res = await showModal({
             title,
             bodyHTML: body,
             buttons: [
-              { text: cancelText, className: "btn btn-outline-secondary", value: null },
+              {
+                text: cancelText,
+                className: "btn btn-outline-secondary",
+                value: null,
+              },
               { text: okText, className: "btn btn-primary", value: "__OK__" },
             ],
             focusSelector: `#${id}`,
@@ -199,7 +224,9 @@
           await showModal({
             title,
             bodyHTML: `<p class="mb-0">${message}</p>`,
-            buttons: [{ text: okText, className: "btn btn-primary", value: true }],
+            buttons: [
+              { text: okText, className: "btn btn-primary", value: true },
+            ],
           });
         }
 
@@ -217,7 +244,7 @@
     ></script>
   </head>
   <body class="bg-dark text-light" style="max-height: 10vh !important">
-<!-- navbar removed for assignment page -->
+    <!-- navbar removed for assignment page -->
     <div
       class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center"
     >
@@ -324,9 +351,16 @@
               class="card-header d-flex justify-content-between align-items-center"
             >
               <div>
-                <strong style="font-weight: 600"
-                  >Q-<span id="qNo">1</span></strong
+                <strong style="font-weight: 600">
+                  Q-<span id="qNo">1</span>
+                </strong>
+                <span
+                  class="text-muted small ms-2"
+                  id="origNoWrap"
+                  title="Original ID in server"
                 >
+                  (ID <span id="origNo">1</span>)
+                </span>
                 <div class="small text-muted" id="assignmentDetails"></div>
               </div>
               <div class="d-flex align-items-center gap-2">
@@ -338,12 +372,45 @@
                   <i class="bi bi-bookmark"></i>
                 </button>
                 <!-- Quick color marks -->
-                <div id="qcolor-picker" class="qcolor-picker collapsed" title="Mark question">
-                  <button type="button" class="qcolor-chip" data-color="none" aria-label="No color (clear)"></button>
-                  <button type="button" class="qcolor-chip" data-color="#0d6efd" style="--qc:#0d6efd" aria-label="Mark blue"></button>
-                  <button type="button" class="qcolor-chip" data-color="#dc3545" style="--qc:#dc3545" aria-label="Mark red"></button>
-                  <button type="button" class="qcolor-chip" data-color="#ffc107" style="--qc:#ffc107" aria-label="Mark yellow"></button>
-                  <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
+                <div
+                  id="qcolor-picker"
+                  class="qcolor-picker collapsed"
+                  title="Mark question"
+                >
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="none"
+                    aria-label="No color (clear)"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#0d6efd"
+                    style="--qc: #0d6efd"
+                    aria-label="Mark blue"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#dc3545"
+                    style="--qc: #dc3545"
+                    aria-label="Mark red"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#ffc107"
+                    style="--qc: #ffc107"
+                    aria-label="Mark yellow"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#198754"
+                    style="--qc: #198754"
+                    aria-label="Mark green"
+                  ></button>
                 </div>
                 <span id="timer" class="badge bg-dark text-info">00:11</span>
                 <span
@@ -421,10 +488,14 @@
           </div>
 
           <!-- Solution (hidden until answer is checked) -->
-          <div id="solutionSection" class="mb-3" style="display: none;">
+          <div id="solutionSection" class="mb-3" style="display: none">
             <h5 class="h6 text-info mb-2">Solution</h5>
             <div id="solutionText" class="fonted"></div>
-            <div id="solutionImage" class="question-image mt-2" style="display: none;"></div>
+            <div
+              id="solutionImage"
+              class="question-image mt-2"
+              style="display: none"
+            ></div>
           </div>
 
           <hr />
@@ -480,8 +551,13 @@
       >
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h6 class="mb-0">Questions</h6>
-          <button id="filters-info-btn" class="btn btn-sm btn-outline-secondary" title="Show active filters"><i class="bi bi-info-circle"></i></button>
-
+          <button
+            id="filters-info-btn"
+            class="btn btn-sm btn-outline-secondary"
+            title="Show active filters"
+          >
+            <i class="bi bi-info-circle"></i>
+          </button>
         </div>
         <div
           class="controls justify-content-between flex-shrink-0"
@@ -491,165 +567,321 @@
         </div>
       </div>
       <!-- Optional: DOMPurify for safe HTML rendering in PYQs -->
-      <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+      <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"
+      ></script>
       <!-- PYQs: provide custom data loader and use PYQ-aware viewer -->
       <script>
         // Provide a custom loader so the viewer can render PYQ chapter data
         (function () {
           window.__ASSIGNMENT_CUSTOM_LOADER__ = async function () {
-            try { if (typeof loadConfig === 'function') await loadConfig(); } catch {}
-            const fetcher = (typeof authFetch === 'function') ? authFetch : fetch;
+            try {
+              if (typeof loadConfig === "function") await loadConfig();
+            } catch {}
+            const fetcher = typeof authFetch === "function" ? authFetch : fetch;
             const url = new URL(window.location.href);
-            const exam = url.searchParams.get('exam');
-            const subject = url.searchParams.get('subject');
-            const chapter = url.searchParams.get('chapter');
+            const exam = url.searchParams.get("exam");
+            const subject = url.searchParams.get("subject");
+            const chapter = url.searchParams.get("chapter");
 
             // Update back link to return to questions list for this chapter
             try {
-              const back = document.querySelector('a.topbar-back');
+              const back = document.querySelector("a.topbar-back");
               if (back && exam && subject) {
-                const u = new URL('./pyqs_questions.html', window.location.href);
-                u.searchParams.set('exam', exam);
-                u.searchParams.set('subject', subject);
-                if (chapter) u.searchParams.set('chapter', chapter);
+                const u = new URL(
+                  "./pyqs_questions.html",
+                  window.location.href
+                );
+                u.searchParams.set("exam", exam);
+                u.searchParams.set("subject", subject);
+                if (chapter) u.searchParams.set("chapter", chapter);
                 back.href = u.toString();
-                back.title = 'Back to Questions';
-                back.setAttribute('aria-label', 'Back to Questions');
+                back.title = "Back to Questions";
+                back.setAttribute("aria-label", "Back to Questions");
               }
             } catch {}
 
             // Derive a stable synthetic assignment ID from route params (for local save state)
             try {
-              const key = String(exam || '') + '::' + String(subject || '') + '::' + String(chapter || '');
+              const key =
+                String(exam || "") +
+                "::" +
+                String(subject || "") +
+                "::" +
+                String(chapter || "");
               let h = 0;
-              for (let i = 0; i < key.length; i++) h = ((h << 5) - h + key.charCodeAt(i)) | 0; // djb2-ish
+              for (let i = 0; i < key.length; i++)
+                h = ((h << 5) - h + key.charCodeAt(i)) | 0; // djb2-ish
               const aID = (h >>> 0) % 2147483647;
               window.__PYQS_ASSIGNMENT_ID__ = aID;
             } catch {}
 
             // Resolve names (exam, subject, chapter) for metadata and title
             try {
-              let examName = '' , subjectName = '' , chapterName = '';
+              let examName = "",
+                subjectName = "",
+                chapterName = "";
               if (exam) {
                 try {
-                  const re = await fetcher(`${API_BASE}/api/pyqs/exams`, { cache: 'no-store' });
-                  if (re.ok) { const ex = await re.json(); examName = (ex || []).find(e => String(e.id) === String(exam))?.name || ''; }
+                  const re = await fetcher(`${API_BASE}/api/pyqs/exams`, {
+                    cache: "no-store",
+                  });
+                  if (re.ok) {
+                    const ex = await re.json();
+                    examName =
+                      (ex || []).find((e) => String(e.id) === String(exam))
+                        ?.name || "";
+                  }
                 } catch {}
               }
               if (exam && subject) {
                 try {
-                  const rs = await fetcher(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(exam)}/subjects`, { cache: 'no-store' });
-                  if (rs.ok) { const ss = await rs.json(); subjectName = (ss || []).find(s => String(s.id) === String(subject))?.name || ''; }
+                  const rs = await fetcher(
+                    `${API_BASE}/api/pyqs/exams/${encodeURIComponent(
+                      exam
+                    )}/subjects`,
+                    { cache: "no-store" }
+                  );
+                  if (rs.ok) {
+                    const ss = await rs.json();
+                    subjectName =
+                      (ss || []).find((s) => String(s.id) === String(subject))
+                        ?.name || "";
+                  }
                 } catch {}
               }
               if (exam && subject) {
-                const rc = await fetcher(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(exam)}/subjects/${encodeURIComponent(subject)}/chapters`, { cache: 'no-store' });
+                const rc = await fetcher(
+                  `${API_BASE}/api/pyqs/exams/${encodeURIComponent(
+                    exam
+                  )}/subjects/${encodeURIComponent(subject)}/chapters`,
+                  { cache: "no-store" }
+                );
                 if (rc.ok) {
                   const arr = await rc.json();
-                  const ch = (arr || []).find((x) => String(x.id) === String(chapter));
+                  const ch = (arr || []).find(
+                    (x) => String(x.id) === String(chapter)
+                  );
                   if (ch && ch.name) chapterName = ch.name;
                 }
               }
               if (chapterName) {
                 window.__PYQS_ASSIGNMENT_TITLE__ = `PYQs - ${chapterName}`;
-                try { document.title = `QBase - ${window.__PYQS_ASSIGNMENT_TITLE__}`; } catch {}
-                try { const t = document.getElementById('assignment-title'); if (t) t.textContent = window.__PYQS_ASSIGNMENT_TITLE__; } catch {}
+                try {
+                  document.title = `QBase - ${window.__PYQS_ASSIGNMENT_TITLE__}`;
+                } catch {}
+                try {
+                  const t = document.getElementById("assignment-title");
+                  if (t) t.textContent = window.__PYQS_ASSIGNMENT_TITLE__;
+                } catch {}
               }
-              window.__PYQS_IDS__ = { examId: exam, subjectId: subject, chapterId: chapter };
-              window.__PYQS_META__ = { examId: exam, subjectId: subject, chapterId: chapter, examName, subjectName, chapterName };
+              window.__PYQS_IDS__ = {
+                examId: exam,
+                subjectId: subject,
+                chapterId: chapter,
+              };
+              window.__PYQS_META__ = {
+                examId: exam,
+                subjectId: subject,
+                chapterId: chapter,
+                examName,
+                subjectName,
+                chapterName,
+              };
             } catch {}
 
             // Fetch questions for the selected chapter
-            const resp = await fetcher(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(exam)}/subjects/${encodeURIComponent(subject)}/chapters/${encodeURIComponent(chapter)}/questions`, { cache: 'no-store' });
-            if (!resp.ok) throw new Error(`questions fetch failed: ${resp.status}`);
+            const resp = await fetcher(
+              `${API_BASE}/api/pyqs/exams/${encodeURIComponent(
+                exam
+              )}/subjects/${encodeURIComponent(
+                subject
+              )}/chapters/${encodeURIComponent(chapter)}/questions`,
+              { cache: "no-store" }
+            );
+            if (!resp.ok)
+              throw new Error(`questions fetch failed: ${resp.status}`);
             const list = await resp.json();
 
-            // Map server PYQ shape to assignment viewer shape
-            let questions = (Array.isArray(list) ? list : []).map((q) => {
-              const t = String(q?.type || '').toLowerCase();
-              let qType = 'SMCQ';
-              if (t.includes('numerical') || t === 'numerical' || t.includes('integer')) qType = 'Numerical';
-              else if (Array.isArray(q?.correctAnswer) && q.correctAnswer.length > 1) qType = 'MMCQ';
+            // Map server PYQ shape to assignment viewer shape AND track original indices
+            let allQuestions = (Array.isArray(list) ? list : []).map(
+              (q, originalIndex) => {
+                const t = String(q?.type || "").toLowerCase();
+                let qType = "SMCQ";
+                if (
+                  t.includes("numerical") ||
+                  t === "numerical" ||
+                  t.includes("integer")
+                )
+                  qType = "Numerical";
+                else if (
+                  Array.isArray(q?.correctAnswer) &&
+                  q.correctAnswer.length > 1
+                )
+                  qType = "MMCQ";
 
-              const qText = String(q?.qText || '');
-              const image = q?.qImage || null;
+                const qText = String(q?.qText || "");
+                const image = q?.qImage || null;
 
-              let qOptions = [];
-              if (Array.isArray(q?.options) && q.options.length) {
-                qOptions = q.options.map((o) => String(o?.oText || '')).slice(0, 4);
-                while (qOptions.length < 4) qOptions.push('');
+                let qOptions = [];
+                if (Array.isArray(q?.options) && q.options.length) {
+                  qOptions = q.options
+                    .map((o) => String(o?.oText || ""))
+                    .slice(0, 4);
+                  while (qOptions.length < 4) qOptions.push("");
+                }
+
+                let qAnswer;
+                if (qType === "Numerical") {
+                  const n = Number(q?.correctAnswer);
+                  qAnswer = Number.isFinite(n) ? n : undefined;
+                } else if (Array.isArray(q?.correctAnswer)) {
+                  if (qType === "MMCQ")
+                    qAnswer = q.correctAnswer.map((x) =>
+                      String(x).trim().toUpperCase()
+                    );
+                  else
+                    qAnswer = String(q.correctAnswer[0] || "")
+                      .trim()
+                      .toUpperCase();
+                } else {
+                  qAnswer = String(q?.correctAnswer || "")
+                    .trim()
+                    .toUpperCase();
+                }
+
+                return {
+                  qType,
+                  passageId: null,
+                  qText,
+                  image: image || null,
+                  qOptions,
+                  qAnswer,
+                  pyqInfo: String(q?.pyqInfo || ""),
+                  solutionText: String(q?.solution?.sText || ""),
+                  solutionImage: q?.solution?.sImage || null,
+                  diffuculty: String(q?.diffuculty || q?.level || ""),
+                  __originalIndex: originalIndex, // ✓ Store original index
+                };
               }
+            );
 
-              let qAnswer;
-              if (qType === 'Numerical') {
-                const n = Number(q?.correctAnswer);
-                qAnswer = Number.isFinite(n) ? n : undefined;
-              } else if (Array.isArray(q?.correctAnswer)) {
-                if (qType === 'MMCQ') qAnswer = q.correctAnswer.map((x) => String(x).trim().toUpperCase());
-                else qAnswer = String(q.correctAnswer[0] || '').trim().toUpperCase();
-              } else {
-                qAnswer = String(q?.correctAnswer || '').trim().toUpperCase();
-              }
+            // Store the original total count BEFORE filtering
+            const originalTotalCount = allQuestions.length;
 
-              return {
-                qType,
-                passageId: null,
-                qText,
-                image: image || null,
-                qOptions,
-                qAnswer,
-                pyqInfo: String(q?.pyqInfo || ''),
-                solutionText: String(q?.solution?.sText || ''),
-                solutionImage: q?.solution?.sImage || null,
-                diffuculty: String(q?.diffuculty || q?.level || ''),
-              };
-            });
             // Apply filters from server preferences (from list view)
+            let filteredWithIndices = allQuestions.map((Q, originalIdx) => ({
+              Q,
+              originalIdx, // ✓ Track original index through filtering
+            }));
+
             try {
-              const url = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(exam)}/${encodeURIComponent(subject)}/${encodeURIComponent(chapter)}`;
-              const resp = await authFetch(url);
-              if (resp.ok) {
-                const f = await resp.json();
-                if (f && typeof f === 'object') window.__ASSIGNMENT_FILTER_OBJECT__ = f;
-                const normDiff = (d) => { d=String(d||'').toLowerCase(); if (d.startsWith('e')) return 'easy'; if (d.startsWith('m')) return 'medium'; if (d.startsWith('h')) return 'hard'; return ''; };
-                const parseYear = (info) => { const m = String(info||'').match(/(19|20)\d{2}/); return m?Number(m[0]):null; };
-                const hasSol = (q) => (String(q.solutionText||'').trim().length || String(q.solutionImage||'').trim().length);
-                let __withIdx = questions.map((Q,i)=>({Q,i}));
-                __withIdx = __withIdx.filter(({Q}) => {
-                  if (f.q && !String(Q.qText||'').toLowerCase().includes(String(f.q||'').toLowerCase())) return false;
-                  if (Array.isArray(f.years) && f.years.length) { const y = parseYear(Q.pyqInfo); if (!y || !f.years.includes(y)) return false; }
+              const prefUrl = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(
+                exam
+              )}/${encodeURIComponent(subject)}/${encodeURIComponent(chapter)}`;
+              const prefResp = await authFetch(prefUrl);
+              if (prefResp.ok) {
+                const f = await prefResp.json();
+                if (f && typeof f === "object")
+                  window.__ASSIGNMENT_FILTER_OBJECT__ = f;
+
+                const normDiff = (d) => {
+                  d = String(d || "").toLowerCase();
+                  if (d.startsWith("e")) return "easy";
+                  if (d.startsWith("m")) return "medium";
+                  if (d.startsWith("h")) return "hard";
+                  return "";
+                };
+                const parseYear = (info) => {
+                  const m = String(info || "").match(/(19|20)\d{2}/);
+                  return m ? Number(m[0]) : null;
+                };
+                const hasSol = (q) =>
+                  String(q.solutionText || "").trim().length ||
+                  String(q.solutionImage || "").trim().length;
+
+                // Apply text/year/difficulty/solution filters
+                filteredWithIndices = filteredWithIndices.filter(({ Q }) => {
+                  if (
+                    f.q &&
+                    !String(Q.qText || "")
+                      .toLowerCase()
+                      .includes(String(f.q || "").toLowerCase())
+                  )
+                    return false;
+                  if (Array.isArray(f.years) && f.years.length) {
+                    const y = parseYear(Q.pyqInfo);
+                    if (!y || !f.years.includes(y)) return false;
+                  }
                   if (f.diff && normDiff(Q.diffuculty) !== f.diff) return false;
                   if (f.hasSol && !hasSol(Q)) return false;
                   return true;
                 });
+
+                // Apply status filter (requires server state lookup)
                 if (f.status) {
                   try {
-                    const r = await authFetch(`${API_BASE}/api/pyqs/state/${encodeURIComponent(exam)}/${encodeURIComponent(subject)}/${encodeURIComponent(chapter)}`);
-                    if (r.ok) {
-                      const states = await r.json();
-                      const statusFromState = (st) => { if (!st) return 'not-started'; if (st.isAnswerEvaluated) return st.evalStatus || 'completed'; if (st.isAnswerPicked) return 'in-progress'; return 'not-started'; };
-                      __withIdx = __withIdx.filter(({i}) => {
-                        const s = states?.[i];
-                        const st = statusFromState(s);
-                        if (f.status === 'completed') return !!s?.isAnswerEvaluated;
-                        return st === f.status;
-                      });
+                    const stateResp = await authFetch(
+                      `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+                        exam
+                      )}/${encodeURIComponent(subject)}/${encodeURIComponent(
+                        chapter
+                      )}`
+                    );
+                    if (stateResp.ok) {
+                      const states = await stateResp.json();
+                      const statusFromState = (st) => {
+                        if (!st) return "not-started";
+                        if (st.isAnswerEvaluated)
+                          return st.evalStatus || "completed";
+                        if (st.isAnswerPicked) return "in-progress";
+                        return "not-started";
+                      };
+
+                      // ✓ CRITICAL FIX: Use originalIdx, not display index
+                      filteredWithIndices = filteredWithIndices.filter(
+                        ({ originalIdx }) => {
+                          const s = states?.[originalIdx]; // ✓ Access state by original index
+                          const st = statusFromState(s);
+                          if (f.status === "completed")
+                            return !!s?.isAnswerEvaluated;
+                          return st === f.status;
+                        }
+                      );
                     }
-                  } catch {}
+                  } catch (e) {
+                    console.warn("Status filter failed:", e);
+                  }
                 }
-                questions = __withIdx.map(x=>x.Q);
-                // human readable summary
+
+                // Build human-readable summary
                 const parts = [];
                 if (f.q) parts.push(`Search: "${f.q}"`);
-                if (f.years?.length) parts.push(`Years: ${f.years.join(', ')}`);
+                if (f.years?.length) parts.push(`Years: ${f.years.join(", ")}`);
                 if (f.diff) parts.push(`Difficulty: ${f.diff}`);
                 if (f.status) parts.push(`Attempt: ${f.status}`);
-                if (f.hasSol) parts.push('Has solution');
-                window.__ASSIGNMENT_FILTER_INFO__ = parts.length ? parts.join(' • ') : 'No filters';
+                if (f.hasSol) parts.push("Has solution");
+                window.__ASSIGNMENT_FILTER_INFO__ = parts.length
+                  ? parts.join(" • ")
+                  : "No filters";
               }
-            } catch {}
+            } catch (e) {
+              console.warn("Filter application failed:", e);
+            }
 
-            return { questions };
+            // Extract filtered questions and build index map
+            const questions = filteredWithIndices.map((x) => x.Q);
+            const originalIndexMap = filteredWithIndices.map(
+              (x) => x.originalIdx
+            );
+
+            return {
+              questions,
+              originalIndexMap,
+              originalTotalCount,
+              allQuestionsMap: allQuestions,
+            };
           };
         })();
       </script>
@@ -659,7 +891,6 @@
         defer
         src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"
       ></script>
-      
 
       <!-- Check answer bar alignment -->
       <script>

@@ -6,6 +6,7 @@
 
   const assignmentTitles = await BookmarksService.fetchAssignmentTitlesMap();
   const assignmentData = new Map();
+  const pyqsData = new Map();
 
   const onReady = () => {
     const refreshBtn = document.getElementById('refresh-bookmarks');
@@ -26,12 +27,35 @@
   async function loadBookmarks(){
     const mySeq = ++__bookmarksLoadSeq; const loadingEl = document.getElementById('loading'); const noBookmarksEl = document.getElementById('no-bookmarks'); const contentEl = document.getElementById('bookmarks-content'); if (!loadingEl || !noBookmarksEl || !contentEl) return; loadingEl.style.display='block'; noBookmarksEl.style.display='none'; contentEl.style.display='none';
     try {
-      const bookmarks = await BookmarksService.fetchBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
-      if (!Array.isArray(bookmarks) || bookmarks.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
-      const grouped = BookmarksService.groupBookmarksByTag(bookmarks);
-      const ids = new Set(); Object.values(grouped).forEach(list => list.forEach(b => ids.add(b.assignmentId)));
-      const dataMap = await BookmarksService.fetchAssignmentDataForIds(ids); if (mySeq !== __bookmarksLoadSeq) return; dataMap.forEach((v,k)=>assignmentData.set(k,v));
-      BookmarksView.renderBookmarks(grouped, assignmentData, { katexOptions, onRemove: async (aid, qidx, tid) => { if (await BookmarksService.removeBookmark(aid, qidx, tid)) loadBookmarks(); }, onDeleteTag: async (tagId) => { if (await BookmarksService.deleteBookmarkTag(tagId)) loadBookmarks(); }, onShow: (aid, qidx) => BookmarksView.showQuestion(aid, qidx, assignmentData, assignmentTitles) });
+      const all = await BookmarksService.fetchAllBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
+      if (!Array.isArray(all) || all.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
+      const grouped = BookmarksService.groupBookmarksByTag(all);
+      // Collect assignment IDs and PYQs chapter keys
+      const aIds = new Set();
+      const pyqKeys = new Set();
+      Object.values(grouped).forEach(list => list.forEach(b => {
+        if (b.kind === 'pyq') pyqKeys.add(BookmarksService.mkPyqsKey(b.examId, b.subjectId, b.chapterId)); else aIds.add(b.assignmentId);
+      }));
+      const [aMap, pMap] = await Promise.all([
+        BookmarksService.fetchAssignmentDataForIds(aIds),
+        BookmarksService.fetchPyqsDataForKeys(pyqKeys),
+      ]);
+      if (mySeq !== __bookmarksLoadSeq) return;
+      aMap.forEach((v,k)=>assignmentData.set(k,v)); pMap.forEach((v,k)=>pyqsData.set(k,v));
+      BookmarksView.renderBookmarks(grouped, { assignments: assignmentData, pyqs: pyqsData }, {
+        katexOptions,
+        onRemove: async (ctx) => {
+          if (!ctx || !ctx.kind) return false;
+          if (ctx.kind === 'pyq') return await BookmarksService.removePyqsBookmark(ctx.examId, ctx.subjectId, ctx.chapterId, ctx.questionIndex, ctx.tagId);
+          return await BookmarksService.removeBookmark(ctx.assignmentId, ctx.questionIndex, ctx.tagId);
+        },
+        onDeleteTag: async (tagId) => { if (await BookmarksService.deleteBookmarkTag(tagId)) loadBookmarks(); },
+        onShow: (ctx) => {
+          if (!ctx || !ctx.kind) return;
+          if (ctx.kind === 'pyq') BookmarksView.showPyqQuestion(ctx.examId, ctx.subjectId, ctx.chapterId, ctx.questionIndex, pyqsData);
+          else BookmarksView.showQuestion(ctx.assignmentId, ctx.questionIndex, assignmentData, assignmentTitles);
+        }
+      });
       loadingEl.style.display='none'; contentEl.style.display='block';
     } catch (err){
       if (mySeq !== __bookmarksLoadSeq) return; loadingEl.style.display='none'; if (err && err.status === 401){ noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p><button class="btn btn-primary" onclick="window.dispatchEvent(new Event(\'qbase:force-login\'))">Sign in</button>'; window.dispatchEvent(new Event('qbase:logout')); return; } noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Error loading bookmarks</h3><p class="text-muted">Failed to load bookmarks. Please try again.</p><button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>';
