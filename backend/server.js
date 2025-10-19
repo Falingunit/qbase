@@ -274,7 +274,14 @@ function auth(req, res, next) {
   if (!m) return res.status(401).json({ error: "Missing token" });
   try {
     const payload = jwt.verify(m[1], JWT_SECRET);
-    req.userId = String(payload.sub);
+    const uid = String(payload.sub || "");
+    if (!uid) return res.status(401).json({ error: "Invalid token" });
+    // Guard against tokens from a previous/reset DB: ensure user exists
+    const row = db
+      .prepare("SELECT id FROM users WHERE id = ?")
+      .get(uid);
+    if (!row) return res.status(401).json({ error: "Invalid token" });
+    req.userId = uid;
     return next();
   } catch {
     return res.status(401).json({ error: "Invalid token" });
@@ -522,6 +529,10 @@ app.post("/api/pyqs/state/:examId/:subjectId/:chapterId", auth, (req, res) => {
     res.json({ success: true });
   } catch (e) {
     console.error("pyqs save state:", e);
+    if (e && e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+      // Likely a stale/invalid token (user disappeared). Force re-auth on client.
+      return res.status(401).json({ error: "Invalid session. Please log in again." });
+    }
     res.status(500).json({ error: "Failed to save PYQs state" });
   }
 });
@@ -1229,7 +1240,7 @@ app.delete("/api/starred/:assignmentId", (req, res) => {
 });
 
 // State & scores
-app.get("/api/state/:assignmentId", (req, res) => {
+app.get("/api/state/:assignmentId", auth, (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const row = db
     .prepare("SELECT state FROM states WHERE userId = ? AND assignmentId = ?")
@@ -1238,18 +1249,25 @@ app.get("/api/state/:assignmentId", (req, res) => {
   res.json(Array.isArray(state) ? state : []);
 });
 
-app.post("/api/state/:assignmentId", async (req, res) => {
+app.post("/api/state/:assignmentId", auth, async (req, res) => {
   const assignmentId = Number(req.params.assignmentId);
   const state = req.body?.state ?? [];
 
   const stateText = JSON.stringify(state);
-  db.prepare(
+  try {
+    db.prepare(
     `
     INSERT INTO states (userId, assignmentId, state)
     VALUES (?, ?, ?)
     ON CONFLICT(userId, assignmentId) DO UPDATE SET state = excluded.state
   `
-  ).run(req.userId, assignmentId, stateText);
+    ).run(req.userId, assignmentId, stateText);
+  } catch (e) {
+    if (e && e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+      return res.status(401).json({ error: "Invalid session. Please log in again." });
+    }
+    throw e;
+  }
 
   try {
     const { score, maxScore } = await computeAssignmentScore(
