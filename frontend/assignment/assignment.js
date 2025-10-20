@@ -2949,6 +2949,23 @@
             else if (matches(getHK()?.colorYellow)) action = 'yellow';
             else if (matches(getHK()?.colorGreen)) action = 'green';
             else if (matches(getHK()?.colorClear)) action = 'clear';
+
+            // Fallback: accept Alt+Digit (1..5) and Ctrl+Alt+Digit in case
+            // hotkey config isn’t available yet or user expects legacy mapping.
+            if (!action) {
+              if (e.altKey && !e.metaKey) {
+                let d = null;
+                if (typeof e.code === 'string' && /^Digit[1-5]$/.test(e.code)) d = e.code.slice(5);
+                else if (typeof e.key === 'string' && '12345'.includes(e.key)) d = e.key;
+                if (d) {
+                  if (d === '1') action = 'blue';
+                  else if (d === '2') action = 'red';
+                  else if (d === '3') action = 'yellow';
+                  else if (d === '4') action = 'green';
+                  else if (d === '5') action = 'clear';
+                }
+              }
+            }
             if (!action) return;
             e.preventDefault();
             if (currentQuestionID == null) return;

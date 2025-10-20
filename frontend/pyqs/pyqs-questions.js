@@ -4058,7 +4058,7 @@
     });
   });
 
-  // ---------- Color hotkeys (configurable) ----------
+  // ---------- Alt+Digit color hotkeys ----------
   (function wireColorHotkeys() {
     function isTypingContext() {
       try {
@@ -4100,7 +4100,7 @@
         if (!action) return;
         e.preventDefault();
         if (currentQuestionID == null) return;
-        const val = COLOR_VALUES[action];
+        const val = COLOR_MAP[k];
         let ok = true;
         if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
         if (ok) { try { updateColorIndicators(); } catch {} try { updateColorPickerSelection(); } catch {} }

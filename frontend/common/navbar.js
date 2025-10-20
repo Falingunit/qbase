@@ -903,22 +903,7 @@
       const marksStatusId = "qbaseMarksStatus";
       const marksSpinId = "qbaseMarksSpin";
     const errId = "qbaseProfErr";
-    // Hotkeys IDs
-    const hkNavPrev = "qbaseHkNavPrev";
-    const hkNavNext = "qbaseHkNavNext";
-    const hkCheck = "qbaseHkCheck";
-    const hkFocus = "qbaseHkFocus";
-    const hkA = "qbaseHkA";
-    const hkB = "qbaseHkB";
-    const hkC = "qbaseHkC";
-    const hkD = "qbaseHkD";
-    const hkBlue = "qbaseHkBlue";
-    const hkRed = "qbaseHkRed";
-    const hkYellow = "qbaseHkYellow";
-    const hkGreen = "qbaseHkGreen";
-    const hkClear = "qbaseHkClear";
-    const hkSaveBtn = "qbaseHkSave";
-    const hkResetBtn = "qbaseHkReset";
+    // Hotkeys UI removed
     const body = `
         <div class="preferences-modal">
           <ul class="nav nav-tabs" id="prefsTabs" role="tablist">
@@ -928,9 +913,7 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="prefs-integrations-tab" data-bs-toggle="tab" data-bs-target="#prefs-integrations" type="button" role="tab" aria-controls="prefs-integrations" aria-selected="false">PYQs API</button>
             </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="prefs-hotkeys-tab" data-bs-toggle="tab" data-bs-target="#prefs-hotkeys" type="button" role="tab" aria-controls="prefs-hotkeys" aria-selected="false">Hotkeys</button>
-            </li>
+            
             <li class="nav-item" role="presentation">
               <button class="nav-link text-danger" id="prefs-danger-tab" data-bs-toggle="tab" data-bs-target="#prefs-danger" type="button" role="tab" aria-controls="prefs-danger" aria-selected="false">Danger</button>
             </li>
@@ -955,72 +938,7 @@
                 <button id="${saveBtnId}" class="btn btn-primary">Update Password</button>
               </div>
             </div>
-            <div class="tab-pane fade" id="prefs-hotkeys" role="tabpanel" aria-labelledby="prefs-hotkeys-tab">
-              <div class="mt-1">
-                <h6 class="mb-2">Hotkeys</h6>
-                <p class="small text-muted">Click a field, then press a key or key combination. Press Escape to clear. These hotkeys apply to Assignment and PYQs questions.</p>
-                <div class="row g-3">
-                  <div class="col-sm-6">
-                    <label class="form-label" for="${hkNavPrev}">Navigate: Previous</label>
-                    <input id="${hkNavPrev}" class="form-control" type="text" placeholder="ArrowLeft" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="form-label" for="${hkNavNext}">Navigate: Next</label>
-                    <input id="${hkNavNext}" class="form-control" type="text" placeholder="ArrowRight" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="form-label" for="${hkCheck}">Check/Reset Toggle</label>
-                    <input id="${hkCheck}" class="form-control" type="text" placeholder="Space" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-6">
-                    <label class="form-label" for="${hkFocus}">Focus Notes</label>
-                    <input id="${hkFocus}" class="form-control" type="text" placeholder="N" autocomplete="off" />
-                  </div>
-                  <div class="col-12"><hr/></div>
-                  <div class="col-sm-3">
-                    <label class="form-label" for="${hkA}">Pick Option A</label>
-                    <input id="${hkA}" class="form-control" type="text" placeholder="A" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-3">
-                    <label class="form-label" for="${hkB}">Pick Option B</label>
-                    <input id="${hkB}" class="form-control" type="text" placeholder="B" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-3">
-                    <label class="form-label" for="${hkC}">Pick Option C</label>
-                    <input id="${hkC}" class="form-control" type="text" placeholder="C" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-3">
-                    <label class="form-label" for="${hkD}">Pick Option D</label>
-                    <input id="${hkD}" class="form-control" type="text" placeholder="D" autocomplete="off" />
-                  </div>
-                  <div class="col-12"><hr/></div>
-                  <div class="col-sm-4">
-                    <label class="form-label" for="${hkBlue}">Mark Color: Blue</label>
-                    <input id="${hkBlue}" class="form-control" type="text" placeholder="Alt+1" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-4">
-                    <label class="form-label" for="${hkRed}">Mark Color: Red</label>
-                    <input id="${hkRed}" class="form-control" type="text" placeholder="Alt+2" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-4">
-                    <label class="form-label" for="${hkYellow}">Mark Color: Yellow</label>
-                    <input id="${hkYellow}" class="form-control" type="text" placeholder="Alt+3" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-4">
-                    <label class="form-label" for="${hkGreen}">Mark Color: Green</label>
-                    <input id="${hkGreen}" class="form-control" type="text" placeholder="Alt+4" autocomplete="off" />
-                  </div>
-                  <div class="col-sm-4">
-                    <label class="form-label" for="${hkClear}">Clear Color</label>
-                    <input id="${hkClear}" class="form-control" type="text" placeholder="Alt+5" autocomplete="off" />
-                  </div>
-                </div>
-                <div class="d-flex align-items-center gap-2 mt-3">
-                  <button id="${hkSaveBtn}" class="btn btn-primary">Save Hotkeys</button>
-                  <button id="${hkResetBtn}" class="btn btn-outline-secondary">Reset Defaults</button>
-                </div>
-              </div>
-            </div>
+            
             <div class="tab-pane fade" id="prefs-integrations" role="tabpanel" aria-labelledby="prefs-integrations-tab">
               <div class="mt-1">
                 <h6 class="mb-2">PYQs Authentication</h6>
@@ -1179,91 +1097,7 @@
           });
         } catch {}
 
-        // Hotkeys wiring
-        try {
-          const HK = (window.qbGetHotkeys && window.qbGetHotkeys()) || null;
-          const ids = {
-            navPrev: `#${hkNavPrev}`,
-            navNext: `#${hkNavNext}`,
-            checkToggle: `#${hkCheck}`,
-            focusNotes: `#${hkFocus}`,
-            optionA: `#${hkA}`,
-            optionB: `#${hkB}`,
-            optionC: `#${hkC}`,
-            optionD: `#${hkD}`,
-            colorBlue: `#${hkBlue}`,
-            colorRed: `#${hkRed}`,
-            colorYellow: `#${hkYellow}`,
-            colorGreen: `#${hkGreen}`,
-            colorClear: `#${hkClear}`,
-          };
-          function populateFromCurrent() {
-            const curHK = (window.qbGetHotkeys && window.qbGetHotkeys()) || HK || {};
-            for (const [k, sel] of Object.entries(ids)) {
-              const el = modalEl.querySelector(sel);
-              if (el) el.value = (curHK?.[k] && curHK[k][0]) || "";
-            }
-          }
-          populateFromCurrent();
-          const hkChangedHandler = () => { try { populateFromCurrent(); } catch {} };
-          window.addEventListener('qbase:hotkeys-changed', hkChangedHandler);
-          modalEl.addEventListener('hidden.bs.modal', () => {
-            try { window.removeEventListener('qbase:hotkeys-changed', hkChangedHandler); } catch {}
-          }, { once: true });
-          function attachCapture(selector) {
-            const el = modalEl.querySelector(selector);
-            if (!el) return;
-            el.addEventListener("keydown", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              if (ev.key === "Escape") {
-                el.value = "";
-                return;
-              }
-              const chord = window.qbEventToChord
-                ? window.qbEventToChord(ev)
-                : "";
-              if (chord) el.value = chord;
-            });
-          }
-          Object.values(ids).forEach(attachCapture);
-          const hkSave = modalEl.querySelector(`#${hkSaveBtn}`);
-          const hkReset = modalEl.querySelector(`#${hkResetBtn}`);
-          hkSave?.addEventListener("click", async (e) => {
-            e.preventDefault();
-            const out = {};
-            for (const [k, sel] of Object.entries(ids)) {
-              const el = modalEl.querySelector(sel);
-              const v = (el?.value || "").trim();
-              if (v) out[k] = [v];
-            }
-            try {
-              window.qbSaveHotkeys && window.qbSaveHotkeys(out);
-            } catch {}
-            try {
-              await showNotice({ title: "Saved", message: "Hotkeys saved." });
-            } catch {}
-          });
-          hkReset?.addEventListener("click", async (e) => {
-            e.preventDefault();
-            const def =
-              (window.qbHotkeysDefaults && window.qbHotkeysDefaults()) || {};
-            for (const [k, sel] of Object.entries(ids)) {
-              const el = modalEl.querySelector(sel);
-              const v = (def[k] && def[k][0]) || "";
-              if (el) el.value = v;
-            }
-            try {
-              window.qbSaveHotkeys && window.qbSaveHotkeys(def);
-            } catch {}
-            try {
-              await showNotice({
-                title: "Reset",
-                message: "Hotkeys reset to defaults.",
-              });
-            } catch {}
-          });
-        } catch {}
+        // Hotkeys UI removed
 
         const getVals = () => {
           const cur = modalEl.querySelector(`#${idCur}`);

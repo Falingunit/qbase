@@ -573,7 +573,7 @@
       </script>
       <!-- Keyboard hotkeys -->
       <script>
-        // Keyboard shortcuts (now configurable in Preferences > Hotkeys)
+        // Keyboard shortcuts: arrows to navigate, A-D to pick, Space to check/reset, N to focus notes
         (function () {
           const isTypingContext = () => {
             const ae = document.activeElement;
@@ -594,32 +594,53 @@
             );
           };
 
-          const clickIf = (el) => { if (el) el.click(); };
+          const clickIf = (el) => {
+            if (el) el.click();
+          };
 
           const pickOption = (opt) => {
+            // Only allow picking when in MCQ before evaluation (Check button visible)
             const checkBtn = document.getElementById("check-answer");
             if (!isVisible(checkBtn)) return;
-            const btn = document.querySelector(`#MCQOptionDiv .mcq-option[data-opt="${opt}"]`);
+            const btn = document.querySelector(
+              `#MCQOptionDiv .mcq-option[data-opt="${opt}"]`
+            );
             if (!btn) return;
+            // Avoid bypassing lock state
             if (btn.classList.contains("disabled")) return;
             btn.click();
           };
 
           const focusNotes = () => {
+            // Prefer dedicated editor focus if provided by assignment.js
             if (typeof window.focusNotesEditor === "function") {
-              try { window.focusNotesEditor(); } catch {}
+              try {
+                window.focusNotesEditor();
+              } catch {}
               const host = document.getElementById("notesInput");
-              if (host) host.scrollIntoView({ block: "nearest", behavior: "smooth" });
+              if (host)
+                host.scrollIntoView({ block: "nearest", behavior: "smooth" });
               return;
             }
+            // Fallback: treat #notesInput as a standard control/contentEditable
             const notes = document.getElementById("notesInput");
             if (!notes) return;
             const tag = (notes.tagName || "").toLowerCase();
             if (tag === "textarea" || tag === "input") {
-              try { const len = (notes.value || "").length; notes.setSelectionRange(len, len); } catch {}
+              try {
+                const len = (notes.value || "").length;
+                notes.setSelectionRange(len, len);
+              } catch {}
               notes.focus();
             } else if (notes.isContentEditable) {
-              try { const range = document.createRange(); range.selectNodeContents(notes); range.collapse(false); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); } catch {}
+              try {
+                const range = document.createRange();
+                range.selectNodeContents(notes);
+                range.collapse(false);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+              } catch {}
               notes.focus();
             } else {
               notes.focus();
@@ -634,21 +655,22 @@
             return s.display !== "none";
           };
 
-          const getHK = () => { try { return window.qbGetHotkeys ? window.qbGetHotkeys() : null; } catch { return null; } };
-
           window.addEventListener("keydown", (e) => {
             if (overlayOpen()) return; // Don't handle shortcuts while image overlay is open
-            const matches = (arr) => (window.qbMatches && getHK() && arr) ? window.qbMatches(e, arr) : false;
+            // Ignore modified shortcuts (Ctrl/Cmd/Alt) to not conflict with system/browser
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
 
-            // Navigation with configured keys (when not typing)
+            const key = e.key;
+
+            // Navigation with arrows (when not typing)
             if (!isTypingContext()) {
-              if (matches(getHK()?.navPrev)) {
+              if (key === "ArrowLeft") {
                 e.preventDefault();
                 const prev = document.getElementById("nav-prev");
                 if (prev && !prev.disabled) clickIf(prev);
                 return;
               }
-              if (matches(getHK()?.navNext)) {
+              if (key === "ArrowRight") {
                 e.preventDefault();
                 const next = document.getElementById("nav-next");
                 if (next && !next.disabled) clickIf(next);
@@ -656,22 +678,30 @@
               }
             }
 
-            // Check/Reset toggle (when not typing)
-            if (!isTypingContext() && matches(getHK()?.checkToggle)) {
-              e.preventDefault();
-              const check = document.getElementById("check-answer");
-              const reset = document.getElementById("reset-question");
-              if (isVisible(check)) clickIf(check); else if (isVisible(reset)) clickIf(reset);
+            // Space toggles Check/Reset when not typing
+            if (key === " " || key === "Spacebar") {
+              if (!isTypingContext()) {
+                e.preventDefault();
+                const check = document.getElementById("check-answer");
+                const reset = document.getElementById("reset-question");
+                if (isVisible(check)) clickIf(check);
+                else if (isVisible(reset)) clickIf(reset);
+              }
               return;
             }
 
-            // Option pick (A-D)
+            // Letter shortcuts
+            const k = (key || "").toUpperCase();
             if (!isTypingContext()) {
-              if (matches(getHK()?.optionA)) { pickOption("A"); return; }
-              if (matches(getHK()?.optionB)) { pickOption("B"); return; }
-              if (matches(getHK()?.optionC)) { pickOption("C"); return; }
-              if (matches(getHK()?.optionD)) { pickOption("D"); return; }
-              if (matches(getHK()?.focusNotes)) { e.preventDefault(); focusNotes(); return; }
+              if (k === "A" || k === "B" || k === "C" || k === "D") {
+                pickOption(k);
+                return;
+              }
+              if (k === "N") {
+                e.preventDefault();
+                focusNotes();
+                return;
+              }
             }
           });
         })();

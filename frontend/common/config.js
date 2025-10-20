@@ -64,7 +64,7 @@ try {
 // --- Hotkeys: defaults, storage, helpers ---
 (() => {
   const STORAGE_KEY = "qbase.hotkeys";
-  const SERVER_ROUTE = "/account/preferences"; // JSON { hotkeys: {...} }
+  const SERVER_ROUTE = null; // server storage disabled
   let __hkCache = null;
   let __syncPromise = null;
 
@@ -137,33 +137,7 @@ try {
     };
   }
 
-  async function syncFromServer() {
-    try {
-      if (typeof authFetch !== "function") return null;
-      // Only try when there is a token
-      const tok = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
-      if (!tok) return null;
-      const r = await authFetch(`${API_BASE}${SERVER_ROUTE}`);
-      if (!r || !r.ok) return null;
-      const data = await r.json();
-      const serverHK = data && typeof data === "object" ? data.hotkeys : null;
-      if (serverHK && typeof serverHK === "object") {
-        const base = defaults();
-        const merged = { ...base };
-        for (const k of Object.keys(base)) {
-          const v = serverHK[k];
-          if (Array.isArray(v) && v.length) merged[k] = normalizeChord(v);
-          else if (typeof v === "string" && v.trim()) merged[k] = [normalizeChord(v)];
-        }
-        // Update cache + localStorage and notify
-        __hkCache = merged;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-        try { window.dispatchEvent(new Event("qbase:hotkeys-changed")); } catch {}
-        return merged;
-      }
-      return null;
-    } catch { return null; }
-  }
+  async function syncFromServer() { return null; }
 
   function load() {
     try {
@@ -202,17 +176,7 @@ try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(out));
       __hkCache = out;
       try { window.dispatchEvent(new Event("qbase:hotkeys-changed")); } catch {}
-      // Best-effort push to server
-      try {
-        const tok = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
-        if (tok && typeof authFetch === "function") {
-          authFetch(`${API_BASE}${SERVER_ROUTE}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ hotkeys: out }),
-          }).catch(() => {});
-        }
-      } catch {}
+      // No server push (disabled)
       return out;
     } catch {
       // ignore
@@ -241,37 +205,6 @@ try {
     // Try syncing once on script load
     try { if (!__syncPromise) __syncPromise = syncFromServer(); } catch {}
     // On login, reconcile with server
-    window.addEventListener('qbase:login', async () => {
-      try {
-        // Pull server prefs
-        const before = __hkCache || load();
-        const r = await authFetch(`${API_BASE}${SERVER_ROUTE}`);
-        if (r && r.ok) {
-          const data = await r.json();
-          const serverHK = data && typeof data === 'object' ? data.hotkeys : null;
-          if (!serverHK || (typeof serverHK !== 'object')) {
-            // If server has no hotkeys, push local
-            const toPush = before || defaults();
-            await authFetch(`${API_BASE}${SERVER_ROUTE}`, {
-              method: 'PATCH',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ hotkeys: toPush }),
-            });
-          } else {
-            // Else, pull from server into cache/local
-            const base = defaults();
-            const merged = { ...base };
-            for (const k of Object.keys(base)) {
-              const v = serverHK[k];
-              if (Array.isArray(v) && v.length) merged[k] = normalizeChord(v);
-              else if (typeof v === 'string' && v.trim()) merged[k] = [normalizeChord(v)];
-            }
-            __hkCache = merged;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
-            try { window.dispatchEvent(new Event('qbase:hotkeys-changed')); } catch {}
-          }
-        }
-      } catch {}
-    });
+    // No server reconciliation on login (disabled)
   } catch {}
 })();

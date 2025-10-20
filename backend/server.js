@@ -257,14 +257,6 @@ db.exec(`
     PRIMARY KEY (userId, examId, subjectId, chapterId),
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
-
-  -- Per-user global preferences (JSON). Used for UI settings like hotkeys
-  CREATE TABLE IF NOT EXISTS user_prefs (
-    userId TEXT PRIMARY KEY,
-    prefs TEXT NOT NULL,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
-  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -2210,45 +2202,6 @@ app.delete("/account/marks-auth", auth, (req, res) => {
   } catch (e) {
     console.error("clear marks-auth:", e);
     res.status(500).json({ error: "Failed to clear marks auth" });
-  }
-});
-
-// Per-user global preferences (JSON) — currently used for hotkeys
-app.get("/account/preferences", auth, (req, res) => {
-  try {
-    const row = db
-      .prepare("SELECT prefs FROM user_prefs WHERE userId = ?")
-      .get(req.userId);
-    const prefs = row ? safeParseJSON(row.prefs, {}) : {};
-    res.json(prefs && typeof prefs === "object" ? prefs : {});
-  } catch (e) {
-    console.error("get preferences:", e);
-    res.status(500).json({ error: "Failed to load preferences" });
-  }
-});
-
-app.patch("/account/preferences", auth, (req, res) => {
-  try {
-    const incoming = req.body && typeof req.body === "object" ? req.body : {};
-    const row = db
-      .prepare("SELECT prefs FROM user_prefs WHERE userId = ?")
-      .get(req.userId);
-    const prev = row ? safeParseJSON(row.prefs, {}) : {};
-    const merged = { ...prev, ...incoming };
-    const text = JSON.stringify(merged);
-    if (row) {
-      db.prepare(
-        "UPDATE user_prefs SET prefs = ?, updated_at = CURRENT_TIMESTAMP WHERE userId = ?"
-      ).run(text, req.userId);
-    } else {
-      db.prepare(
-        "INSERT INTO user_prefs (userId, prefs, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP)"
-      ).run(req.userId, text);
-    }
-    res.json(merged);
-  } catch (e) {
-    console.error("set preferences:", e);
-    res.status(500).json({ error: "Failed to save preferences" });
   }
 });
 
