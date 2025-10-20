@@ -1,0 +1,27 @@
+PYQs pages and modules
+
+Pages
+- pyqs.html → Exams (click an exam to open chapters)
+- pyqs_chapters.html → Subjects as tabs + chapter list for selected subject
+- pyqs_questions.html → Question list + viewer for a given exam+subject+chapter
+
+Modules
+- pyqs-common.js: Shared utilities (fetchers, toolbar, stars, helpers)
+- pyqs-index.js: Logic for pyqs.html (exams only)
+- pyqs-chapters.js: Logic for pyqs_chapters.html (subjects as tabs)
+- pyqs-questions.js: Logic for pyqs_questions.html
+  (legacy; current flow opens the PYQs Assignment viewer instead)
+
+Deep links (URL params)
+- Chapters (optional subject): pyqs_chapters.html?exam=<id>[&subject=<id>]
+- Questions: pyqs_questions.html?exam=<id>&subject=<id>&chapter=<id>
+  (param `view` is optional and inferred)
+
+Assignment-style PYQs viewer
+- pyqs_assignment.html opens the full assignment UI for a chapter’s PYQs.
+- pyqs-assignment-bridge.js configures assignment.js with a custom loader
+  and deterministic assignment id/title derived from exam/subject/chapter.
+
+Notes
+- The previous monolithic pyqs.js is no longer referenced by these pages and
+  can be removed once you’re happy with the split.

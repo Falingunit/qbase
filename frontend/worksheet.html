@@ -33,13 +33,14 @@
     />
 
     <!-- Site styles -->
-    <link href="./theme.css" rel="stylesheet" />
-    <link href="./index.css" rel="stylesheet" />
-    <link href="./worksheet.css" rel="stylesheet" />
+    <link href="./common/theme.css" rel="stylesheet" />
+    <link href="./common/index.css" rel="stylesheet" />
+    <link href="./worksheets/worksheet.css" rel="stylesheet" />
 
     <!-- Site scripts -->
-    <script defer src="config.js"></script>
-    <script defer src="./navbar.js"></script>
+    <script defer src="./common/config.js"></script>
+    <script defer src="./common/navbar.js"></script>
+    <script defer src="./worksheets/worksheets.service.js"></script>
   </head>
   <body class="bg-dark text-light">
     <!-- NAVBAR -->
@@ -89,37 +90,49 @@
     </div>
 
     <div class="container py-3">
-      <!-- Marker search -->
-      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-        <div class="input-group" style="max-width: 440px">
-          <span class="input-group-text"><i class="bi bi-search"></i></span>
-          <input id="mark-search" class="form-control" placeholder="Search markers..." autocomplete="off" />
-          <button id="mark-prev" class="btn btn-outline-secondary" title="Previous"><i class="bi bi-chevron-up"></i></button>
-          <button id="mark-next" class="btn btn-outline-secondary" title="Next"><i class="bi bi-chevron-down"></i></button>
+      <div class="ws-layout">
+        <!-- Left: main worksheet pages + markers -->
+        <div class="ws-main">
+          <div id="ws-pages" class="ws-pages"></div>
         </div>
-        <span class="text-muted small" id="mark-count"></span>
-      </div>
 
-      <!-- Pages stack -->
-      <div id="ws-pages" class="ws-pages"></div>
+        <!-- Right: fixed sidebar with tools -->
+        <aside class="ws-side" id="ws-side">
+          <div class="ws-resizer" id="ws-resizer" title="Drag to resize"></div>
+          <div class="ws-tools p-3">
+            <!-- Marker search -->
+            <div class="d-flex flex-column gap-2 mb-3">
+              <label class="small text-muted">Marker Search</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input id="mark-search" class="form-control" placeholder="Search markers..." autocomplete="off" />
+                <button id="mark-prev" class="btn btn-outline-secondary" title="Previous"><i class="bi bi-chevron-up"></i></button>
+                <button id="mark-next" class="btn btn-outline-secondary" title="Next"><i class="bi bi-chevron-down"></i></button>
+              </div>
+              <span class="text-muted small" id="mark-count"></span>
+              <div id="mark-results" class="mark-results"></div>
+            </div>
 
-      <!-- Answer key -->
-      <section id="ws-answers-wrap" class="mt-5 d-none">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h5 class="mb-0">Answer Key</h5>
-          <div class="btn-group btn-group-sm" role="group" aria-label="Answer tools">
-            <button id="ans-mask" class="btn btn-outline-light" title="Mask (black rounded rectangle)"><i class="bi bi-square-fill"></i></button>
-            <button id="ans-reveal" class="btn btn-outline-light" title="Reveal (erase mask)"><i class="bi bi-eye"></i></button>
-            <button id="ans-clear" class="btn btn-outline-danger" title="Clear masks"><i class="bi bi-trash"></i></button>
+            <!-- Answer key -->
+            <section id="ws-answers-wrap" class="d-none">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="mb-0">Answer Key</h6>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Answer tools">
+                  <button id="ans-mask" class="btn btn-outline-light" title="Mask (black rounded rectangle)"><i class="bi bi-square-fill"></i></button>
+                  <button id="ans-reveal" class="btn btn-outline-light" title="Reveal (erase mask)"><i class="bi bi-eye"></i></button>
+                  <button id="ans-clear" class="btn btn-outline-danger" title="Clear masks"><i class="bi bi-trash"></i></button>
+                </div>
+              </div>
+              <div id="ws-answers" class="ws-answers"></div>
+            </section>
           </div>
-        </div>
-        <div id="ws-answers" class="ws-answers"></div>
-      </section>
+        </aside>
+      </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script defer src="./worksheet.js"></script>
+    <script defer src="./worksheets/worksheet.js"></script>
   </body>
   <script>
     if ("serviceWorker" in navigator) {

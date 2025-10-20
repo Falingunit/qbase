@@ -7,6 +7,8 @@
   const els = {
     title: document.getElementById("ws-title"),
     pages: document.getElementById("ws-pages"),
+    side: document.getElementById("ws-side"),
+    resizer: document.getElementById("ws-resizer"),
     answersWrap: document.getElementById("ws-answers-wrap"),
     answers: document.getElementById("ws-answers"),
     reset: document.getElementById("ws-reset"),
@@ -16,6 +18,7 @@
     markPrev: document.getElementById("mark-prev"),
     markNext: document.getElementById("mark-next"),
     markCount: document.getElementById("mark-count"),
+    markResults: document.getElementById("mark-results"),
     ansMask: document.getElementById("ans-mask"),
     ansReveal: document.getElementById("ans-reveal"),
     ansClear: document.getElementById("ans-clear"),
@@ -29,6 +32,7 @@
   let markers = loadMarkers(); // [{page,i, side, yRatio, text, id}]
   let currentMarkHits = [];
   let currentHitIndex = -1;
+  let zoom = loadZoom();
 
   init();
 
@@ -38,16 +42,20 @@
       alert("Missing worksheet ID (wID)");
       return;
     }
+    setupSplitSide();
     try {
-      worksheet = await loadWorksheet(wID);
+      worksheet = await WorksheetsService.loadWorksheetManifest(wID);
       renderTitle();
       renderPages();
       renderAnswers();
       updateMarkerCount();
+      updateSearchHits();
+      applyZoom();
       bindUI();
       window.addEventListener("resize", () => {
         // Reflow marker positions on resize
         worksheet.pages.forEach((_, i) => renderMarkersFor(i));
+        initSideTopOffset();
       });
       // scroll to hash marker if provided
       if (location.hash.startsWith("#m-")) {
@@ -60,21 +68,76 @@
     }
   }
 
-  async function loadWorksheet(id) {
-    const url = `./data/worksheets/${encodeURIComponent(id)}.json`;
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
-    const json = await r.json();
-    const pages = (json.pages || []).slice().sort(byFilename);
-    const answers = (json.answers || []).slice().sort(byFilename);
-    return { title: json.title || "Worksheet", pages, answers };
+  // ===== Split view (fixed sidebar with resizer) =====
+  function setupSplitSide() {
+    // width persistence
+    const saved = localStorage.getItem(storeKey("side_width"));
+    const width = saved ? parseInt(saved, 10) : NaN;
+    if (!isNaN(width) && width >= 260 && width <= 720) {
+      document.documentElement.style.setProperty("--ws-side-width", width + "px");
+    }
+    initSideTopOffset();
+
+    // drag to resize
+    const resizer = els.resizer;
+    if (!resizer) return;
+    let dragging = false;
+    function onDown(e) {
+      dragging = true;
+      document.body.style.userSelect = "none";
+      e.preventDefault();
+    }
+    function onMove(e) {
+      if (!dragging) return;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const vw = window.innerWidth || document.documentElement.clientWidth;
+      let newW = Math.max(260, Math.min(720, vw - clientX));
+      document.documentElement.style.setProperty("--ws-side-width", newW + "px");
+    }
+    function onUp() {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.userSelect = "";
+      const val = getComputedStyle(document.documentElement).getPropertyValue("--ws-side-width").trim();
+      const num = parseInt(val, 10);
+      if (!isNaN(num)) localStorage.setItem(storeKey("side_width"), String(num));
+    }
+    resizer.addEventListener("mousedown", (e) => {
+      onDown(e);
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", function once() {
+        onUp();
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", once);
+      });
+    });
+    resizer.addEventListener("touchstart", (e) => {
+      onDown(e);
+      window.addEventListener("touchmove", onMove, { passive: false });
+      window.addEventListener("touchend", function once() {
+        onUp();
+        window.removeEventListener("touchmove", onMove);
+        window.removeEventListener("touchend", once);
+      });
+    }, { passive: false });
   }
 
-  function byFilename(a, b) {
-    const fa = a.split("/").pop().toLowerCase();
-    const fb = b.split("/").pop().toLowerCase();
-    return fa.localeCompare(fb);
+  let baseSideTopOffset = 0;
+  function initSideTopOffset() {
+    const nav = document.querySelector("nav.navbar");
+    const topbar = document.querySelector(".worksheet-topbar");
+    const navH = nav ? nav.offsetHeight : 0;
+    const topH = topbar ? topbar.offsetHeight : 0;
+    baseSideTopOffset = navH + topH;
+    updateSideTopOnScroll();
+    window.addEventListener('scroll', updateSideTopOnScroll, { passive: true });
   }
+  function updateSideTopOnScroll() {
+    const top = Math.max(0, baseSideTopOffset - window.scrollY);
+    document.documentElement.style.setProperty("--ws-top-offset", top + "px");
+  }
+
+  // loadWorksheet moved to WorksheetsService
 
   function renderTitle() {
     if (els.title) els.title.textContent = worksheet.title || "Worksheet";
@@ -97,6 +160,18 @@
     });
     els.markPrev?.addEventListener("click", () => jumpHit(-1));
     els.markNext?.addEventListener("click", () => jumpHit(1));
+
+    // Ctrl+wheel zoom on pages area
+    els.pages?.addEventListener('wheel', (e) => {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      const delta = e.deltaY;
+      const factor = delta > 0 ? 0.95 : 1.05;
+      zoom = clamp(+(zoom * factor).toFixed(3), 0.5, 2.5);
+      applyZoom();
+      saveZoom();
+      worksheet.pages.forEach((_, i) => renderMarkersFor(i));
+    }, { passive: false });
 
     // Answer tools
     els.ansMask?.addEventListener("click", () => setAnsTool("mask"));
@@ -123,9 +198,6 @@
       const gl = document.createElement("div");
       gl.className = "ws-gutter left";
       gl.innerHTML = '<span class="hint mt-1">Add marker</span>';
-      const gr = document.createElement("div");
-      gr.className = "ws-gutter right";
-      gr.innerHTML = '<span class="hint mt-1">Add marker</span>';
 
       const wrap = document.createElement("div");
       wrap.className = "ws-media-wrap";
@@ -139,13 +211,12 @@
       canvas.className = "ws-canvas";
 
       wrap.append(img, canvas);
-      page.append(gl, gr, wrap);
+      page.append(gl, /* no right gutter */ wrap);
       host.appendChild(page);
 
       img.addEventListener("load", () => preparePageCanvas(canvas, img, index));
 
       gl.addEventListener("click", (e) => addMarkerAt(page, index, "left", e));
-      gr.addEventListener("click", (e) => addMarkerAt(page, index, "right", e));
     });
   }
 
@@ -248,14 +319,22 @@
     const rect = img.getBoundingClientRect();
     const y = (evt.touches ? evt.touches[0].clientY : evt.clientY) - rect.top;
     const yRatio = Math.max(0, Math.min(1, y / rect.height));
-    const text = prompt("Marker text?") || "";
+    const text = "";
     const id = `m${Date.now().toString(36)}${Math.random().toString(36).slice(2,6)}`;
-    const m = { id, page: pageIndex, side, yRatio, text };
+    const m = { id, page: pageIndex, side: "left", yRatio, text };
     markers.push(m);
     saveMarkers();
     renderMarkersFor(pageIndex);
     updateMarkerCount();
     location.hash = `m-${id}`;
+    // focus new marker content for inline typing
+    setTimeout(() => {
+      const el = document.getElementById(`marker-${id}`);
+      const content = el?.querySelector('.content');
+      if (content) {
+        content.focus();
+      }
+    }, 0);
   }
 
   function renderMarkersFor(pageIndex) {
@@ -266,10 +345,122 @@
     const rect = img.getBoundingClientRect();
     markers.filter((m) => m.page === pageIndex).forEach((m) => {
       const el = document.createElement("div");
-      el.className = `ws-marker ${m.side}`;
-      el.textContent = m.text || "Marker";
+      el.className = `ws-marker left`;
       el.style.top = `${m.yRatio * rect.height}px`;
       el.id = `marker-${m.id}`;
+
+      // grip for dragging
+      const grip = document.createElement("span");
+      grip.className = "grip";
+      grip.title = "Drag to move";
+      grip.innerHTML = "<i class=\"bi bi-grip-vertical\"></i>";
+      el.appendChild(grip);
+
+      // editable content
+      const content = document.createElement("div");
+      content.className = "content";
+      content.contentEditable = "true";
+      content.setAttribute('data-ph', 'Type marker...');
+      content.textContent = m.text || "";
+      el.appendChild(content);
+
+      // actions: delete only
+      const actions = document.createElement("span");
+      actions.className = "actions";
+      const btnDelete = document.createElement("button");
+      btnDelete.className = "btn-icon";
+      btnDelete.title = "Delete";
+      btnDelete.innerHTML = "<i class=\"bi bi-x\"></i>";
+      actions.append(btnDelete);
+      el.appendChild(actions);
+
+      // Delete handler
+      btnDelete.addEventListener("click", (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const ok = true;
+        if (!ok) return;
+        const idx = markers.findIndex((x) => x.id === m.id);
+        if (idx !== -1) {
+          markers.splice(idx, 1);
+          saveMarkers();
+          el.remove();
+          updateMarkerCount();
+          updateSearchHits();
+        }
+      });
+
+      // Inline edit: save on input/blur
+      let saveDebounce;
+      function persistNow() {
+        m.text = content.innerText.replace(/\u00A0/g, ' ').trimEnd();
+        saveMarkers();
+        updateSearchHits();
+      }
+      content.addEventListener('input', () => {
+        clearTimeout(saveDebounce);
+        saveDebounce = setTimeout(persistNow, 200);
+      });
+      content.addEventListener('blur', () => {
+        clearTimeout(saveDebounce);
+        persistNow();
+      });
+
+      // Drag to move (via grip) and flip side if crossing midpoint
+      let dragging = false;
+      function getPointer(evt) {
+        const y = (evt.touches ? evt.touches[0].clientY : evt.clientY);
+        const x = (evt.touches ? evt.touches[0].clientX : evt.clientX);
+        return { x, y };
+      }
+      function onDown(e) {
+        // only start drag from grip
+        if (!(e.target === grip || grip.contains(e.target))) return;
+        dragging = true;
+        el.classList.add("dragging");
+        e.preventDefault();
+      }
+      function onMove(e) {
+        if (!dragging) return;
+        const p = getPointer(e);
+        const imgRect = img.getBoundingClientRect();
+        // y within the image height
+        const yInImg = Math.max(0, Math.min(imgRect.height, p.y - imgRect.top));
+        m.yRatio = imgRect.height ? yInImg / imgRect.height : 0;
+        el.style.top = `${m.yRatio * imgRect.height}px`;
+        e.preventDefault();
+      }
+      function onUp() {
+        if (!dragging) return;
+        dragging = false;
+        el.classList.remove("dragging");
+        saveMarkers();
+      }
+      grip.addEventListener("mousedown", (e) => {
+        onDown(e);
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", function upOnce() {
+          onUp();
+          window.removeEventListener("mousemove", onMove);
+          window.removeEventListener("mouseup", upOnce);
+        });
+      });
+      grip.addEventListener("touchstart", (e) => {
+        onDown(e);
+        window.addEventListener("touchmove", onMove, { passive: false });
+        window.addEventListener("touchend", function upOnce() {
+          onUp();
+          window.removeEventListener("touchmove", onMove);
+          window.removeEventListener("touchend", upOnce);
+        });
+      }, { passive: false });
+
+      // Navigate to this marker on click (outside of editing)
+      el.addEventListener("click", (evt) => {
+        if (evt.target === content || content.contains(evt.target)) return;
+        location.hash = `m-${m.id}`;
+      });
+
       pageEl.appendChild(el);
     });
   }
@@ -285,8 +476,44 @@
       .map((m, i) => ({ m, i }))
       .filter(({ m }) => !q || String(m.text || "").toLowerCase().includes(q));
     currentHitIndex = currentMarkHits.length > 0 ? 0 : -1;
-    if (currentHitIndex >= 0) jumpToMarker(currentMarkHits[0].m);
+    renderSearchResults();
     updateMarkerCount();
+  }
+  function renderSearchResults() {
+    const host = els.markResults;
+    if (!host) return;
+    host.innerHTML = '';
+    const q = (els.markSearch?.value || '').trim();
+    const total = markers.length;
+    const matches = currentMarkHits.length;
+    if (els.markCount) {
+      if (q) {
+        els.markCount.textContent = `${matches} match${matches===1?'':'es'} • ${total} total`;
+      } else {
+        els.markCount.textContent = `${total} marker${total===1?'':'s'}`;
+      }
+    }
+    currentMarkHits
+      .slice()
+      .sort((a, b) => a.m.page - b.m.page || a.m.yRatio - b.m.yRatio)
+      .forEach(({ m }, idx) => {
+        const item = document.createElement('div');
+        item.className = 'mark-item' + (idx === currentHitIndex ? ' active' : '');
+        const title = document.createElement('span');
+        title.className = 'title';
+        title.textContent = (m.text || '(no text)').replace(/\s+/g, ' ').trim();
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = `Pg ${m.page + 1}`;
+        item.append(title, meta);
+        item.addEventListener('click', () => {
+          jumpToMarker(m);
+          location.hash = `m-${m.id}`;
+          currentHitIndex = idx;
+          renderSearchResults();
+        });
+        host.appendChild(item);
+      });
   }
   function jumpHit(dir) {
     if (currentMarkHits.length === 0) return;
@@ -464,4 +691,17 @@
     ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
   }
+  // ===== Zoom (Ctrl + wheel) =====
+  function loadZoom() {
+    const v = parseFloat(localStorage.getItem(storeKey('zoom')));
+    if (!isNaN(v)) return clamp(v, 0.5, 2.5);
+    return 1;
+  }
+  function saveZoom() {
+    try { localStorage.setItem(storeKey('zoom'), String(zoom)); } catch {}
+  }
+  function applyZoom() {
+    document.documentElement.style.setProperty('--ws-zoom', String(zoom));
+  }
+  function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 })();
