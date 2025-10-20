@@ -144,6 +144,15 @@ export function initQListView(
       <div class="text-muted small">${yr || ""}</div>
     </div>`;
     try {
+      const imgs = item.querySelectorAll('img');
+      imgs.forEach((im) => {
+        im.loading = 'lazy';
+        im.decoding = 'async';
+        try { im.referrerPolicy = 'no-referrer'; } catch {}
+        im.onerror = () => { im.onerror = null; im.style.display = 'none'; };
+      });
+    } catch {}
+    try {
       if (renderMath && window.renderMathInElement)
         window.renderMathInElement(item, {
           delimiters: [

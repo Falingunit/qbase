@@ -42,7 +42,7 @@ function examCard(exam, { onToggleStar }) {
   if (starredExams.has(exam.id)) card.classList.add('as-starred');
   const body = document.createElement('div'); body.className = 'card-body';
   const icoWrap = document.createElement('div'); icoWrap.className = 'pyqs-icon-wrap';
-  const img = document.createElement('img'); img.className = 'pyqs-icon'; img.loading = 'lazy'; img.src = exam.icon || ICON_FALLBACK; img.onerror = () => { img.src = ICON_FALLBACK; };
+  const img = document.createElement('img'); img.className = 'pyqs-icon'; img.loading = 'lazy'; img.decoding = 'async'; img.src = exam.icon || ICON_FALLBACK; img.onerror = () => { img.onerror = null; img.src = ICON_FALLBACK; };
   icoWrap.appendChild(img);
   const info = document.createElement('div'); info.className = 'flex-grow-1';
   const title = document.createElement('h5'); title.className = 'pyqs-title'; title.textContent = exam.name;

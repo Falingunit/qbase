@@ -1,6 +1,7 @@
 ﻿// PYQs Question List view (sidebar + list with filters)
-import { ensureConfig, fetchQuestions, fetchChapters } from "./pyqs-service.js";
+import { ensureConfig, fetchChapters, questionsBundle } from "./pyqs-service.js";
 import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
+ 
 
 (async () => {
   await ensureConfig();
@@ -32,15 +33,27 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     backTop: document.getElementById("q-back-top"),
   };
   const PREF_URL = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
-  function defaultFilters() { return { q: '', years: [], status: '', diff: '', hasSol: false, sort: 'index' }; }
+  function defaultFilters() { return { q: '', years: [], status: '', diff: '', sort: 'index' }; }
   async function loadServerFilters() {
     try { const r = await authFetch(PREF_URL); if (r.ok) { const obj = await r.json(); if (obj && typeof obj === 'object') return { ...defaultFilters(), ...obj }; } } catch {}
     return defaultFilters();
   }
+  const _savePrefState = { timer: 0, last: null };
   function saveServerFilters(obj) {
-    try { authFetch(PREF_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prefs: obj || {} }) }); } catch {}
+    _savePrefState.last = obj || {};
+    try { clearTimeout(_savePrefState.timer); } catch {}
+    _savePrefState.timer = setTimeout(() => {
+      try {
+        authFetch(PREF_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prefs: _savePrefState.last })
+        });
+      } catch {}
+    }, 250);
   }
 
+  // Load filters from server (source of truth)
   let filters = await loadServerFilters();
 
   // Breadcrumbs removed
@@ -100,16 +113,17 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     return "not-started";
   }
 
-  // Fetch questions + state
+  // Fetch questions + state in a single bundle
   let questions = [];
   let states = [];
   let chapterName = "";
   try {
-    const [qs, chs] = await Promise.all([
-      fetchQuestions(examId, subjectId, chapterId),
+    const [bundle, chs] = await Promise.all([
+      questionsBundle(examId, subjectId, chapterId, { full: false, state: true, overlays: false }),
       fetchChapters(examId, subjectId).catch(() => []),
     ]);
-    questions = Array.isArray(qs) ? qs : [];
+    questions = Array.isArray(bundle?.questions) ? bundle.questions : [];
+    states = Array.isArray(bundle?.state) ? bundle.state : [];
     try {
       const match = (Array.isArray(chs) ? chs : []).find((c) => String(c.id) === String(chapterId));
       if (match && match.name) chapterName = String(match.name);
@@ -121,15 +135,7 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     return;
   }
 
-  // Try to fetch server state (ignore errors and auth)
-  try {
-    const r = await authFetch(
-      `${API_BASE}/api/pyqs/state/${encodeURIComponent(
-        examId
-      )}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`
-    );
-    if (r.ok) states = await r.json();
-  } catch {}
+  // State already included in bundle
 
   // Normalize persisted years to available set
   try {
@@ -193,7 +199,6 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     if (Array.isArray(f.years) && f.years.length) n++;
     if (f.status) n++;
     if (f.diff) n++;
-    if (f.hasSol) n++;
     return n;
   }
   function syncFilterControlsFromFilters() {
@@ -213,12 +218,7 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
       els.diffMenu?.querySelectorAll('input[type="radio"]').forEach((inp) => {
         inp.checked = String(inp.value || "") === String(filters.diff || "");
       });
-      // Solution toggle
-      if (els.solBtn) {
-        const n = filters.hasSol ? "1" : "0";
-        els.solBtn.setAttribute("data-active", n);
-        els.solBtn.classList.toggle("btn-primary", n === "1");
-      }
+      // Solution toggle removed
       // Sort label
       updateSortUI();
     } catch {}
@@ -254,16 +254,7 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
       }
     });
   });
-  // Solution toggle
-  els.solBtn?.addEventListener("click", () => {
-    const on = els.solBtn.getAttribute("data-active") === "1";
-    const n = on ? "0" : "1";
-    els.solBtn.setAttribute("data-active", n);
-    els.solBtn.classList.toggle("btn-primary", n === "1");
-    filters.hasSol = n === "1";
-    saveServerFilters(filters);
-    render();
-  });
+  // Solution toggle removed
 
   // Search
   els.search.value = filters.q || "";
@@ -292,12 +283,6 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
         return y && f.years.includes(y);
       });
     if (f.diff) out = out.filter((o) => normDiff(o.q.diffuculty) === f.diff);
-    if (f.hasSol)
-      out = out.filter(
-        (o) =>
-          String(o.q?.solution?.sText || "").trim().length ||
-          String(o.q?.solution?.sImage || "").trim().length
-      );
     if (f.status)
       out = out.filter(
         (o) =>

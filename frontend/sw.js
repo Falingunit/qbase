@@ -1,39 +1,87 @@
-// sw.js (PWA cache for project page at /qbase/)
-// Use a versioned cache; bump when strategy/critical assets change
-const CACHE_NAME = 'qbase-v2';
+// sw.js — Service Worker
+// Scope-aware precache + runtime caching for static pages, catalog APIs, and remote icons.
+const SCOPE_PATH = new URL(self.registration.scope).pathname.replace(/\/?$/, '/');
+const CACHE_STATIC = 'qbase-static-v3';
+const CACHE_RUNTIME = 'qbase-rt-v3';
 const PRECACHE = [
-  '/qbase/',           // start page
-  '/qbase/index.html',
-  // Keep precache minimal; network-first will fetch latest for CSS/JS
-  '/qbase/android-chrome-192x192.png',
-  '/qbase/android-chrome-512x512.png',
-  '/qbase/offline.html'
+  SCOPE_PATH,
+  SCOPE_PATH + 'index.html',
+  SCOPE_PATH + 'offline.html',
+  SCOPE_PATH + 'android-chrome-192x192.png',
+  SCOPE_PATH + 'android-chrome-512x512.png',
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE)));
+  event.waitUntil(caches.open(CACHE_STATIC).then(cache => cache.addAll(PRECACHE)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => ![CACHE_STATIC, CACHE_RUNTIME].includes(k)).map(k => caches.delete(k)));
+  })());
   self.clients.claim();
 });
 
-// Runtime caching strategy: network-first for same-origin GETs with no-store,
-// fallback to cache when offline. This ensures updates appear immediately.
+function isCatalogApi(url) {
+  // Cache GETs for public catalog endpoints only (no user data)
+  const p = url.pathname;
+  if (!p.startsWith('/api/pyqs/')) return false;
+  if (p.includes('/questions') || p.includes('/state') || p.includes('/prefs') || p.includes('/overlays') || p.includes('/starred') || p.includes('/progress') || p.includes('/subject-overview')) return false;
+  // exams, subjects, chapters, exam-overview are safe
+  return p.startsWith('/api/pyqs/exams') || p.startsWith('/api/pyqs/exam-overview');
+}
+
+async function swrRespond(request) {
+  const cache = await caches.open(CACHE_RUNTIME);
+  const cached = await cache.match(request);
+  const fetchAndPut = fetch(new Request(request, { cache: 'no-store' }))
+    .then(async (res) => { try { await cache.put(request, res.clone()); } catch {} return res; })
+    .catch(() => null);
+  // Return cached immediately if present, else wait for network
+  if (cached) { fetchAndPut.catch(()=>{}); return cached; }
+  const net = await fetchAndPut; if (net) return net;
+  // As a last resort, serve offline page for same-origin HTML navigations
+  if (request.mode === 'navigate') return caches.match(SCOPE_PATH + 'offline.html');
+  throw new Error('Network error');
+}
+
+async function cacheFirstOpaque(request) {
+  // For cross-origin icon requests; store opaque responses
+  const cache = await caches.open(CACHE_RUNTIME);
+  const cached = await cache.match(request);
+  if (cached) return cached;
+  try {
+    const res = await fetch(request, { mode: 'no-cors' });
+    try { await cache.put(request, res.clone()); } catch {}
+    return res;
+  } catch {
+    // Fallback to local icon if available
+    return caches.match(SCOPE_PATH + 'android-chrome-192x192.png');
+  }
+}
+
+// Runtime caching strategy
 self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
 
-  // Pass through cross-origin and API calls (let browser handle)
-  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) {
-    event.respondWith(fetch(request).catch(() => caches.match('/qbase/offline.html')));
+  // Cross-origin remote icons (cache-first, opaque)
+  if (url.origin !== self.location.origin) {
+    const host = url.hostname;
+    if (host.endsWith('getmarks.app')) {
+      event.respondWith(cacheFirstOpaque(request));
+      return;
+    }
+    // Other cross-origin: pass-through
+    return;
+  }
+
+  // Same-origin catalog APIs: stale-while-revalidate
+  if (isCatalogApi(url)) {
+    event.respondWith(swrRespond(request));
     return;
   }
 
@@ -41,16 +89,15 @@ self.addEventListener('fetch', event => {
   // then update cache, else fallback to cache/offline.
   event.respondWith((async () => {
     try {
-      const noStoreReq = new Request(request, { cache: 'no-store' });
-      const netRes = await fetch(noStoreReq);
+      const netRes = await fetch(new Request(request, { cache: 'no-store' }));
       const resClone = netRes.clone();
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(request, resClone);
+      const cache = await caches.open(CACHE_STATIC);
+      try { await cache.put(request, resClone); } catch {}
       return netRes;
     } catch (e) {
       const cached = await caches.match(request);
       if (cached) return cached;
-      return caches.match('/qbase/offline.html');
+      return caches.match(SCOPE_PATH + 'offline.html');
     }
   })());
 });

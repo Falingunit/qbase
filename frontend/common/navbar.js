@@ -891,7 +891,7 @@
     });
   }
 
-  async function showProfileModal() {
+  async function showPreferencesModal() {
     const idCur = "qbaseProfCur";
     const idNew = "qbaseProfNew";
     const idCon = "qbaseProfCon";
@@ -900,35 +900,159 @@
     const marksTokId = "qbaseMarksToken";
     const marksSaveId = "qbaseMarksSave";
     const marksClearId = "qbaseMarksClear";
-    const marksStatusId = "qbaseMarksStatus";
+      const marksStatusId = "qbaseMarksStatus";
+      const marksSpinId = "qbaseMarksSpin";
     const errId = "qbaseProfErr";
+    // Hotkeys IDs
+    const hkNavPrev = "qbaseHkNavPrev";
+    const hkNavNext = "qbaseHkNavNext";
+    const hkCheck = "qbaseHkCheck";
+    const hkFocus = "qbaseHkFocus";
+    const hkA = "qbaseHkA";
+    const hkB = "qbaseHkB";
+    const hkC = "qbaseHkC";
+    const hkD = "qbaseHkD";
+    const hkBlue = "qbaseHkBlue";
+    const hkRed = "qbaseHkRed";
+    const hkYellow = "qbaseHkYellow";
+    const hkGreen = "qbaseHkGreen";
+    const hkClear = "qbaseHkClear";
+    const hkSaveBtn = "qbaseHkSave";
+    const hkResetBtn = "qbaseHkReset";
     const body = `
-      <div class="mb-3">
-        <h6 class="mb-2">Change Password</h6>
-        <div class="mb-2">
-          <label for="${idCur}" class="form-label">Current Password</label>
-          <input id="${idCur}" class="form-control" type="password" autocomplete="current-password" />
+        <div class="preferences-modal">
+          <ul class="nav nav-tabs" id="prefsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="prefs-account-tab" data-bs-toggle="tab" data-bs-target="#prefs-account" type="button" role="tab" aria-controls="prefs-account" aria-selected="true">Account</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="prefs-integrations-tab" data-bs-toggle="tab" data-bs-target="#prefs-integrations" type="button" role="tab" aria-controls="prefs-integrations" aria-selected="false">PYQs API</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="prefs-hotkeys-tab" data-bs-toggle="tab" data-bs-target="#prefs-hotkeys" type="button" role="tab" aria-controls="prefs-hotkeys" aria-selected="false">Hotkeys</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link text-danger" id="prefs-danger-tab" data-bs-toggle="tab" data-bs-target="#prefs-danger" type="button" role="tab" aria-controls="prefs-danger" aria-selected="false">Danger</button>
+            </li>
+          </ul>
+          <div class="tab-content pt-3" id="prefsTabsContent">
+            <div class="tab-pane fade show active" id="prefs-account" role="tabpanel" aria-labelledby="prefs-account-tab">
+              <div class="mb-3">
+                <h6 class="mb-2">Change Password</h6>
+                <div class="mb-2">
+                  <label for="${idCur}" class="form-label">Current Password</label>
+                  <input id="${idCur}" class="form-control" type="password" autocomplete="current-password" />
+                </div>
+                <div class="mb-2">
+                  <label for="${idNew}" class="form-label">New Password</label>
+                  <input id="${idNew}" class="form-control" type="password" autocomplete="new-password" />
+                </div>
+                <div class="mb-2">
+                  <label for="${idCon}" class="form-label">Confirm New Password</label>
+                  <input id="${idCon}" class="form-control" type="password" autocomplete="new-password" />
+                </div>
+                <div id="${errId}" class="text-danger small" style="display:none"></div>
+                <button id="${saveBtnId}" class="btn btn-primary">Update Password</button>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="prefs-hotkeys" role="tabpanel" aria-labelledby="prefs-hotkeys-tab">
+              <div class="mt-1">
+                <h6 class="mb-2">Hotkeys</h6>
+                <p class="small text-muted">Click a field, then press a key or key combination. Press Escape to clear. These hotkeys apply to Assignment and PYQs questions.</p>
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label class="form-label" for="${hkNavPrev}">Navigate: Previous</label>
+                    <input id="${hkNavPrev}" class="form-control" type="text" placeholder="ArrowLeft" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label" for="${hkNavNext}">Navigate: Next</label>
+                    <input id="${hkNavNext}" class="form-control" type="text" placeholder="ArrowRight" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label" for="${hkCheck}">Check/Reset Toggle</label>
+                    <input id="${hkCheck}" class="form-control" type="text" placeholder="Space" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-6">
+                    <label class="form-label" for="${hkFocus}">Focus Notes</label>
+                    <input id="${hkFocus}" class="form-control" type="text" placeholder="N" autocomplete="off" />
+                  </div>
+                  <div class="col-12"><hr/></div>
+                  <div class="col-sm-3">
+                    <label class="form-label" for="${hkA}">Pick Option A</label>
+                    <input id="${hkA}" class="form-control" type="text" placeholder="A" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="form-label" for="${hkB}">Pick Option B</label>
+                    <input id="${hkB}" class="form-control" type="text" placeholder="B" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="form-label" for="${hkC}">Pick Option C</label>
+                    <input id="${hkC}" class="form-control" type="text" placeholder="C" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-3">
+                    <label class="form-label" for="${hkD}">Pick Option D</label>
+                    <input id="${hkD}" class="form-control" type="text" placeholder="D" autocomplete="off" />
+                  </div>
+                  <div class="col-12"><hr/></div>
+                  <div class="col-sm-4">
+                    <label class="form-label" for="${hkBlue}">Mark Color: Blue</label>
+                    <input id="${hkBlue}" class="form-control" type="text" placeholder="Alt+1" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label" for="${hkRed}">Mark Color: Red</label>
+                    <input id="${hkRed}" class="form-control" type="text" placeholder="Alt+2" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label" for="${hkYellow}">Mark Color: Yellow</label>
+                    <input id="${hkYellow}" class="form-control" type="text" placeholder="Alt+3" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label" for="${hkGreen}">Mark Color: Green</label>
+                    <input id="${hkGreen}" class="form-control" type="text" placeholder="Alt+4" autocomplete="off" />
+                  </div>
+                  <div class="col-sm-4">
+                    <label class="form-label" for="${hkClear}">Clear Color</label>
+                    <input id="${hkClear}" class="form-control" type="text" placeholder="Alt+5" autocomplete="off" />
+                  </div>
+                </div>
+                <div class="d-flex align-items-center gap-2 mt-3">
+                  <button id="${hkSaveBtn}" class="btn btn-primary">Save Hotkeys</button>
+                  <button id="${hkResetBtn}" class="btn btn-outline-secondary">Reset Defaults</button>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="prefs-integrations" role="tabpanel" aria-labelledby="prefs-integrations-tab">
+              <div class="mt-1">
+                <h6 class="mb-2">PYQs Authentication</h6>
+                <p class="small text-muted">Paste your Bearer token here. <br /> We do not display the saved token.</p>
+                <div class="mb-2" pt-2>
+                  <label for="${marksTokId}" class="form-label">Bearer Token: </label>
+                  <input id="${marksTokId}" class="form-control" type="text" placeholder="Paste your bearer token here..." autocomplete="off" />
+                  <div class="form-text">Leave blank to use the default token (may not always work). <br />Use Clear to remove your token and switch back to the default token.</div>
+                </div>
+                  <div class="d-flex align-items-center gap-2 pt-2">
+                    <button id="${marksSaveId}" class="btn btn-primary">Save Token</button>
+                    <button id="${marksClearId}" class="btn btn-outline-danger">Clear Token</button>
+                  </div>
+                  <div class="pt-2 d-flex align-items-center gap-2">
+                    <span>Current token status:</span>
+                    <span id="${marksStatusId}" class=""></span>
+                    <span id="${marksSpinId}" class="spinner-border spinner-border-sm text-secondary align-middle d-none" role="status" aria-hidden="true"></span>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="prefs-danger" role="tabpanel" aria-labelledby="prefs-danger-tab">
+              <div class="mt-3">
+                <h6 class="mb-2 text-danger">Danger Zone</h6>
+                <p class="small text-muted">Deleting your account permanently removes all saved data.</p>
+                <button id="${delBtnId}" class="btn btn-outline-danger">Delete Account…</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="mb-2">
-          <label for="${idNew}" class="form-label">New Password</label>
-          <input id="${idNew}" class="form-control" type="password" autocomplete="new-password" />
-        </div>
-        <div class="mb-2">
-          <label for="${idCon}" class="form-label">Confirm New Password</label>
-          <input id="${idCon}" class="form-control" type="password" autocomplete="new-password" />
-        </div>
-        <div id="${errId}" class="text-danger small" style="display:none"></div>
-        <button id="${saveBtnId}" class="btn btn-primary">Update Password</button>
-      </div>
-      <hr/>
-      <div class="mt-3">
-        <h6 class="mb-2 text-danger">Danger Zone</h6>
-        <p class="small text-muted">Deleting your account permanently removes all saved data.</p>
-        <button id="${delBtnId}" class="btn btn-outline-danger">Delete Account…</button>
-      </div>
-    `;
+      `;
     await showModal({
-      title: "Profile",
+      title: "Preferences",
       bodyHTML: body,
       buttons: [
         { text: "Close", className: "btn btn-outline-secondary", value: true },
@@ -939,99 +1063,109 @@
         const delBtn = modalEl.querySelector(`#${delBtnId}`);
         const err = modalEl.querySelector(`#${errId}`);
 
-        // Inject Marks App Authentication section before Danger Zone
+        // Integrations: Marks App handlers
         try {
-          const bodyEl = modalEl.querySelector(".modal-body");
-          const danger = delBtn?.closest(".mt-3");
-          const sect = document.createElement("div");
-          sect.className = "mt-3";
-          sect.innerHTML = `
-            <h6 class="mb-2">Marks App Authentication</h6>
-            <p class="small text-muted">Paste your Bearer token. It will be used to PYQs for you. We do not display the saved token.</p>
-            <div class="mb-2">
-              <label for="${marksTokId}" class="form-label">Bearer Token</label>
-              <input id="${marksTokId}" class="form-control" type="text" placeholder="eyJhbGciOi..." autocomplete="off" />
-              <div class="form-text">Leave blank to keep using the default (may not always work). Use Clear to remove.</div>
-            </div>
-            <div class="d-flex align-items-center gap-2">
-            <button id="${marksSaveId}" class="btn btn-outline-primary">Save Token</button>
-            <button id="${marksClearId}" class="btn btn-outline-secondary">Clear Token</button>
-            <span id="${marksStatusId}" class="small"></span>
-            </div>            <hr>
-`;
-          if (bodyEl) {
-            if (danger && danger.parentElement === bodyEl) {
-              bodyEl.insertBefore(sect, danger);
-            } else {
-              bodyEl.appendChild(sect);
-            }
-          }
-          // Wire up handlers
-          const mTok = sect.querySelector(`#${marksTokId}`);
-          const mSave = sect.querySelector(`#${marksSaveId}`);
-          const mClear = sect.querySelector(`#${marksClearId}`);
-          const mStatus = sect.querySelector(`#${marksStatusId}`);
-          (async () => {
-            try {
-              const r = await authFetch(`${API_BASE}/account/marks-auth`);
-              if (r.ok) {
-                const d = await r.json();
-                if (mStatus)
-                  mStatus.textContent = d?.hasToken
-                    ? "Token configured"
-                    : "No token set";
+          const mTok = modalEl.querySelector(`#${marksTokId}`);
+          const mSave = modalEl.querySelector(`#${marksSaveId}`);
+          const mClear = modalEl.querySelector(`#${marksClearId}`);
+            const mStatus = modalEl.querySelector(`#${marksStatusId}`);
+            const mSpin = modalEl.querySelector(`#${marksSpinId}`);
+            const setSpin = (on) => {
+              if (!mSpin) return;
+              if (on) mSpin.classList.remove("d-none");
+              else mSpin.classList.add("d-none");
+            };
+            (async () => {
+              setSpin(true);
+              try {
+                const r = await authFetch(`${API_BASE}/account/marks-auth`);
+                if (r.ok) {
+                  const d = await r.json();
+                  if (mStatus)
+                    mStatus.textContent = d?.hasToken
+                      ? "Token configured"
+                      : "No token set";
+                  if (mStatus) {
+                    mStatus.classList.remove("text-danger", "text-success");
+                    if (d?.hasToken) mStatus.classList.add("text-success");
+                  }
+                }
+              } catch {} finally {
+                setSpin(false);
               }
-            } catch {}
-          })();
-          mSave?.addEventListener("click", async (e) => {
-            e.preventDefault();
-            const token = (mTok?.value || "").trim();
-            if (!token) {
+            })();
+            mSave?.addEventListener("click", async (e) => {
+              e.preventDefault();
+              const token = (mTok?.value || "").trim();
+              if (!token) {
+                try {
+                  await showNotice({
+                    title: "Nothing to save",
+                    message: "Enter a token first.",
+                  });
+                } catch {}
+                return;
+              }
               try {
-                await showNotice({
-                  title: "Nothing to save",
-                  message: "Enter a token first.",
+                setSpin(true);
+                const r = await authFetch(`${API_BASE}/account/marks-auth`, {
+                  method: "PATCH",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ bearerToken: token }),
                 });
-              } catch {}
-              return;
-            }
-            try {
-              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ bearerToken: token }),
-              });
-              if (!r.ok) throw new Error(String(r.status));
-              if (mStatus) mStatus.textContent = "Token configured";
-              if (mTok) mTok.value = "";
+                if (!r.ok) {
+                  // If invalid, mark status red and do not clear input
+                  if (r.status === 401 || r.status === 403 || r.status === 400) {
+                    if (mStatus) {
+                      mStatus.textContent = "Token Invalid";
+                      mStatus.classList.remove("text-success");
+                      mStatus.classList.add("text-danger");
+                    }
+                    setSpin(false);
+                    return;
+                  }
+                  try {
+                    await showNotice({
+                      title: "Error",
+                      message: "Failed to save token.",
+                    });
+                  } catch {}
+                  setSpin(false);
+                  return;
+                }
+                if (mStatus) {
+                  mStatus.textContent = "Token configured";
+                  mStatus.classList.remove("text-danger");
+                  mStatus.classList.add("text-success");
+                }
+                if (mTok) mTok.value = "";
+                setSpin(false);
+              } catch (e) {
+                try {
+                  await showNotice({
+                    title: "Error",
+                    message: "Failed to save token.",
+                  });
+                } catch {}
+                setSpin(false);
+              }
+            });
+            mClear?.addEventListener("click", async (e) => {
+              e.preventDefault();
               try {
-                await showNotice({
-                  title: "Saved",
-                  message: "Marks App token saved.",
+                const r = await authFetch(`${API_BASE}/account/marks-auth`, {
+                  method: "DELETE",
                 });
-              } catch {}
-            } catch (e) {
-              try {
-                await showNotice({
-                  title: "Error",
-                  message: "Failed to save token.",
-                });
-              } catch {}
-            }
-          });
-          mClear?.addEventListener("click", async (e) => {
-            e.preventDefault();
-            try {
-              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                method: "DELETE",
-              });
-              if (!r.ok) throw new Error(String(r.status));
-              if (mStatus) mStatus.textContent = "No token set";
-              if (mTok) mTok.value = "";
-              try {
-                await showNotice({
-                  title: "Cleared",
-                  message: "Marks App token cleared.",
+                if (!r.ok) throw new Error(String(r.status));
+                if (mStatus) {
+                  mStatus.textContent = "No token set";
+                  mStatus.classList.remove("text-danger", "text-success");
+                }
+                if (mTok) mTok.value = "";
+                try {
+                  await showNotice({
+                    title: "Cleared",
+                    message: "Marks App token cleared.",
                 });
               } catch {}
             } catch (e) {
@@ -1044,6 +1178,93 @@
             }
           });
         } catch {}
+
+        // Hotkeys wiring
+        try {
+          const HK = (window.qbGetHotkeys && window.qbGetHotkeys()) || null;
+          const ids = {
+            navPrev: `#${hkNavPrev}`,
+            navNext: `#${hkNavNext}`,
+            checkToggle: `#${hkCheck}`,
+            focusNotes: `#${hkFocus}`,
+            optionA: `#${hkA}`,
+            optionB: `#${hkB}`,
+            optionC: `#${hkC}`,
+            optionD: `#${hkD}`,
+            colorBlue: `#${hkBlue}`,
+            colorRed: `#${hkRed}`,
+            colorYellow: `#${hkYellow}`,
+            colorGreen: `#${hkGreen}`,
+            colorClear: `#${hkClear}`,
+          };
+          function populateFromCurrent() {
+            const curHK = (window.qbGetHotkeys && window.qbGetHotkeys()) || HK || {};
+            for (const [k, sel] of Object.entries(ids)) {
+              const el = modalEl.querySelector(sel);
+              if (el) el.value = (curHK?.[k] && curHK[k][0]) || "";
+            }
+          }
+          populateFromCurrent();
+          const hkChangedHandler = () => { try { populateFromCurrent(); } catch {} };
+          window.addEventListener('qbase:hotkeys-changed', hkChangedHandler);
+          modalEl.addEventListener('hidden.bs.modal', () => {
+            try { window.removeEventListener('qbase:hotkeys-changed', hkChangedHandler); } catch {}
+          }, { once: true });
+          function attachCapture(selector) {
+            const el = modalEl.querySelector(selector);
+            if (!el) return;
+            el.addEventListener("keydown", (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              if (ev.key === "Escape") {
+                el.value = "";
+                return;
+              }
+              const chord = window.qbEventToChord
+                ? window.qbEventToChord(ev)
+                : "";
+              if (chord) el.value = chord;
+            });
+          }
+          Object.values(ids).forEach(attachCapture);
+          const hkSave = modalEl.querySelector(`#${hkSaveBtn}`);
+          const hkReset = modalEl.querySelector(`#${hkResetBtn}`);
+          hkSave?.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const out = {};
+            for (const [k, sel] of Object.entries(ids)) {
+              const el = modalEl.querySelector(sel);
+              const v = (el?.value || "").trim();
+              if (v) out[k] = [v];
+            }
+            try {
+              window.qbSaveHotkeys && window.qbSaveHotkeys(out);
+            } catch {}
+            try {
+              await showNotice({ title: "Saved", message: "Hotkeys saved." });
+            } catch {}
+          });
+          hkReset?.addEventListener("click", async (e) => {
+            e.preventDefault();
+            const def =
+              (window.qbHotkeysDefaults && window.qbHotkeysDefaults()) || {};
+            for (const [k, sel] of Object.entries(ids)) {
+              const el = modalEl.querySelector(sel);
+              const v = (def[k] && def[k][0]) || "";
+              if (el) el.value = v;
+            }
+            try {
+              window.qbSaveHotkeys && window.qbSaveHotkeys(def);
+            } catch {}
+            try {
+              await showNotice({
+                title: "Reset",
+                message: "Hotkeys reset to defaults.",
+              });
+            } catch {}
+          });
+        } catch {}
+
         const getVals = () => {
           const cur = modalEl.querySelector(`#${idCur}`);
           const nw = modalEl.querySelector(`#${idNew}`);
@@ -1096,6 +1317,7 @@
       },
     });
   }
+
   function broadcastLogin(name) {
     window.dispatchEvent(
       new CustomEvent("qbase:login", { detail: { username: name } })
@@ -1624,7 +1846,7 @@
     e.preventDefault();
     doLogoutFlow();
   });
-  // Build Profile entry dynamically if missing, and move Delete Account into Profile modal
+  // Build Preferences entry dynamically if missing, and move Delete Account into Preferences modal
   (function setupProfileEntry() {
     try {
       // Hide existing Delete Account item if present
@@ -1638,7 +1860,7 @@
         a.className = "dropdown-item";
         a.href = "#";
         a.id = "nav-profile";
-        a.textContent = "Profile";
+        a.textContent = "Preferences";
         li.appendChild(a);
         // Insert as first item
         userDropdownMenu.insertBefore(
@@ -1647,9 +1869,13 @@
         );
         profileLink = a;
       }
+      if (profileLink) {
+        // Ensure label is Preferences even if element pre-exists in HTML
+        profileLink.textContent = "Preferences";
+      }
       profileLink?.addEventListener("click", (e) => {
         e.preventDefault();
-        showProfileModal();
+        showPreferencesModal();
       });
     } catch {}
   })();

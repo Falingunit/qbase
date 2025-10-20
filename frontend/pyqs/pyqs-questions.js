@@ -1492,6 +1492,19 @@
             });
           } catch {}
 
+          // Allow Esc to exit the notes editor (blur CodeMirror)
+          try {
+            notesMDE.codemirror.on('keydown', function (cm, ev) {
+              try {
+                if (ev && (ev.key === 'Escape' || ev.key === 'Esc')) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  try { cm.getInputField()?.blur(); } catch {}
+                }
+              } catch {}
+            });
+          } catch {}
+
           // Prevent manual deletion of image markdown; require using delete button
           try {
             notesMDE.codemirror.on("beforeChange", function (cm, change) {
@@ -4044,6 +4057,56 @@
         .forEach((el) => el.classList.add("hidden"));
     });
   });
+
+  // ---------- Color hotkeys (configurable) ----------
+  (function wireColorHotkeys() {
+    function isTypingContext() {
+      try {
+        const ae = document.activeElement; if (!ae) return false;
+        const tag = String(ae.tagName || '').toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return true;
+        if (ae.isContentEditable) return true;
+      } catch {}
+      return false;
+    }
+    function overlayOpen() {
+      try {
+        const el = document.getElementById('image-overlay');
+        if (!el) return false;
+        const s = getComputedStyle(el);
+        return s.display !== 'none';
+      } catch {}
+      return false;
+    }
+    const COLOR_VALUES = {
+      blue: '#0d6efd',
+      red: '#dc3545',
+      yellow: '#ffc107',
+      green: '#198754',
+      clear: 'none',
+    };
+    const getHK = () => { try { return window.qbGetHotkeys ? window.qbGetHotkeys() : null; } catch { return null; } };
+    window.addEventListener('keydown', async (e) => {
+      try {
+        if (overlayOpen()) return;
+        if (isTypingContext()) return;
+        const matches = (arr) => (window.qbMatches && getHK() && arr) ? window.qbMatches(e, arr) : false;
+        let action = null;
+        if (matches(getHK()?.colorBlue)) action = 'blue';
+        else if (matches(getHK()?.colorRed)) action = 'red';
+        else if (matches(getHK()?.colorYellow)) action = 'yellow';
+        else if (matches(getHK()?.colorGreen)) action = 'green';
+        else if (matches(getHK()?.colorClear)) action = 'clear';
+        if (!action) return;
+        e.preventDefault();
+        if (currentQuestionID == null) return;
+        const val = COLOR_VALUES[action];
+        let ok = true;
+        if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
+        if (ok) { try { updateColorIndicators(); } catch {} try { updateColorPickerSelection(); } catch {} }
+      } catch {}
+    });
+  })();
 
   // -------------------- Filter UI (tags + colors) --------------------
   function setupFilterDropdown() {

@@ -18,6 +18,35 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   flex: 0 0 260px;
 }
 
+/* Horizontal subject tabs */
+.pyqs-tabs-wrap { margin-top: .25rem; }
+#pyqs-subject-tabs { border-bottom: 1px solid rgba(255,255,255,0.12); }
+#pyqs-subject-tabs .nav-link {
+  color: #cbd3dc;
+  background: transparent;
+  border: 0 !important;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: .5rem .75rem;
+}
+#pyqs-subject-tabs .nav-link:hover { color: #ffffff; border-bottom-color: rgba(255,255,255,0.12); }
+#pyqs-subject-tabs .nav-link.active {
+  color: #ffffff;
+  font-weight: 600;
+  background: rgba(255,255,255,0.12);
+  border-bottom-color: var(--bs-primary);
+}
+#pyqs-subject-tabs .ico {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(255,255,255,.04);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
 .topbar-back {
   display: inline-flex;
   align-items: center;

@@ -46,3 +46,232 @@ window.authFetch = (url, opts = {}) => {
   if (token) headers.set("Authorization", `Bearer ${token}`);
   return fetch(url, { cache: "no-store", ...opts, headers });
 };
+
+// --- Service worker registration (global) ---
+try {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      try {
+        const pathParts = location.pathname.split('/').filter(Boolean);
+        const base = pathParts.length && pathParts[0] === 'qbase' ? '/qbase/' : '/';
+        const swUrl = base + 'sw.js';
+        navigator.serviceWorker.register(swUrl, { scope: base }).catch(()=>{});
+      } catch {}
+    });
+  }
+} catch {}
+
+// --- Hotkeys: defaults, storage, helpers ---
+(() => {
+  const STORAGE_KEY = "qbase.hotkeys";
+  const SERVER_ROUTE = "/account/preferences"; // JSON { hotkeys: {...} }
+  let __hkCache = null;
+  let __syncPromise = null;
+
+  // Canonicalize a chord like "ctrl+alt+a" -> "Ctrl+Alt+A"
+  function normalizeChord(input) {
+    if (!input) return "";
+    if (Array.isArray(input)) return input.map(normalizeChord).filter(Boolean);
+    let s = String(input).trim();
+    if (!s) return "";
+    const parts = s.split("+").map((p) => p.trim()).filter(Boolean);
+    const mods = new Set();
+    let key = "";
+    for (const pRaw of parts) {
+      const p = pRaw.toLowerCase();
+      if (p === "ctrl" || p === "control") mods.add("Ctrl");
+      else if (p === "alt" || p === "option") mods.add("Alt");
+      else if (p === "shift") mods.add("Shift");
+      else if (p === "meta" || p === "cmd" || p === "command" || p === "os") mods.add("Meta");
+      else {
+        // Base key
+        if (p === "spacebar" || p === "space" || p === " ") key = "Space";
+        else if (p.startsWith("arrow")) key = p[0].toUpperCase() + p.slice(1);
+        else if (/^f[1-9][0-2]?$/.test(p)) key = p.toUpperCase();
+        else if (p.length === 1) key = p.toUpperCase();
+        else key = pRaw; // keep original case for special keys
+      }
+    }
+    const order = ["Ctrl", "Alt", "Shift", "Meta"]; // Display order
+    const out = [];
+    for (const m of order) if (mods.has(m)) out.push(m);
+    if (key) out.push(key);
+    return out.join("+");
+  }
+
+  function eventToChord(e) {
+    if (!e) return "";
+    let key = String(e.key || "");
+    if (key === " ") key = "Space";
+    if (key === "Spacebar") key = "Space";
+    // Normalize arrows casing
+    if (key.toLowerCase().startsWith("arrow")) key = key[0].toUpperCase() + key.slice(1);
+    // Letters as uppercase
+    if (key.length === 1) key = key.toUpperCase();
+    const mods = [];
+    if (e.ctrlKey) mods.push("Ctrl");
+    if (e.altKey) mods.push("Alt");
+    if (e.shiftKey) mods.push("Shift");
+    if (e.metaKey) mods.push("Meta");
+    return (mods.length ? mods.join("+") + (key ? "+" : "") : "") + key;
+  }
+
+  function defaults() {
+    return {
+      // Assignment/PYQs common actions
+      navPrev: ["ArrowLeft"],
+      navNext: ["ArrowRight"],
+      checkToggle: ["Space"],
+      focusNotes: ["N"],
+      optionA: ["A"],
+      optionB: ["B"],
+      optionC: ["C"],
+      optionD: ["D"],
+
+      // Color mark shortcuts (Alt+Digit by default)
+      colorBlue: ["Alt+1"],
+      colorRed: ["Alt+2"],
+      colorYellow: ["Alt+3"],
+      colorGreen: ["Alt+4"],
+      colorClear: ["Alt+5"],
+    };
+  }
+
+  async function syncFromServer() {
+    try {
+      if (typeof authFetch !== "function") return null;
+      // Only try when there is a token
+      const tok = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
+      if (!tok) return null;
+      const r = await authFetch(`${API_BASE}${SERVER_ROUTE}`);
+      if (!r || !r.ok) return null;
+      const data = await r.json();
+      const serverHK = data && typeof data === "object" ? data.hotkeys : null;
+      if (serverHK && typeof serverHK === "object") {
+        const base = defaults();
+        const merged = { ...base };
+        for (const k of Object.keys(base)) {
+          const v = serverHK[k];
+          if (Array.isArray(v) && v.length) merged[k] = normalizeChord(v);
+          else if (typeof v === "string" && v.trim()) merged[k] = [normalizeChord(v)];
+        }
+        // Update cache + localStorage and notify
+        __hkCache = merged;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+        try { window.dispatchEvent(new Event("qbase:hotkeys-changed")); } catch {}
+        return merged;
+      }
+      return null;
+    } catch { return null; }
+  }
+
+  function load() {
+    try {
+      if (__hkCache) return __hkCache;
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const base = defaults();
+      if (!raw) { __hkCache = base; return base; }
+      const parsed = JSON.parse(raw);
+      for (const k of Object.keys(base)) {
+        const v = parsed[k];
+        if (Array.isArray(v) && v.length) base[k] = normalizeChord(v);
+        else if (typeof v === "string" && v.trim()) base[k] = [normalizeChord(v)];
+      }
+      __hkCache = base;
+      // Background sync from server (once)
+      if (!__syncPromise) {
+        __syncPromise = syncFromServer().catch(() => null);
+      }
+      return base;
+    } catch {
+      __hkCache = defaults();
+      return __hkCache;
+    }
+  }
+
+  function save(cfg) {
+    try {
+      const base = defaults();
+      const out = {};
+      for (const k of Object.keys(base)) {
+        const v = cfg[k];
+        if (Array.isArray(v)) out[k] = normalizeChord(v);
+        else if (typeof v === "string") out[k] = [normalizeChord(v)];
+        else out[k] = base[k];
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(out));
+      __hkCache = out;
+      try { window.dispatchEvent(new Event("qbase:hotkeys-changed")); } catch {}
+      // Best-effort push to server
+      try {
+        const tok = (typeof qbGetToken === "function" ? qbGetToken() : "") || "";
+        if (tok && typeof authFetch === "function") {
+          authFetch(`${API_BASE}${SERVER_ROUTE}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ hotkeys: out }),
+          }).catch(() => {});
+        }
+      } catch {}
+      return out;
+    } catch {
+      // ignore
+    }
+  }
+
+  function matches(e, combos) {
+    if (!e) return false;
+    const cur = eventToChord(e);
+    const arr = Array.isArray(combos) ? combos : [combos];
+    for (const c of arr) {
+      if (normalizeChord(c) === cur) return true;
+    }
+    return false;
+  }
+
+  // Expose API globally
+  try {
+    window.qbHotkeysDefaults = defaults;
+    window.qbLoadHotkeys = load;
+    window.qbSaveHotkeys = save;
+    window.qbGetHotkeys = load; // alias
+    window.qbEventToChord = eventToChord;
+    window.qbNormalizeChord = normalizeChord;
+    window.qbMatches = matches;
+    // Try syncing once on script load
+    try { if (!__syncPromise) __syncPromise = syncFromServer(); } catch {}
+    // On login, reconcile with server
+    window.addEventListener('qbase:login', async () => {
+      try {
+        // Pull server prefs
+        const before = __hkCache || load();
+        const r = await authFetch(`${API_BASE}${SERVER_ROUTE}`);
+        if (r && r.ok) {
+          const data = await r.json();
+          const serverHK = data && typeof data === 'object' ? data.hotkeys : null;
+          if (!serverHK || (typeof serverHK !== 'object')) {
+            // If server has no hotkeys, push local
+            const toPush = before || defaults();
+            await authFetch(`${API_BASE}${SERVER_ROUTE}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ hotkeys: toPush }),
+            });
+          } else {
+            // Else, pull from server into cache/local
+            const base = defaults();
+            const merged = { ...base };
+            for (const k of Object.keys(base)) {
+              const v = serverHK[k];
+              if (Array.isArray(v) && v.length) merged[k] = normalizeChord(v);
+              else if (typeof v === 'string' && v.trim()) merged[k] = [normalizeChord(v)];
+            }
+            __hkCache = merged;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+            try { window.dispatchEvent(new Event('qbase:hotkeys-changed')); } catch {}
+          }
+        }
+      } catch {}
+    });
+  } catch {}
+})();

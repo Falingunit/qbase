@@ -3,6 +3,9 @@
 (async () => {
   // --- Image Overlay: centered + wheel/pinch zoom + pan ---
   (() => {
+    // Guard: if an overlay already exists (e.g., created by assignment.view.js),
+    // avoid creating a duplicate which breaks hotkey checks and overlay detection.
+    if (document.getElementById("image-overlay")) return;
     const style = document.createElement("style");
     style.textContent = `
     #image-overlay{position:fixed;inset:0;display:none;z-index:1060;background:rgba(10,12,14,.85)}
@@ -1289,6 +1292,19 @@
               if (!suppressWidgetRefresh) {
                 scheduleImageWidgets();
               }
+            });
+          } catch {}
+
+          // Allow Esc to exit the notes editor (blur CodeMirror)
+          try {
+            notesMDE.codemirror.on('keydown', function (cm, ev) {
+              try {
+                if (ev && (ev.key === 'Escape' || ev.key === 'Esc')) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  try { cm.getInputField()?.blur(); } catch {}
+                }
+              } catch {}
             });
           } catch {}
 
@@ -2901,8 +2917,8 @@
         });
       });
 
-      // ---------- Alt+Digit color hotkeys ----------
-      (function wireAltColorHotkeys() {
+      // ---------- Color hotkeys (configurable) ----------
+      (function wireColorHotkeys() {
         function isTypingContext() {
           const ae = document.activeElement; if (!ae) return false;
           const tag = (ae.tagName || '').toLowerCase();
@@ -2914,28 +2930,33 @@
           const el = document.getElementById('image-overlay');
           if (!el) return false; const s = getComputedStyle(el); return s.display !== 'none';
         }
-        const COLOR_MAP = {
-          '1': '#0d6efd', // blue
-          '2': '#dc3545', // red
-          '3': '#ffc107', // yellow
-          '4': '#198754', // green
-          '5': 'none',    // clear
+        const COLOR_VALUES = {
+          blue: '#0d6efd',
+          red: '#dc3545',
+          yellow: '#ffc107',
+          green: '#198754',
+          clear: 'none',
         };
+        const getHK = () => { try { return window.qbGetHotkeys ? window.qbGetHotkeys() : null; } catch { return null; } };
         window.addEventListener('keydown', async (e) => {
-          if (!e.altKey) return;
-          if (overlayOpen()) return;
-          const k = String(e.key || '').toLowerCase();
-          if (!Object.prototype.hasOwnProperty.call(COLOR_MAP, k)) return;
-          if (isTypingContext()) return;
-          e.preventDefault();
-          if (currentQuestionID == null) return;
-          const val = COLOR_MAP[k];
-          let ok = true;
-          if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
-          if (ok) {
-            try { updateColorIndicators(); } catch {}
-            try { updateColorPickerSelection(); } catch {}
-          }
+          try {
+            if (overlayOpen()) return;
+            if (isTypingContext()) return;
+            const matches = (arr) => (window.qbMatches && getHK() && arr) ? window.qbMatches(e, arr) : false;
+            let action = null;
+            if (matches(getHK()?.colorBlue)) action = 'blue';
+            else if (matches(getHK()?.colorRed)) action = 'red';
+            else if (matches(getHK()?.colorYellow)) action = 'yellow';
+            else if (matches(getHK()?.colorGreen)) action = 'green';
+            else if (matches(getHK()?.colorClear)) action = 'clear';
+            if (!action) return;
+            e.preventDefault();
+            if (currentQuestionID == null) return;
+            const val = COLOR_VALUES[action];
+            let ok = true;
+            if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
+            if (ok) { try { updateColorIndicators(); } catch {} try { updateColorPickerSelection(); } catch {} }
+          } catch {}
         });
       })();
 

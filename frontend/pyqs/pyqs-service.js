@@ -54,17 +54,173 @@ export async function toggleChapterStar(examId, subjectId, chapterId, makeStarre
   } catch (e) { console.error(e); }
 }
 
+// Unified starred loader
+export async function refreshStarredUnified() {
+  try {
+    const r = await authFetch(`${API_BASE}/api/pyqs/starred`);
+    if (r.ok) {
+      const obj = await r.json();
+      starredExams.clear(); (obj?.exams||[]).forEach((id)=>starredExams.add(String(id)));
+      starredChapters.clear(); (obj?.chapters||[]).forEach((it)=>starredChapters.add(chKey(it.examId, it.subjectId, it.chapterId)));
+    }
+  } catch {}
+}
+
 // Backend fetchers (simple shapes from the server)
+const _examsCache = { value: null, promise: null };
+const _subjectsCache = new Map(); // examId -> { value, promise }
+const _chaptersCache = new Map(); // examId__subjectId -> { value, promise }
+
 export async function fetchExams() {
-  const r = await authFetch(`${API_BASE}/api/pyqs/exams`); if (!r.ok) throw new Error(`exams: ${r.status}`); return await r.json();
+  if (_examsCache.value) return _examsCache.value;
+  if (_examsCache.promise) return _examsCache.promise;
+  _examsCache.promise = authFetch(`${API_BASE}/api/pyqs/exams`).then(async (r) => {
+    if (!r.ok) throw new Error(`exams: ${r.status}`);
+    const data = await r.json();
+    _examsCache.value = data;
+    _examsCache.promise = null;
+    return data;
+  }).catch((e) => { _examsCache.promise = null; throw e; });
+  return _examsCache.promise;
 }
 export async function fetchSubjects(examId) {
-  const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects`); if (!r.ok) throw new Error(`subjects: ${r.status}`); return await r.json();
+  const key = String(examId);
+  const node = _subjectsCache.get(key) || { value: null, promise: null };
+  if (node.value) return node.value;
+  if (node.promise) return node.promise;
+  node.promise = authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects`).then(async (r) => {
+    if (!r.ok) throw new Error(`subjects: ${r.status}`);
+    const data = await r.json();
+    node.value = data; node.promise = null; _subjectsCache.set(key, node);
+    return data;
+  }).catch((e) => { node.promise = null; _subjectsCache.set(key, node); throw e; });
+  _subjectsCache.set(key, node);
+  return node.promise;
 }
 export async function fetchChapters(examId, subjectId) {
-  const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters`); if (!r.ok) throw new Error(`chapters: ${r.status}`); return await r.json();
+  const key = `${examId}__${subjectId}`;
+  const node = _chaptersCache.get(key) || { value: null, promise: null };
+  if (node.value) return node.value;
+  if (node.promise) return node.promise;
+  const url = `${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters`;
+  node.promise = authFetch(url).then(async (r) => {
+    if (!r.ok) throw new Error(`chapters: ${r.status}`);
+    const data = await r.json();
+    node.value = data; node.promise = null; _chaptersCache.set(key, node);
+    return data;
+  }).catch((e) => { node.promise = null; _chaptersCache.set(key, node); throw e; });
+  _chaptersCache.set(key, node);
+  return node.promise;
 }
+const _questionsCache = new Map(); // exam__subject__chapter -> { value, promise }
 export async function fetchQuestions(examId, subjectId, chapterId) {
-  const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`); if (!r.ok) throw new Error(`questions: ${r.status}`); return await r.json();
+  const key = `${examId}__${subjectId}__${chapterId}`;
+  const node = _questionsCache.get(key) || { value: null, promise: null };
+  if (node.value) return node.value;
+  if (node.promise) return node.promise;
+  const url = `${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`;
+  node.promise = authFetch(url).then(async (r) => {
+    if (!r.ok) throw new Error(`questions: ${r.status}`);
+    const data = await r.json();
+    node.value = data; node.promise = null; _questionsCache.set(key, node);
+    return data;
+  }).catch((e) => { node.promise = null; _questionsCache.set(key, node); throw e; });
+  _questionsCache.set(key, node);
+  return node.promise;
+}
+
+const _questionsMetaCache = new Map(); // exam__subject__chapter -> { value, promise }
+export async function fetchQuestionsMeta(examId, subjectId, chapterId) {
+  const key = `${examId}__${subjectId}__${chapterId}`;
+  const node = _questionsMetaCache.get(key) || { value: null, promise: null };
+  if (node.value) return node.value;
+  if (node.promise) return node.promise;
+  const url = `${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions?meta=1`;
+  node.promise = authFetch(url).then(async (r) => {
+    if (!r.ok) throw new Error(`questions(meta): ${r.status}`);
+    const data = await r.json();
+    node.value = data; node.promise = null; _questionsMetaCache.set(key, node);
+    return data;
+  }).catch((e) => { node.promise = null; _questionsMetaCache.set(key, node); throw e; });
+  _questionsMetaCache.set(key, node);
+  return node.promise;
+}
+
+// Bulk subject-level meta: { [chapterId]: [ { diffuculty, pyqInfo, qText } ] }
+const _questionsMetaSubjectCache = new Map(); // exam__subject -> { value, promise }
+export async function fetchQuestionsMetaSubject(examId, subjectId) {
+  const key = `${examId}__${subjectId}`;
+  const node = _questionsMetaSubjectCache.get(key) || { value: null, promise: null };
+  if (node.value) return node.value;
+  if (node.promise) return node.promise;
+  const url = `${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/questions-meta`;
+  node.promise = authFetch(url).then(async (r) => {
+    if (!r.ok) throw new Error(`questions-meta: ${r.status}`);
+    const data = await r.json();
+    node.value = data && typeof data === 'object' ? data : {}; node.promise = null; _questionsMetaSubjectCache.set(key, node);
+    return node.value;
+  }).catch((e) => { node.promise = null; _questionsMetaSubjectCache.set(key, node); throw e; });
+  _questionsMetaSubjectCache.set(key, node);
+  return node.promise;
+}
+
+// ---------- New optimized service calls ----------
+export async function bootstrap(opts = {}) {
+  const params = new URLSearchParams();
+  if (opts.includeExams !== false) params.set('includeExams', '1');
+  if (opts.exam) params.set('exam', String(opts.exam));
+  if (opts.subject) params.set('subject', String(opts.subject));
+  const url = `${API_BASE}/api/pyqs/bootstrap?${params.toString()}`;
+  const r = await authFetch(url);
+  if (!r.ok) throw new Error(`bootstrap: ${r.status}`);
+  return await r.json();
+}
+
+export async function examOverview(examId, { includeCounts = false } = {}) {
+  const url = `${API_BASE}/api/pyqs/exam-overview/${encodeURIComponent(examId)}?includeCounts=${includeCounts ? '1' : '0'}`;
+  const r = await authFetch(url); if (!r.ok) throw new Error(`exam-overview: ${r.status}`); return await r.json();
+}
+
+export async function subjectOverview(examId, subjectId) {
+  const url = `${API_BASE}/api/pyqs/subject-overview/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`;
+  const r = await authFetch(url); if (!r.ok) throw new Error(`subject-overview: ${r.status}`); return await r.json();
+}
+
+export async function subjectProgress(examId, subjectId, chapters = []) {
+  const params = new URLSearchParams(); if (Array.isArray(chapters) && chapters.length) params.set('chapters', chapters.join(','));
+  const url = `${API_BASE}/api/pyqs/progress/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}?${params.toString()}`;
+  const r = await authFetch(url); if (!r.ok) throw new Error(`progress: ${r.status}`); return await r.json();
+}
+
+export async function questionsBundle(examId, subjectId, chapterId, { full = false, state = true, overlays = false } = {}) {
+  const params = new URLSearchParams(); if (full) params.set('full', '1'); if (state) params.set('state', '1'); if (overlays) params.set('overlays', '1');
+  const url = `${API_BASE}/api/pyqs/questions-bundle/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}?${params.toString()}`;
+  const r = await authFetch(url); if (!r.ok) throw new Error(`q-bundle: ${r.status}`); return await r.json();
+}
+
+export async function overlaysGet(examId, subjectId) {
+  const url = `${API_BASE}/api/pyqs/overlays/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`;
+  const r = await authFetch(url); if (!r.ok) throw new Error(`overlays: ${r.status}`); return await r.json();
+}
+
+export async function overlaysBulk(body) {
+  const r = await authFetch(`${API_BASE}/api/pyqs/overlays/bulk`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body||{}) });
+  if (!r.ok) throw new Error(`overlays-bulk: ${r.status}`); return await r.json();
+}
+
+
+export async function prefsBulk(examId, subjectId, chaptersMap) {
+  const r = await authFetch(`${API_BASE}/api/pyqs/prefs/bulk`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ examId, subjectId, chapters: chaptersMap||{} }) });
+  if (!r.ok) throw new Error(`prefs-bulk: ${r.status}`); return await r.json();
+}
+
+export async function stateBulk(examId, subjectId, items) {
+  const r = await authFetch(`${API_BASE}/api/pyqs/state/bulk`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ examId, subjectId, items: Array.isArray(items)?items:[] }) });
+  if (!r.ok) throw new Error(`state-bulk: ${r.status}`); return await r.json();
+}
+
+export async function searchChapters(examId, subjectId, chapters, q) {
+  const r = await authFetch(`${API_BASE}/api/pyqs/search/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chapters, q }) });
+  if (!r.ok) throw new Error(`search: ${r.status}`); return await r.json();
 }
 
