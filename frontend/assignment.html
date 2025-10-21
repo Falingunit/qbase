@@ -323,14 +323,7 @@
                 <div class="small text-muted" id="assignmentDetails"></div>
               </div>
               <div class="d-flex align-items-center gap-2">
-                <button
-                  id="bookmark-btn"
-                  class="btn btn-sm btn-outline-primary"
-                  title="Bookmark this question"
-                >
-                  <i class="bi bi-bookmark"></i>
-                </button>
-                <!-- Quick color marks -->
+                <!-- Order: color mark; time; question type; bookmark; report -->
                 <div id="qcolor-picker" class="qcolor-picker collapsed" title="Mark question">
                   <button type="button" class="qcolor-chip" data-color="none" aria-label="No color (clear)"></button>
                   <button type="button" class="qcolor-chip" data-color="#0d6efd" style="--qc:#0d6efd" aria-label="Mark blue"></button>
@@ -339,10 +332,21 @@
                   <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
                 </div>
                 <span id="timer" class="badge bg-dark text-info">00:11</span>
-                <span
-                  class="badge bg-dark-subtle text-info"
-                  id="qTypeInfo"
-                ></span>
+                <span class="badge bg-dark-subtle text-info" id="qTypeInfo"></span>
+                <button
+                  id="bookmark-btn"
+                  class="btn btn-sm btn-outline-primary"
+                  title="Bookmark this question"
+                >
+                  <i class="bi bi-bookmark"></i>
+                </button>
+                <button
+                  id="report-btn"
+                  class="btn btn-sm btn-outline-warning"
+                  title="Report an issue with this question"
+                >
+                  <i class="bi bi-flag"></i>
+                </button>
               </div>
             </div>
             <div class="card-body">

@@ -1713,6 +1713,117 @@
     showBookmarkDialog();
   });
 
+  // Report functionality
+  document.getElementById("report-btn")?.addEventListener("click", () => {
+    if (currentQuestionID == null) return;
+    try {
+      const b = document.getElementById("report-btn");
+      b.classList.remove("btn-pulse");
+      void b.offsetWidth; // reflow
+      b.classList.add("btn-pulse");
+    } catch {}
+    showReportDialog();
+  });
+
+  async function showReportDialog() {
+    try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const reasons = [
+        { id: "wrong-answer", label: "Answer seems incorrect" },
+        { id: "wrong-solution", label: "Solution seems incorrect" },
+        { id: "typo", label: "Typo or formatting issue" },
+        { id: "bad-image", label: "Image is unclear/broken" },
+        { id: "other", label: "Other" },
+      ];
+
+      let bodyHTML = '<div class="mb-2">Whats the issue?</div>';
+      bodyHTML += '<div class="list-group mb-3">';
+      reasons.forEach((r, i) => {
+        const checked = i === 0 ? 'checked' : '';
+        bodyHTML += `
+          <label class="list-group-item list-group-item-action">
+            <input class="form-check-input me-1" type="radio" name="rep-reason" value="${r.id}" ${checked}>
+            ${r.label}
+          </label>`;
+      });
+      bodyHTML += '</div>';
+      bodyHTML += `
+        <div class="mb-1"><strong>Additional details (optional)</strong></div>
+        <textarea id="rep-notes" class="form-control" rows="3" placeholder="Add any details that can help..."></textarea>
+      `;
+
+      // Override with required assignment report options and required details
+      try {
+        bodyHTML = "";
+        bodyHTML += "<div class=\"mb-2\">What's the issue?</div>";
+        bodyHTML += '<div class="list-group mb-3">';
+        const _opts = [
+          "Typographical or Formatting Error",
+          "Missing Image",
+          "Answer Incorrect",
+          "Other (mention in report details.)",
+        ];
+        for (let i = 0; i < _opts.length; i++) {
+          const label = _opts[i];
+          const checked = i === 0 ? "checked" : "";
+          bodyHTML += `\n<label class=\"list-group-item list-group-item-action\">\n  <input class=\"form-check-input me-1\" type=\"radio\" name=\"rep-reason\" value=\"${label}\" ${checked}>\n  ${label}\n</label>`;
+        }
+        bodyHTML += '</div>';
+        bodyHTML += `\n<div class=\"mb-1\"><strong>Report Details (required)</strong></div>\n<textarea id=\"rep-notes\" class=\"form-control\" rows=\"3\" placeholder=\"Describe the issue...\"></textarea>`;
+      } catch {}
+
+      const modal = await showModal({
+        title: "Report Question",
+        bodyHTML,
+        buttons: [
+          { text: "Cancel", className: "btn btn-secondary", value: "cancel" },
+          { text: "Submit", className: "btn btn-warning", value: "submit" },
+        ],
+        focusSelector: 'input[name="rep-reason"]:checked',
+      });
+
+      if (modal !== "submit") return;
+
+      const modalEl = document.getElementById("qbaseModal");
+      const reason = (modalEl.querySelector('input[name="rep-reason"]:checked')?.value || "").trim();
+      const message = String(modalEl.querySelector('#rep-notes')?.value || "").trim();
+      if (!message) {
+        await showNotice({ title: "Report Details Required", message: "Please enter report details." });
+        return;
+      }
+
+      const payload = {
+        kind: "assignment",
+        assignmentId: aID,
+        questionIndex: Number(originalIdx),
+        reason,
+        message,
+        meta: {
+          assignmentTitle: assignmentTitle || `Assignment ${aID}`,
+          displayIndex: currentQuestionID + 1,
+        },
+      };
+
+      const res = await authFetch(`${API_BASE}/api/report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        throw new Error(`Failed: ${res.status} ${errText}`);
+      }
+
+      await showNotice({
+        title: "Thank you",
+        message: "Your report has been submitted.",
+      });
+    } catch (e) {
+      console.error("report dialog:", e);
+      await showNotice({ title: "Error", message: "Failed to submit report" });
+    }
+  }
+
   // Quick color picker near bookmark icon
   (function wireQColorPicker() {
     const picker = document.getElementById('qcolor-picker');
@@ -2087,6 +2198,19 @@
     // Notes editor now renders inline; no textarea reference
     const questionState = questionStates[qID];
     const question = questionData.questions[originalIdx];
+
+    // Toggle report button based on server block status (best-effort)
+    (async () => {
+      try {
+        const btn = document.getElementById("report-btn");
+        if (!btn) return;
+        const url = `${API_BASE}/api/report/blocked?kind=assignment&assignmentId=${encodeURIComponent(aID)}&questionIndex=${encodeURIComponent(originalIdx)}`;
+        const r = await authFetch(url);
+        if (!r.ok) return; // leave as-is on failure
+        const j = await r.json();
+        btn.style.display = j.blocked ? 'none' : '';
+      } catch {}
+    })();
 
     qNo.textContent = qID + 1;
     typeInfo.textContent = question.qType;

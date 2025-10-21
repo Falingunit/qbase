@@ -26,6 +26,8 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 const FRONTEND_ORIGIN = "https://falingunit.github.io";
 const ASSETS_BASE =
   process.env.ASSETS_BASE || "https://falingunit.github.io/qbase";
+// Optional: forward reports to a webhook (e.g., Slack/Discord)
+const REPORTS_WEBHOOK_URL = process.env.REPORTS_WEBHOOK_URL || "";
 
 // For Zoom/in-app browsers, requests still come from the frontend origin.
 // But we’ll also allow dev and your nip.io domain for safety.
@@ -88,7 +90,9 @@ try {
 app.use("/uploads", express.static(uploadsDir, { maxAge: "365d", etag: true }));
 // Icons subdir for remote cache
 const iconsDir = path.join(uploadsDir, "icons");
-try { fs.mkdirSync(iconsDir, { recursive: true }); } catch {}
+try {
+  fs.mkdirSync(iconsDir, { recursive: true });
+} catch {}
 
 // ---------- Disable caching for dynamic content ----------
 app.use((req, res, next) => {
@@ -106,7 +110,8 @@ function hashOf(obj) {
 function sendJsonWithCache(req, res, obj, maxAgeSec = 600) {
   try {
     const etag = `W/\"${hashOf(obj)}\"`;
-    const inm = req.headers["if-none-match"]; if (inm && inm === etag) {
+    const inm = req.headers["if-none-match"];
+    if (inm && inm === etag) {
       res.status(304);
       res.set("ETag", etag);
       res.set("Cache-Control", `public, max-age=${maxAgeSec}`);
@@ -257,6 +262,37 @@ db.exec(`
     PRIMARY KEY (userId, examId, subjectId, chapterId),
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
+
+  -- Reported questions (assignment or PYQs)
+  CREATE TABLE IF NOT EXISTS question_reports (
+    id TEXT PRIMARY KEY,
+    userId TEXT NOT NULL,
+    kind TEXT NOT NULL, -- 'assignment' | 'pyqs'
+    assignmentId INTEGER,
+    examId TEXT,
+    subjectId TEXT,
+    chapterId TEXT,
+    questionIndex INTEGER NOT NULL, -- original index in source set
+    reason TEXT NOT NULL,
+    message TEXT,
+    meta TEXT, -- JSON with extra context (title, names, etc.)
+    status TEXT NOT NULL DEFAULT 'open', -- 'open' | 'wip' | 'closed'
+    admin_notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  -- Questions that are blocked from receiving further reports
+  CREATE TABLE IF NOT EXISTS question_report_blocks (
+    kind TEXT NOT NULL, -- 'assignment' | 'pyqs'
+    assignmentId INTEGER,
+    examId TEXT,
+    subjectId TEXT,
+    chapterId TEXT,
+    questionIndex INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (kind, assignmentId, examId, subjectId, chapterId, questionIndex)
+  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -280,9 +316,55 @@ try {
   if (!hasMarks) {
     db.exec("ALTER TABLE users ADD COLUMN getmarks_token TEXT");
   }
+  const hasAdmin = cols.some(
+    (c) => String(c.name).toLowerCase() === "is_admin"
+  );
+  if (!hasAdmin) {
+    db.exec("ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0");
+  }
 } catch (e) {
   console.warn("users.password_hash migration check failed:", e?.message || e);
 }
+
+// Ensure question_reports has a status column if created earlier
+try {
+  const cols = db.prepare("PRAGMA table_info(question_reports)").all();
+  const hasStatus = cols.some((c) => String(c.name).toLowerCase() === "status");
+  if (!hasStatus) {
+    db.exec("ALTER TABLE question_reports ADD COLUMN status TEXT DEFAULT 'open'");
+  }
+  const hasNotes = cols.some((c) => String(c.name).toLowerCase() === "admin_notes");
+  if (!hasNotes) {
+    db.exec("ALTER TABLE question_reports ADD COLUMN admin_notes TEXT");
+  }
+} catch (e) {
+  console.warn("question_reports.status migration check failed:", e?.message || e);
+}
+
+// Ensure admin user exists and can login with the specified credentials
+function ensureAdminUser() {
+  try {
+    const uname = "adminlol";
+    const row = db
+      .prepare("SELECT id, username, is_admin FROM users WHERE username = ?")
+      .get(uname);
+    const pwHash = hashPassword("adminlol");
+    if (!row) {
+      const id = nanoid();
+      db.prepare(
+        "INSERT INTO users (id, username, password_hash, is_admin, force_pw_reset) VALUES (?, ?, ?, 1, 0)"
+      ).run(id, uname, pwHash);
+    } else {
+      // Ensure admin flag; refresh password to the known value
+      db.prepare(
+        "UPDATE users SET is_admin = 1, password_hash = ? WHERE id = ?"
+      ).run(pwHash, row.id);
+    }
+  } catch (e) {
+    console.warn("ensureAdminUser failed:", e?.message || e);
+  }
+}
+ensureAdminUser();
 
 // ---------- Auth helpers ----------
 function signToken(userId) {
@@ -314,9 +396,7 @@ function auth(req, res, next) {
     const uid = String(payload.sub || "");
     if (!uid) return res.status(401).json({ error: "Invalid token" });
     // Guard against tokens from a previous/reset DB: ensure user exists
-    const row = db
-      .prepare("SELECT id FROM users WHERE id = ?")
-      .get(uid);
+    const row = db.prepare("SELECT id FROM users WHERE id = ?").get(uid);
     if (!row) return res.status(401).json({ error: "Invalid token" });
     req.userId = uid;
     return next();
@@ -325,12 +405,26 @@ function auth(req, res, next) {
   }
 }
 
+function adminOnly(req, res, next) {
+  try {
+    const row = db
+      .prepare("SELECT is_admin FROM users WHERE id = ?")
+      .get(req.userId);
+    if (!row || !row.is_admin) return res.status(403).json({ error: "Forbidden" });
+    next();
+  } catch {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+}
+
 // ---------- Public routes ----------
 app.get("/healthz", (_req, res) => res.send("ok"));
 
 // ---------- PYQs proxy (public) ----------
 // Uses per-user token when available (from profile), otherwise falls back to server-side token.
-const GETMARKS_AUTH_TOKEN = process.env.GETMARKS_AUTH_TOKEN || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTkxNzVmNjcwMTY3ODUwOTBiZGI0ZiIsImlhdCI6MTc2MDE4ODAyOCwiZXhwIjoxNzYyNzgwMDI4fQ.v7tZWhoru3bC6c4H8RjtaGdkHm4luZQWvQ1kivF1Jl0";
+const GETMARKS_AUTH_TOKEN =
+  process.env.GETMARKS_AUTH_TOKEN ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2OTkxNzVmNjcwMTY3ODUwOTBiZGI0ZiIsImlhdCI6MTc2MDE4ODAyOCwiZXhwIjoxNzYyNzgwMDI4fQ.v7tZWhoru3bC6c4H8RjtaGdkHm4luZQWvQ1kivF1Jl0";
 const GM_BASE = {
   dashboard: "https://web.getmarks.app/api/v3/dashboard/platform/web",
   exam_subjects: (examId) =>
@@ -358,9 +452,16 @@ async function getSubjectChaptersCached(req, examId, subjectId) {
   const now = Date.now();
   const ent = subjectChaptersCache.get(key);
   if (ent && now - ent.ts < SUBJECT_CHAPTERS_TTL_MS) return ent.list;
-  const data = await gmFetch(req, GM_BASE.subject_chapters(examId, subjectId), { limit: 10000 });
+  const data = await gmFetch(req, GM_BASE.subject_chapters(examId, subjectId), {
+    limit: 10000,
+  });
   const list = (data?.data?.chapters?.data || [])
-    .map((c) => ({ id: c?._id, name: c?.title, icon_name: c?.icon, total: c?.allPyqs?.totalQs ?? 0 }))
+    .map((c) => ({
+      id: c?._id,
+      name: c?.title,
+      icon_name: c?.icon,
+      total: c?.allPyqs?.totalQs ?? 0,
+    }))
     .filter((x) => x.id);
   subjectChaptersCache.set(key, { ts: now, list });
   return list;
@@ -375,7 +476,9 @@ async function getSubjectMetaPartial(req, examId, subjectId, neededIds) {
     subjectMetaCache.set(key, ent);
   }
   const missing = [];
-  neededIds.forEach((id) => { if (!ent.map[id]) missing.push(id); });
+  neededIds.forEach((id) => {
+    if (!ent.map[id]) missing.push(id);
+  });
   if (missing.length) {
     const CONC = 6;
     for (let i = 0; i < missing.length; i += CONC) {
@@ -400,7 +503,9 @@ async function getSubjectMetaPartial(req, examId, subjectId, neededIds) {
   }
   // Build subset map
   const out = {};
-  neededIds.forEach((id) => { out[id] = ent.map[id] || []; });
+  neededIds.forEach((id) => {
+    out[id] = ent.map[id] || [];
+  });
   return out;
 }
 
@@ -436,8 +541,7 @@ async function cacheIcon(url) {
     const dest = path.join(iconsDir, file);
     await fs.promises.writeFile(dest, buf);
     return path.join("/uploads/icons", file);
-  })()
-    .finally(() => iconFetchInFlight.delete(key));
+  })().finally(() => iconFetchInFlight.delete(key));
   iconFetchInFlight.set(key, p);
   return p;
 }
@@ -530,32 +634,78 @@ app.get("/api/pyqs/bootstrap", async (req, res) => {
     // Optional user
     const uid = getUserIdOptional(req);
     if (uid) {
-      const u = db.prepare("SELECT id, username, force_pw_reset, getmarks_token FROM users WHERE id = ?").get(uid);
-      if (u) result.user = { id: u.id, username: u.username, mustChangePassword: !!u.force_pw_reset, hasMarksAuth: !!(u.getmarks_token && String(u.getmarks_token).trim()) };
+      const u = db
+        .prepare(
+          "SELECT id, username, force_pw_reset, getmarks_token FROM users WHERE id = ?"
+        )
+        .get(uid);
+      if (u)
+        result.user = {
+          id: u.id,
+          username: u.username,
+          mustChangePassword: !!u.force_pw_reset,
+          hasMarksAuth: !!(u.getmarks_token && String(u.getmarks_token).trim()),
+        };
       // starred
-      const ex = db.prepare("SELECT examId FROM starred_pyqs WHERE userId = ? AND kind = 'exam'").all(uid).map(r => r.examId);
-      const ch = db.prepare("SELECT examId, subjectId, chapterId FROM starred_pyqs WHERE userId = ? AND kind = 'chapter'").all(uid);
+      const ex = db
+        .prepare(
+          "SELECT examId FROM starred_pyqs WHERE userId = ? AND kind = 'exam'"
+        )
+        .all(uid)
+        .map((r) => r.examId);
+      const ch = db
+        .prepare(
+          "SELECT examId, subjectId, chapterId FROM starred_pyqs WHERE userId = ? AND kind = 'chapter'"
+        )
+        .all(uid);
       result.starred = { exams: ex, chapters: ch };
       // bookmark tags
-      result.bookmarkTags = db.prepare("SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC").all(uid);
+      result.bookmarkTags = db
+        .prepare(
+          "SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC"
+        )
+        .all(uid);
     } else {
       result.user = null;
     }
     // Optionally include catalog slices
     const { exam, subject } = req.query || {};
-    if (String(req.query.includeExams || '1') === '1') {
+    if (String(req.query.includeExams || "1") === "1") {
       const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
       const items = data?.data?.items || [];
-      const comp = items.find((it) => it?.componentTitle === "ChapterwiseExams");
-      result.exams = (comp?.items || []).map((ex) => ({ id: ex?.examId, name: ex?.title, icon: ex?.icon?.dark || ex?.icon?.light || "" })).filter((x) => x.id && x.name);
+      const comp = items.find(
+        (it) => it?.componentTitle === "ChapterwiseExams"
+      );
+      result.exams = (comp?.items || [])
+        .map((ex) => ({
+          id: ex?.examId,
+          name: ex?.title,
+          icon: ex?.icon?.dark || ex?.icon?.light || "",
+        }))
+        .filter((x) => x.id && x.name);
     }
     if (exam) {
-      const sData = await gmFetch(req, GM_BASE.exam_subjects(exam), { limit: 10000 });
-      result.subjects = (sData?.data?.subjects || []).map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" })).filter((x) => x.id && x.name);
+      const sData = await gmFetch(req, GM_BASE.exam_subjects(exam), {
+        limit: 10000,
+      });
+      result.subjects = (sData?.data?.subjects || [])
+        .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
+        .filter((x) => x.id && x.name);
     }
     if (exam && subject) {
-      const cData = await gmFetch(req, GM_BASE.subject_chapters(exam, subject), { limit: 10000 });
-      result.chapters = (cData?.data?.chapters?.data || []).map((c) => ({ id: c?._id, name: c?.title, icon_name: c?.icon, total_questions: c?.allPyqs?.totalQs ?? 0 })).filter((x) => x.id && x.name);
+      const cData = await gmFetch(
+        req,
+        GM_BASE.subject_chapters(exam, subject),
+        { limit: 10000 }
+      );
+      result.chapters = (cData?.data?.chapters?.data || [])
+        .map((c) => ({
+          id: c?._id,
+          name: c?.title,
+          icon_name: c?.icon,
+          total_questions: c?.allPyqs?.totalQs ?? 0,
+        }))
+        .filter((x) => x.id && x.name);
     }
     return res.json(result);
   } catch (e) {
@@ -619,7 +769,12 @@ app.get(
   async (req, res) => {
     try {
       const { examId, subjectId, chapterId } = req.params;
-      const fields = new Set(String(req.query.fields || "year,diff,text").split(',').map(s=>s.trim()).filter(Boolean));
+      const fields = new Set(
+        String(req.query.fields || "year,diff,text")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      );
       const data = await gmFetch(
         req,
         GM_BASE.questions(examId, subjectId, chapterId),
@@ -636,7 +791,10 @@ app.get(
           qText: q?.question?.text || "",
         };
         if (isMeta) {
-          if (!fields.has('text')) { const { qText, ...rest } = base; return rest; }
+          if (!fields.has("text")) {
+            const { qText, ...rest } = base;
+            return rest;
+          }
           return base;
         }
         const opts = Array.isArray(q?.options) ? q.options : [];
@@ -651,9 +809,16 @@ app.get(
           type: q?.type,
           ...base,
           qImage: q?.question?.image || "",
-          options: opts.map((o) => ({ oText: o?.text || "", oImage: o?.image || "" })),
-          correctAnswer: q?.type === "numerical" ? q?.correctValue : correctLetters,
-          solution: { sText: q?.solution?.text || "", sImage: q?.solution?.image || "" },
+          options: opts.map((o) => ({
+            oText: o?.text || "",
+            oImage: o?.image || "",
+          })),
+          correctAnswer:
+            q?.type === "numerical" ? q?.correctValue : correctLetters,
+          solution: {
+            sText: q?.solution?.text || "",
+            sImage: q?.solution?.image || "",
+          },
         };
       });
       return res.json(questions);
@@ -668,21 +833,33 @@ app.get(
 app.get("/api/pyqs/exam-overview/:examId", async (req, res) => {
   try {
     const { examId } = req.params;
-    const includeCounts = String(req.query.includeCounts || '0') === '1';
-    const sData = await gmFetch(req, GM_BASE.exam_subjects(examId), { limit: 10000 });
-    const subjects = (sData?.data?.subjects || []).map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" })).filter((x) => x.id && x.name);
+    const includeCounts = String(req.query.includeCounts || "0") === "1";
+    const sData = await gmFetch(req, GM_BASE.exam_subjects(examId), {
+      limit: 10000,
+    });
+    const subjects = (sData?.data?.subjects || [])
+      .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
+      .filter((x) => x.id && x.name);
     const out = { subjects };
     if (includeCounts) {
       const counts = {};
       const CONC = 4;
       for (let i = 0; i < subjects.length; i += CONC) {
         const chunk = subjects.slice(i, i + CONC);
-        await Promise.all(chunk.map(async (s) => {
-          try {
-            const cData = await gmFetch(req, GM_BASE.subject_chapters(examId, s.id), { limit: 10000 });
-            counts[String(s.id)] = (cData?.data?.chapters?.data || []).length;
-          } catch { counts[String(s.id)] = 0; }
-        }));
+        await Promise.all(
+          chunk.map(async (s) => {
+            try {
+              const cData = await gmFetch(
+                req,
+                GM_BASE.subject_chapters(examId, s.id),
+                { limit: 10000 }
+              );
+              counts[String(s.id)] = (cData?.data?.chapters?.data || []).length;
+            } catch {
+              counts[String(s.id)] = 0;
+            }
+          })
+        );
       }
       out.counts = counts;
     }
@@ -694,57 +871,181 @@ app.get("/api/pyqs/exam-overview/:examId", async (req, res) => {
 });
 
 // Subject overview (chapters + progress)
-app.get("/api/pyqs/subject-overview/:examId/:subjectId", auth, async (req, res) => {
-  try {
-    const { examId, subjectId } = req.params;
-    const chList = await getSubjectChaptersCached(req, examId, subjectId);
-    const chapters = chList.map((c) => ({ id: c.id, name: c.name, icon_name: c.icon_name, total_questions: c.total }));
-    // Reuse progress handler logic by invoking the same internals
-    req.query.chapters = chapters.map(c=>c.id).join(',');
-    // Call functionally: duplicate progress compute quickly
-    const progReq = { ...req, params: { examId, subjectId }, query: { chapters: req.query.chapters } };
-    const resp = {};
-    await (async ()=>{
-      // Inline small compute: use the same process as /progress
-      const totalsById = Object.fromEntries(chList.map((c) => [String(c.id), Number(c.total || 0)]));
-      const prefRows = db.prepare("SELECT chapterId, prefs FROM pyqs_prefs WHERE userId = ? AND examId = ? AND subjectId = ?").all(req.userId, String(examId), String(subjectId));
-      const stateRows = db.prepare("SELECT chapterId, state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ?").all(req.userId, String(examId), String(subjectId));
-      const prefsMap = {}; for (const r of prefRows) { const o = safeParseJSON(r.prefs, {}); if (o && typeof o === 'object') prefsMap[String(r.chapterId)] = o; }
-      const normalizeStates = (raw) => { if (Array.isArray(raw)) return raw; const out = []; if (raw && typeof raw === 'object') { for (const k of Object.keys(raw)) { const idx = Number(k); if (!Number.isNaN(idx)) out[idx] = raw[k]; } } return out; };
-      const statesMap = {}; for (const r of stateRows) statesMap[String(r.chapterId)] = normalizeStates(safeParseJSON(r.state, []));
-      const out = {};
-      const parseYear = (pyqInfo) => { try { const m = String(pyqInfo||"").match(/(19|20)\d{2}/); return m ? Number(m[0]) : null; } catch { return null; } };
-      const normDiff = (d) => { const s = String(d||"").toLowerCase(); if (s.startsWith('1')||s.startsWith('e')) return 'easy'; if (s.startsWith('2')||s.startsWith('m')) return 'medium'; if (s.startsWith('3')||s.startsWith('h')) return 'hard'; return ''; };
-      const statusFromState = (st) => { if (!st) return 'not-started'; if (st.isAnswerEvaluated) { if (st.evalStatus==='correct') return 'correct'; if (st.evalStatus==='partial') return 'partial'; if (st.evalStatus==='incorrect') return 'incorrect'; return 'completed'; } if (st.isAnswerPicked) return 'in-progress'; return 'not-started'; };
-      // All chapters default: status-only path using totals + states
-      for (const c of chapters) {
-        const cid = String(c.id);
-        const f = Object.assign({ q:'', years:[], status:'', diff:'', sort:'index' }, prefsMap[cid] || {});
-        const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
-        const totalQs = Math.max(0, Number(totalsById[cid] || 0));
-        let correct=0,incorrect=0,partial=0,inProgress=0,evaluated=0;
-        for (let i=0;i<stArr.length;i++){ const st=stArr[i]; if(!st) continue; if(st.isAnswerEvaluated){ evaluated++; if(st.evalStatus==='correct') correct++; else if(st.evalStatus==='incorrect') incorrect++; else if(st.evalStatus==='partial') partial++; } else if(st.isAnswerPicked){ inProgress++; } }
-        let total=0, green=0, red=0, grey=0;
-        if (!f.q && !(Array.isArray(f.years)&&f.years.length) && !f.diff) {
-          if (!f.status) { green=correct; red=incorrect+partial; grey=Math.max(0,totalQs-green-red); total=totalQs; }
-          else { switch(String(f.status)){ case 'correct': total=correct; green=correct; break; case 'incorrect': total=incorrect; red=incorrect; break; case 'partial': total=partial; red=partial; break; case 'completed': total=evaluated; green=correct; red=incorrect+partial; break; case 'in-progress': total=inProgress; grey=inProgress; break; case 'not-started': total=Math.max(0,totalQs-evaluated-inProgress); grey=total; break; default: total=totalQs; green=correct; red=incorrect+partial; grey=Math.max(0,totalQs-green-red); }} }
-        out[cid] = { total, green, red, grey };
-      }
-      resp.progress = out;
-    })();
-    return res.json({ chapters, progress: resp.progress });
-  } catch (e) {
-    const code = e.status || 500; return res.status(code).json({ error: String(e.message || e) });
+app.get(
+  "/api/pyqs/subject-overview/:examId/:subjectId",
+  auth,
+  async (req, res) => {
+    try {
+      const { examId, subjectId } = req.params;
+      const chList = await getSubjectChaptersCached(req, examId, subjectId);
+      const chapters = chList.map((c) => ({
+        id: c.id,
+        name: c.name,
+        icon_name: c.icon_name,
+        total_questions: c.total,
+      }));
+      // Reuse progress handler logic by invoking the same internals
+      req.query.chapters = chapters.map((c) => c.id).join(",");
+      // Call functionally: duplicate progress compute quickly
+      const progReq = {
+        ...req,
+        params: { examId, subjectId },
+        query: { chapters: req.query.chapters },
+      };
+      const resp = {};
+      await (async () => {
+        // Inline small compute: use the same process as /progress
+        const totalsById = Object.fromEntries(
+          chList.map((c) => [String(c.id), Number(c.total || 0)])
+        );
+        const prefRows = db
+          .prepare(
+            "SELECT chapterId, prefs FROM pyqs_prefs WHERE userId = ? AND examId = ? AND subjectId = ?"
+          )
+          .all(req.userId, String(examId), String(subjectId));
+        const stateRows = db
+          .prepare(
+            "SELECT chapterId, state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ?"
+          )
+          .all(req.userId, String(examId), String(subjectId));
+        const prefsMap = {};
+        for (const r of prefRows) {
+          const o = safeParseJSON(r.prefs, {});
+          if (o && typeof o === "object") prefsMap[String(r.chapterId)] = o;
+        }
+        const normalizeStates = (raw) => {
+          if (Array.isArray(raw)) return raw;
+          const out = [];
+          if (raw && typeof raw === "object") {
+            for (const k of Object.keys(raw)) {
+              const idx = Number(k);
+              if (!Number.isNaN(idx)) out[idx] = raw[k];
+            }
+          }
+          return out;
+        };
+        const statesMap = {};
+        for (const r of stateRows)
+          statesMap[String(r.chapterId)] = normalizeStates(
+            safeParseJSON(r.state, [])
+          );
+        const out = {};
+        const parseYear = (pyqInfo) => {
+          try {
+            const m = String(pyqInfo || "").match(/(19|20)\d{2}/);
+            return m ? Number(m[0]) : null;
+          } catch {
+            return null;
+          }
+        };
+        const normDiff = (d) => {
+          const s = String(d || "").toLowerCase();
+          if (s.startsWith("1") || s.startsWith("e")) return "easy";
+          if (s.startsWith("2") || s.startsWith("m")) return "medium";
+          if (s.startsWith("3") || s.startsWith("h")) return "hard";
+          return "";
+        };
+        const statusFromState = (st) => {
+          if (!st) return "not-started";
+          if (st.isAnswerEvaluated) {
+            if (st.evalStatus === "correct") return "correct";
+            if (st.evalStatus === "partial") return "partial";
+            if (st.evalStatus === "incorrect") return "incorrect";
+            return "completed";
+          }
+          if (st.isAnswerPicked) return "in-progress";
+          return "not-started";
+        };
+        // All chapters default: status-only path using totals + states
+        for (const c of chapters) {
+          const cid = String(c.id);
+          const f = Object.assign(
+            { q: "", years: [], status: "", diff: "", sort: "index" },
+            prefsMap[cid] || {}
+          );
+          const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
+          const totalQs = Math.max(0, Number(totalsById[cid] || 0));
+          let correct = 0,
+            incorrect = 0,
+            partial = 0,
+            inProgress = 0,
+            evaluated = 0;
+          for (let i = 0; i < stArr.length; i++) {
+            const st = stArr[i];
+            if (!st) continue;
+            if (st.isAnswerEvaluated) {
+              evaluated++;
+              if (st.evalStatus === "correct") correct++;
+              else if (st.evalStatus === "incorrect") incorrect++;
+              else if (st.evalStatus === "partial") partial++;
+            } else if (st.isAnswerPicked) {
+              inProgress++;
+            }
+          }
+          let total = 0,
+            green = 0,
+            red = 0,
+            grey = 0;
+          if (!f.q && !(Array.isArray(f.years) && f.years.length) && !f.diff) {
+            if (!f.status) {
+              green = correct;
+              red = incorrect + partial;
+              grey = Math.max(0, totalQs - green - red);
+              total = totalQs;
+            } else {
+              switch (String(f.status)) {
+                case "correct":
+                  total = correct;
+                  green = correct;
+                  break;
+                case "incorrect":
+                  total = incorrect;
+                  red = incorrect;
+                  break;
+                case "partial":
+                  total = partial;
+                  red = partial;
+                  break;
+                case "completed":
+                  total = evaluated;
+                  green = correct;
+                  red = incorrect + partial;
+                  break;
+                case "in-progress":
+                  total = inProgress;
+                  grey = inProgress;
+                  break;
+                case "not-started":
+                  total = Math.max(0, totalQs - evaluated - inProgress);
+                  grey = total;
+                  break;
+                default:
+                  total = totalQs;
+                  green = correct;
+                  red = incorrect + partial;
+                  grey = Math.max(0, totalQs - green - red);
+              }
+            }
+          }
+          out[cid] = { total, green, red, grey };
+        }
+        resp.progress = out;
+      })();
+      return res.json({ chapters, progress: resp.progress });
+    } catch (e) {
+      const code = e.status || 500;
+      return res.status(code).json({ error: String(e.message || e) });
+    }
   }
-});
-
+);
 
 // Build minimal meta from a GetMarks question
 function gmToMeta(q) {
   return {
     diffuculty: q?.level,
     pyqInfo:
-      (Array.isArray(q?.previousYearPapers) && q.previousYearPapers[0]?.title) ||
+      (Array.isArray(q?.previousYearPapers) &&
+        q.previousYearPapers[0]?.title) ||
       "",
     qText: q?.question?.text || "",
   };
@@ -779,7 +1080,12 @@ app.get(
 
       const out = {};
       // Optional fields control (year,diff,text). If text omitted, exclude qText.
-      const fields = new Set(String(req.query.fields || "year,diff,text").split(",").map(s=>s.trim()).filter(Boolean));
+      const fields = new Set(
+        String(req.query.fields || "year,diff,text")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      );
       const CONC = 4;
       for (let i = 0; i < chapterIds.length; i += CONC) {
         const chunk = chapterIds.slice(i, i + CONC);
@@ -791,9 +1097,12 @@ app.get(
                 GM_BASE.questions(examId, subjectId, chId),
                 { limit: 10000, hideOutOfSyllabus: "false" }
               );
-              const arr = (data?.data?.questions || []).map((q)=>{
+              const arr = (data?.data?.questions || []).map((q) => {
                 const base = gmToMeta(q);
-                if (!fields.has('text')) { const { qText, ...rest } = base; return rest; }
+                if (!fields.has("text")) {
+                  const { qText, ...rest } = base;
+                  return rest;
+                }
                 return base;
               });
               out[String(chId)] = arr;
@@ -812,231 +1121,378 @@ app.get(
 );
 
 // Questions bundle (combine questions + state + overlays)
-app.get("/api/pyqs/questions-bundle/:examId/:subjectId/:chapterId", auth, async (req, res) => {
-  try {
-    const { examId, subjectId, chapterId } = req.params;
-    const full = String(req.query.full || '0') === '1';
-    const includeState = String(req.query.state || '1') === '1';
-    const includeOverlays = String(req.query.overlays || '1') === '1';
-    const questions = await gmFetch(req, GM_BASE.questions(examId, subjectId, chapterId), { limit: 10000, hideOutOfSyllabus: 'false' });
-    const qList = (questions?.data?.questions || []).map((q) => full ? {
-      type: q?.type,
-      diffuculty: q?.level,
-      pyqInfo: (Array.isArray(q?.previousYearPapers) && q.previousYearPapers[0]?.title) || "",
-      qText: q?.question?.text || "",
-      qImage: q?.question?.image || "",
-      options: (Array.isArray(q?.options)?q.options:[]).map((o)=>({oText:o?.text||"", oImage:o?.image||""})),
-      correctAnswer: q?.type === 'numerical' ? q?.correctValue : (Array.isArray(q?.options)?q.options:[]).reduce((acc,o,i)=>{ if(o?.isCorrect){ const letters=['A','B','C','D']; acc.push(letters[i]||String(i+1)); } return acc; },[]),
-      solution: { sText: q?.solution?.text || "", sImage: q?.solution?.image || "" },
-    } : gmToMeta(q));
-    const out = { questions: qList };
-    if (includeState) {
-      const row = db.prepare("SELECT state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?").get(req.userId, String(examId), String(subjectId), String(chapterId));
-      out.state = row ? safeParseJSON(row.state, []) : [];
+app.get(
+  "/api/pyqs/questions-bundle/:examId/:subjectId/:chapterId",
+  auth,
+  async (req, res) => {
+    try {
+      const { examId, subjectId, chapterId } = req.params;
+      const full = String(req.query.full || "0") === "1";
+      const includeState = String(req.query.state || "1") === "1";
+      const includeOverlays = String(req.query.overlays || "1") === "1";
+      const questions = await gmFetch(
+        req,
+        GM_BASE.questions(examId, subjectId, chapterId),
+        { limit: 10000, hideOutOfSyllabus: "false" }
+      );
+      const qList = (questions?.data?.questions || []).map((q) =>
+        full
+          ? {
+              type: q?.type,
+              diffuculty: q?.level,
+              pyqInfo:
+                (Array.isArray(q?.previousYearPapers) &&
+                  q.previousYearPapers[0]?.title) ||
+                "",
+              qText: q?.question?.text || "",
+              qImage: q?.question?.image || "",
+              options: (Array.isArray(q?.options) ? q.options : []).map(
+                (o) => ({ oText: o?.text || "", oImage: o?.image || "" })
+              ),
+              correctAnswer:
+                q?.type === "numerical"
+                  ? q?.correctValue
+                  : (Array.isArray(q?.options) ? q.options : []).reduce(
+                      (acc, o, i) => {
+                        if (o?.isCorrect) {
+                          const letters = ["A", "B", "C", "D"];
+                          acc.push(letters[i] || String(i + 1));
+                        }
+                        return acc;
+                      },
+                      []
+                    ),
+              solution: {
+                sText: q?.solution?.text || "",
+                sImage: q?.solution?.image || "",
+              },
+            }
+          : gmToMeta(q)
+      );
+      const out = { questions: qList };
+      if (includeState) {
+        const row = db
+          .prepare(
+            "SELECT state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+          )
+          .get(
+            req.userId,
+            String(examId),
+            String(subjectId),
+            String(chapterId)
+          );
+        out.state = row ? safeParseJSON(row.state, []) : [];
+      }
+      if (includeOverlays) {
+        out.bookmarks = db
+          .prepare(
+            "SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+          )
+          .all(
+            req.userId,
+            String(examId),
+            String(subjectId),
+            String(chapterId)
+          );
+        out.marks = db
+          .prepare(
+            "SELECT questionIndex, color FROM pyqs_question_marks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+          )
+          .all(
+            req.userId,
+            String(examId),
+            String(subjectId),
+            String(chapterId)
+          );
+      }
+      res.json(out);
+    } catch (e) {
+      const code = e.status || 500;
+      return res.status(code).json({ error: String(e.message || e) });
     }
-    if (includeOverlays) {
-      out.bookmarks = db.prepare("SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?").all(req.userId, String(examId), String(subjectId), String(chapterId));
-      out.marks = db.prepare("SELECT questionIndex, color FROM pyqs_question_marks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?").all(req.userId, String(examId), String(subjectId), String(chapterId));
-    }
-    res.json(out);
-  } catch (e) {
-    const code = e.status || 500; return res.status(code).json({ error: String(e.message || e) });
   }
-});
+);
 
 // Search within chapters for text (server-side)
 app.post("/api/pyqs/search/:examId/:subjectId", auth, async (req, res) => {
   try {
     const { examId, subjectId } = req.params;
     const { chapters = [], q = "" } = req.body || {};
-    const ids = Array.isArray(chapters) && chapters.length ? chapters.map(String) : (await getSubjectChaptersCached(req, examId, subjectId)).map(c=>String(c.id));
-    const needle = String(q || "").trim().toLowerCase();
+    const ids =
+      Array.isArray(chapters) && chapters.length
+        ? chapters.map(String)
+        : (await getSubjectChaptersCached(req, examId, subjectId)).map((c) =>
+            String(c.id)
+          );
+    const needle = String(q || "")
+      .trim()
+      .toLowerCase();
     if (!needle) return res.json({});
     const metaMap = await getSubjectMetaPartial(req, examId, subjectId, ids);
     const out = {};
     for (const id of ids) {
       const arr = metaMap[id] || [];
       const hits = [];
-      for (let i=0;i<arr.length;i++){ const t = String(arr[i]?.qText||"").toLowerCase(); if (t.includes(needle)) hits.push(i); }
+      for (let i = 0; i < arr.length; i++) {
+        const t = String(arr[i]?.qText || "").toLowerCase();
+        if (t.includes(needle)) hits.push(i);
+      }
       out[id] = hits;
     }
     res.json(out);
   } catch (e) {
-    res.status(500).json({ error: 'search failed' });
+    res.status(500).json({ error: "search failed" });
   }
 });
 
 // GET chapter progress for all chapters of a subject (protected)
 // Computes counts under saved per-chapter filters for the user
 // Response shape: { [chapterId]: { total, green, red, grey } }
-app.get(
-  "/api/pyqs/progress/:examId/:subjectId",
-  auth,
-  async (req, res) => {
-    try {
-      const { examId, subjectId } = req.params;
-      // Load chapter list (cached) with totals
-      const chList = await getSubjectChaptersCached(req, examId, subjectId);
-      let chapters = chList.map((c) => c.id);
-      // Optional chapters param to scope
-      const qsCh = String(req.query.chapters || "").trim();
-      if (qsCh) {
-        const only = new Set(qsCh.split(',').map(s=>s.trim()).filter(Boolean));
-        chapters = chapters.filter(id => only.has(String(id)));
-      }
-      const totalsById = Object.fromEntries(chList.map((c) => [String(c.id), Number(c.total || 0)]));
-      
-      // Load prefs + states for this user in a single query each
-      const prefRows = db
-        .prepare(
-          "SELECT chapterId, prefs FROM pyqs_prefs WHERE userId = ? AND examId = ? AND subjectId = ?"
-        )
-        .all(req.userId, String(examId), String(subjectId));
-      const stateRows = db
-        .prepare(
-          "SELECT chapterId, state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ?"
-        )
-        .all(req.userId, String(examId), String(subjectId));
-      const prefsMap = {};
-      for (const r of prefRows) {
-        const obj = safeParseJSON(r.prefs, {});
-        if (obj && typeof obj === "object") prefsMap[String(r.chapterId)] = obj;
-      }
-      const normalizeStates = (raw) => {
-        if (Array.isArray(raw)) return raw;
-        const out = [];
-        if (raw && typeof raw === "object") {
-          for (const k of Object.keys(raw)) {
-            const idx = Number(k);
-            if (!Number.isNaN(idx)) out[idx] = raw[k];
-          }
-        }
-        return out;
-      };
-      const statesMap = {};
-      for (const r of stateRows) {
-        statesMap[String(r.chapterId)] = normalizeStates(safeParseJSON(r.state, []));
-      }
-
-      // Determine which chapters actually need meta (content filters present)
-      const needsMeta = new Set();
-      for (const chId of chapters) {
-        const f = prefsMap[String(chId)] || {};
-        if ((f.q && String(f.q).trim()) || (Array.isArray(f.years) && f.years.length) || (f.diff && String(f.diff).trim())) {
-          needsMeta.add(String(chId));
-        }
-      }
-      // Fetch meta only for chapters that need it (cached by subject)
-      const metaMap = needsMeta.size
-        ? await getSubjectMetaPartial(req, examId, subjectId, Array.from(needsMeta))
-        : {};
-
-      // Helpers for filtering and status
-      const parseYear = (pyqInfo) => {
-        try {
-          const m = String(pyqInfo || "").match(/(19|20)\d{2}/);
-          return m ? Number(m[0]) : null;
-        } catch { return null; }
-      };
-      const normDiff = (d) => {
-        const s = String(d || "").toLowerCase();
-        if (s.startsWith("1") || s.startsWith("e")) return "easy";
-        if (s.startsWith("2") || s.startsWith("m")) return "medium";
-        if (s.startsWith("3") || s.startsWith("h")) return "hard";
-        return "";
-      };
-      const statusFromState = (st) => {
-        if (!st) return "not-started";
-        if (st.isAnswerEvaluated) {
-          if (st.evalStatus === "correct") return "correct";
-          if (st.evalStatus === "partial") return "partial";
-          if (st.evalStatus === "incorrect") return "incorrect";
-          return "completed";
-        }
-        if (st.isAnswerPicked) return "in-progress";
-        return "not-started";
-      };
-
-      // Compute progress counts per chapter under saved filters
-      const out = {};
-      for (const chId of chapters) {
-        const cid = String(chId);
-        const defaults = { q: "", years: [], status: "", diff: "", sort: "index" };
-        const f = Object.assign({}, defaults, prefsMap[cid] || {});
-        const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
-
-        const requiresMeta = (f.q && String(f.q).trim()) || (Array.isArray(f.years) && f.years.length) || (f.diff && String(f.diff).trim());
-        let total = 0, green = 0, red = 0, grey = 0;
-
-        if (!requiresMeta) {
-          const totalQs = Math.max(0, Number(totalsById[cid] || 0));
-          // Aggregate state counts without iterating over all indices
-          let correct = 0, incorrect = 0, partial = 0, inProgress = 0, evaluated = 0;
-          for (let i = 0; i < stArr.length; i++) {
-            const st = stArr[i]; if (!st) continue;
-            if (st.isAnswerEvaluated) {
-              evaluated++;
-              if (st.evalStatus === "correct") correct++;
-              else if (st.evalStatus === "incorrect") incorrect++;
-              else if (st.evalStatus === "partial") partial++;
-            } else if (st.isAnswerPicked) {
-              inProgress++;
-            }
-          }
-          if (!f.status) {
-            green = correct;
-            red = incorrect + partial;
-            grey = Math.max(0, totalQs - green - red);
-            total = totalQs;
-          } else {
-            switch (String(f.status)) {
-              case "correct":
-                total = correct; green = correct; red = 0; grey = 0; break;
-              case "incorrect":
-                total = incorrect; green = 0; red = incorrect; grey = 0; break;
-              case "partial":
-                total = partial; green = 0; red = partial; grey = 0; break;
-              case "completed":
-                total = evaluated; green = correct; red = incorrect + partial; grey = 0; break;
-              case "in-progress":
-                total = inProgress; green = 0; red = 0; grey = inProgress; break;
-              case "not-started":
-                total = Math.max(0, totalQs - evaluated - inProgress); green = 0; red = 0; grey = total; break;
-              default:
-                total = totalQs; green = correct; red = incorrect + partial; grey = Math.max(0, totalQs - green - red); break;
-            }
-          }
-        } else {
-          const meta = Array.isArray(metaMap[cid]) ? metaMap[cid] : [];
-          let mapped = meta.map((q, i) => ({ q, i }));
-          if (f.q) { const qq = String(f.q).trim().toLowerCase(); mapped = mapped.filter((o) => (o.q.qText || "").toLowerCase().includes(qq)); }
-          if (Array.isArray(f.years) && f.years.length) { const set = new Set(f.years); mapped = mapped.filter((o) => { const y = parseYear(o.q.pyqInfo); return y && set.has(y); }); }
-          if (f.diff) { mapped = mapped.filter((o) => normDiff(o.q.diffuculty) === f.diff); }
-          if (f.status) {
-            mapped = mapped.filter((o) => {
-              const s = statusFromState(stArr[o.i]);
-              return s === f.status || (f.status === "completed" && stArr[o.i]?.isAnswerEvaluated);
-            });
-          }
-          total = mapped.length;
-          for (const o of mapped) {
-            const s = statusFromState(stArr[o.i]);
-            if (s === "correct") green++;
-            else if (s === "incorrect" || s === "partial") red++;
-            else grey++;
-          }
-        }
-        out[cid] = { total, green, red, grey };
-      }
-
-      return res.json(out);
-    } catch (e) {
-      console.error("pyqs progress:", e);
-      const code = e.status || 500;
-      return res.status(code).json({ error: String(e.message || e) });
+app.get("/api/pyqs/progress/:examId/:subjectId", auth, async (req, res) => {
+  try {
+    const { examId, subjectId } = req.params;
+    // Load chapter list (cached) with totals
+    const chList = await getSubjectChaptersCached(req, examId, subjectId);
+    let chapters = chList.map((c) => c.id);
+    // Optional chapters param to scope
+    const qsCh = String(req.query.chapters || "").trim();
+    if (qsCh) {
+      const only = new Set(
+        qsCh
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      );
+      chapters = chapters.filter((id) => only.has(String(id)));
     }
+    const totalsById = Object.fromEntries(
+      chList.map((c) => [String(c.id), Number(c.total || 0)])
+    );
+
+    // Load prefs + states for this user in a single query each
+    const prefRows = db
+      .prepare(
+        "SELECT chapterId, prefs FROM pyqs_prefs WHERE userId = ? AND examId = ? AND subjectId = ?"
+      )
+      .all(req.userId, String(examId), String(subjectId));
+    const stateRows = db
+      .prepare(
+        "SELECT chapterId, state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ?"
+      )
+      .all(req.userId, String(examId), String(subjectId));
+    const prefsMap = {};
+    for (const r of prefRows) {
+      const obj = safeParseJSON(r.prefs, {});
+      if (obj && typeof obj === "object") prefsMap[String(r.chapterId)] = obj;
+    }
+    const normalizeStates = (raw) => {
+      if (Array.isArray(raw)) return raw;
+      const out = [];
+      if (raw && typeof raw === "object") {
+        for (const k of Object.keys(raw)) {
+          const idx = Number(k);
+          if (!Number.isNaN(idx)) out[idx] = raw[k];
+        }
+      }
+      return out;
+    };
+    const statesMap = {};
+    for (const r of stateRows) {
+      statesMap[String(r.chapterId)] = normalizeStates(
+        safeParseJSON(r.state, [])
+      );
+    }
+
+    // Determine which chapters actually need meta (content filters present)
+    const needsMeta = new Set();
+    for (const chId of chapters) {
+      const f = prefsMap[String(chId)] || {};
+      if (
+        (f.q && String(f.q).trim()) ||
+        (Array.isArray(f.years) && f.years.length) ||
+        (f.diff && String(f.diff).trim())
+      ) {
+        needsMeta.add(String(chId));
+      }
+    }
+    // Fetch meta only for chapters that need it (cached by subject)
+    const metaMap = needsMeta.size
+      ? await getSubjectMetaPartial(
+          req,
+          examId,
+          subjectId,
+          Array.from(needsMeta)
+        )
+      : {};
+
+    // Helpers for filtering and status
+    const parseYear = (pyqInfo) => {
+      try {
+        const m = String(pyqInfo || "").match(/(19|20)\d{2}/);
+        return m ? Number(m[0]) : null;
+      } catch {
+        return null;
+      }
+    };
+    const normDiff = (d) => {
+      const s = String(d || "").toLowerCase();
+      if (s.startsWith("1") || s.startsWith("e")) return "easy";
+      if (s.startsWith("2") || s.startsWith("m")) return "medium";
+      if (s.startsWith("3") || s.startsWith("h")) return "hard";
+      return "";
+    };
+    const statusFromState = (st) => {
+      if (!st) return "not-started";
+      if (st.isAnswerEvaluated) {
+        if (st.evalStatus === "correct") return "correct";
+        if (st.evalStatus === "partial") return "partial";
+        if (st.evalStatus === "incorrect") return "incorrect";
+        return "completed";
+      }
+      if (st.isAnswerPicked) return "in-progress";
+      return "not-started";
+    };
+
+    // Compute progress counts per chapter under saved filters
+    const out = {};
+    for (const chId of chapters) {
+      const cid = String(chId);
+      const defaults = {
+        q: "",
+        years: [],
+        status: "",
+        diff: "",
+        sort: "index",
+      };
+      const f = Object.assign({}, defaults, prefsMap[cid] || {});
+      const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
+
+      const requiresMeta =
+        (f.q && String(f.q).trim()) ||
+        (Array.isArray(f.years) && f.years.length) ||
+        (f.diff && String(f.diff).trim());
+      let total = 0,
+        green = 0,
+        red = 0,
+        grey = 0;
+
+      if (!requiresMeta) {
+        const totalQs = Math.max(0, Number(totalsById[cid] || 0));
+        // Aggregate state counts without iterating over all indices
+        let correct = 0,
+          incorrect = 0,
+          partial = 0,
+          inProgress = 0,
+          evaluated = 0;
+        for (let i = 0; i < stArr.length; i++) {
+          const st = stArr[i];
+          if (!st) continue;
+          if (st.isAnswerEvaluated) {
+            evaluated++;
+            if (st.evalStatus === "correct") correct++;
+            else if (st.evalStatus === "incorrect") incorrect++;
+            else if (st.evalStatus === "partial") partial++;
+          } else if (st.isAnswerPicked) {
+            inProgress++;
+          }
+        }
+        if (!f.status) {
+          green = correct;
+          red = incorrect + partial;
+          grey = Math.max(0, totalQs - green - red);
+          total = totalQs;
+        } else {
+          switch (String(f.status)) {
+            case "correct":
+              total = correct;
+              green = correct;
+              red = 0;
+              grey = 0;
+              break;
+            case "incorrect":
+              total = incorrect;
+              green = 0;
+              red = incorrect;
+              grey = 0;
+              break;
+            case "partial":
+              total = partial;
+              green = 0;
+              red = partial;
+              grey = 0;
+              break;
+            case "completed":
+              total = evaluated;
+              green = correct;
+              red = incorrect + partial;
+              grey = 0;
+              break;
+            case "in-progress":
+              total = inProgress;
+              green = 0;
+              red = 0;
+              grey = inProgress;
+              break;
+            case "not-started":
+              total = Math.max(0, totalQs - evaluated - inProgress);
+              green = 0;
+              red = 0;
+              grey = total;
+              break;
+            default:
+              total = totalQs;
+              green = correct;
+              red = incorrect + partial;
+              grey = Math.max(0, totalQs - green - red);
+              break;
+          }
+        }
+      } else {
+        const meta = Array.isArray(metaMap[cid]) ? metaMap[cid] : [];
+        let mapped = meta.map((q, i) => ({ q, i }));
+        if (f.q) {
+          const qq = String(f.q).trim().toLowerCase();
+          mapped = mapped.filter((o) =>
+            (o.q.qText || "").toLowerCase().includes(qq)
+          );
+        }
+        if (Array.isArray(f.years) && f.years.length) {
+          const set = new Set(f.years);
+          mapped = mapped.filter((o) => {
+            const y = parseYear(o.q.pyqInfo);
+            return y && set.has(y);
+          });
+        }
+        if (f.diff) {
+          mapped = mapped.filter((o) => normDiff(o.q.diffuculty) === f.diff);
+        }
+        if (f.status) {
+          mapped = mapped.filter((o) => {
+            const s = statusFromState(stArr[o.i]);
+            return (
+              s === f.status ||
+              (f.status === "completed" && stArr[o.i]?.isAnswerEvaluated)
+            );
+          });
+        }
+        total = mapped.length;
+        for (const o of mapped) {
+          const s = statusFromState(stArr[o.i]);
+          if (s === "correct") green++;
+          else if (s === "incorrect" || s === "partial") red++;
+          else grey++;
+        }
+      }
+      out[cid] = { total, green, red, grey };
+    }
+
+    return res.json(out);
+  } catch (e) {
+    console.error("pyqs progress:", e);
+    const code = e.status || 500;
+    return res.status(code).json({ error: String(e.message || e) });
   }
-);
+});
 
 // ---------- PYQs icon proxy (public) ----------
 app.get("/api/pyqs/icon", async (req, res) => {
@@ -1044,7 +1500,11 @@ app.get("/api/pyqs/icon", async (req, res) => {
     const src = String(req.query.src || "").trim();
     if (!src) return res.status(400).json({ error: "src is required" });
     let u;
-    try { u = new URL(src); } catch { return res.status(400).json({ error: "invalid src" }); }
+    try {
+      u = new URL(src);
+    } catch {
+      return res.status(400).json({ error: "invalid src" });
+    }
     if (u.protocol !== "https:" && u.protocol !== "http:") {
       return res.status(400).json({ error: "unsupported scheme" });
     }
@@ -1102,9 +1562,11 @@ app.post("/api/pyqs/state/:examId/:subjectId/:chapterId", auth, (req, res) => {
     res.json({ success: true });
   } catch (e) {
     console.error("pyqs save state:", e);
-    if (e && e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
+    if (e && e.code === "SQLITE_CONSTRAINT_FOREIGNKEY") {
       // Likely a stale/invalid token (user disappeared). Force re-auth on client.
-      return res.status(401).json({ error: "Invalid session. Please log in again." });
+      return res
+        .status(401)
+        .json({ error: "Invalid session. Please log in again." });
     }
     res.status(500).json({ error: "Failed to save PYQs state" });
   }
@@ -1274,6 +1736,7 @@ app.post("/login", (req, res) => {
       id: row.id,
       username: row.username,
       mustChangePassword: !!row.force_pw_reset,
+      isAdmin: !!row.is_admin,
     };
     const token = signToken(user.id);
     res.json({ success: true, user, token });
@@ -1292,7 +1755,7 @@ app.get("/me", (req, res) => {
     const { sub } = jwt.verify(m[1], JWT_SECRET);
     const u = db
       .prepare(
-        "SELECT id, username, force_pw_reset, getmarks_token FROM users WHERE id = ?"
+        "SELECT id, username, force_pw_reset, getmarks_token, is_admin FROM users WHERE id = ?"
       )
       .get(String(sub));
     if (!u) return res.json(null);
@@ -1301,6 +1764,7 @@ app.get("/me", (req, res) => {
       username: u.username,
       mustChangePassword: !!u.force_pw_reset,
       hasMarksAuth: !!(u.getmarks_token && String(u.getmarks_token).trim()),
+      isAdmin: !!u.is_admin,
     });
   } catch {
     res.json(null);
@@ -1330,25 +1794,363 @@ async function loadAssignment(assignmentId) {
 app.get("/api/assignment/:aID/bootstrap", (req, res) => {
   try {
     const aID = Number(req.params.aID);
-    if (!Number.isFinite(aID)) return res.status(400).json({ error: 'invalid assignment id' });
+    if (!Number.isFinite(aID))
+      return res.status(400).json({ error: "invalid assignment id" });
     // Load assignment from static cache/Pages
     loadAssignment(aID)
       .then((assignment) => {
-        const stateRow = db.prepare("SELECT state FROM states WHERE userId = ? AND assignmentId = ?").get(req.userId, aID);
+        const stateRow = db
+          .prepare(
+            "SELECT state FROM states WHERE userId = ? AND assignmentId = ?"
+          )
+          .get(req.userId, aID);
         const state = stateRow ? safeParseJSON(stateRow.state, {}) : {};
-        const bookmarks = db.prepare("SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId IS NULL AND subjectId IS NULL AND chapterId IS NULL AND questionIndex IS NOT NULL").all(req.userId);
-        const marks = db.prepare("SELECT questionIndex, color FROM question_marks WHERE userId = ? AND assignmentId = ?").all(req.userId, aID);
-        const tags = db.prepare("SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC").all(req.userId);
+        const bookmarks = db
+          .prepare(
+            "SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId IS NULL AND subjectId IS NULL AND chapterId IS NULL AND questionIndex IS NOT NULL"
+          )
+          .all(req.userId);
+        const marks = db
+          .prepare(
+            "SELECT questionIndex, color FROM question_marks WHERE userId = ? AND assignmentId = ?"
+          )
+          .all(req.userId, aID);
+        const tags = db
+          .prepare(
+            "SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC"
+          )
+          .all(req.userId);
         res.json({ assignment, state, bookmarks, marks, tags });
       })
-      .catch((e) => { res.status(500).json({ error: 'Failed to load assignment' }); });
+      .catch((e) => {
+        res.status(500).json({ error: "Failed to load assignment" });
+      });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to bootstrap assignment' });
+    res.status(500).json({ error: "Failed to bootstrap assignment" });
   }
 });
 
 // ---------- Protected routes (require Bearer token) ----------
 app.use(auth);
+
+// Report a question (assignment or PYQs)
+app.post("/api/report", async (req, res) => {
+  try {
+    const {
+      kind,
+      assignmentId,
+      examId,
+      subjectId,
+      chapterId,
+      questionIndex,
+      reason,
+      message = "",
+      meta = {},
+    } = req.body || {};
+
+    const k = String(kind || "").toLowerCase();
+    if (k !== "assignment" && k !== "pyqs")
+      return res.status(400).json({ error: "Invalid kind" });
+
+    const qIdx = Number(questionIndex);
+    if (!Number.isFinite(qIdx) || qIdx < 0)
+      return res.status(400).json({ error: "Invalid questionIndex" });
+
+    const r = String(reason || "").trim();
+    if (!r) return res.status(400).json({ error: "Reason is required" });
+
+    const msg = String(message || "").trim();
+    if (!msg) return res.status(400).json({ error: "Report details are required" });
+
+    // Validate identifiers by kind
+    let aId = null,
+      ex = null,
+      su = null,
+      ch = null;
+    if (k === "assignment") {
+      const n = Number(assignmentId);
+      if (!Number.isFinite(n))
+        return res.status(400).json({ error: "assignmentId required" });
+      aId = n;
+    } else {
+      ex = String(examId || "").trim();
+      su = String(subjectId || "").trim();
+      ch = String(chapterId || "").trim();
+      if (!ex || !su || !ch)
+        return res
+          .status(400)
+          .json({ error: "examId, subjectId, chapterId are required" });
+    }
+
+    // Check if reports are blocked for this question
+    const blocked = (() => {
+      try {
+        if (k === "assignment") {
+          const r = db
+            .prepare(
+              "SELECT 1 FROM question_report_blocks WHERE kind = 'assignment' AND assignmentId = ? AND questionIndex = ?"
+            )
+            .get(aId, qIdx);
+          return !!r;
+        } else {
+          const r = db
+            .prepare(
+              "SELECT 1 FROM question_report_blocks WHERE kind = 'pyqs' AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?"
+            )
+            .get(ex, su, ch, qIdx);
+          return !!r;
+        }
+      } catch {
+        return false;
+      }
+    })();
+    if (blocked) return res.status(403).json({ error: "Reports disabled for this question" });
+
+    const id = nanoid();
+    const metaJson = JSON.stringify(meta || {});
+    db.prepare(
+      `INSERT INTO question_reports (id, userId, kind, assignmentId, examId, subjectId, chapterId, questionIndex, reason, message, meta)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).run(
+      id,
+      req.userId,
+      k,
+      aId,
+      ex,
+      su,
+      ch,
+      qIdx,
+      r,
+      msg,
+      metaJson
+    );
+
+    // Optional forwarding to webhook (best-effort)
+    (async () => {
+      try {
+        if (!REPORTS_WEBHOOK_URL) return;
+        const payload = {
+          id,
+          userId: req.userId,
+          kind: k,
+          assignmentId: aId,
+          examId: ex,
+          subjectId: su,
+          chapterId: ch,
+          questionIndex: qIdx,
+          reason: r,
+          message: msg,
+          meta: meta || {},
+          created_at: new Date().toISOString(),
+        };
+        await fetch(REPORTS_WEBHOOK_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }).catch(() => {});
+      } catch {}
+    })();
+
+    res.json({ success: true, id });
+  } catch (e) {
+    console.error("report create:", e);
+    res.status(500).json({ error: "Failed to submit report" });
+  }
+});
+
+// Check if a question is currently blocked from receiving reports
+app.get("/api/report/blocked", (req, res) => {
+  try {
+    const kind = String(req.query.kind || "").toLowerCase();
+    const questionIndex = Number(req.query.questionIndex);
+    if (!Number.isFinite(questionIndex))
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    if (kind === "assignment") {
+      const assignmentId = Number(req.query.assignmentId);
+      if (!Number.isFinite(assignmentId))
+        return res.status(400).json({ error: "assignmentId required" });
+      const row = db
+        .prepare(
+          "SELECT 1 FROM question_report_blocks WHERE kind = 'assignment' AND assignmentId = ? AND questionIndex = ?"
+        )
+        .get(assignmentId, questionIndex);
+      return res.json({ blocked: !!row });
+    } else if (kind === "pyqs") {
+      const ex = String(req.query.examId || "").trim();
+      const su = String(req.query.subjectId || "").trim();
+      const ch = String(req.query.chapterId || "").trim();
+      if (!ex || !su || !ch)
+        return res
+          .status(400)
+          .json({ error: "examId, subjectId, chapterId required" });
+      const row = db
+        .prepare(
+          "SELECT 1 FROM question_report_blocks WHERE kind = 'pyqs' AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?"
+        )
+        .get(ex, su, ch, questionIndex);
+      return res.json({ blocked: !!row });
+    } else {
+      return res.status(400).json({ error: "Invalid kind" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: "check failed" });
+  }
+});
+
+// ---------- Admin APIs ----------
+app.get("/api/admin/reports", adminOnly, (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT 
+           qr.id, qr.userId, COALESCE(u.username, '') AS reporter,
+           qr.kind, qr.assignmentId, qr.examId, qr.subjectId, qr.chapterId, qr.questionIndex,
+           qr.reason, qr.message, qr.status, qr.meta, qr.admin_notes, qr.created_at
+         FROM question_reports qr
+         LEFT JOIN users u ON u.id = qr.userId
+         ORDER BY qr.created_at DESC`
+      )
+      .all();
+    const isBlocked = (r) => {
+      try {
+        if (r.kind === "assignment") {
+          const x = db
+            .prepare(
+              "SELECT 1 FROM question_report_blocks WHERE kind = 'assignment' AND assignmentId = ? AND questionIndex = ?"
+            )
+            .get(r.assignmentId, r.questionIndex);
+          return !!x;
+        } else {
+          const x = db
+            .prepare(
+              "SELECT 1 FROM question_report_blocks WHERE kind = 'pyqs' AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?"
+            )
+            .get(r.examId, r.subjectId, r.chapterId, r.questionIndex);
+          return !!x;
+        }
+      } catch {
+        return false;
+      }
+    };
+    const out = rows.map((r) => ({
+      ...r,
+      username: r.reporter || "",
+      blocked: isBlocked(r),
+      meta: (() => {
+        try { return r.meta ? JSON.parse(r.meta) : {}; } catch { return {}; }
+      })(),
+      notes: r.admin_notes || "",
+    }));
+    res.json(out);
+  } catch (e) {
+    res.status(500).json({ error: "Failed to list reports" });
+  }
+});
+
+app.patch("/api/admin/reports/:id", adminOnly, (req, res) => {
+  try {
+    const id = String(req.params.id || "").trim();
+    const status = req.body?.status != null ? String(req.body.status).toLowerCase() : null;
+    const notes = req.body?.notes != null ? String(req.body.notes) : null;
+    if (!id) return res.status(400).json({ error: "id required" });
+    if (status != null && !["open", "wip", "closed"].includes(status))
+      return res.status(400).json({ error: "invalid status" });
+    let setParts = [];
+    const args = [];
+    if (status != null) { setParts.push("status = ?"); args.push(status); }
+    if (notes != null) { setParts.push("admin_notes = ?"); args.push(notes); }
+    if (!setParts.length) return res.status(400).json({ error: "no changes" });
+    args.push(id);
+    const sql = `UPDATE question_reports SET ${setParts.join(", ")} WHERE id = ?`;
+    const r = db.prepare(sql).run(...args);
+    if (r.changes === 0) return res.status(404).json({ error: "not found" });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+app.post("/api/admin/blocks", adminOnly, (req, res) => {
+  try {
+    const {
+      kind,
+      assignmentId,
+      examId,
+      subjectId,
+      chapterId,
+      questionIndex,
+    } = req.body || {};
+    const k = String(kind || "").toLowerCase();
+    const qIdx = Number(questionIndex);
+    if (!Number.isFinite(qIdx))
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    if (k === "assignment") {
+      const aId = Number(assignmentId);
+      if (!Number.isFinite(aId))
+        return res.status(400).json({ error: "assignmentId required" });
+      db.prepare(
+        "INSERT OR IGNORE INTO question_report_blocks (kind, assignmentId, examId, subjectId, chapterId, questionIndex) VALUES ('assignment', ?, NULL, NULL, NULL, ?)"
+      ).run(aId, qIdx);
+      return res.json({ success: true });
+    } else if (k === "pyqs") {
+      const ex = String(examId || "").trim();
+      const su = String(subjectId || "").trim();
+      const ch = String(chapterId || "").trim();
+      if (!ex || !su || !ch)
+        return res
+          .status(400)
+          .json({ error: "examId, subjectId, chapterId required" });
+      db.prepare(
+        "INSERT OR IGNORE INTO question_report_blocks (kind, assignmentId, examId, subjectId, chapterId, questionIndex) VALUES ('pyqs', NULL, ?, ?, ?, ?)"
+      ).run(ex, su, ch, qIdx);
+      return res.json({ success: true });
+    }
+    return res.status(400).json({ error: "Invalid kind" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to block" });
+  }
+});
+
+app.delete("/api/admin/blocks", adminOnly, (req, res) => {
+  try {
+    const {
+      kind,
+      assignmentId,
+      examId,
+      subjectId,
+      chapterId,
+      questionIndex,
+    } = req.body || {};
+    const k = String(kind || "").toLowerCase();
+    const qIdx = Number(questionIndex);
+    if (!Number.isFinite(qIdx))
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    if (k === "assignment") {
+      const aId = Number(assignmentId);
+      if (!Number.isFinite(aId))
+        return res.status(400).json({ error: "assignmentId required" });
+      db.prepare(
+        "DELETE FROM question_report_blocks WHERE kind = 'assignment' AND assignmentId = ? AND questionIndex = ?"
+      ).run(aId, qIdx);
+      return res.json({ success: true });
+    } else if (k === "pyqs") {
+      const ex = String(examId || "").trim();
+      const su = String(subjectId || "").trim();
+      const ch = String(chapterId || "").trim();
+      if (!ex || !su || !ch)
+        return res
+          .status(400)
+          .json({ error: "examId, subjectId, chapterId required" });
+      db.prepare(
+        "DELETE FROM question_report_blocks WHERE kind = 'pyqs' AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?"
+      ).run(ex, su, ch, qIdx);
+      return res.json({ success: true });
+    }
+    return res.status(400).json({ error: "Invalid kind" });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to unblock" });
+  }
+});
 
 // Bookmark tags
 app.get("/api/bookmark-tags", (req, res) => {
@@ -1443,8 +2245,10 @@ app.post("/api/bookmarks", (req, res) => {
 app.post("/api/pyqs/prefs/bulk", (req, res) => {
   try {
     const { examId, subjectId, chapters } = req.body || {};
-    if (!examId || !subjectId || !chapters || typeof chapters !== 'object') {
-      return res.status(400).json({ error: 'examId, subjectId and chapters map are required' });
+    if (!examId || !subjectId || !chapters || typeof chapters !== "object") {
+      return res
+        .status(400)
+        .json({ error: "examId, subjectId and chapters map are required" });
     }
     const stmt = db.prepare(`
       INSERT INTO pyqs_prefs (userId, examId, subjectId, chapterId, prefs)
@@ -1454,15 +2258,23 @@ app.post("/api/pyqs/prefs/bulk", (req, res) => {
     `);
     const tx = db.transaction((entries) => {
       for (const [chapterId, prefs] of entries) {
-        const text = JSON.stringify(prefs && typeof prefs === 'object' ? prefs : {});
-        stmt.run(req.userId, String(examId), String(subjectId), String(chapterId), text);
+        const text = JSON.stringify(
+          prefs && typeof prefs === "object" ? prefs : {}
+        );
+        stmt.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(chapterId),
+          text
+        );
       }
     });
     tx(Object.entries(chapters));
     res.json({ success: true });
   } catch (e) {
-    console.error('prefs bulk:', e);
-    res.status(500).json({ error: 'Failed to save prefs (bulk)' });
+    console.error("prefs bulk:", e);
+    res.status(500).json({ error: "Failed to save prefs (bulk)" });
   }
 });
 
@@ -1470,7 +2282,10 @@ app.post("/api/pyqs/prefs/bulk", (req, res) => {
 app.post("/api/pyqs/state/bulk", (req, res) => {
   try {
     const { examId, subjectId, items } = req.body || {};
-    if (!examId || !subjectId || !Array.isArray(items)) return res.status(400).json({ error: 'examId, subjectId, items[] are required' });
+    if (!examId || !subjectId || !Array.isArray(items))
+      return res
+        .status(400)
+        .json({ error: "examId, subjectId, items[] are required" });
     const stmt = db.prepare(`
       INSERT INTO pyqs_states (userId, examId, subjectId, chapterId, state)
       VALUES (?, ?, ?, ?, ?)
@@ -1480,14 +2295,20 @@ app.post("/api/pyqs/state/bulk", (req, res) => {
     const tx = db.transaction((arr) => {
       for (const it of arr) {
         const text = JSON.stringify(Array.isArray(it?.state) ? it.state : []);
-        stmt.run(req.userId, String(examId), String(subjectId), String(it.chapterId), text);
+        stmt.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(it.chapterId),
+          text
+        );
       }
     });
     tx(items);
     res.json({ success: true });
   } catch (e) {
-    console.error('state bulk:', e);
-    res.status(500).json({ error: 'Failed to save state (bulk)' });
+    console.error("state bulk:", e);
+    res.status(500).json({ error: "Failed to save state (bulk)" });
   }
 });
 
@@ -1495,73 +2316,166 @@ app.post("/api/pyqs/state/bulk", (req, res) => {
 app.get("/api/pyqs/overlays/:examId/:subjectId", (req, res) => {
   try {
     const { examId, subjectId } = req.params;
-    const bookmarks = db.prepare(`
+    const bookmarks = db
+      .prepare(
+        `
       SELECT chapterId, questionIndex, tagId FROM pyqs_bookmarks
       WHERE userId = ? AND examId = ? AND subjectId = ?
-    `).all(req.userId, String(examId), String(subjectId));
-    const marks = db.prepare(`
+    `
+      )
+      .all(req.userId, String(examId), String(subjectId));
+    const marks = db
+      .prepare(
+        `
       SELECT chapterId, questionIndex, color FROM pyqs_question_marks
       WHERE userId = ? AND examId = ? AND subjectId = ?
-    `).all(req.userId, String(examId), String(subjectId));
-    const tags = db.prepare(`SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC`).all(req.userId);
+    `
+      )
+      .all(req.userId, String(examId), String(subjectId));
+    const tags = db
+      .prepare(
+        `SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC`
+      )
+      .all(req.userId);
     res.json({ bookmarks, marks, tags });
   } catch (e) {
-    console.error('overlays get:', e);
-    res.status(500).json({ error: 'Failed to load overlays' });
+    console.error("overlays get:", e);
+    res.status(500).json({ error: "Failed to load overlays" });
   }
 });
 
 app.post("/api/pyqs/overlays/bulk", (req, res) => {
   try {
-    const { examId, subjectId, addBookmarks = [], removeBookmarks = [], setMarks = [], removeMarks = [] } = req.body || {};
-    if (!examId || !subjectId) return res.status(400).json({ error: 'examId and subjectId required' });
-    const addBm = db.prepare(`INSERT OR IGNORE INTO pyqs_bookmarks (userId, examId, subjectId, chapterId, questionIndex, tagId) VALUES (?, ?, ?, ?, ?, ?)`);
-    const delBm = db.prepare(`DELETE FROM pyqs_bookmarks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ? AND tagId = ?`);
-    const setMk = db.prepare(`INSERT INTO pyqs_question_marks (userId, examId, subjectId, chapterId, questionIndex, color) VALUES (?, ?, ?, ?, ?, ?)
+    const {
+      examId,
+      subjectId,
+      addBookmarks = [],
+      removeBookmarks = [],
+      setMarks = [],
+      removeMarks = [],
+    } = req.body || {};
+    if (!examId || !subjectId)
+      return res.status(400).json({ error: "examId and subjectId required" });
+    const addBm = db.prepare(
+      `INSERT OR IGNORE INTO pyqs_bookmarks (userId, examId, subjectId, chapterId, questionIndex, tagId) VALUES (?, ?, ?, ?, ?, ?)`
+    );
+    const delBm = db.prepare(
+      `DELETE FROM pyqs_bookmarks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ? AND tagId = ?`
+    );
+    const setMk =
+      db.prepare(`INSERT INTO pyqs_question_marks (userId, examId, subjectId, chapterId, questionIndex, color) VALUES (?, ?, ?, ?, ?, ?)
       ON CONFLICT(userId, examId, subjectId, chapterId, questionIndex)
       DO UPDATE SET color = excluded.color, updated_at = CURRENT_TIMESTAMP`);
-    const delMk = db.prepare(`DELETE FROM pyqs_question_marks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?`);
+    const delMk = db.prepare(
+      `DELETE FROM pyqs_question_marks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ? AND questionIndex = ?`
+    );
     const tx = db.transaction(() => {
-      for (const b of addBookmarks) addBm.run(req.userId, String(examId), String(subjectId), String(b.chapterId), Number(b.questionIndex), String(b.tagId));
-      for (const b of removeBookmarks) delBm.run(req.userId, String(examId), String(subjectId), String(b.chapterId), Number(b.questionIndex), String(b.tagId));
-      for (const m of setMarks) setMk.run(req.userId, String(examId), String(subjectId), String(m.chapterId), Number(m.questionIndex), String(m.color || '')); 
-      for (const m of removeMarks) delMk.run(req.userId, String(examId), String(subjectId), String(m.chapterId), Number(m.questionIndex));
+      for (const b of addBookmarks)
+        addBm.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(b.chapterId),
+          Number(b.questionIndex),
+          String(b.tagId)
+        );
+      for (const b of removeBookmarks)
+        delBm.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(b.chapterId),
+          Number(b.questionIndex),
+          String(b.tagId)
+        );
+      for (const m of setMarks)
+        setMk.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(m.chapterId),
+          Number(m.questionIndex),
+          String(m.color || "")
+        );
+      for (const m of removeMarks)
+        delMk.run(
+          req.userId,
+          String(examId),
+          String(subjectId),
+          String(m.chapterId),
+          Number(m.questionIndex)
+        );
     });
     tx();
     res.json({ success: true });
   } catch (e) {
-    console.error('overlays bulk:', e);
-    res.status(500).json({ error: 'Failed to update overlays' });
+    console.error("overlays bulk:", e);
+    res.status(500).json({ error: "Failed to update overlays" });
   }
 });
 
 // ---- PYQs Starred unified ----
 app.get("/api/pyqs/starred", (req, res) => {
   try {
-    const ex = db.prepare("SELECT examId FROM starred_pyqs WHERE userId = ? AND kind = 'exam'").all(req.userId).map(r => r.examId);
-    const ch = db.prepare("SELECT examId, subjectId, chapterId FROM starred_pyqs WHERE userId = ? AND kind = 'chapter'").all(req.userId);
+    const ex = db
+      .prepare(
+        "SELECT examId FROM starred_pyqs WHERE userId = ? AND kind = 'exam'"
+      )
+      .all(req.userId)
+      .map((r) => r.examId);
+    const ch = db
+      .prepare(
+        "SELECT examId, subjectId, chapterId FROM starred_pyqs WHERE userId = ? AND kind = 'chapter'"
+      )
+      .all(req.userId);
     res.json({ exams: ex, chapters: ch });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to load starred' });
+    res.status(500).json({ error: "Failed to load starred" });
   }
 });
 
 app.post("/api/pyqs/starred/bulk", (req, res) => {
   try {
-    const { examsAdd = [], examsRemove = [], chaptersAdd = [], chaptersRemove = [] } = req.body || {};
-    const add = db.prepare(`INSERT OR IGNORE INTO starred_pyqs (userId, kind, examId, subjectId, chapterId) VALUES (?, ?, ?, ?, ?)`);
-    const del = db.prepare(`DELETE FROM starred_pyqs WHERE userId = ? AND kind = ? AND examId = ? AND subjectId IS ? AND chapterId IS ?`);
-    const delChapter = db.prepare(`DELETE FROM starred_pyqs WHERE userId = ? AND kind = 'chapter' AND examId = ? AND subjectId = ? AND chapterId = ?`);
+    const {
+      examsAdd = [],
+      examsRemove = [],
+      chaptersAdd = [],
+      chaptersRemove = [],
+    } = req.body || {};
+    const add = db.prepare(
+      `INSERT OR IGNORE INTO starred_pyqs (userId, kind, examId, subjectId, chapterId) VALUES (?, ?, ?, ?, ?)`
+    );
+    const del = db.prepare(
+      `DELETE FROM starred_pyqs WHERE userId = ? AND kind = ? AND examId = ? AND subjectId IS ? AND chapterId IS ?`
+    );
+    const delChapter = db.prepare(
+      `DELETE FROM starred_pyqs WHERE userId = ? AND kind = 'chapter' AND examId = ? AND subjectId = ? AND chapterId = ?`
+    );
     const tx = db.transaction(() => {
-      for (const id of examsAdd) add.run(req.userId, 'exam', String(id), null, null);
-      for (const id of examsRemove) del.run(req.userId, 'exam', String(id), null, null);
-      for (const it of chaptersAdd) add.run(req.userId, 'chapter', String(it.examId), String(it.subjectId), String(it.chapterId));
-      for (const it of chaptersRemove) delChapter.run(req.userId, String(it.examId), String(it.subjectId), String(it.chapterId));
+      for (const id of examsAdd)
+        add.run(req.userId, "exam", String(id), null, null);
+      for (const id of examsRemove)
+        del.run(req.userId, "exam", String(id), null, null);
+      for (const it of chaptersAdd)
+        add.run(
+          req.userId,
+          "chapter",
+          String(it.examId),
+          String(it.subjectId),
+          String(it.chapterId)
+        );
+      for (const it of chaptersRemove)
+        delChapter.run(
+          req.userId,
+          String(it.examId),
+          String(it.subjectId),
+          String(it.chapterId)
+        );
     });
     tx();
     res.json({ success: true });
   } catch (e) {
-    res.status(500).json({ error: 'Failed to update starred' });
+    res.status(500).json({ error: "Failed to update starred" });
   }
 });
 
@@ -1570,12 +2484,20 @@ app.post("/api/pyqs/starred/bulk", (req, res) => {
 app.post("/api/pyqs/bookmarks", (req, res) => {
   try {
     if (!req.userId) return res.status(401).json({ error: "Unauthorized" });
-    const { examId, subjectId, chapterId, questionIndex, tagId } = req.body || {};
+    const { examId, subjectId, chapterId, questionIndex, tagId } =
+      req.body || {};
     if (
-      !examId || !subjectId || !chapterId ||
-      questionIndex === undefined || questionIndex === null || !tagId
+      !examId ||
+      !subjectId ||
+      !chapterId ||
+      questionIndex === undefined ||
+      questionIndex === null ||
+      !tagId
     ) {
-      return res.status(400).json({ error: "examId, subjectId, chapterId, questionIndex, and tagId are required" });
+      return res.status(400).json({
+        error:
+          "examId, subjectId, chapterId, questionIndex, and tagId are required",
+      });
     }
     const idx = Number(questionIndex);
     if (!Number.isFinite(idx) || idx < 0)
@@ -1587,10 +2509,19 @@ app.post("/api/pyqs/bookmarks", (req, res) => {
         INSERT INTO pyqs_bookmarks (userId, examId, subjectId, chapterId, questionIndex, tagId)
         VALUES (?, ?, ?, ?, ?, ?)
       `
-      ).run(req.userId, String(examId), String(subjectId), String(chapterId), idx, String(tagId));
+      ).run(
+        req.userId,
+        String(examId),
+        String(subjectId),
+        String(chapterId),
+        idx,
+        String(tagId)
+      );
     } catch (e) {
       if (e && e.code === "SQLITE_CONSTRAINT_PRIMARYKEY") {
-        return res.status(400).json({ error: "Question already bookmarked with this tag" });
+        return res
+          .status(400)
+          .json({ error: "Question already bookmarked with this tag" });
       }
       throw e;
     }
@@ -1773,7 +2704,7 @@ app.get("/api/question-marks/:assignmentId/:questionIndex", (req, res) => {
     `
       )
       .get(req.userId, assignmentId, questionIndex);
-    if (!row) return res.status(404).json({ error: "Not found" });
+    if (!row) return res.status(200).json({});
     res.json(row);
   } catch (e) {
     console.error("get question-mark:", e);
@@ -2017,15 +2948,17 @@ app.post("/api/state/:assignmentId", auth, async (req, res) => {
   const stateText = JSON.stringify(state);
   try {
     db.prepare(
-    `
+      `
     INSERT INTO states (userId, assignmentId, state)
     VALUES (?, ?, ?)
     ON CONFLICT(userId, assignmentId) DO UPDATE SET state = excluded.state
   `
     ).run(req.userId, assignmentId, stateText);
   } catch (e) {
-    if (e && e.code === 'SQLITE_CONSTRAINT_FOREIGNKEY') {
-      return res.status(401).json({ error: "Invalid session. Please log in again." });
+    if (e && e.code === "SQLITE_CONSTRAINT_FOREIGNKEY") {
+      return res
+        .status(401)
+        .json({ error: "Invalid session. Please log in again." });
     }
     throw e;
   }
@@ -2408,7 +3341,7 @@ app.get(
           String(chapterId),
           questionIndex
         );
-      if (!row) return res.status(404).json({ error: "Not found" });
+      if (!row) return res.status(200).json({});
       res.json(row);
     } catch (e) {
       console.error("pyqs get question-mark:", e);
