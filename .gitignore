@@ -31,3 +31,5 @@ utils/scraper/output/
 
 backend/dbbackupold
 backend/uploads
+backend/pyqs_assets
+backend/pyqs_assets.tar
