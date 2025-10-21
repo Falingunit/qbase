@@ -207,13 +207,17 @@ export function renderChaptersView(els, state, chapters, { onToggleStar, progres
       } catch {}
       els.content.innerHTML = "";
       els.content.appendChild(grid);
-      // Apply any provided progress immediately, then always fetch fresh
+      // Apply any provided progress immediately to both grids, then always fetch fresh
       try {
         if (progressMap && typeof progressMap === 'object') {
           applyProgressToBars(grid, progressMap);
+          if (els.starredChaptersGrid) applyProgressToBars(els.starredChaptersGrid, progressMap);
         }
         fetchSubjectProgress(state.exam.id, state.subject?.id)
-          .then((map) => applyProgressToBars(grid, map))
+          .then((map) => {
+            applyProgressToBars(grid, map);
+            if (els.starredChaptersGrid) applyProgressToBars(els.starredChaptersGrid, map);
+          })
           .catch(() => {});
       } catch {}
       checkEmpty(els.content);
