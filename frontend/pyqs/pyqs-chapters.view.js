@@ -120,11 +120,24 @@ export function renderSidebarSubjects(state, { onSelectSubject }) {
   } catch {}
   try {
     if (examIcon && state.exam?.icon) {
-      examIcon.src = state.exam.icon;
+      if (examIcon && state.exam?.icon) {
+        examIcon.loading = "lazy";
+        examIcon.decoding = "async";
+        examIcon.referrerPolicy = "no-referrer"; // NEW
+        examIcon.crossOrigin = "anonymous"; // NEW
+        examIcon.src = state.exam.icon;
+        examIcon.onerror = () => {
+          examIcon.onerror = null;
+          examIcon.src = ICON_FALLBACK;
+        };
+      }
       examIcon.alt = (state.exam?.name || "") + " icon";
       examIcon.loading = "lazy";
       examIcon.decoding = "async";
-      examIcon.onerror = () => { examIcon.onerror = null; examIcon.src = ICON_FALLBACK; };
+      examIcon.onerror = () => {
+        examIcon.onerror = null;
+        examIcon.src = ICON_FALLBACK;
+      };
     }
   } catch {}
   try {
@@ -152,8 +165,13 @@ export function renderSidebarSubjects(state, { onSelectSubject }) {
     ico.alt = "";
     ico.loading = "lazy";
     ico.decoding = "async";
+    ico.referrerPolicy = "no-referrer";
+    ico.crossOrigin = "anonymous";   
     ico.src = s.icon || ICON_FALLBACK;
-    ico.onerror = () => { ico.onerror = null; ico.src = ICON_FALLBACK; };
+    ico.onerror = () => {
+      ico.onerror = null;
+      ico.src = ICON_FALLBACK;
+    };
     const nm = document.createElement("span");
     nm.textContent = s.name;
     btn.append(ico, nm);
@@ -163,7 +181,12 @@ export function renderSidebarSubjects(state, { onSelectSubject }) {
   });
 }
 
-export function renderChaptersView(els, state, chapters, { onToggleStar, progressMap } = {}) {
+export function renderChaptersView(
+  els,
+  state,
+  chapters,
+  { onToggleStar, progressMap } = {}
+) {
   buildToolbar(
     els.toolbar,
     (ctx) => {
@@ -194,7 +217,9 @@ export function renderChaptersView(els, state, chapters, { onToggleStar, progres
 
       const grid = document.createElement("div");
       grid.className = "as-grid fade-in";
-      list.forEach((ch) => grid.appendChild(chapterCard(state, ch, { onToggleStar })));
+      list.forEach((ch) =>
+        grid.appendChild(chapterCard(state, ch, { onToggleStar }))
+      );
 
       try {
         const line = document.getElementById("pyqs-count-line");
@@ -209,14 +234,16 @@ export function renderChaptersView(els, state, chapters, { onToggleStar, progres
       els.content.appendChild(grid);
       // Apply any provided progress immediately to both grids, then always fetch fresh
       try {
-        if (progressMap && typeof progressMap === 'object') {
+        if (progressMap && typeof progressMap === "object") {
           applyProgressToBars(grid, progressMap);
-          if (els.starredChaptersGrid) applyProgressToBars(els.starredChaptersGrid, progressMap);
+          if (els.starredChaptersGrid)
+            applyProgressToBars(els.starredChaptersGrid, progressMap);
         }
         fetchSubjectProgress(state.exam.id, state.subject?.id)
           .then((map) => {
             applyProgressToBars(grid, map);
-            if (els.starredChaptersGrid) applyProgressToBars(els.starredChaptersGrid, map);
+            if (els.starredChaptersGrid)
+              applyProgressToBars(els.starredChaptersGrid, map);
           })
           .catch(() => {});
       } catch {}
@@ -251,7 +278,10 @@ function chapterCard(state, chapter, { onToggleStar }) {
     chapter.icon ||
     (chapter.icon_name ? CHAPTER_ICON_BASE + chapter.icon_name : ICON_FALLBACK);
   img.src = iconUrl;
-  img.onerror = () => { img.onerror = null; img.src = ICON_FALLBACK; };
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = ICON_FALLBACK;
+  };
   icoWrap.appendChild(img);
   const info = document.createElement("div");
   info.className = "flex-grow-1";
@@ -319,14 +349,18 @@ function _schedule(task) {
   return new Promise((resolve, reject) => {
     const run = async () => {
       _inFlight++;
-      try { resolve(await task()); } catch (e) { reject(e); }
-      finally {
+      try {
+        resolve(await task());
+      } catch (e) {
+        reject(e);
+      } finally {
         _inFlight--;
         const next = _queue.shift();
         if (next) next();
       }
     };
-    if (_inFlight < _MAX_CONCURRENT) run(); else _queue.push(run);
+    if (_inFlight < _MAX_CONCURRENT) run();
+    else _queue.push(run);
   });
 }
 
@@ -334,7 +368,9 @@ async function fetchChapterStates(examId, subjectId, chapterId) {
   const key = `${examId}__${subjectId}__${chapterId}`;
   if (_stateCache.has(key)) return _stateCache.get(key);
   const p = _schedule(async () => {
-    const url = `${API_BASE}/api/pyqs/state/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
+    const url = `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+      examId
+    )}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
     const r = await authFetch(url).catch(() => null);
     const data = r && r.ok ? await r.json() : [];
     return normalizeStates(data);
@@ -347,10 +383,12 @@ async function fetchBulkPrefs(examId, subjectId) {
   const key = `${examId}__${subjectId}`;
   if (_bulkPrefsCache.has(key)) return _bulkPrefsCache.get(key);
   const p = _schedule(async () => {
-    const url = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`;
+    const url = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(
+      examId
+    )}/${encodeURIComponent(subjectId)}`;
     const r = await authFetch(url).catch(() => null);
     const data = r && r.ok ? await r.json() : {};
-    return data && typeof data === 'object' ? data : {};
+    return data && typeof data === "object" ? data : {};
   });
   _bulkPrefsCache.set(key, p);
   return p;
@@ -360,16 +398,24 @@ async function fetchBulkStates(examId, subjectId) {
   const key = `${examId}__${subjectId}`;
   if (_bulkStateCache.has(key)) return _bulkStateCache.get(key);
   const p = _schedule(async () => {
-    const url = `${API_BASE}/api/pyqs/state/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`;
+    const url = `${API_BASE}/api/pyqs/state/${encodeURIComponent(
+      examId
+    )}/${encodeURIComponent(subjectId)}`;
     const r = await authFetch(url).catch(() => null);
     const data = r && r.ok ? await r.json() : {};
-    return data && typeof data === 'object' ? data : {};
+    return data && typeof data === "object" ? data : {};
   });
   _bulkStateCache.set(key, p);
   return p;
 }
 
-async function updateChapterProgressBar(host, examId, subjectId, chapterId, totalQuestions) {
+async function updateChapterProgressBar(
+  host,
+  examId,
+  subjectId,
+  chapterId,
+  totalQuestions
+) {
   try {
     const totalFallback = Math.max(0, Number(totalQuestions || 0)) || 0;
 
@@ -383,15 +429,28 @@ async function updateChapterProgressBar(host, examId, subjectId, chapterId, tota
     let filters = { ...defaults, ...(prefsMap?.[chapterId] || {}) };
     let states = normalizeStates(statesMap?.[chapterId] || []);
     if (!Array.isArray(states) || states.length === 0) {
-      try { states = await fetchChapterStates(examId, subjectId, chapterId); } catch { states = []; }
+      try {
+        states = await fetchChapterStates(examId, subjectId, chapterId);
+      } catch {
+        states = [];
+      }
     }
-    let questions = Array.isArray(metaMap?.[chapterId]) ? metaMap[chapterId] : null;
+    let questions = Array.isArray(metaMap?.[chapterId])
+      ? metaMap[chapterId]
+      : null;
     if (!questions) {
-      questions = await fetchQuestionsMeta(examId, subjectId, chapterId).catch(() => []);
+      questions = await fetchQuestionsMeta(examId, subjectId, chapterId).catch(
+        () => []
+      );
     }
 
     const parseYear = (pyqInfo) => {
-      try { const m = String(pyqInfo || "").match(/(19|20)\d{2}/); return m ? Number(m[0]) : null; } catch { return null; }
+      try {
+        const m = String(pyqInfo || "").match(/(19|20)\d{2}/);
+        return m ? Number(m[0]) : null;
+      } catch {
+        return null;
+      }
     };
     const normDiff = (d) => {
       const s = String(d || "").toLowerCase();
@@ -412,14 +471,22 @@ async function updateChapterProgressBar(host, examId, subjectId, chapterId, tota
       return "not-started";
     };
 
-    let mapped = (Array.isArray(questions) ? questions : []).map((q, i) => ({ q, i }));
+    let mapped = (Array.isArray(questions) ? questions : []).map((q, i) => ({
+      q,
+      i,
+    }));
     if (filters.q) {
       const qq = String(filters.q).trim().toLowerCase();
-      mapped = mapped.filter((o) => (o.q.qText || "").toLowerCase().includes(qq));
+      mapped = mapped.filter((o) =>
+        (o.q.qText || "").toLowerCase().includes(qq)
+      );
     }
     if (Array.isArray(filters.years) && filters.years.length) {
       const set = new Set(filters.years);
-      mapped = mapped.filter((o) => { const y = parseYear(o.q.pyqInfo); return y && set.has(y); });
+      mapped = mapped.filter((o) => {
+        const y = parseYear(o.q.pyqInfo);
+        return y && set.has(y);
+      });
     }
     if (filters.diff) {
       mapped = mapped.filter((o) => normDiff(o.q.diffuculty) === filters.diff);
@@ -428,12 +495,17 @@ async function updateChapterProgressBar(host, examId, subjectId, chapterId, tota
     if (filters.status) {
       mapped = mapped.filter((o) => {
         const s = statusFromState(states[o.i]);
-        return s === filters.status || (filters.status === "completed" && states[o.i]?.isAnswerEvaluated);
+        return (
+          s === filters.status ||
+          (filters.status === "completed" && states[o.i]?.isAnswerEvaluated)
+        );
       });
     }
 
     const total = mapped.length || 0;
-    let green = 0, red = 0, grey = 0;
+    let green = 0,
+      red = 0,
+      grey = 0;
     if (total > 0) {
       for (const o of mapped) {
         const s = statusFromState(states[o.i]);
@@ -457,9 +529,15 @@ async function updateChapterProgressBar(host, examId, subjectId, chapterId, tota
     if (gEl) gEl.style.width = `${gPct.toFixed(2)}%`;
     if (rEl) rEl.style.width = `${rPct.toFixed(2)}%`;
     if (grEl) grEl.style.width = `${grPct.toFixed(2)}%`;
-    try { host.title = total ? `${green} correct • ${red} incorrect • ${grey} pending (${total} in filter)` : "No questions in filter"; } catch {}
+    try {
+      host.title = total
+        ? `${green} correct • ${red} incorrect • ${grey} pending (${total} in filter)`
+        : "No questions in filter";
+    } catch {}
   } catch (e) {
-    try { host.title = "Progress unavailable"; } catch {}
+    try {
+      host.title = "Progress unavailable";
+    } catch {}
   }
 }
 
@@ -469,10 +547,12 @@ async function fetchSubjectProgress(examId, subjectId) {
   const key = `${examId}__${subjectId}`;
   if (_subjectProgressCache.has(key)) return _subjectProgressCache.get(key);
   const p = _schedule(async () => {
-    const url = `${API_BASE}/api/pyqs/progress/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}`;
+    const url = `${API_BASE}/api/pyqs/progress/${encodeURIComponent(
+      examId
+    )}/${encodeURIComponent(subjectId)}`;
     const r = await authFetch(url).catch(() => null);
     const data = r && r.ok ? await r.json() : {};
-    return data && typeof data === 'object' ? data : {};
+    return data && typeof data === "object" ? data : {};
   });
   _subjectProgressCache.set(key, p);
   return p;
@@ -480,24 +560,31 @@ async function fetchSubjectProgress(examId, subjectId) {
 
 function applyProgressToBars(container, progressMap) {
   try {
-    container.querySelectorAll('.pyqs-chapbar').forEach((host) => {
+    container.querySelectorAll(".pyqs-chapbar").forEach((host) => {
       const chId = host.dataset.chapterId;
       const rec = progressMap?.[chId];
       const total = Math.max(0, Number(rec?.total || 0));
       const green = Math.max(0, Number(rec?.green || 0));
       const red = Math.max(0, Number(rec?.red || 0));
-      const grey = Math.max(0, Number(rec?.grey || Math.max(0, total - green - red)));
+      const grey = Math.max(
+        0,
+        Number(rec?.grey || Math.max(0, total - green - red))
+      );
       const denom = total > 0 ? total : 1;
       const gPct = (green * 100) / denom;
       const rPct = (red * 100) / denom;
       const grPct = total > 0 ? Math.max(0, 100 - gPct - rPct) : 100;
-      const gEl = host.querySelector('.seg-green');
-      const rEl = host.querySelector('.seg-red');
-      const grEl = host.querySelector('.seg-grey');
+      const gEl = host.querySelector(".seg-green");
+      const rEl = host.querySelector(".seg-red");
+      const grEl = host.querySelector(".seg-grey");
       if (gEl) gEl.style.width = `${gPct.toFixed(2)}%`;
       if (rEl) rEl.style.width = `${rPct.toFixed(2)}%`;
       if (grEl) grEl.style.width = `${grPct.toFixed(2)}%`;
-      try { host.title = total ? `${green} correct • ${red} incorrect • ${grey} pending (${total} in filter)` : 'No questions in filter'; } catch {}
+      try {
+        host.title = total
+          ? `${green} correct • ${red} incorrect • ${grey} pending (${total} in filter)`
+          : "No questions in filter";
+      } catch {}
     });
   } catch {}
 }

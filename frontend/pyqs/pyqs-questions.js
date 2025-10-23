@@ -851,6 +851,8 @@
     wrap.setAttribute("aria-label", meta.alt || "image");
 
     const img = document.createElement("img");
+    img.referrerPolicy = "no-referrer";
+    img.crossOrigin = "anonymous";
     img.src = meta.url;
     img.alt = meta.alt || "";
     img.draggable = false;
@@ -1494,12 +1496,14 @@
 
           // Allow Esc to exit the notes editor (blur CodeMirror)
           try {
-            notesMDE.codemirror.on('keydown', function (cm, ev) {
+            notesMDE.codemirror.on("keydown", function (cm, ev) {
               try {
-                if (ev && (ev.key === 'Escape' || ev.key === 'Esc')) {
+                if (ev && (ev.key === "Escape" || ev.key === "Esc")) {
                   ev.preventDefault();
                   ev.stopPropagation();
-                  try { cm.getInputField()?.blur(); } catch {}
+                  try {
+                    cm.getInputField()?.blur();
+                  } catch {}
                 }
               } catch {}
             });
@@ -1925,8 +1929,12 @@
             // Fetch all PYQs marks for this chapter and delete them one by one
             try {
               const listResp = await authFetch(
-                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`,
-                { cache: 'no-store' }
+                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+                  ids.examId
+                )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+                  ids.chapterId
+                )}`,
+                { cache: "no-store" }
               );
               if (listResp.ok) {
                 const arr = await listResp.json();
@@ -1936,8 +1944,12 @@
                     if (!Number.isNaN(qi)) {
                       try {
                         await authFetch(
-                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}/${qi}`,
-                          { method: 'DELETE' }
+                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+                            ids.examId
+                          )}/${encodeURIComponent(
+                            ids.subjectId
+                          )}/${encodeURIComponent(ids.chapterId)}/${qi}`,
+                          { method: "DELETE" }
                         );
                       } catch {}
                     }
@@ -1948,7 +1960,10 @@
           } else {
             // Regular assignment fallback: clear all marks for this assignment
             try {
-              const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+              const listResp = await authFetch(
+                `${API_BASE}/api/question-marks`,
+                { cache: "no-store" }
+              );
               if (listResp.ok) {
                 const all = await listResp.json();
                 const mine = Array.isArray(all)
@@ -1958,7 +1973,10 @@
                   const qi = Number(m?.questionIndex);
                   if (!Number.isNaN(qi)) {
                     try {
-                      await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' });
+                      await authFetch(
+                        `${API_BASE}/api/question-marks/${aID}/${qi}`,
+                        { method: "DELETE" }
+                      );
                     } catch {}
                   }
                 }
@@ -1974,8 +1992,12 @@
           if (!Number.isNaN(idx)) evaluateQuestionButtonColor(idx);
         });
         // Refresh color indicators and picker selection
-        try { updateColorIndicators(); } catch {}
-        try { updateColorPickerSelection(); } catch {}
+        try {
+          updateColorIndicators();
+        } catch {}
+        try {
+          updateColorPickerSelection();
+        } catch {}
         clickQuestionButton(0);
         dirty = false;
       } catch (e) {
@@ -2110,8 +2132,20 @@
   async function showReportDialog() {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const ids = (function(){ try { return window.__PYQS_IDS__ || null; } catch { return null; } })();
-      const metaNames = (function(){ try { return window.__PYQS_META__ || {}; } catch { return {}; } })();
+      const ids = (function () {
+        try {
+          return window.__PYQS_IDS__ || null;
+        } catch {
+          return null;
+        }
+      })();
+      const metaNames = (function () {
+        try {
+          return window.__PYQS_META__ || {};
+        } catch {
+          return {};
+        }
+      })();
       const reasons = [
         { id: "wrong-answer", label: "Answer seems incorrect" },
         { id: "wrong-solution", label: "Solution seems incorrect" },
@@ -2123,11 +2157,11 @@
       let bodyHTML = '<div class="mb-2">What\'s the issue?</div>';
       bodyHTML += '<div class="list-group mb-3">';
       reasons.forEach((r, i) => {
-        const checked = i === 0 ? 'checked' : '';
+        const checked = i === 0 ? "checked" : "";
         bodyHTML += `
           <label class=\"list-group-item list-group-item-action\">\n            <input class=\"form-check-input me-1\" type=\"radio\" name=\"rep-reason\" value=\"${r.id}\" ${checked}>\n            ${r.label}\n          </label>`;
       });
-      bodyHTML += '</div>';
+      bodyHTML += "</div>";
       bodyHTML += `
         <div class=\"mb-1\"><strong>Additional details (optional)</strong></div>
         <textarea id=\"rep-notes\" class=\"form-control\" rows=\"3\" placeholder=\"Add any details that can help...\"></textarea>
@@ -2136,7 +2170,7 @@
       // Override with required PYQs report options and required details
       try {
         bodyHTML = "";
-        bodyHTML += "<div class=\"mb-2\">What's the issue?</div>";
+        bodyHTML += '<div class="mb-2">What\'s the issue?</div>';
         bodyHTML += '<div class="list-group mb-3">';
         const _opts = [
           "Typographical or Formatting Error",
@@ -2147,7 +2181,7 @@
           const checked = i === 0 ? "checked" : "";
           bodyHTML += `\n<label class=\"list-group-item list-group-item-action\">\n  <input class=\"form-check-input me-1\" type=\"radio\" name=\"rep-reason\" value=\"${label}\" ${checked}>\n  ${label}\n</label>`;
         }
-        bodyHTML += '</div>';
+        bodyHTML += "</div>";
         bodyHTML += `\n<div class=\"mb-1\"><strong>Report Details (required)</strong></div>\n<textarea id=\"rep-notes\" class=\"form-control\" rows=\"3\" placeholder=\"Describe the issue...\"></textarea>`;
       } catch {}
 
@@ -2164,10 +2198,17 @@
       if (modal !== "submit") return;
 
       const modalEl = document.getElementById("qbaseModal");
-      const reason = (modalEl.querySelector('input[name="rep-reason"]:checked')?.value || "").trim();
-      const message = String(modalEl.querySelector('#rep-notes')?.value || "").trim();
+      const reason = (
+        modalEl.querySelector('input[name="rep-reason"]:checked')?.value || ""
+      ).trim();
+      const message = String(
+        modalEl.querySelector("#rep-notes")?.value || ""
+      ).trim();
       if (!message) {
-        await uiNotice("Please enter report details.", "Report Details Required");
+        await uiNotice(
+          "Please enter report details.",
+          "Report Details Required"
+        );
         return;
       }
 
@@ -2808,19 +2849,25 @@
       try {
         const btn = document.getElementById("report-btn");
         if (!btn) return;
-        const ids = (function(){ try { return window.__PYQS_IDS__ || null; } catch { return null; } })();
+        const ids = (function () {
+          try {
+            return window.__PYQS_IDS__ || null;
+          } catch {
+            return null;
+          }
+        })();
         if (!ids) return;
         const p = new URLSearchParams();
-        p.set('kind','pyqs');
-        p.set('examId', ids.examId);
-        p.set('subjectId', ids.subjectId);
-        p.set('chapterId', ids.chapterId);
-        p.set('questionIndex', String(originalIdx));
+        p.set("kind", "pyqs");
+        p.set("examId", ids.examId);
+        p.set("subjectId", ids.subjectId);
+        p.set("chapterId", ids.chapterId);
+        p.set("questionIndex", String(originalIdx));
         const url = `${API_BASE}/api/report/blocked?${p.toString()}`;
         const r = await authFetch(url);
         if (!r.ok) return;
         const j = await r.json();
-        btn.style.display = j.blocked ? 'none' : '';
+        btn.style.display = j.blocked ? "none" : "";
       } catch {}
     })();
 
@@ -2963,13 +3010,17 @@
           const picked = getUserSelection(questionState, "SMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
-          try { showSolution(question); } catch {}
+          try {
+            showSolution(question);
+          } catch {}
         } else if (question.qType === "MMCQ") {
           const correct = normalizeAnswer(question);
           const picked = getUserSelection(questionState, "MMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
-          try { showSolution(question); } catch {}
+          try {
+            showSolution(question);
+          } catch {}
         } else if (question.qType === "Numerical") {
           const ans = normalizeAnswer(question);
           const user = getUserSelection(questionState, "Numerical");
@@ -3102,7 +3153,9 @@
       }
 
       if (!response) {
-        response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${originalIdx}`);
+        response = await authFetch(
+          `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        );
         if (response.status === 401) {
           try {
             window.dispatchEvent(new Event("qbase:force-login"));
@@ -3139,7 +3192,10 @@
           try {
             window.dispatchEvent(new Event("qbase:force-login"));
           } catch {}
-          await uiNotice("Please log in to manage bookmarks.", "Login required");
+          await uiNotice(
+            "Please log in to manage bookmarks.",
+            "Login required"
+          );
           return;
         }
         throw new Error(`HTTP ${response.status}`);
@@ -3442,7 +3498,10 @@
             try {
               window.dispatchEvent(new Event("qbase:force-login"));
             } catch {}
-            await uiNotice("Please log in to bookmark questions.", "Login required");
+            await uiNotice(
+              "Please log in to bookmark questions.",
+              "Login required"
+            );
             return false;
           }
           if (respPyqs.ok) {
@@ -3466,7 +3525,10 @@
         try {
           window.dispatchEvent(new Event("qbase:force-login"));
         } catch {}
-        await uiNotice("Please log in to bookmark questions.", "Login required");
+        await uiNotice(
+          "Please log in to bookmark questions.",
+          "Login required"
+        );
         return false;
       }
       if (!response.ok) {
@@ -3505,7 +3567,10 @@
             try {
               window.dispatchEvent(new Event("qbase:force-login"));
             } catch {}
-            await uiNotice("Please log in to manage bookmarks.", "Login required");
+            await uiNotice(
+              "Please log in to manage bookmarks.",
+              "Login required"
+            );
             return false;
           }
           if (respPyqs.ok) {
@@ -3920,7 +3985,9 @@
         } catch {}
       }
       if (!res) {
-        res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+        res = await authFetch(`${API_BASE}/api/bookmarks`, {
+          cache: "no-store",
+        });
       }
       if (!res || !res.ok) {
         questionButtons?.forEach((btn) => {
@@ -3932,7 +3999,12 @@
       }
       const all = await res.json();
       let mine;
-      if (ids && Array.isArray(all) && all.length && all[0]?.examId !== undefined) {
+      if (
+        ids &&
+        Array.isArray(all) &&
+        all.length &&
+        all[0]?.examId !== undefined
+      ) {
         // PYQs bookmarks payload
         mine = all.filter(
           (b) =>
@@ -4189,48 +4261,64 @@
   (function wireColorHotkeys() {
     function isTypingContext() {
       try {
-        const ae = document.activeElement; if (!ae) return false;
-        const tag = String(ae.tagName || '').toLowerCase();
-        if (tag === 'input' || tag === 'textarea') return true;
+        const ae = document.activeElement;
+        if (!ae) return false;
+        const tag = String(ae.tagName || "").toLowerCase();
+        if (tag === "input" || tag === "textarea") return true;
         if (ae.isContentEditable) return true;
       } catch {}
       return false;
     }
     function overlayOpen() {
       try {
-        const el = document.getElementById('image-overlay');
+        const el = document.getElementById("image-overlay");
         if (!el) return false;
         const s = getComputedStyle(el);
-        return s.display !== 'none';
+        return s.display !== "none";
       } catch {}
       return false;
     }
     const COLOR_VALUES = {
-      blue: '#0d6efd',
-      red: '#dc3545',
-      yellow: '#ffc107',
-      green: '#198754',
-      clear: 'none',
+      blue: "#0d6efd",
+      red: "#dc3545",
+      yellow: "#ffc107",
+      green: "#198754",
+      clear: "none",
     };
-    const getHK = () => { try { return window.qbGetHotkeys ? window.qbGetHotkeys() : null; } catch { return null; } };
-    window.addEventListener('keydown', async (e) => {
+    const getHK = () => {
+      try {
+        return window.qbGetHotkeys ? window.qbGetHotkeys() : null;
+      } catch {
+        return null;
+      }
+    };
+    window.addEventListener("keydown", async (e) => {
       try {
         if (overlayOpen()) return;
         if (isTypingContext()) return;
-        const matches = (arr) => (window.qbMatches && getHK() && arr) ? window.qbMatches(e, arr) : false;
+        const matches = (arr) =>
+          window.qbMatches && getHK() && arr ? window.qbMatches(e, arr) : false;
         let action = null;
-        if (matches(getHK()?.colorBlue)) action = 'blue';
-        else if (matches(getHK()?.colorRed)) action = 'red';
-        else if (matches(getHK()?.colorYellow)) action = 'yellow';
-        else if (matches(getHK()?.colorGreen)) action = 'green';
-        else if (matches(getHK()?.colorClear)) action = 'clear';
+        if (matches(getHK()?.colorBlue)) action = "blue";
+        else if (matches(getHK()?.colorRed)) action = "red";
+        else if (matches(getHK()?.colorYellow)) action = "yellow";
+        else if (matches(getHK()?.colorGreen)) action = "green";
+        else if (matches(getHK()?.colorClear)) action = "clear";
         if (!action) return;
         e.preventDefault();
         if (currentQuestionID == null) return;
         const val = COLOR_MAP[k];
         let ok = true;
-        if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
-        if (ok) { try { updateColorIndicators(); } catch {} try { updateColorPickerSelection(); } catch {} }
+        if (val === "none") ok = await clearQuestionColor();
+        else ok = await setQuestionColor(val);
+        if (ok) {
+          try {
+            updateColorIndicators();
+          } catch {}
+          try {
+            updateColorPickerSelection();
+          } catch {}
+        }
       } catch {}
     });
   })();
