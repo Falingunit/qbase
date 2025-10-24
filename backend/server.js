@@ -3,6 +3,8 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import { MathMLToLaTeX } from 'mathml-to-latex';
+
 import Database from "better-sqlite3";
 import { nanoid } from "nanoid";
 import jwt from "jsonwebtoken";
@@ -149,13 +151,35 @@ function sendJsonWithCache(req, res, obj, maxAgeSec = 600) {
 
 function reqOrigin(req) {
   try {
-    const proto = ("https")
-      .split(",")[0]
-      .trim();
+    const proto = "https".split(",")[0].trim();
     const host = req.get("host");
     return `${proto}://${host}`;
   } catch {
     return "";
+  }
+}
+
+function sanitizeLatex(latex) {
+  return latex
+    .replace(/\\left\{\s*\\right\./g, "\\{")  // simplify '{'
+    .replace(/\\left\.\s*\\right\}/g, "\\}")  // simplify '}'
+    .replace(/\\left\.\s*\\right\./g, "");    // remove redundant empty pairs
+}
+
+function replaceMathMLWithLatex(input) {
+  try {
+    if (!input || typeof input !== "string") return input || "";
+    return input.replace(/<math\b[\s\S]*?<\/math>/gi, (m) => {
+      try {
+        const latex = sanitizeLatex(MathMLToLaTeX.convert(m) || "");
+        const isBlock = /\bdisplay\s*=\s*["']?block["']?/i.test(m);
+        return isBlock ? `\\[${latex}\\]` : `\\(${latex}\\)`;
+      } catch (e){
+        return m;
+      }
+    });
+  } catch {
+    return input || "";
   }
 }
 
@@ -189,17 +213,21 @@ function absolutizeQuestion(q, req) {
     if (out.solution.sImage)
       out.solution.sImage = toAbsoluteAsset(out.solution.sImage, req);
     if (out.solution.sText)
-      out.solution.sText = absolutizeHtml(out.solution.sText, req);
+      out.solution.sText = replaceMathMLWithLatex(
+        absolutizeHtml(out.solution.sText, req)
+      );
   }
   if (Array.isArray(out.options)) {
     out.options = out.options.map((o) => {
       const oo = { ...o };
       if (oo.oImage) oo.oImage = toAbsoluteAsset(oo.oImage, req);
-      if (oo.oText) oo.oText = absolutizeHtml(oo.oText, req);
+      if (oo.oText)
+        oo.oText = replaceMathMLWithLatex(absolutizeHtml(oo.oText, req));
       return oo;
     });
   }
-  if (out.qText) out.qText = absolutizeHtml(out.qText, req);
+  if (out.qText)
+    out.qText = replaceMathMLWithLatex(absolutizeHtml(out.qText, req));
   return out;
 }
 
