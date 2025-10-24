@@ -149,7 +149,7 @@ function sendJsonWithCache(req, res, obj, maxAgeSec = 600) {
 
 function reqOrigin(req) {
   try {
-    const proto = (req.headers["x-forwarded-proto"] || req.protocol || "http")
+    const proto = ("https")
       .split(",")[0]
       .trim();
     const host = req.get("host");
@@ -2315,7 +2315,6 @@ app.get("/api/report/blocked", (req, res) => {
     res.status(500).json({ error: "check failed" });
   }
 });
-
 
 // ---------- Admin APIs ----------
 app.get("/api/admin/reports", adminOnly, (req, res) => {
