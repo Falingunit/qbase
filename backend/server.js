@@ -166,10 +166,56 @@ function sanitizeLatex(latex) {
     .replace(/\\left\.\s*\\right\./g, "");    // remove redundant empty pairs
 }
 
+function escapeTexSpecialsInsideTextBlocks(latex) {
+  try {
+    if (!latex || typeof latex !== "string") return latex || "";
+    const s = String(latex);
+    let i = 0;
+    let out = "";
+    const cmd = "\\text{";
+    while (i < s.length) {
+      const idx = s.indexOf(cmd, i);
+      if (idx === -1) {
+        out += s.slice(i);
+        break;
+      }
+      out += s.slice(i, idx);
+      // Find matching closing '}' accounting for nested braces and escapes
+      let j = idx + cmd.length; // start of inner
+      let depth = 1;
+      while (j < s.length && depth > 0) {
+        const ch = s[j];
+        if (ch === "\\") {
+          // skip escaped next char
+          j += 2;
+          continue;
+        }
+        if (ch === "{") depth++;
+        else if (ch === "}") depth--;
+        j++;
+      }
+      // j now points just past the closing '}' or end
+      const inner = s.slice(idx + cmd.length, Math.max(idx + cmd.length, j - 1));
+      const escaped = inner
+        // Escape alignment and other TeX specials inside text blocks only
+        .replace(/&/g, "\\&")
+        .replace(/%/g, "\\%")
+        .replace(/#/g, "\\#")
+        .replace(/\$/g, "\\$")
+        .replace(/_/g, "\\_");
+      out += cmd + escaped + "}";
+      i = j;
+    }
+    return out;
+  } catch {
+    return latex || "";
+  }
+}
+
 function replaceMathMLWithLatex(input) {
   try {
     if (!input || typeof input !== "string") return input || "";
-    return input.replace(/<math\b[\s\S]*?<\/math>/gi, (m) => {
+    const converted = input.replace(/<math\b[\s\S]*?<\/math>/gi, (m) => {
       try {
         const latex = sanitizeLatex(MathMLToLaTeX.convert(m) || "");
         const isBlock = /\bdisplay\s*=\s*["']?block["']?/i.test(m);
@@ -178,6 +224,8 @@ function replaceMathMLWithLatex(input) {
         return m;
       }
     });
+    // Additionally, escape TeX specials inside \text{...} blocks so KaTeX doesn't treat them as alignment points
+    return escapeTexSpecialsInsideTextBlocks(converted);
   } catch {
     return input || "";
   }
@@ -1039,7 +1087,7 @@ app.get(
                 (Array.isArray(q?.previousYearPapers) &&
                   q.previousYearPapers[0]?.title) ||
                 "",
-              qText: q?.question?.text || "",
+              qText: replaceMathMLWithLatex(q?.question?.text || ""),
             };
             if (!fields.has("text")) {
               const { qText, ...rest } = base;
@@ -1055,7 +1103,7 @@ app.get(
                 (Array.isArray(q?.previousYearPapers) &&
                   q.previousYearPapers[0]?.title) ||
                 "",
-              qText: q?.question?.text || "",
+              qText: replaceMathMLWithLatex(q?.question?.text || ""),
             };
             const opts = Array.isArray(q?.options) ? q.options : [];
             const correctLetters = [];
@@ -1071,13 +1119,13 @@ app.get(
               ...base,
               qImage: q?.question?.image || "",
               options: opts.map((o) => ({
-                oText: o?.text || "",
+                oText: replaceMathMLWithLatex(o?.text || ""),
                 oImage: o?.image || "",
               })),
               correctAnswer:
                 q?.type === "numerical" ? q?.correctValue : correctLetters,
               solution: {
-                sText: q?.solution?.text || "",
+                sText: replaceMathMLWithLatex(q?.solution?.text || ""),
                 sImage: q?.solution?.image || "",
               },
             };
@@ -1332,7 +1380,7 @@ function gmToMeta(q) {
       (Array.isArray(q?.previousYearPapers) &&
         q.previousYearPapers[0]?.title) ||
       "",
-    qText: q?.question?.text || "",
+    qText: replaceMathMLWithLatex(q?.question?.text || ""),
   };
 }
 
@@ -1475,10 +1523,10 @@ app.get(
                   (Array.isArray(q?.previousYearPapers) &&
                     q.previousYearPapers[0]?.title) ||
                   "",
-                qText: q?.question?.text || "",
+                qText: replaceMathMLWithLatex(q?.question?.text || ""),
                 qImage: q?.question?.image || "",
                 options: (Array.isArray(q?.options) ? q.options : []).map(
-                  (o) => ({ oText: o?.text || "", oImage: o?.image || "" })
+                  (o) => ({ oText: replaceMathMLWithLatex(o?.text || ""), oImage: o?.image || "" })
                 ),
                 correctAnswer:
                   q?.type === "numerical"
@@ -1494,7 +1542,7 @@ app.get(
                         []
                       ),
                 solution: {
-                  sText: q?.solution?.text || "",
+                  sText: replaceMathMLWithLatex(q?.solution?.text || ""),
                   sImage: q?.solution?.image || "",
                 },
               }
