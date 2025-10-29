@@ -1,0 +1,1028 @@
+{
+  "questions": [
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Wavelength of the light used in YDSE is 500 nm. Distance between the slits ‘d’ = 2 mm where as D = 4 m. Parallel beam is light is incident on the slits at an angle of \\(\\theta = 30^\\circ\\) (see figure). Find: I. The location of the central maxima on the screen II. The order of bright fringe at point O III. Fringe width of the pattern formed on the screen near O. IV. Location of 10th order bright fringe on either side of central maxima.",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "I. The location of the central maxima on the screen (choose the correct value).",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{4}{\\sqrt{3}}\\) mm",
+        "2 mm",
+        "3 mm",
+        "\\(\\dfrac{4}{3}\\) mm"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P1",
+      "qText": "II. The order of bright fringe at point O.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2000
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P1",
+      "qText": "III. Fringe width of the pattern formed on the screen near O (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P1",
+      "qText": "IV-a. Location of 10th order bright fringe on one side of central maxima (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2.293
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P1",
+      "qText": "IV-b. Location of 10th order bright fringe on the other side of central maxima (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2.324
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "Wavelength of the light used in YDSE is 600 nm. Distance between the slits ‘d’ = 2.5 mm whereas D = 2 m. Parallel beam is light is incident on the slits at an angle of \\(\\theta\\) such that \\(\\sin\\theta = \\tfrac{25\\lambda}{6d}\\). \\(I_0\\) is the intensity of the light due to one slit. Find: I. The location of the central maxima on the screen. II. The intensity at the point O. III. Fringe width of the pattern formed on the screen near O. IV. Location of 10th order bright fringe on either side of central maxima. V. Y–coordinate of the nearest brightest spots on either side of O.",
+      "image": "p2.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "I. The location of the central maxima on the screen (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "II. The intensity at the point O (in units of \\(I_0\\)).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 3
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "III. Fringe width of the pattern formed on the screen near O (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.48
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "IV-a. Location of 10th order bright fringe on one side of central maxima (y in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6.8
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "IV-b. Location of 10th order bright fringe on the other side of central maxima (y in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": -2.8
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "V-a. Y–coordinate of the nearest brightest spot on one side of O (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.08
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P2",
+      "qText": "V-b. Y–coordinate of the nearest brightest spot on the other side of O (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": -0.4
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the shown Young’s double slit experiment, the central maxima is formed at",
+      "image": "3.png",
+      "qOptions": [
+        "2d below ‘O’.",
+        "2d above ‘O’",
+        "‘d’ above ‘O’",
+        "none of these"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P3",
+      "qText": "In the YDSE the monochromatic source of wavelength \\(\\lambda\\) is placed at a distance \\(\\tfrac{d}{2}\\) from the central axis (as shown in the figure), where d is the separation between the two slits \\(S_1\\) and \\(S_2\\). (a) find the position of the central maxima (b) find the order of interference formed at O. (c) now S is placed on centre dotted line. Find the minimum thickness of the film of refractive index \\(\\mu = 1.5\\) to be placed infront of \\(S_2\\) so that intensity at O becomes \\(\\tfrac{3}{4}\\)th of the maximum intensity. Take \\(\\lambda = 6000\\,\\text{\\AA}\\); \\(d = 6\\,\\text{mm}\\).",
+      "image": "p3.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "(a) Position of the central maxima relative to O (answer as distance in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 4
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "(b) Order of interference formed at O.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 20
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P3",
+      "qText": "(c) Minimum thickness of the film so that intensity at O becomes \\(\\tfrac{3}{4}\\) of maximum (answer in \\u212B).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2000
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the adjacent diagram, CP represent a wavefront and AO and BP, the corresponding two rays. Find the condition on \\(\\theta\\) for constructive interference at P between the ray BP and reflected ray OP.",
+      "image": "5.png",
+      "qOptions": [
+        "cos\\(\\theta\\) = \\(\\tfrac{3\\lambda}{2d}\\)",
+        "cos\\(\\theta\\) = \\(\\tfrac{\\lambda}{4d}\\)",
+        "sec\\(\\theta\\) − cos\\(\\theta\\) = \\(\\tfrac{\\lambda}{d}\\)",
+        "sec\\(\\theta\\) − cos\\(\\theta\\) = \\(\\tfrac{4\\lambda}{d}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "In a modified Young’s double slit experiment (\\(\\lambda = 6000\\,\\text{\\AA}\\)) the zero order maxima and tenth order maxima fall at 12.34 mm and 14.73 mm on a screen from a particular reference point. If \\(\\lambda\\) is changed to 5000 \\(\\text{\\AA}\\), find the new position of the zero–order maxima, other arrangements remaining unchanged (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 12.34
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "In the same setup of Q6, find the new position of the 10th order maxima when \\(\\lambda\\) is changed to 5000 \\(\\text{\\AA}\\) (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 14.33
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P4",
+      "qText": "In the figure shown, \\(Z_1\\) and \\(Z_2\\) are two screens. Line PO is the bisector line of \\(S_1S_2\\) and \\(S_3S_4\\). When \\(Z_1\\) is removed, resultant intensity at O due to slits \\(S_1\\) and \\(S_2\\) is \\(I\\). Now \\(Z_1\\) is placed. For different values of y given in column I, match the resultant intensity at O given in column II.",
+      "image": "7.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "For A: \\(y = \\tfrac{\\lambda D}{2d}\\). Match the resultant intensity at O.",
+      "image": null,
+      "qOptions": [
+        "3I",
+        "Zero",
+        "I",
+        "None of these"
+      ],
+      "qAnswer": "Q"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "For B: \\(y = \\tfrac{\\lambda D}{6d}\\). Match the resultant intensity at O.",
+      "image": null,
+      "qOptions": [
+        "3I",
+        "Zero",
+        "I",
+        "None of these"
+      ],
+      "qAnswer": "P"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "For C: \\(y = \\tfrac{\\lambda D}{4d}\\). Match the resultant intensity at O.",
+      "image": null,
+      "qOptions": [
+        "3I",
+        "Zero",
+        "I",
+        "None of these"
+      ],
+      "qAnswer": "S"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P4",
+      "qText": "For D: \\(y = \\tfrac{\\lambda D}{3d}\\). Match the resultant intensity at O.",
+      "image": null,
+      "qOptions": [
+        "3I",
+        "Zero",
+        "I",
+        "None of these"
+      ],
+      "qAnswer": "R"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Light of wavelength \\(\\lambda\\) in air enters a medium of refractive index \\(\\mu\\). Two points in this medium, lying along the path of this light, are at distance x apart. The phase difference between these points is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{2\\pi}{\\mu\\,\\lambda}x\\)",
+        "\\(\\dfrac{1}{\\mu}\\cdot\\dfrac{2\\pi}{\\lambda}x\\)",
+        "\\((\\mu-1)\\dfrac{2\\pi}{\\lambda}x\\)",
+        "\\(\\dfrac{1}{(\\mu-1)}\\dfrac{2\\pi}{\\lambda}x\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A double slit apparatus is immersed in a liquid of R.I 1.33. It has slit separation of 0.7 mm and distance between plane of the slits and screen is 4 m. Slits are illuminated by a parallel beam of light whose wavelength in air is 6300 \\(\\text{\\AA}\\). The observed fringe width is",
+      "image": null,
+      "qOptions": [
+        "1.4 mm",
+        "1.8 mm",
+        "2.7 mm",
+        "no fringe are formed"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Young’s double slit experiment is performed inside water (\\(\\mu=\\tfrac{4}{3}\\)) with light of frequency \\(6\\times10^{14}\\,\\text{Hz}\\). If the slits are separated by 0.2 mm and the screen kept 1 m from the slits, find the fringe width (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.5
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Using the same set–up as in Q10, what will be the fringe width if the experiment is performed in air (in mm)?",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.875
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a double-slit experiment, when the set up is shifted from air to inside of a still, clear lake of water, the fringe pattern",
+      "image": null,
+      "qOptions": [
+        "gets shrunk",
+        "gets enlarged",
+        "remains unchanged",
+        "gets shifted"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If one of the two slits of a standard Young's double slit experiment is covered by a thin parallel sided glass slab so that it transmits only half the light intensity of the other, then",
+      "image": null,
+      "qOptions": [
+        "the fringe system will get shifted towards the covered slit",
+        "the fringe system will get shifted away from the covered slit",
+        "the bright fringes will be less bright and the darkness will be more bright",
+        "the fringe width will remain unchanged"
+      ],
+      "qAnswer": [
+        "A",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plate of thickness t made of a material of refractive index \\(\\mu\\) is placed in front of one of the slits in a double slit experiment. What should be the minimum thickness t which will make the intensity at the centre of the fringe pattern zero?",
+      "image": null,
+      "qOptions": [
+        "\\((\\mu-1)\\dfrac{\\lambda}{2}\\)",
+        "\\((\\mu-1)\\lambda\\)",
+        "\\(\\dfrac{\\lambda}{2(\\mu-1)}\\)",
+        "\\(\\dfrac{\\lambda}{\\mu-1}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Monochromatic light of wavelength 5890 \\(\\text{\\AA}\\) is used in YDSE. If one of the slit is covered by a transparent sheet (\\(\\mu = 1.3\\)) of thickness \\(1.4\\times 10^{-5}\\,\\text{m}\\), then number of fringes shifted is",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light of wavelength 5000 \\(\\text{\\AA}\\) falls on two slits spaced by a distance of 1 mm and screen is 1 m away. If a plate of thickness 1 \\(\\mu\\)m and R.I. \\(\\tfrac{3}{2}\\) is placed in front of one of the slits, the fringes formed get displaced by",
+      "image": null,
+      "qOptions": [
+        "1 cm",
+        "0.5 cm",
+        "0.5 mm",
+        "0.1 mm"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Light travels through a glass plate of thickness t and refractive index \\(\\mu\\). If c is the speed of light in vacuum then the time taken by light to travel through the glass plate is",
+      "image": null,
+      "qOptions": [
+        "\\(\\mu t c\\)",
+        "\\(\\dfrac{t c}{\\mu}\\)",
+        "\\(\\dfrac{t}{\\mu c}\\)",
+        "\\(\\dfrac{\\mu t}{c}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In ideal YDSE, when a glass-plate (refractive index 1.5) is introduced in the path of one of the interfering beams (wavelength \\(\\lambda\\)), the intensity at the position where the central maximum occurred previously remains unchanged. Find the minimum thickness of the glass-plate. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{\\lambda}{\\mu-1}\\)",
+        "\\(\\dfrac{\\lambda}{2(\\mu-1)}\\)",
+        "\\(\\dfrac{\\lambda}{\\mu}\\)",
+        "\\(\\dfrac{\\lambda}{2\\mu}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a Young's double slit experiment, the fringes are displaced by a distance x when a glass plate of refractive index 1.5 is introduced in the path of one of the beams. When this plate is replaced by another plate of same thickness, the shift of fringes is \\((3/2)x\\). The refractive index of second plate is",
+      "image": null,
+      "qOptions": [
+        "1.75",
+        "1.50",
+        "1.25",
+        "1.00"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the figure a mica sheet of thickness t and refractive index \\(\\mu\\) is first placed in front of \\(S_1\\). If the sheet is removed from this position and placed in front of \\(S_2\\), find the number of fringes crossing O. (Options are made-up distractors; one is correct.)",
+      "image": "19.png",
+      "qOptions": [
+        "\\(\\dfrac{2t(\\mu-1)}{\\lambda}\\)",
+        "\\(\\dfrac{t(\\mu-1)}{\\lambda}\\)",
+        "\\(\\dfrac{2t\\mu}{\\lambda}\\)",
+        "\\(\\dfrac{t\\mu}{\\lambda}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Interference fringes are produced by a double slit arrangement and a piece of plane parallel glass of refractive index 1.5 is introduced in one of the interfering beams. If the fringes are displaced through 30 fringe widths for light of wavelength \\(6\\times10^{-5}\\,\\text{cm}\\), and if the thickness of the plate is \\(t\\times10^{-4}\\,\\text{cm}\\) then find the value of \\(t/6\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "YDSE setup is arranged in a medium of refractive index \\(\\mu\\). When a transparent slab of R.I. 1.2 is kept in front of the upper slit, central maxima shifts to a point A below the centre. If instead, a transparent slab of double thickness and double refractive index is put in front of the lower slit, central maxima is again formed at A. Find \\(\\mu\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P5",
+      "qText": "A double slit apparatus is immersed in a liquid of refractive index 1.33. It has slit separation of 1 mm and distance between the plane of slits and screen 1.33 m. The slits are illuminated by a parallel beam of light whose wavelength in air is 6300 \\(\\text{\\AA}\\). (a) Calculate the fringe width. (b) One of the slits of the apparatus is covered by a thin glass sheet of refractive index 1.53. Find the smallest thickness of the sheet to bring the adjacent minima on the axis.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(a) Fringe width (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.63
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P5",
+      "qText": "(b) Smallest thickness of the sheet (in \\u00B5m).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.575
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P6",
+      "qText": "In the YDSE apparatus shown, \\(\\Delta x\\) is the path difference between \\(S_1P\\) and \\(S_2P\\). Now a glass slab is introduced in front of \\(S_2\\); match Column I with Column II.",
+      "image": "23.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "A. \\(\\Delta x\\) at P will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "B. Fringe width will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "C. Fringe pattern will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "E"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P6",
+      "qText": "D. Number of fringes between O and P will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a double-slit experiment, when the set up is shifted from air to inside of a still, clear lake of water, the fringe pattern",
+      "image": null,
+      "qOptions": [
+        "gets shrunk",
+        "gets enlarged",
+        "remains unchanged",
+        "gets shifted"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "If one of the two slits of a standard Young's double slit experiment is covered by a thin parallel sided glass slab so that it transmits only half the light intensity of the other, then",
+      "image": null,
+      "qOptions": [
+        "the fringe system will get shifted towards the covered slit",
+        "the fringe system will get shifted away from the covered slit",
+        "the bright fringes will be less bright and the darkness will be more bright",
+        "the fringe width will remain unchanged"
+      ],
+      "qAnswer": [
+        "A",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A plate of thickness t made of a material of refractive index \\(\\mu\\) is placed in front of one of the slits in a double slit experiment. What should be the minimum thickness t which will make the intensity at the centre of the fringe pattern zero?",
+      "image": null,
+      "qOptions": [
+        "\\((\\mu-1)\\dfrac{\\lambda}{2}\\)",
+        "\\((\\mu-1)\\lambda\\)",
+        "\\(\\dfrac{\\lambda}{2(\\mu-1)}\\)",
+        "\\(\\dfrac{\\lambda}{\\mu-1}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Monochromatic light of wavelength 5890 \\(\\text{\\AA}\\) is used in YDSE. If one of the slit is covered by a transparent sheet (\\(\\mu = 1.3\\)) of thickness \\(1.4\\times 10^{-5}\\,\\text{m}\\), then number of fringes shifted is",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light of wavelength 5000 \\(\\text{\\AA}\\) falls on two slits spaced by a distance of 1 mm and the screen kept 1 m from the slits. If a plate of thickness 1 \\(\\mu\\)m and R.I. \\(\\tfrac{3}{2}\\) is placed in front of one of the slits then the fringes formed get displaced by",
+      "image": null,
+      "qOptions": [
+        "1 cm",
+        "0.5 cm",
+        "0.5 mm",
+        "0.1 mm"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Light travels through a glass plate of thickness t and refractive index \\(\\mu\\). If c is the speed of light in vacuum then the time taken by light to travel through the glass plate is",
+      "image": null,
+      "qOptions": [
+        "\\(\\mu t c\\)",
+        "\\(\\dfrac{t c}{\\mu}\\)",
+        "\\(\\dfrac{t}{\\mu c}\\)",
+        "\\(\\dfrac{\\mu t}{c}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In the ideal Young's double-slit experiment, when a glass-plate (refractive index 1.5) is introduced in the path of one of the interfering beams (wavelength \\(\\lambda\\)), the intensity at the position where the central maximum occurred previously remains unchanged. Find the minimum thickness of the glass-plate. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{\\lambda}{\\mu-1}\\)",
+        "\\(\\dfrac{\\lambda}{2(\\mu-1)}\\)",
+        "\\(\\dfrac{\\lambda}{\\mu}\\)",
+        "\\(\\dfrac{\\lambda}{2\\mu}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a Young's double Slit Experiment with a mica sheet of thickness t and refractive index \\(\\mu\\) introduced in front of \\(S_1\\). If the mica sheet is removed from the earlier position and placed in front of \\(S_2\\), find the number of fringes crossing O. (Options are made-up distractors; one is correct.)",
+      "image": "19.png",
+      "qOptions": [
+        "\\(\\dfrac{2t(\\mu-1)}{\\lambda}\\)",
+        "\\(\\dfrac{t(\\mu-1)}{\\lambda}\\)",
+        "\\(\\dfrac{2t\\mu}{\\lambda}\\)",
+        "\\(\\dfrac{t\\mu}{\\lambda}\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "In a double slit arrangement, a glass of refractive index 1.5 is introduced in one path. If the fringes are displaced through 30 fringe widths for light of wavelength \\(6\\times10^{-5}\\,\\text{cm}\\), and the thickness of the plate is \\(t\\times10^{-4}\\,\\text{cm}\\), find \\(t/6\\).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "YDSE setup is arranged in a medium of refractive index \\(\\mu\\). When a transparent slab of R.I 1.2 is kept in front of the upper slit, central maxima shifted from centre point of the screen to a point A below the center point. If instead, a transparent slab of double the thickness and double the refractive index is put in front of the lower slit, central maxima was again formed at A. Find the refractive index \\(\\mu\\) of the medium.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P7",
+      "qText": "A double slit apparatus is immersed in a liquid of refractive index 1.33. It has slit separation of 1 mm and distance between the plane of slits and screen 1.33 m. The slits are illuminated by a parallel beam of light whose wavelength in air is 6300 \\(\\text{\\AA}\\). (a) Calculate the fringe width. (b) One of the slits of the apparatus is covered by a thin glass sheet of refractive index 1.53. Find the smallest thickness of the sheet to bring the adjacent minima on the axis.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P7",
+      "qText": "(a) Fringe width (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.63
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P7",
+      "qText": "(b) Smallest thickness of the sheet (in \\u00B5m).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.575
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P8",
+      "qText": "In the YDSE apparatus shown in figure, \\(\\Delta x\\) is the path difference between \\(S_1P\\) and \\(S_2P\\). Now a glass slab is introduced in front of \\(S_2\\). Match the following.",
+      "image": "23.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "A. \\(\\Delta x\\) at P will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "B. Fringe width will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "C. Fringe pattern will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "E"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P8",
+      "qText": "D. Number of fringes between O and P will",
+      "image": null,
+      "qOptions": [
+        "Increase",
+        "Decrease",
+        "Remain same",
+        "Shift upward",
+        "Shift downward"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "Fringes are produced using light of wavelength \\(\\lambda = 4800\\,\\text{\\AA}\\) in a double-slit experiment. One slit is covered by a thin glass plate of refractive index 1.4 and the other slit by another plate of the same thickness but refractive index 1.7. During this process, the central bright fringe shifts to a position originally occupied by the fifth bright fringe from the centre. Find the thickness of each glass plate (in \\u00B5m).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2.4
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P9",
+      "qText": "In a YDSE experiment, the distance between the slits & the screen is 100 cm. For a certain distance between the slits, an interference pattern is observed on the screen with the fringe width 0.25 mm. When the distance between the slits is increased by \\(\\Delta d = 1.2\\,\\text{mm}\\), the fringe width decreased to \\(n = 2/3\\) of the original value. In the final position, a thin glass plate (\\(\\mu=1.5\\)) is kept in front of one of the slits & the shift of central maximum is observed to be 20 fringe width. Find the thickness of the plate & wavelength of the incident light.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P9",
+      "qText": "Thickness of the plate (in \\u00B5m).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 2.4
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P9",
+      "qText": "Wavelength of the incident light in air (in nm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 600
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "In a YDSE setup with \\(\\bar{\\lambda}=5000\\,\\text{\\AA}\\), slit separation \\(5\\times10^{-4}\\,\\text{m}\\) and screen at 1 m, a glass plate (thickness \\(1.5\\times10^{-6}\\,\\text{m}\\), \\(\\mu=1.5\\)) is placed in front of one slit. Find the intensity at the centre relative to \\(I_0\\) (give numeric value for \\(I/I_0\\)).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "A transparent slab of thickness t and refractive index \\(\\mu\\) is inserted in front of upper slit of YDSE apparatus. Assume no absorption. Mark the correct statement(s).",
+      "image": null,
+      "qOptions": [
+        "The intensity of dark fringes will be zero, if slits are identical",
+        "The change in optical path due to insertion of plate is \\(\\mu t\\)",
+        "The change in optical path due to insertion of plate is \\((\\mu-1)t\\)",
+        "For making intensity zero at the centre of the screen, the thickness can be \\(\\dfrac{5\\lambda}{2(\\mu-1)}\\)"
+      ],
+      "qAnswer": [
+        "A",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P10",
+      "qText": "In a young experiment the light source is at distance \\(\\ell_1 = 20\\,\\mu\\text{m}\\) and \\(\\ell_2 = 40\\,\\mu\\text{m}\\) from the slits. The light of wavelength \\(\\lambda = 500\\,\\text{nm}\\) incident on slits separated at a distance 10 \\(\\mu\\)m. A screen is placed at distance \\(D = 2\\) m away from the slits as shown. Find: (a) the angular positions relative to the central line do maxima appear on the screen? (b) how many maxima will appear on the screen? (c) What should be minimum thickness of a slab of refractive index 1.5 be placed on the path of one of the rays so that minima occure at C?",
+      "image": "30.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P10",
+      "qText": "(a) Angular positions of maxima relative to central line (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(\\sin^{-1}\\!\\left(\\dfrac{n\\lambda}{d}\\right)\\)",
+        "\\(\\tan^{-1}\\!\\left(\\dfrac{n\\lambda}{d}\\right)\\)",
+        "\\(\\sin^{-1}\\!\\left(\\dfrac{\\lambda}{nd}\\right)\\)",
+        "\\(\\cos^{-1}\\!\\left(\\dfrac{n\\lambda}{d}\\right)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P10",
+      "qText": "(b) Number of maxima that will appear on the screen.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 39
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P10",
+      "qText": "(c) The wavelength that would make minima occur at C (in nm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 500
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P11",
+      "qText": "In the figure shown a screen is placed normal to the line joining two point coherent sources \\(S_1\\) and \\(S_2\\). The interference pattern consists of concentric circles. (a) find the radius of the nth bright ring. (b) if \\(d=0.5\\,\\text{mm}\\), \\(\\lambda=5000\\,\\text{\\AA}\\) and \\(D=100\\,\\text{cm}\\), find the radius of the closest second bright ring. (c) also, find the value of n for this ring.",
+      "image": "31.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P11",
+      "qText": "(a) Radius of the nth bright ring. (Options are made-up distractors; one is correct.)",
+      "image": null,
+      "qOptions": [
+        "\\(D\\sqrt{2}\\,\\Big(1-\\dfrac{n\\lambda}{d}\\Big)\\)",
+        "\\(D\\sqrt{2}\\,\\Big(1+\\dfrac{n\\lambda}{d}\\Big)\\)",
+        "\\(D\\,\\Big(1-\\dfrac{n\\lambda}{d}\\Big)\\)",
+        "\\(\\dfrac{D}{\\sqrt{2}}\\,\\Big(1-\\dfrac{n\\lambda}{d}\\Big)\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P11",
+      "qText": "(b) Radius of the closest second bright ring (in mm).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.0632
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P11",
+      "qText": "(c) Value of n for the ring in part (b).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 998
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P12",
+      "qText": "A narrow slit S transmitting light of wavelength \\(\\lambda\\) is placed a distance d above a large plane mirror. The light coming directly from the slit and that coming after reflection from the mirror interfere at a screen \\(\\Sigma\\) placed at a distance D from the slit. Assume the mirror is 100% reflecting and \\(d\\ll D\\). Match Column-I with Column-II (given \\(D=1\\,\\text{m}, d=\\lambda\\)).",
+      "image": "32.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P12",
+      "qText": "A. Distance from O where first interference maximum is formed on screen.",
+      "image": null,
+      "qOptions": [
+        "0",
+        "1/4",
+        "1/2",
+        "1",
+        "1/8"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P12",
+      "qText": "B. Distance from O where closest interference minimum is formed on screen.",
+      "image": null,
+      "qOptions": [
+        "0",
+        "1/4",
+        "1/2",
+        "1",
+        "1/8"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P12",
+      "qText": "C. Fringe width of the interference pattern.",
+      "image": null,
+      "qOptions": [
+        "0",
+        "1/4",
+        "1/2",
+        "1",
+        "1/8"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P12",
+      "qText": "D. Closest point to O on screen where waves interfere with a phase difference of \\(\\pi/2\\).",
+      "image": null,
+      "qOptions": [
+        "0",
+        "1/4",
+        "1/2",
+        "1",
+        "1/8"
+      ],
+      "qAnswer": "E"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P13",
+      "qText": "The arrangement of the Lloyd’s mirror experiment is shown: ‘S’ is a point source of frequency \\(6\\times10^{14}\\,\\text{Hz}\\). A and B represent the two ends of a mirror placed horizontally, and LOM represents the screen. Determine the position of the region where the fringes will be visible and calculate the number of fringes.",
+      "image": "33.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P13",
+      "qText": "Visible fringe region starts at (in cm from O).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1.9
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P13",
+      "qText": "Visible fringe region ends at (in cm from O).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 3.9
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P13",
+      "qText": "Total number of fringes visible in this region.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 40
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A long narrow horizontal slit lies 1 mm above a plane mirror. The interference pattern produced by the slit and its image is viewed on a screen at distance 1 m from the slit. The wavelength of light is 600 nm. Then the distance of the first maxima above the mirror is equal to:",
+      "image": "34.png",
+      "qOptions": [
+        "0.3 mm",
+        "0.15 mm",
+        "60 mm",
+        "7.5 mm"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Numerical",
+      "passageId": null,
+      "qText": "In a Young's experiment the upper slit is covered by a thin glass plate of refractive index 1.4 while the lower slit is covered by another glass plate of the same thickness but refractive index 1.7. Using light of wavelength 5400 \\(\\text{\\AA}\\), it is found that the point P on the screen where the central maximum fell before the plates were inserted now has 3/4 the original intensity. Also, what used to be the fifth maximum earlier now lies below P while the sixth minimum lies above P. Calculate the thickness of the glass plate t (in \\u00B5m).",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 9.3
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P14",
+      "qText": "Light of wavelength \\(\\lambda = 500\\,\\text{nm}\\) falls on two narrow slits placed a distance \\(d = 50\\times 10^{-4}\\,\\text{cm}\\) apart, at an angle \\(\\phi = 30^\\circ\\) relative to the slits as shown in figure. On the lower slit a transparent slab of thickness 0.1\\,\\text{mm} and refractive index \\(\\tfrac{3}{2}\\) is placed. The interference pattern is observed on a distance \\(D = 2\\,\\text{m}\\) from the slits. Then calculate: (a) Position of the central maxima; (b) the order of maxima at point C of screen; (c) how many fringes will pass C, if we remove the transparent slab from the lower slit?",
+      "image": "p14.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P14",
+      "qText": "(b) The order of maxima at point C of screen.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 50
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P14",
+      "qText": "(c) How many fringes will pass C, if we remove the transparent slab from the lower slit?",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 50
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P15",
+      "qText": "In a YDSE, a parallel beam of light of wavelength \\(6000\\,\\text{\\AA}\\) is incident on slits at angle of incidence \\(30^\\circ\\). A and B are two thin transparent films, each of refractive index 1.5. Thickness of A is \\(20.4\\,\\mu\\text{m}\\). Light coming through A and B have intensities \\(I\\) and \\(4I\\) respectively on the screen. Intensity at point O, which is symmetric relative to the slits, is \\(3I\\). The central maximum is above O. I. What is the maximum thickness of B to do so? Assuming thickness of B to be that found in part (a) answer the following parts: II. Find fringe width, maximum intensity and minimum intensity on screen. III. Distance of nearest minimum from O. IV. Intensity at 5 cm on either side of O.",
+      "image": "p15.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P15",
+      "qText": "II. Fringe width on screen.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 6
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P15",
+      "qText": "I. What is the maximum thickness of B to do so?",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 0.12
+    },
+    {
+      "qType": "Numerical",
+      "passageId": "P15",
+      "qText": "III. Distance of nearest minimum from O.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": 1
+    }
+  ]
+}

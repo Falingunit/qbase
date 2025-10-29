@@ -181,7 +181,7 @@
     "title": "Optical Instruments",
     "aID": 205
   },
-   {
+  {
     "subject": "Chemistry",
     "faculty": "CVR",
     "chapter": "Electrochemistry",
@@ -193,9 +193,16 @@
     "faculty": "PGR",
     "chapter": "Wave Optics",
     "title": "YDSE Basics #1",
-    "aID": 207
+    "aID": 22
   },
-   {
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "YDSE Basics #2",
+    "aID": 23
+  },
+  {
     "subject": "Mathematics",
     "faculty": "MJG",
     "chapter": "Matrices and Determinants",
@@ -207,7 +214,14 @@
     "faculty": "PGR",
     "chapter": "Wave Optics",
     "title": "Polarization",
-    "aID": 210
+    "aID": 24
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "Diffraction",
+    "aID": 25
   },
   {
     "subject": "Chemistry",
@@ -216,6 +230,4 @@
     "title": "Galvanic Cell",
     "aID": 801
   }
-
-
 ]

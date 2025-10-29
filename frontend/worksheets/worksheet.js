@@ -9,6 +9,8 @@
     pages: document.getElementById("ws-pages"),
     side: document.getElementById("ws-side"),
     resizer: document.getElementById("ws-resizer"),
+    side: document.getElementById("ws-side"),
+    resizer: document.getElementById("ws-resizer"),
     answersWrap: document.getElementById("ws-answers-wrap"),
     answers: document.getElementById("ws-answers"),
     reset: document.getElementById("ws-reset"),
@@ -18,6 +20,7 @@
     markPrev: document.getElementById("mark-prev"),
     markNext: document.getElementById("mark-next"),
     markCount: document.getElementById("mark-count"),
+    markResults: document.getElementById("mark-results"),
     markResults: document.getElementById("mark-results"),
     ansMask: document.getElementById("ans-mask"),
     ansReveal: document.getElementById("ans-reveal"),
@@ -135,6 +138,22 @@
   function updateSideTopOnScroll() {
     const top = Math.max(0, baseSideTopOffset - window.scrollY);
     document.documentElement.style.setProperty("--ws-top-offset", top + "px");
+  }
+
+  async function loadWorksheet(id) {
+    const url = `./data/worksheets/${encodeURIComponent(id)}.json`;
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
+    const json = await r.json();
+    const pages = (json.pages || []).slice().sort(byFilename);
+    const answers = (json.answers || []).slice().sort(byFilename);
+    return { title: json.title || "Worksheet", pages, answers };
+  }
+
+  function byFilename(a, b) {
+    const fa = a.split("/").pop().toLowerCase();
+    const fb = b.split("/").pop().toLowerCase();
+    return fa.localeCompare(fb);
   }
 
   // loadWorksheet moved to WorksheetsService
