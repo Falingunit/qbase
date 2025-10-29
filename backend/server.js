@@ -449,6 +449,18 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (kind, assignmentId, examId, subjectId, chapterId, questionIndex)
   );
+
+  -- Per-user notifications
+  CREATE TABLE IF NOT EXISTS notifications (
+    id TEXT PRIMARY KEY,
+    userId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    body_md TEXT NOT NULL,
+    meta TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    read_at DATETIME,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -502,6 +514,29 @@ try {
     "question_reports.status migration check failed:",
     e?.message || e
   );
+}
+
+// Ensure notifications table has required columns if created earlier
+try {
+  const cols = db.prepare("PRAGMA table_info(notifications)").all();
+  const needCols = {
+    id: false,
+    userId: false,
+    title: false,
+    body_md: false,
+    meta: false,
+    created_at: false,
+    read_at: false,
+  };
+  for (const c of cols) {
+    const n = String(c?.name || "").toLowerCase();
+    if (n in needCols) needCols[n] = true;
+  }
+  // Add missing columns conservatively
+  if (!needCols["meta"]) db.exec("ALTER TABLE notifications ADD COLUMN meta TEXT");
+  if (!needCols["read_at"]) db.exec("ALTER TABLE notifications ADD COLUMN read_at DATETIME");
+} catch (e) {
+  console.warn("notifications migration check failed:", e?.message || e);
 }
 
 // Ensure admin user exists and can login with the specified credentials
@@ -2353,6 +2388,75 @@ app.post("/api/report", async (req, res) => {
   }
 });
 
+// ---------- Notifications (per-user) ----------
+// List notifications for current user (newest first)
+app.get("/api/notifications", (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT id, title, body_md, meta, created_at, read_at
+         FROM notifications WHERE userId = ?
+         ORDER BY datetime(created_at) DESC, id DESC`
+      )
+      .all(req.userId);
+    const out = rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      body_md: r.body_md,
+      meta: (() => {
+        try { return r.meta ? JSON.parse(r.meta) : null; } catch { return null; }
+      })(),
+      created_at: r.created_at,
+      read_at: r.read_at || null,
+    }));
+    res.json(out);
+  } catch (e) {
+    console.error("list notifications:", e);
+    res.status(500).json({ error: "Failed to load notifications" });
+  }
+});
+
+// Unread count for badge
+app.get("/api/notifications/unread-count", (req, res) => {
+  try {
+    const row = db
+      .prepare(
+        "SELECT COUNT(1) AS c FROM notifications WHERE userId = ? AND read_at IS NULL"
+      )
+      .get(req.userId);
+    res.json({ count: Number(row?.c || 0) });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to count" });
+  }
+});
+
+// Mark one notification read
+app.patch("/api/notifications/:id/read", (req, res) => {
+  try {
+    const id = String(req.params.id || "").trim();
+    if (!id) return res.status(400).json({ error: "id required" });
+    const r = db
+      .prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE id = ? AND userId = ?")
+      .run(id, req.userId);
+    if (!r.changes) return res.status(404).json({ error: "Not found" });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update" });
+  }
+});
+
+// Mark all read
+app.post("/api/notifications/mark-all-read", (req, res) => {
+  try {
+    db.prepare(
+      "UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE userId = ? AND read_at IS NULL"
+    ).run(req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update" });
+  }
+});
+
 // Check if a question is currently blocked from receiving reports
 app.get("/api/report/blocked", (req, res) => {
   try {
@@ -2475,6 +2579,58 @@ app.patch("/api/admin/reports/:id", adminOnly, (req, res) => {
     res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
+// List users (for targeting notifications)
+app.get("/api/admin/users", adminOnly, (req, res) => {
+  try {
+    const rows = db
+      .prepare("SELECT id, username FROM users ORDER BY username COLLATE NOCASE ASC")
+      .all();
+    res.json(rows.map((u) => ({ id: u.id, username: u.username })));
+  } catch (e) {
+    res.status(500).json({ error: "Failed to list users" });
+  }
+});
+
+// Send notifications (to list of users or broadcast)
+// Body: { title, body, userIds?: string[], all?: boolean, meta?: object }
+app.post("/api/admin/notifications", adminOnly, (req, res) => {
+  try {
+    const title = String(req.body?.title || "").trim();
+    const body = String(req.body?.body || req.body?.body_md || "").trim();
+    const meta = req.body?.meta || null;
+    const all = !!req.body?.all;
+    let userIds = Array.isArray(req.body?.userIds)
+      ? req.body.userIds.map((x) => String(x)).filter(Boolean)
+      : [];
+    if (!title) return res.status(400).json({ error: "title required" });
+    if (!body) return res.status(400).json({ error: "body required" });
+
+    if (all) {
+      const rows = db.prepare("SELECT id FROM users").all();
+      userIds = rows.map((r) => r.id);
+    }
+    // De-duplicate
+    userIds = Array.from(new Set(userIds));
+    if (!userIds.length)
+      return res.status(400).json({ error: "no recipients" });
+
+    const metaJson = meta ? JSON.stringify(meta) : null;
+    const insert = db.prepare(
+      "INSERT INTO notifications (id, userId, title, body_md, meta) VALUES (?, ?, ?, ?, ?)"
+    );
+    const tx = db.transaction((list) => {
+      for (const uid of list) {
+        insert.run(nanoid(), uid, title, body, metaJson);
+      }
+    });
+    tx(userIds);
+    res.json({ success: true, count: userIds.length });
+  } catch (e) {
+    console.error("admin send notifications:", e);
+    res.status(500).json({ error: "Failed to send notifications" });
   }
 });
 
