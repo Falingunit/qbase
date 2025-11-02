@@ -161,9 +161,25 @@ function reqOrigin(req) {
 
 function sanitizeLatex(latex) {
   return latex
+    // Simplify constructs that come from some MathML->LaTeX conversions
     .replace(/\\left\{\s*\\right\./g, "\\{")  // simplify '{'
     .replace(/\\left\.\s*\\right\}/g, "\\}")  // simplify '}'
     .replace(/\\left\.\s*\\right\./g, "");    // remove redundant empty pairs
+}
+
+// Fix common authoring mistakes that cause KaTeX parse errors
+// e.g., using "\\left{" instead of "\\left\\{" and "\\right}" instead of "\\right\\}"
+function fixCommonLatexErrors(input) {
+  try {
+    if (!input || typeof input !== "string") return input || "";
+    return String(input)
+      // Only add a backslash before { or } when they immediately follow \\left or \\right
+      // and are not already escaped. This avoids double escaping.
+      .replace(/\\left\s*\{/g, "\\left\\{")
+      .replace(/\\right\s*\}/g, "\\right\\}");
+  } catch {
+    return input || "";
+  }
 }
 
 function escapeTexSpecialsInsideTextBlocks(latex) {
@@ -224,8 +240,10 @@ function replaceMathMLWithLatex(input) {
         return m;
       }
     });
+    // Fix common delimiter mistakes globally (affects non-MathML LaTeX too)
+    const fixed = fixCommonLatexErrors(converted);
     // Additionally, escape TeX specials inside \text{...} blocks so KaTeX doesn't treat them as alignment points
-    return escapeTexSpecialsInsideTextBlocks(converted);
+    return escapeTexSpecialsInsideTextBlocks(fixed);
   } catch {
     return input || "";
   }
