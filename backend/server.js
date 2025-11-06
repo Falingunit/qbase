@@ -188,30 +188,40 @@ function escapeTexSpecialsInsideTextBlocks(latex) {
     const s = String(latex);
     let i = 0;
     let out = "";
-    const cmd = "\\text{";
+    const marker = "\\text"; // support "\\text{" and "\\text {"
     while (i < s.length) {
-      const idx = s.indexOf(cmd, i);
+      const idx = s.indexOf(marker, i);
       if (idx === -1) {
         out += s.slice(i);
         break;
       }
+      // copy everything up to "\\text"
       out += s.slice(i, idx);
-      // Find matching closing '}' accounting for nested braces and escapes
-      let j = idx + cmd.length; // start of inner
+      let j = idx + marker.length;
+      // allow optional whitespace between \text and '{'
+      while (j < s.length && /\s/.test(s[j])) j++;
+      // if not followed by '{', just emit literally and continue
+      if (s[j] !== "{") {
+        out += s.slice(idx, j);
+        i = j;
+        continue;
+      }
+      // we're at '{' — parse balanced braces
+      j++; // move past '{'
+      let k = j;
       let depth = 1;
-      while (j < s.length && depth > 0) {
-        const ch = s[j];
+      while (k < s.length && depth > 0) {
+        const ch = s[k];
         if (ch === "\\") {
           // skip escaped next char
-          j += 2;
+          k += 2;
           continue;
         }
         if (ch === "{") depth++;
         else if (ch === "}") depth--;
-        j++;
+        k++;
       }
-      // j now points just past the closing '}' or end
-      const inner = s.slice(idx + cmd.length, Math.max(idx + cmd.length, j - 1));
+      const inner = s.slice(j, Math.max(j, k - 1));
       const escaped = inner
         // Escape alignment and other TeX specials inside text blocks only
         .replace(/&/g, "\\&")
@@ -219,8 +229,8 @@ function escapeTexSpecialsInsideTextBlocks(latex) {
         .replace(/#/g, "\\#")
         .replace(/\$/g, "\\$")
         .replace(/_/g, "\\_");
-      out += cmd + escaped + "}";
-      i = j;
+      out += "\\text{" + escaped + "}";
+      i = k;
     }
     return out;
   } catch {
