@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "./worksheet_list.schema.json",
   "title": "QBase Worksheet Index",
-  "description": "Data source consumed by frontend/worksheet_index.js at ./data/worksheets/worksheet_list.json. Supports multiple shapes for convenience.",
+  "description": "Data source consumed by frontend/worksheets/index.js at ./data/worksheets/worksheet_list.json. Supports multiple shapes for convenience.",
   "oneOf": [
     { "$ref": "#/$defs/ArrayOfItems" },
     { "$ref": "#/$defs/WorksheetsObject" },
@@ -102,4 +102,3 @@
     }
   ]
 }
-

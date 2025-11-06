@@ -16,6 +16,10 @@
   /* Shape & layout */
   --radius: 16px;
   --container-max: 1100px;
+    color-scheme: dark;
+}
+select, input, textarea, button {
+  color-scheme: dark;
 }
 
 /* Base page background overlay (keeps Bootstrap body classes intact) */

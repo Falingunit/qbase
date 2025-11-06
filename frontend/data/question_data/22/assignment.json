@@ -411,7 +411,7 @@
     {
       "qType": "SMCQ",
       "passageId": null,
-      "qText": "Consider a usual set up of Young’s double slit experiment with slits of equal intensity as shown. If average intensity between \\(y_1=\\tfrac{\\lambda D}{4d}\\) and \\(y_2=+\\tfrac{\\lambda D}{4d}\\) equals 'n' times the intensity of maxima, then 'n' equals",
+      "qText": "Consider a usual set up of Young’s double slit experiment with slits of equal intensity as shown. If average intensity between \\(y_1=-\\tfrac{\\lambda D}{4d}\\) and \\(y_2=+\\tfrac{\\lambda D}{4d}\\) equals 'n' times the intensity of maxima, then 'n' equals",
       "image": "47.png",
       "qOptions": [
         "\\(\\tfrac{1}{2}\\left(1+\\tfrac{2}{\\pi}\\right)\\)",

@@ -1,7 +1,7 @@
 **Worksheets Guide**
 - **Location:** `frontend/data/worksheets/`
 - **Pages:** `frontend/worksheet.html` renders a single worksheet by `wID`
-- **Index:** `frontend/worksheet_index.html` lists worksheets from `./data/worksheets/worksheet_list.json`
+- **Index:** `frontend/worksheets.html` lists worksheets from `./data/worksheets/worksheet_list.json`
 
 **Overview**
 - **Manifest per worksheet:** `./data/worksheets/{wID}.json` describes the pages and optional answer images.
@@ -69,7 +69,7 @@
 - **3) Create the manifest:** Save `frontend/data/worksheets/{wID}.json` following the manifest schema.
 - **4) Add to the index:** Append an item to `frontend/data/worksheets/worksheet_list.json` with at least `subject`, `chapter`, `title`, and your `wID`.
 - **5) Test locally:**
-  - Index: open `/qbase/worksheet_index.html`
+  - Index: open `/qbase/worksheets.html`
   - Detail: open `/qbase/worksheet.html?wID={your-wID}`
 
 **Manage & Maintain**
@@ -86,4 +86,5 @@
   - `frontend/data/worksheets/worksheet.schema.json` for `{wID}.json`
   - `frontend/data/worksheets/worksheet_list.schema.json` for `worksheet_list.json`
 - Relative paths in your JSON are resolved under `/qbase/` when served (due to the `<base>` tag). Use `./data/...` style paths for assets within this repo, or absolute URLs.
+
 

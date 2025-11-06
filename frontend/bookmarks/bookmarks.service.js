@@ -1,5 +1,30 @@
 // Bookmarks service: logic + data (no DOM)
 (function(){
+  // Simple in-memory caches to avoid re-fetching the same data during a session
+  const _assignmentCache = new Map(); // key: Number(assignmentId) -> assignment data
+  const _pyqsCache = new Map();       // key: `${examId}__${subjectId}__${chapterId}` -> { examId, subjectId, chapterId, questions }
+
+  // Small utility to run async work with a concurrency cap
+  async function _runWithConcurrency(items, limit, worker) {
+    const arr = Array.from(items || []);
+    if (arr.length === 0) return [];
+    const results = new Array(arr.length);
+    let idx = 0;
+    const workers = new Array(Math.min(limit, arr.length)).fill(0).map(async () => {
+      while (true) {
+        const i = idx++;
+        if (i >= arr.length) break;
+        const item = arr[i];
+        try {
+          results[i] = await worker(item, i);
+        } catch {
+          results[i] = undefined;
+        }
+      }
+    });
+    await Promise.all(workers);
+    return results;
+  }
   async function fetchBookmarks() {
     const r = await authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' });
     if (!r.ok) {
@@ -81,18 +106,37 @@
   }
 
   async function fetchAssignmentDataForIds(ids) {
-    const map = new Map();
-    for (const id of ids) {
-      try {
-        const resp = await fetch(`./data/question_data/${id}/assignment.json`, { cache: 'no-store' });
-        if (resp.ok) {
-          const data = await resp.json();
-          processPassageQuestions(Array.isArray(data.questions) ? data.questions : []);
-          map.set(Number(id), data);
-        }
-      } catch {}
+    // Prepare results map and determine which IDs are missing from cache
+    const result = new Map();
+    const allIds = Array.from(ids || []);
+    const missing = [];
+    for (const id of allIds) {
+      const key = Number(id);
+      if (_assignmentCache.has(key)) {
+        result.set(key, _assignmentCache.get(key));
+      } else {
+        missing.push(key);
+      }
     }
-    return map;
+
+    // Fetch missing IDs with limited concurrency to speed up loads without overloading
+    if (missing.length > 0) {
+      const fetched = await _runWithConcurrency(missing, 8, async (key) => {
+        const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
+        if (!resp.ok) return undefined;
+        const data = await resp.json();
+        try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
+        return { key, data };
+      });
+
+      for (const item of fetched) {
+        if (!item) continue;
+        _assignmentCache.set(item.key, item.data);
+        result.set(item.key, item.data);
+      }
+    }
+
+    return result;
   }
 
   function mkPyqsKey(examId, subjectId, chapterId) {
@@ -100,18 +144,35 @@
   }
 
   async function fetchPyqsDataForKeys(keys) {
-    const map = new Map();
-    for (const key of keys) {
-      const [examId, subjectId, chapterId] = String(key).split('__');
-      try {
-        const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
-        if (r.ok) {
-          const data = await r.json();
-          map.set(key, { examId, subjectId, chapterId, questions: Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []) });
-        }
-      } catch {}
+    const result = new Map();
+    const all = Array.from(keys || []);
+    const missing = [];
+    for (const k of all) {
+      if (_pyqsCache.has(k)) {
+        result.set(k, _pyqsCache.get(k));
+      } else {
+        missing.push(k);
+      }
     }
-    return map;
+
+    if (missing.length > 0) {
+      const fetched = await _runWithConcurrency(missing, 6, async (key) => {
+        const [examId, subjectId, chapterId] = String(key).split('__');
+        const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
+        if (!r.ok) return undefined;
+        const data = await r.json();
+        const questions = Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []);
+        return { key, value: { examId, subjectId, chapterId, questions } };
+      });
+
+      for (const item of fetched) {
+        if (!item) continue;
+        _pyqsCache.set(item.key, item.value);
+        result.set(item.key, item.value);
+      }
+    }
+
+    return result;
   }
 
   async function fetchQuestionState(assignmentId) {
