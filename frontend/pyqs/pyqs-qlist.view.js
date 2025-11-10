@@ -44,6 +44,8 @@ export function initQListView(
   let observer = null;
   let sentinel = null;
 
+  try { els?.list?.classList?.add("pyqs-list"); } catch {}
+
   function teardownObserver() {
     try {
       if (observer) observer.disconnect();
@@ -115,6 +117,7 @@ export function initQListView(
     item.href = "#";
     item.className =
       "list-group-item list-group-item-action bg-transparent text-light border-secondary-subtle pt-3";
+    item.classList.add("anim-enter-fast");
     item.setAttribute("data-mapped-idx", String(idxInMapped));
     const yr = parseYear(q.pyqInfo);
     const st = getStatusForIndex(i);

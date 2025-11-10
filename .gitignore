@@ -19,7 +19,8 @@ Thumbs.db
 
 #Utils without specific files
 utils/PDF Screenshots/*
-!utils/PDF Screenshots/*.*
+!utils/PDF Screenshots/*.py
+!utils/PDF Screenshots/*.bat
 
 ISDEV
 frontend/dev.config.json
@@ -33,5 +34,3 @@ backend/dbbackupold
 backend/uploads
 backend/pyqs_assets
 backend/pyqs_assets.tar
-utils/PDF Screenshots/Quadratic Equations-JeeMain-Formula Sheet.pdf
-utils/PDF Screenshots/trigo_formula_sheet.pdf

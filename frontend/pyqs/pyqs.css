@@ -2,11 +2,18 @@
 
 .pyqs-container {
   padding-top: 4rem;
+  /* Smooth in-page scrolling for anchor/jumps inside PYQs */
+  scroll-behavior: smooth;
 }
 
 /* Page transition similar to index */
 body .pyqs-container { transition: opacity 120ms ease; }
 body.page-leave .pyqs-container { opacity: 0.0; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  body .pyqs-container { transition: none !important; }
+}
 
 /* Chapters layout (sidebar + main) */
 .pyqs-layout {
@@ -28,6 +35,7 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   border-bottom: 3px solid transparent;
   margin-bottom: -2px;
   padding: .5rem .75rem;
+  transition: color 140ms ease, border-bottom-color 140ms ease, background-color 140ms ease;
 }
 #pyqs-subject-tabs .nav-link:hover { color: #ffffff; border-bottom-color: rgba(255,255,255,0.12); }
 #pyqs-subject-tabs .nav-link.active {
@@ -60,6 +68,7 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   outline: none;
   box-shadow: none;
   border-radius: 999px;
+  transition: background-color 140ms ease, transform 100ms ease;
 }
 
 .questions-list {
@@ -83,6 +92,7 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 
 .topbar-back i { font-size: 1.1rem; }
 .topbar-back:hover { background: rgba(255, 255, 255, 0.08); }
+.topbar-back:active { transform: scale(0.94); }
 
 
 .diff-bg-success{
@@ -111,6 +121,7 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   color: #dfe6ee;
   cursor: pointer;
   margin-bottom: .4rem;
+  transition: background-color 140ms ease, color 140ms ease;
 }
 .pyqs-side-item.active, .pyqs-side-item:hover {
   background: rgba(255,255,255,.06);
@@ -204,6 +215,34 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 .fade-in { animation: fadeIn 160ms ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
 
+/* Generic enter animations for items/cards */
+.anim-enter { animation: fadeInUp 220ms ease-out both; }
+.anim-enter-fast { animation: fadeInUp 140ms ease-out both; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Exit animation for moving items */
+.anim-out { animation: fadeOutDown 160ms ease-in forwards; }
+@keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(6px); } }
+
+/* List items hover/active feedback */
+.pyqs-list .list-group-item { transition: background-color 140ms ease, border-color 140ms ease; }
+.pyqs-list .list-group-item:hover { background-color: rgba(255,255,255,0.04); }
+.pyqs-list .list-group-item:active { background-color: rgba(255,255,255,0.08); }
+
+/* Star button micro-interactions */
+.as-star-btn .bi { transition: transform 140ms ease, color 160ms ease; transform-origin: center; }
+.as-star-btn:active .bi { transform: scale(0.85); }
+.as-star-btn.star-animate .bi { animation: starPop 320ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes starPop {
+  0% { transform: scale(0.6) rotate(-15deg); }
+  60% { transform: scale(1.15) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Slight lift for PYQs cards (piggybacks on .as-card transitions) */
+.pyqs-card { will-change: transform, box-shadow; }
+.pyqs-card:hover { transform: translateY(-3px); }
+
 /* Skeleton shimmer primitives */
 .sk-skeleton {
   position: relative;
@@ -243,3 +282,10 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 .pyqs-chapbar .seg-green { background-color: #198754; }
 .pyqs-chapbar .seg-red { background-color: #dc3545; }
 .pyqs-chapbar .seg-grey { background-color: rgba(255, 255, 255, 0.2); }
+
+/* Reduce motion when requested */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .anim-enter, .anim-enter-fast { animation: none !important; }
+  .pyqs-card, .as-card.card { transition: none !important; }
+  .as-star-btn .bi { transition: none !important; }
+}

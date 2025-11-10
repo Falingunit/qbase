@@ -202,11 +202,11 @@ export function renderChaptersView(
           starredChapters.has(chKey(state.exam.id, state.subject?.id, ch.id))
         );
         if (starredList.length > 0) {
-          starredList.forEach((ch) =>
-            els.starredChaptersGrid.appendChild(
-              chapterCard(state, ch, { onToggleStar })
-            )
-          );
+          starredList.forEach((ch) => {
+            const card = chapterCard(state, ch, { onToggleStar });
+            card.classList.add("anim-enter");
+            els.starredChaptersGrid.appendChild(card);
+          });
           els.starredChaptersWrap.classList.remove("d-none");
           if (els.starredChaptersCount)
             els.starredChaptersCount.textContent = `(${starredList.length})`;
@@ -217,8 +217,10 @@ export function renderChaptersView(
 
       const grid = document.createElement("div");
       grid.className = "as-grid fade-in";
-      list.forEach((ch) =>
-        grid.appendChild(chapterCard(state, ch, { onToggleStar }))
+      list.forEach((ch) =>{
+      const _c = chapterCard(state, ch, { onToggleStar });
+      _c.classList.add("anim-enter");
+      grid.appendChild(_c)}
       );
 
       try {
@@ -266,6 +268,9 @@ export function setLoading(els, on) {
 function chapterCard(state, chapter, { onToggleStar }) {
   const card = document.createElement("div");
   card.className = "card as-card pyqs-card h-100";
+  card.dataset.examId = String(state.exam?.id || '');
+  card.dataset.subjectId = String(state.subject?.id || '');
+  card.dataset.chapterId = String(chapter.id);
   const body = document.createElement("div");
   body.className = "card-body";
   const icoWrap = document.createElement("div");
@@ -305,7 +310,28 @@ function chapterCard(state, chapter, { onToggleStar }) {
   starBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    onToggleStar?.(chapter, !isStarred);
+    // tiny pop animation on tap
+    try {
+      starBtn.classList.remove("star-animate");
+      // force reflow to restart animation if needed
+      // eslint-disable-next-line no-unused-expressions
+      starBtn.offsetHeight;
+      starBtn.classList.add("star-animate");
+      setTimeout(() => starBtn.classList.remove("star-animate"), 360);
+    } catch {}
+    const q = (document.querySelector('#pyqs-toolbar input.form-control')?.value || '').trim().toLowerCase();
+    const matches = !q || String(chapter.name || '').toLowerCase().includes(q);
+    const currentlyStarred = card.classList.contains('as-starred');
+    const makeStarred = !currentlyStarred;
+    // Optimistic DOM update
+    applyChapterStarDom(state, chapter, makeStarred, { matches, onToggleStar });
+    starBtn.disabled = true;
+    Promise.resolve(onToggleStar?.(chapter, makeStarred))
+      .catch(() => {
+        // Revert on failure
+        applyChapterStarDom(state, chapter, !makeStarred, { matches, onToggleStar });
+      })
+      .finally(() => { starBtn.disabled = false; });
   });
   if (isStarred) card.classList.add("as-starred");
 
@@ -333,6 +359,77 @@ function chapterCard(state, chapter, { onToggleStar }) {
     location.href = url.toString();
   });
   return card;
+}
+
+function applyChapterStarDom(state, chapter, makeStarred, { matches, onToggleStar } = {}) {
+  try {
+    const examId = String(state.exam?.id || '');
+    const subjectId = String(state.subject?.id || '');
+    const chapterId = String(chapter.id);
+    const keySel = `.pyqs-card[data-exam-id="${CSS.escape(examId)}"][data-subject-id="${CSS.escape(subjectId)}"][data-chapter-id="${CSS.escape(chapterId)}"]`;
+    const allCards = Array.from(document.querySelectorAll(keySel));
+
+    // Update star appearance on all instances
+    for (const c of allCards) {
+      c.classList.toggle('as-starred', makeStarred);
+      const btn = c.querySelector('.as-star-btn');
+      if (btn) {
+        btn.title = makeStarred ? 'Unstar' : 'Star';
+        btn.innerHTML = makeStarred ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star"></i>';
+      }
+    }
+
+    const starredWrap = document.getElementById('pyqs-starred-chapters-wrap');
+    const starredGrid = document.getElementById('pyqs-starred-chapters');
+    const mainGrid = document.querySelector('#pyqs-content .as-grid');
+    if (!starredGrid || !mainGrid) return;
+
+    const inStarred = starredGrid.querySelector(keySel);
+    const inMain = mainGrid.querySelector(keySel);
+
+    if (makeStarred) {
+      if (matches !== false && !inStarred && inMain) {
+        const clone = chapterCard(state, chapter, { onToggleStar });
+        clone.classList.add('anim-enter');
+        // Copy progress widths from the main card if available
+        try {
+          const mbar = inMain.querySelector('.pyqs-chapbar');
+          const cbar = clone.querySelector('.pyqs-chapbar');
+          if (mbar && cbar) {
+            const mg = mbar.querySelector('.seg-green');
+            const mr = mbar.querySelector('.seg-red');
+            const mgrey = mbar.querySelector('.seg-grey');
+            const cg = cbar.querySelector('.seg-green');
+            const cr = cbar.querySelector('.seg-red');
+            const cgrey = cbar.querySelector('.seg-grey');
+            if (mg && cg) cg.style.width = mg.style.width;
+            if (mr && cr) cr.style.width = mr.style.width;
+            if (mgrey && cgrey) cgrey.style.width = mgrey.style.width;
+          }
+        } catch {}
+        starredGrid.appendChild(clone);
+      }
+    } else {
+      if (inStarred) {
+        inStarred.classList.add('anim-out');
+        inStarred.addEventListener('animationend', () => inStarred.remove(), { once: true });
+      }
+    }
+
+    // Update starred count/visibility
+    if (starredWrap) {
+      const count = starredGrid.children.length;
+      starredWrap.classList.toggle('d-none', count === 0);
+      const cntEl = document.getElementById('pyqs-starred-chapters-count');
+      if (cntEl) cntEl.textContent = count ? `(${count})` : '';
+    }
+
+    // Update empty state of content grid
+    try {
+      const content = document.getElementById('pyqs-content');
+      if (content) checkEmpty(content);
+    } catch {}
+  } catch {}
 }
 
 // -------- Helpers: fetch + compute progress per chapter (green/red/grey) --------

@@ -62,7 +62,7 @@ import { ensureLayout, showChaptersSkeleton, renderSidebarSubjects, renderChapte
     hideBreadcrumb(els);
     renderSidebarSubjects(state, { onSelectSubject: onSelectSubject });
     const current = chaptersCache.get(state.subject?.id) || [];
-    renderChaptersView(els, state, current, { onToggleStar: (chapter, make) => toggleChapterStar(examId, state.subject?.id, chapter.id, make).then(() => render()), progressMap: state._progressMap });
+    renderChaptersView(els, state, current, { onToggleStar: (chapter, make) => toggleChapterStar(examId, state.subject?.id, chapter.id, make), progressMap: state._progressMap });
   }
 
   async function onSelectSubject(s) {

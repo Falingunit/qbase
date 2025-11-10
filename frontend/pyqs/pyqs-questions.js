@@ -5,7 +5,13 @@
   (() => {
     const style = document.createElement("style");
     style.textContent = `
-    #image-overlay{position:fixed;inset:0;display:none;z-index:1060;background:rgba(10,12,14,.85)}
+    #image-overlay{
+      position:fixed; inset:0; z-index:1060;
+      background:rgba(10,12,14,.85);
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition: opacity 160ms ease, visibility 0s linear 160ms;
+    }
+    #image-overlay.open{ opacity:1; visibility:visible; pointer-events:auto; transition: opacity 160ms ease; }
     #image-overlay .io-backdrop{position:absolute;inset:0}
     #image-overlay .io-stage{
       position:absolute; inset:0;
@@ -134,7 +140,7 @@
     function openOverlay(src, alt = "") {
       img.src = src;
       img.alt = alt || "Image";
-      root.style.display = "block";
+      root.classList.add("open");
       open = true;
       if (img.complete) {
         naturalW = img.naturalWidth;
@@ -151,7 +157,7 @@
 
     function closeOverlay() {
       open = false;
-      root.style.display = "none";
+      root.classList.remove("open");
       img.src = "";
     }
 

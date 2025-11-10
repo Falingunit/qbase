@@ -33,9 +33,10 @@ export function renderExamsView(els, exams, { onToggleStar }) {
       }
 
       const grid = document.createElement("div");
-      grid.className = "as-grid";
+      grid.className = "as-grid fade-in";
       exams.forEach((ex) => {
         const card = examCard(ex, { onToggleStar });
+        card.classList.add("anim-enter");
         const isVisible = matchExam(ex, q);
         card.classList.toggle("d-none", !isVisible);
         grid.appendChild(card);
@@ -55,6 +56,7 @@ function matchExam(exam, q) {
 function examCard(exam, { onToggleStar }) {
   const card = document.createElement("div");
   card.className = "card as-card pyqs-card h-100";
+  card.dataset.examId = String(exam.id);
   if (starredExams.has(exam.id)) card.classList.add("as-starred");
   const body = document.createElement("div");
   body.className = "card-body";
@@ -90,7 +92,28 @@ function examCard(exam, { onToggleStar }) {
   starBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-    onToggleStar?.(exam.id, !isStarred);
+    // tiny pop animation on tap
+    try {
+      starBtn.classList.remove("star-animate");
+      // force reflow to restart animation if needed
+      // eslint-disable-next-line no-unused-expressions
+      starBtn.offsetHeight;
+      starBtn.classList.add("star-animate");
+      setTimeout(() => starBtn.classList.remove("star-animate"), 360);
+    } catch {}
+    const q = (document.querySelector('#pyqs-toolbar input.form-control')?.value || '').trim().toLowerCase();
+    const matches = !q || String(exam.name || '').toLowerCase().includes(q);
+    const currentlyStarred = card.classList.contains('as-starred');
+    const makeStarred = !currentlyStarred;
+    // Optimistic DOM update
+    applyExamStarDom(exam, makeStarred, { matches, onToggleStar });
+    starBtn.disabled = true;
+    Promise.resolve(onToggleStar?.(exam.id, makeStarred))
+      .catch(() => {
+        // Revert on failure
+        applyExamStarDom(exam, !makeStarred, { matches });
+      })
+      .finally(() => { starBtn.disabled = false; });
   });
   if (isStarred) card.classList.add("as-starred");
 
@@ -103,4 +126,54 @@ function examCard(exam, { onToggleStar }) {
     location.href = url.toString();
   });
   return card;
+}
+
+// Move/update cards across sections without full re-render
+function applyExamStarDom(exam, makeStarred, { matches, onToggleStar } = {}) {
+  try {
+    const id = String(exam.id);
+    const starredWrap = document.getElementById('pyqs-starred-wrap');
+    const starredGrid = document.getElementById('pyqs-starred');
+    const mainGrid = document.querySelector('#pyqs-content .as-grid');
+    const allCards = Array.from(document.querySelectorAll(`.pyqs-card[data-exam-id="${CSS.escape(id)}"]`));
+
+    // Update all instances' star UI
+    for (const c of allCards) {
+      c.classList.toggle('as-starred', makeStarred);
+      const btn = c.querySelector('.as-star-btn');
+      if (btn) {
+        btn.title = makeStarred ? 'Unstar' : 'Star';
+        btn.innerHTML = makeStarred ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star"></i>';
+      }
+    }
+
+    if (!starredGrid || !mainGrid) return;
+
+    const inStarred = starredGrid.querySelector(`.pyqs-card[data-exam-id="${CSS.escape(id)}"]`);
+    const inMain = mainGrid.querySelector(`.pyqs-card[data-exam-id="${CSS.escape(id)}"]`);
+
+    if (makeStarred) {
+      // Add to starred if matching current filter and not already there
+      if (matches !== false && !inStarred && inMain) {
+        const clone = examCard(exam, { onToggleStar });
+        clone.classList.add('anim-enter');
+        starredGrid.appendChild(clone);
+      }
+    } else {
+      // Remove from starred if present
+      if (inStarred) {
+        inStarred.classList.add('anim-out');
+        const node = inStarred;
+        node.addEventListener('animationend', () => node.remove(), { once: true });
+      }
+    }
+
+    // Update starred count/visibility
+    if (starredWrap) {
+      const count = starredGrid.children.length;
+      starredWrap.classList.toggle('d-none', count === 0);
+      const cntEl = document.getElementById('pyqs-starred-count');
+      if (cntEl) cntEl.textContent = count ? `(${count})` : '';
+    }
+  } catch (e) { /* noop */ }
 }
