@@ -3,8 +3,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import { MathMLToLaTeX } from 'mathml-to-latex';
-
 import Database from "better-sqlite3";
 import { nanoid } from "nanoid";
 import jwt from "jsonwebtoken";
@@ -159,104 +157,21 @@ function reqOrigin(req) {
   }
 }
 
+// Legacy helpers (now no-ops) kept for backward compatibility.
 function sanitizeLatex(latex) {
-  return latex
-    // Simplify constructs that come from some MathML->LaTeX conversions
-    .replace(/\\left\{\s*\\right\./g, "\\{")  // simplify '{'
-    .replace(/\\left\.\s*\\right\}/g, "\\}")  // simplify '}'
-    .replace(/\\left\.\s*\\right\./g, "");    // remove redundant empty pairs
+  return typeof latex === "string" ? latex : latex || "";
 }
 
-// Fix common authoring mistakes that cause KaTeX parse errors
-// e.g., using "\\left{" instead of "\\left\\{" and "\\right}" instead of "\\right\\}"
 function fixCommonLatexErrors(input) {
-  try {
-    if (!input || typeof input !== "string") return input || "";
-    return String(input)
-      // Only add a backslash before { or } when they immediately follow \\left or \\right
-      // and are not already escaped. This avoids double escaping.
-      .replace(/\\left\s*\{/g, "\\left\\{")
-      .replace(/\\right\s*\}/g, "\\right\\}");
-  } catch {
-    return input || "";
-  }
+  return typeof input === "string" ? input : input || "";
 }
 
 function escapeTexSpecialsInsideTextBlocks(latex) {
-  try {
-    if (!latex || typeof latex !== "string") return latex || "";
-    const s = String(latex);
-    let i = 0;
-    let out = "";
-    const marker = "\\text"; // support "\\text{" and "\\text {"
-    while (i < s.length) {
-      const idx = s.indexOf(marker, i);
-      if (idx === -1) {
-        out += s.slice(i);
-        break;
-      }
-      // copy everything up to "\\text"
-      out += s.slice(i, idx);
-      let j = idx + marker.length;
-      // allow optional whitespace between \text and '{'
-      while (j < s.length && /\s/.test(s[j])) j++;
-      // if not followed by '{', just emit literally and continue
-      if (s[j] !== "{") {
-        out += s.slice(idx, j);
-        i = j;
-        continue;
-      }
-      // we're at '{' — parse balanced braces
-      j++; // move past '{'
-      let k = j;
-      let depth = 1;
-      while (k < s.length && depth > 0) {
-        const ch = s[k];
-        if (ch === "\\") {
-          // skip escaped next char
-          k += 2;
-          continue;
-        }
-        if (ch === "{") depth++;
-        else if (ch === "}") depth--;
-        k++;
-      }
-      const inner = s.slice(j, Math.max(j, k - 1));
-      const escaped = inner
-        // Escape alignment and other TeX specials inside text blocks only
-        .replace(/&/g, "\\&")
-        .replace(/%/g, "\\%")
-        .replace(/#/g, "\\#")
-        .replace(/\$/g, "\\$")
-        .replace(/_/g, "\\_");
-      out += "\\text{" + escaped + "}";
-      i = k;
-    }
-    return out;
-  } catch {
-    return latex || "";
-  }
+  return typeof latex === "string" ? latex : latex || "";
 }
 
 function replaceMathMLWithLatex(input) {
-  try {
-    if (!input || typeof input !== "string") return input || "";
-    const converted = input.replace(/<math\b[\s\S]*?<\/math>/gi, (m) => {
-      try {
-        const latex = sanitizeLatex(MathMLToLaTeX.convert(m) || "");
-        const isBlock = /\bdisplay\s*=\s*["']?block["']?/i.test(m);
-        return isBlock ? `\\[${latex}\\]` : `\\(${latex}\\)`;
-      } catch (e){
-        return m;
-      }
-    });
-    // Fix common delimiter mistakes globally (affects non-MathML LaTeX too)
-    const fixed = fixCommonLatexErrors(converted);
-    // Additionally, escape TeX specials inside \text{...} blocks so KaTeX doesn't treat them as alignment points
-    return escapeTexSpecialsInsideTextBlocks(fixed);
-  } catch {
-    return input || "";
-  }
+  return typeof input === "string" ? input : input || "";
 }
 
 function toAbsoluteAsset(pathStr, req) {

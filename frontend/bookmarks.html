@@ -25,21 +25,40 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
-    />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+          processEscapes: true,
+          packages: { "[+]": ["mhchem"] },
+        },
+        loader: { load: ["[tex]/mhchem"] },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+          ignoreHtmlClass: "mathjax-ignore",
+        },
+        startup: {
+          ready: () => {
+            MathJax.startup.defaultReady();
+            try {
+              if (window.__qbaseMathFlush) window.__qbaseMathFlush();
+            } catch {}
+          },
+        },
+      };
+    </script>
+    <script defer src="./common/mathjax-setup.js"></script>
     <script
       defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+      id="mathjax-script"
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
     <script defer src="./common/config.js"></script>
     <script defer src="./common/navbar.js"></script>
