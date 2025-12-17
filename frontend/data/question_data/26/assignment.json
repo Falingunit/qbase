@@ -1,0 +1,7352 @@
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The first step in qualitative inorganic salt analysis is:",
+    "image": null,
+    "qOptions": [
+      "Wet test for cation",
+      "Dry test for anion",
+      "Preliminary examination",
+      "Group precipitation"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Qualitative analysis always begins with simple observation before any reagent is added."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following observations is part of preliminary examination?",
+    "image": null,
+    "qOptions": [
+      "Colour of solution",
+      "Colour of salt",
+      "Group reagent reaction",
+      "Confirmatory test"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Colour of the solid salt is checked before dissolving or reacting."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A blue-coloured salt most commonly indicates the presence of:",
+    "image": null,
+    "qOptions": [
+      "Fe²⁺",
+      "Cu²⁺",
+      "Ni²⁺",
+      "Co²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Blue salts are characteristic of Cu^{2+} (CuSO_4, CuCl_2)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A green-coloured salt may indicate the presence of:",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "Fe²⁺",
+      "Zn²⁺",
+      "Al³⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Green salts are commonly due to Fe^{2+} (ferrous salts)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A yellow-coloured salt often suggests the presence of:",
+    "image": null,
+    "qOptions": [
+      "Pb²⁺",
+      "Fe³⁺",
+      "Ni²⁺",
+      "Zn²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ferric salts (Fe³⁺) are typically yellow to brownish."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A white colour of salt generally indicates:",
+    "image": null,
+    "qOptions": [
+      "Coloured cation",
+      "Transition metal ion",
+      "Colourless ion",
+      "Presence of sulphide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "White salts usually mean no coloured transition metal ion."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion commonly forms colourless salts?",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "Ni²⁺",
+      "Zn²⁺",
+      "Fe³⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Zn²⁺ has completely filled d-orbitals, so its salts are colourless."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A pink crystalline salt is most likely to contain:",
+    "image": null,
+    "qOptions": [
+      "Co²⁺",
+      "Ni²⁺",
+      "Mn²⁺",
+      "Zn²⁺"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Cobalt(II) salts are pink crystalline."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The green colour of hydrated ferrous salts is due to:",
+    "image": null,
+    "qOptions": [
+      "Anion",
+      "Hydration",
+      "Fe²⁺ ion",
+      "Impurities"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "The green colour comes from Fe²⁺ ion itself, not anion or water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The blue colour of copper sulphate crystals is due to:",
+    "image": null,
+    "qOptions": [
+      "SO₄²⁻",
+      "Water of crystallisation",
+      "Cu²⁺ ion",
+      "Impurities"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Blue colour of CuSO₄·5H₂O is due to Cu²⁺, not sulphate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which type of salts are generally soluble in water?",
+    "image": null,
+    "qOptions": [
+      "Carbonates",
+      "Nitrates",
+      "Sulphides",
+      "Phosphates"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "All nitrates are soluble in water (golden rule)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Insolubility of a salt in water suggests the possible presence of:",
+    "image": null,
+    "qOptions": [
+      "Alkali metal ion",
+      "Nitrate ion",
+      "Carbonate or sulphide",
+      "Ammonium ion"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Carbonates and sulphides are usually water-insoluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If a salt dissolves completely in water, it is most likely to contain:",
+    "image": null,
+    "qOptions": [
+      "Pb²⁺",
+      "Ag⁺",
+      "Na⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Alkali metal salts (Na⁺) are highly soluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion almost always forms water-soluble salts?",
+    "image": null,
+    "qOptions": [
+      "Ba²⁺",
+      "Pb²⁺",
+      "Na⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Na⁺ always forms soluble salts."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Insolubility in water but solubility in dilute acid suggests presence of:",
+    "image": null,
+    "qOptions": [
+      "Nitrate",
+      "Chloride",
+      "Carbonate",
+      "Sulphate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Carbonates dissolve in acids with CO₂ evolution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Heating a salt in a dry test tube is used to detect:",
+    "image": null,
+    "qOptions": [
+      "Cation only",
+      "Anion only",
+      "Volatile substances and water",
+      "Group separation"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Dry heating detects volatile gases and water of crystallisation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Water droplets on the test tube walls indicate:",
+    "image": null,
+    "qOptions": [
+      "Hygroscopic nature",
+      "Water of crystallisation",
+      "Sublimation",
+      "Decomposition"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Condensed droplets indicate water of crystallisation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blue copper sulphate turns white on heating due to loss of:",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "SO₄²⁻",
+      "Water of crystallisation",
+      "Oxygen"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Heating CuSO₄·5H₂O removes water, turning it white."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Reappearance of blue colour on adding water confirms presence of:",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "Fe²⁺",
+      "Hydrated salt",
+      "Sulphate ion"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Rehydration restores blue colour → confirms hydrated salt."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A gas with smell of rotten eggs on heating indicates:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "SO₂",
+      "H₂S",
+      "NH₃"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Rotten egg smell is due to H₂S."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A gas turning moist red litmus blue indicates:",
+    "image": null,
+    "qOptions": [
+      "H₂S",
+      "NH₃",
+      "SO₂",
+      "CO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH₃ is basic and turns red litmus blue."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A colourless, odourless gas that turns limewater milky is:",
+    "image": null,
+    "qOptions": [
+      "SO₂",
+      "NH₃",
+      "CO₂",
+      "NO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CO₂ is colourless, odourless, and turns limewater milky."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brown fumes evolved on heating usually indicate presence of:",
+    "image": null,
+    "qOptions": [
+      "Nitrite or nitrate",
+      "Sulphide",
+      "Carbonate",
+      "Chloride"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Brown fumes indicate NO₂ from nitrates/nitrites."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Heating ammonium salts with NaOH gives a gas that:",
+    "image": null,
+    "qOptions": [
+      "Is acidic",
+      "Turns red litmus blue",
+      "Turns limewater milky",
+      "Is colourless and odourless"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{NH}_4^+ + \\text{NaOH} \\to \\text{NH}_3 \\text{ gas} \\to \\text{basic nature}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sublimation on heating is characteristic of:",
+    "image": null,
+    "qOptions": [
+      "NH₄Cl",
+      "NaCl",
+      "KNO₃",
+      "CaCO₃"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "NH₄Cl sublimes directly on heating."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test is mainly useful for detecting:",
+    "image": null,
+    "qOptions": [
+      "Anions",
+      "Transition metals",
+      "Alkali and alkaline earth metals",
+      "Heavy metals"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame test works best for alkali & alkaline earth metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium imparts which colour to flame?",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Golden yellow",
+      "Apple green"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Na⁺ → golden yellow flame (very intense)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Potassium gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Violet",
+      "Green",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "K⁺ → violet/lilac flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Calcium gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Crimson",
+      "Brick red",
+      "Green",
+      "Violet"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ca²⁺ → brick red flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Barium imparts which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Crimson",
+      "Brick red",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ba²⁺ → apple green flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Copper gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Blue-green",
+      "Crimson",
+      "Brick red"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cu²⁺ → blue-green flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test colour is due to:",
+    "image": null,
+    "qOptions": [
+      "Ionisation energy",
+      "Atomic mass",
+      "Excited electrons",
+      "Anion present"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame colour comes from excited electrons returning to ground state."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium flame colour can mask other colours because it is:",
+    "image": null,
+    "qOptions": [
+      "Weak",
+      "Intense",
+      "Invisible",
+      "Short-lived"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Na⁺ emission is very intense, masking others."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "To observe potassium flame clearly, which glass is used?",
+    "image": null,
+    "qOptions": [
+      "Blue glass",
+      "Green glass",
+      "Red glass",
+      "Yellow glass"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Blue glass absorbs yellow Na light → reveals K flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test is unreliable for:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "Mg²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg²⁺ does not give characteristic flame colour."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In systematic qualitative analysis, anion detection is done:",
+    "image": null,
+    "qOptions": [
+      "After cation analysis",
+      "Before cation analysis",
+      "Simultaneously",
+      "At the end"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Anion analysis is done before cation analysis."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The first reagent used for dry test of anions is usually:",
+    "image": null,
+    "qOptions": [
+      "AgNO₃",
+      "Dilute acid",
+      "BaCl₂",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "First anion test is usually with dilute acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Effervescence with dilute acid indicates presence of:",
+    "image": null,
+    "qOptions": [
+      "Sulphate",
+      "Nitrate",
+      "Carbonate",
+      "Chloride"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Effervescence with acid → carbonate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The gas evolved from carbonates turns limewater:",
+    "image": null,
+    "qOptions": [
+      "Blue",
+      "Milky",
+      "Green",
+      "Colourless"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "CO₂ turns limewater milky due to CaCO₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphide ions on treatment with dilute acid evolve gas having smell of:",
+    "image": null,
+    "qOptions": [
+      "Burning sulphur",
+      "Rotten eggs",
+      "Ammonia",
+      "Chlorine"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphides release H₂S (rotten egg smell)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphite ions on acidification produce a gas that:",
+    "image": null,
+    "qOptions": [
+      "Turns limewater milky",
+      "Smells like rotten eggs",
+      "Turns acidified KMnO₄ colourless",
+      "Turns red litmus blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "SO₂ reduces KMnO₄ → decolourisation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "A gas that decolourises acidified KMnO₄ is most likely:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "SO₂",
+      "NH₃",
+      "NO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "SO₂ is a reducing gas, decolourises KMnO₄."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Nitrate ions do not react with:",
+    "image": null,
+    "qOptions": [
+      "Dilute acids",
+      "Conc. acids",
+      "Alkali",
+      "Reducing agents"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Nitrates show no reaction with dilute acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chloride ions give which gas with conc. H₂SO₄?",
+    "image": null,
+    "qOptions": [
+      "SO₂",
+      "HCl",
+      "NO₂",
+      "CO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Cl}^- + \\text{conc. H}_2\\text{SO}_4 \\to \\text{HCl gas}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White fumes with glass rod dipped in NH₄OH indicate:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "NH₃",
+      "HCl",
+      "SO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{HCl} + \\text{NH}_3 \\to \\text{white fumes of NH}_4\\text{Cl}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Preliminary examination helps in:",
+    "image": null,
+    "qOptions": [
+      "Confirming ion",
+      "Eliminating possibilities",
+      "Group separation",
+      "Quantitative estimation"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Preliminary exam helps narrow down possibilities."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Colour of salt mainly depends on:",
+    "image": null,
+    "qOptions": [
+      "Anion",
+      "Cation",
+      "Impurities",
+      "Hydration only"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Salt colour mainly depends on cation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Water-soluble salts are best tested using:",
+    "image": null,
+    "qOptions": [
+      "Dry tests only",
+      "Wet tests only",
+      "Flame test only",
+      "Group analysis"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Soluble salts are best analysed using wet tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Heating test mainly helps in detecting:",
+    "image": null,
+    "qOptions": [
+      "Alkali metals",
+      "Volatile components",
+      "Insoluble ions",
+      "Complex ions"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Heating test reveals volatile components."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test should be done using:",
+    "image": null,
+    "qOptions": [
+      "Iron wire",
+      "Copper wire",
+      "Platinum or nichrome wire",
+      "Glass rod"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame test requires clean platinum/nichrome wire."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "When a salt reacts with dilute HCl producing brisk effervescence, the anion most likely present is:",
+    "image": null,
+    "qOptions": [
+      "SO₄²⁻",
+      "CO₃²⁻",
+      "NO₃⁻",
+      "Cl⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Carbonates react with dilute acids producing CO₂ with effervescence."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The gas evolved from carbonates turns limewater milky due to formation of:",
+    "image": null,
+    "qOptions": [
+      "CaO",
+      "Ca(HCO₃)₂",
+      "CaCO₃",
+      "CaSO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{CO}_2 + \\text{Ca(OH)}_2 \\to \\text{CaCO}_3 \\ (\\text{milky})$$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If effervescence slows down on continued acid addition, the anion involved is:",
+    "image": null,
+    "qOptions": [
+      "Sulphide",
+      "Sulphite",
+      "Carbonate",
+      "Nitrate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Carbonate effervescence slows down as reaction completes."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which anion gives CO₂ on treatment with dilute acid?",
+    "image": null,
+    "qOptions": [
+      "SO₃²⁻",
+      "CO₃²⁻",
+      "NO₂⁻",
+      "Cl⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Carbonate + acid → CO₂ gas."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which gas is colourless, odourless, and extinguishes a burning splint?",
+    "image": null,
+    "qOptions": [
+      "SO₂",
+      "H₂S",
+      "CO₂",
+      "NH₃"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CO₂ is colourless, odourless and extinguishes flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphide ions react with dilute acids to give gas smelling like:",
+    "image": null,
+    "qOptions": [
+      "Burning sulphur",
+      "Rotten eggs",
+      "Ammonia",
+      "Chlorine"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphide + acid → H₂S (rotten egg smell)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The gas evolved from sulphide ions blackens lead acetate paper due to formation of:",
+    "image": null,
+    "qOptions": [
+      "PbSO₄",
+      "PbCO₃",
+      "PbS",
+      "PbCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "H₂S blackens lead acetate due to PbS formation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which anion produces SO₂ on acidification?",
+    "image": null,
+    "qOptions": [
+      "CO₃²⁻",
+      "SO₃²⁻",
+      "S²⁻",
+      "NO₃⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphite + acid → SO₂ gas."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "SO₂ can be identified by its ability to:",
+    "image": null,
+    "qOptions": [
+      "Turn limewater milky",
+      "Turn red litmus blue",
+      "Decolourise acidified KMnO₄",
+      "Blacken lead acetate paper"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "SO₂ is a reducing gas → decolourises acidified KMnO₄."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The smell of burning sulphur is characteristic of:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "SO₂",
+      "H₂S",
+      "NH₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "SO₂ smells like burning sulphur."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Nitrite ions on treatment with dilute acid evolve:",
+    "image": null,
+    "qOptions": [
+      "NO₂",
+      "NO",
+      "N₂O",
+      "NH₃"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Nitrites decompose to give NO₂ (brown fumes)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brown fumes observed immediately on acidification indicate presence of:",
+    "image": null,
+    "qOptions": [
+      "NO₃⁻",
+      "NO₂⁻",
+      "SO₃²⁻",
+      "CO₃²⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Immediate brown fumes → NO₂⁻ (nitrite)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which anion gives brown fumes without heating?",
+    "image": null,
+    "qOptions": [
+      "Nitrate",
+      "Nitrite",
+      "Chloride",
+      "Sulphate"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Nitrites react with dilute acid without heating."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Nitrate ions do not react with dilute acids because they are:",
+    "image": null,
+    "qOptions": [
+      "Oxidising",
+      "Reducing",
+      "Stable",
+      "Volatile"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Nitrates are stable to dilute acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which test is a specific confirmatory test for nitrate ion?",
+    "image": null,
+    "qOptions": [
+      "Brown ring test",
+      "Lead acetate test",
+      "Limewater test",
+      "Flame test"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Brown ring test is confirmatory for nitrate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Concentrated H₂SO₄ is used mainly to detect:",
+    "image": null,
+    "qOptions": [
+      "Cations",
+      "Volatile anions",
+      "Alkali metals",
+      "Carbonates"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Conc. H₂SO₄ detects volatile anions."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chloride ions give which gas with conc. H₂SO₄?",
+    "image": null,
+    "qOptions": [
+      "Cl₂",
+      "HCl",
+      "SO₂",
+      "NO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Cl}^- + \\text{conc. H}_2\\text{SO}_4 \\to \\text{HCl gas}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The gas evolved from chloride ion gives dense white fumes with:",
+    "image": null,
+    "qOptions": [
+      "Moist air",
+      "NH₃",
+      "H₂O",
+      "Limewater"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "HCl gives dense white fumes with $\\text{NH}_3$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bromide ions with conc. H₂SO₄ produce:",
+    "image": null,
+    "qOptions": [
+      "HBr only",
+      "Br₂ vapours",
+      "No reaction",
+      "CO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$\\text{Br}^-$ partially oxidised $\\to \\text{Br}_2$ vapours."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Reddish-brown vapours observed indicate formation of:",
+    "image": null,
+    "qOptions": [
+      "Cl₂",
+      "Br₂",
+      "I₂",
+      "NO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Reddish-brown vapours indicate $\\text{Br}_2$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Iodide ions on treatment with conc. H₂SO₄ give vapours of:",
+    "image": null,
+    "qOptions": [
+      "Cl₂",
+      "Br₂",
+      "I₂",
+      "SO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Iodide gives violet iodine vapours."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The violet vapours formed are due to:",
+    "image": null,
+    "qOptions": [
+      "NO₂",
+      "I₂",
+      "SO₂",
+      "HCl"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Violet vapours = $\\text{I}_2$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Iodide ions act as:",
+    "image": null,
+    "qOptions": [
+      "Oxidising agents",
+      "Neutral agents",
+      "Reducing agents",
+      "Catalysts"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$I^-$ acts as a strong reducing agent."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which product confirms iodide during conc. acid test?",
+    "image": null,
+    "qOptions": [
+      "White fumes",
+      "Yellow precipitate",
+      "Violet vapours",
+      "Colourless gas"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Iodide confirmation: violet vapours."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess oxidation during iodide test may produce:",
+    "image": null,
+    "qOptions": [
+      "HBr",
+      "HCl",
+      "H₂S",
+      "H₂SO₄ reduction products"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Strong reduction of $\\text{H}_2\\text{SO}_4$ forms $\\text{SO}_2 / \\text{H}_2\\text{S}$ etc."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphate ions do not give any gas with:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Concentrated H₂SO₄",
+      "Both A and B",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sulphate gives no gas with acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphate ion is first suspected when:",
+    "image": null,
+    "qOptions": [
+      "No reaction with dilute acid",
+      "Brisk effervescence",
+      "Rotten egg smell",
+      "Brown fumes"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "No reaction with dilute acid → suspect sulphate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphate ions are confirmed using:",
+    "image": null,
+    "qOptions": [
+      "AgNO₃",
+      "BaCl₂",
+      "Lead acetate",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphate confirmed using BaCl₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The white precipitate formed with BaCl₂ is:",
+    "image": null,
+    "qOptions": [
+      "BaCO₃",
+      "BaSO₃",
+      "BaSO₄",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "White ppt is $\\text{BaSO}_4$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Insolubility of the BaSO_4 precipitate in conc. HCl confirms:",
+    "image": null,
+    "qOptions": [
+      "Carbonate",
+      "Sulphite",
+      "Sulphate",
+      "Nitrate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "BaSO₄ insoluble in conc. HCl → sulphate confirmed."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Phosphate ions do not produce gas with dilute acids because they are:",
+    "image": null,
+    "qOptions": [
+      "Volatile",
+      "Stable",
+      "Insoluble",
+      "Reducing"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Phosphate is stable, no gas evolution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Phosphate ion is commonly confirmed using:",
+    "image": null,
+    "qOptions": [
+      "BaCl_2",
+      "AgNO_3",
+      "Ammonium molybdate",
+      "Limewater"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Phosphate confirmatory reagent: ammonium molybdate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The yellow precipitate in phosphate test is due to formation of:",
+    "image": null,
+    "qOptions": [
+      "Pb_3(PO_4)_2",
+      "(NH_4)_3PO_4",
+      "Ammonium phosphomolybdate",
+      "Ba₃(PO₄)₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow ppt = ammonium phosphomolybdate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which anion forms a yellow precipitate only on warming?",
+    "image": null,
+    "qOptions": [
+      "SO₄²⁻",
+      "PO₄³⁻",
+      "Cl⁻",
+      "NO₃⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Phosphate ppt appears on warming."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The phosphate confirmatory test is performed in:",
+    "image": null,
+    "qOptions": [
+      "Neutral medium",
+      "Basic medium",
+      "Acidic medium",
+      "Alkaline medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Phosphate test is done in acidic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In systematic anion analysis, reagents are added:",
+    "image": null,
+    "qOptions": [
+      "Randomly",
+      "From weak to strong",
+      "From strong to weak",
+      "Only after cation analysis"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Reagents are added from weak to strong."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Gas evolution tests are always performed:",
+    "image": null,
+    "qOptions": [
+      "At the end",
+      "Before wet tests",
+      "After confirmatory tests",
+      "Only with heating"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Gas tests are done before wet tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The absence of any gas with dilute acid eliminates:",
+    "image": null,
+    "qOptions": [
+      "Sulphate",
+      "Nitrate",
+      "Carbonate",
+      "Phosphate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "No gas eliminates carbonate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Anion analysis helps prevent errors in:",
+    "image": null,
+    "qOptions": [
+      "Flame test",
+      "Cation group analysis",
+      "Heating test",
+      "Preliminary exam"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Anion analysis prevents errors in cation group analysis."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Correct identification of anion is important before cation analysis because:",
+    "image": null,
+    "qOptions": [
+      "Anions interfere with cation tests",
+      "Cations interfere with anion tests",
+      "Flame colour changes",
+      "Salts decompose"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Anions can interfere with cation tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Rotten egg smell always indicates presence of:",
+    "image": null,
+    "qOptions": [
+      "SO₂",
+      "CO₂",
+      "H₂S",
+      "NO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Rotten egg smell → H₂S."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Limewater test is specific for:",
+    "image": null,
+    "qOptions": [
+      "SO₂",
+      "CO₂",
+      "NH₃",
+      "HCl"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Limewater test → CO₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White fumes with NH₃ always indicate:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "H₂S",
+      "HCl",
+      "NO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "White fumes with NH₃ → HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Decolourisation of KMnO₄ indicates presence of a:",
+    "image": null,
+    "qOptions": [
+      "Oxidising agent",
+      "Neutral gas",
+      "Reducing agent",
+      "Inert gas"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "KMnO₄ decolourisation → reducing agent."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphite ions differ from sulphate ions because sulphite:",
+    "image": null,
+    "qOptions": [
+      "Gives precipitate with BaCl₂",
+      "Gives gas with dilute acid",
+      "Is water insoluble",
+      "Is coloured"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphite differs by gas evolution with acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphate ions are best detected using:",
+    "image": null,
+    "qOptions": [
+      "Dry test",
+      "Flame test",
+      "Wet test",
+      "Sublimation"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sulphate is detected by wet test (BaCl₂)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Confirmatory tests are done to:",
+    "image": null,
+    "qOptions": [
+      "Guess the ion",
+      "Eliminate ions",
+      "Prove the presence of ion",
+      "Speed up analysis"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Confirmatory tests prove the ion."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Anion tests are generally carried out on:",
+    "image": null,
+    "qOptions": [
+      "Solid salt",
+      "Aqueous extract",
+      "Organic solvent",
+      "Melted salt"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Anion tests are done on aqueous extract."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess acid should be avoided during anion tests because it may:",
+    "image": null,
+    "qOptions": [
+      "Stop reactions",
+      "Give false positives",
+      "Neutralise ions",
+      "Precipitate cations"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Excess acid may cause false positives."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Systematic qualitative analysis relies most on:",
+    "image": null,
+    "qOptions": [
+      "Memory of reactions",
+      "Observation",
+      "Speed",
+      "Guesswork"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Qualitative analysis relies most on observation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The only cation tested before group analysis is:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "NH₄⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$\\text{NH}_4^+$ is the only basic radical tested before group analysis."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ammonium ion is tested using:",
+    "image": null,
+    "qOptions": [
+      "NaOH solution",
+      "NH₄OH solution",
+      "Dilute HCl",
+      "BaCl₂ solution"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Ammonium salts release $\\text{NH}_3$ with $\\text{NaOH}$ on heating."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "On heating ammonium salts with NaOH, the gas evolved is:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "NH₃",
+      "H₂S",
+      "SO₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{NH}_4^+ + \\text{OH}^- \\to \\text{NH}_3\\ (\\text{gas}) + \\text{H}_2\\text{O}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The evolved gas is identified by its ability to:",
+    "image": null,
+    "qOptions": [
+      "Turn limewater milky",
+      "Blacken lead acetate",
+      "Turn red litmus blue",
+      "Decolourise KMnO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$\\text{NH}_3$ turns red litmus blue (basic gas)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The smell associated with ammonia gas is:",
+    "image": null,
+    "qOptions": [
+      "Rotten eggs",
+      "Burning sulphur",
+      "Pungent",
+      "Fruity"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ammonia has a sharp, pungent smell."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ammonium ion is called a basic radical because it:",
+    "image": null,
+    "qOptions": [
+      "Is acidic",
+      "Behaves like a metal ion",
+      "Forms anions",
+      "Is volatile"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$\\text{NH}_4^+$ behaves like a metal ion in salts."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ does not interfere with group analysis because it is:",
+    "image": null,
+    "qOptions": [
+      "Insoluble",
+      "Precipitated early",
+      "Removed on heating",
+      "Coloured"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$\\text{NH}_4^+$ is removed as $\\text{NH}_3$ gas on heating, so no interference."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which reagent must be freshly prepared for NH₄⁺ test?",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "HCl",
+      "BaCl₂"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "NaOH must be fresh, otherwise it absorbs CO₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which paper is used to confirm NH₃ gas?",
+    "image": null,
+    "qOptions": [
+      "Blue litmus",
+      "Red litmus",
+      "Filter paper",
+      "Starch paper"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Red litmus confirms basic NH₃ gas."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ test is done on:",
+    "image": null,
+    "qOptions": [
+      "Solid salt only",
+      "Aqueous solution only",
+      "Solid or solution",
+      "Soda extract"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NH₄⁺ can be tested from solid or solution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cation analysis is carried out in the form of:",
+    "image": null,
+    "qOptions": [
+      "Solid salt",
+      "Melted salt",
+      "Aqueous solution",
+      "Organic solution"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Cation analysis is always done in aqueous solution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The solution used for group analysis is called:",
+    "image": null,
+    "qOptions": [
+      "Original solution",
+      "Soda extract",
+      "Filtrate",
+      "Residue"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "The prepared solution is called the original solution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The first group reagent added in cation analysis is:",
+    "image": null,
+    "qOptions": [
+      "H_2S",
+      "Dilute HCl",
+      "NH_4OH",
+      "BaCl_2"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group I reagent is dilute HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I cations are precipitated as:",
+    "image": null,
+    "qOptions": [
+      "Sulphides",
+      "Hydroxides",
+      "Chlorides",
+      "Carbonates"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group I cations precipitate as chlorides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dilute HCl is used to precipitate:",
+    "image": null,
+    "qOptions": [
+      "Group II cations",
+      "Group III cations",
+      "Group I cations",
+      "Group IV cations"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Dilute HCl → Group I only."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following belongs to Group I?",
+    "image": null,
+    "qOptions": [
+      "Cu^{2+}",
+      "Ag^{+}",
+      "Fe^{3+}",
+      "Zn^{2+}"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ag⁺ belongs to Group I."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I cations form precipitates that are:",
+    "image": null,
+    "qOptions": [
+      "Coloured",
+      "Soluble in water",
+      "Insoluble chlorides",
+      "Insoluble sulphides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group I chlorides are insoluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The precipitate formed on adding dilute HCl is usually:",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "White",
+      "Black",
+      "Brown"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group I chlorides give white precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following chlorides is soluble in hot water?",
+    "image": null,
+    "qOptions": [
+      "AgCl",
+      "PbCl₂",
+      "Hg₂Cl₂",
+      "CuCl₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "PbCl₂ is soluble in hot water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hot water treatment helps to separate:",
+    "image": null,
+    "qOptions": [
+      "Ag⁺",
+      "Hg₂²⁺",
+      "Pb²⁺",
+      "Cu²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Hot water separates Pb²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Pb²⁺ is confirmed by formation of yellow precipitate with:",
+    "image": null,
+    "qOptions": [
+      "KCl",
+      "KI",
+      "NaOH",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Pb²⁺ + KI → yellow PbI₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The yellow precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "PbCl₂",
+      "PbSO₄",
+      "PbI₂",
+      "PbS"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow ppt = PbI₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "PbI₂ crystals appear golden yellow on:",
+    "image": null,
+    "qOptions": [
+      "Cooling",
+      "Heating",
+      "Standing",
+      "Shaking"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "PbI₂ forms golden crystals on cooling."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Pb²⁺ can also be confirmed using:",
+    "image": null,
+    "qOptions": [
+      "K₂CrO₄",
+      "BaCl₂",
+      "AgNO₃",
+      "NH₄Cl"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "$$\\text{Pb}^{2+} + \\text{K}_2\\text{CrO}_4 \\to \\text{PbCrO}_4.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The colour of PbCrO₄ precipitate is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Brown",
+      "Black"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "PbCrO_4 is yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "AgCl dissolves in:",
+    "image": null,
+    "qOptions": [
+      "Water",
+      "Dilute HCl",
+      "NH₄OH",
+      "NaOH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "AgCl dissolves in $\\text{NH}_4\\text{OH}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dissolution of AgCl in NH₄OH is due to formation of:",
+    "image": null,
+    "qOptions": [
+      "AgOH",
+      "Ag₂O",
+      "Ammine complex",
+      "AgCl₂⁻"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Due to formation of $\\text{[Ag(NH}_3\\text{)_2]^+}$ complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Re-precipitation of AgCl occurs on adding:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "HNO₃",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Adding HNO_3 breaks complex $\\to$ AgCl reappears."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ag⁺ gives black precipitate with:",
+    "image": null,
+    "qOptions": [
+      "SO₄²⁻",
+      "Cl⁻",
+      "S²⁻",
+      "CO₃²⁻"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{Ag}^+ + \\text{S}^{2-} \\to \\text{Ag}_2\\text{S}\\ (\\text{black}).$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The black precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "AgCl",
+      "Ag₂S",
+      "Ag₂CO₃",
+      "AgNO₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Black ppt = Ag_2S."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hg₂Cl₂ reacts with NH₄OH to give:",
+    "image": null,
+    "qOptions": [
+      "White precipitate",
+      "Black precipitate",
+      "No reaction",
+      "Yellow precipitate"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Hg}_2\\text{Cl}_2 + \\text{NH}_4\\text{OH} \\to \\text{black ppt}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The black colour is due to formation of:",
+    "image": null,
+    "qOptions": [
+      "HgCl₂",
+      "HgO",
+      "Hg + HgNH₂Cl",
+      "HgS"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Black colour = Hg + HgNH_2Cl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "This reaction confirms presence of:",
+    "image": null,
+    "qOptions": [
+      "Hg²⁺",
+      "Hg₂²⁺",
+      "Pb²⁺",
+      "Ag⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "This confirms Hg₂²⁺ (mercurous)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hg₂²⁺ belongs to which group?",
+    "image": null,
+    "qOptions": [
+      "Group I",
+      "Group II",
+      "Group III",
+      "Group IV"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Hg₂²⁺ belongs to Group I."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hg₂Cl₂ is also known as:",
+    "image": null,
+    "qOptions": [
+      "Calomel",
+      "Cinnabar",
+      "Vermilion",
+      "Galena"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Hg₂Cl₂ is called calomel."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I precipitate is separated by treating with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "Hot water",
+      "H₂S",
+      "NH₄Cl"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group I separation uses hot water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The insoluble portion after hot water treatment contains:",
+    "image": null,
+    "qOptions": [
+      "PbCl₂",
+      "AgCl + Hg₂Cl₂",
+      "Only AgCl",
+      "Only Hg₂Cl₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Residue contains AgCl + Hg₂Cl₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I analysis must be completed before proceeding to:",
+    "image": null,
+    "qOptions": [
+      "Anion analysis",
+      "Group II",
+      "Flame test",
+      "Preliminary exam"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group I must be removed before Group II."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I cations are separated based on differences in:",
+    "image": null,
+    "qOptions": [
+      "Colour",
+      "Solubility",
+      "Atomic mass",
+      "Valency"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Separation based on solubility."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dilute HCl is preferred over concentrated HCl because:",
+    "image": null,
+    "qOptions": [
+      "It is cheaper",
+      "It avoids complex formation",
+      "It is safer",
+      "It reacts faster"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Dilute HCl avoids complex formation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ is tested first because it is:",
+    "image": null,
+    "qOptions": [
+      "Insoluble",
+      "Volatile",
+      "Coloured",
+      "Heavy"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH_4^+ is tested first as it is volatile."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group reagents are added sequentially to:",
+    "image": null,
+    "qOptions": [
+      "Speed analysis",
+      "Avoid interference",
+      "Increase yield",
+      "Reduce cost"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sequential addition avoids interference."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group separation is based on difference in:",
+    "image": null,
+    "qOptions": [
+      "Colour",
+      "Solubility product",
+      "Atomic number",
+      "Density"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group separation depends on Ksp differences."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Confirmatory tests are always performed on:",
+    "image": null,
+    "qOptions": [
+      "Original solution",
+      "Precipitate",
+      "Filtrate",
+      "Solid salt"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Confirmatory tests are done on the precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Skipping group separation may result in:",
+    "image": null,
+    "qOptions": [
+      "Correct result",
+      "Faster analysis",
+      "Wrong identification",
+      "Clear solution"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Skipping group separation → wrong identification."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group I analysis mainly involves reactions of:",
+    "image": null,
+    "qOptions": [
+      "Sulphides",
+      "Chlorides",
+      "Hydroxides",
+      "Carbonates"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group I chemistry is about chlorides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hot water separation works because PbCl₂ has:",
+    "image": null,
+    "qOptions": [
+      "Lower density",
+      "Higher solubility in hot water",
+      "Different colour",
+      "Different valency"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "PbCl₂ is soluble in hot water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "AgCl dissolves in NH₄OH but Hg₂Cl₂ does not because:",
+    "image": null,
+    "qOptions": [
+      "AgCl is coloured",
+      "Hg₂Cl₂ forms complex",
+      "Ag⁺ forms stable ammine complex",
+      "Hg₂²⁺ forms sulphide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ag⁺ forms stable ammine complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The blackening of Hg₂Cl₂ with NH₄OH is a:",
+    "image": null,
+    "qOptions": [
+      "Physical change",
+      "Oxidation",
+      "Disproportionation",
+      "Decomposition"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{Hg}_2^{2+} \\to \\text{Hg}^0 + \\text{Hg}^{2+} = \\text{disproportionation}.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hg₂²⁺ contains mercury in which oxidation state?",
+    "image": null,
+    "qOptions": [
+      "0",
+      "+1",
+      "+2",
+      "+3"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Hg₂²⁺ contains Hg in +1 oxidation state."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II cations are precipitated by passing:",
+    "image": null,
+    "qOptions": [
+      "H₂S in neutral medium",
+      "H₂S in alkaline medium",
+      "H₂S in acidic medium",
+      "(NH₄)₂S in acidic medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group II cations precipitate when H₂S is passed in acidic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II cations precipitate as:",
+    "image": null,
+    "qOptions": [
+      "Chlorides",
+      "Hydroxides",
+      "Carbonates",
+      "Sulphides"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Group II metals form insoluble sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Acidic medium is maintained during Group II analysis to prevent precipitation of:",
+    "image": null,
+    "qOptions": [
+      "Group I cations",
+      "Group III cations",
+      "Group IV cations",
+      "Group V cations"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Acidic medium suppresses S²⁻ concentration, preventing Group III sulphide precipitation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The colour of Group II sulphide precipitates is generally:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow to black",
+      "Green",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group II sulphides range from yellow (CdS) to black (CuS, Bi₂S₃)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which reagent supplies sulphide ions slowly in acidic medium?",
+    "image": null,
+    "qOptions": [
+      "Na₂S",
+      "(NH₄)₂S",
+      "H₂S",
+      "NaHS"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "H₂S supplies sulphide ions slowly and controllably in acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II is subdivided into IIA and IIB based on:",
+    "image": null,
+    "qOptions": [
+      "Solubility in water",
+      "Solubility of sulphides in ammonium sulphide",
+      "Colour of sulphides",
+      "Atomic number"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group II is split based on solubility in yellow ammonium sulphide."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IIA sulphides are insoluble in:",
+    "image": null,
+    "qOptions": [
+      "Water",
+      "Dilute acids",
+      "Yellow ammonium sulphide",
+      "Dilute HCl"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group IIA sulphides do not dissolve in yellow ammonium sulphide."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IIB sulphides are soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Water",
+      "Yellow ammonium sulphide",
+      "NaOH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group IIB sulphides dissolve in yellow ammonium sulphide."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following belongs to Group IIA?",
+    "image": null,
+    "qOptions": [
+      "As^{3+}",
+      "Sb^{3+}",
+      "Bi^{3+}",
+      "Sn^{4+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Bi³⁺ belongs to Group IIA (Cu, Cd, Bi)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following belongs to Group IIB?",
+    "image": null,
+    "qOptions": [
+      "Cu^{2+}",
+      "Cd^{2+}",
+      "As^{3+}",
+      "Pb^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "As³⁺ belongs to Group IIB (As, Sb, Sn)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cu^{2+} gives a black precipitate with H₂S due to formation of:",
+    "image": null,
+    "qOptions": [
+      "CuSO₄",
+      "CuS",
+      "Cu₂S",
+      "CuO"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Cu}^{2+} + \\text{H}_2\\text{S} \\to \\text{CuS}\\ (\\text{black}).$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CuS is insoluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Dilute HNO₃",
+      "Concentrated HNO₃",
+      "Aqua regia"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "CuS is insoluble in dilute HCl, but dissolves in oxidising acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dissolution of CuS in nitric acid gives a solution that is:",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "Blue",
+      "Colourless",
+      "Yellow"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cu^{2+} solutions are blue due to hydrated Cu^{2+} ions."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cu²⁺ is confirmed by formation of deep blue colour with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "H₂S",
+      "K₄[Fe(CN)₆]"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cu^{2+} + excess NH_4OH → deep blue solution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The deep blue colour is due to formation of:",
+    "image": null,
+    "qOptions": [
+      "Cu(OH)₂",
+      "CuO",
+      "[Cu(NH₃)₄]²⁺",
+      "CuSO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Deep blue colour = [Cu(NH_3)_4]^{2+} complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cd²⁺ gives which colour sulphide precipitate with H₂S?",
+    "image": null,
+    "qOptions": [
+      "Black",
+      "Yellow",
+      "Brown",
+      "White"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cd^{2+} + H_2S → CdS (yellow)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CdS is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Concentrated HCl",
+      "Dilute HNO₃",
+      "Yellow ammonium sulphide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CdS dissolves in dilute nitric acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cd²⁺ can be confirmed by formation of yellow CdS in presence of:",
+    "image": null,
+    "qOptions": [
+      "NH₄OH",
+      "NaOH",
+      "Dilute acid",
+      "Excess H₂S"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Excess H_2S ensures complete precipitation of CdS."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion can interfere with Cd²⁺ detection due to similar sulphide colour?",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "Zn²⁺",
+      "Pb²⁺",
+      "Fe²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "ZnS (white) may interfere slightly due to sulphide formation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cd²⁺ belongs to:",
+    "image": null,
+    "qOptions": [
+      "Group I",
+      "Group II",
+      "Group III",
+      "Group IV"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cd^{2+} is a Group II cation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bi³⁺ gives which coloured sulphide precipitate?",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Brown",
+      "Black",
+      "White"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{Bi}^{3+} + \\text{H}_2\\text{S} \\to \\text{Bi}_2\\text{S}_3 \\ (\\text{black/brownish black}).$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bi₂S₃ is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Concentrated HNO₃",
+      "Yellow ammonium sulphide",
+      "NaOH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Bi₂S₃ dissolves in concentrated nitric acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "On adding NH₄OH to Bi³⁺ solution, a precipitate of ___ is formed.",
+    "image": null,
+    "qOptions": [
+      "Bi(OH)₃",
+      "Bi₂O₃",
+      "BiCl₃",
+      "Bi(NO₃)₃"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "NH₄OH gives Bi(OH)₃ precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The colour of Bi(OH)₃ precipitate is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Brown",
+      "Black"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Bi(OH)₃ is white."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bi³⁺ belongs to which sub-group of Group II?",
+    "image": null,
+    "qOptions": [
+      "IIA",
+      "IIB",
+      "IIIA",
+      "IIIB"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Bi³⁺ belongs to Group IIA."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II sulphide precipitates are filtered and treated with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄Cl",
+      "Yellow ammonium sulphide",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow ammonium sulphide separates Group II subgroups."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Insoluble residue after yellow ammonium sulphide treatment contains:",
+    "image": null,
+    "qOptions": [
+      "As, Sb, Sn",
+      "Cu, Cd, Bi",
+      "Fe, Al, Cr",
+      "Zn, Mn"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Insoluble residue → Cu, Cd, Bi."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Soluble portion after yellow ammonium sulphide treatment contains:",
+    "image": null,
+    "qOptions": [
+      "Cu, Cd, Bi",
+      "Pb, Hg, Ag",
+      "As, Sb, Sn",
+      "Fe, Co, Ni"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Soluble portion → As, Sb, Sn."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II analysis is done before Group III because:",
+    "image": null,
+    "qOptions": [
+      "Sulphides interfere later",
+      "Hydroxides form later",
+      "Sulphides are insoluble in acid",
+      "Group III precipitates dissolve"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Group II sulphides interfere with later groups if not removed."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following gases is used in Group II analysis?",
+    "image": null,
+    "qOptions": [
+      "NH₃",
+      "CO₂",
+      "H₂S",
+      "SO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group II uses H₂S gas."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CuS is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Black",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CuS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CdS is:",
+    "image": null,
+    "qOptions": [
+      "Black",
+      "Yellow",
+      "Brown",
+      "White"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "CdS is yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bi₂S₃ is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Brownish black",
+      "Green"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Bi₂S₃ is brownish black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Deep blue colour in Cu²⁺ confirmatory test indicates:",
+    "image": null,
+    "qOptions": [
+      "Cu(OH)₂",
+      "CuO",
+      "Ammine complex",
+      "Sulphide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Deep blue colour → ammine complex of Cu²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Yellow ammonium sulphide is also known as:",
+    "image": null,
+    "qOptions": [
+      "(NH₄)₂S",
+      "(NH₄)₂Sₓ",
+      "Na₂S",
+      "NaHS"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Yellow ammonium sulphide = (NH₄)₂Sₓ."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II cations are completely removed before testing for:",
+    "image": null,
+    "qOptions": [
+      "Anions",
+      "Group I",
+      "Group III",
+      "NH₄⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group II must be removed before Group III."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Failure to maintain acidic medium during Group II precipitation may cause precipitation of:",
+    "image": null,
+    "qOptions": [
+      "CuS only",
+      "CdS only",
+      "Group III sulphides",
+      "Group I chlorides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Alkaline medium would precipitate Group III sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion does NOT belong to Group II?",
+    "image": null,
+    "qOptions": [
+      "Cu²⁺",
+      "Cd²⁺",
+      "Zn²⁺",
+      "Bi³⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Zn²⁺ belongs to Group IV, not Group II."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II cations are also called:",
+    "image": null,
+    "qOptions": [
+      "Acidic sulphide group",
+      "Basic sulphide group",
+      "Hydroxide group",
+      "Carbonate group"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Group II is the acidic sulphide group."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The key principle governing Group II precipitation is difference in:",
+    "image": null,
+    "qOptions": [
+      "Colour",
+      "Solubility product",
+      "Density",
+      "Atomic radius"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Precipitation depends on Ksp differences."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III cations are precipitated as:",
+    "image": null,
+    "qOptions": [
+      "Sulphides",
+      "Carbonates",
+      "Hydroxides",
+      "Chlorides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group III cations precipitate as hydroxides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The group reagent for Group III is a mixture of:",
+    "image": null,
+    "qOptions": [
+      "NaOH + NH₄OH",
+      "NH₄Cl + NH₄OH",
+      "HCl + NH₄Cl",
+      "NH₄OH + H₂S"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "The group reagent is NH₄Cl + NH₄OH (buffer)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄Cl is added before NH₄OH in Group III analysis to:",
+    "image": null,
+    "qOptions": [
+      "Increase pH",
+      "Decrease pH",
+      "Buffer the solution",
+      "Precipitate cations"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NH₄Cl controls OH⁻ concentration → buffer action."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III precipitation occurs in:",
+    "image": null,
+    "qOptions": [
+      "Strongly acidic medium",
+      "Neutral medium",
+      "Weakly basic medium",
+      "Strongly basic medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group III requires weakly basic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following belongs to Group III?",
+    "image": null,
+    "qOptions": [
+      "Zn^{2+}",
+      "Fe^{3+}",
+      "Cu^{2+}",
+      "Cd^{2+}"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Fe^{3+} belongs to Group III."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III cations include:",
+    "image": null,
+    "qOptions": [
+      "Fe^{3+}, Al^{3+}, Cr^{3+}",
+      "Fe^{2+}, Al^{3+}, Zn^{2+}",
+      "Al^{3+}, Zn^{2+}, Mn^{2+}",
+      "Cr^{3+}, Cu^{2+}, Ni^{2+}"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Group III ions: Fe^{3+}, Al^{3+}, Cr^{3+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III hydroxide precipitates are generally:",
+    "image": null,
+    "qOptions": [
+      "White only",
+      "Coloured only",
+      "White to coloured",
+      "Black"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Their hydroxides range from white to coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which Group III hydroxide is amphoteric?",
+    "image": null,
+    "qOptions": [
+      "Fe(OH)_3",
+      "Al(OH)_3",
+      "Cr(OH)_3",
+      "Both B and C"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Al(OH)_3 and Cr(OH)_3 are amphoteric."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Amphoteric hydroxides dissolve in:",
+    "image": null,
+    "qOptions": [
+      "Dilute acids only",
+      "Dilute bases only",
+      "Both acids and bases",
+      "Neither acids nor bases"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Amphoteric hydroxides dissolve in acids and bases."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which hydroxide is NOT amphoteric?",
+    "image": null,
+    "qOptions": [
+      "Al(OH)_3",
+      "Cr(OH)_3",
+      "Fe(OH)_3",
+      "Zn(OH)_2"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe(OH)_3 is not amphoteric."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Fe^{3+} gives which coloured hydroxide precipitate with NH_4OH?",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "White",
+      "Brown",
+      "Blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe^{3+} + NH_4OH → brown Fe(OH)_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "Fe(OH)_2",
+      "Fe(OH)_3",
+      "Fe_2O_3",
+      "Fe_3O_4"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "The precipitate is Fe(OH)_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Fe(OH)_3 is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Excess NH_4OH",
+      "Excess NaOH",
+      "Dilute acids",
+      "All of the above"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe(OH)_3 dissolves in dilute acids only."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which reagent gives blood-red colour with Fe^{3+}?",
+    "image": null,
+    "qOptions": [
+      "Potassium ferrocyanide",
+      "Potassium ferricyanide",
+      "Potassium thiocyanate",
+      "NH_4OH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe^{3+} + KSCN → blood-red complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The blood-red colour is due to formation of:",
+    "image": null,
+    "qOptions": [
+      "FeS",
+      "Fe(SCN)_3",
+      "Fe(CN)_6^{3-}",
+      "Fe_2O_3"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Blood-red colour = Fe(SCN)_3 complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al³⁺ gives which precipitate with NH₄OH?",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "White gelatinous",
+      "Brown",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Al^{3+} gives white gelatinous ppt."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The precipitate is:",
+    "image": null,
+    "qOptions": [
+      "Al(OH)_2",
+      "Al(OH)_3",
+      "Al₂O₃",
+      "AlCl₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Precipitate is Al(OH)_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al(OH)_3 dissolves in excess NaOH forming:",
+    "image": null,
+    "qOptions": [
+      "AlO₂^-",
+      "Al³⁺",
+      "AlCl₄^-",
+      "Al(OH)₄^- only"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Al(OH)_3 dissolves forming [Al(OH)_4]^-"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dissolution of Al(OH)_3 in NaOH indicates its:",
+    "image": null,
+    "qOptions": [
+      "Basic nature",
+      "Acidic nature",
+      "Amphoteric nature",
+      "Neutral nature"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "This shows amphoteric nature."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al³⁺ does NOT give coloured salts because:",
+    "image": null,
+    "qOptions": [
+      "It is colourless",
+      "It has no d-electrons",
+      "It forms complexes",
+      "It is amphoteric"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Al^{3+} has no d-electrons, hence colourless."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cr³⁺ gives which coloured precipitate with NH₄OH?",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Green",
+      "Brown",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cr^{3+} gives green precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "CrO₃",
+      "Cr₂O₃",
+      "Cr(OH)₃",
+      "Cr(OH)₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Precipitate is Cr(OH)_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cr(OH)₃ dissolves in excess NaOH forming:",
+    "image": null,
+    "qOptions": [
+      "Chromate",
+      "Dichromate",
+      "Chromite",
+      "Chromium metal"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Cr(OH)_3 dissolves forming chromite."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The ion formed on dissolving Cr(OH)_3 in NaOH is:",
+    "image": null,
+    "qOptions": [
+      "[Cr(OH)_6]^{3-}",
+      "[CrO_4]^{2-}",
+      "[Cr_2O_7]^{2-}",
+      "Cr^{3+}"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Ion formed: [Cr(OH)_6]^{3-}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Oxidation of chromite in alkaline medium gives:",
+    "image": null,
+    "qOptions": [
+      "Cr^{3+}",
+      "CrO_4^{2-}",
+      "Cr_2O_3",
+      "Cr(OH)_3"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Oxidation gives chromate (CrO_4^{2-})."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "On adding excess NaOH to Group III precipitate, which ions dissolve?",
+    "image": null,
+    "qOptions": [
+      "Fe^{3+} only",
+      "Al^{3+} only",
+      "Al^{3+} and Cr^{3+}",
+      "Fe^{3+} and Cr^{3+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Excess NaOH dissolves Al^{3+} and Cr^{3+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The insoluble residue after NaOH treatment contains:",
+    "image": null,
+    "qOptions": [
+      "Al^{3+}",
+      "Cr^{3+}",
+      "Fe³⁺",
+      "Zn²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Insoluble residue → Fe^{3+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which reagent is used to oxidise Cr³⁺ to chromate?",
+    "image": null,
+    "qOptions": [
+      "H₂S",
+      "NH₄OH",
+      "H₂O₂",
+      "NaCl"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "H_2O_2 oxidises Cr^{3+} to chromate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The yellow colour after oxidation indicates formation of:",
+    "image": null,
+    "qOptions": [
+      "Dichromate",
+      "Chromite",
+      "Chromate",
+      "Chromium oxide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow solution indicates chromate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion gives yellow solution after oxidation in alkaline medium?",
+    "image": null,
+    "qOptions": [
+      "Fe³⁺",
+      "Al³⁺",
+      "Cr³⁺",
+      "Zn²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow solution confirms Cr^{3+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Fe³⁺ can be confirmed by blue precipitate with:",
+    "image": null,
+    "qOptions": [
+      "KSCN",
+      "K₄[Fe(CN)₆]",
+      "K₃[Fe(CN)₆]",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Fe^{3+} + K_4[Fe(CN)_6] → Prussian blue."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The blue precipitate formed is known as:",
+    "image": null,
+    "qOptions": [
+      "Prussian blue",
+      "Turnbull's blue",
+      "Berlin blue",
+      "All of these"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Prussian blue = Berlin blue = Turnbull's blue."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al³⁺ is confirmed by formation of blue lake with:",
+    "image": null,
+    "qOptions": [
+      "Alizarin",
+      "KSCN",
+      "KMnO₄",
+      "NH₄OH"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Al^{3+} forms red-blue lake with alizarin."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The aluminium-alizarin lake is formed in:",
+    "image": null,
+    "qOptions": [
+      "Acidic medium",
+      "Neutral medium",
+      "Slightly acidic medium",
+      "Alkaline medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Lake formation occurs in slightly acidic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cr^{3+} is confirmed by yellow precipitate with:",
+    "image": null,
+    "qOptions": [
+      "Pb^{2+} salts",
+      "BaCl_2",
+      "AgNO_3",
+      "NH_4OH"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Chromate + Pb^{2+} → yellow PbCrO_4."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Colour of Fe(OH)_3 is:",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "White",
+      "Brown",
+      "Yellow"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe(OH)_3 is brown."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Colour of Al(OH)_3 is:",
+    "image": null,
+    "qOptions": [
+      "Brown",
+      "Green",
+      "White",
+      "Blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Al(OH)_3 is white."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Colour of Cr(OH)_3 is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Green",
+      "Brown",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cr(OH)_3 is green."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Amphoteric hydroxides belong to:",
+    "image": null,
+    "qOptions": [
+      "Only Fe³⁺",
+      "Only Al³⁺",
+      "Only Cr³⁺",
+      "Al³⁺ and Cr³⁺"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Amphoteric: Al³⁺ and Cr³⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Fe³⁺ hydroxide does not dissolve in excess NaOH because it is:",
+    "image": null,
+    "qOptions": [
+      "Amphoteric",
+      "Neutral",
+      "Basic",
+      "Acidic"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe(OH)₃ is basic, not amphoteric."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄Cl prevents precipitation of:",
+    "image": null,
+    "qOptions": [
+      "Group I cations",
+      "Group II cations",
+      "Group IV cations",
+      "Group V cations"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "NH₄Cl prevents precipitation of Group IV cations."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III precipitation requires careful pH control because:",
+    "image": null,
+    "qOptions": [
+      "All hydroxides precipitate easily",
+      "Amphoteric hydroxides may dissolve",
+      "Some ions hydrolyse",
+      "All of these"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "pH control avoids hydrolysis + dissolution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess NH₄OH is avoided because it may:",
+    "image": null,
+    "qOptions": [
+      "Increase yield",
+      "Dissolve precipitates",
+      "Change colour",
+      "Precipitate more ions"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Excess NH₄OH can redissolve precipitates."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III analysis is done after Group II to avoid:",
+    "image": null,
+    "qOptions": [
+      "Loss of NH₄⁺",
+      "Sulphide interference",
+      "Colour change",
+      "Oxidation"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group III follows Group II to avoid sulphide interference."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The main basis of Group III separation is:",
+    "image": null,
+    "qOptions": [
+      "Colour difference",
+      "Solubility in NaOH",
+      "Oxidation states",
+      "Flame colour"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Separation is based on solubility in NaOH."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Fe³⁺ solutions are generally:",
+    "image": null,
+    "qOptions": [
+      "Colourless",
+      "Green",
+      "Yellow-brown",
+      "Blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Fe³⁺ solutions are yellow-brown."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al³⁺ salts are usually:",
+    "image": null,
+    "qOptions": [
+      "Coloured",
+      "White",
+      "Green",
+      "Black"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Al³⁺ salts are white/colourless."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cr³⁺ salts are commonly:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Green",
+      "Yellow",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cr³⁺ salts are generally green."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chromate ions are:",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "Blue",
+      "Yellow",
+      "Colourless"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Chromate ions are yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most important observation in Group III is:",
+    "image": null,
+    "qOptions": [
+      "Smell",
+      "Flame colour",
+      "Precipitate colour and solubility",
+      "Gas evolution"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group III relies on ppt colour & solubility."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV cations are precipitated as:",
+    "image": null,
+    "qOptions": [
+      "Chlorides",
+      "Hydroxides",
+      "Sulphides",
+      "Carbonates"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group IV cations precipitate as sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The reagent used to precipitate Group IV cations is:",
+    "image": null,
+    "qOptions": [
+      "H₂S in acidic medium",
+      "H₂S in alkaline medium",
+      "Dilute HCl",
+      "NH₄OH alone"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "They are precipitated by H₂S in alkaline medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The alkaline medium for Group IV precipitation is provided by:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH + NH₄Cl",
+      "NH₄Cl only",
+      "Na₂CO₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Alkaline medium is maintained using NH₄OH + NH₄Cl buffer."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV cations precipitate because their sulphides have:",
+    "image": null,
+    "qOptions": [
+      "High solubility",
+      "Low solubility in alkaline medium",
+      "High density",
+      "High melting point"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Their sulphides have low solubility in alkaline medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which of the following belongs to Group IV?",
+    "image": null,
+    "qOptions": [
+      "Fe^{3+}",
+      "Zn^{2+}",
+      "Cu^{2+}",
+      "Pb^{2+}"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Zn²⁺ belongs to Group IV."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV cations include:",
+    "image": null,
+    "qOptions": [
+      "Zn^{2+}, Mn^{2+}, Ni^{2+}, Co^{2+}",
+      "Fe^{2+}, Zn^{2+}, Cu^{2+}, Ni^{2+}",
+      "Mn^{2+}, Cr^{3+}, Al^{3+}, Zn^{2+}",
+      "Zn^{2+}, Cd^{2+}, Hg^{2+}, Pb^{2+}"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Group IV includes Zn²⁺, Mn²⁺, Ni²⁺, Co²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV sulphides are precipitated using:",
+    "image": null,
+    "qOptions": [
+      "H_2S gas",
+      "Na_2S",
+      "(NH_4)_2S",
+      "Yellow ammonium sulphide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sulphide ions are supplied using (NH₄)₂S."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The sulphide of zinc is:",
+    "image": null,
+    "qOptions": [
+      "Black",
+      "Yellow",
+      "White",
+      "Green"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "ZnS is white."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The sulphide of manganese is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Pink",
+      "Flesh-coloured",
+      "Black"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "MnS is flesh-coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The sulphide of nickel is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Green",
+      "Black",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NiS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Zn²⁺ gives which coloured sulphide precipitate?",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Black",
+      "White",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{Zn}^{2+} + \\text{H}_2\\text{S} \\to \\text{ZnS}\\ (\\text{white})$$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "ZnS is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Dilute HNO₃",
+      "NH₄OH",
+      "Water"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "ZnS dissolves in dilute HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Zn²⁺ gives a white precipitate with NaOH which:",
+    "image": null,
+    "qOptions": [
+      "Remains insoluble in excess",
+      "Dissolves in excess",
+      "Turns brown",
+      "Turns green"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Zn(OH)_2 dissolves in excess NaOH."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dissolution of Zn(OH)₂ in excess NaOH indicates:",
+    "image": null,
+    "qOptions": [
+      "Basic nature",
+      "Acidic nature",
+      "Amphoteric nature",
+      "Neutral nature"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "This shows amphoteric nature."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Zn²⁺ is confirmed by formation of white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "K₄[Fe(CN)₆]",
+      "K₃[Fe(CN)₆]",
+      "Na₂CO₃",
+      "NH₄OH"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Zn^{2+} + K_4[Fe(CN)_6] → white ppt."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mn²⁺ gives which coloured sulphide?",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Flesh-coloured",
+      "Black"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "MnS is flesh-coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MnS is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Dilute HNO₃",
+      "NH₄OH",
+      "Water"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "MnS dissolves in dilute HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mn²⁺ gives white precipitate with NaOH which on standing turns:",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "Brown",
+      "Black",
+      "Yellow"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Mn(OH)_2 turns brown on standing."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The colour change on standing is due to:",
+    "image": null,
+    "qOptions": [
+      "Reduction",
+      "Oxidation",
+      "Hydrolysis",
+      "Dehydration"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Due to oxidation by air."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mn²⁺ is confirmed by formation of purple colour after oxidation to:",
+    "image": null,
+    "qOptions": [
+      "MnO₂",
+      "Mn₂O₃",
+      "MnO₄²⁻",
+      "MnO₄⁻"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Oxidation gives permanganate (MnO₄⁻) (purple)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ gives which coloured sulphide?",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Green",
+      "Black"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "NiS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NiS is insoluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Dilute HNO₃",
+      "Concentrated HNO₃",
+      "Aqua regia"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "NiS is insoluble in dilute HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ gives green precipitate with:",
+    "image": null,
+    "qOptions": [
+      "NH₄OH",
+      "NaOH",
+      "Both A and B",
+      "H₂S"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ni^{2+} gives green ppt with NaOH and NH₄OH."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni(OH)₂ is:",
+    "image": null,
+    "qOptions": [
+      "Amphoteric",
+      "Acidic",
+      "Basic",
+      "Neutral"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ni(OH)₂ is basic."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ is confirmed by formation of red precipitate with:",
+    "image": null,
+    "qOptions": [
+      "Dimethylglyoxime",
+      "K₄[Fe(CN)₆]",
+      "NH₄OH",
+      "Na₂CO₃"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Ni^{2+} + DMG → red ppt."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Co²⁺ gives which coloured sulphide?",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Black",
+      "Blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CoS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CoS is soluble in:",
+    "image": null,
+    "qOptions": [
+      "Dilute HCl",
+      "Dilute HNO₃",
+      "Concentrated HNO₃",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "CoS dissolves in dilute nitric acid."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Co²⁺ gives blue precipitate with:",
+    "image": null,
+    "qOptions": [
+      "NH₄OH",
+      "NaOH",
+      "KNO₂",
+      "KSCN"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Co^{2+} + NH₄OH → blue ppt (initial)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Co²⁺ forms yellow crystalline precipitate with:",
+    "image": null,
+    "qOptions": [
+      "Dimethylglyoxime",
+      "KNO₂",
+      "NH₄OH",
+      "NaOH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Co}^{2+} + \\text{KNO}_2 \\to \\text{yellow crystalline ppt.}$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The yellow precipitate confirms presence of:",
+    "image": null,
+    "qOptions": [
+      "Ni²⁺",
+      "Co²⁺",
+      "Zn²⁺",
+      "Mn²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "This confirms Co²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV sulphides dissolve in dilute acids because they are:",
+    "image": null,
+    "qOptions": [
+      "Covalent",
+      "Basic sulphides",
+      "Amphoteric",
+      "Oxidising"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group IV sulphides are basic sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Zn²⁺ and Mn²⁺ can be separated based on difference in:",
+    "image": null,
+    "qOptions": [
+      "Colour",
+      "Solubility of hydroxides",
+      "Solubility of sulphides",
+      "Oxidation states"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Zn²⁺ and Mn²⁺ differ in sulphide solubility."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ and Co²⁺ are often tested together because they:",
+    "image": null,
+    "qOptions": [
+      "Give same colour",
+      "Form similar complexes",
+      "Belong to same subgroup",
+      "Have same valency"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ni²⁺ and Co²⁺ form similar complexes."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dimethylglyoxime is selective for:",
+    "image": null,
+    "qOptions": [
+      "Co²⁺",
+      "Zn²⁺",
+      "Ni²⁺",
+      "Mn²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Dimethylglyoxime is selective for Ni²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Potassium nitrite test confirms:",
+    "image": null,
+    "qOptions": [
+      "Ni²⁺",
+      "Co²⁺",
+      "Zn²⁺",
+      "Mn²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Potassium nitrite confirms Co²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "ZnS is:",
+    "image": null,
+    "qOptions": [
+      "Black",
+      "Yellow",
+      "White",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "ZnS is white."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "MnS is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Flesh-coloured",
+      "Black"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "MnS is flesh-coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NiS is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Green",
+      "Yellow",
+      "Black"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "NiS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CoS is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Black",
+      "Blue"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CoS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ confirmatory reagent is:",
+    "image": null,
+    "qOptions": [
+      "KNO₂",
+      "Dimethylglyoxime",
+      "KSCN",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ni²⁺ confirmatory reagent = DMG."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV analysis is done after Group III because:",
+    "image": null,
+    "qOptions": [
+      "Hydroxides interfere",
+      "Sulphides interfere",
+      "Carbonates interfere",
+      "Flame colours interfere"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphides interfere if Group IV is done earlier."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess NH₄Cl is used to:",
+    "image": null,
+    "qOptions": [
+      "Increase OH⁻",
+      "Decrease OH⁻",
+      "Buffer the solution",
+      "Precipitate sulphides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NH₄Cl provides buffering action."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV cations are called:",
+    "image": null,
+    "qOptions": [
+      "Acidic sulphide group",
+      "Basic sulphide group",
+      "Hydroxide group",
+      "Carbonate group"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group IV = basic sulphide group."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Failure to maintain alkaline medium during Group IV analysis leads to:",
+    "image": null,
+    "qOptions": [
+      "No precipitation",
+      "Partial precipitation",
+      "Precipitation of Group II",
+      "Colour change"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Wrong medium → partial precipitation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion does NOT belong to Group IV?",
+    "image": null,
+    "qOptions": [
+      "Zn²⁺",
+      "Mn²⁺",
+      "Ni²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Ca²⁺ does not belong to Group IV."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Zn²⁺ hydroxide dissolves in excess NaOH due to:",
+    "image": null,
+    "qOptions": [
+      "Oxidation",
+      "Reduction",
+      "Amphoteric nature",
+      "Basic nature"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Zn(OH)_2 dissolves due to amphoteric nature."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mn²⁺ hydroxide darkens on standing due to:",
+    "image": null,
+    "qOptions": [
+      "Reduction",
+      "Oxidation by air",
+      "Dehydration",
+      "Hydrolysis"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Mn(OH)_2 darkens due to oxidation by air."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ni²⁺ hydroxide is best described as:",
+    "image": null,
+    "qOptions": [
+      "Amphoteric",
+      "Basic",
+      "Acidic",
+      "Neutral"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ni(OH)_2 is basic."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Co²⁺ nitrite test produces a precipitate that is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Blue",
+      "Black"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Co^{2+} nitrite ppt is yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV identification relies heavily on:",
+    "image": null,
+    "qOptions": [
+      "Flame tests",
+      "Colour of sulphides and confirmatory reagents",
+      "Gas evolution",
+      "Odour"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group IV relies on colour + confirmatory tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations are precipitated as:",
+    "image": null,
+    "qOptions": [
+      "Sulphides",
+      "Hydroxides",
+      "Carbonates",
+      "Chlorides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group V cations precipitate as carbonates."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The group reagent for Group V is:",
+    "image": null,
+    "qOptions": [
+      "NH₄OH",
+      "(NH₄)₂CO₃",
+      "BaCl₂",
+      "Na₂CO₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group reagent is (NH_4)_2CO_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄Cl is added before Group V reagent to:",
+    "image": null,
+    "qOptions": [
+      "Increase precipitation",
+      "Buffer the solution",
+      "Prevent precipitation of Group VI",
+      "Precipitate Mg²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NH_4Cl prevents precipitation of Mg^{2+} → buffer action."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V precipitation is carried out in:",
+    "image": null,
+    "qOptions": [
+      "Acidic medium",
+      "Neutral medium",
+      "Slightly alkaline medium",
+      "Strongly alkaline medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group V precipitation requires slightly alkaline medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion belongs to Group V?",
+    "image": null,
+    "qOptions": [
+      "Mg²⁺",
+      "Ca²⁺",
+      "Na⁺",
+      "K⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ca²⁺ belongs to Group V."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V includes:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺, Sr²⁺, Ba²⁺",
+      "Mg²⁺, Ca²⁺, Ba²⁺",
+      "Ca²⁺, Zn²⁺, Sr²⁺",
+      "Sr²⁺, Na⁺, K⁺"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Group V = Ca²⁺, Sr²⁺, Ba²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations precipitate as:",
+    "image": null,
+    "qOptions": [
+      "Sulphates",
+      "Carbonates",
+      "Chlorides",
+      "Hydroxides"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "They precipitate as carbonates."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which carbonate is least soluble?",
+    "image": null,
+    "qOptions": [
+      "CaCO₃",
+      "SrCO₃",
+      "BaCO₃",
+      "MgCO₃"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "BaCO₃ is the least soluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The white precipitate formed in Group V analysis is:",
+    "image": null,
+    "qOptions": [
+      "Sulphide",
+      "Chloride",
+      "Carbonate",
+      "Hydroxide"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "White ppt formed = carbonate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V precipitate is filtered and washed to remove:",
+    "image": null,
+    "qOptions": [
+      "Excess acid",
+      "NH₄⁺ ions",
+      "Alkali metal ions",
+      "Sulphide ions"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Washing removes NH₄⁺ ions."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ca²⁺ gives white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "(NH₄)₂CO₃",
+      "NH₄OH",
+      "H₂S"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$$\\text{Ca}^{2+} + (\\text{NH}_4)_2\\text{CO}_3 \\to \\text{CaCO}_3 \\ (\\text{white}).$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "CaSO₄",
+      "CaCl₂",
+      "CaCO₃",
+      "Ca(OH)₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Precipitate is CaCO₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CaCO₃ dissolves in dilute acids with evolution of:",
+    "image": null,
+    "qOptions": [
+      "NH₃",
+      "SO₂",
+      "CO₂",
+      "H₂S"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CaCO₃ + acid → CO₂ gas."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ca²⁺ is confirmed by formation of white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "BaCl₂",
+      "(NH₄)₂SO₄",
+      "Ammonium oxalate",
+      "K₂CrO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ca²⁺ confirmed using ammonium oxalate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The confirmatory precipitate formed is:",
+    "image": null,
+    "qOptions": [
+      "CaSO₄",
+      "CaC₂O₄",
+      "CaCO₃",
+      "CaCl₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Confirmatory ppt = CaC₂O₄ (white)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sr²⁺ gives white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "Na₂CO₃",
+      "(NH₄)₂CO₃",
+      "BaCl₂",
+      "NH₄OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sr²⁺ gives ppt with (NH₄)₂CO₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "SrCO₃ dissolves in dilute acids producing:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "SO₂",
+      "NH₃",
+      "NO₂"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "SrCO₃ + acid → CO₂."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sr²⁺ gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sr²⁺ gives crimson flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sr^{2+} is confirmed by formation of precipitate with:",
+    "image": null,
+    "qOptions": [
+      "K_2CrO_4",
+      "(NH_4)_2SO_4",
+      "NaOH",
+      "NH_4OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sr²⁺ confirmed using (NH₄)₂SO₄."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The confirmatory precipitate is:",
+    "image": null,
+    "qOptions": [
+      "SrSO_4",
+      "SrCO_3",
+      "SrCl_2",
+      "Sr(OH)_2"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Confirmatory ppt = SrSO_4."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ba^{2+} gives white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "Na_2CO_3",
+      "(NH_4)_2CO_3",
+      "H_2S",
+      "NH_4OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ba^{2+} gives ppt with (NH_4)_2CO_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "BaCO_3 is:",
+    "image": null,
+    "qOptions": [
+      "Soluble in water",
+      "Insoluble in water",
+      "Yellow",
+      "Black"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "BaCO_3 is insoluble in water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ba²⁺ gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ba^{2+} gives apple green flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ba²⁺ is confirmed by formation of white precipitate with:",
+    "image": null,
+    "qOptions": [
+      "AgNO₃",
+      "BaCl₂",
+      "K₂CrO₄",
+      "NH₄OH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ba^{2+} confirmed by K_2CrO_4."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The confirmatory precipitate is:",
+    "image": null,
+    "qOptions": [
+      "BaCO₃",
+      "BaSO₄",
+      "BaCl₂",
+      "Ba(OH)₂"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Confirmatory ppt = BaSO_4 (white)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations are separated based on difference in:",
+    "image": null,
+    "qOptions": [
+      "Colour",
+      "Solubility of sulphates",
+      "Solubility of carbonates",
+      "Flame colour"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Separation based on carbonate solubility."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ca²⁺ carbonate is more soluble than:",
+    "image": null,
+    "qOptions": [
+      "SrCO₃",
+      "BaCO₃",
+      "Both A and B",
+      "Neither A nor B"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CaCO_3 is more soluble than SrCO_3 & BaCO_3."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphate test is preferred for confirmation of:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sulphate test is best for Ba^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test is most reliable for:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "All of these"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Flame test works for all Group V ions."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V analysis is done before Group VI because:",
+    "image": null,
+    "qOptions": [
+      "Carbonates interfere",
+      "Alkali metals interfere",
+      "Sulphides interfere",
+      "Hydroxides interfere"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group V is before VI because alkali metals interfere."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group VI cations are:",
+    "image": null,
+    "qOptions": [
+      "Precipitated as carbonates",
+      "Precipitated as hydroxides",
+      "Not precipitated by group reagents",
+      "Precipitated as sulphides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group VI cations are not precipitated by group reagents."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group VI includes:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺, Sr²⁺",
+      "Mg²⁺, Na⁺, K⁺",
+      "Na⁺, K⁺ only",
+      "Mg²⁺ only"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group VI = Mg²⁺, Na⁺, K⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ is not precipitated in Group V because:",
+    "image": null,
+    "qOptions": [
+      "It forms soluble carbonate",
+      "It forms insoluble sulphide",
+      "It forms volatile compounds",
+      "It forms coloured salts"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "MgCO₃ is soluble, so not precipitated earlier."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ is tested using:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "Na₂HPO₄",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg²⁺ tested using Na₂HPO₄."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ gives white precipitate of ___ in presence of NH₄OH and NH₄Cl.",
+    "image": null,
+    "qOptions": [
+      "Mg(OH)₂",
+      "MgCO₃",
+      "MgNH₄PO₄",
+      "MgSO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg²⁺ gives MgNH₄PO₄ (white)."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Na⁺ gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Golden yellow",
+      "Apple green"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Na⁺ gives golden yellow flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Weak",
+      "Intense",
+      "Short-lived",
+      "Invisible"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sodium flame is very intense."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium interferes in flame tests because it:",
+    "image": null,
+    "qOptions": [
+      "Is colourless",
+      "Gives intense emission",
+      "Forms complexes",
+      "Is insoluble"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Na⁺ interferes due to intense emission."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium is confirmed by:",
+    "image": null,
+    "qOptions": [
+      "Flame test only",
+      "Precipitation test",
+      "Colour reaction",
+      "Gas evolution"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Na⁺ is confirmed mainly by flame test."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium salts are generally:",
+    "image": null,
+    "qOptions": [
+      "Coloured",
+      "Insoluble",
+      "Water soluble",
+      "Amphoteric"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sodium salts are water soluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "K⁺ gives which flame colour?",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Violet",
+      "Crimson",
+      "Green"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "K⁺ gives violet flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Potassium flame is best observed using:",
+    "image": null,
+    "qOptions": [
+      "Red glass",
+      "Blue glass",
+      "Green glass",
+      "Yellow glass"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Potassium flame seen using blue glass."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "K⁺ is confirmed by formation of precipitate with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "Sodium cobaltinitrite",
+      "BaCl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "K⁺ confirmed using sodium cobaltinitrite."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The colour of potassium cobaltinitrite precipitate is:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Yellow",
+      "Green",
+      "Blue"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Potassium cobaltinitrite is yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "K⁺ does not give precipitation with:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH",
+      "Both A and B",
+      "H₂S"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "K⁺ gives no ppt with NaOH & NH₄OH."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations are also called:",
+    "image": null,
+    "qOptions": [
+      "Alkali metals",
+      "Alkaline earth metals",
+      "Transition metals",
+      "Basic radicals"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group V = alkaline earth metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group VI cations are detected mainly by:",
+    "image": null,
+    "qOptions": [
+      "Group reagents",
+      "Precipitation reactions",
+      "Flame tests and special tests",
+      "Sulphide tests"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group VI detected by flame + special tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ hydroxide is:",
+    "image": null,
+    "qOptions": [
+      "Amphoteric",
+      "Acidic",
+      "Basic",
+      "Neutral"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg(OH)₂ is basic."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ phosphate precipitate is:",
+    "image": null,
+    "qOptions": [
+      "Soluble in acids",
+      "Insoluble in acids",
+      "Coloured",
+      "Black"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "MgNH₄PO₄ dissolves in acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group VI identification relies mostly on:",
+    "image": null,
+    "qOptions": [
+      "Colour of salt",
+      "Flame colour and confirmatory tests",
+      "Gas evolution",
+      "Solubility in water"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group VI relies on flame + confirmatory tests."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V is analysed before Group VI because:",
+    "image": null,
+    "qOptions": [
+      "Group VI interferes",
+      "Group V interferes",
+      "Group VI precipitates early",
+      "Group V is volatile"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group V before VI because Group V interferes later."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ remains in filtrate after Group V because it:",
+    "image": null,
+    "qOptions": [
+      "Forms insoluble carbonate",
+      "Forms soluble carbonate",
+      "Forms sulphide",
+      "Forms chloride"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Mg²⁺ forms soluble carbonate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Alkali metal ions are analysed last because they:",
+    "image": null,
+    "qOptions": [
+      "Are coloured",
+      "Have no group reagent",
+      "Are volatile",
+      "Are amphoteric"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Alkali metals have no group reagent."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame tests are especially useful for:",
+    "image": null,
+    "qOptions": [
+      "Transition metals",
+      "Alkali metals",
+      "Heavy metals",
+      "Anions"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Flame tests best for alkali metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium cobaltinitrite test is specific for:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "Mg²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sodium cobaltinitrite → K⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ca²⁺ flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Crimson",
+      "Brick red",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Ca²⁺ → brick red flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sr²⁺ flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sr²⁺ → crimson flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ba²⁺ flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Apple green",
+      "Violet"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ba²⁺ → apple green flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Na⁺ flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Brick red",
+      "Crimson",
+      "Golden yellow",
+      "Violet"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Na⁺ → golden yellow flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "K⁺ flame colour is:",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Crimson",
+      "Violet",
+      "Green"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "K⁺ → violet flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brick-red flame may be confused with crimson flame unless:",
+    "image": null,
+    "qOptions": [
+      "Concentrated acid is used",
+      "Blue glass is used",
+      "Green glass is used",
+      "Flame is observed in dark"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Brick-red (Ca²⁺) and crimson (Sr²⁺) flames are distinguished using a blue glass."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium flame masks other flame colours because:",
+    "image": null,
+    "qOptions": [
+      "Sodium salts are insoluble",
+      "Sodium emits strongly in visible region",
+      "Sodium forms complexes",
+      "Sodium volatilises slowly"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sodium masks others because it gives very intense emission."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which flame colour is most intense?",
+    "image": null,
+    "qOptions": [
+      "Ca^{2+}",
+      "Sr^{2+}",
+      "Na^{+}",
+      "K^{+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Most intense flame colour: Na⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blue glass is used to observe flame of:",
+    "image": null,
+    "qOptions": [
+      "Na^{+}",
+      "Ca^{2+}",
+      "K^{+}",
+      "Ba^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Blue glass is used to observe K⁺ violet flame clearly."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test is unreliable for:",
+    "image": null,
+    "qOptions": [
+      "Alkali metals",
+      "Alkaline earth metals",
+      "Transition metals",
+      "Group V metals"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame tests are unreliable for transition metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "(NH_4)_2CO_3 is preferred over Na_2CO_3 because:",
+    "image": null,
+    "qOptions": [
+      "It is cheaper",
+      "It avoids introducing Na^{+}",
+      "It is stronger base",
+      "It reacts faster"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "(NH₄)₂CO₃ avoids introducing Na⁺ impurity."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Presence of NH_4Cl prevents precipitation of:",
+    "image": null,
+    "qOptions": [
+      "Ca^{2+}",
+      "Sr^{2+}",
+      "Ba^{2+}",
+      "Mg^{2+}"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "NH₄Cl prevents precipitation of Mg²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which carbonate precipitates first on adding (NH_4)_2CO_3?",
+    "image": null,
+    "qOptions": [
+      "CaCO_3",
+      "SrCO_3",
+      "BaCO_3",
+      "MgCO_3"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Least soluble carbonate → BaCO₃ precipitates first."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations are separated mainly by:",
+    "image": null,
+    "qOptions": [
+      "Sulphide tests",
+      "Carbonate solubility",
+      "Flame colour",
+      "Hydroxide solubility"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group V separation is based on carbonate solubility."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Failure to add NH_4Cl during Group V analysis may precipitate:",
+    "image": null,
+    "qOptions": [
+      "Na^{+}",
+      "K^{+}",
+      "Mg^{2+}",
+      "Ba^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Without NH_4Cl, Mg^{2+} precipitates incorrectly."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ does not give flame colour because it:",
+    "image": null,
+    "qOptions": [
+      "Is heavy",
+      "Forms stable salts",
+      "Has high excitation energy",
+      "Is amphoteric"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg^{2+} has high excitation energy, so no flame colour."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ is tested only after removal of:",
+    "image": null,
+    "qOptions": [
+      "Group II",
+      "Group III",
+      "Group IV",
+      "Group V"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Mg^{2+} is tested after Group V removal."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ test requires presence of:",
+    "image": null,
+    "qOptions": [
+      "NaOH only",
+      "NH₄OH only",
+      "NH₄OH + NH₄Cl",
+      "HCl"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg^{2+} test requires NH_4OH + NH_4Cl buffer."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The role of NH₄Cl in Mg²⁺ test is to:",
+    "image": null,
+    "qOptions": [
+      "Increase precipitation",
+      "Buffer the solution",
+      "Oxidise Mg²⁺",
+      "Reduce Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH_4Cl provides buffering action."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The Mg²⁺ confirmatory precipitate is:",
+    "image": null,
+    "qOptions": [
+      "Soluble in water",
+      "Insoluble in water",
+      "Coloured",
+      "Black"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "MgNH_4PO_4 is insoluble, white precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Alkali metals are placed last because they:",
+    "image": null,
+    "qOptions": [
+      "Are volatile",
+      "Form insoluble salts",
+      "Do not precipitate with group reagents",
+      "Give coloured sulphides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Alkali metals do not precipitate with group reagents."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which alkali metal ion has no confirmatory precipitation test?",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "Both A and B",
+      "Li⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Na^{+} and K^{+} lack direct precipitation tests → both."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium cobaltinitrite test fails if solution contains excess:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "NH₄⁺",
+      "K⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Excess NH₄⁺ interferes with cobaltinitrite test."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "K⁺ flame is weak because:",
+    "image": null,
+    "qOptions": [
+      "It forms stable compounds",
+      "Emission lies partially outside visible range",
+      "It is less volatile",
+      "It is heavier"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "K⁺ flame is weak because emission is partly outside visible range."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion interferes most in K⁺ flame test?",
+    "image": null,
+    "qOptions": [
+      "Li⁺",
+      "Na⁺",
+      "Ca²⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Na⁺ interferes most due to strong emission."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V precipitates dissolve in acids due to:",
+    "image": null,
+    "qOptions": [
+      "Oxidation",
+      "Reduction",
+      "CO₂ evolution",
+      "Hydrolysis"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Carbonates dissolve due to CO₂ evolution."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Carbonate group is skipped if solution is acidic because:",
+    "image": null,
+    "qOptions": [
+      "Carbonates dissolve",
+      "Sulphides form",
+      "Hydroxides form",
+      "Chlorides form"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Carbonate group skipped in acidic medium because carbonates dissolve."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The gas evolved when carbonates react with acid turns limewater:",
+    "image": null,
+    "qOptions": [
+      "Blue",
+      "Yellow",
+      "Milky",
+      "Colourless"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CO₂ turns limewater milky."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion must be completely removed before Mg²⁺ test?",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "All of these"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "All alkaline earth ions must be removed before Mg²⁺ test."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ gives no precipitate with NH₄OH alone because:",
+    "image": null,
+    "qOptions": [
+      "Mg(OH)₂ is soluble",
+      "NH₄OH is weak base",
+      "Mg²⁺ is amphoteric",
+      "Mg²⁺ is volatile"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$NH_4OH$ is a weak base, so $Mg(OH)_2$ doesn't precipitate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White gelatinous precipitate suggests presence of:",
+    "image": null,
+    "qOptions": [
+      "Fe³⁺",
+      "Al³⁺",
+      "Zn²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "White gelatinous ppt → $Al(OH)_3$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flesh-coloured sulphide indicates:",
+    "image": null,
+    "qOptions": [
+      "Zn²⁺",
+      "Mn²⁺",
+      "Ni²⁺",
+      "Co²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Flesh-coloured sulphide → $Mn^{2+}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Apple-green flame confirms:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "Na⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Apple-green flame → $Ba^{2+}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Crimson flame confirms:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "K⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Crimson flame → $Sr^{2+}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Golden yellow flame confirms:",
+    "image": null,
+    "qOptions": [
+      "K⁺",
+      "Na⁺",
+      "Ca²⁺",
+      "Sr²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Golden yellow flame → $Na^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion is detected only by flame test in qualitative analysis?",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Na⁺",
+      "Sr²⁺",
+      "Ba²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Only flame-test-based detection → $Na^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which test must always be done in clean platinum wire?",
+    "image": null,
+    "qOptions": [
+      "Sulphide test",
+      "Hydroxide test",
+      "Flame test",
+      "Carbonate test"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame test requires clean platinum wire."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame colour is observed due to:",
+    "image": null,
+    "qOptions": [
+      "Ionisation",
+      "Electron excitation and emission",
+      "Oxidation",
+      "Reduction"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Flame colour arises from electron excitation & emission."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Alkali metals give flame colour because they:",
+    "image": null,
+    "qOptions": [
+      "Have low ionisation energy",
+      "Form coloured compounds",
+      "Have unpaired electrons",
+      "Are amphoteric"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "Alkali metals show flame colour due to low ionisation energy."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V and VI together are called:",
+    "image": null,
+    "qOptions": [
+      "Acidic radicals",
+      "Basic radicals",
+      "Anions",
+      "Neutral radicals"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group V + VI = basic radicals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V test is skipped if solution contains:",
+    "image": null,
+    "qOptions": [
+      "Excess NH₄Cl",
+      "Excess acid",
+      "Excess base",
+      "Sulphide"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Carbonate group fails in acidic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Which ion remains till the very end of analysis?",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Mg²⁺",
+      "Na⁺",
+      "Ba²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ion remaining till the end → Na⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Final filtrate after all group analysis contains mainly:",
+    "image": null,
+    "qOptions": [
+      "Heavy metals",
+      "Alkali metals",
+      "Transition metals",
+      "Sulphides"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Final filtrate contains alkali metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The last confirmatory tests in analysis usually involve:",
+    "image": null,
+    "qOptions": [
+      "Precipitation",
+      "Flame colour",
+      "Gas evolution",
+      "Colour change"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Last confirmations usually involve flame colour."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Correct order of last two groups is:",
+    "image": null,
+    "qOptions": [
+      "VI then V",
+      "V then VI",
+      "IV then VI",
+      "III then VI"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Correct order: Group V → Group VI."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The first ion tested in qualitative analysis is:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "NH₄⁺",
+      "K⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH_4^+ is tested first as it is volatile and lost on heating."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The last ions tested in qualitative analysis belong to:",
+    "image": null,
+    "qOptions": [
+      "Group IV",
+      "Group III",
+      "Group V",
+      "Group VI"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Last group = Group VI (Mg^{2+}, Na^{+}, K^{+})."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group reagents are added sequentially to avoid:",
+    "image": null,
+    "qOptions": [
+      "Colour formation",
+      "Gas evolution",
+      "Interference",
+      "Hydrolysis"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sequential reagents prevent interference."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The basis of qualitative inorganic analysis is difference in:",
+    "image": null,
+    "qOptions": [
+      "Atomic mass",
+      "Colour",
+      "Solubility product",
+      "Density"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Qualitative analysis is based on Ksp differences."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Confirmatory tests are done on:",
+    "image": null,
+    "qOptions": [
+      "Original solution",
+      "Solid salt",
+      "Precipitate",
+      "Filtrate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Confirmatory tests are done on precipitates."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dilute HCl precipitates which group?",
+    "image": null,
+    "qOptions": [
+      "Group II",
+      "Group III",
+      "Group I",
+      "Group IV"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Dilute HCl → Group I."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "H₂S in acidic medium precipitates:",
+    "image": null,
+    "qOptions": [
+      "Group I",
+      "Group II",
+      "Group III",
+      "Group IV"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "H_2S (acidic) → Group II."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄OH + NH₄Cl precipitates:",
+    "image": null,
+    "qOptions": [
+      "Group II",
+      "Group III",
+      "Group IV",
+      "Group V"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH_4Cl + NH_4OH → Group III."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "H₂S in alkaline medium precipitates:",
+    "image": null,
+    "qOptions": [
+      "Group II",
+      "Group III",
+      "Group IV",
+      "Group V"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "H₂S (alkaline) → Group IV."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "$(\\text{NH}_4)_2\\text{CO}_3$ precipitates:",
+    "image": null,
+    "qOptions": [
+      "Group III",
+      "Group IV",
+      "Group V",
+      "Group VI"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "(NH₄)₂CO₃ → Group V."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White curdy precipitate with dilute HCl indicates:",
+    "image": null,
+    "qOptions": [
+      "Pb²⁺",
+      "Ag⁺",
+      "Hg₂²⁺",
+      "All of these"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "All Group I chlorides are white → all possible."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The Group I chloride soluble in hot water is:",
+    "image": null,
+    "qOptions": [
+      "AgCl",
+      "Hg₂Cl₂",
+      "PbCl₂",
+      "CuCl"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "PbCl₂ dissolves in hot water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blackening of precipitate with NH₄OH confirms:",
+    "image": null,
+    "qOptions": [
+      "Ag⁺",
+      "Pb²⁺",
+      "Hg₂²⁺",
+      "Cu²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Blackening with NH₄OH → Hg₂²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "AgCl dissolves in NH₄OH due to formation of:",
+    "image": null,
+    "qOptions": [
+      "AgOH",
+      "Ag₂O",
+      "Ammine complex",
+      "Ag₂Cl₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "AgCl dissolves due to ammine complex."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Yellow crystalline PbI₂ appears on:",
+    "image": null,
+    "qOptions": [
+      "Heating",
+      "Cooling",
+      "Standing",
+      "Shaking"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Pbl₂ crystallises on cooling."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II sulphides are precipitated in:",
+    "image": null,
+    "qOptions": [
+      "Neutral medium",
+      "Acidic medium",
+      "Alkaline medium",
+      "Strongly basic medium"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Group II requires acidic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CuS is coloured:",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "White",
+      "Black",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "CuS is black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CdS is coloured:",
+    "image": null,
+    "qOptions": [
+      "Black",
+      "Yellow",
+      "White",
+      "Green"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "CdS is yellow."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Bi₂S₃ is coloured:",
+    "image": null,
+    "qOptions": [
+      "Yellow",
+      "Brownish black",
+      "Green",
+      "White"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Bi₂S₃ is brownish black."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group II is divided into subgroups based on solubility in:",
+    "image": null,
+    "qOptions": [
+      "Water",
+      "Dilute acids",
+      "Yellow ammonium sulphide",
+      "NaOH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Subgroups depend on solubility in yellow ammonium sulphide."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group III hydroxides are precipitated in:",
+    "image": null,
+    "qOptions": [
+      "Acidic medium",
+      "Neutral medium",
+      "Weakly basic medium",
+      "Strongly basic medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group III → weakly basic medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brown hydroxide precipitate indicates:",
+    "image": null,
+    "qOptions": [
+      "Al^{3+}",
+      "Cr^{3+}",
+      "Fe^{3+}",
+      "Zn^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Brown hydroxide → Fe(OH)₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White gelatinous precipitate suggests:",
+    "image": null,
+    "qOptions": [
+      "Fe^{3+}",
+      "Al^{3+}",
+      "Cr^{3+}",
+      "Mn^{2+}"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "White gelatinous → Al(OH)₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Green hydroxide precipitate suggests:",
+    "image": null,
+    "qOptions": [
+      "Al^{3+}",
+      "Fe^{3+}",
+      "Cr^{3+}",
+      "Zn^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Green hydroxide → Cr(OH)₃."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Amphoteric hydroxides in Group III are:",
+    "image": null,
+    "qOptions": [
+      "Fe^{3+} only",
+      "Al^{3+} only",
+      "Cr^{3+} only",
+      "Al^{3+} and Cr^{3+}"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Amphoteric → Al³⁺, Cr³⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blood-red colour with KSCN confirms:",
+    "image": null,
+    "qOptions": [
+      "Fe^{2+}",
+      "Fe^{3+}",
+      "Cr^{3+}",
+      "Al^{3+}"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Blood red with SCN⁻ → Fe³⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Prussian blue is formed by reaction of Fe^{3+} with:",
+    "image": null,
+    "qOptions": [
+      "KSCN",
+      "K_4[Fe(CN)_6]",
+      "K_3[Fe(CN)_6]",
+      "NH_4OH"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Prussian blue uses K₄[Fe(CN)₆]."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al^{3+} is confirmed using:",
+    "image": null,
+    "qOptions": [
+      "Dimethylglyoxime",
+      "Alizarin",
+      "KSCN",
+      "KNO_2"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Al³⁺ → Alizarin lake."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cr^{3+} is oxidised to chromate using:",
+    "image": null,
+    "qOptions": [
+      "NH_4OH",
+      "NaOH only",
+      "H_2O_2 in alkaline medium",
+      "H_2S"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Cr³⁺ oxidised by H₂O₂ in alkali."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Yellow colour after oxidation indicates:",
+    "image": null,
+    "qOptions": [
+      "Dichromate",
+      "Chromite",
+      "Chromate",
+      "Chromium metal"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Yellow → chromate."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group IV sulphides are precipitated in:",
+    "image": null,
+    "qOptions": [
+      "Acidic medium",
+      "Neutral medium",
+      "Alkaline medium",
+      "Strongly acidic medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group IV → alkaline medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White sulphide indicates:",
+    "image": null,
+    "qOptions": [
+      "Mn²⁺",
+      "Zn²⁺",
+      "Ni²⁺",
+      "Co²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "White sulphide → ZnS."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flesh-coloured sulphide indicates:",
+    "image": null,
+    "qOptions": [
+      "Zn²⁺",
+      "Mn²⁺",
+      "Ni²⁺",
+      "Co²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Flesh-coloured → MnS."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Black sulphide may indicate:",
+    "image": null,
+    "qOptions": [
+      "Zn^{2+}",
+      "Mn^{2+}",
+      "Ni^{2+}",
+      "Both Cu and Co^{2+}"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Black sulphide → NiS / CoS."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Red precipitate with dimethylglyoxime confirms:",
+    "image": null,
+    "qOptions": [
+      "Co^{2+}",
+      "Zn^{2+}",
+      "Ni^{2+}",
+      "Mn^{2+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "DMG → Ni^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group V cations precipitate as:",
+    "image": null,
+    "qOptions": [
+      "Sulphides",
+      "Hydroxides",
+      "Carbonates",
+      "Chlorides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group V → carbonates."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brick-red flame confirms:",
+    "image": null,
+    "qOptions": [
+      "Sr^{2+}",
+      "Ba^{2+}",
+      "Ca^{2+}",
+      "Na^{+}"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Brick red → Ca^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Crimson flame confirms:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "K⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Crimson → Sr^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Apple-green flame confirms:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Sr²⁺",
+      "Ba²⁺",
+      "Na⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Apple green → Ba^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "White precipitate with ammonium oxalate confirms:",
+    "image": null,
+    "qOptions": [
+      "Sr²⁺",
+      "Ba²⁺",
+      "Ca²⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ammonium oxalate → Ca^{2+}."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ is confirmed by formation of:",
+    "image": null,
+    "qOptions": [
+      "Mg(OH)_2",
+      "MgCO₃",
+      "MgNH₄PO₄",
+      "MgSO₄"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$$\\text{Mg}^{2+} \\to \\text{MgNH}_4\\text{PO}_4.$$"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ test requires presence of:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄OH only",
+      "NH₄OH + NH₄Cl",
+      "HCl"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Mg$^{2+}$ test needs $\\text{NH}_4\\text{OH} + \\text{NH}_4\\text{Cl}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Golden yellow flame indicates:",
+    "image": null,
+    "qOptions": [
+      "K⁺",
+      "Ca²⁺",
+      "Na⁺",
+      "Sr²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Golden yellow $\\to \\text{Na}^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Violet flame seen through blue glass indicates:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "Ba²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Violet (blue glass) $\\to \\text{K}^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sodium cobaltinitrite confirms:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "K⁺",
+      "Mg²⁺",
+      "Ca²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Cobaltinitrite $\\to \\text{K}^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ion remaining in filtrate till the end is usually:",
+    "image": null,
+    "qOptions": [
+      "Ca²⁺",
+      "Mg²⁺",
+      "Na⁺",
+      "Ba²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Ion till end $\\to \\text{Na}^+$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄Cl is added in multiple groups mainly to:",
+    "image": null,
+    "qOptions": [
+      "Increase pH",
+      "Decrease pH",
+      "Buffer the solution",
+      "Oxidise ions"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$\\text{NH}_4\\text{Cl} \\to \\text{buffer}$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame test must be performed using:",
+    "image": null,
+    "qOptions": [
+      "Copper wire",
+      "Iron wire",
+      "Platinum/nichrome wire",
+      "Glass rod"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame test $\\to$ platinum/nichrome wire."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most common cause of wrong qualitative analysis is:",
+    "image": null,
+    "qOptions": [
+      "Wrong salt",
+      "Skipping group separation",
+      "Clean reagents",
+      "Clear solution"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Biggest mistake → wrong order."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most important principle to remember is:",
+    "image": null,
+    "qOptions": [
+      "Colour of salt",
+      "Order of group reagents",
+      "Atomic numbers",
+      "Molecular weight"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Key principle → order of reagents."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ is detected by evolution of:",
+    "image": null,
+    "qOptions": [
+      "CO₂",
+      "SO₂",
+      "NH₃",
+      "NO₂"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "$NH_4^+$ releases $NH_3$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₃ turns red litmus:",
+    "image": null,
+    "qOptions": [
+      "Colourless",
+      "Blue",
+      "Green",
+      "Yellow"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "$NH_3$ turns red litmus blue."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Sulphide precipitates are generally:",
+    "image": null,
+    "qOptions": [
+      "White",
+      "Coloured",
+      "Colourless",
+      "Transparent"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Sulphides are usually coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hydroxide precipitates may be:",
+    "image": null,
+    "qOptions": [
+      "Only white",
+      "Only coloured",
+      "White or coloured",
+      "Only black"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Hydroxides may be white or coloured."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Carbonate precipitates evolve ___ with acids.",
+    "image": null,
+    "qOptions": [
+      "NH₃",
+      "SO₂",
+      "CO₂",
+      "H₂S"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Carbonates + acid → $CO_2$."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "First group reagent used is:",
+    "image": null,
+    "qOptions": [
+      "H₂S",
+      "Dilute HCl",
+      "NH₄OH",
+      "(NH₄)₂CO₃"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "First reagent → dilute HCl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Last group reagent used is:",
+    "image": null,
+    "qOptions": [
+      "H₂S",
+      "NH₄OH",
+      "(NH₄)₂CO₃",
+      "No group reagent"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Last group → no reagent."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Qualitative analysis primarily tests:",
+    "image": null,
+    "qOptions": [
+      "Anions only",
+      "Cations only",
+      "Both anions and cations",
+      "Organic compounds"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Analysis tests both anions and cations."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The success of analysis depends mainly on:",
+    "image": null,
+    "qOptions": [
+      "Speed",
+      "Memory",
+      "Observation",
+      "Guessing"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Success depends on observation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The correct order of analysis is:",
+    "image": null,
+    "qOptions": [
+      "Anions → Cations",
+      "Cations → Anions",
+      "Either order",
+      "Random"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Correct order → cations then anions."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ test must be performed before heating the salt because:",
+    "image": null,
+    "qOptions": [
+      "NH₄⁺ decomposes on heating",
+      "NH₄⁺ is coloured",
+      "NH₄⁺ forms precipitate",
+      "NH₄⁺ reacts with acids"
+    ],
+    "qAnswer": "A",
+    "sImage": null,
+    "sText": "NH_4^+ decomposes on heating."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Dilute HCl is preferred over concentrated HCl in Group I because it:",
+    "image": null,
+    "qOptions": [
+      "Is cheaper",
+      "Prevents complex formation",
+      "Gives faster reaction",
+      "Is safer"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Dilute HCl avoids complexes."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "PbCl₂ dissolves in hot water due to:",
+    "image": null,
+    "qOptions": [
+      "Decomposition",
+      "Increased solubility",
+      "Complex formation",
+      "Oxidation"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "PbCl₂ dissolves due to higher solubility in hot water."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Black precipitate on passing H₂S in acidic medium may indicate:",
+    "image": null,
+    "qOptions": [
+      "Zn²⁺",
+      "Cu²⁺",
+      "Ca²⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Black sulphide in acid → Cu²⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Yellow ammonium sulphide is used to separate Group II because it:",
+    "image": null,
+    "qOptions": [
+      "Precipitates sulphides",
+      "Dissolves some sulphides",
+      "Oxidises sulphides",
+      "Reduces sulphides"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Yellow ammonium sulphide dissolves some sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Failure to maintain acidic medium during Group II may precipitate:",
+    "image": null,
+    "qOptions": [
+      "Group I sulphides",
+      "Group III sulphides",
+      "Group IV sulphides",
+      "Group V carbonates"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Wrong medium → Group III sulphides."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄Cl prevents precipitation by:",
+    "image": null,
+    "qOptions": [
+      "Increasing Ksp",
+      "Decreasing OH⁻ concentration",
+      "Oxidising ions",
+      "Forming complexes"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "NH₄Cl lowers OH⁻ concentration."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess NaOH dissolves Al(OH)₃ due to:",
+    "image": null,
+    "qOptions": [
+      "Oxidation",
+      "Reduction",
+      "Amphoteric nature",
+      "Hydrolysis"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Al(OH)₃ dissolves due to amphoteric nature."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chromate ion is yellow because chromium is in oxidation state:",
+    "image": null,
+    "qOptions": [
+      "+2",
+      "+3",
+      "+5",
+      "+6"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Chromate = Cr in +6 state."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flesh-coloured sulphide turning brown on standing suggests:",
+    "image": null,
+    "qOptions": [
+      "Zn²⁺",
+      "Mn²⁺",
+      "Ni²⁺",
+      "Co²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Flesh → brown → Mn²⁺ oxidation."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blood-red colour with thiocyanate disappears on adding:",
+    "image": null,
+    "qOptions": [
+      "NH₄OH",
+      "HCl",
+      "KF",
+      "NaOH"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "KF complexes Fe³⁺, colour disappears."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Prussian blue formation requires Fe³⁺ and:",
+    "image": null,
+    "qOptions": [
+      "CN⁻",
+      "[Fe(CN)₆]⁴⁻",
+      "[Fe(CN)₆]³⁻",
+      "SCN⁻"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Prussian blue requires [Fe(CN)₆]⁴⁻."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Alizarin test for Al³⁺ is done in:",
+    "image": null,
+    "qOptions": [
+      "Strongly acidic medium",
+      "Neutral medium",
+      "Slightly acidic medium",
+      "Strongly alkaline medium"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Alizarin test → slightly acidic."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Red precipitate with dimethylglyoxime requires medium to be:",
+    "image": null,
+    "qOptions": [
+      "Acidic",
+      "Neutral",
+      "Alkaline",
+      "Strongly acidic"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "DMG works in alkaline medium."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Potassium cobaltinitrite test fails in presence of excess:",
+    "image": null,
+    "qOptions": [
+      "Na⁺",
+      "NH₄⁺",
+      "Ca²⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Excess NH_4^+ interferes."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Brick-red flame can be masked by:",
+    "image": null,
+    "qOptions": [
+      "K⁺",
+      "Na⁺",
+      "Ba²⁺",
+      "Sr²⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Na^+ masks Ca^{2+} flame."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Blue glass absorbs light mainly from:",
+    "image": null,
+    "qOptions": [
+      "Violet region",
+      "Yellow region",
+      "Red region",
+      "Green region"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Blue glass absorbs yellow (Na) light."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Nichrome wire is preferred because it:",
+    "image": null,
+    "qOptions": [
+      "Is cheap",
+      "Gives no colour",
+      "Does not melt easily",
+      "Is coloured"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Nichrome resists melting."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Flame colour is due to emission from:",
+    "image": null,
+    "qOptions": [
+      "Molecules",
+      "Nuclei",
+      "Excited atoms/ions",
+      "Electrons alone"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Flame colour = excited atoms."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Most persistent flame colour among alkali metals is of:",
+    "image": null,
+    "qOptions": [
+      "Li⁺",
+      "Na⁺",
+      "K⁺",
+      "Cs⁺"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Most persistent → Na^+."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Carbonate group must not be tested in acidic solution because:",
+    "image": null,
+    "qOptions": [
+      "Carbonates hydrolyse",
+      "Carbonates dissolve",
+      "Carbonates oxidise",
+      "Carbonates reduce"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Carbonates dissolve in acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mg²⁺ precipitates with phosphate only in presence of:",
+    "image": null,
+    "qOptions": [
+      "NaOH",
+      "NH₄Cl",
+      "NH₄OH",
+      "NH₄Cl + NH₄OH"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Mg^{2+} ppt needs NH_4OH + NH_4Cl."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Alkali metals do not form sulphides in analysis because:",
+    "image": null,
+    "qOptions": [
+      "Sulphides are coloured",
+      "Sulphides are soluble",
+      "Sulphides oxidise",
+      "Sulphides reduce"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Alkali sulphides are soluble."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most common flame-test contaminant is:",
+    "image": null,
+    "qOptions": [
+      "K⁺",
+      "Ca²⁺",
+      "Na⁺",
+      "Mg²⁺"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Most common contaminant → Na^+."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group separation primarily depends on controlling:",
+    "image": null,
+    "qOptions": [
+      "Temperature",
+      "Pressure",
+      "pH",
+      "Volume"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Group separation depends on pH control."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ detection confirms presence of a:",
+    "image": null,
+    "qOptions": [
+      "Metal ion",
+      "Acidic radical",
+      "Basic radical",
+      "Neutral molecule"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NH_4^+ is a basic radical."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cu²⁺ ammine complex is:",
+    "image": null,
+    "qOptions": [
+      "Colourless",
+      "Green",
+      "Deep blue",
+      "Yellow"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Cu^{2+} ammine complex is deep blue."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Al(OH)₃ dissolves in excess NaOH forming:",
+    "image": null,
+    "qOptions": [
+      "Al³⁺",
+      "AlO₂⁻",
+      "[Al(OH)₄]⁻",
+      "Al₂O₃"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Al(OH)_3 → [Al(OH)_4]^-."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Ba²⁺ sulphate precipitate is:",
+    "image": null,
+    "qOptions": [
+      "Soluble in acids",
+      "Insoluble in acids",
+      "Coloured",
+      "Volatile"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "BaSO_4 is insoluble in acids."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Mn²⁺ permanganate test gives colour:",
+    "image": null,
+    "qOptions": [
+      "Green",
+      "Blue",
+      "Purple",
+      "Brown"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Permanganate gives purple."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most selective reagent in qualitative analysis is:",
+    "image": null,
+    "qOptions": [
+      "HCl",
+      "H₂S",
+      "NH₄OH",
+      "Order of reagents"
+    ],
+    "qAnswer": "D",
+    "sImage": null,
+    "sText": "Most selective factor = order of reagents."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The most irreversible precipitation is of:",
+    "image": null,
+    "qOptions": [
+      "Carbonates",
+      "Hydroxides",
+      "Sulphides",
+      "Chlorides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Sulphides are most irreversible."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Final filtrate always contains:",
+    "image": null,
+    "qOptions": [
+      "Transition metals",
+      "Alkaline earth metals",
+      "Alkali metals",
+      "Sulphides"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Final filtrate → alkali metals."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "One mistake that ruins entire analysis is:",
+    "image": null,
+    "qOptions": [
+      "Excess reagent",
+      "Wrong order",
+      "Slow filtration",
+      "Heating"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Wrong order ruins analysis."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Qualitative analysis is fundamentally an application of:",
+    "image": null,
+    "qOptions": [
+      "Thermodynamics",
+      "Kinetics",
+      "Solubility equilibria",
+      "Electrochemistry"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "Qualitative analysis = solubility equilibria."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "NH₄⁺ test uses NaOH because it:",
+    "image": null,
+    "qOptions": [
+      "Oxidises NH₄⁺",
+      "Reduces NH₄⁺",
+      "Liberates NH₃",
+      "Forms precipitate"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "NaOH liberates NH₃ from NH₄⁺."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "H₂S must be passed slowly to control:",
+    "image": null,
+    "qOptions": [
+      "Temperature",
+      "Pressure",
+      "Sulphide ion concentration",
+      "Volume"
+    ],
+    "qAnswer": "C",
+    "sImage": null,
+    "sText": "H₂S passed slowly to control S²⁻ concentration."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Group analysis is stopped once all cations are identified because:",
+    "image": null,
+    "qOptions": [
+      "Filtrate is colourless",
+      "No ions remain",
+      "Remaining ions have no tests",
+      "Flame tests begin"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Analysis stops once ions identified."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In exams, qualitative questions mainly test:",
+    "image": null,
+    "qOptions": [
+      "Speed",
+      "Memory of colours and order",
+      "Numerical ability",
+      "Calculations"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Exams test memory of order & colours."
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The single most important habit for correct analysis is:",
+    "image": null,
+    "qOptions": [
+      "Writing equations",
+      "Careful observation",
+      "Fast reactions",
+      "Guessing"
+    ],
+    "qAnswer": "B",
+    "sImage": null,
+    "sText": "Most important habit = careful observation."
+  }
+]

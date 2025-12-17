@@ -897,12 +897,13 @@
     const idCon = "qbaseProfCon";
     const delBtnId = "qbaseProfDeleteBtn";
     const saveBtnId = "qbaseProfSaveBtn";
-    const marksTokId = "qbaseMarksToken";
-    const marksSaveId = "qbaseMarksSave";
-    const marksClearId = "qbaseMarksClear";
-    const marksStatusId = "qbaseMarksStatus";
-    const marksSpinId = "qbaseMarksSpin";
     const errId = "qbaseProfErr";
+    const resetCooldownId = "qbaseResetCooldown";
+    const resetCooldownSaveId = "qbaseResetCooldownSave";
+    const resetCooldownMsgId = "qbaseResetCooldownMsg";
+    const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
+    const RESET_COOLDOWN_DEFAULT_MS = 2000;
+    const RESET_COOLDOWN_MAX_MS = 60000;
     // Hotkeys UI removed
     const body = `
         <div class="preferences-modal">
@@ -911,7 +912,7 @@
               <button class="nav-link active" id="prefs-account-tab" data-bs-toggle="tab" data-bs-target="#prefs-account" type="button" role="tab" aria-controls="prefs-account" aria-selected="true">Account</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="prefs-integrations-tab" data-bs-toggle="tab" data-bs-target="#prefs-integrations" type="button" role="tab" aria-controls="prefs-integrations" aria-selected="false">PYQs API</button>
+              <button class="nav-link" id="prefs-preferences-tab" data-bs-toggle="tab" data-bs-target="#prefs-preferences" type="button" role="tab" aria-controls="prefs-preferences" aria-selected="false">Preferences</button>
             </li>
             
             <li class="nav-item" role="presentation">
@@ -939,24 +940,16 @@
               </div>
             </div>
             
-            <div class="tab-pane fade" id="prefs-integrations" role="tabpanel" aria-labelledby="prefs-integrations-tab">
+            <div class="tab-pane fade" id="prefs-preferences" role="tabpanel" aria-labelledby="prefs-preferences-tab">
               <div class="mt-1">
-                <h6 class="mb-2">PYQs Authentication</h6>
-                <p class="small text-muted">Paste your Bearer token here. <br /> We do not display the saved token.</p>
+                <h6 class="mb-2">Question Controls</h6>
                 <div class="mb-2" pt-2>
-                  <label for="${marksTokId}" class="form-label">Bearer Token: </label>
-                  <input id="${marksTokId}" class="form-control" type="text" placeholder="Paste your bearer token here..." autocomplete="off" />
-                  <div class="form-text">Leave blank to use the default token (may not always work). <br />Use Clear to remove your token and switch back to the default token.</div>
+                  <label for="${resetCooldownId}" class="form-label">Reset question delay (seconds)</label>
+                  <input id="${resetCooldownId}" class="form-control" type="number" min="0" max="60" step="0.5" />
+                  <div class="form-text">After checking an answer, the reset question button stays disabled for this many seconds. Set 0 to disable the delay.</div>
                 </div>
-                  <div class="d-flex align-items-center gap-2 pt-2">
-                    <button id="${marksSaveId}" class="btn btn-primary">Save Token</button>
-                    <button id="${marksClearId}" class="btn btn-outline-danger">Clear Token</button>
-                  </div>
-                  <div class="pt-2 d-flex align-items-center gap-2">
-                    <span>Current token status:</span>
-                    <span id="${marksStatusId}" class=""></span>
-                    <span id="${marksSpinId}" class="spinner-border spinner-border-sm text-secondary align-middle d-none" role="status" aria-hidden="true"></span>
-                  </div>
+                <button id="${resetCooldownSaveId}" class="btn btn-primary btn-sm mt-1">Save Preference</button>
+                <div id="${resetCooldownMsgId}" class="small text-muted mt-2" style="display:none"></div>
               </div>
             </div>
             <div class="tab-pane fade" id="prefs-danger" role="tabpanel" aria-labelledby="prefs-danger-tab">
@@ -981,120 +974,64 @@
         const delBtn = modalEl.querySelector(`#${delBtnId}`);
         const err = modalEl.querySelector(`#${errId}`);
 
-        // Integrations: Marks App handlers
+        // Practice preferences
         try {
-          const mTok = modalEl.querySelector(`#${marksTokId}`);
-          const mSave = modalEl.querySelector(`#${marksSaveId}`);
-          const mClear = modalEl.querySelector(`#${marksClearId}`);
-          const mStatus = modalEl.querySelector(`#${marksStatusId}`);
-          const mSpin = modalEl.querySelector(`#${marksSpinId}`);
-          const setSpin = (on) => {
-            if (!mSpin) return;
-            if (on) mSpin.classList.remove("d-none");
-            else mSpin.classList.add("d-none");
+          const resetInput = modalEl.querySelector(`#${resetCooldownId}`);
+          const resetSave = modalEl.querySelector(`#${resetCooldownSaveId}`);
+          const resetMsg = modalEl.querySelector(`#${resetCooldownMsgId}`);
+
+          const showResetMsg = (msg, tone = "muted") => {
+            if (!resetMsg) return;
+            resetMsg.style.display = msg ? "block" : "none";
+            resetMsg.textContent = msg || "";
+            resetMsg.classList.remove("text-danger", "text-success", "text-muted");
+            if (tone === "success") resetMsg.classList.add("text-success");
+            else if (tone === "danger") resetMsg.classList.add("text-danger");
+            else resetMsg.classList.add("text-muted");
           };
-          (async () => {
-            setSpin(true);
+
+          const getCooldownMs = () => {
             try {
-              const r = await authFetch(`${API_BASE}/account/marks-auth`);
-              if (r.ok) {
-                const d = await r.json();
-                if (mStatus)
-                  mStatus.textContent = d?.hasToken
-                    ? "Token configured"
-                    : "No token set";
-                if (mStatus) {
-                  mStatus.classList.remove("text-danger", "text-success");
-                  if (d?.hasToken) mStatus.classList.add("text-success");
-                }
-              }
+              const raw = localStorage.getItem(RESET_COOLDOWN_LS_KEY);
+              const num = Number(raw);
+              if (!Number.isFinite(num) || num < 0) return RESET_COOLDOWN_DEFAULT_MS;
+              return Math.min(num, RESET_COOLDOWN_MAX_MS);
             } catch {
-            } finally {
-              setSpin(false);
+              return RESET_COOLDOWN_DEFAULT_MS;
             }
-          })();
-          mSave?.addEventListener("click", async (e) => {
+          };
+
+          const setCooldownMs = (ms) => {
+            try {
+              localStorage.setItem(RESET_COOLDOWN_LS_KEY, String(ms));
+            } catch {}
+          };
+
+          const syncResetInput = () => {
+            if (!resetInput) return;
+            const ms = getCooldownMs();
+            const seconds = (ms / 1000).toFixed(1).replace(/\.0$/, "");
+            resetInput.value = seconds;
+            showResetMsg("", "muted");
+          };
+
+          syncResetInput();
+
+          resetSave?.addEventListener("click", (e) => {
             e.preventDefault();
-            const token = (mTok?.value || "").trim();
-            if (!token) {
-              try {
-                await showNotice({
-                  title: "Nothing to save",
-                  message: "Enter a token first.",
-                });
-              } catch {}
+            if (!resetInput) return;
+            const val = parseFloat(resetInput.value);
+            if (!Number.isFinite(val) || val < 0) {
+              showResetMsg("Enter a non-negative number of seconds.", "danger");
               return;
             }
-            try {
-              setSpin(true);
-              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ bearerToken: token }),
-              });
-              if (!r.ok) {
-                // If invalid, mark status red and do not clear input
-                if (r.status === 401 || r.status === 403 || r.status === 400) {
-                  if (mStatus) {
-                    mStatus.textContent = "Token Invalid";
-                    mStatus.classList.remove("text-success");
-                    mStatus.classList.add("text-danger");
-                  }
-                  setSpin(false);
-                  return;
-                }
-                try {
-                  await showNotice({
-                    title: "Error",
-                    message: "Failed to save token.",
-                  });
-                } catch {}
-                setSpin(false);
-                return;
-              }
-              if (mStatus) {
-                mStatus.textContent = "Token configured";
-                mStatus.classList.remove("text-danger");
-                mStatus.classList.add("text-success");
-              }
-              if (mTok) mTok.value = "";
-              setSpin(false);
-            } catch (e) {
-              try {
-                await showNotice({
-                  title: "Error",
-                  message: "Failed to save token.",
-                });
-              } catch {}
-              setSpin(false);
-            }
-          });
-          mClear?.addEventListener("click", async (e) => {
-            e.preventDefault();
-            try {
-              const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                method: "DELETE",
-              });
-              if (!r.ok) throw new Error(String(r.status));
-              if (mStatus) {
-                mStatus.textContent = "No token set";
-                mStatus.classList.remove("text-danger", "text-success");
-              }
-              if (mTok) mTok.value = "";
-              try {
-                await showNotice({
-                  title: "Cleared",
-                  message: "Marks App token cleared.",
-                });
-              } catch {}
-            } catch (e) {
-              try {
-                await showNotice({
-                  title: "Error",
-                  message: "Failed to clear token.",
-                });
-              } catch {}
-            }
+            const ms = Math.min(val * 1000, RESET_COOLDOWN_MAX_MS);
+            setCooldownMs(ms);
+            const seconds = (ms / 1000).toFixed(1).replace(/\.0$/, "");
+            showResetMsg(
+              `Saved: reset delay set to ${seconds}s for assignments and PYQs.`,
+              "success"
+            );
           });
         } catch {}
 

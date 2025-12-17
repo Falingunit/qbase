@@ -357,6 +357,16 @@
     return out;
   }
 
+  function normalizeAssignmentPayload(input) {
+    if (Array.isArray(input)) return { questions: input };
+    if (!input || typeof input !== "object") return { questions: [] };
+    if (Array.isArray(input.questions)) return input;
+    if (Array.isArray(input.data)) {
+      return { ...input, questions: input.data };
+    }
+    return { ...input, questions: [] };
+  }
+
   let saveTimeout;
 
   // ---------- Local keys & auth tracking ----------
@@ -373,12 +383,17 @@
       pickedNumerical: undefined,
       time: 0,
       notes: "",
+      resetLockedUntil: 0,
     };
   }
   function ensureStateLength(n) {
     if (!Array.isArray(questionStates)) questionStates = [];
     for (let i = 0; i < n; i++) {
-      if (!questionStates[i]) questionStates[i] = defaultState();
+      if (!questionStates[i]) {
+        questionStates[i] = defaultState();
+      } else if (questionStates[i].resetLockedUntil === undefined) {
+        questionStates[i].resetLockedUntil = 0;
+      }
     }
   }
 
@@ -494,6 +509,10 @@
           isAnswerEvaluated: !!(l.isAnswerEvaluated || s.isAnswerEvaluated),
           evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
+          resetLockedUntil: Math.max(
+            Number(l.resetLockedUntil) || 0,
+            Number(s.resetLockedUntil) || 0
+          ),
           // Prefer local notes if present, else server's
           notes: (l.notes && String(l.notes).length > 0)
             ? l.notes
@@ -1527,12 +1546,93 @@
   let questionStates;
   let optionButtons = [];
   let timerInterval;
+  let resetCooldownTimer = null;
+
+  const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
+  const RESET_COOLDOWN_DEFAULT_MS = 2000;
+  const RESET_COOLDOWN_MAX_MS = 60000;
 
   // ---------- UI helpers ----------
   function formatTime(sec) {
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
     return `${m}:${s}`;
+  }
+
+  function readResetCooldownMs() {
+    try {
+      const raw = localStorage.getItem(RESET_COOLDOWN_LS_KEY);
+      const num = Number(raw);
+      if (!Number.isFinite(num) || num < 0) return RESET_COOLDOWN_DEFAULT_MS;
+      return Math.min(num, RESET_COOLDOWN_MAX_MS);
+    } catch {
+      return RESET_COOLDOWN_DEFAULT_MS;
+    }
+  }
+
+  function clearResetCooldownTimer() {
+    if (resetCooldownTimer) {
+      clearTimeout(resetCooldownTimer);
+      resetCooldownTimer = null;
+    }
+  }
+
+  function applyResetCooldownState(qState) {
+    const resetBtn = document.getElementById("reset-question");
+    if (!resetBtn || !qState) return;
+    clearResetCooldownTimer();
+    resetBtn.disabled = false;
+
+    const unlockAt = Number(qState.resetLockedUntil) || 0;
+    if (!unlockAt) return;
+    const now = Date.now();
+    const remaining = unlockAt - now;
+    if (remaining <= 0) {
+      qState.resetLockedUntil = 0;
+      return;
+    }
+    resetBtn.disabled = true;
+    resetCooldownTimer = setTimeout(() => {
+      resetBtn.disabled = false;
+      resetCooldownTimer = null;
+      qState.resetLockedUntil = 0;
+      markDirty();
+      scheduleSave(aID);
+    }, remaining);
+  }
+
+  function stopQuestionTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function startQuestionTimer(qID) {
+    const timerElem = document.getElementById("timer");
+    if (!timerElem) return;
+    stopQuestionTimer();
+    const st = questionStates?.[qID];
+    const value = st ? st.time || 0 : 0;
+    timerElem.textContent = formatTime(value);
+
+    if (st && !st.isAnswerEvaluated) {
+      timerInterval = setInterval(() => {
+        st.time++;
+        timerElem.textContent = formatTime(st.time);
+        markDirty(); // keep local change; don't scheduleSave here
+      }, 1000);
+    }
+  }
+
+  function resetTimerForCurrentQuestion() {
+    if (currentQuestionID == null) return;
+    const st = questionStates?.[currentQuestionID];
+    if (!st) return;
+    st.time = 0;
+    startQuestionTimer(currentQuestionID);
+    markDirty();
+    scheduleSave(aID);
   }
 
   // Wire option buttons
@@ -1559,6 +1659,20 @@
     markDirty();
     scheduleSave(aID);
   });
+
+  // Timer reset (clickable badge)
+  (function wireTimerReset() {
+    const timerEl = document.getElementById("timer");
+    if (!timerEl) return;
+    const trigger = (e) => {
+      e?.preventDefault();
+      resetTimerForCurrentQuestion();
+    };
+    timerEl.addEventListener("click", trigger);
+    timerEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") trigger(e);
+    });
+  })();
 
   // Initialize the notes editor once the DOM is ready
   try { initNotesEditor(); } catch {}
@@ -1655,6 +1769,9 @@
     const originalNotes = questionStates[qID]['notes']
     questionStates[qID] = { ...defaultState(), time: 0 };
     questionStates[qID]['notes'] = originalNotes
+    questionStates[qID].resetLockedUntil = 0;
+    clearResetCooldownTimer();
+    stopQuestionTimer();
 
     // Clear visuals + unlock
     if (q.qType === "SMCQ" || q.qType === "MMCQ") {
@@ -1678,6 +1795,9 @@
     // Hide reset, show check answer again
     document.getElementById("reset-question").classList.add("d-none");
     document.getElementById("check-answer").classList.remove("d-none");
+    const resetBtn = document.getElementById("reset-question");
+    if (resetBtn) resetBtn.disabled = false;
+    hideSolutionPanel();
 
     // Re-render question UI from scratch (timer restarts from 0)
     setQuestion(qID);
@@ -1922,13 +2042,15 @@
       optionButtons.forEach((btn) => btn.classList.add("disabled"));
     }
 
-    document.getElementById("check-answer").classList.add("d-none");
-    document.getElementById("reset-question").classList.remove("d-none");
+    const checkBtn = document.getElementById("check-answer");
+    const resetBtn = document.getElementById("reset-question");
+    checkBtn.classList.add("d-none");
+    resetBtn.classList.remove("d-none");
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    const cooldownMs = readResetCooldownMs();
+    st.resetLockedUntil = cooldownMs > 0 ? Date.now() + cooldownMs : 0;
+    applyResetCooldownState(st);
 
     // Store evaluation
     st.isAnswerEvaluated = true;
@@ -1937,6 +2059,7 @@
     markDirty();
     scheduleSave(aID);
 
+    showSolutionForQuestion(q);
     // Update question grid color
     evaluateQuestionButtonColor(qID);
   }
@@ -1947,9 +2070,10 @@
   const __customLoader = (typeof window !== 'undefined' && window.__ASSIGNMENT_CUSTOM_LOADER__) || null;
   (async () => {
     try {
-      const data = __customLoader
+      const rawData = __customLoader
         ? await __customLoader()
         : await AssignmentService.loadLocalAssignment(aID);
+      const data = normalizeAssignmentPayload(rawData);
       // 1) passages
       processPassageQuestions(data.questions);
       questionData = data;
@@ -2140,10 +2264,8 @@
       if (Number(button.dataset.qid) === qID) button.classList.add("selected");
     });
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    clearResetCooldownTimer();
 
     currentQuestionID = qID;
     setQuestion(qID);
@@ -2183,6 +2305,8 @@
     // 3) Hide the per-question reset icon by default; we’ll show it again if evaluated
     const resetIcon = document.getElementById("reset-question-icon");
     if (resetIcon) resetIcon.classList.add("d-none");
+    // 4) Hide solution panel by default on navigation
+    hideSolutionPanel();
 
     ensureStateLength(window.displayQuestions.length);
 
@@ -2267,21 +2391,7 @@
     try { renderMathInElement && renderMathInElement(qTextElm, katexOptions); } catch {}
 
     // --- Timer control ---
-    if (timerInterval) clearInterval(timerInterval);
-
-    const timerElem = document.getElementById("timer");
-    timerElem.textContent = formatTime(questionStates[qID].time);
-
-    // Only tick if the question is NOT yet evaluated
-    if (!questionStates[qID].isAnswerEvaluated) {
-      timerInterval = setInterval(() => {
-        questionStates[qID].time++;
-        timerElem.textContent = formatTime(questionStates[qID].time);
-        markDirty(); // keep local change; don't scheduleSave here
-      }, 1000);
-    } else {
-      timerInterval = null; // ensure paused
-    }
+    startQuestionTimer(qID);
 
     // Reset MCQ selection UI
     optionButtons.forEach((btn) => btn.classList.remove("mcq-option-selected"));
@@ -2329,11 +2439,13 @@
         // (Do not remove here; animations should only play on explicit check)
         // setTimeout(() => document.body.classList.remove("suppress-eval-anim"), 0);
       }
+      showSolutionForQuestion(question);
     } else {
       // Not evaluated yet → ensure reset icon hidden
       document.body.classList.remove("suppress-eval-anim");
       const icon = document.getElementById("reset-question-icon");
       if (icon) icon.classList.add("d-none");
+      hideSolutionPanel();
     }
 
     // Show numerical vs MCQ
@@ -2381,8 +2493,12 @@
     if (questionState.isAnswerEvaluated) {
       checkBtn.classList.add("d-none");
       resetBtn.classList.remove("d-none");
+      applyResetCooldownState(questionState);
     } else {
       resetBtn.classList.add("d-none");
+      resetBtn.disabled = false;
+      clearResetCooldownTimer();
+      questionState.resetLockedUntil = 0;
       checkBtn.classList.remove("d-none");
     }
 
@@ -2803,6 +2919,305 @@
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  // ---------- Solution helpers ----------
+  function resolveAssetUrl(pathStr) {
+    try {
+      const raw = String(pathStr || "").trim();
+      if (!raw) return "";
+      if (/^(https?:)?\/\//i.test(raw)) return raw;
+      if (/^data:/i.test(raw)) return raw;
+      if (raw.startsWith("/")) return raw;
+      return `./data/question_data/${aID}/${raw}`;
+    } catch {
+      return "";
+    }
+  }
+
+  function getSolutionParts(question) {
+    if (!question || typeof question !== "object")
+      return { text: "", image: "" };
+    const sol = question.solution || {};
+    const text =
+      question.sText ||
+      question.solutionText ||
+      question.solutionText ||
+      sol.sText ||
+      sol.text ||
+      sol.body ||
+      "";
+    const image =
+      question.sImage ||
+      question.solutionImage ||
+      question.solutionImage ||
+      sol.sImage ||
+      sol.image ||
+      sol.img ||
+      "";
+    return {
+      text: typeof text === "string" ? text.trim() : "",
+      image: typeof image === "string" ? image.trim() : "",
+    };
+  }
+
+  function hideSolutionPanel() {
+    const host = document.getElementById("solutionSection");
+    const textEl = document.getElementById("solutionText");
+    const imgWrap = document.getElementById("solutionImage");
+    if (host) host.style.display = "none";
+    if (textEl) textEl.innerHTML = "";
+    if (imgWrap) {
+      imgWrap.style.display = "none";
+      imgWrap.innerHTML = "";
+    }
+  }
+
+  function showSolutionForQuestion(question) {
+    const host = document.getElementById("solutionSection");
+    const textEl = document.getElementById("solutionText");
+    const imgWrap = document.getElementById("solutionImage");
+    if (!host || !textEl || !imgWrap) return;
+    const { text, image } = getSolutionParts(question);
+    const hasText = !!text;
+    const hasImage = !!image;
+
+    if (hasText) {
+      renderHTML(textEl, text);
+      try {
+        renderMathInElement && renderMathInElement(textEl, katexOptions);
+      } catch {}
+    } else {
+      textEl.innerHTML = "";
+    }
+
+    if (hasImage) {
+      const imgSrc = resolveAssetUrl(image);
+      imgWrap.style.display = "";
+      imgWrap.innerHTML = `<img src="${imgSrc}" alt="Solution image" class="q-image" loading="lazy" decoding="async">`;
+      try {
+        imgWrap
+          .querySelector("img")
+          .addEventListener("click", () => showImageOverlay(imgSrc));
+      } catch {}
+    } else {
+      imgWrap.style.display = "none";
+      imgWrap.innerHTML = "";
+    }
+
+    host.style.display = hasText || hasImage ? "" : "none";
+  }
+
+  // Sanitize limited HTML so solution content renders safely.
+  function sanitizeHtml(html) {
+    try {
+      if (
+        typeof window !== "undefined" &&
+        window.DOMPurify &&
+        typeof window.DOMPurify.sanitize === "function"
+      ) {
+        const MATHML_TAGS = [
+          "math",
+          "mrow",
+          "mi",
+          "mn",
+          "mo",
+          "ms",
+          "mtext",
+          "mspace",
+          "msub",
+          "msup",
+          "msubsup",
+          "munder",
+          "mover",
+          "munderover",
+          "mfrac",
+          "msqrt",
+          "mroot",
+          "mfenced",
+          "menclose",
+          "mpadded",
+          "mphantom",
+          "mstyle",
+          "mtable",
+          "mtr",
+          "mtd",
+          "mlabeledtr",
+          "semantics",
+          "annotation",
+          "annotation-xml",
+        ];
+        const ALLOWED_TAGS = [
+          "b",
+          "i",
+          "em",
+          "strong",
+          "u",
+          "sup",
+          "sub",
+          "br",
+          "p",
+          "ul",
+          "ol",
+          "li",
+          "span",
+          "div",
+          "img",
+          "a",
+          "code",
+          "pre",
+          "blockquote",
+          "hr",
+          "table",
+          "thead",
+          "tbody",
+          "tr",
+          "td",
+          "th",
+          ...MATHML_TAGS,
+        ];
+        const ALLOWED_ATTR = [
+          "class",
+          "style",
+          "href",
+          "src",
+          "alt",
+          "title",
+          "width",
+          "height",
+          "loading",
+          "decoding",
+          "rel",
+          "target",
+          "display",
+          "mathvariant",
+          "mathsize",
+          "open",
+          "close",
+          "separators",
+          "notation",
+          "rowalign",
+          "columnalign",
+          "rowspan",
+          "columnspan",
+          "fence",
+          "form",
+          "accent",
+          "accentunder",
+          "displaystyle",
+          "scriptlevel",
+        ];
+        return window.DOMPurify.sanitize(String(html || ""), {
+          ALLOWED_TAGS,
+          ALLOWED_ATTR,
+          FORBID_TAGS: [
+            "script",
+            "style",
+            "iframe",
+            "object",
+            "embed",
+            "link",
+            "meta",
+            "form",
+            "svg",
+          ],
+          ADD_ATTR: ["aria-label", "role"],
+        });
+      }
+    } catch {}
+
+    try {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = String(html || "");
+      const disallowed = new Set([
+        "SCRIPT",
+        "STYLE",
+        "IFRAME",
+        "OBJECT",
+        "EMBED",
+        "LINK",
+        "META",
+        "FORM",
+        "SVG",
+      ]);
+      (function walk(node) {
+        const children = Array.from(node.childNodes || []);
+        for (const child of children) {
+          if (child.nodeType === 1) {
+            if (disallowed.has(child.nodeName)) {
+              child.remove();
+              continue;
+            }
+            for (const attr of Array.from(child.attributes || [])) {
+              const name = attr.name.toLowerCase();
+              const val = String(attr.value || "");
+              if (name.startsWith("on")) child.removeAttribute(attr.name);
+              if (name === "style") {
+                child.removeAttribute(attr.name);
+                continue;
+              }
+              if (name === "href" || name === "src" || name === "xlink:href") {
+                if (/^\s*javascript:/i.test(val)) child.removeAttribute(attr.name);
+                if (/^\s*data:text\//i.test(val)) child.removeAttribute(attr.name);
+              }
+            }
+            if (child.nodeName.toLowerCase() === "a") {
+              try {
+                const t = (child.getAttribute("target") || "").toLowerCase();
+                if (t.includes("_blank"))
+                  child.setAttribute("rel", "noopener noreferrer");
+                const href = child.getAttribute("href") || "";
+                if (!/^(https?:|mailto:|#|\/|\/\/|data:image)/i.test(href))
+                  child.removeAttribute("href");
+              } catch {}
+            }
+          }
+          walk(child);
+        }
+      })(wrapper);
+      return wrapper.innerHTML;
+    } catch {
+      return escapeHtml(String(html || ""));
+    }
+  }
+
+  // Render HTML or plain text with newline preservation; normalizes CRLF
+  // Additionally: make any <img> inside clickable to open the image overlay
+  function renderHTML(el, value) {
+    try {
+      const raw = String(value || "")
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        // Normalize any HTML <br> tags to newlines so KaTeX delimiters stay intact
+        .replace(/<br\s*\/?>/gi, "\n");
+      const sanitized = sanitizeHtml(raw);
+      el.innerHTML = sanitized;
+      if (!el.dataset.imgOverlayBound) {
+        el.addEventListener("click", (ev) => {
+          const target = ev.target;
+          if (!target) return;
+          const img = target.closest && target.closest("img");
+          if (img && img.src) {
+            try {
+              ev.preventDefault();
+              ev.stopPropagation();
+            } catch {}
+            try {
+              if (typeof showImageOverlay === "function")
+                showImageOverlay(img.src);
+            } catch {}
+          }
+        });
+        el.dataset.imgOverlayBound = "1";
+      }
+      el.querySelectorAll("img").forEach((img) => {
+        try {
+          img.style.cursor = "zoom-in";
+        } catch {}
+      });
+    } catch {
+      el.textContent = String(value || "");
+    }
   }
   
   // -------------------- UI toggles: Questions sidebar and desktop Q-bar --------------------

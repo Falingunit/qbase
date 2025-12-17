@@ -348,7 +348,16 @@
                   <button type="button" class="qcolor-chip" data-color="#ffc107" style="--qc:#ffc107" aria-label="Mark yellow"></button>
                   <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
                 </div>
-                <span id="timer" class="badge bg-dark text-info">00:11</span>
+                <span
+                  id="timer"
+                  class="badge bg-dark text-info"
+                  role="button"
+                  tabindex="0"
+                  title="Click to reset timer"
+                  aria-label="Time spent, click to reset"
+                >
+                  00:11
+                </span>
                 <span class="badge bg-dark-subtle text-info" id="qTypeInfo"></span>
                 <button
                   id="bookmark-btn"
@@ -707,7 +716,7 @@
           };
 
           const clickIf = (el) => {
-            if (el) el.click();
+            if (el && !el.disabled) el.click();
           };
 
           const pickOption = (opt) => {

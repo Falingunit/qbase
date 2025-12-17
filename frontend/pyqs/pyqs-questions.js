@@ -336,12 +336,17 @@
       pickedNumerical: undefined,
       time: 0,
       notes: "",
+      resetLockedUntil: 0,
     };
   }
   function ensureStateLength(n) {
     if (!Array.isArray(questionStates)) questionStates = [];
     for (let i = 0; i < n; i++) {
-      if (!questionStates[i]) questionStates[i] = defaultState();
+      if (!questionStates[i]) {
+        questionStates[i] = defaultState();
+      } else if (questionStates[i].resetLockedUntil === undefined) {
+        questionStates[i].resetLockedUntil = 0;
+      }
     }
   }
 
@@ -457,6 +462,10 @@
           isAnswerEvaluated: !!(l.isAnswerEvaluated || s.isAnswerEvaluated),
           evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
+          resetLockedUntil: Math.max(
+            Number(l.resetLockedUntil) || 0,
+            Number(s.resetLockedUntil) || 0
+          ),
           // Prefer local notes if present, else server's
           notes:
             l.notes && String(l.notes).length > 0 ? l.notes : s.notes || "",
@@ -1829,12 +1838,98 @@
   let questionStates;
   let optionButtons = [];
   let timerInterval;
+  let resetCooldownTimer = null;
+
+  const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
+  const RESET_COOLDOWN_DEFAULT_MS = 2000;
+  const RESET_COOLDOWN_MAX_MS = 60000;
 
   // ---------- UI helpers ----------
   function formatTime(sec) {
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
     return `${m}:${s}`;
+  }
+
+  function readResetCooldownMs() {
+    try {
+      const raw = localStorage.getItem(RESET_COOLDOWN_LS_KEY);
+      const num = Number(raw);
+      if (!Number.isFinite(num) || num < 0) return RESET_COOLDOWN_DEFAULT_MS;
+      return Math.min(num, RESET_COOLDOWN_MAX_MS);
+    } catch {
+      return RESET_COOLDOWN_DEFAULT_MS;
+    }
+  }
+
+  function clearResetCooldownTimer() {
+    if (resetCooldownTimer) {
+      clearTimeout(resetCooldownTimer);
+      resetCooldownTimer = null;
+    }
+  }
+
+  function applyResetCooldownState(qState) {
+    const resetBtn = document.getElementById("reset-question");
+    if (!resetBtn || !qState) return;
+    clearResetCooldownTimer();
+    resetBtn.disabled = false;
+    const unlockAt = Number(qState.resetLockedUntil) || 0;
+    if (!unlockAt) return;
+    const now = Date.now();
+    const remaining = unlockAt - now;
+    if (remaining <= 0) {
+      qState.resetLockedUntil = 0;
+      return;
+    }
+    resetBtn.disabled = true;
+    resetCooldownTimer = setTimeout(() => {
+      resetBtn.disabled = false;
+      resetCooldownTimer = null;
+      qState.resetLockedUntil = 0;
+      markDirty();
+      scheduleSave(aID);
+    }, remaining);
+  }
+
+  function stopQuestionTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function startQuestionTimer(displayIdx) {
+    const timerElem = document.getElementById("timer");
+    if (!timerElem) return;
+    stopQuestionTimer();
+    const originalIdx = window.questionIndexMap?.[displayIdx];
+    if (originalIdx == null) return;
+    const st =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
+    timerElem.textContent = formatTime(st.time || 0);
+
+    if (!st.isAnswerEvaluated) {
+      timerInterval = setInterval(() => {
+        st.time++;
+        timerElem.textContent = formatTime(st.time);
+        markDirty(); // keep local change; don't scheduleSave here
+      }, 1000);
+    }
+  }
+
+  function resetTimerForCurrentQuestion() {
+    if (currentQuestionID == null) return;
+    const originalIdx = window.questionIndexMap?.[currentQuestionID];
+    if (originalIdx == null) return;
+    const st =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
+    st.time = 0;
+    startQuestionTimer(currentQuestionID);
+    markDirty();
+    scheduleSave(aID);
   }
 
   // Wire option buttons
@@ -1864,6 +1959,20 @@
     markDirty();
     scheduleSave(aID);
   });
+
+  // Timer reset (clickable badge)
+  (function wireTimerReset() {
+    const timerEl = document.getElementById("timer");
+    if (!timerEl) return;
+    const trigger = (e) => {
+      e?.preventDefault();
+      resetTimerForCurrentQuestion();
+    };
+    timerEl.addEventListener("click", trigger);
+    timerEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") trigger(e);
+    });
+  })();
 
   // Initialize the notes editor once the DOM is ready
   try {
@@ -2059,8 +2168,16 @@
     try {
       document.getElementById("solutionSection").style.display = "none";
     } catch {}
-    document.getElementById("reset-question").classList.add("d-none");
-    document.getElementById("check-answer").classList.remove("d-none");
+    const resetBtn = document.getElementById("reset-question");
+    const checkBtn = document.getElementById("check-answer");
+    stopQuestionTimer();
+    clearResetCooldownTimer();
+    questionStates[originalIdx].resetLockedUntil = 0;
+    if (resetBtn) {
+      resetBtn.classList.add("d-none");
+      resetBtn.disabled = false;
+    }
+    if (checkBtn) checkBtn.classList.remove("d-none");
 
     // Re-render question UI from scratch (timer restarts from 0)
     setQuestion(qID);
@@ -2356,13 +2473,15 @@
       optionButtons.forEach((btn) => btn.classList.add("disabled"));
     }
 
-    document.getElementById("check-answer").classList.add("d-none");
-    document.getElementById("reset-question").classList.remove("d-none");
+    const checkBtn = document.getElementById("check-answer");
+    const resetBtn = document.getElementById("reset-question");
+    checkBtn.classList.add("d-none");
+    resetBtn.classList.remove("d-none");
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    const cooldownMs = readResetCooldownMs();
+    st.resetLockedUntil = cooldownMs > 0 ? Date.now() + cooldownMs : 0;
+    applyResetCooldownState(st);
 
     // Store evaluation
     st.isAnswerEvaluated = true;
@@ -2786,10 +2905,8 @@
       if (btnDisplayIdx === qID) button.classList.add("selected");
     });
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    clearResetCooldownTimer();
 
     currentQuestionID = qID;
     setQuestion(qID);
@@ -2967,25 +3084,7 @@
     } catch {}
 
     // --- Timer control ---
-    if (timerInterval) clearInterval(timerInterval);
-
-    const timerElem = document.getElementById("timer");
-    timerElem.textContent = formatTime(
-      (questionStates[originalIdx] || defaultState()).time
-    );
-
-    // Only tick if the question is NOT yet evaluated
-    if (!(questionStates[originalIdx] || defaultState()).isAnswerEvaluated) {
-      timerInterval = setInterval(() => {
-        if (!questionStates[originalIdx])
-          questionStates[originalIdx] = defaultState();
-        questionStates[originalIdx].time++;
-        timerElem.textContent = formatTime(questionStates[originalIdx].time);
-        markDirty(); // keep local change; don't scheduleSave here
-      }, 1000);
-    } else {
-      timerInterval = null; // ensure paused
-    }
+    startQuestionTimer(qID);
 
     // Reset MCQ selection UI
     optionButtons.forEach((btn) => btn.classList.remove("mcq-option-selected"));
@@ -3102,8 +3201,12 @@
     if (questionState.isAnswerEvaluated) {
       checkBtn.classList.add("d-none");
       resetBtn.classList.remove("d-none");
+      applyResetCooldownState(questionState);
     } else {
       resetBtn.classList.add("d-none");
+      resetBtn.disabled = false;
+      clearResetCooldownTimer();
+      questionState.resetLockedUntil = 0;
       checkBtn.classList.remove("d-none");
     }
 
