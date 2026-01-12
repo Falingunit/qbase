@@ -897,12 +897,13 @@
     const idCon = "qbaseProfCon";
     const delBtnId = "qbaseProfDeleteBtn";
     const saveBtnId = "qbaseProfSaveBtn";
-    const marksTokId = "qbaseMarksToken";
-    const marksSaveId = "qbaseMarksSave";
-    const marksClearId = "qbaseMarksClear";
-      const marksStatusId = "qbaseMarksStatus";
-      const marksSpinId = "qbaseMarksSpin";
     const errId = "qbaseProfErr";
+    const resetCooldownId = "qbaseResetCooldown";
+    const resetCooldownSaveId = "qbaseResetCooldownSave";
+    const resetCooldownMsgId = "qbaseResetCooldownMsg";
+    const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
+    const RESET_COOLDOWN_DEFAULT_MS = 2000;
+    const RESET_COOLDOWN_MAX_MS = 60000;
     // Hotkeys UI removed
     const body = `
         <div class="preferences-modal">
@@ -911,7 +912,7 @@
               <button class="nav-link active" id="prefs-account-tab" data-bs-toggle="tab" data-bs-target="#prefs-account" type="button" role="tab" aria-controls="prefs-account" aria-selected="true">Account</button>
             </li>
             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="prefs-integrations-tab" data-bs-toggle="tab" data-bs-target="#prefs-integrations" type="button" role="tab" aria-controls="prefs-integrations" aria-selected="false">PYQs API</button>
+              <button class="nav-link" id="prefs-preferences-tab" data-bs-toggle="tab" data-bs-target="#prefs-preferences" type="button" role="tab" aria-controls="prefs-preferences" aria-selected="false">Preferences</button>
             </li>
             
             <li class="nav-item" role="presentation">
@@ -939,24 +940,16 @@
               </div>
             </div>
             
-            <div class="tab-pane fade" id="prefs-integrations" role="tabpanel" aria-labelledby="prefs-integrations-tab">
+            <div class="tab-pane fade" id="prefs-preferences" role="tabpanel" aria-labelledby="prefs-preferences-tab">
               <div class="mt-1">
-                <h6 class="mb-2">PYQs Authentication</h6>
-                <p class="small text-muted">Paste your Bearer token here. <br /> We do not display the saved token.</p>
+                <h6 class="mb-2">Question Controls</h6>
                 <div class="mb-2" pt-2>
-                  <label for="${marksTokId}" class="form-label">Bearer Token: </label>
-                  <input id="${marksTokId}" class="form-control" type="text" placeholder="Paste your bearer token here..." autocomplete="off" />
-                  <div class="form-text">Leave blank to use the default token (may not always work). <br />Use Clear to remove your token and switch back to the default token.</div>
+                  <label for="${resetCooldownId}" class="form-label">Reset question delay (seconds)</label>
+                  <input id="${resetCooldownId}" class="form-control" type="number" min="0" max="60" step="0.5" />
+                  <div class="form-text">After checking an answer, the reset question button stays disabled for this many seconds. Set 0 to disable the delay.</div>
                 </div>
-                  <div class="d-flex align-items-center gap-2 pt-2">
-                    <button id="${marksSaveId}" class="btn btn-primary">Save Token</button>
-                    <button id="${marksClearId}" class="btn btn-outline-danger">Clear Token</button>
-                  </div>
-                  <div class="pt-2 d-flex align-items-center gap-2">
-                    <span>Current token status:</span>
-                    <span id="${marksStatusId}" class=""></span>
-                    <span id="${marksSpinId}" class="spinner-border spinner-border-sm text-secondary align-middle d-none" role="status" aria-hidden="true"></span>
-                  </div>
+                <button id="${resetCooldownSaveId}" class="btn btn-primary btn-sm mt-1">Save Preference</button>
+                <div id="${resetCooldownMsgId}" class="small text-muted mt-2" style="display:none"></div>
               </div>
             </div>
             <div class="tab-pane fade" id="prefs-danger" role="tabpanel" aria-labelledby="prefs-danger-tab">
@@ -981,119 +974,64 @@
         const delBtn = modalEl.querySelector(`#${delBtnId}`);
         const err = modalEl.querySelector(`#${errId}`);
 
-        // Integrations: Marks App handlers
+        // Practice preferences
         try {
-          const mTok = modalEl.querySelector(`#${marksTokId}`);
-          const mSave = modalEl.querySelector(`#${marksSaveId}`);
-          const mClear = modalEl.querySelector(`#${marksClearId}`);
-            const mStatus = modalEl.querySelector(`#${marksStatusId}`);
-            const mSpin = modalEl.querySelector(`#${marksSpinId}`);
-            const setSpin = (on) => {
-              if (!mSpin) return;
-              if (on) mSpin.classList.remove("d-none");
-              else mSpin.classList.add("d-none");
-            };
-            (async () => {
-              setSpin(true);
-              try {
-                const r = await authFetch(`${API_BASE}/account/marks-auth`);
-                if (r.ok) {
-                  const d = await r.json();
-                  if (mStatus)
-                    mStatus.textContent = d?.hasToken
-                      ? "Token configured"
-                      : "No token set";
-                  if (mStatus) {
-                    mStatus.classList.remove("text-danger", "text-success");
-                    if (d?.hasToken) mStatus.classList.add("text-success");
-                  }
-                }
-              } catch {} finally {
-                setSpin(false);
-              }
-            })();
-            mSave?.addEventListener("click", async (e) => {
-              e.preventDefault();
-              const token = (mTok?.value || "").trim();
-              if (!token) {
-                try {
-                  await showNotice({
-                    title: "Nothing to save",
-                    message: "Enter a token first.",
-                  });
-                } catch {}
-                return;
-              }
-              try {
-                setSpin(true);
-                const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                  method: "PATCH",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ bearerToken: token }),
-                });
-                if (!r.ok) {
-                  // If invalid, mark status red and do not clear input
-                  if (r.status === 401 || r.status === 403 || r.status === 400) {
-                    if (mStatus) {
-                      mStatus.textContent = "Token Invalid";
-                      mStatus.classList.remove("text-success");
-                      mStatus.classList.add("text-danger");
-                    }
-                    setSpin(false);
-                    return;
-                  }
-                  try {
-                    await showNotice({
-                      title: "Error",
-                      message: "Failed to save token.",
-                    });
-                  } catch {}
-                  setSpin(false);
-                  return;
-                }
-                if (mStatus) {
-                  mStatus.textContent = "Token configured";
-                  mStatus.classList.remove("text-danger");
-                  mStatus.classList.add("text-success");
-                }
-                if (mTok) mTok.value = "";
-                setSpin(false);
-              } catch (e) {
-                try {
-                  await showNotice({
-                    title: "Error",
-                    message: "Failed to save token.",
-                  });
-                } catch {}
-                setSpin(false);
-              }
-            });
-            mClear?.addEventListener("click", async (e) => {
-              e.preventDefault();
-              try {
-                const r = await authFetch(`${API_BASE}/account/marks-auth`, {
-                  method: "DELETE",
-                });
-                if (!r.ok) throw new Error(String(r.status));
-                if (mStatus) {
-                  mStatus.textContent = "No token set";
-                  mStatus.classList.remove("text-danger", "text-success");
-                }
-                if (mTok) mTok.value = "";
-                try {
-                  await showNotice({
-                    title: "Cleared",
-                    message: "Marks App token cleared.",
-                });
-              } catch {}
-            } catch (e) {
-              try {
-                await showNotice({
-                  title: "Error",
-                  message: "Failed to clear token.",
-                });
-              } catch {}
+          const resetInput = modalEl.querySelector(`#${resetCooldownId}`);
+          const resetSave = modalEl.querySelector(`#${resetCooldownSaveId}`);
+          const resetMsg = modalEl.querySelector(`#${resetCooldownMsgId}`);
+
+          const showResetMsg = (msg, tone = "muted") => {
+            if (!resetMsg) return;
+            resetMsg.style.display = msg ? "block" : "none";
+            resetMsg.textContent = msg || "";
+            resetMsg.classList.remove("text-danger", "text-success", "text-muted");
+            if (tone === "success") resetMsg.classList.add("text-success");
+            else if (tone === "danger") resetMsg.classList.add("text-danger");
+            else resetMsg.classList.add("text-muted");
+          };
+
+          const getCooldownMs = () => {
+            try {
+              const raw = localStorage.getItem(RESET_COOLDOWN_LS_KEY);
+              const num = Number(raw);
+              if (!Number.isFinite(num) || num < 0) return RESET_COOLDOWN_DEFAULT_MS;
+              return Math.min(num, RESET_COOLDOWN_MAX_MS);
+            } catch {
+              return RESET_COOLDOWN_DEFAULT_MS;
             }
+          };
+
+          const setCooldownMs = (ms) => {
+            try {
+              localStorage.setItem(RESET_COOLDOWN_LS_KEY, String(ms));
+            } catch {}
+          };
+
+          const syncResetInput = () => {
+            if (!resetInput) return;
+            const ms = getCooldownMs();
+            const seconds = (ms / 1000).toFixed(1).replace(/\.0$/, "");
+            resetInput.value = seconds;
+            showResetMsg("", "muted");
+          };
+
+          syncResetInput();
+
+          resetSave?.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (!resetInput) return;
+            const val = parseFloat(resetInput.value);
+            if (!Number.isFinite(val) || val < 0) {
+              showResetMsg("Enter a non-negative number of seconds.", "danger");
+              return;
+            }
+            const ms = Math.min(val * 1000, RESET_COOLDOWN_MAX_MS);
+            setCooldownMs(ms);
+            const seconds = (ms / 1000).toFixed(1).replace(/\.0$/, "");
+            showResetMsg(
+              `Saved: reset delay set to ${seconds}s for assignments and PYQs.`,
+              "success"
+            );
           });
         } catch {}
 
@@ -1196,6 +1134,8 @@
     keyboard = true,
     stack = false,
     onContentReady,
+    dialogClass,
+    // Optional per-button metadata support: [{ html, text, className, value, ariaLabel, title }]
   }) {
     const run = () =>
       new Promise((resolve) => {
@@ -1230,6 +1170,26 @@
           bodyEl.innerHTML = bodyHTML || "";
           footEl.innerHTML = "";
 
+          // Apply optional dialog size/class
+          try {
+            const dialog = modalEl.querySelector(".modal-dialog");
+            if (dialog) {
+              const toRemove = [
+                "modal-sm",
+                "modal-lg",
+                "modal-xl",
+                "modal-dialog-scrollable",
+              ];
+              dialog.classList.remove(...toRemove);
+              if (dialogClass) {
+                for (const c of String(dialogClass)
+                  .split(/\s+/)
+                  .filter(Boolean))
+                  dialog.classList.add(c);
+              }
+            }
+          } catch {}
+
           if (onContentReady && typeof onContentReady === "function") {
             onContentReady(modalEl);
           }
@@ -1249,7 +1209,10 @@
             const btn = document.createElement("button");
             btn.type = "button";
             btn.className = b.className || "btn btn-primary";
-            btn.textContent = b.text || `Button ${i + 1}`;
+            if (b && b.html) btn.innerHTML = b.html;
+            else btn.textContent = b.text || `Button ${i + 1}`;
+            if (b && b.ariaLabel) btn.setAttribute("aria-label", b.ariaLabel);
+            if (b && b.title) btn.setAttribute("title", b.title);
             btn.addEventListener("click", () => {
               result = b.value;
               bsModal.hide();
@@ -1302,6 +1265,24 @@
         bodyEl.innerHTML = bodyHTML || "";
         footEl.innerHTML = "";
 
+        // Apply optional dialog size/class
+        try {
+          const dialog = modalEl.querySelector(".modal-dialog");
+          if (dialog) {
+            const toRemove = [
+              "modal-sm",
+              "modal-lg",
+              "modal-xl",
+              "modal-dialog-scrollable",
+            ];
+            dialog.classList.remove(...toRemove);
+            if (dialogClass) {
+              for (const c of String(dialogClass).split(/\s+/).filter(Boolean))
+                dialog.classList.add(c);
+            }
+          }
+        } catch {}
+
         if (onContentReady && typeof onContentReady === "function") {
           onContentReady(modalEl);
         }
@@ -1317,7 +1298,10 @@
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = b.className || "btn btn-primary";
-          btn.textContent = b.text || `Button ${i + 1}`;
+          if (b && b.html) btn.innerHTML = b.html;
+          else btn.textContent = b.text || `Button ${i + 1}`;
+          if (b && b.ariaLabel) btn.setAttribute("aria-label", b.ariaLabel);
+          if (b && b.title) btn.setAttribute("title", b.title);
           btn.addEventListener("click", () => {
             result = b.value;
             bsModal.hide();
@@ -1341,6 +1325,276 @@
         bsModal.show();
       });
     return stack ? run() : queueModal(run);
+  }
+
+  // Expose showModal for other pages (e.g., admin)
+  try {
+    window.showModal = showModal;
+  } catch {}
+
+  // -------------------- Notifications UI --------------------
+  function ensureNotifStyles() {
+    if (document.getElementById("qbaseNotifStyles")) return;
+    const s = document.createElement("style");
+    s.id = "qbaseNotifStyles";
+    s.textContent = `
+      .nav-notif-btn { position: relative; }
+      .nav-notif-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; border-radius: 50%; background: #dc3545; display: none; }
+      .nav-notif-btn.has-unread .nav-notif-dot { display: inline-block; }
+      #notif-list { max-height: 70vh; overflow: auto; }
+      .notif-item { padding: 12px 0; }
+      .notif-item + .notif-item { border-top: 1px solid rgba(255,255,255,.18); margin-top: 10px; padding-top: 16px; }
+      .notif-title { font-weight: 600; }
+      .notif-meta { opacity: .8; }
+      .notif-body { font-size: .95rem; }
+      .notif-badge { display: inline-block; margin: 2px 0; }
+    `;
+    document.head.appendChild(s);
+  }
+
+  async function ensureMarkdownEngine() {
+    try {
+      if (window.marked && window.DOMPurify) return true;
+      const load = (src) =>
+        new Promise((res, rej) => {
+          const s = document.createElement("script");
+          s.src = src;
+          s.defer = true;
+          s.onload = () => res(true);
+          s.onerror = rej;
+          document.head.appendChild(s);
+        });
+      if (!window.marked)
+        await load("https://cdn.jsdelivr.net/npm/marked/marked.min.js");
+      if (!window.DOMPurify)
+        await load("https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js");
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function renderMarkdown(md) {
+    try {
+      // Prefer EasyMDE markdown if present (same as assignment editor)
+      if (window.easyMDE && typeof window.easyMDE.markdown === "function") {
+        return window.easyMDE.markdown(md);
+      }
+      if (window.marked) {
+        const html = window.marked.parse(String(md || ""), {
+          breaks: true,
+          gfm: true,
+        });
+        if (window.DOMPurify) return window.DOMPurify.sanitize(html);
+        return html; // fallback without sanitizer (use trusted inputs only)
+      }
+    } catch {}
+    // Safe minimal fallback when no engine is available
+    const esc = (s) =>
+      String(s || "").replace(
+        /[&<>]/g,
+        (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])
+      );
+    const safe = esc(String(md || ""));
+    // basic formatting
+    return safe
+      .replace(/^######\s+(.*)$/gm, "<h6>$1</h6>")
+      .replace(/^#####\s+(.*)$/gm, "<h5>$1</h5>")
+      .replace(/^####\s+(.*)$/gm, "<h5>$1</h5>")
+      .replace(/^###\s+(.*)$/gm, "<h5>$1</h5>")
+      .replace(/^##\s+(.*)$/gm, "<h5>$1</h5>")
+      .replace(/^#\s+(.*)$/gm, "<h5>$1</h5>")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      .replace(/\n/g, "<br>");
+  }
+
+  async function fetchUnreadCount() {
+    try {
+      const r = await authFetch(`${API_BASE}/api/notifications/unread-count`);
+      if (!r.ok) return 0;
+      const j = await r.json();
+      return Number(j?.count || 0);
+    } catch {
+      return 0;
+    }
+  }
+
+  async function fetchNotifications() {
+    const r = await authFetch(`${API_BASE}/api/notifications`);
+    if (!r.ok) throw new Error(String(r.status));
+    return await r.json();
+  }
+
+  function ensureNotifButton() {
+    try {
+      ensureNotifStyles();
+      const rightNav = document.querySelector(
+        ".navbar .navbar-collapse .navbar-nav.ms-auto"
+      );
+      if (!rightNav) return null;
+      let li = document.getElementById("nav-notifications");
+      if (!li) {
+        li = document.createElement("li");
+        li.id = "nav-notifications";
+        li.className = "nav-item";
+        li.innerHTML = `
+          <a href="#" class="nav-link nav-notif-btn" id="nav-notif-btn" title="Notifications" aria-label="Notifications">
+            <i class="bi bi-bell"></i>
+            <span class="nav-notif-dot" aria-hidden="true"></span>
+          </a>`;
+        // Insert before user dropdown if present
+        const userItem = document.getElementById("nav-user-item");
+        if (userItem && userItem.parentElement === rightNav) {
+          rightNav.insertBefore(li, userItem);
+        } else {
+          rightNav.appendChild(li);
+        }
+      }
+      return li;
+    } catch {
+      return null;
+    }
+  }
+
+  async function openNotificationsModal() {
+    try {
+      // Make sure a solid Markdown renderer is available
+      await ensureMarkdownEngine();
+      const list = await fetchNotifications();
+      const items = Array.isArray(list) ? list : [];
+      const body = document.createElement("div");
+      body.innerHTML = `
+        <div class="d-flex align-items-center justify-content-between pb-2">
+          <div class="fw-semibold"><i class="bi bi-bell me-1" aria-hidden="true"></i> Notifications</div>
+          <div class="pe-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" id="notif-refresh" title="Refresh" aria-label="Refresh"><i class="bi bi-arrow-clockwise" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-sm btn-outline-light ms-2" id="notif-mark-all" title="Mark all as read" aria-label="Mark all as read"><i class="bi bi-envelope-fill" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <div id="notif-list"></div>
+      `;
+      const renderList = (arr) => {
+        const host = document.getElementById("qbaseModal") || document;
+        const wrap = host.querySelector("#notif-list");
+        wrap.innerHTML = "";
+        if (!arr.length) {
+          wrap.innerHTML =
+            '<div class="text-center text-muted py-3">No notifications</div>';
+          return;
+        }
+        for (const n of arr) {
+          const row = document.createElement("div");
+          row.className = "notif-item py-2";
+          const read = !!n.read_at;
+          const created = (() => {
+            try {
+              return new Date(n.created_at).toLocaleString();
+            } catch {
+              return n.created_at || "";
+            }
+          })();
+          row.innerHTML = `
+            <div class="card d-flex align-items-start justify-content-between gap-3 w-100">
+              <div class="flex-fill p-3 w-100">
+                <div class="d-flex justify-content-between gap-2">
+                  <div>
+                    <span class="notif-title">${(n.title || "")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")}</span>
+                    ${
+                      read
+                        ? ""
+                        : '<span class="ms-2 badge bg-danger"><i class="bi bi-circle-fill" aria-hidden="true"></i> New</span>'
+                    }
+                  </div>
+                  <button class="btn btn-sm ${read ? "d-none" : "btn-outline-light"}" data-act="mark" data-id="${n.id}" title="Mark as read" aria-label="Mark as read"><i class="bi bi-envelope" aria-hidden="true"></i></button>
+                </div>
+                <div class="notif-meta small text-secondary">${created}</div>
+                <hr>
+                <div class="notif-body mt-2" id="nb_${n.id}"></div>
+              </div>
+            </div>`;
+          wrap.appendChild(row);
+          // Render markdown to HTML
+          const target = row.querySelector(`#nb_${n.id}`);
+          try {
+            target.innerHTML = renderMarkdown(n.body_md || "");
+          } catch {
+            target.textContent = n.body_md || "";
+          }
+        }
+      };
+
+      await showModal({
+        title: "Notifications",
+        bodyHTML: body.outerHTML,
+        buttons: [],
+        dialogClass: "modal-xl modal-dialog-scrollable",
+        onContentReady: (modalEl) => {
+          // Attach handlers after DOM is injected
+          const listWrap = modalEl.querySelector("#notif-list");
+          const refreshBtn = modalEl.querySelector("#notif-refresh");
+          const markAllBtn = modalEl.querySelector("#notif-mark-all");
+          const rerender = async () => {
+            try {
+              const latest = await fetchNotifications();
+              renderList(latest || []);
+              updateNotifDot();
+            } catch {}
+          };
+          refreshBtn?.addEventListener("click", rerender);
+          markAllBtn?.addEventListener("click", async () => {
+            try {
+              await authFetch(`${API_BASE}/api/notifications/mark-all-read`, {
+                method: "POST",
+              });
+              await rerender();
+            } catch {}
+          });
+          listWrap?.addEventListener("click", async (e) => {
+            const btn = e.target.closest('[data-act="mark"]');
+            if (!btn) return;
+            const id = btn.getAttribute("data-id");
+            try {
+              await authFetch(
+                `${API_BASE}/api/notifications/${encodeURIComponent(id)}/read`,
+                { method: "PATCH" }
+              );
+              await rerender();
+            } catch {}
+          });
+          // initial
+          renderList(items);
+        },
+      });
+    } catch {}
+  }
+
+  async function updateNotifDot() {
+    try {
+      const cnt = await fetchUnreadCount();
+      const btn = document.getElementById("nav-notif-btn");
+      if (!btn) return;
+      if (cnt > 0) btn.classList.add("has-unread");
+      else btn.classList.remove("has-unread");
+    } catch {}
+  }
+
+  function setupNotifications() {
+    const host = ensureNotifButton();
+    if (!host) return;
+    const btn = host.querySelector("#nav-notif-btn");
+    btn?.addEventListener("click", (e) => {
+      e.preventDefault();
+      openNotificationsModal();
+    });
+    // Poll unread count every 60s
+    updateNotifDot();
+    try {
+      setInterval(updateNotifDot, 60000);
+    } catch {}
   }
   async function showConfirm({
     title,
@@ -1720,6 +1974,7 @@
       setLoggedInUI(me.username);
       broadcastLogin(me.username);
       hideLoginGate();
+      setupNotifications();
       try {
         if (me.mustChangePassword) {
           await showChangePasswordFlow();

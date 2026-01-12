@@ -10,6 +10,7 @@
   const gate = document.getElementById("admin-gate");
   const listEl = document.getElementById("reports-list");
   const refreshBtn = document.getElementById("refresh");
+  const sendGeneralBtn = document.getElementById('btn-send-general');
   const filterBtns = Array.from(document.querySelectorAll('[data-filter]'));
   let currentFilter = 'open';
   const searchInput = document.getElementById('search');
@@ -61,6 +62,140 @@
   async function setNotes(id, notes){
     const r = await authFetch(`${API_BASE}/api/admin/reports/${encodeURIComponent(id)}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ notes }) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  }
+
+  // --- Notifications compose helpers ---
+  async function loadEasyMDEAssets() {
+    if (!document.getElementById('easymde-css')) {
+      const l = document.createElement('link');
+      l.id = 'easymde-css';
+      l.rel = 'stylesheet';
+      l.href = 'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css';
+      document.head.appendChild(l);
+    }
+    if (typeof window.EasyMDE === 'undefined') {
+      await new Promise((resolve) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js';
+        s.defer = true;
+        s.onload = resolve;
+        document.head.appendChild(s);
+      });
+    }
+  }
+
+  async function openNotifyReporter(r) {
+    await loadEasyMDEAssets();
+    const details = questionKey(r);
+    const qUrl = questionHref(r);
+    const reporterMsg = String(r.message||'');
+    const status = String(r.status||'open').toLowerCase();
+    const statusHtml = `Report status at time of writing: <span class="badge text-bg-${status==='closed'?'success':(status==='wip'?'warning text-dark':'info')}">${status.toUpperCase()}</span>`;
+    const preface = `\n\n<hr>\nQuestion: [${details}](${qUrl})\n\nReporter message: ${reporterMsg}\n\n${statusHtml}`;
+
+    const body = document.createElement('div');
+    body.innerHTML = `
+      <div class="mb-2">
+        <label class="form-label">Title</label>
+        <div class="input-group">
+          <span class="input-group-text">Report -</span>
+          <input type="text" class="form-control" id="notif-title" placeholder="Message title" />
+        </div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Body (Markdown)</label>
+        <textarea id="notif-body" class="form-control" rows="8"></textarea>
+      </div>`;
+
+    await showModal({
+      title: 'Notify Reporter',
+      bodyHTML: body.outerHTML,
+      buttons: [
+        { text: 'Cancel', className: 'btn btn-outline-secondary', value: 'cancel' },
+        { text: 'Send', className: 'btn btn-primary', value: 'send' },
+      ],
+      focusSelector: '#notif-title',
+      dialogClass: 'modal-xl modal-dialog-scrollable',
+      stack: true,
+      onContentReady: (modalEl) => {
+        const area = modalEl.querySelector('#notif-body');
+        const titleIn = modalEl.querySelector('#notif-title');
+        if (area) {
+          area.value = preface + '\n';
+          try { modalEl.__mde = new EasyMDE({ element: area, spellChecker:false, status:false }); } catch {}
+        }
+        setTimeout(() => {
+          const sendBtn = modalEl.querySelector('.modal-footer .btn.btn-primary');
+          sendBtn?.addEventListener('click', async () => {
+            try {
+              const tSuffix = String(titleIn?.value||'').trim();
+              const title = `Report - ${tSuffix}`;
+              const bodyVal = (modalEl.__mde ? modalEl.__mde.value() : (area?.value||''));
+              const payload = { title, body: bodyVal, userIds: [r.userId], meta: { reportId: r.id, status: r.status } };
+              await authFetch(`${API_BASE}/api/admin/notifications`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            } catch {}
+          }, { once: true, capture: true });
+        }, 0);
+      },
+    });
+  }
+
+  async function openSendGeneralNotification() {
+    await loadEasyMDEAssets();
+    let users = [];
+    try { const r = await authFetch(`${API_BASE}/api/admin/users`); if (r.ok) users = await r.json(); } catch {}
+    const body = document.createElement('div');
+    body.innerHTML = `
+      <div class="mb-2">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-control" id="gn-title" placeholder="Notification title" />
+      </div>
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="gn-all" />
+        <label class="form-check-label" for="gn-all">Send to all users</label>
+      </div>
+      <div class="mb-2" id="gn-targets-wrap">
+        <label class="form-label">Recipients</label>
+        <select id="gn-targets" class="form-select" multiple size="8">${users.map(u=>`<option value="${u.id}">${escapeHtml(u.username)} (${String(u.id||'').slice(0,6)})</option>`).join('')}</select>
+        <div class="form-text">Hold Ctrl/Cmd to select multiple.</div>
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Body (Markdown)</label>
+        <textarea id="gn-body" class="form-control" rows="10"></textarea>
+      </div>`;
+    await showModal({
+      title: 'Send Notification',
+      bodyHTML: body.outerHTML,
+      buttons: [
+        { text: 'Cancel', className: 'btn btn-outline-secondary', value: 'cancel' },
+        { text: 'Send', className: 'btn btn-primary', value: 'send' },
+      ],
+      focusSelector: '#gn-title',
+      dialogClass: 'modal-xl modal-dialog-scrollable',
+      stack: true,
+      onContentReady: (modalEl) => {
+        const txt = modalEl.querySelector('#gn-body');
+        const titleIn = modalEl.querySelector('#gn-title');
+        const allCb = modalEl.querySelector('#gn-all');
+        const targetsWrap = modalEl.querySelector('#gn-targets-wrap');
+        const targetsSel = modalEl.querySelector('#gn-targets');
+        try { modalEl.__mde = new EasyMDE({ element: txt, spellChecker:false, status:false }); } catch {}
+        allCb?.addEventListener('change', ()=>{ if (allCb.checked) targetsWrap.classList.add('d-none'); else targetsWrap.classList.remove('d-none'); });
+        setTimeout(() => {
+          const sendBtn = modalEl.querySelector('.modal-footer .btn.btn-primary');
+          sendBtn?.addEventListener('click', async () => {
+            try {
+              const title = String(titleIn?.value||'').trim();
+              const bodyVal = (modalEl.__mde ? modalEl.__mde.value() : (txt?.value||''));
+              const all = !!allCb?.checked;
+              const sel = Array.from(targetsSel?.selectedOptions||[]).map(o=>o.value);
+              const payload = all ? { title, body: bodyVal, all: true } : { title, body: bodyVal, userIds: sel };
+              await authFetch(`${API_BASE}/api/admin/notifications`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            } catch {}
+          }, { once: true, capture: true });
+        }, 0);
+      }
+    });
   }
 
   async function blockQuestion(r){
@@ -165,7 +300,11 @@
           </div>
           <div class="mb-1"><strong>Reason</strong>: ${escapeHtml(r.reason)}</div>
           <div class="mb-3"><strong>Details</strong><div class="p-3 bg-dark rounded border border-dark-subtle" style="min-height: 140px; white-space: pre-wrap">${escapeHtml(r.message)}</div></div>
-          <div class="mb-0"><strong>Notes</strong><textarea class="form-control admin-notes" rows="5" placeholder="Add notes...">${escapeHtml(r.notes||'')}</textarea></div>
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="flex-fill me-2"><strong>Notes</strong></div>
+            <div class="flex-shrink-0"><button class="btn btn-sm btn-outline-primary" data-act="notify">Notify reporter</button></div>
+          </div>
+          <div class="mb-0"><textarea class="form-control admin-notes" rows="5" placeholder="Add notes...">${escapeHtml(r.notes||'')}</textarea></div>
         `;
         const sel = item.querySelector('select');
         sel?.addEventListener('change', async (e) => {
@@ -174,6 +313,8 @@
           catch {}
         });
         const notesEl = item.querySelector('.admin-notes');
+        const notifyBtn = item.querySelector('[data-act="notify"]');
+        notifyBtn?.addEventListener('click', () => openNotifyReporter(r));
         let notesTimer = 0, lastVal = notesEl.value;
         const pushNotes = async () => { const v = String(notesEl.value||''); if (v === lastVal) return; lastVal = v; try { await setNotes(r.id, v); } catch {} };
         notesEl.addEventListener('input', () => { clearTimeout(notesTimer); notesTimer = setTimeout(pushNotes, 600); });
@@ -197,6 +338,7 @@
   }
 
   refreshBtn?.addEventListener('click', load);
+  sendGeneralBtn?.addEventListener('click', openSendGeneralNotification);
   searchInput?.addEventListener('input', () => render(cache));
   blockedOnlyEl?.addEventListener('change', () => render(cache));
   filterBtns.forEach(btn => btn.addEventListener('click', () => {

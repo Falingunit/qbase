@@ -1,0 +1,219 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Can reflection result in plane polarised light if the light is incident on the interface from the side with higher refractive index?",
+      "image": null,
+      "qOptions": [
+        "Thus, polarization by reflection shall not definitely occur.",
+        "Thus, polarization by refraction shall definitely occur.",
+        "Thus, polarization by refraction shall not definitely occur.",
+        "Thus, polarization by reflection shall definitely occur."
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Unpolarized light of intensity \\(I_0\\) is incident on a polarizer and the emerging light strikes a second polarizing filter with its axis at \\(45^\\circ\\) to that of the first. The intensity of the emerging beam is",
+      "image": null,
+      "qOptions": ["\\(I_0/2\\)", "\\(I_0/4\\)", "\\(I_0\\)", "\\(I_0/3\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Waves that cannot be polarised are",
+      "image": null,
+      "qOptions": ["Longitudinal", "Transverse", "Electromagnetic", "Light"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Plane of polarisation is",
+      "image": null,
+      "qOptions": [
+        "The plane in which vibrations of the electric vector takes place",
+        "A plane perpendicular to the plane in which vibrations of the electric vector takes place",
+        "Is perpendicular to the plane of vibration",
+        "Horizontal plane"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two linear polarizers (with their planes parallel to each other) are kept on the path of an unpolarized light of intensity \\(I_0\\). Their axes are inclined to each other by \\(30^\\circ\\). Find the intensity of the light after passing through the polarizers if angle between their axis of polarization is \\(30^\\circ\\).",
+      "image": null,
+      "qOptions": [
+        "\\(I_0/2\\)",
+        "\\(I_0/8\\)",
+        "\\(3I_0/4\\)",
+        "\\(3I_0/8\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A polarizer is kept on the path of a plane polarized light and the intensity of the transmitted light is \\(I_1\\). If the polarizer is rotated clockwise by \\(53^\\circ\\), it was observed that no light is transmitted. When it is rotated anticlockwise by angle \\(53^\\circ\\), the intensity is \\(I_2\\). Then ratio \\(I_1/I_2\\) is",
+      "image": null,
+      "qOptions": ["\\(5/6\\)", "\\(9/16\\)", "\\(24/25\\)", "\\(25/36\\)"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Transverse wave nature is established by",
+      "image": null,
+      "qOptions": [
+        "Interference",
+        "Diffraction",
+        "Polarization",
+        "All the above"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two polarizers are kept in the path of an unpolarized light of intensity \\(I_0\\) such that no light is transmitted after passing through both the polarizers. Now a third polarizer is kept in between them such that it makes \\(45^\\circ\\) with both polarizers. Then intensity of the transmitted light is",
+      "image": null,
+      "qOptions": ["\\(I_0/4\\)", "\\(I_0/8\\)", "\\(3I_0/8\\)", "zero"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The angle of incidence at which reflected light is totally polarized for reflection from air to glass (refractive index \\(n\\)) is",
+      "image": null,
+      "qOptions": [
+        "\\(\\sin^{-1}(n)\\)",
+        "\\(\\sin^{-1}(1/n)\\)",
+        "\\(\\tan^{-1}(1/n)\\)",
+        "\\(\\tan^{-1}(n)\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Choose the correct statement.",
+      "image": null,
+      "qOptions": [
+        "the Brewster's angle is independent of wavelength of light.",
+        "the Brewster's angle is independent of the nature of reflecting surface",
+        "the Brewster's angle is different for different wavelengths",
+        "Brewster's angle depends on wavelength but not on the nature of reflecting surface."
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light is incident from a denser to a rarer medium. The critical angle for total internal reflection is \\(\\theta_{IC}\\) and the Brewster's angle of incidence is \\(\\theta_{IB}\\) such that \\(\\sin\\theta_{IC}/\\sin\\theta_{IB}=m=1.28\\). The relative refractive index of the two media is:",
+      "image": null,
+      "qOptions": ["0.2", "0.4", "0.8", "0.9"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Unpolarising light falls on two polarizing sheets so oriented that no light is transmitted. If a third polarizing sheet is placed between them; not parallel to either of the above two sheets in question",
+      "image": null,
+      "qOptions": [
+        "no light is transmitted",
+        "some light is transmitted",
+        "light may or may not be transmitted",
+        "certainly 50% light is transmitted."
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light is going from air to glass such that the reflected light is found to be completely plane polarized. Also the angle of refraction inside the glass is found exactly equal to the angle of deviation suffered by the ray. The refractive index of the glass is",
+      "image": null,
+      "qOptions": ["1.5", "\\(\\sqrt{2}\\)", "\\(\\sqrt{3}\\)", "4/3"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Unpolarized light of intensity \\(I_0\\) is incident on surface of a block of glass at Brewster's angle. In that case, which one of the following statements is true?",
+      "image": null,
+      "qOptions": [
+        "transmitted light is partially polarized with intensity \\(I_0/2\\).",
+        "transmitted light is completely polarized with intensity less than \\(I_0/2\\).",
+        "reflected light is completely polarized with intensity less than \\(I_0/2\\).",
+        "reflected light is partially polarized with intensity \\(I_0/2\\)."
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A ray of light in air is incident on a glass plate at polarising angle of incidence. It suffers a deviation of \\(22^\\circ\\) on entering glass. The angle of polarization is",
+      "image": null,
+      "qOptions": ["90°", "56°", "68°", "Zero"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "When light is incident on a glass block at polarizing angle a) reflected ray is plane polarized b) reflected and refracted rays are perpendicular c) reflected and refracted rays are partially polarized d) refracted ray is partially polarised",
+      "image": null,
+      "qOptions": [
+        "a, c and d are correct",
+        "a, b and d are correct",
+        "b, c and d are correct",
+        "a, b and c are correct"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two beams, A and B, of plane polarized light with mutually perpendicular planes of polarization are seen through a polaroid. From the position when the beam A has maximum intensity (and beam B has zero intensity), a rotation of polaroid through \\(30^\\circ\\) makes the two beams appear equally bright. If the initial intensities of the two beams are \\(I_A\\) and \\(I_B\\) respectively, then \\(I_A/I_B\\) equals:",
+      "image": null,
+      "qOptions": ["3", "3/2", "1", "1/3"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A horizontal beam of vertically polarized light of intensity 43 W/m\\(^2\\) is sent through two polarizing sheets. The polarizing direction of the first is \\(60^\\circ\\) to the vertical, and that of the second is horizontal. The intensity of the light transmitted by the pair of sheets is (nearly)",
+      "image": null,
+      "qOptions": [
+        "8.1 W/m\\(^2\\)",
+        "7.3 W/m\\(^2\\)",
+        "6.4 W/m\\(^2\\)",
+        "3.8 W/m\\(^2\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Unpolarised light of intensity 32 W m\\(^{-2}\\) passes through three polarisers such that the transmission axis of the last polariser is crossed with first. If the intensity of the emerging light is 3 W m\\(^{-2}\\), the angle between the axes of the first two polarisers is",
+      "image": null,
+      "qOptions": ["45°", "60°", "30°", "zero"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The polaroids \\(P_1, P_2\\) & \\(P_3\\) are arranged coaxially, the angle between \\(P_1\\) and \\(P_2\\) is \\(37^\\circ\\). The angle between \\(P_2\\) and \\(P_3\\) is, if intensity of emerging light is one quarterth of intensity of unpolarized light",
+      "image": null,
+      "qOptions": [
+        "\\(\\theta = \\cos^{-1}\\!\\left(\\tfrac{5}{4}\\right)\\)",
+        "\\(\\theta = \\cos^{-1}\\!\\left(\\tfrac{4}{5}\\right)\\)",
+        "\\(\\theta = \\cos^{-1}\\!\\left(\\tfrac{4}{5\\sqrt{2}}\\right)\\)",
+        "\\(\\theta = \\cos^{-1}\\!\\left(\\tfrac{5}{4\\sqrt{2}}\\right)\\)"
+      ],
+      "qAnswer": "D"
+    }
+  ]
+}

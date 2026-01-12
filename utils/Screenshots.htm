@@ -9,6 +9,14 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Cpath d='M16 18h20a4 4 0 0 1 4 4v4h4a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4v-4h-4a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4Z' fill='%23fff'/%3E%3C/svg%3E"
     />
     <style>
+      .thumbs img.dragging {
+        opacity: 0.6;
+        outline: 2px dashed var(--accent);
+      }
+      .thumbs {
+        user-select: none;
+      }
+
       :root {
         --bg: #0b0d10;
         --panel: #14171c;
@@ -436,6 +444,8 @@
         const nextLabelEl = document.getElementById("nextLabel");
         const histStateEl = document.getElementById("histState");
         const liveEl = document.getElementById("live");
+        let dragFromIndex = null;
+        let draggedThumb = null;
 
         // Toolbar controls
         const openBtn = document.getElementById("openBtn");
@@ -474,6 +484,12 @@
           undo: [],
           redo: [],
         };
+        function updateThumbMeta() {
+          [...thumbsEl.children].forEach((img, i) => {
+            img.alt = `Page ${i + 1}`;
+            img.title = `Go to page ${i + 1}`;
+          });
+        }
 
         function pushAction(action) {
           history.undo.push(action);
@@ -549,7 +565,10 @@
           history.redo.length = 0;
 
           files.sort((a, b) =>
-            a.name.localeCompare(b.name, undefined, { numeric: true })
+            a.name.localeCompare(b.name, undefined, {
+              numeric: true,
+              sensitivity: "base", // case-insensitive
+            })
           );
 
           const pdfFile =
@@ -584,45 +603,60 @@
         }
 
         async function loadImageFile(file) {
-          const url = URL.createObjectURL(file);
-          const img = new Image();
-          img.decoding = "async";
-          img.draggable = false;
-          img.onload = () => {
-            const pixelW = img.naturalWidth;
-            const pixelH = img.naturalHeight;
-            const baseCSSWidth = measuredCSSSize();
-            const ratio = pixelH / pixelW;
-            const baseCSSHeight = Math.round(baseCSSWidth * ratio);
+          return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            const img = new Image();
+            img.decoding = "async";
+            img.draggable = false;
 
-            const page = createPageShell(baseCSSWidth, baseCSSHeight);
-            page.content.appendChild(img);
-            page.kind = "image";
-            page.canvasRef = null;
-            img.className = "content";
+            img.onload = () => {
+              const pixelW = img.naturalWidth;
+              const pixelH = img.naturalHeight;
+              const baseCSSWidth = measuredCSSSize();
+              const ratio = pixelH / pixelW;
+              const baseCSSHeight = Math.round(baseCSSWidth * ratio);
 
-            page.root.style.width = `${baseCSSWidth * state.zoom}px`;
-            page.root.style.height = `${baseCSSHeight * state.zoom}px`;
-            img.style.width = "100%";
-            img.style.height = "100%";
+              const page = createPageShell(baseCSSWidth, baseCSSHeight);
+              img.className = "content";
+              page.content.appendChild(img);
 
-            state.pages.push({
-              type: "image",
-              baseCSSWidth,
-              baseCSSHeight,
-              pixelW,
-              pixelH,
-              node: page,
-              imgEl: img,
-              canvasEl: null,
-            });
-            makeThumb(state.pages.length - 1, img, baseCSSWidth, baseCSSHeight);
+              page.kind = "image";
+              page.canvasRef = null;
 
-            URL.revokeObjectURL(url);
-            updateToolbar();
-          };
-          img.onerror = () => URL.revokeObjectURL(url);
-          img.src = url;
+              page.root.style.width = `${baseCSSWidth * state.zoom}px`;
+              page.root.style.height = `${baseCSSHeight * state.zoom}px`;
+              img.style.width = "100%";
+              img.style.height = "100%";
+
+              state.pages.push({
+                type: "image",
+                baseCSSWidth,
+                baseCSSHeight,
+                pixelW,
+                pixelH,
+                node: page,
+                imgEl: img,
+                canvasEl: null,
+              });
+
+              makeThumb(
+                state.pages.length - 1,
+                img,
+                baseCSSWidth,
+                baseCSSHeight
+              );
+              URL.revokeObjectURL(url);
+              updateToolbar();
+              resolve();
+            };
+
+            img.onerror = () => {
+              URL.revokeObjectURL(url);
+              reject(new Error(`Failed to load image: ${file.name}`));
+            };
+
+            img.src = url;
+          });
         }
 
         async function loadPDF(file) {
@@ -674,16 +708,82 @@
             updateToolbar();
           }
         }
+        function insertAt(parent, node, index) {
+          const ref = parent.children[index] || null;
+          parent.insertBefore(node, ref);
+        }
+
+        function movePage(from, to) {
+          if (from === to) return;
+          // clamp target
+          to = Math.max(0, Math.min(state.pages.length - 1, to));
+
+          // 1) move state
+          const [rec] = state.pages.splice(from, 1);
+          state.pages.splice(to, 0, rec);
+
+          // 2) move DOM: page node (always), thumb node (only if not already moved by dragover)
+          insertAt(pagesEl, rec.node.root, to);
+
+          // If we're in a drag-and-drop operation, the thumb has already been positioned by dragover.
+          if (!draggedThumb) {
+            const thumb = thumbsEl.children[from];
+            insertAt(thumbsEl, thumb, to);
+          }
+
+          // 3) fix active index and UI
+          if (state.activePage === from) state.activePage = to;
+          else if (state.activePage > from && state.activePage <= to)
+            state.activePage--;
+          else if (state.activePage < from && state.activePage >= to)
+            state.activePage++;
+
+          updateActiveThumb();
+          updateThumbMeta();
+          updateToolbar();
+        }
 
         function makeThumb(index, sourceEl, baseW, baseH) {
           const t = document.createElement("img");
           t.alt = `Page ${index + 1}`;
           t.title = `Go to page ${index + 1}`;
           t.src = toDataURL(sourceEl);
+          t.draggable = true;
           if (index === 0) t.classList.add("active");
+
+          // click to navigate
           t.addEventListener("click", () => {
-            scrollToPage(index);
+            const idx = [...thumbsEl.children].indexOf(t);
+            scrollToPage(idx);
           });
+
+          // drag & drop – per-thumb only needs start/end
+          t.addEventListener("dragstart", (e) => {
+            draggedThumb = t;
+            dragFromIndex = [...thumbsEl.children].indexOf(t); // compute from now
+            t.classList.add("dragging");
+            e.dataTransfer.effectAllowed = "move";
+          });
+
+          thumbsEl.addEventListener("drop", (e) => {
+            if (dragFromIndex == null || !draggedThumb) return;
+            e.preventDefault();
+            const to = [...thumbsEl.children].indexOf(draggedThumb);
+            if (to !== dragFromIndex) {
+              movePage(dragFromIndex, to);
+            }
+            // cleanup (in case dragend doesn't fire in some browsers)
+            draggedThumb.classList.remove("dragging");
+            draggedThumb = null;
+            dragFromIndex = null;
+          });
+
+          t.addEventListener("dragend", () => {
+            t.classList.remove("dragging");
+            draggedThumb = null;
+            dragFromIndex = null;
+          });
+
           thumbsEl.appendChild(t);
 
           function toDataURL(el) {
@@ -698,6 +798,29 @@
             return c.toDataURL("image/png");
           }
         }
+        // Single dragover/drop handlers for the strip
+        thumbsEl.addEventListener("dragover", (e) => {
+          if (!draggedThumb) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
+
+          // find insertion point by mouse X
+          const children = [...thumbsEl.children].filter(
+            (n) => n !== draggedThumb
+          );
+          const after = children.find((child) => {
+            const r = child.getBoundingClientRect();
+            return e.clientX < r.left + r.width / 2;
+          });
+          thumbsEl.insertBefore(draggedThumb, after || null);
+        });
+
+        thumbsEl.addEventListener("drop", (e) => {
+          if (dragFromIndex == null || !draggedThumb) return;
+          e.preventDefault();
+          const to = [...thumbsEl.children].indexOf(draggedThumb);
+          movePage(dragFromIndex, to);
+        });
 
         function createPageShell(baseCSSWidth, baseCSSHeight) {
           const page = document.createElement("div");

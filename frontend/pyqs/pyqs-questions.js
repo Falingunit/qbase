@@ -5,7 +5,13 @@
   (() => {
     const style = document.createElement("style");
     style.textContent = `
-    #image-overlay{position:fixed;inset:0;display:none;z-index:1060;background:rgba(10,12,14,.85)}
+    #image-overlay{
+      position:fixed; inset:0; z-index:1060;
+      background:rgba(10,12,14,.85);
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition: opacity 160ms ease, visibility 0s linear 160ms;
+    }
+    #image-overlay.open{ opacity:1; visibility:visible; pointer-events:auto; transition: opacity 160ms ease; }
     #image-overlay .io-backdrop{position:absolute;inset:0}
     #image-overlay .io-stage{
       position:absolute; inset:0;
@@ -134,7 +140,7 @@
     function openOverlay(src, alt = "") {
       img.src = src;
       img.alt = alt || "Image";
-      root.style.display = "block";
+      root.classList.add("open");
       open = true;
       if (img.complete) {
         naturalW = img.naturalWidth;
@@ -151,7 +157,7 @@
 
     function closeOverlay() {
       open = false;
-      root.style.display = "none";
+      root.classList.remove("open");
       img.src = "";
     }
 
@@ -330,12 +336,17 @@
       pickedNumerical: undefined,
       time: 0,
       notes: "",
+      resetLockedUntil: 0,
     };
   }
   function ensureStateLength(n) {
     if (!Array.isArray(questionStates)) questionStates = [];
     for (let i = 0; i < n; i++) {
-      if (!questionStates[i]) questionStates[i] = defaultState();
+      if (!questionStates[i]) {
+        questionStates[i] = defaultState();
+      } else if (questionStates[i].resetLockedUntil === undefined) {
+        questionStates[i].resetLockedUntil = 0;
+      }
     }
   }
 
@@ -451,6 +462,10 @@
           isAnswerEvaluated: !!(l.isAnswerEvaluated || s.isAnswerEvaluated),
           evalStatus: l.isAnswerEvaluated ? l.evalStatus : s.evalStatus,
           time: Math.max(l.time || 0, s.time || 0),
+          resetLockedUntil: Math.max(
+            Number(l.resetLockedUntil) || 0,
+            Number(s.resetLockedUntil) || 0
+          ),
           // Prefer local notes if present, else server's
           notes:
             l.notes && String(l.notes).length > 0 ? l.notes : s.notes || "",
@@ -851,6 +866,8 @@
     wrap.setAttribute("aria-label", meta.alt || "image");
 
     const img = document.createElement("img");
+    img.referrerPolicy = "no-referrer";
+    img.crossOrigin = "anonymous";
     img.src = meta.url;
     img.alt = meta.alt || "";
     img.draggable = false;
@@ -1494,12 +1511,14 @@
 
           // Allow Esc to exit the notes editor (blur CodeMirror)
           try {
-            notesMDE.codemirror.on('keydown', function (cm, ev) {
+            notesMDE.codemirror.on("keydown", function (cm, ev) {
               try {
-                if (ev && (ev.key === 'Escape' || ev.key === 'Esc')) {
+                if (ev && (ev.key === "Escape" || ev.key === "Esc")) {
                   ev.preventDefault();
                   ev.stopPropagation();
-                  try { cm.getInputField()?.blur(); } catch {}
+                  try {
+                    cm.getInputField()?.blur();
+                  } catch {}
                 }
               } catch {}
             });
@@ -1819,12 +1838,98 @@
   let questionStates;
   let optionButtons = [];
   let timerInterval;
+  let resetCooldownTimer = null;
+
+  const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
+  const RESET_COOLDOWN_DEFAULT_MS = 2000;
+  const RESET_COOLDOWN_MAX_MS = 60000;
 
   // ---------- UI helpers ----------
   function formatTime(sec) {
     const m = String(Math.floor(sec / 60)).padStart(2, "0");
     const s = String(sec % 60).padStart(2, "0");
     return `${m}:${s}`;
+  }
+
+  function readResetCooldownMs() {
+    try {
+      const raw = localStorage.getItem(RESET_COOLDOWN_LS_KEY);
+      const num = Number(raw);
+      if (!Number.isFinite(num) || num < 0) return RESET_COOLDOWN_DEFAULT_MS;
+      return Math.min(num, RESET_COOLDOWN_MAX_MS);
+    } catch {
+      return RESET_COOLDOWN_DEFAULT_MS;
+    }
+  }
+
+  function clearResetCooldownTimer() {
+    if (resetCooldownTimer) {
+      clearTimeout(resetCooldownTimer);
+      resetCooldownTimer = null;
+    }
+  }
+
+  function applyResetCooldownState(qState) {
+    const resetBtn = document.getElementById("reset-question");
+    if (!resetBtn || !qState) return;
+    clearResetCooldownTimer();
+    resetBtn.disabled = false;
+    const unlockAt = Number(qState.resetLockedUntil) || 0;
+    if (!unlockAt) return;
+    const now = Date.now();
+    const remaining = unlockAt - now;
+    if (remaining <= 0) {
+      qState.resetLockedUntil = 0;
+      return;
+    }
+    resetBtn.disabled = true;
+    resetCooldownTimer = setTimeout(() => {
+      resetBtn.disabled = false;
+      resetCooldownTimer = null;
+      qState.resetLockedUntil = 0;
+      markDirty();
+      scheduleSave(aID);
+    }, remaining);
+  }
+
+  function stopQuestionTimer() {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function startQuestionTimer(displayIdx) {
+    const timerElem = document.getElementById("timer");
+    if (!timerElem) return;
+    stopQuestionTimer();
+    const originalIdx = window.questionIndexMap?.[displayIdx];
+    if (originalIdx == null) return;
+    const st =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
+    timerElem.textContent = formatTime(st.time || 0);
+
+    if (!st.isAnswerEvaluated) {
+      timerInterval = setInterval(() => {
+        st.time++;
+        timerElem.textContent = formatTime(st.time);
+        markDirty(); // keep local change; don't scheduleSave here
+      }, 1000);
+    }
+  }
+
+  function resetTimerForCurrentQuestion() {
+    if (currentQuestionID == null) return;
+    const originalIdx = window.questionIndexMap?.[currentQuestionID];
+    if (originalIdx == null) return;
+    const st =
+      questionStates[originalIdx] ||
+      (questionStates[originalIdx] = defaultState());
+    st.time = 0;
+    startQuestionTimer(currentQuestionID);
+    markDirty();
+    scheduleSave(aID);
   }
 
   // Wire option buttons
@@ -1854,6 +1959,20 @@
     markDirty();
     scheduleSave(aID);
   });
+
+  // Timer reset (clickable badge)
+  (function wireTimerReset() {
+    const timerEl = document.getElementById("timer");
+    if (!timerEl) return;
+    const trigger = (e) => {
+      e?.preventDefault();
+      resetTimerForCurrentQuestion();
+    };
+    timerEl.addEventListener("click", trigger);
+    timerEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") trigger(e);
+    });
+  })();
 
   // Initialize the notes editor once the DOM is ready
   try {
@@ -1925,8 +2044,12 @@
             // Fetch all PYQs marks for this chapter and delete them one by one
             try {
               const listResp = await authFetch(
-                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}`,
-                { cache: 'no-store' }
+                `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+                  ids.examId
+                )}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(
+                  ids.chapterId
+                )}`,
+                { cache: "no-store" }
               );
               if (listResp.ok) {
                 const arr = await listResp.json();
@@ -1936,8 +2059,12 @@
                     if (!Number.isNaN(qi)) {
                       try {
                         await authFetch(
-                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(ids.examId)}/${encodeURIComponent(ids.subjectId)}/${encodeURIComponent(ids.chapterId)}/${qi}`,
-                          { method: 'DELETE' }
+                          `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(
+                            ids.examId
+                          )}/${encodeURIComponent(
+                            ids.subjectId
+                          )}/${encodeURIComponent(ids.chapterId)}/${qi}`,
+                          { method: "DELETE" }
                         );
                       } catch {}
                     }
@@ -1948,7 +2075,10 @@
           } else {
             // Regular assignment fallback: clear all marks for this assignment
             try {
-              const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+              const listResp = await authFetch(
+                `${API_BASE}/api/question-marks`,
+                { cache: "no-store" }
+              );
               if (listResp.ok) {
                 const all = await listResp.json();
                 const mine = Array.isArray(all)
@@ -1958,7 +2088,10 @@
                   const qi = Number(m?.questionIndex);
                   if (!Number.isNaN(qi)) {
                     try {
-                      await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' });
+                      await authFetch(
+                        `${API_BASE}/api/question-marks/${aID}/${qi}`,
+                        { method: "DELETE" }
+                      );
                     } catch {}
                   }
                 }
@@ -1974,8 +2107,12 @@
           if (!Number.isNaN(idx)) evaluateQuestionButtonColor(idx);
         });
         // Refresh color indicators and picker selection
-        try { updateColorIndicators(); } catch {}
-        try { updateColorPickerSelection(); } catch {}
+        try {
+          updateColorIndicators();
+        } catch {}
+        try {
+          updateColorPickerSelection();
+        } catch {}
         clickQuestionButton(0);
         dirty = false;
       } catch (e) {
@@ -2031,8 +2168,16 @@
     try {
       document.getElementById("solutionSection").style.display = "none";
     } catch {}
-    document.getElementById("reset-question").classList.add("d-none");
-    document.getElementById("check-answer").classList.remove("d-none");
+    const resetBtn = document.getElementById("reset-question");
+    const checkBtn = document.getElementById("check-answer");
+    stopQuestionTimer();
+    clearResetCooldownTimer();
+    questionStates[originalIdx].resetLockedUntil = 0;
+    if (resetBtn) {
+      resetBtn.classList.add("d-none");
+      resetBtn.disabled = false;
+    }
+    if (checkBtn) checkBtn.classList.remove("d-none");
 
     // Re-render question UI from scratch (timer restarts from 0)
     setQuestion(qID);
@@ -2110,8 +2255,20 @@
   async function showReportDialog() {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const ids = (function(){ try { return window.__PYQS_IDS__ || null; } catch { return null; } })();
-      const metaNames = (function(){ try { return window.__PYQS_META__ || {}; } catch { return {}; } })();
+      const ids = (function () {
+        try {
+          return window.__PYQS_IDS__ || null;
+        } catch {
+          return null;
+        }
+      })();
+      const metaNames = (function () {
+        try {
+          return window.__PYQS_META__ || {};
+        } catch {
+          return {};
+        }
+      })();
       const reasons = [
         { id: "wrong-answer", label: "Answer seems incorrect" },
         { id: "wrong-solution", label: "Solution seems incorrect" },
@@ -2123,11 +2280,11 @@
       let bodyHTML = '<div class="mb-2">What\'s the issue?</div>';
       bodyHTML += '<div class="list-group mb-3">';
       reasons.forEach((r, i) => {
-        const checked = i === 0 ? 'checked' : '';
+        const checked = i === 0 ? "checked" : "";
         bodyHTML += `
           <label class=\"list-group-item list-group-item-action\">\n            <input class=\"form-check-input me-1\" type=\"radio\" name=\"rep-reason\" value=\"${r.id}\" ${checked}>\n            ${r.label}\n          </label>`;
       });
-      bodyHTML += '</div>';
+      bodyHTML += "</div>";
       bodyHTML += `
         <div class=\"mb-1\"><strong>Additional details (optional)</strong></div>
         <textarea id=\"rep-notes\" class=\"form-control\" rows=\"3\" placeholder=\"Add any details that can help...\"></textarea>
@@ -2136,7 +2293,7 @@
       // Override with required PYQs report options and required details
       try {
         bodyHTML = "";
-        bodyHTML += "<div class=\"mb-2\">What's the issue?</div>";
+        bodyHTML += '<div class="mb-2">What\'s the issue?</div>';
         bodyHTML += '<div class="list-group mb-3">';
         const _opts = [
           "Typographical or Formatting Error",
@@ -2147,7 +2304,7 @@
           const checked = i === 0 ? "checked" : "";
           bodyHTML += `\n<label class=\"list-group-item list-group-item-action\">\n  <input class=\"form-check-input me-1\" type=\"radio\" name=\"rep-reason\" value=\"${label}\" ${checked}>\n  ${label}\n</label>`;
         }
-        bodyHTML += '</div>';
+        bodyHTML += "</div>";
         bodyHTML += `\n<div class=\"mb-1\"><strong>Report Details (required)</strong></div>\n<textarea id=\"rep-notes\" class=\"form-control\" rows=\"3\" placeholder=\"Describe the issue...\"></textarea>`;
       } catch {}
 
@@ -2164,10 +2321,17 @@
       if (modal !== "submit") return;
 
       const modalEl = document.getElementById("qbaseModal");
-      const reason = (modalEl.querySelector('input[name="rep-reason"]:checked')?.value || "").trim();
-      const message = String(modalEl.querySelector('#rep-notes')?.value || "").trim();
+      const reason = (
+        modalEl.querySelector('input[name="rep-reason"]:checked')?.value || ""
+      ).trim();
+      const message = String(
+        modalEl.querySelector("#rep-notes")?.value || ""
+      ).trim();
       if (!message) {
-        await uiNotice("Please enter report details.", "Report Details Required");
+        await uiNotice(
+          "Please enter report details.",
+          "Report Details Required"
+        );
         return;
       }
 
@@ -2309,13 +2473,15 @@
       optionButtons.forEach((btn) => btn.classList.add("disabled"));
     }
 
-    document.getElementById("check-answer").classList.add("d-none");
-    document.getElementById("reset-question").classList.remove("d-none");
+    const checkBtn = document.getElementById("check-answer");
+    const resetBtn = document.getElementById("reset-question");
+    checkBtn.classList.add("d-none");
+    resetBtn.classList.remove("d-none");
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    const cooldownMs = readResetCooldownMs();
+    st.resetLockedUntil = cooldownMs > 0 ? Date.now() + cooldownMs : 0;
+    applyResetCooldownState(st);
 
     // Store evaluation
     st.isAnswerEvaluated = true;
@@ -2739,10 +2905,8 @@
       if (btnDisplayIdx === qID) button.classList.add("selected");
     });
 
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
+    stopQuestionTimer();
+    clearResetCooldownTimer();
 
     currentQuestionID = qID;
     setQuestion(qID);
@@ -2808,19 +2972,25 @@
       try {
         const btn = document.getElementById("report-btn");
         if (!btn) return;
-        const ids = (function(){ try { return window.__PYQS_IDS__ || null; } catch { return null; } })();
+        const ids = (function () {
+          try {
+            return window.__PYQS_IDS__ || null;
+          } catch {
+            return null;
+          }
+        })();
         if (!ids) return;
         const p = new URLSearchParams();
-        p.set('kind','pyqs');
-        p.set('examId', ids.examId);
-        p.set('subjectId', ids.subjectId);
-        p.set('chapterId', ids.chapterId);
-        p.set('questionIndex', String(originalIdx));
+        p.set("kind", "pyqs");
+        p.set("examId", ids.examId);
+        p.set("subjectId", ids.subjectId);
+        p.set("chapterId", ids.chapterId);
+        p.set("questionIndex", String(originalIdx));
         const url = `${API_BASE}/api/report/blocked?${p.toString()}`;
         const r = await authFetch(url);
         if (!r.ok) return;
         const j = await r.json();
-        btn.style.display = j.blocked ? 'none' : '';
+        btn.style.display = j.blocked ? "none" : "";
       } catch {}
     })();
 
@@ -2914,25 +3084,7 @@
     } catch {}
 
     // --- Timer control ---
-    if (timerInterval) clearInterval(timerInterval);
-
-    const timerElem = document.getElementById("timer");
-    timerElem.textContent = formatTime(
-      (questionStates[originalIdx] || defaultState()).time
-    );
-
-    // Only tick if the question is NOT yet evaluated
-    if (!(questionStates[originalIdx] || defaultState()).isAnswerEvaluated) {
-      timerInterval = setInterval(() => {
-        if (!questionStates[originalIdx])
-          questionStates[originalIdx] = defaultState();
-        questionStates[originalIdx].time++;
-        timerElem.textContent = formatTime(questionStates[originalIdx].time);
-        markDirty(); // keep local change; don't scheduleSave here
-      }, 1000);
-    } else {
-      timerInterval = null; // ensure paused
-    }
+    startQuestionTimer(qID);
 
     // Reset MCQ selection UI
     optionButtons.forEach((btn) => btn.classList.remove("mcq-option-selected"));
@@ -2963,13 +3115,17 @@
           const picked = getUserSelection(questionState, "SMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
-          try { showSolution(question); } catch {}
+          try {
+            showSolution(question);
+          } catch {}
         } else if (question.qType === "MMCQ") {
           const correct = normalizeAnswer(question);
           const picked = getUserSelection(questionState, "MMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
-          try { showSolution(question); } catch {}
+          try {
+            showSolution(question);
+          } catch {}
         } else if (question.qType === "Numerical") {
           const ans = normalizeAnswer(question);
           const user = getUserSelection(questionState, "Numerical");
@@ -3045,8 +3201,12 @@
     if (questionState.isAnswerEvaluated) {
       checkBtn.classList.add("d-none");
       resetBtn.classList.remove("d-none");
+      applyResetCooldownState(questionState);
     } else {
       resetBtn.classList.add("d-none");
+      resetBtn.disabled = false;
+      clearResetCooldownTimer();
+      questionState.resetLockedUntil = 0;
       checkBtn.classList.remove("d-none");
     }
 
@@ -3102,7 +3262,9 @@
       }
 
       if (!response) {
-        response = await authFetch(`${API_BASE}/api/bookmarks/${aID}/${originalIdx}`);
+        response = await authFetch(
+          `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        );
         if (response.status === 401) {
           try {
             window.dispatchEvent(new Event("qbase:force-login"));
@@ -3139,7 +3301,10 @@
           try {
             window.dispatchEvent(new Event("qbase:force-login"));
           } catch {}
-          await uiNotice("Please log in to manage bookmarks.", "Login required");
+          await uiNotice(
+            "Please log in to manage bookmarks.",
+            "Login required"
+          );
           return;
         }
         throw new Error(`HTTP ${response.status}`);
@@ -3442,7 +3607,10 @@
             try {
               window.dispatchEvent(new Event("qbase:force-login"));
             } catch {}
-            await uiNotice("Please log in to bookmark questions.", "Login required");
+            await uiNotice(
+              "Please log in to bookmark questions.",
+              "Login required"
+            );
             return false;
           }
           if (respPyqs.ok) {
@@ -3466,7 +3634,10 @@
         try {
           window.dispatchEvent(new Event("qbase:force-login"));
         } catch {}
-        await uiNotice("Please log in to bookmark questions.", "Login required");
+        await uiNotice(
+          "Please log in to bookmark questions.",
+          "Login required"
+        );
         return false;
       }
       if (!response.ok) {
@@ -3505,7 +3676,10 @@
             try {
               window.dispatchEvent(new Event("qbase:force-login"));
             } catch {}
-            await uiNotice("Please log in to manage bookmarks.", "Login required");
+            await uiNotice(
+              "Please log in to manage bookmarks.",
+              "Login required"
+            );
             return false;
           }
           if (respPyqs.ok) {
@@ -3920,7 +4094,9 @@
         } catch {}
       }
       if (!res) {
-        res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+        res = await authFetch(`${API_BASE}/api/bookmarks`, {
+          cache: "no-store",
+        });
       }
       if (!res || !res.ok) {
         questionButtons?.forEach((btn) => {
@@ -3932,7 +4108,12 @@
       }
       const all = await res.json();
       let mine;
-      if (ids && Array.isArray(all) && all.length && all[0]?.examId !== undefined) {
+      if (
+        ids &&
+        Array.isArray(all) &&
+        all.length &&
+        all[0]?.examId !== undefined
+      ) {
         // PYQs bookmarks payload
         mine = all.filter(
           (b) =>
@@ -4189,48 +4370,80 @@
   (function wireColorHotkeys() {
     function isTypingContext() {
       try {
-        const ae = document.activeElement; if (!ae) return false;
-        const tag = String(ae.tagName || '').toLowerCase();
-        if (tag === 'input' || tag === 'textarea') return true;
+        const ae = document.activeElement;
+        if (!ae) return false;
+        const tag = String(ae.tagName || "").toLowerCase();
+        if (tag === "input" || tag === "textarea") return true;
         if (ae.isContentEditable) return true;
       } catch {}
       return false;
     }
     function overlayOpen() {
       try {
-        const el = document.getElementById('image-overlay');
+        const el = document.getElementById("image-overlay");
         if (!el) return false;
         const s = getComputedStyle(el);
-        return s.display !== 'none';
+        return s.display !== "none";
       } catch {}
       return false;
     }
     const COLOR_VALUES = {
-      blue: '#0d6efd',
-      red: '#dc3545',
-      yellow: '#ffc107',
-      green: '#198754',
-      clear: 'none',
+      blue: "#0d6efd",
+      red: "#dc3545",
+      yellow: "#ffc107",
+      green: "#198754",
+      clear: "none",
     };
-    const getHK = () => { try { return window.qbGetHotkeys ? window.qbGetHotkeys() : null; } catch { return null; } };
-    window.addEventListener('keydown', async (e) => {
+    const getHK = () => {
+      try {
+        return window.qbGetHotkeys ? window.qbGetHotkeys() : null;
+      } catch {
+        return null;
+      }
+    };
+    window.addEventListener("keydown", async (e) => {
       try {
         if (overlayOpen()) return;
         if (isTypingContext()) return;
-        const matches = (arr) => (window.qbMatches && getHK() && arr) ? window.qbMatches(e, arr) : false;
+        const matches = (arr) =>
+          window.qbMatches && getHK() && arr ? window.qbMatches(e, arr) : false;
         let action = null;
-        if (matches(getHK()?.colorBlue)) action = 'blue';
-        else if (matches(getHK()?.colorRed)) action = 'red';
-        else if (matches(getHK()?.colorYellow)) action = 'yellow';
-        else if (matches(getHK()?.colorGreen)) action = 'green';
-        else if (matches(getHK()?.colorClear)) action = 'clear';
+        if (matches(getHK()?.colorBlue)) action = "blue";
+        else if (matches(getHK()?.colorRed)) action = "red";
+        else if (matches(getHK()?.colorYellow)) action = "yellow";
+        else if (matches(getHK()?.colorGreen)) action = "green";
+        else if (matches(getHK()?.colorClear)) action = "clear";
+
+        // Fallback: accept Alt+Digit (1..5) when config not ready
+        if (!action) {
+          if (e.altKey && !e.metaKey) {
+            let d = null;
+            if (typeof e.code === 'string' && /^Digit[1-5]$/.test(e.code)) d = e.code.slice(5);
+            else if (typeof e.key === 'string' && '12345'.includes(e.key)) d = e.key;
+            if (d) {
+              if (d === '1') action = 'blue';
+              else if (d === '2') action = 'red';
+              else if (d === '3') action = 'yellow';
+              else if (d === '4') action = 'green';
+              else if (d === '5') action = 'clear';
+            }
+          }
+        }
         if (!action) return;
         e.preventDefault();
         if (currentQuestionID == null) return;
-        const val = COLOR_MAP[k];
+        const val = COLOR_VALUES[action];
         let ok = true;
-        if (val === 'none') ok = await clearQuestionColor(); else ok = await setQuestionColor(val);
-        if (ok) { try { updateColorIndicators(); } catch {} try { updateColorPickerSelection(); } catch {} }
+        if (val === "none") ok = await clearQuestionColor();
+        else ok = await setQuestionColor(val);
+        if (ok) {
+          try {
+            updateColorIndicators();
+          } catch {}
+          try {
+            updateColorPickerSelection();
+          } catch {}
+        }
       } catch {}
     });
   })();

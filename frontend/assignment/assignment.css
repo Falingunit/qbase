@@ -194,6 +194,14 @@ body {
   padding: 0.35rem 0.6rem;
   border-radius: 999px;
 }
+#timer {
+  cursor: pointer;
+  user-select: none;
+}
+#timer:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
 
 .controls {
   align-items: center;
@@ -281,6 +289,29 @@ body {
     #000 20px,
     #000 calc(100% - 20px),
     transparent
+  );
+  scrollbar-width: thin;
+  scrollbar-color: rgba(54, 47, 109, 0.28) transparent;
+}
+#mobile-qbar::-webkit-scrollbar {
+  height: 6px;
+}
+#mobile-qbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+#mobile-qbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.45),
+    rgba(255, 255, 255, 0.2)
+  );
+  border-radius: 999px;
+}
+#mobile-qbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(255, 255, 255, 0.32)
   );
 }
 #mobile-qbar button {
@@ -835,7 +866,8 @@ html {
   /* Q-bar: keep in flow and animate collapse/expand */
   #mobile-qbar {
     display: block; /* override base none to allow transition */
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
     max-height: 0;
     opacity: 0;
     transform: translateY(-6px);
@@ -851,6 +883,7 @@ html {
     transform: translateY(0);
     margin-bottom: 1rem;
     pointer-events: auto;
+    overflow-x: auto;
   }
 
   /* Sidebar: animate width/opacity instead of display */

@@ -268,9 +268,14 @@
     const starredCount = document.getElementById("as-starred-count");
     if (starredWrap && starredGrid) {
       starredGrid.innerHTML = "";
+      const q = (els.search?.value || "").trim().toLowerCase();
       const starredList = data.filter((it) => starredIds.has(Number(it.aID)));
       if (starredList.length > 0) {
-        starredList.forEach((it) => starredGrid.appendChild(cardFor(it)));
+        starredList.forEach((it) => {
+          const c = cardFor(it);
+          c.classList.add("anim-enter");
+          starredGrid.appendChild(c);
+        });
         if (starredCount) starredCount.textContent = `(${starredList.length})`;
         starredWrap.classList.remove("d-none");
       } else {
@@ -343,8 +348,8 @@
         wrap.id = chapId;
 
         const grid = document.createElement("div");
-        grid.className = "as-grid";
-        list.forEach((it) => grid.appendChild(cardFor(it)));
+        grid.className = "as-grid fade-in";
+        list.forEach((it) => { const c = cardFor(it); c.classList.add("anim-enter"); grid.appendChild(c); });
 
         wrap.appendChild(grid);
         chapWrap.append(h, wrap);
@@ -359,6 +364,7 @@
   function cardFor(entry) {
     const card = document.createElement("div");
     card.className = "card as-card h-100";
+    card.dataset.aid = String(entry.aID);
     if (starredIds.has(Number(entry.aID))) card.classList.add("as-starred");
 
     // Determine status from scores: completed if all questions attempted; started if attempted > 0
@@ -395,7 +401,31 @@
     starBtn.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
-      await toggleStar(entry.aID, !isStarred);
+      try {
+        starBtn.classList.remove("star-animate");
+        // restart animation
+        // eslint-disable-next-line no-unused-expressions
+        starBtn.offsetHeight;
+        starBtn.classList.add("star-animate");
+        setTimeout(() => starBtn.classList.remove("star-animate"), 360);
+      } catch {}
+
+      const q = (els.search?.value || "").trim().toLowerCase();
+      const hay = (card.dataset.haystack || "");
+      const matches = !q || hay.includes(q);
+      const currentlyStarred = card.classList.contains('as-starred');
+      const makeStarred = !currentlyStarred;
+
+      applyAssignmentStarDom(entry, makeStarred, { matches });
+      starBtn.disabled = true;
+      try {
+        await toggleStar(entry.aID, makeStarred);
+      } catch (err) {
+        // revert on failure
+        applyAssignmentStarDom(entry, !makeStarred, { matches });
+      } finally {
+        starBtn.disabled = false;
+      }
     });
 
     const title = document.createElement("h5");
@@ -489,14 +519,56 @@
         if (!r.ok) throw new Error("unstar failed");
         starredIds.delete(id);
       }
-      // Rebuild to reflect updated stars
-      buildCards(getFilteredData());
-      filterVisibility(lastSearch);
-      highlightElements(document, (els.search?.value || "").trim());
-      checkEmpty();
+      // no full rebuild; DOM already updated optimistically
     } catch (e) {
       console.error(e);
     }
+  }
+
+  // Move/update assignment cards across sections without full rebuild
+  function applyAssignmentStarDom(entry, makeStarred, { matches } = {}) {
+    try {
+      const id = String(entry.aID);
+      const starredWrap = document.getElementById('as-starred-wrap');
+      const starredGrid = document.getElementById('as-starred');
+      if (!starredGrid) return;
+
+      // Update all instances in the page
+      const allCards = Array.from(document.querySelectorAll(`.as-card[data-aid="${CSS.escape(id)}"]`));
+      for (const c of allCards) {
+        c.classList.toggle('as-starred', makeStarred);
+        const btn = c.querySelector('.as-star-btn');
+        if (btn) {
+          btn.title = makeStarred ? 'Unstar' : 'Star';
+          btn.innerHTML = makeStarred ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star"></i>';
+        }
+      }
+
+      const inStarred = starredGrid.querySelector(`.as-card[data-aid="${CSS.escape(id)}"]`);
+      if (makeStarred) {
+        if (matches !== false && !inStarred) {
+          const clone = cardFor(entry);
+          clone.classList.add('anim-enter');
+          // make sure highlights apply on new node
+          try { highlightElements(clone, (els.search?.value || '').trim()); } catch {}
+          starredGrid.appendChild(clone);
+        }
+      } else {
+        if (inStarred) {
+          inStarred.classList.add('anim-out');
+          inStarred.addEventListener('animationend', () => inStarred.remove(), { once: true });
+        }
+      }
+
+      // Update count/visibility
+      const countEl = document.getElementById('as-starred-count');
+      const count = starredGrid.children.length;
+      if (starredWrap) starredWrap.classList.toggle('d-none', count === 0);
+      if (countEl) countEl.textContent = count ? `(${count})` : '';
+
+      // Maintain empty state visibility
+      checkEmpty();
+    } catch (e) { /* noop */ }
   }
 
   // === utils ===

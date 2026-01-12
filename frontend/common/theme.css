@@ -16,6 +16,10 @@
   /* Shape & layout */
   --radius: 16px;
   --container-max: 1100px;
+    color-scheme: dark;
+}
+select, input, textarea, button {
+  color-scheme: dark;
 }
 
 /* Base page background overlay (keeps Bootstrap body classes intact) */
@@ -70,15 +74,35 @@ h4 { margin-top: 1.75rem; color: #cfd7df; }
 }
 .card .small.text-muted { color: var(--muted) !important; }
 
-/* Scrollbars (WebKit) */
-::-webkit-scrollbar { width: 12px; }
+/* Scrollbars (light, minimal) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(54, 47, 109, 0.28) transparent;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: 0 0 1px 1px rgba(13, 110, 253, 0.12) inset;
-  border-radius: 10px;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.22)
+  );
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.3)
+  );
+  background-clip: padding-box;
 }
 
 /* Modals: align with card look */

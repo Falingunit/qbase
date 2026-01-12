@@ -31,29 +31,10 @@
   async function toggleStar(wID, makeStarred) {
     const id = String(wID || "");
     if (!id) return;
-    // Preserve currently open collapses (subjects/chapters)
-    const previouslyOpen = Array.from(
-      document.querySelectorAll(".as-subject > .collapse.show, .as-chapter .collapse.show")
-    )
-      .map((el) => el.id)
-      .filter(Boolean);
     if (makeStarred) starredWids.add(id);
     else starredWids.delete(id);
     saveStarred();
-    // Rebuild to reflect updated stars
-    renderGroups(getFilteredData());
-    filterVisibility(lastSearch);
-    highlightElements(document, (els.search?.value || "").trim());
-    checkEmpty();
-    // Restore previously open collapses
-    const BS = window.bootstrap;
-    previouslyOpen.forEach((cid) => {
-      const el = cid ? document.getElementById(cid) : null;
-      if (el && BS?.Collapse) {
-        const coll = BS.Collapse.getOrCreateInstance(el, { toggle: false });
-        try { coll.show(); } catch {}
-      }
-    });
+    // no full rebuild; DOM updated optimistically by caller
   }
   function getFilteredData() {
     const q = (lastSearch || "").toLowerCase();
@@ -133,9 +114,10 @@
     const starredCount = document.getElementById("as-starred-count");
     if (starredWrap && starredGrid) {
       starredGrid.innerHTML = "";
+      const q = (els.search?.value || '').trim().toLowerCase();
       const starredList = data.filter((it) => starredWids.has(String(it.wID)));
       if (starredList.length > 0) {
-        starredList.forEach((it) => starredGrid.appendChild(cardFor(it)));
+        starredList.forEach((it) => { const c = cardFor(it); c.classList.add('anim-enter'); starredGrid.appendChild(c); });
         if (starredCount) starredCount.textContent = `(${starredList.length})`;
         starredWrap.classList.remove("d-none");
       } else {
@@ -209,9 +191,8 @@
         wrap.id = chapId;
 
         const grid = document.createElement("div");
-        grid.className = "as-grid";
-
-        list.forEach((it) => grid.appendChild(cardFor(it)));
+        grid.className = "as-grid fade-in";
+        list.forEach((it) => { const c = cardFor(it); c.classList.add('anim-enter'); grid.appendChild(c); });
 
         wrap.appendChild(grid);
         chapWrap.append(h, wrap);
@@ -226,6 +207,7 @@
   function cardFor(it) {
     const card = document.createElement("div");
     card.className = "card as-card h-100";
+    card.dataset.wid = String(it.wID || '');
     if (starredWids.has(String(it.wID))) card.classList.add("as-starred");
     card.dataset.haystack = [it.subject, it.chapter, it.title]
       .filter(Boolean)
@@ -247,7 +229,28 @@
     starBtn.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
-      await toggleStar(it.wID, !isStarred);
+      try {
+        starBtn.classList.remove('star-animate');
+        // eslint-disable-next-line no-unused-expressions
+        starBtn.offsetHeight; // restart animation
+        starBtn.classList.add('star-animate');
+        setTimeout(() => starBtn.classList.remove('star-animate'), 360);
+      } catch {}
+
+      const q = (els.search?.value || '').trim().toLowerCase();
+      const hay = (card.dataset.haystack || '');
+      const matches = !q || hay.includes(q);
+      const currentlyStarred = card.classList.contains('as-starred');
+      const makeStarred = !currentlyStarred;
+      applyWorksheetStarDom(it, makeStarred, { matches });
+      starBtn.disabled = true;
+      try {
+        await toggleStar(it.wID, makeStarred);
+      } catch (err) {
+        applyWorksheetStarDom(it, !makeStarred, { matches });
+      } finally {
+        starBtn.disabled = false;
+      }
     });
 
     const title = document.createElement("h5");
@@ -283,6 +286,51 @@
     });
 
     return card;
+  }
+
+  // Move/update worksheet cards across sections without full rebuild
+  function applyWorksheetStarDom(it, makeStarred, { matches } = {}) {
+    try {
+      const id = String(it.wID || '');
+      const starredWrap = document.getElementById('as-starred-wrap');
+      const starredGrid = document.getElementById('as-starred');
+      if (!starredGrid) return;
+
+      // Update all instances
+      const allCards = Array.from(document.querySelectorAll(`.as-card[data-wid="${CSS.escape(id)}"]`));
+      for (const c of allCards) {
+        c.classList.toggle('as-starred', makeStarred);
+        const btn = c.querySelector('.as-star-btn');
+        if (btn) {
+          btn.title = makeStarred ? 'Unstar' : 'Star';
+          btn.innerHTML = makeStarred ? '<i class="bi bi-star-fill"></i>' : '<i class="bi bi-star"></i>';
+        }
+      }
+
+      const inStarred = starredGrid.querySelector(`.as-card[data-wid="${CSS.escape(id)}"]`);
+      if (makeStarred) {
+        if (matches !== false && !inStarred) {
+          const clone = cardFor(it);
+          clone.classList.add('anim-enter');
+          try { highlightElements(clone, (els.search?.value || '').trim()); } catch {}
+          starredGrid.appendChild(clone);
+        }
+      } else {
+        if (inStarred) {
+          inStarred.classList.add('anim-out');
+          inStarred.addEventListener('animationend', () => inStarred.remove(), { once: true });
+        }
+      }
+
+      // Update count/visibility
+      const countEl = document.getElementById('as-starred-count');
+      const count = starredGrid.children.length;
+      if (starredWrap) starredWrap.classList.toggle('d-none', count === 0);
+      if (countEl) countEl.textContent = count ? `(${count})` : '';
+
+      // Maintain empty state
+      checkEmpty();
+    } catch {}
   }
 
   // === Search / filter like index.js ===

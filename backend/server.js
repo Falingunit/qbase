@@ -94,6 +94,30 @@ try {
   fs.mkdirSync(iconsDir, { recursive: true });
 } catch {}
 
+// ---------- Local PYQs assets (if available) ----------
+const pyqsAssetsDir = path.join(__dirname, "pyqs_assets");
+try {
+  fs.mkdirSync(pyqsAssetsDir, { recursive: true });
+} catch {}
+app.use(
+  "/pyqs-assets",
+  express.static(pyqsAssetsDir, { maxAge: "365d", etag: true })
+);
+
+// Optional local PYQs database (populated by utils/scraper/pyqs_downloader.py)
+const pyqsLocalDbPath = path.join(__dirname, "pyqs_local.sqlite");
+let pyqsDb = null;
+try {
+  if (fs.existsSync(pyqsLocalDbPath)) {
+    pyqsDb = new Database(pyqsLocalDbPath);
+    pyqsDb.pragma("foreign_keys = ON");
+    pyqsDb.pragma("journal_mode = WAL");
+  }
+} catch (e) {
+  console.warn("PYQs local DB not available:", e?.message || e);
+}
+const USE_LOCAL_PYQS = !!pyqsDb;
+
 // ---------- Disable caching for dynamic content ----------
 app.use((req, res, next) => {
   res.set("Cache-Control", "no-store");
@@ -121,6 +145,81 @@ function sendJsonWithCache(req, res, obj, maxAgeSec = 600) {
     res.set("Cache-Control", `public, max-age=${maxAgeSec}`);
   } catch {}
   return res.json(obj);
+}
+
+function reqOrigin(req) {
+  try {
+    const proto = "https".split(",")[0].trim();
+    const host = req.get("host");
+    return `${proto}://${host}`;
+  } catch {
+    return "";
+  }
+}
+
+// Legacy helpers (now no-ops) kept for backward compatibility.
+function sanitizeLatex(latex) {
+  return typeof latex === "string" ? latex : latex || "";
+}
+
+function fixCommonLatexErrors(input) {
+  return typeof input === "string" ? input : input || "";
+}
+
+function escapeTexSpecialsInsideTextBlocks(latex) {
+  return typeof latex === "string" ? latex : latex || "";
+}
+
+function replaceMathMLWithLatex(input) {
+  return typeof input === "string" ? input : input || "";
+}
+
+function toAbsoluteAsset(pathStr, req) {
+  try {
+    if (typeof pathStr === "string" && pathStr.startsWith("/pyqs-assets/")) {
+      const origin = reqOrigin(req);
+      if (origin) return origin + pathStr;
+    }
+  } catch {}
+  return pathStr;
+}
+
+function absolutizeHtml(html, req) {
+  try {
+    if (!html || typeof html !== "string") return html || "";
+    const origin = reqOrigin(req);
+    if (!origin) return html;
+    return html.split("/pyqs-assets/").join(`${origin}/pyqs-assets/`);
+  } catch {
+    return html || "";
+  }
+}
+
+function absolutizeQuestion(q, req) {
+  if (!q || typeof q !== "object") return q;
+  const out = { ...q };
+  if (out.qImage) out.qImage = toAbsoluteAsset(out.qImage, req);
+  if (out.solution) {
+    out.solution = { ...out.solution };
+    if (out.solution.sImage)
+      out.solution.sImage = toAbsoluteAsset(out.solution.sImage, req);
+    if (out.solution.sText)
+      out.solution.sText = replaceMathMLWithLatex(
+        absolutizeHtml(out.solution.sText, req)
+      );
+  }
+  if (Array.isArray(out.options)) {
+    out.options = out.options.map((o) => {
+      const oo = { ...o };
+      if (oo.oImage) oo.oImage = toAbsoluteAsset(oo.oImage, req);
+      if (oo.oText)
+        oo.oText = replaceMathMLWithLatex(absolutizeHtml(oo.oText, req));
+      return oo;
+    });
+  }
+  if (out.qText)
+    out.qText = replaceMathMLWithLatex(absolutizeHtml(out.qText, req));
+  return out;
 }
 
 // ---------- SQLite ----------
@@ -293,6 +392,18 @@ db.exec(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (kind, assignmentId, examId, subjectId, chapterId, questionIndex)
   );
+
+  -- Per-user notifications
+  CREATE TABLE IF NOT EXISTS notifications (
+    id TEXT PRIMARY KEY,
+    userId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    body_md TEXT NOT NULL,
+    meta TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    read_at DATETIME,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
 `);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
@@ -331,14 +442,44 @@ try {
   const cols = db.prepare("PRAGMA table_info(question_reports)").all();
   const hasStatus = cols.some((c) => String(c.name).toLowerCase() === "status");
   if (!hasStatus) {
-    db.exec("ALTER TABLE question_reports ADD COLUMN status TEXT DEFAULT 'open'");
+    db.exec(
+      "ALTER TABLE question_reports ADD COLUMN status TEXT DEFAULT 'open'"
+    );
   }
-  const hasNotes = cols.some((c) => String(c.name).toLowerCase() === "admin_notes");
+  const hasNotes = cols.some(
+    (c) => String(c.name).toLowerCase() === "admin_notes"
+  );
   if (!hasNotes) {
     db.exec("ALTER TABLE question_reports ADD COLUMN admin_notes TEXT");
   }
 } catch (e) {
-  console.warn("question_reports.status migration check failed:", e?.message || e);
+  console.warn(
+    "question_reports.status migration check failed:",
+    e?.message || e
+  );
+}
+
+// Ensure notifications table has required columns if created earlier
+try {
+  const cols = db.prepare("PRAGMA table_info(notifications)").all();
+  const needCols = {
+    id: false,
+    userId: false,
+    title: false,
+    body_md: false,
+    meta: false,
+    created_at: false,
+    read_at: false,
+  };
+  for (const c of cols) {
+    const n = String(c?.name || "").toLowerCase();
+    if (n in needCols) needCols[n] = true;
+  }
+  // Add missing columns conservatively
+  if (!needCols["meta"]) db.exec("ALTER TABLE notifications ADD COLUMN meta TEXT");
+  if (!needCols["read_at"]) db.exec("ALTER TABLE notifications ADD COLUMN read_at DATETIME");
+} catch (e) {
+  console.warn("notifications migration check failed:", e?.message || e);
 }
 
 // Ensure admin user exists and can login with the specified credentials
@@ -410,7 +551,8 @@ function adminOnly(req, res, next) {
     const row = db
       .prepare("SELECT is_admin FROM users WHERE id = ?")
       .get(req.userId);
-    if (!row || !row.is_admin) return res.status(403).json({ error: "Forbidden" });
+    if (!row || !row.is_admin)
+      return res.status(403).json({ error: "Forbidden" });
     next();
   } catch {
     return res.status(403).json({ error: "Forbidden" });
@@ -448,6 +590,23 @@ const subjectChaptersCache = new Map(); // key -> { ts, list: [{ id, total }] }
 const subjectMetaCache = new Map(); // key -> { ts, map: { [chapterId]: meta[] } }
 
 async function getSubjectChaptersCached(req, examId, subjectId) {
+  if (USE_LOCAL_PYQS) {
+    try {
+      const rows = pyqsDb
+        .prepare(
+          "SELECT id, name, icon_name, total_questions FROM chapters WHERE examId = ? AND subjectId = ?"
+        )
+        .all(String(examId), String(subjectId));
+      return rows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        icon_name: r.icon_name,
+        total: Number(r.total_questions || 0),
+      }));
+    } catch {
+      return [];
+    }
+  }
   const key = `${examId}__${subjectId}`;
   const now = Date.now();
   const ent = subjectChaptersCache.get(key);
@@ -468,6 +627,30 @@ async function getSubjectChaptersCached(req, examId, subjectId) {
 }
 
 async function getSubjectMetaPartial(req, examId, subjectId, neededIds) {
+  if (USE_LOCAL_PYQS) {
+    const out = {};
+    for (const chId of neededIds) {
+      try {
+        const rows = pyqsDb
+          .prepare(
+            "SELECT data_json FROM questions WHERE examId = ? AND subjectId = ? AND chapterId = ? ORDER BY idx ASC"
+          )
+          .all(String(examId), String(subjectId), String(chId));
+        out[String(chId)] = rows.map((r) => {
+          const q = safeParseJSON(r.data_json, {});
+          const base = {
+            diffuculty: q.diffuculty,
+            pyqInfo: q.pyqInfo,
+            qText: q.qText,
+          };
+          return base;
+        });
+      } catch {
+        out[String(chId)] = [];
+      }
+    }
+    return out;
+  }
   const key = `${examId}__${subjectId}`;
   const now = Date.now();
   let ent = subjectMetaCache.get(key);
@@ -610,16 +793,26 @@ async function gmFetch(req, url, params = {}) {
 // GET /api/pyqs/exams -> [{ id, name, icon }]
 app.get("/api/pyqs/exams", async (req, res) => {
   try {
-    const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
-    const items = data?.data?.items || [];
-    const comp = items.find((it) => it?.componentTitle === "ChapterwiseExams");
-    const exams = (comp?.items || [])
-      .map((ex) => ({
-        id: ex?.examId,
-        name: ex?.title,
-        icon: ex?.icon?.dark || ex?.icon?.light || "",
-      }))
-      .filter((x) => x.id && x.name);
+    let exams;
+    if (USE_LOCAL_PYQS) {
+      exams = pyqsDb
+        .prepare("SELECT id, name, COALESCE(icon_path,'') AS icon FROM exams")
+        .all()
+        .map((e) => ({ ...e, icon: toAbsoluteAsset(e.icon, req) }));
+    } else {
+      const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
+      const items = data?.data?.items || [];
+      const comp = items.find(
+        (it) => it?.componentTitle === "ChapterwiseExams"
+      );
+      exams = (comp?.items || [])
+        .map((ex) => ({
+          id: ex?.examId,
+          name: ex?.title,
+          icon: ex?.icon?.dark || ex?.icon?.light || "",
+        }))
+        .filter((x) => x.id && x.name);
+    }
     return sendJsonWithCache(req, res, exams, 3600);
   } catch (e) {
     const code = e.status || 500;
@@ -671,41 +864,71 @@ app.get("/api/pyqs/bootstrap", async (req, res) => {
     // Optionally include catalog slices
     const { exam, subject } = req.query || {};
     if (String(req.query.includeExams || "1") === "1") {
-      const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
-      const items = data?.data?.items || [];
-      const comp = items.find(
-        (it) => it?.componentTitle === "ChapterwiseExams"
-      );
-      result.exams = (comp?.items || [])
-        .map((ex) => ({
-          id: ex?.examId,
-          name: ex?.title,
-          icon: ex?.icon?.dark || ex?.icon?.light || "",
-        }))
-        .filter((x) => x.id && x.name);
+      if (USE_LOCAL_PYQS) {
+        result.exams = pyqsDb
+          .prepare("SELECT id, name, COALESCE(icon_path,'') AS icon FROM exams")
+          .all()
+          .map((e) => ({ ...e, icon: toAbsoluteAsset(e.icon, req) }));
+      } else {
+        const data = await gmFetch(req, GM_BASE.dashboard, { limit: 10000 });
+        const items = data?.data?.items || [];
+        const comp = items.find(
+          (it) => it?.componentTitle === "ChapterwiseExams"
+        );
+        result.exams = (comp?.items || [])
+          .map((ex) => ({
+            id: ex?.examId,
+            name: ex?.title,
+            icon: ex?.icon?.dark || ex?.icon?.light || "",
+          }))
+          .filter((x) => x.id && x.name);
+      }
     }
     if (exam) {
-      const sData = await gmFetch(req, GM_BASE.exam_subjects(exam), {
-        limit: 10000,
-      });
-      result.subjects = (sData?.data?.subjects || [])
-        .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
-        .filter((x) => x.id && x.name);
+      if (USE_LOCAL_PYQS) {
+        result.subjects = pyqsDb
+          .prepare(
+            "SELECT id, name, COALESCE(icon_path,'') AS icon FROM subjects WHERE examId = ?"
+          )
+          .all(String(exam))
+          .map((s) => ({ ...s, icon: toAbsoluteAsset(s.icon, req) }));
+      } else {
+        const sData = await gmFetch(req, GM_BASE.exam_subjects(exam), {
+          limit: 10000,
+        });
+        result.subjects = (sData?.data?.subjects || [])
+          .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
+          .filter((x) => x.id && x.name);
+      }
     }
     if (exam && subject) {
-      const cData = await gmFetch(
-        req,
-        GM_BASE.subject_chapters(exam, subject),
-        { limit: 10000 }
-      );
-      result.chapters = (cData?.data?.chapters?.data || [])
-        .map((c) => ({
-          id: c?._id,
-          name: c?.title,
-          icon_name: c?.icon,
-          total_questions: c?.allPyqs?.totalQs ?? 0,
-        }))
-        .filter((x) => x.id && x.name);
+      if (USE_LOCAL_PYQS) {
+        result.chapters = pyqsDb
+          .prepare(
+            "SELECT id, name, icon_name, total_questions FROM chapters WHERE examId = ? AND subjectId = ?"
+          )
+          .all(String(exam), String(subject))
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            icon_name: c.icon_name,
+            total_questions: Number(c.total_questions || 0),
+          }));
+      } else {
+        const cData = await gmFetch(
+          req,
+          GM_BASE.subject_chapters(exam, subject),
+          { limit: 10000 }
+        );
+        result.chapters = (cData?.data?.chapters?.data || [])
+          .map((c) => ({
+            id: c?._id,
+            name: c?.title,
+            icon_name: c?.icon,
+            total_questions: c?.allPyqs?.totalQs ?? 0,
+          }))
+          .filter((x) => x.id && x.name);
+      }
     }
     return res.json(result);
   } catch (e) {
@@ -718,16 +941,26 @@ app.get("/api/pyqs/bootstrap", async (req, res) => {
 app.get("/api/pyqs/exams/:examId/subjects", async (req, res) => {
   try {
     const { examId } = req.params;
-    const data = await gmFetch(req, GM_BASE.exam_subjects(examId), {
-      limit: 10000,
-    });
-    const subjects = (data?.data?.subjects || [])
-      .map((s) => ({
-        id: s?._id,
-        name: s?.title,
-        icon: s?.icon || "",
-      }))
-      .filter((x) => x.id && x.name);
+    let subjects;
+    if (USE_LOCAL_PYQS) {
+      subjects = pyqsDb
+        .prepare(
+          "SELECT id, name, COALESCE(icon_path,'') AS icon FROM subjects WHERE examId = ?"
+        )
+        .all(String(examId))
+        .map((s) => ({ ...s, icon: toAbsoluteAsset(s.icon, req) }));
+    } else {
+      const data = await gmFetch(req, GM_BASE.exam_subjects(examId), {
+        limit: 10000,
+      });
+      subjects = (data?.data?.subjects || [])
+        .map((s) => ({
+          id: s?._id,
+          name: s?.title,
+          icon: s?.icon || "",
+        }))
+        .filter((x) => x.id && x.name);
+    }
     return sendJsonWithCache(req, res, subjects, 3600);
   } catch (e) {
     const code = e.status || 500;
@@ -741,19 +974,34 @@ app.get(
   async (req, res) => {
     try {
       const { examId, subjectId } = req.params;
-      const data = await gmFetch(
-        req,
-        GM_BASE.subject_chapters(examId, subjectId),
-        { limit: 10000 }
-      );
-      const chapters = (data?.data?.chapters?.data || [])
-        .map((c) => ({
-          id: c?._id,
-          name: c?.title,
-          icon_name: c?.icon,
-          total_questions: c?.allPyqs?.totalQs ?? 0,
-        }))
-        .filter((x) => x.id && x.name);
+      let chapters;
+      if (USE_LOCAL_PYQS) {
+        chapters = pyqsDb
+          .prepare(
+            "SELECT id, name, icon_name, total_questions FROM chapters WHERE examId = ? AND subjectId = ?"
+          )
+          .all(String(examId), String(subjectId))
+          .map((c) => ({
+            id: c.id,
+            name: c.name,
+            icon_name: c.icon_name,
+            total_questions: Number(c.total_questions || 0),
+          }));
+      } else {
+        const data = await gmFetch(
+          req,
+          GM_BASE.subject_chapters(examId, subjectId),
+          { limit: 10000 }
+        );
+        chapters = (data?.data?.chapters?.data || [])
+          .map((c) => ({
+            id: c?._id,
+            name: c?.title,
+            icon_name: c?.icon,
+            total_questions: c?.allPyqs?.totalQs ?? 0,
+          }))
+          .filter((x) => x.id && x.name);
+      }
       return sendJsonWithCache(req, res, chapters, 1800);
     } catch (e) {
       const code = e.status || 500;
@@ -775,52 +1023,93 @@ app.get(
           .map((s) => s.trim())
           .filter(Boolean)
       );
-      const data = await gmFetch(
-        req,
-        GM_BASE.questions(examId, subjectId, chapterId),
-        { limit: 10000, hideOutOfSyllabus: "false" }
-      );
       const isMeta = String(req.query.meta || "0") === "1";
-      const questions = (data?.data?.questions || []).map((q) => {
-        const base = {
-          diffuculty: q?.level,
-          pyqInfo:
-            (Array.isArray(q?.previousYearPapers) &&
-              q.previousYearPapers[0]?.title) ||
-            "",
-          qText: q?.question?.text || "",
-        };
+      let questions;
+      if (USE_LOCAL_PYQS) {
+        const rows = pyqsDb
+          .prepare(
+            "SELECT data_json FROM questions WHERE examId = ? AND subjectId = ? AND chapterId = ? ORDER BY idx ASC"
+          )
+          .all(String(examId), String(subjectId), String(chapterId));
+        const full = rows.map((r) =>
+          absolutizeQuestion(safeParseJSON(r.data_json, {}), req)
+        );
         if (isMeta) {
-          if (!fields.has("text")) {
-            const { qText, ...rest } = base;
-            return rest;
-          }
-          return base;
+          questions = full.map((q) => {
+            const base = {
+              diffuculty: q.diffuculty,
+              pyqInfo: q.pyqInfo,
+              qText: q.qText,
+            };
+            if (!fields.has("text")) {
+              const { qText, ...rest } = base;
+              return rest;
+            }
+            return base;
+          });
+        } else {
+          questions = full;
         }
-        const opts = Array.isArray(q?.options) ? q.options : [];
-        const correctLetters = [];
-        if (Array.isArray(opts)) {
-          const letters = ["A", "B", "C", "D"];
-          opts.forEach((o, i) => {
-            if (o?.isCorrect) correctLetters.push(letters[i] || String(i + 1));
+      } else {
+        const data = await gmFetch(
+          req,
+          GM_BASE.questions(examId, subjectId, chapterId),
+          { limit: 10000, hideOutOfSyllabus: "false" }
+        );
+        const qs = data?.data?.questions || [];
+        if (isMeta) {
+          questions = qs.map((q) => {
+            const base = {
+              diffuculty: q?.level,
+              pyqInfo:
+                (Array.isArray(q?.previousYearPapers) &&
+                  q.previousYearPapers[0]?.title) ||
+                "",
+              qText: replaceMathMLWithLatex(q?.question?.text || ""),
+            };
+            if (!fields.has("text")) {
+              const { qText, ...rest } = base;
+              return rest;
+            }
+            return base;
+          });
+        } else {
+          questions = qs.map((q) => {
+            const base = {
+              diffuculty: q?.level,
+              pyqInfo:
+                (Array.isArray(q?.previousYearPapers) &&
+                  q.previousYearPapers[0]?.title) ||
+                "",
+              qText: replaceMathMLWithLatex(q?.question?.text || ""),
+            };
+            const opts = Array.isArray(q?.options) ? q.options : [];
+            const correctLetters = [];
+            if (Array.isArray(opts)) {
+              const letters = ["A", "B", "C", "D"];
+              opts.forEach((o, i) => {
+                if (o?.isCorrect)
+                  correctLetters.push(letters[i] || String(i + 1));
+              });
+            }
+            return {
+              type: q?.type,
+              ...base,
+              qImage: q?.question?.image || "",
+              options: opts.map((o) => ({
+                oText: replaceMathMLWithLatex(o?.text || ""),
+                oImage: o?.image || "",
+              })),
+              correctAnswer:
+                q?.type === "numerical" ? q?.correctValue : correctLetters,
+              solution: {
+                sText: replaceMathMLWithLatex(q?.solution?.text || ""),
+                sImage: q?.solution?.image || "",
+              },
+            };
           });
         }
-        return {
-          type: q?.type,
-          ...base,
-          qImage: q?.question?.image || "",
-          options: opts.map((o) => ({
-            oText: o?.text || "",
-            oImage: o?.image || "",
-          })),
-          correctAnswer:
-            q?.type === "numerical" ? q?.correctValue : correctLetters,
-          solution: {
-            sText: q?.solution?.text || "",
-            sImage: q?.solution?.image || "",
-          },
-        };
-      });
+      }
       return res.json(questions);
     } catch (e) {
       const code = e.status || 500;
@@ -834,32 +1123,54 @@ app.get("/api/pyqs/exam-overview/:examId", async (req, res) => {
   try {
     const { examId } = req.params;
     const includeCounts = String(req.query.includeCounts || "0") === "1";
-    const sData = await gmFetch(req, GM_BASE.exam_subjects(examId), {
-      limit: 10000,
-    });
-    const subjects = (sData?.data?.subjects || [])
-      .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
-      .filter((x) => x.id && x.name);
+    let subjects;
+    if (USE_LOCAL_PYQS) {
+      subjects = pyqsDb
+        .prepare(
+          "SELECT id, name, COALESCE(icon_path,'') AS icon FROM subjects WHERE examId = ?"
+        )
+        .all(String(examId));
+    } else {
+      const sData = await gmFetch(req, GM_BASE.exam_subjects(examId), {
+        limit: 10000,
+      });
+      subjects = (sData?.data?.subjects || [])
+        .map((s) => ({ id: s?._id, name: s?.title, icon: s?.icon || "" }))
+        .filter((x) => x.id && x.name);
+    }
     const out = { subjects };
     if (includeCounts) {
       const counts = {};
-      const CONC = 4;
-      for (let i = 0; i < subjects.length; i += CONC) {
-        const chunk = subjects.slice(i, i + CONC);
-        await Promise.all(
-          chunk.map(async (s) => {
-            try {
-              const cData = await gmFetch(
-                req,
-                GM_BASE.subject_chapters(examId, s.id),
-                { limit: 10000 }
-              );
-              counts[String(s.id)] = (cData?.data?.chapters?.data || []).length;
-            } catch {
-              counts[String(s.id)] = 0;
-            }
-          })
-        );
+      if (USE_LOCAL_PYQS) {
+        for (const s of subjects) {
+          const r = pyqsDb
+            .prepare(
+              "SELECT COUNT(1) AS c FROM chapters WHERE examId = ? AND subjectId = ?"
+            )
+            .get(String(examId), String(s.id));
+          counts[String(s.id)] = Number(r?.c || 0);
+        }
+      } else {
+        const CONC = 4;
+        for (let i = 0; i < subjects.length; i += CONC) {
+          const chunk = subjects.slice(i, i + CONC);
+          await Promise.all(
+            chunk.map(async (s) => {
+              try {
+                const cData = await gmFetch(
+                  req,
+                  GM_BASE.subject_chapters(examId, s.id),
+                  { limit: 10000 }
+                );
+                counts[String(s.id)] = (
+                  cData?.data?.chapters?.data || []
+                ).length;
+              } catch {
+                counts[String(s.id)] = 0;
+              }
+            })
+          );
+        }
       }
       out.counts = counts;
     }
@@ -1047,7 +1358,7 @@ function gmToMeta(q) {
       (Array.isArray(q?.previousYearPapers) &&
         q.previousYearPapers[0]?.title) ||
       "",
-    qText: q?.question?.text || "",
+    qText: replaceMathMLWithLatex(q?.question?.text || ""),
   };
 }
 
@@ -1086,31 +1397,59 @@ app.get(
           .map((s) => s.trim())
           .filter(Boolean)
       );
-      const CONC = 4;
-      for (let i = 0; i < chapterIds.length; i += CONC) {
-        const chunk = chapterIds.slice(i, i + CONC);
-        await Promise.all(
-          chunk.map(async (chId) => {
-            try {
-              const data = await gmFetch(
-                req,
-                GM_BASE.questions(examId, subjectId, chId),
-                { limit: 10000, hideOutOfSyllabus: "false" }
-              );
-              const arr = (data?.data?.questions || []).map((q) => {
-                const base = gmToMeta(q);
-                if (!fields.has("text")) {
-                  const { qText, ...rest } = base;
-                  return rest;
-                }
-                return base;
-              });
-              out[String(chId)] = arr;
-            } catch (e) {
-              out[String(chId)] = [];
-            }
-          })
-        );
+      if (USE_LOCAL_PYQS) {
+        for (const chId of chapterIds) {
+          try {
+            const rows = pyqsDb
+              .prepare(
+                "SELECT data_json FROM questions WHERE examId = ? AND subjectId = ? AND chapterId = ? ORDER BY idx ASC"
+              )
+              .all(String(examId), String(subjectId), String(chId));
+            const arr = rows.map((r) => {
+              const q = absolutizeQuestion(safeParseJSON(r.data_json, {}), req);
+              const base = {
+                diffuculty: q.diffuculty,
+                pyqInfo: q.pyqInfo,
+                qText: q.qText,
+              };
+              if (!fields.has("text")) {
+                const { qText, ...rest } = base;
+                return rest;
+              }
+              return base;
+            });
+            out[String(chId)] = arr;
+          } catch {
+            out[String(chId)] = [];
+          }
+        }
+      } else {
+        const CONC = 4;
+        for (let i = 0; i < chapterIds.length; i += CONC) {
+          const chunk = chapterIds.slice(i, i + CONC);
+          await Promise.all(
+            chunk.map(async (chId) => {
+              try {
+                const data = await gmFetch(
+                  req,
+                  GM_BASE.questions(examId, subjectId, chId),
+                  { limit: 10000, hideOutOfSyllabus: "false" }
+                );
+                const arr = (data?.data?.questions || []).map((q) => {
+                  const base = gmToMeta(q);
+                  if (!fields.has("text")) {
+                    const { qText, ...rest } = base;
+                    return rest;
+                  }
+                  return base;
+                });
+                out[String(chId)] = arr;
+              } catch (e) {
+                out[String(chId)] = [];
+              }
+            })
+          );
+        }
       }
       return res.json(out);
     } catch (e) {
@@ -1130,45 +1469,64 @@ app.get(
       const full = String(req.query.full || "0") === "1";
       const includeState = String(req.query.state || "1") === "1";
       const includeOverlays = String(req.query.overlays || "1") === "1";
-      const questions = await gmFetch(
-        req,
-        GM_BASE.questions(examId, subjectId, chapterId),
-        { limit: 10000, hideOutOfSyllabus: "false" }
-      );
-      const qList = (questions?.data?.questions || []).map((q) =>
-        full
-          ? {
-              type: q?.type,
-              diffuculty: q?.level,
-              pyqInfo:
-                (Array.isArray(q?.previousYearPapers) &&
-                  q.previousYearPapers[0]?.title) ||
-                "",
-              qText: q?.question?.text || "",
-              qImage: q?.question?.image || "",
-              options: (Array.isArray(q?.options) ? q.options : []).map(
-                (o) => ({ oText: o?.text || "", oImage: o?.image || "" })
-              ),
-              correctAnswer:
-                q?.type === "numerical"
-                  ? q?.correctValue
-                  : (Array.isArray(q?.options) ? q.options : []).reduce(
-                      (acc, o, i) => {
-                        if (o?.isCorrect) {
-                          const letters = ["A", "B", "C", "D"];
-                          acc.push(letters[i] || String(i + 1));
-                        }
-                        return acc;
-                      },
-                      []
-                    ),
-              solution: {
-                sText: q?.solution?.text || "",
-                sImage: q?.solution?.image || "",
-              },
-            }
-          : gmToMeta(q)
-      );
+      let qList;
+      if (USE_LOCAL_PYQS) {
+        const rows = pyqsDb
+          .prepare(
+            "SELECT data_json FROM questions WHERE examId = ? AND subjectId = ? AND chapterId = ? ORDER BY idx ASC"
+          )
+          .all(String(examId), String(subjectId), String(chapterId));
+        const fullList = rows.map((r) =>
+          absolutizeQuestion(safeParseJSON(r.data_json, {}), req)
+        );
+        qList = full
+          ? fullList
+          : fullList.map((q) => ({
+              diffuculty: q?.diffuculty,
+              pyqInfo: q?.pyqInfo || "",
+              qText: q?.qText || "",
+            }));
+      } else {
+        const questions = await gmFetch(
+          req,
+          GM_BASE.questions(examId, subjectId, chapterId),
+          { limit: 10000, hideOutOfSyllabus: "false" }
+        );
+        qList = (questions?.data?.questions || []).map((q) =>
+          full
+            ? {
+                type: q?.type,
+                diffuculty: q?.level,
+                pyqInfo:
+                  (Array.isArray(q?.previousYearPapers) &&
+                    q.previousYearPapers[0]?.title) ||
+                  "",
+                qText: replaceMathMLWithLatex(q?.question?.text || ""),
+                qImage: q?.question?.image || "",
+                options: (Array.isArray(q?.options) ? q.options : []).map(
+                  (o) => ({ oText: replaceMathMLWithLatex(o?.text || ""), oImage: o?.image || "" })
+                ),
+                correctAnswer:
+                  q?.type === "numerical"
+                    ? q?.correctValue
+                    : (Array.isArray(q?.options) ? q.options : []).reduce(
+                        (acc, o, i) => {
+                          if (o?.isCorrect) {
+                            const letters = ["A", "B", "C", "D"];
+                            acc.push(letters[i] || String(i + 1));
+                          }
+                          return acc;
+                        },
+                        []
+                      ),
+                solution: {
+                  sText: replaceMathMLWithLatex(q?.solution?.text || ""),
+                  sImage: q?.solution?.image || "",
+                },
+              }
+            : gmToMeta(q)
+        );
+      }
       const out = { questions: qList };
       if (includeState) {
         const row = db
@@ -1505,6 +1863,28 @@ app.get("/api/pyqs/icon", async (req, res) => {
     } catch {
       return res.status(400).json({ error: "invalid src" });
     }
+    if (USE_LOCAL_PYQS) {
+      // Attempt to map remote chapter icon src to local cached asset under /pyqs-assets/icons/chapters
+      const m = String(u.pathname || "").match(/\/icons\/exam\/(.+)$/);
+      const iconName = m ? m[1] : "";
+      if (iconName) {
+        try {
+          const dir = path.join(pyqsAssetsDir, "icons", "chapters");
+          const files = fs.readdirSync(dir);
+          const f = files.find(
+            (fn) => fn === iconName || fn.startsWith(iconName + ".")
+          );
+          if (f) {
+            const abs = path.join(dir, f);
+            res.set("Cache-Control", "public, max-age=31536000, immutable");
+            res.removeHeader("Pragma");
+            res.removeHeader("Expires");
+            return res.sendFile(abs);
+          }
+        } catch {}
+      }
+      // Fallback to remote fetch if not found locally
+    }
     if (u.protocol !== "https:" && u.protocol !== "http:") {
       return res.status(400).json({ error: "unsupported scheme" });
     }
@@ -1765,6 +2145,7 @@ app.get("/me", (req, res) => {
       mustChangePassword: !!u.force_pw_reset,
       hasMarksAuth: !!(u.getmarks_token && String(u.getmarks_token).trim()),
       isAdmin: !!u.is_admin,
+      pyqsSource: (u.pyqs_source && String(u.pyqs_source).trim()) || "auto",
     });
   } catch {
     res.json(null);
@@ -1860,7 +2241,8 @@ app.post("/api/report", async (req, res) => {
     if (!r) return res.status(400).json({ error: "Reason is required" });
 
     const msg = String(message || "").trim();
-    if (!msg) return res.status(400).json({ error: "Report details are required" });
+    if (!msg)
+      return res.status(400).json({ error: "Report details are required" });
 
     // Validate identifiers by kind
     let aId = null,
@@ -1904,26 +2286,17 @@ app.post("/api/report", async (req, res) => {
         return false;
       }
     })();
-    if (blocked) return res.status(403).json({ error: "Reports disabled for this question" });
+    if (blocked)
+      return res
+        .status(403)
+        .json({ error: "Reports disabled for this question" });
 
     const id = nanoid();
     const metaJson = JSON.stringify(meta || {});
     db.prepare(
       `INSERT INTO question_reports (id, userId, kind, assignmentId, examId, subjectId, chapterId, questionIndex, reason, message, meta)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).run(
-      id,
-      req.userId,
-      k,
-      aId,
-      ex,
-      su,
-      ch,
-      qIdx,
-      r,
-      msg,
-      metaJson
-    );
+    ).run(id, req.userId, k, aId, ex, su, ch, qIdx, r, msg, metaJson);
 
     // Optional forwarding to webhook (best-effort)
     (async () => {
@@ -1955,6 +2328,75 @@ app.post("/api/report", async (req, res) => {
   } catch (e) {
     console.error("report create:", e);
     res.status(500).json({ error: "Failed to submit report" });
+  }
+});
+
+// ---------- Notifications (per-user) ----------
+// List notifications for current user (newest first)
+app.get("/api/notifications", (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT id, title, body_md, meta, created_at, read_at
+         FROM notifications WHERE userId = ?
+         ORDER BY datetime(created_at) DESC, id DESC`
+      )
+      .all(req.userId);
+    const out = rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      body_md: r.body_md,
+      meta: (() => {
+        try { return r.meta ? JSON.parse(r.meta) : null; } catch { return null; }
+      })(),
+      created_at: r.created_at,
+      read_at: r.read_at || null,
+    }));
+    res.json(out);
+  } catch (e) {
+    console.error("list notifications:", e);
+    res.status(500).json({ error: "Failed to load notifications" });
+  }
+});
+
+// Unread count for badge
+app.get("/api/notifications/unread-count", (req, res) => {
+  try {
+    const row = db
+      .prepare(
+        "SELECT COUNT(1) AS c FROM notifications WHERE userId = ? AND read_at IS NULL"
+      )
+      .get(req.userId);
+    res.json({ count: Number(row?.c || 0) });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to count" });
+  }
+});
+
+// Mark one notification read
+app.patch("/api/notifications/:id/read", (req, res) => {
+  try {
+    const id = String(req.params.id || "").trim();
+    if (!id) return res.status(400).json({ error: "id required" });
+    const r = db
+      .prepare("UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE id = ? AND userId = ?")
+      .run(id, req.userId);
+    if (!r.changes) return res.status(404).json({ error: "Not found" });
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update" });
+  }
+});
+
+// Mark all read
+app.post("/api/notifications/mark-all-read", (req, res) => {
+  try {
+    db.prepare(
+      "UPDATE notifications SET read_at = CURRENT_TIMESTAMP WHERE userId = ? AND read_at IS NULL"
+    ).run(req.userId);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to update" });
   }
 });
 
@@ -2037,7 +2479,11 @@ app.get("/api/admin/reports", adminOnly, (req, res) => {
       username: r.reporter || "",
       blocked: isBlocked(r),
       meta: (() => {
-        try { return r.meta ? JSON.parse(r.meta) : {}; } catch { return {}; }
+        try {
+          return r.meta ? JSON.parse(r.meta) : {};
+        } catch {
+          return {};
+        }
       })(),
       notes: r.admin_notes || "",
     }));
@@ -2050,18 +2496,27 @@ app.get("/api/admin/reports", adminOnly, (req, res) => {
 app.patch("/api/admin/reports/:id", adminOnly, (req, res) => {
   try {
     const id = String(req.params.id || "").trim();
-    const status = req.body?.status != null ? String(req.body.status).toLowerCase() : null;
+    const status =
+      req.body?.status != null ? String(req.body.status).toLowerCase() : null;
     const notes = req.body?.notes != null ? String(req.body.notes) : null;
     if (!id) return res.status(400).json({ error: "id required" });
     if (status != null && !["open", "wip", "closed"].includes(status))
       return res.status(400).json({ error: "invalid status" });
     let setParts = [];
     const args = [];
-    if (status != null) { setParts.push("status = ?"); args.push(status); }
-    if (notes != null) { setParts.push("admin_notes = ?"); args.push(notes); }
+    if (status != null) {
+      setParts.push("status = ?");
+      args.push(status);
+    }
+    if (notes != null) {
+      setParts.push("admin_notes = ?");
+      args.push(notes);
+    }
     if (!setParts.length) return res.status(400).json({ error: "no changes" });
     args.push(id);
-    const sql = `UPDATE question_reports SET ${setParts.join(", ")} WHERE id = ?`;
+    const sql = `UPDATE question_reports SET ${setParts.join(
+      ", "
+    )} WHERE id = ?`;
     const r = db.prepare(sql).run(...args);
     if (r.changes === 0) return res.status(404).json({ error: "not found" });
     res.json({ success: true });
@@ -2070,16 +2525,62 @@ app.patch("/api/admin/reports/:id", adminOnly, (req, res) => {
   }
 });
 
+// List users (for targeting notifications)
+app.get("/api/admin/users", adminOnly, (req, res) => {
+  try {
+    const rows = db
+      .prepare("SELECT id, username FROM users ORDER BY username COLLATE NOCASE ASC")
+      .all();
+    res.json(rows.map((u) => ({ id: u.id, username: u.username })));
+  } catch (e) {
+    res.status(500).json({ error: "Failed to list users" });
+  }
+});
+
+// Send notifications (to list of users or broadcast)
+// Body: { title, body, userIds?: string[], all?: boolean, meta?: object }
+app.post("/api/admin/notifications", adminOnly, (req, res) => {
+  try {
+    const title = String(req.body?.title || "").trim();
+    const body = String(req.body?.body || req.body?.body_md || "").trim();
+    const meta = req.body?.meta || null;
+    const all = !!req.body?.all;
+    let userIds = Array.isArray(req.body?.userIds)
+      ? req.body.userIds.map((x) => String(x)).filter(Boolean)
+      : [];
+    if (!title) return res.status(400).json({ error: "title required" });
+    if (!body) return res.status(400).json({ error: "body required" });
+
+    if (all) {
+      const rows = db.prepare("SELECT id FROM users").all();
+      userIds = rows.map((r) => r.id);
+    }
+    // De-duplicate
+    userIds = Array.from(new Set(userIds));
+    if (!userIds.length)
+      return res.status(400).json({ error: "no recipients" });
+
+    const metaJson = meta ? JSON.stringify(meta) : null;
+    const insert = db.prepare(
+      "INSERT INTO notifications (id, userId, title, body_md, meta) VALUES (?, ?, ?, ?, ?)"
+    );
+    const tx = db.transaction((list) => {
+      for (const uid of list) {
+        insert.run(nanoid(), uid, title, body, metaJson);
+      }
+    });
+    tx(userIds);
+    res.json({ success: true, count: userIds.length });
+  } catch (e) {
+    console.error("admin send notifications:", e);
+    res.status(500).json({ error: "Failed to send notifications" });
+  }
+});
+
 app.post("/api/admin/blocks", adminOnly, (req, res) => {
   try {
-    const {
-      kind,
-      assignmentId,
-      examId,
-      subjectId,
-      chapterId,
-      questionIndex,
-    } = req.body || {};
+    const { kind, assignmentId, examId, subjectId, chapterId, questionIndex } =
+      req.body || {};
     const k = String(kind || "").toLowerCase();
     const qIdx = Number(questionIndex);
     if (!Number.isFinite(qIdx))
@@ -2113,14 +2614,8 @@ app.post("/api/admin/blocks", adminOnly, (req, res) => {
 
 app.delete("/api/admin/blocks", adminOnly, (req, res) => {
   try {
-    const {
-      kind,
-      assignmentId,
-      examId,
-      subjectId,
-      chapterId,
-      questionIndex,
-    } = req.body || {};
+    const { kind, assignmentId, examId, subjectId, chapterId, questionIndex } =
+      req.body || {};
     const k = String(kind || "").toLowerCase();
     const qIdx = Number(questionIndex);
     if (!Number.isFinite(qIdx))

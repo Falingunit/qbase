@@ -1,0 +1,342 @@
+{
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Maximum diffraction takes place in a given slit for",
+      "image": null,
+      "qOptions": [
+        "\\(\\gamma\\)-rays",
+        "Ultraviolet light",
+        "Infrared light",
+        "Radiowaves"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Wavelength of light used in an optical instrument are \\(\\lambda_1=4000\\,\\text{\\AA}\\) and \\(\\lambda_2=5000\\,\\text{\\AA}\\), then ratio of their respective resolving powers (corresponding to \\(\\lambda_1\\) and \\(\\lambda_2\\)) is",
+      "image": null,
+      "qOptions": ["16:25", "9:1", "4:5", "5:4"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A parallel monochromatic beam of light is incident normally on a narrow slit. A diffraction pattern is formed on a screen placed perpendicular to the direction of incident beam. At the first maximum of the diffraction pattern, the phase difference between the rays coming from the edges of the slit is",
+      "image": null,
+      "qOptions": ["0", "\\(\\dfrac{\\pi}{2}\\)", "\\(\\pi\\)", "\\(2\\pi\\)"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The condition for diffraction of \\(m\\)th order minima in a single slit Fraunhofer diffraction is",
+      "image": null,
+      "qOptions": [
+        "\\(d\\sin\\theta_m=m\\lambda,\\; m=1,2,3,\\ldots\\)",
+        "\\(d\\sin\\theta_m=\\dfrac{m\\lambda}{2},\\; m=1,2,3,\\ldots\\)",
+        "\\(d\\sin\\theta_m=\\left(m+\\dfrac{1}{2}\\right)\\!\\lambda,\\; m=1,2,3,\\ldots\\)",
+        "\\(d\\sin\\theta_m=\\left(m-\\dfrac{1}{2}\\right)\\!\\dfrac{\\lambda}{2},\\; m=1,2,3,\\ldots\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The resolving power of human eye is",
+      "image": null,
+      "qOptions": [
+        "\\(\\approx 1'\\)",
+        "\\(\\approx 1^{\\circ}\\)",
+        "\\(\\approx 10'\\)",
+        "\\(\\approx 5'\\)"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "First diffraction minima due to a single slit diffraction is at \\(\\theta=30^{\\circ}\\) for a light of wavelength \\(6000\\,\\text{\\AA}\\). The width of slit is",
+      "image": null,
+      "qOptions": [
+        "\\(1\\times10^{-6}\\,\\text{cm}\\)",
+        "\\(1.2\\times10^{-6}\\,\\text{m}\\)",
+        "\\(2\\times10^{-6}\\,\\text{cm}\\)",
+        "\\(2.4\\times10^{-6}\\,\\text{m}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The diameter of an objective of a telescope, which can just resolve two stars situated at angular displacement of \\(10^{-4}\\) degree, should be (\\(\\lambda=5000\\,\\text{\\AA}\\))",
+      "image": null,
+      "qOptions": ["35 mm", "35 cm", "35 m", "3.5 cm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two luminous point sources separated by a certain distance are at 10 km from an observer. If the aperture of his eye is \\(2.5\\times10^{-3}\\,\\text{m}\\) and the wavelength of light used is 500 nm, the distance of separation between the point sources just seen to be resolved is",
+      "image": null,
+      "qOptions": ["12.2 m", "24.2 m", "2.44 m", "1.22 m"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In Fraunhofer diffraction experiment, \\(L\\) is the distance between screen and the obstacle, \\(b\\) is the size of obstacle and \\(\\lambda\\) is wavelength of incident light. The general condition for the applicability of Fraunhofer diffraction is",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{b^{2}}{L\\lambda}\\gg1\\)",
+        "\\(\\dfrac{b^{2}}{L\\lambda}=1\\)",
+        "\\(\\dfrac{b^{2}}{L\\lambda}\\ll1\\)",
+        "\\(\\dfrac{b^{2}}{L\\lambda}\\approx1\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two points separated by a distance of 0.1 mm can just be inspected in a microscope when light of wavelength \\(6000\\,\\text{\\AA}\\) is used. If the light of wavelength \\(4800\\,\\text{\\AA}\\) is used, this limit of resolution will become:",
+      "image": null,
+      "qOptions": ["0.80 mm", "0.12 mm", "0.10 mm", "0.08 mm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Assuming human pupil to have a radius of 0.25 cm and a comfortable viewing distance of 25 cm, the minimum separation between two objects that human eye can resolve at 500 nm wavelength is:",
+      "image": null,
+      "qOptions": [
+        "1 \\(\\mu\\)m",
+        "30 \\(\\mu\\)m",
+        "100 \\(\\mu\\)m",
+        "300 \\(\\mu\\)m"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Angular width of central maxima is \\(\\pi/2\\). When a slit of width 'a' is illuminated by a light of wavelength \\(7000\\,\\text{\\AA}\\) then \\(a=\\)",
+      "image": null,
+      "qOptions": [
+        "\\(9\\times10^{-9}\\,\\text{m}\\)",
+        "\\(8.9\\times10^{-7}\\,\\text{m}\\)",
+        "\\(9\\times10^{-7}\\,\\text{m}\\)",
+        "\\(9.8\\times10^{-7}\\,\\text{m}\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The sun subtends an angle of \\((1/2)^{\\circ}\\) on earth. The image of sun is obtained on the screen with the help of a convex lens of focal length 100 cm; the diameter of the image obtained on the screen will be",
+      "image": null,
+      "qOptions": ["18 cm", "1 mm", "50 cm", "8.73 mm"],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A small aperture is illuminated with a parallel beam of \\(\\lambda=628\\,\\text{nm}\\). The emergent beam has an angular divergence of \\(2^{\\circ}\\). The size of the aperture is",
+      "image": null,
+      "qOptions": [
+        "9 \\(\\mu\\)m",
+        "18 \\(\\mu\\)m",
+        "27 \\(\\mu\\)m",
+        "36 \\(\\mu\\)m"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A single slit Fraunhofer diffraction pattern is formed with white light. For what wavelength of light the third secondary maximum in the diffraction pattern coincides with the second secondary maximum in the pattern for red light of wavelength \\(6500\\,\\text{\\AA}\\)?",
+      "image": null,
+      "qOptions": [
+        "4400 \\(\\text{\\AA}\\)",
+        "4100 \\(\\text{\\AA}\\)",
+        "4642.8 \\(\\text{\\AA}\\)",
+        "9100 \\(\\text{\\AA}\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "If \\(I_0\\) is the intensity of the principal maximum in the single slit diffraction pattern, then what will be its intensity when the slit width is doubled?",
+      "image": null,
+      "qOptions": ["\\(2I_0\\)", "\\(4I_0\\)", "\\(I_0\\)", "\\(I_0/2\\)"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The limit of resolution of microscope, if the numerical aperture of microscope is 0.12, and the wavelength of light used is 600 nm, is",
+      "image": null,
+      "qOptions": [
+        "0.3 \\(\\mu\\)m",
+        "1.2 \\(\\mu\\)m",
+        "2.5 \\(\\mu\\)m",
+        "3 \\(\\mu\\)m"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Assume that light of wavelength \\(6000\\,\\text{\\AA}\\) is coming from a star. What is the limit of resolution of a telescope whose objective has a diameter of 100 inch?",
+      "image": null,
+      "qOptions": [
+        "\\(2.9\\times10^{-7}\\) radians",
+        "\\(1.45\\times10^{-7}\\) radians",
+        "\\(8.7\\times10^{-7}\\) radians",
+        "\\(0.7\\times10^{-7}\\) radians"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A parallel beam of electrons travelling in x-direction falls on a slit of width \\(d\\) (see figure). After passing the slit, an electron acquires momentum \\(p_y\\) in the y-direction then for a majority of electrons passing through the slit (h is Planck's constant):",
+      "image": "19.png",
+      "qOptions": [
+        "\\(|p_y|d\\simeq h\\)",
+        "\\(|p_y|d>h\\)",
+        "\\(|p_y|d<h\\)",
+        "\\(|p_y|d\\gg h\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In an experiment of single slit diffraction pattern, first minimum for red light coincides with first maximum of some other wavelength. If wavelength of red light is \\(6600\\,\\text{\\AA}\\), then wavelength of first maximum will be:",
+      "image": null,
+      "qOptions": [
+        "3300 \\(\\text{\\AA}\\)",
+        "4400 \\(\\text{\\AA}\\)",
+        "5500 \\(\\text{\\AA}\\)",
+        "6600 \\(\\text{\\AA}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Two point white dots are 1 mm apart on a black paper. They are viewed by eye of pupil diameter 3 mm. Approximately, what is the maximum distance at which these dots can be resolved by the eye? (Take wavelength of light = 500 nm) [AIEEE-2005]",
+      "image": null,
+      "qOptions": ["6 m", "3 m", "5 m", "1 m"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The least resolvable angle by a telescope using objective of aperture 5 m is nearly (\\(\\lambda=4000\\,\\text{\\AA}\\))",
+      "image": null,
+      "qOptions": [
+        "\\(\\dfrac{1}{50}^{\\circ}\\)",
+        "\\(\\dfrac{1}{50}\\) minute",
+        "\\(\\dfrac{1}{50}\\) sec",
+        "\\(\\dfrac{1}{500}\\) sec"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A parallel beam of monochromatic light of wavelength \\(5000\\,\\text{\\AA}\\) is incident normally on a single narrow slit of width \\(0.0001\\,\\text{mm}\\). The light is focused by a convex lens on a screen placed on the focal plane. The first minimum will be formed for the angle of diffraction equal to:",
+      "image": null,
+      "qOptions": ["0°", "15°", "30°", "60°"],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "A screen is placed 50 cm from a single slit, which is illuminated with 6000 \\(\\text{\\AA}\\) light. If distance between the first and third minima in the diffraction pattern is 3.0 mm, then the width of the slit is",
+      "image": null,
+      "qOptions": ["0.1 mm", "0.2 mm", "0.4 mm", "0.8 mm"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In Young's double slit experiment, the distance between slits and the screen is 1.0 m and monochromatic light of 600 nm is being used. A person standing near the slits is looking at the fringe pattern. When the separation between the slits is varied, the interference pattern disappears for a particular distance \\(d_0\\) between the slits. If the angular resolution of the eye is \\(\\dfrac{1}{60}^{\\circ}\\), the value of \\(d_0\\) is close to:",
+      "image": null,
+      "qOptions": ["1 mm", "2 mm", "4 mm", "3 mm"],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a single slit diffraction experiment, the width of the slit is made double the original width. How does this affect the size and intensity of the central diffraction band?",
+      "image": null,
+      "qOptions": [
+        "The size reduces by half according to the relation: size \\(\\sim\\) \\(\\lambda/d\\).",
+        "Intensity increases four fold.",
+        "The total power incident on the screen increases by two",
+        "All of the above"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "In a YDSE, let \\(\\beta\\) be the fringe width and let \\(I_0\\) be the intensity at the central bright fringe. At a distance \\(x\\) from the central bright fringe, the intensity will be",
+      "image": null,
+      "qOptions": [
+        "\\(I_0\\cos\\!\\left(\\dfrac{x}{\\beta}\\right)\\)",
+        "\\(I_0\\cos^{2}\\!\\left(\\dfrac{x}{\\beta}\\right)\\)",
+        "\\(I_0\\cos^{2}\\!\\left(\\dfrac{\\pi x}{\\beta}\\right)\\)",
+        "\\(\\dfrac{I_0}{4}\\cos^{2}\\!\\left(\\dfrac{\\pi x}{\\beta}\\right)\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "Wave property of electrons implies that they will show diffraction effects. Davisson and Germer demonstrated this by diffracting electrons from crystals. The law governing the diffraction from a crystal is obtained by requiring that electron waves reflected from the planes of atoms in a crystal interfere constructively (see figure).",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "Electrons accelerated by potential \\(V\\) are diffracted from a crystal. If \\(d=1\\,\\text{\\AA}\\) and \\(i=30^{\\circ}\\), \\(V\\) should be about \\((h=6.6\\times10^{-34}\\,\\text{Js},\\; m=9.1\\times10^{-31}\\,\\text{kg},\\; e=1.6\\times10^{-19}\\,\\text{C})\\).",
+      "image": null,
+      "qOptions": ["2000 V", "50 V", "500 V", "1000 V"],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "If a strong diffraction peak is observed when electrons are incident at an angle \\(i\\) from the normal to the crystal planes with distance \\(d\\) between them (see figure) de-Broglie wavelength \\(\\lambda_{dB}\\) of electrons can be calculated by the relationship (\\(n\\) is an integer)",
+      "image": null,
+      "qOptions": [
+        "\\(d\\sin i=n\\lambda_{dB}\\)",
+        "\\(2d\\cos i=n\\lambda_{dB}\\)",
+        "\\(2d\\sin i=n\\lambda_{dB}\\)",
+        "\\(d\\cos i=n\\lambda_{dB}\\)"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The box of a pin hole camera, of length \\(L\\), has a hole of radius \\(a\\). It is assumed that when the hole is illuminated by a parallel beam of light of wavelength \\(\\lambda\\) the spread of the spot (obtained on the opposite wall of the camera) is the sum of its geometrical spread and the spread due to diffraction. The spot would then have its minimum size \\((\\text{say } b_{\\min})\\) when:",
+      "image": null,
+      "qOptions": [
+        "\\(a=\\sqrt{\\lambda L}\\) and \\(b_{\\min}=\\left(\\dfrac{2\\lambda^{2}}{L}\\right)\\)",
+        "\\(a=\\sqrt{\\lambda L}\\) and \\(b_{\\min}=\\sqrt{4\\lambda L}\\)",
+        "\\(a=\\dfrac{\\lambda^{2}}{L}\\) and \\(b_{\\min}=\\sqrt{4\\lambda L}\\)",
+        "\\(a=\\dfrac{\\lambda^{2}}{L}\\) and \\(b_{\\min}=\\left(\\dfrac{2\\lambda^{2}}{L}\\right)\\)"
+      ],
+      "qAnswer": "B"
+    }
+  ]
+}

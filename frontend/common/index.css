@@ -158,6 +158,33 @@
   color: #fffc66;
 }
 
+/* --- lightweight animations utilities (shared) --- */
+/* Subtle fade-in for content swaps */
+.fade-in { animation: fadeIn 160ms ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+
+/* Generic enter/exit animations for items/cards */
+.anim-enter { animation: fadeInUp 220ms ease-out both; }
+.anim-enter-fast { animation: fadeInUp 140ms ease-out both; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.anim-out { animation: fadeOutDown 160ms ease-in forwards; }
+@keyframes fadeOutDown { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(6px); } }
+
+/* Star button micro-interactions */
+.as-star-btn .bi { transition: transform 140ms ease, color 160ms ease; transform-origin: center; }
+.as-star-btn:active .bi { transform: scale(0.85); }
+.as-star-btn.star-animate .bi { animation: starPop 320ms cubic-bezier(.2,.8,.2,1) both; }
+@keyframes starPop {
+  0% { transform: scale(0.6) rotate(-15deg); }
+  60% { transform: scale(1.15) rotate(10deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in, .anim-enter, .anim-enter-fast, .anim-out { animation: none !important; }
+  .as-card.card, .as-star-btn .bi { transition: none !important; }
+}
+
 /* highlight */
 mark {
   background: rgba(255, 193, 7, 0.35);
@@ -183,15 +210,27 @@ body.page-leave .container-lg {
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
+  width: 8px;
+  height: 8px;
 }
-
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: 0 0 1px 1px rgba(13, 110, 253, 0.12) inset;
-    border-radius: 10px;
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    -webkit-box-shadow: 0 0 2px 1px rgb(64, 52, 80) inset;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(255, 255, 255, 0.22)
+  );
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.3)
+  );
+  background-clip: padding-box;
 }

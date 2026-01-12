@@ -13,7 +13,7 @@ Subfolders (by feature)
 - `bookmarks/`
   - `bookmarks.css`, `bookmarks.js`
 - `worksheets/`
-  - `worksheet.css`, `worksheet.js`, `worksheet_index.css`, `worksheet_index.js`
+  - `worksheet.css`, `worksheet.js`, `index.css`, `index.js`
 - `assignment/`
   - `assignment.css`, `assignment.js` — generic assignment UI
 - `pyqs/`

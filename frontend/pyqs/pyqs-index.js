@@ -41,7 +41,7 @@ import { hideBreadcrumb, renderExamsView } from './pyqs-index.view.js';
 
   function renderExams(exams) {
     hideBreadcrumb(els);
-    renderExamsView(els, exams, { onToggleStar: (id, make) => toggleExamStar(id, make).then(render) });
+    renderExamsView(els, exams, { onToggleStar: (id, make) => toggleExamStar(id, make) });
   }
 })();
 
