@@ -1,0 +1,421 @@
+
+{
+  "questions":
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The geometry of \\(\\text{Ni(CO)}_4\\) is:",
+    "image": null,
+    "qOptions": ["Square planar", "Octahedral", "Tetrahedral", "Trigonal bipyramidal"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The geometry of \\(\\text{Fe(CO)}_5\\) is:",
+    "image": null,
+    "qOptions": ["Square pyramidal", "Trigonal bipyramidal", "Tetrahedral", "Octahedral"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The coordination number of chromium in \\(\\text{Cr(CO)}_6\\) is:",
+    "image": null,
+    "qOptions": ["4", "5", "6", "2"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "[\\(\\text{Mn}_2(\\text{CO})_{10}\\)] contains how many CO ligands in total?",
+    "image": null,
+    "qOptions": ["5", "8", "10", "12"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "\\(\\text{Cr(CO)}_6\\) has which geometry?",
+    "image": null,
+    "qOptions": ["Tetrahedral", "Square planar", "Octahedral", "Trigonal planar"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Metal carbonyls shown are examples of:",
+    "image": null,
+    "qOptions": ["Heteroleptic complexes", "Ionic complexes", "Homoleptic complexes", "Chelates"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The M–C σ bond in metal carbonyls is formed by:",
+    "image": null,
+    "qOptions": ["Metal → CO donation", "CO → metal donation", "Metal → metal overlap", "CO → CO overlap"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The M–C π bond involves donation from:",
+    "image": null,
+    "qOptions": ["CO π* → metal", "Metal d → CO π*", "Metal s → CO σ", "CO σ → metal p"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The synergic effect in metal carbonyls results in:",
+    "image": null,
+    "qOptions": ["Weakening of M–C bond", "Weakening of C–O bond", "Strengthening of M–C bond", "Breaking of π bonds"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The antibonding orbital involved in π back bonding is:",
+    "image": null,
+    "qOptions": ["σ", "σ*", "π", "π*"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Synergic bonding involves:",
+    "image": null,
+    "qOptions": ["Only σ donation", "Only π back donation", "σ donation + π back donation", "Ionic bonding"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Donation of lone pair occurs from which atom of CO?",
+    "image": null,
+    "qOptions": ["Oxygen", "Carbon", "Both equally", "Neither"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "EDTA is mainly used in analysis due to its:",
+    "image": null,
+    "qOptions": ["Colour", "Volatility", "Chelating ability", "Oxidizing nature"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hardness of water is estimated using:",
+    "image": null,
+    "qOptions": ["KMnO₄", "Na₂EDTA", "HCl", "NaOH"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hardness of water is caused mainly by:",
+    "image": null,
+    "qOptions": ["Na⁺ and K⁺", "Ca²⁺ and Mg²⁺", "Fe²⁺ and Zn²⁺", "Al³⁺ and Cr³⁺"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Selective estimation of Ca²⁺ and Mg²⁺ using EDTA is possible due to:",
+    "image": null,
+    "qOptions": ["Colour difference", "Size difference", "Difference in stability constants", "Solubility difference"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "DMG is used mainly as:",
+    "image": null,
+    "qOptions": ["Catalyst", "Chelating reagent", "Oxidant", "Reducing agent"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "α-nitroso-β-naphthol is used in:",
+    "image": null,
+    "qOptions": ["Metallurgy", "Qualitative analysis", "Photography", "Electroplating"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Gold extraction involves formation of:",
+    "image": null,
+    "qOptions": ["[AuCl₄]⁻", "[Au(CN)₂]⁻", "[Au(NH₃)₂]⁺", "Au₂O₃"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Gold is separated from cyanide solution by adding:",
+    "image": null,
+    "qOptions": ["Copper", "Iron", "Zinc", "Silver"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Purification of metals via coordination compounds involves:",
+    "image": null,
+    "qOptions": ["Oxidation", "Reduction", "Formation and decomposition of complexes", "Electrolysis only"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Impure nickel is purified via formation of:",
+    "image": null,
+    "qOptions": ["NiCl₂", "NiO", "Ni(CO)₄", "NiSO₄"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chlorophyll contains which metal?",
+    "image": null,
+    "qOptions": ["Fe", "Mg", "Co", "Zn"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Haemoglobin is a coordination compound of:",
+    "image": null,
+    "qOptions": ["Copper", "Magnesium", "Iron", "Cobalt"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Vitamin B₁₂ contains:",
+    "image": null,
+    "qOptions": ["Iron", "Nickel", "Magnesium", "Cobalt"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Vitamin B₁₂ is also called:",
+    "image": null,
+    "qOptions": ["Chlorophyll", "Cyanocobalamine", "Haemin", "Myoglobin"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Carboxypeptidase A is:",
+    "image": null,
+    "qOptions": ["Pigment", "Hormone", "Enzyme", "Vitamin"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Carbonic anhydrase acts as:",
+    "image": null,
+    "qOptions": ["Oxygen carrier", "Catalyst", "Hormone", "Antibiotic"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Wilkinson catalyst contains which metal?",
+    "image": null,
+    "qOptions": ["Pd", "Pt", "Rh", "Ni"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Wilkinson catalyst is used for:",
+    "image": null,
+    "qOptions": ["Oxidation of alcohols", "Hydrogenation of alkenes", "Polymerization", "Cracking"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Formula of Wilkinson catalyst is:",
+    "image": null,
+    "qOptions": ["[Rh(NH₃)₆]³⁺", "[(Ph₃P)₃RhCl]", "[RhCl₆]³⁻", "Rh(CO)₅"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Electroplating of silver uses:",
+    "image": null,
+    "qOptions": ["AgNO₃", "AgCl", "[Ag(CN)₂]⁻", "Ag₂O"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Smooth electroplating is possible due to:",
+    "image": null,
+    "qOptions": ["Free metal ions", "Complex ions", "Oxides", "Alloys"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "In photography, undecomposed AgBr is removed by:",
+    "image": null,
+    "qOptions": ["Water", "Acid", "Hypo solution", "Alkali"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Hypo forms which complex with Ag⁺?",
+    "image": null,
+    "qOptions": ["[AgCl₂]⁻", "[Ag(NH₃)₂]⁺", "[Ag(S₂O₃)₂]³⁻", "[Ag(CN)₂]⁻"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Chelate therapy is used to remove excess:",
+    "image": null,
+    "qOptions": ["Non-metals", "Alkali metals", "Toxic metals", "Gases"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Excess copper and iron are removed using:",
+    "image": null,
+    "qOptions": ["EDTA only", "DMG", "D-penicillamine & desferrioxime B", "Cyanide"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "EDTA is used in treatment of:",
+    "image": null,
+    "qOptions": ["Iron poisoning", "Copper poisoning", "Lead poisoning", "Mercury poisoning"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Platinum coordination compounds are used in:",
+    "image": null,
+    "qOptions": ["Photography", "Electroplating", "Cancer treatment", "Fertilizers"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Cis-platin is used to:",
+    "image": null,
+    "qOptions": ["Increase haemoglobin", "Inhibit tumour growth", "Treat infections", "Reduce hardness"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The first systematic theory of coordination compounds was proposed by:",
+    "image": null,
+    "qOptions": ["Pauling", "Lewis", "Werner", "Bohr"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Werner proposed:",
+    "image": null,
+    "qOptions": ["Only covalent bonds", "Primary and secondary valencies", "Hybridization", "Crystal fields"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Primary valency corresponds to:",
+    "image": null,
+    "qOptions": ["Non-ionisable bond", "Covalent bond", "Ionic bond", "π bond"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Secondary valency corresponds to:",
+    "image": null,
+    "qOptions": ["Ionic bond", "Covalent bond", "Hydrogen bond", "Metallic bond"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "VBT explains all except:",
+    "image": null,
+    "qOptions": ["Geometry", "Magnetic behaviour (qualitative)", "Optical properties", "Bond formation"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "CFT treats ligands as:",
+    "image": null,
+    "qOptions": ["Dipoles", "Point charges", "Covalent donors", "Orbitals"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Isomerism helped Werner to predict:",
+    "image": null,
+    "qOptions": ["Colour", "Geometry", "Solubility", "Reactivity"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Coordination compounds are important in:",
+    "image": null,
+    "qOptions": ["Only biology", "Only industry", "Only medicine", "Multiple fields"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Metal carbonyl bonding strengthens which bond?",
+    "image": null,
+    "qOptions": ["C–O only", "M–C only", "Both C–O and M–C", "Neither"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Coordination compounds are present in:",
+    "image": null,
+    "qOptions": ["Only minerals", "Only plants", "Only animals", "Mineral, plant & animal worlds"],
+    "qAnswer": "D"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
