@@ -1,0 +1,93 @@
+
+{
+  "questions":
+
+[
+  {"qType":"SMCQ","passageId":null,"qText":"Question 1","image":"1.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 2","image":"2.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 3","image":"3.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 4","image":"4.png","qOptions":[],"qAnswer":88},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 5","image":"5.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 6","image":"6.png","qOptions":[],"qAnswer":100},
+  {"qType":"Numerical","passageId":null,"qText":"Question 7","image":"7.png","qOptions":[],"qAnswer":10},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 8","image":"8.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 9","image":"9.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 10","image":"10.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 11","image":"11.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+
+  {"qType":"SMCQ","passageId":null,"qText":"Question 12","image":"12.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+
+  {"qType":"SMCQ","passageId":null,"qText":"Question 13","image":"13.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 14","image":"14.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 15","image":"15.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 16","image":"16.png","qOptions":[],"qAnswer":14},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 17","image":"17.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 18","image":"18.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 19","image":"19.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 20","image":"20.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 21","image":"21.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 22","image":"22.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 23","image":"23.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 24","image":"24.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 25","image":"25.png","qOptions":[],"qAnswer":5},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 26","image":"26.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 27","image":"27.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 28","image":"28.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 29","image":"29.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 30","image":"30.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 31","image":"31.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 32","image":"32.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 33","image":"33.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 34","image":"34.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 35","image":"35.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 36","image":"36.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 37","image":"37.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 38","image":"38.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 39","image":"39.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 40","image":"40.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 41","image":"41.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 42","image":"42.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 43","image":"43.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 44","image":"44.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 45","image":"45.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 46","image":"46.png","qOptions":[],"qAnswer":1462},
+  {"qType":"Numerical","passageId":null,"qText":"Question 47","image":"47.png","qOptions":[],"qAnswer":100},
+  {"qType":"Numerical","passageId":null,"qText":"Question 48","image":"48.png","qOptions":[],"qAnswer":3},
+  {"qType":"Numerical","passageId":null,"qText":"Question 49","image":"49.png","qOptions":[],"qAnswer":7},
+  {"qType":"Numerical","passageId":null,"qText":"Question 50","image":"50.png","qOptions":[],"qAnswer":5},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 51","image":"51.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 52","image":"52.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 53","image":"53.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 54","image":"54.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 55","image":"55.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 56","image":"56.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 57","image":"57.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 58","image":"58.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 59","image":"59.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 60","image":"60.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 61","image":"61.png","qOptions":["A","B","C","D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 62","image":"62.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 63","image":"63.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 64","image":"64.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 65","image":"65.png","qOptions":["A","B","C","D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 66","image":"66.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 67","image":"67.png","qOptions":["A","B","C","D"],"qAnswer":"C"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 68","image":"68.png","qOptions":[],"qAnswer":25},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 69","image":"69.png","qOptions":["A","B","C","D"],"qAnswer":"B"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 70","image":"70.png","qOptions":[],"qAnswer":29}
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
