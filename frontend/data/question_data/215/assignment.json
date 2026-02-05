@@ -1,0 +1,239 @@
+
+{
+  "questions":
+
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "How many pairs of positive integers \\(m, n\\) satisfy \\(\\frac{1}{m} + \\frac{4}{n} = \\frac{1}{12}\\) where \\(n\\) is an odd integer less than 60?",
+    "image": null,
+    "qOptions": ["4", "7", "5", "3"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Determine the sum of all the real solutions of \\(\\left[\\frac{x}{2}\\right] + \\left[\\frac{2x}{3}\\right] = x\\).",
+    "image": null,
+    "qOptions": ["21", "28", "15", "None of these"],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Consider a one-one function \\(A_n \\to A_n\\) where \\(A_n = \\{1,2,3,\\dots,n\\}\\). Let \\(T(n)\\) be the number of functions from \\(A_n \\to A_n\\) such that \\(|f(i)-i|<2\\).",
+    "image": null,
+    "qOptions": ["T(9)=57", "T(10)=89", "T(8)=36", "T(7)=23"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\(2f(\\sin x)+f(\\cos x)=x\\ \\forall x\\in\\mathbb{R}\\), then the range of \\(f(x)\\) is",
+    "image": null,
+    "qOptions": ["\\([-\\pi/3,\\pi/3]\\)", "\\([-2\\pi/3,\\pi/3]\\)", "\\([-2\\pi/3,\\pi/6]\\)", "\\([-\\pi/6,\\pi/6]\\)"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "If \\((a+1)(b+1)(c+1)(d+1)=1\\), \\((a+2)(b+2)(c+2)(d+2)=2\\), \\((a+3)(b+3)(c+3)(d+3)=3\\), \\((a+4)(b+4)(c+4)(d+4)=4\\), then find \\((a+5)(b+5)(c+5)(d+5)\\).",
+    "image": null,
+    "qOptions": ["24", "29", "39", "49"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Let \\(f(x)\\) be an even function defined using greatest integer and fractional part functions as given. Then the sum of all possible values of \\(\\lambda\\) is",
+    "image": null,
+    "qOptions": ["131/4", "151/4", "121/4", "101/4"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let \\(x,y,z\\) be positive real numbers satisfying the given equations involving greatest integer and fractional part functions. Identify the correct statements.",
+    "image": null,
+    "qOptions": ["\\(xyz=349.32\\)", "\\(x+y+z=21.3\\)", "\\(x+y-z=4.9\\)", "\\(x-y+z=27.6\\)"],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let \\(f(x)=|x-2|\\) and \\(g(x)=f(f(\\dots f(x)))\\) applied \\(n\\) times. For \\(k\\in(0,2)\\), identify correct statements.",
+    "image": null,
+    "qOptions": ["If \\(g(x)=k\\) has 8 distinct solutions then \\(n=4\\)", "If \\(g(x)=k\\) has 11 distinct solutions then \\(n=5\\)", "If \\(g(x)=k\\) has 6 distinct solutions then \\(n=3\\)", "If \\(g(x)=k\\) has 7 distinct solutions then \\(n=3\\)"],
+    "qAnswer": ["A","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following functions are periodic?",
+    "image": null,
+    "qOptions": ["\\(\\operatorname{sgn}(e^{-x})\\)", "Dirichlet function", "\\(\\sqrt{\\frac{8}{1+\\cos x}+\\frac{8}{1-\\cos x}}\\)", "\\([x+1/2]+[x-1/2]+2[-x]\\)"],
+    "qAnswer": ["A","B","C","D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If a function satisfies \\((x-y)f(x+y)-(x+y)f(x-y)=2(x^2y-y^3)\\) and \\(f(1)=2\\), identify the correct statements.",
+    "image": null,
+    "qOptions": ["\\(f(x)\\) must be polynomial", "\\(f(3)=12\\)", "\\(f(0)=0\\)", "\\(f(x)\\) may not be differentiable"],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "If \\(f:\\mathbb{R}\\setminus\\{-1,k\\}\\to\\mathbb{R}\\setminus\\{\\alpha,\\beta\\}\\) is bijective, identify the correct statements.",
+    "image": null,
+    "qOptions": ["If \\(k\\in(-1,1)\\), then \\(\\alpha+\\beta=2\\)", "If \\(k\\in(-1,1)\\), then \\(\\alpha+\\beta=6\\)", "If \\(k\\in(1,3)\\), then \\(\\alpha+\\beta=4\\)", "If \\(k\\in(1,3)\\), then \\(\\alpha+\\beta=6\\)"],
+    "qAnswer": ["A","D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The graph of a function \\(y=f(x)\\) is shown. Identify the correct statements.",
+    "image": "12.png",
+    "qOptions": ["Domain of \\(f(f(x))\\) is \\([-4,3]\\)", "Domain of \\(f(f(x))\\) is \\([-3,13/5]\\)", "\\(f(f(x))=1\\) has exactly 7 solutions", "\\(f(f(x))=1\\) has exactly 8 solutions"],
+    "qAnswer": ["B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let \\(f(x)=\\frac{x^2+2x+a}{x^2+4x+3a}\\). If \\(f\\) is surjective, then the value of the given expression can be",
+    "image": null,
+    "qOptions": ["1/4", "1/9", "-1/9", "-1"],
+    "qAnswer": ["A","B","C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The number of nonempty subsets \\(S\\subseteq\\{-10,-9,\\dots,9,10\\}\\) satisfying \\(|S|+\\min(S)\\cdot\\max(S)=0\\) is \\(R\\). Identify divisors of \\(R\\).",
+    "image": null,
+    "qOptions": ["5", "11", "23", "67"],
+    "qAnswer": ["A","D"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If \\(f(x)=\\{x\\}+\\{x+\\frac{x}{1+x^2}\\}+\\dots+\\{x+\\frac{x}{1+99x^2}\\}\\), then find \\(f(\\sqrt{2})\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 41.42
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If \\(f(x)\\) is a polynomial of degree 4 with leading coefficient 1 satisfying \\(f(1)=1,f(2)=2,f(3)=3\\), find \\(\\frac14\\left[\\frac{f(-1)+f(5)}{f(0)+f(4)}\\right]\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 1.25
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If roots of \\(|x-1|=2[x]-3\\{x\\}\\) are \\(x_i\\), find \\(\\frac{\\sum x_i}{5}\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 0.8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Consider a function \\(f:A\\to A\\), \\(A=\\{1,2,\\dots,7\\}\\) such that \\(f(f(f(x)))=x\\). How many functions can be formed?",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 351
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Let \\(f(x)=4x(1-x)\\), \\(0\\le x\\le1\\). The number of solutions of \\(f(f(f(x)))=x/3\\) is",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If \\(f(x)=x^5+x^2+1\\) has roots \\(x_1,\\dots,x_5\\) and \\(g(x)=x^2-2\\), find \\(g(x_1)\\dots g(x_5)-30g(x_1x_2x_3x_4x_5)\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 7
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Consider the function \\(f(x)=\\begin{cases}\\sqrt{1-x^2}, & -1\\le x<0 \\\\ x^2, & 0\\le x<1 \\\\ \\frac{(x-1)^2}{4}+2, & x\\ge1 \\end{cases}\\). Consider another function \\(g\\) such that \\(g(f(x))=x\\ \\forall x\\ge -1\\) and \\(f(g(x))=x\\ \\forall x\\ge0\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The range of the function \\(y=f(f(f(g(x))))\\) is",
+    "image": null,
+    "qOptions": ["[-1,∞)", "[0,∞)", "[1,∞)", "[2,∞)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The domain of \\(y=g(g(g(f(x))))\\) is",
+    "image": null,
+    "qOptions": ["[-1,∞)", "[0,∞)", "[1,∞)", "[2,∞)"],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "Let \\(w\\) be a non-real fifth root of 3 and \\(x=w^3+w^4\\). If \\(x^5=f(x)\\), where \\(f(x)\\) is a real quadratic polynomial with roots \\(\\alpha\\) and \\(\\beta\\).",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "Every term of the sequence \\(\\{f(n)\\}, n\\in\\mathbb{N}\\) is divisible by",
+    "image": null,
+    "qOptions": ["12", "18", "24", "27"],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "Which of the following is not true?",
+    "image": null,
+    "qOptions": ["\\(\\alpha+\\beta=-3\\)", "\\(\\alpha\\beta=12/5\\)", "\\(|\\alpha-\\beta|=\\sqrt{3/5}\\)", "\\(|\\alpha|+|\\beta|=2\\sqrt{3/5}\\)"],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "If \\(\\alpha\\) and \\(\\beta\\) are represented by points A and B in the argand plane, then the circumradius of \\(\\triangle OAB\\) (O is origin) is",
+    "image": null,
+    "qOptions": ["4/5", "8/5", "16/5", "32/5"],
+    "qAnswer": "A"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
