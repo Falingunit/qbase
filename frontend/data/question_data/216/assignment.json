@@ -199,7 +199,7 @@
     "qAnswer": []
   },
   {
-    "qType": "Subjective",
+    "qType": "Passage",
     "passageId": "P15",
     "qText": "(a) Show that the total kinetic energy of the system with respect to the centre of mass frame is given by \\[ K_{\\text{wrt cm}} = \\left( \\frac{M}{M + m} \\right) K_{\\text{Lab}} \\].",
     "image": null,
@@ -209,7 +209,7 @@
     "sText": "The velocity of the centre of mass of the system is \\[ v_{\\text{cm}} = \\frac{mv + M(0)}{m + M} = \\frac{mv}{m + M}. \\] Let \\(v'_m\\) be the velocity of mass \\(m\\) with respect to the centre of mass and \\(v'_M\\) be the velocity of mass \\(M\\) with respect to the centre of mass. Then \\[ v'_m = v - v_{\\text{cm}} = v - \\left( \\frac{mv}{m + M} \\right) = \\frac{Mv}{m + M}, \\] and \\[ v'_M = 0 - \\frac{mv}{m + M} = -\\frac{mv}{m + M}. \\] In the centre of mass frame, the kinetic energy is \\[ K_{\\text{wrt cm}} = \\frac{1}{2} m (v'_m)^2 + \\frac{1}{2} M (v'_M)^2. \\] Substituting the above expressions, \\[ K_{\\text{wrt cm}} = \\frac{m}{2} \\left( \\frac{Mv}{m + M} \\right)^2 + \\frac{M}{2} \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{wrt cm}} = \\frac{1}{2} \\left( \\frac{Mm}{m + M} \\right) v^2 = \\frac{1}{2} \\mu v^2, \\] where the reduced mass \\(\\mu\\) is given by \\[ \\mu = \\frac{mM}{m + M}. \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{wrt cm}} = K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right). \\]"
   },
   {
-    "qType": "Subjective",
+    "qType": "Passage",
     "passageId": "P15",
     "qText": "(b) Show that the total kinetic energy of the centre of mass in the lab frame is given by \\[ K_{\\text{cm}} = \\left( \\frac{m}{M + m} \\right) K_{\\text{Lab}} \\].",
     "image": null,
@@ -219,7 +219,7 @@
     "sText": "The kinetic energy of the centre of mass is \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) v_{\\text{cm}}^2. \\] Substituting \\( v_{\\text{cm}} = \\frac{mv}{m + M} \\), we get \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{cm}} = \\frac{1}{2} \\left( \\frac{m^2 v^2}{m + M} \\right) = \\frac{1}{2} m v^2 \\left( \\frac{m}{m + M} \\right). \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{m}{m + M} \\right). \\]"
   },
   {
-    "qType": "Subjective",
+    "qType": "Passage",
     "passageId": "P15",
     "qText": "(c) If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) required to cause an endoergic reaction, show that \\[ K_{\\text{th}} = -Q \\left( 1 + \\frac{m}{M} \\right). \\]",
     "image": null,
