@@ -7,265 +7,263 @@
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(1).png",
+    "image": "1 (1).png",
     "qOptions": [],
     "qAnswer": "C",
-    "stext": null,
-    "simage": "1.png"
+    "sText": null,
+    "sImage": "1.png"
   },
   {
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(2).png",
+    "image": "1 (2).png",
     "qOptions": [],
     "qAnswer": "A",
-    "stext": null,
-    "simage": "2.png"
+    "sText": null,
+    "sImage": "2.png"
   },
   {
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(3).png",
+    "image": "1 (3).png",
     "qOptions": [],
     "qAnswer": "A",
-    "stext": null,
-    "simage": "3.png"
+    "sText": null,
+    "sImage": "3.png"
   },
   {
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(4).png",
+    "image": "1 (4).png",
     "qOptions": [],
     "qAnswer": "D",
-    "stext": null,
-    "simage": "4.png"
+    "sText": null,
+    "sImage": "4.png"
   },
   {
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(5).png",
+    "image": "1 (5).png",
     "qOptions": [],
     "qAnswer": "A",
-    "stext": null,
-    "simage": "5.png"
+    "sText": null,
+    "sImage": "5.png"
   },
   {
     "qType": "SMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(6).png",
+    "image": "1 (6).png",
     "qOptions": [],
     "qAnswer": "A",
-    "stext": null,
-    "simage": "6.png"
+    "sText": null,
+    "sImage": "6.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(7).png",
+    "image": "1 (7).png",
     "qOptions": [],
     "qAnswer": ["A", "B", "C", "D"],
-    "stext": null,
-    "simage": "7.png"
+    "sText": null,
+    "sImage": "7.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(8).png",
+    "image": "1 (8).png",
     "qOptions": [],
     "qAnswer": ["A", "B", "C"],
-    "stext": null,
-    "simage": "8.png"
+    "sText": null,
+    "sImage": "8.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(9).png",
+    "image": "1 (9).png",
     "qOptions": [],
     "qAnswer": ["A", "C", "D"],
-    "stext": null,
-    "simage": "9.png"
+    "sText": null,
+    "sImage": "9.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(10).png",
+    "image": "1 (10).png",
     "qOptions": [],
     "qAnswer": ["A", "B", "D"],
-    "stext": null,
-    "simage": "10.png"
+    "sText": null,
+    "sImage": "10.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(11).png",
+    "image": "1 (11).png",
     "qOptions": [],
     "qAnswer": ["B", "C", "D"],
-    "stext": null,
-    "simage": "11.png"
+    "sText": null,
+    "sImage": "11.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(12).png",
+    "image": "1 (12).png",
     "qOptions": [],
     "qAnswer": ["A", "C"],
-    "stext": null,
-    "simage": "12.png"
+    "sText": null,
+    "sImage": "12.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(13).png",
+    "image": "1 (13).png",
     "qOptions": [],
     "qAnswer": ["A", "B", "C"],
-    "stext": null,
-    "simage": "13.png"
+    "sText": null,
+    "sImage": "13.png"
   },
   {
     "qType": "MMCQ",
     "passageId": null,
     "qText": null,
-    "image": "1(14).png",
+    "image": "1 (14).png",
     "qOptions": [],
     "qAnswer": ["A", "C"],
-    "stext": null,
-    "simage": "14.png"
+    "sText": null,
+    "sImage": "14.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(15).png",
+    "image": "1 (15).png",
     "qOptions": [],
     "qAnswer": 7,
-    "stext": null,
-    "simage": "15.png"
+    "sText": null,
+    "sImage": "15.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(16).png",
+    "image": "1 (16).png",
     "qOptions": [],
     "qAnswer": 3,
-    "stext": null,
-    "simage": "16.png"
+    "sText": null,
+    "sImage": "16.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(17).png",
+    "image": "1 (17).png",
     "qOptions": [],
     "qAnswer": 10.23,
-    "stext": null,
-    "simage": "17.png"
+    "sText": null,
+    "sImage": "17.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(18).png",
+    "image": "1 (18).png",
     "qOptions": [],
     "qAnswer": 3.5,
-    "stext": null,
-    "simage": "18.png"
+    "sText": null,
+    "sImage": "18.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(19).png",
+    "image": "1 (19).png",
     "qOptions": [],
     "qAnswer": 0,
-    "stext": null,
-    "simage": "19.png"
+    "sText": null,
+    "sImage": "19.png"
   },
   {
     "qType": "Numerical",
     "passageId": null,
     "qText": null,
-    "image": "1(20).png",
+    "image": "1 (20).png",
     "qOptions": [],
     "qAnswer": 4,
-    "stext": null,
-    "simage": "20.png"
+    "sText": null,
+    "sImage": "20.png"
   },
-    {
+  {
     "qType": "Passage",
     "passageId": "P1",
     "qText": null,
-    "image": "P1.png",
+    "image": null,
     "qOptions": [],
     "qAnswer": [],
-    "stext": null,
-    "simage": null
+    "sText": null,
+    "sImage": null
   },
   {
     "qType": "SMCQ",
     "passageId": "P1",
     "qText": null,
-    "image": "1(21).png",
+    "image": "1 (21).png",
     "qOptions": [],
     "qAnswer": "B",
-    "stext": null,
-    "simage": "21.png"
+    "sText": null,
+    "sImage": "21.png"
   },
   {
     "qType": "MMCQ",
     "passageId": "P1",
     "qText": null,
-    "image": "1(22).png",
+    "image": "1 (22).png",
     "qOptions": [],
     "qAnswer": ["C", "D"],
-    "stext": null,
-    "simage": "22.png"
+    "sText": null,
+    "sImage": "22.png"
   },
   {
     "qType": "Passage",
     "passageId": "P2",
     "qText": null,
-    "image": "P2.png",
+    "image": null,
     "qOptions": [],
     "qAnswer": [],
-    "stext": null,
-    "simage": null
+    "sText": null,
+    "sImage": null
   },
   {
     "qType": "MMCQ",
     "passageId": "P2",
     "qText": null,
-    "image": "1(23).png",
+    "image": "1 (23).png",
     "qOptions": [],
     "qAnswer": ["A", "C"],
-    "stext": null,
-    "simage": "23.png"
+    "sText": null,
+    "sImage": "23.png"
   },
   {
     "qType": "MMCQ",
     "passageId": "P2",
     "qText": null,
-    "image": "1(24).png",
+    "image": "1 (24).png",
     "qOptions": [],
     "qAnswer": ["A", "B", "D"],
-    "stext": null,
-    "simage": "24.png"
+    "sText": null,
+    "sImage": "24.png"
   }
-
 ]
-
 
 
 
