@@ -659,9 +659,15 @@ body.suppress-eval-anim input.is-wrong {
    Media & passages
    ========================= */
 .passage-image,
-.question-image {
+.question-image,
+.solution-image,
+#passageImage,
+#questionImage,
+#solutionImage {
   display: flex;
   justify-content: center;
+  background: var(--card-bg);
+  border-radius: 0.5rem;
 }
 
 .passage-image img,
