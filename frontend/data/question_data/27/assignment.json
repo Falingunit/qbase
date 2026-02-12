@@ -1,0 +1,237 @@
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "1.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "2.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "3.png",
+    "qOptions": [],
+    "qAnswer": "A",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "4.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "5.png",
+    "qOptions": [],
+    "qAnswer": "A",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "6.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "7.png",
+    "qOptions": [],
+    "qAnswer": "C",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "8.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "9.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "10.png",
+    "qOptions": [],
+    "qAnswer": "B",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "11.png",
+    "qOptions": [],
+    "qAnswer": "A",
+    "sText": null
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "12.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "C",
+      "D"
+    ],
+    "sText": null
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "13.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "sText": null
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "14.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C"
+    ],
+    "sText": null
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "15.png",
+    "qOptions": [],
+    "qAnswer": [
+      "B",
+      "C"
+    ],
+    "sText": null
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": null,
+    "image": "p1.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": null,
+    "image": "16.png",
+    "qOptions": [],
+    "qAnswer": "C",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": null,
+    "image": "17.png",
+    "qOptions": [],
+    "qAnswer": "D",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": null,
+    "image": "18.png",
+    "qOptions": [],
+    "qAnswer": "D",
+    "sText": null
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": null,
+    "image": "19.png",
+    "qOptions": [
+      "P-q, Q-p, R-s, S-r",
+      "P-p, Q-q, R-s, S-r",
+      "P-q, Q-s, R-p, S-r",
+      "P-r, Q-p, R-s, S-q"
+    ],
+    "qAnswer": "A",
+    "sText": null
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": null,
+    "image": "20.png",
+    "qOptions": [],
+    "qAnswer": 0,
+    "sText": null
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": null,
+    "image": "21.png",
+    "qOptions": [],
+    "qAnswer": 0,
+    "sText": null
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": null,
+    "image": "22.png",
+    "qOptions": [],
+    "qAnswer": 0,
+    "sText": null
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": null,
+    "image": "23.png",
+    "qOptions": [],
+    "qAnswer": 0,
+    "sText": null
+  }
+]

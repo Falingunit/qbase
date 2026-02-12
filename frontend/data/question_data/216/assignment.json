@@ -1,251 +1,264 @@
-
 {
-  "questions":
-
-[
-  {
-    "qType": "SMCQ",
-    "passageId": null,
-    "qText": "The figure represents the observed intensity of X-rays emitted by two different tubes A and B as a function of wavelength \\(\\lambda\\). For tube A, the potential difference between the filament and target is \\(V_A\\) and atomic number of target is \\(Z_A\\). For tube B, corresponding potential difference is \\(V_B\\) and the atomic number is \\(Z_B\\). The solid curve is for tube A and dotted curve for tube B, then",
-    "image": "1.png",
-    "qOptions": [
-      "\\(Z_A > Z_B,\\; V_A > V_B\\)",
-      "\\(Z_A = Z_B,\\; V_A = V_B\\)",
-      "\\(Z_A < Z_B,\\; V_A > V_B\\)",
-      "\\(Z_A < Z_B,\\; V_A < V_B\\)"
-    ],
-    "qAnswer": "C"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": null,
-    "qText": "The diagram shows the energy levels for an electron in a certain atom. Which transition shows the emission of a photon with the most energy?",
-    "image": "2.png",
-    "qOptions": ["I", "II", "III", "IV"],
-    "qAnswer": "C"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": null,
-    "qText": "Consider the electronic energy level diagram of H-atom. The photons associated with shortest and longest wavelength would be emitted from the atom by the transitions labelled",
-    "image": "3.png",
-    "qOptions": [
-      "D and C respectively",
-      "C and A respectively",
-      "C and D respectively",
-      "A and C respectively"
-    ],
-    "qAnswer": "C"
-  },
-  {
-    "qType": "MMCQ",
-    "passageId": null,
-    "qText": "Consider an atom whose energy level diagram is shown in figure. Suppose an atom starts at level 3 then",
-    "image": "4.png",
-    "qOptions": [
-      "Shortest wavelength photon the atom can emit is \\(1.24 \\times 10^{-7}\\,\\text{m}\\)",
-      "Longest wavelength photon that it can absorb is \\(6.2 \\times 10^{-7}\\,\\text{m}\\)",
-      "Lowest frequency photon that can ionize the atom is \\(3.62 \\times 10^{15}\\,\\text{Hz}\\)",
-      "The number of ways of de-excitation of atom to ground state is 3"
-    ],
-    "qAnswer": ["A", "B", "C"]
-  },
-  {
-    "qType": "MMCQ",
-    "passageId": null,
-    "qText": "The ground state and first excited state energies of hydrogen atom are \\(-13.6\\,\\text{eV}\\) and \\(-3.4\\,\\text{eV}\\) respectively. If potential energy in ground state is taken to be zero, then",
-    "image": null,
-    "qOptions": [
-      "Potential energy in ground state would be \\(20.4\\,\\text{eV}\\)",
-      "Total energy in the first excited state would be \\(23.8\\,\\text{eV}\\)",
-      "Kinetic energy in the first excited state would be \\(3.4\\,\\text{eV}\\)",
-      "Total energy in the ground state would be \\(13.6\\,\\text{eV}\\)"
-    ],
-    "qAnswer": ["A", "B", "C", "D"]
-  },
-  {
-    "qType": "MMCQ",
-    "passageId": null,
-    "qText": "Total energy of electron in the first orbit of hydrogen atom is equal to the",
-    "image": null,
-    "qOptions": [
-      "Total energy of electron in 2nd orbit of \\(\\ce{He^+}\\)",
-      "Total energy of electron in 3rd orbit of \\(\\ce{He^+}\\)",
-      "Total energy of electron in 2nd orbit of \\(\\ce{Li^{2+}}\\)",
-      "Total energy of electron in 3rd orbit of \\(\\ce{Li^{2+}}\\)"
-    ],
-    "qAnswer": ["A", "D"]
-  },
-  {
-    "qType": "MMCQ",
-    "passageId": null,
-    "qText": "Let \\(A_n\\) be the area enclosed by the \\(n^{\\text{th}}\\) orbit in a hydrogen atom. The graph of \\(\\log_e\\left(\\frac{A_n}{A_1}\\right)\\) against \\(\\log_e n\\)",
-    "image": null,
-    "qOptions": [
-      "Will pass through the origin",
-      "Will have a slope of four units at all points",
-      "Will be a monotonically increasing nonlinear curve",
-      "Will be a straight line"
-    ],
-    "qAnswer": ["A", "B", "D"]
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P1",
-    "qText": "In quantum mechanics, some quantities are discrete and cannot be continuous. One of these quantities is the energy. Energy can only take certain values like \\(E_1, E_2, E_3, E_4, \\ldots\\) which are called energy levels. The energy cannot take any values between \\(E_1\\) and \\(E_2\\) or \\(E_2\\) and \\(E_3\\), etc. Certain transitions from one energy level to another result in the emission of a photon of radiation, whereas others can only take place if a photon is absorbed. The energy levels in a newly discovered gas are expressed as \\[E_n = -\\frac{E_1 Z^2}{n^2}\\] where \\(-E_1 Z^2\\) is the ground state energy. Taking \\(Z = 1\\) for simplicity, the results obtained in the experiment are given in the table: \\(n = 2, E_n = -144\\,\\text{eV};\\ n = 3, E_n = -64\\,\\text{eV};\\ n = 4, E_n = -36\\,\\text{eV}.\\)",
-    "image": "p1.png",
-    "qOptions": [],
-    "qAnswer": []
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P1",
-    "qText": "The ionization energy of the gas is",
-    "image": null,
-    "qOptions": ["244 eV", "576 eV", "144 eV", "+13.6 eV"],
-    "qAnswer": "B"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P1",
-    "qText": "The ground state energy is",
-    "image": null,
-    "qOptions": ["−144 eV", "+144 eV", "−244 eV", "None of these"],
-    "qAnswer": "D"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P1",
-    "qText": "The graph of \\(E_n\\) versus \\(\\frac{1}{n^2}\\) is best represented as",
-    "image": "p1a.png",
-    "qOptions": ["A", "B", "C", "D"],
-    "qAnswer": "A"
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P2",
-    "qText": "According to Bohr’s theoretical model, the nucleus of the hydrogen atom is infinitely heavy when compared with the electron and so it remains stationary while the electron revolves around it. However, practically, the nucleus has a finite mass, and both the electron and the nucleus revolve about their common centre of mass with a common angular velocity \\(\\omega\\). Let \\(m\\) be the mass of electron, \\(M_H\\) be the mass of hydrogen nucleus and \\(r\\) the separation between them. Based on the information provided, answer the following questions.",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": []
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P2",
-    "qText": "The angular momentum of the atom will be constant about an axis passing through",
-    "image": null,
-    "qOptions": [
-      "Nucleus",
-      "Electron",
-      "Centre of mass of the atom",
-      "Any axis perpendicular to the joining the electron and nucleus"
-    ],
-    "qAnswer": "C"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P2",
-    "qText": "The angular momentum of the atom about the centre of mass will be",
-    "image": null,
-    "qOptions": [
-      "\\(m r^2 \\omega\\)",
-      "\\(m (r-x)^2 \\omega\\)",
-      "\\(\\frac{(M_H+m)^2}{M_H m} r^2 \\omega\\)",
-      "\\(\\frac{M_H m}{M_H+m} r^2 \\omega\\)"
-    ],
-    "qAnswer": "D"
-  },
-  {
-    "qType": "SMCQ",
-    "passageId": "P2",
-    "qText": "The new ground state energy of electron will be",
-    "image": null,
-    "qOptions": [
-      "More than that found with Bohr’s theoretical model",
-      "Equal to that found with Bohr’s theoretical model",
-      "Smaller than that found with Bohr’s theoretical model",
-      "Data insufficient to arrive at a conclusion"
-    ],
-    "qAnswer": "A"
-  },
-  {
-  "qType": "SMCQ",
-  "passageId": null,
-  "qText": "Square root of frequency \\(\\sqrt{\\nu}\\) versus atomic number \\(Z\\) graph for characteristic X-rays is as shown in the figure. Match the lines with the corresponding X-ray transitions.",
-  "image": "14.png",
-  "qOptions": [
-    "A–s, B–r, C–q, D–p",
-    "A–r, B–s, C–q, D–p",
-    "A–q, B–r, C–s, D–p",
-    "A–s, B–q, C–r, D–p"
-  ],
-  "qAnswer": "A"
-},
-
-  {
-    "qType": "Passage",
-    "passageId": "P3",
-    "qText": "A particle having mass \\(m\\), kinetic energy measured in the Lab frame collides head-on with a stationary nucleus of mass \\(M\\). If \\(K_{\\text{cm}}\\) is the total kinetic energy of the system with respect to the centre of mass frame, then show that \\[K_{\\text{cm}} = \\left( \\frac{M}{M+m} \\right) K_{\\text{Lab}}\\] If \\(K_{\\text{cm}}\\) is the total kinetic energy of the centre of mass in the lab frame, show that \\[K_{\\text{cm}} = \\left( \\frac{m}{M+m} \\right) K_{\\text{Lab}}\\] If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) to cause an endoergic reaction in the above situation, show that \\[K_{\\text{th}} = -Q \\left(1 + \\frac{m}{M} \\right)\\]",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": []
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P15",
-    "qText": "A particle having mass \\(m\\), kinetic energy measured in the Lab Frame collides head-on with a stationary nucleus of mass \\(M\\). Let \\(K_{\\text{wrt cm}}\\) be the total kinetic energy of the system with respect to the centre of mass frame (i.e., the energy available to cause the reaction). Let \\(K_{\\text{cm}}\\) be the total kinetic energy of the centre of mass in the lab frame. If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) required to cause an endoergic reaction, answer the following questions using both the Lab frame (L-frame) and the Centre of Mass frame.",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": []
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P15",
-    "qText": "(a) Show that the total kinetic energy of the system with respect to the centre of mass frame is given by \\[ K_{\\text{wrt cm}} = \\left( \\frac{M}{M + m} \\right) K_{\\text{Lab}} \\].",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": null,
-    "sImage": null,
-    "sText": "The velocity of the centre of mass of the system is \\[ v_{\\text{cm}} = \\frac{mv + M(0)}{m + M} = \\frac{mv}{m + M}. \\] Let \\(v'_m\\) be the velocity of mass \\(m\\) with respect to the centre of mass and \\(v'_M\\) be the velocity of mass \\(M\\) with respect to the centre of mass. Then \\[ v'_m = v - v_{\\text{cm}} = v - \\left( \\frac{mv}{m + M} \\right) = \\frac{Mv}{m + M}, \\] and \\[ v'_M = 0 - \\frac{mv}{m + M} = -\\frac{mv}{m + M}. \\] In the centre of mass frame, the kinetic energy is \\[ K_{\\text{wrt cm}} = \\frac{1}{2} m (v'_m)^2 + \\frac{1}{2} M (v'_M)^2. \\] Substituting the above expressions, \\[ K_{\\text{wrt cm}} = \\frac{m}{2} \\left( \\frac{Mv}{m + M} \\right)^2 + \\frac{M}{2} \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{wrt cm}} = \\frac{1}{2} \\left( \\frac{Mm}{m + M} \\right) v^2 = \\frac{1}{2} \\mu v^2, \\] where the reduced mass \\(\\mu\\) is given by \\[ \\mu = \\frac{mM}{m + M}. \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{wrt cm}} = K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right). \\]"
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P15",
-    "qText": "(b) Show that the total kinetic energy of the centre of mass in the lab frame is given by \\[ K_{\\text{cm}} = \\left( \\frac{m}{M + m} \\right) K_{\\text{Lab}} \\].",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": null,
-    "sImage": null,
-    "sText": "The kinetic energy of the centre of mass is \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) v_{\\text{cm}}^2. \\] Substituting \\( v_{\\text{cm}} = \\frac{mv}{m + M} \\), we get \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{cm}} = \\frac{1}{2} \\left( \\frac{m^2 v^2}{m + M} \\right) = \\frac{1}{2} m v^2 \\left( \\frac{m}{m + M} \\right). \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{m}{m + M} \\right). \\]"
-  },
-  {
-    "qType": "Passage",
-    "passageId": "P15",
-    "qText": "(c) If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) required to cause an endoergic reaction, show that \\[ K_{\\text{th}} = -Q \\left( 1 + \\frac{m}{M} \\right). \\]",
-    "image": null,
-    "qOptions": [],
-    "qAnswer": null,
-    "sImage": null,
-    "sText": "From the Lab frame, the kinetic energy of the centre of mass is \\[ K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{m}{m + M} \\right). \\] This energy is carried by the centre of mass and is therefore not available to be dissipated in the reaction. Hence, the available energy is \\[ K_0 = K_{\\text{Lab}} - K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right). \\] For an endoergic reaction, the available energy must be equal to the magnitude of the \\(Q\\)-value, i.e., \\( K_0 = -Q \\). Thus, \\[ K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right) = -Q. \\] Solving for the threshold kinetic energy, we obtain \\[ K_{\\text{th}} = -Q \\left( 1 + \\frac{m}{M} \\right). \\]"
-  }
-]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  "questions": [
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The figure represents the observed intensity of X-rays emitted by two different tubes A and B as a function of wavelength \\(\\lambda\\). For tube A, the potential difference between the filament and target is \\(V_A\\) and atomic number of target is \\(Z_A\\). For tube B, corresponding potential difference is \\(V_B\\) and the atomic number is \\(Z_B\\). The solid curve is for tube A and dotted curve for tube B, then",
+      "image": "1.png",
+      "qOptions": [
+        "\\(Z_A > Z_B,\\; V_A > V_B\\)",
+        "\\(Z_A = Z_B,\\; V_A = V_B\\)",
+        "\\(Z_A < Z_B,\\; V_A > V_B\\)",
+        "\\(Z_A < Z_B,\\; V_A < V_B\\)"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "The diagram shows the energy levels for an electron in a certain atom. Which transition shows the emission of a photon with the most energy?",
+      "image": "2.png",
+      "qOptions": [
+        "I",
+        "II",
+        "III",
+        "IV"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Consider the electronic energy level diagram of H-atom. The photons associated with shortest and longest wavelength would be emitted from the atom by the transitions labelled",
+      "image": "3.png",
+      "qOptions": [
+        "D and C respectively",
+        "C and A respectively",
+        "C and D respectively",
+        "A and C respectively"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Consider an atom whose energy level diagram is shown in figure. Suppose an atom starts at level 3 then",
+      "image": "4.png",
+      "qOptions": [
+        "Shortest wavelength photon the atom can emit is \\(1.24 \\times 10^{-7}\\,\\text{m}\\)",
+        "Longest wavelength photon that it can absorb is \\(6.2 \\times 10^{-7}\\,\\text{m}\\)",
+        "Lowest frequency photon that can ionize the atom is \\(3.62 \\times 10^{15}\\,\\text{Hz}\\)",
+        "The number of ways of de-excitation of atom to ground state is 3"
+      ],
+      "qAnswer": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "The ground state and first excited state energies of hydrogen atom are \\(-13.6\\,\\text{eV}\\) and \\(-3.4\\,\\text{eV}\\) respectively. If potential energy in ground state is taken to be zero, then",
+      "image": null,
+      "qOptions": [
+        "Potential energy in ground state would be \\(20.4\\,\\text{eV}\\)",
+        "Total energy in the first excited state would be \\(23.8\\,\\text{eV}\\)",
+        "Kinetic energy in the first excited state would be \\(3.4\\,\\text{eV}\\)",
+        "Total energy in the ground state would be \\(13.6\\,\\text{eV}\\)"
+      ],
+      "qAnswer": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Total energy of electron in the first orbit of hydrogen atom is equal to the",
+      "image": null,
+      "qOptions": [
+        "Total energy of electron in 2nd orbit of \\(\\ce{He^+}\\)",
+        "Total energy of electron in 3rd orbit of \\(\\ce{He^+}\\)",
+        "Total energy of electron in 2nd orbit of \\(\\ce{Li^{2+}}\\)",
+        "Total energy of electron in 3rd orbit of \\(\\ce{Li^{2+}}\\)"
+      ],
+      "qAnswer": [
+        "A",
+        "D"
+      ]
+    },
+    {
+      "qType": "MMCQ",
+      "passageId": null,
+      "qText": "Let \\(A_n\\) be the area enclosed by the \\(n^{\\text{th}}\\) orbit in a hydrogen atom. The graph of \\(\\log_e\\left(\\frac{A_n}{A_1}\\right)\\) against \\(\\log_e n\\)",
+      "image": null,
+      "qOptions": [
+        "Will pass through the origin",
+        "Will have a slope of four units at all points",
+        "Will be a monotonically increasing nonlinear curve",
+        "Will be a straight line"
+      ],
+      "qAnswer": [
+        "A",
+        "B",
+        "D"
+      ]
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P1",
+      "qText": "In quantum mechanics, some quantities are discrete and cannot be continuous. One of these quantities is the energy. Energy can only take certain values like \\(E_1, E_2, E_3, E_4, \\ldots\\) which are called energy levels. The energy cannot take any values between \\(E_1\\) and \\(E_2\\) or \\(E_2\\) and \\(E_3\\), etc. Certain transitions from one energy level to another result in the emission of a photon of radiation, whereas others can only take place if a photon is absorbed. The energy levels in a newly discovered gas are expressed as \\[E_n = -\\frac{E_1 Z^2}{n^2}\\] where \\(-E_1 Z^2\\) is the ground state energy. Taking \\(Z = 1\\) for simplicity, the results obtained in the experiment are given in the table: \\(n = 2, E_n = -144\\,\\text{eV};\\ n = 3, E_n = -64\\,\\text{eV};\\ n = 4, E_n = -36\\,\\text{eV}.\\)",
+      "image": "p1.png",
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The ionization energy of the gas is",
+      "image": null,
+      "qOptions": [
+        "244 eV",
+        "576 eV",
+        "144 eV",
+        "+13.6 eV"
+      ],
+      "qAnswer": "B"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The ground state energy is",
+      "image": null,
+      "qOptions": [
+        "−144 eV",
+        "+144 eV",
+        "−244 eV",
+        "None of these"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P1",
+      "qText": "The graph of \\(E_n\\) versus \\(\\frac{1}{n^2}\\) is best represented as",
+      "image": "p1a.png",
+      "qOptions": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P2",
+      "qText": "According to Bohr’s theoretical model, the nucleus of the hydrogen atom is infinitely heavy when compared with the electron and so it remains stationary while the electron revolves around it. However, practically, the nucleus has a finite mass, and both the electron and the nucleus revolve about their common centre of mass with a common angular velocity \\(\\omega\\). Let \\(m\\) be the mass of electron, \\(M_H\\) be the mass of hydrogen nucleus and \\(r\\) the separation between them. Based on the information provided, answer the following questions.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "The angular momentum of the atom will be constant about an axis passing through",
+      "image": null,
+      "qOptions": [
+        "Nucleus",
+        "Electron",
+        "Centre of mass of the atom",
+        "Any axis perpendicular to the joining the electron and nucleus"
+      ],
+      "qAnswer": "C"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "The angular momentum of the atom about the centre of mass will be",
+      "image": null,
+      "qOptions": [
+        "\\(m r^2 \\omega\\)",
+        "\\(m (r-x)^2 \\omega\\)",
+        "\\(\\frac{(M_H+m)^2}{M_H m} r^2 \\omega\\)",
+        "\\(\\frac{M_H m}{M_H+m} r^2 \\omega\\)"
+      ],
+      "qAnswer": "D"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": "P2",
+      "qText": "The new ground state energy of electron will be",
+      "image": null,
+      "qOptions": [
+        "More than that found with Bohr’s theoretical model",
+        "Equal to that found with Bohr’s theoretical model",
+        "Smaller than that found with Bohr’s theoretical model",
+        "Data insufficient to arrive at a conclusion"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "SMCQ",
+      "passageId": null,
+      "qText": "Square root of frequency \\(\\sqrt{\\nu}\\) versus atomic number \\(Z\\) graph for characteristic X-rays is as shown in the figure. Match the lines with the corresponding X-ray transitions.",
+      "image": "14.png",
+      "qOptions": [
+        "A–s, B–r, C–q, D–p",
+        "A–r, B–s, C–q, D–p",
+        "A–q, B–r, C–s, D–p",
+        "A–s, B–q, C–r, D–p"
+      ],
+      "qAnswer": "A"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P3",
+      "qText": "A particle having mass \\(m\\), kinetic energy measured in the Lab frame collides head-on with a stationary nucleus of mass \\(M\\). If \\(K_{\\text{cm}}\\) is the total kinetic energy of the system with respect to the centre of mass frame, then show that \\[K_{\\text{cm}} = \\left( \\frac{M}{M+m} \\right) K_{\\text{Lab}}\\] If \\(K_{\\text{cm}}\\) is the total kinetic energy of the centre of mass in the lab frame, show that \\[K_{\\text{cm}} = \\left( \\frac{m}{M+m} \\right) K_{\\text{Lab}}\\] If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) to cause an endoergic reaction in the above situation, show that \\[K_{\\text{th}} = -Q \\left(1 + \\frac{m}{M} \\right)\\]",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P15",
+      "qText": "A particle having mass \\(m\\), kinetic energy measured in the Lab Frame collides head-on with a stationary nucleus of mass \\(M\\). Let \\(K_{\\text{wrt cm}}\\) be the total kinetic energy of the system with respect to the centre of mass frame (i.e., the energy available to cause the reaction). Let \\(K_{\\text{cm}}\\) be the total kinetic energy of the centre of mass in the lab frame. If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) required to cause an endoergic reaction, answer the following questions using both the Lab frame (L-frame) and the Centre of Mass frame.",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": []
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P15",
+      "qText": "(a) Show that the total kinetic energy of the system with respect to the centre of mass frame is given by \\[ K_{\\text{wrt cm}} = \\left( \\frac{M}{M + m} \\right) K_{\\text{Lab}} \\].",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": null,
+      "sImage": null,
+      "sText": "The velocity of the centre of mass of the system is \\[ v_{\\text{cm}} = \\frac{mv + M(0)}{m + M} = \\frac{mv}{m + M}. \\] Let \\(v'_m\\) be the velocity of mass \\(m\\) with respect to the centre of mass and \\(v'_M\\) be the velocity of mass \\(M\\) with respect to the centre of mass. Then \\[ v'_m = v - v_{\\text{cm}} = v - \\left( \\frac{mv}{m + M} \\right) = \\frac{Mv}{m + M}, \\] and \\[ v'_M = 0 - \\frac{mv}{m + M} = -\\frac{mv}{m + M}. \\] In the centre of mass frame, the kinetic energy is \\[ K_{\\text{wrt cm}} = \\frac{1}{2} m (v'_m)^2 + \\frac{1}{2} M (v'_M)^2. \\] Substituting the above expressions, \\[ K_{\\text{wrt cm}} = \\frac{m}{2} \\left( \\frac{Mv}{m + M} \\right)^2 + \\frac{M}{2} \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{wrt cm}} = \\frac{1}{2} \\left( \\frac{Mm}{m + M} \\right) v^2 = \\frac{1}{2} \\mu v^2, \\] where the reduced mass \\(\\mu\\) is given by \\[ \\mu = \\frac{mM}{m + M}. \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{wrt cm}} = K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right). \\]"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P15",
+      "qText": "(b) Show that the total kinetic energy of the centre of mass in the lab frame is given by \\[ K_{\\text{cm}} = \\left( \\frac{m}{M + m} \\right) K_{\\text{Lab}} \\].",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": null,
+      "sImage": null,
+      "sText": "The kinetic energy of the centre of mass is \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) v_{\\text{cm}}^2. \\] Substituting \\( v_{\\text{cm}} = \\frac{mv}{m + M} \\), we get \\[ K_{\\text{cm}} = \\frac{1}{2} (m + M) \\left( \\frac{mv}{m + M} \\right)^2. \\] This simplifies to \\[ K_{\\text{cm}} = \\frac{1}{2} \\left( \\frac{m^2 v^2}{m + M} \\right) = \\frac{1}{2} m v^2 \\left( \\frac{m}{m + M} \\right). \\] Since \\( K_{\\text{Lab}} = \\frac{1}{2} m v^2 \\), we obtain \\[ K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{m}{m + M} \\right). \\]"
+    },
+    {
+      "qType": "Passage",
+      "passageId": "P15",
+      "qText": "(c) If \\(K_{\\text{th}}\\) is the minimum kinetic energy (threshold energy) required to cause an endoergic reaction, show that \\[ K_{\\text{th}} = -Q \\left( 1 + \\frac{m}{M} \\right). \\]",
+      "image": null,
+      "qOptions": [],
+      "qAnswer": null,
+      "sImage": null,
+      "sText": "From the Lab frame, the kinetic energy of the centre of mass is \\[ K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{m}{m + M} \\right). \\] This energy is carried by the centre of mass and is therefore not available to be dissipated in the reaction. Hence, the available energy is \\[ K_0 = K_{\\text{Lab}} - K_{\\text{cm}} = K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right). \\] For an endoergic reaction, the available energy must be equal to the magnitude of the \\(Q\\)-value, i.e., \\( K_0 = -Q \\). Thus, \\[ K_{\\text{Lab}} \\left( \\frac{M}{m + M} \\right) = -Q. \\] Solving for the threshold kinetic energy, we obtain \\[ K_{\\text{th}} = -Q \\left( 1 + \\frac{m}{M} \\right). \\]"
+    }
+  ]
 }
