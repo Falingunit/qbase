@@ -673,6 +673,18 @@ body.suppress-eval-anim input.is-wrong {
   cursor: pointer;
 }
 
+/* Keep assignment/PYQ content images readable on dark backgrounds. */
+#questionText img,
+#MCQOptionDiv .opt-text img,
+#passageText img,
+#solutionText img,
+#questionImage img,
+#solutionImage img,
+#image-overlay .io-img {
+  filter: invert(1);
+  mix-blend-mode: screen;
+}
+
 img,
 video {
   max-inline-size: 100%;

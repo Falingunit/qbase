@@ -1,2 +1,14 @@
 [
-]
+      {
+        "subject": "Physics",
+        "chapter": "4. Kinematics",
+        "title": "Displacement/Velocity Worksheet A",
+        "wID": "physics-emi-worksheet"
+      },
+      {
+        "subject": "Chemistry",
+        "chapter": "Stoichiometry",
+        "title": "Mole Concept Practice",
+        "wID": "chemistry-stoichiometry-mole-concept"
+      }
+    ]

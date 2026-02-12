@@ -567,7 +567,7 @@
                   const b = document.getElementById('filters-info-btn');
                   if (b) b.classList.remove('d-none');
                 } catch {}
-                // Invert images for dark theme readability (matches original pyqs page)
+                // Match content-image treatment used across assignment/PYQ pages.
                 try {
                   const style = document.createElement('style');
                   style.textContent = [
@@ -576,8 +576,10 @@
                     '#passageText img,',
                     '#solutionText img,',
                     '#questionImage img,',
-                    '#solutionImage img {',
-                    '  filter: invert(1) hue-rotate(180deg) contrast(1.05);',
+                    '#solutionImage img,',
+                    '#image-overlay .io-img {',
+                    '  filter: invert(1);',
+                    '  mix-blend-mode: screen;',
                     '}'
                   ].join('\n');
                   document.head.appendChild(style);
