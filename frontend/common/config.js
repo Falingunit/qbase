@@ -53,9 +53,9 @@ function parseEnvText(text) {
   return out;
 }
 
-async function tryLoadEnvConfig() {
+async function tryLoadEnvConfig(path = "./.env") {
   try {
-    const res = await fetch("./.env", { cache: "no-store" });
+    const res = await fetch(path, { cache: "no-store" });
     if (!res.ok) return null;
     const txt = await res.text();
     const parsed = parseEnvText(txt);
@@ -65,31 +65,22 @@ async function tryLoadEnvConfig() {
   }
 }
 
-async function tryLoadJsonConfig() {
-  try {
-    const res = await fetch("./config.json", { cache: "no-store" });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
-}
-
 async function loadConfig() {
   // Priority:
   // 1) .env (local/private),
-  // 2) config.json on GitHub Pages publish,
+  // 2) .env.ghpages on GitHub Pages publish,
   // 3) built-in defaults (LOCAL_MODE=true).
   const envConfig = await tryLoadEnvConfig();
-  const jsonConfig = envConfig ? null : await tryLoadJsonConfig();
+  const ghPagesEnvConfig =
+    envConfig || !isGithubPagesHost() ? null : await tryLoadEnvConfig("./.env.ghpages");
   let config = { ...DEFAULT_CONFIG };
   let source = "defaults";
   if (envConfig) {
     config = { ...config, ...envConfig };
     source = ".env";
-  } else if (isGithubPagesHost() && jsonConfig) {
-    config = { ...config, ...jsonConfig };
-    source = "config.json";
+  } else if (ghPagesEnvConfig) {
+    config = { ...config, ...ghPagesEnvConfig };
+    source = ".env.ghpages";
   }
 
   try { window.CONFIG_SOURCE = source; } catch {}

@@ -33,5 +33,5 @@ Local development tips
 - If you serve from a path other than `/qbase/`, either keep the folder name as `qbase` at the server root or remove the `<base href="/qbase/">` line in the relevant pages during local testing.
 - Config load priority is:
   1. `frontend/.env` (local/private, not committed),
-  2. `frontend/config.json` on GitHub Pages publish,
+  2. `frontend/.env.ghpages` on GitHub Pages publish,
   3. built-in defaults in `common/config.js` (same values, but `LOCAL_MODE=true`).
