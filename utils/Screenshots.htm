@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SnipLab — Fast Page Selections → PNG Zip</title>
+    <title>SnipLab - Fast Page Selections to PNG ZIP</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000'/%3E%3Cpath d='M16 18h20a4 4 0 0 1 4 4v4h4a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4v-4h-4a4 4 0 0 1-4-4V22a4 4 0 0 1 4-4Z' fill='%23fff'/%3E%3C/svg%3E"
@@ -82,6 +82,10 @@
       button:hover {
         background: #232a34;
       }
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
       button:active {
         transform: translateY(1px);
       }
@@ -91,6 +95,13 @@
       }
       button.primary:hover {
         background: #2a3950;
+      }
+      select {
+        background: var(--panel-2);
+        color: var(--ink);
+        border: 1px solid #2a303a;
+        border-radius: 10px;
+        padding: 0.35rem 0.5rem;
       }
       .kbd {
         background: #11161d;
@@ -317,13 +328,13 @@
       </div>
 
       <div class="group">
-        <button id="prevBtn" title="Previous page (K / PgUp)">◀</button>
-        <button id="nextBtn" title="Next page (J / PgDn)">▶</button>
-        <div class="pill">Active page: <span id="activeIndex">–</span></div>
+        <button id="prevBtn" title="Previous page (K / PgUp)">&#9664;</button>
+        <button id="nextBtn" title="Next page (J / PgDn)">&#9654;</button>
+        <div class="pill">Active page: <span id="activeIndex">-</span></div>
       </div>
 
       <div class="group">
-        <button id="zoomOut" title="Zoom out (-)">–</button>
+        <button id="zoomOut" title="Zoom out (-)">-</button>
         <input id="zoom" type="range" min="10" max="400" value="100" />
         <button id="zoomIn" title="Zoom in (+)">+</button>
         <button id="zoomReset" title="Reset zoom (0)">100%</button>
@@ -351,6 +362,13 @@
           Crosshair
         </button>
         <button id="newBox" title="New selection at center (N)">New Box</button>
+        <label for="exportScale" class="pill">Export:
+          <select id="exportScale" title="PNG export scale">
+            <option value="1">1x</option>
+            <option value="2" selected>2x</option>
+            <option value="3">3x</option>
+          </select>
+        </label>
         <button id="helpBtn" title="Show shortcuts (?)">?</button>
       </div>
 
@@ -402,8 +420,7 @@
         <div><span class="kbd">R</span> Rename selected label</div>
         <div><span class="kbd">Del</span> Delete selected box</div>
         <div>
-          <span class="kbd">←↑→↓</span> Nudge (hold
-          <span class="kbd">Shift</span> ×10)
+          <span class="kbd">&#8592;&#8593;&#8594;&#8595;</span> Nudge (hold <span class="kbd">Shift</span> x10)
         </div>
         <div><span class="kbd">Ctrl/Cmd+Z</span> Undo</div>
         <div>
@@ -444,7 +461,14 @@
         const nextLabelEl = document.getElementById("nextLabel");
         const histStateEl = document.getElementById("histState");
         const liveEl = document.getElementById("live");
+        const exportScaleEl = document.getElementById("exportScale");
         let dragFromIndex = null;
+        const STORAGE_KEY = "sniplab.sessions.v1";
+        const MAX_SAVED_SESSIONS = 50;
+        const PDF_RENDER_SCALE = 2.5;
+        let currentSessionKey = null;
+        let saveTimer = null;
+        let isRestoringSession = false;
         let draggedThumb = null;
 
         // Toolbar controls
@@ -495,6 +519,7 @@
           history.undo.push(action);
           history.redo.length = 0;
           updateHistoryUI();
+          scheduleSessionSave();
         }
         function updateHistoryUI() {
           histStateEl.textContent = `${history.undo.length} / ${history.redo.length}`;
@@ -506,16 +531,17 @@
         }
 
         function updateToolbar() {
-          document.getElementById("pageCount").textContent = state.pages.length;
+          pageCountEl.textContent = state.pages.length;
           activeIndexEl.textContent = state.pages.length
             ? state.activePage + 1
-            : "–";
+            : "-";
           pToggleBtn.textContent = `p-mode: ${state.pMode ? "ON" : "OFF"}`;
           pToggleBtn.style.background = state.pMode ? "#2a3d2f" : "#243040";
           pToggleBtn.style.borderColor = state.pMode ? "#355a41" : "#2e3b4e";
           nextLabelEl.textContent = nextLabel();
           zoomResetBtn.textContent = Math.round(state.zoom * 100) + "%";
           updateHistoryUI();
+          if (!isRestoringSession) scheduleSessionSave();
         }
 
         function nextLabel() {
@@ -550,11 +576,15 @@
 
         // ---------- Loading ----------
         openBtn.addEventListener("click", () => fileEl.click());
-        fileEl.addEventListener("change", handleFiles);
-
-        async function handleFiles(e) {
+        fileEl.addEventListener("change", async (e) => {
           const files = [...(e.target.files || [])];
+          await loadFiles(files);
+          fileEl.value = "";
+        });
+
+        async function loadFiles(files) {
           if (!files.length) return;
+          currentSessionKey = computeSessionKey(files);
 
           // Reset current doc
           pagesEl.innerHTML = "";
@@ -585,13 +615,13 @@
             }
           }
 
+          restoreSession();
           updateToolbar();
           if (state.pages.length) {
             zoomToFitWidth();
             scrollToPage(0, false);
           }
         }
-
         function measuredCSSSize(maxWidth = 1040) {
           const container = pagesEl.getBoundingClientRect();
           const pad = 24;
@@ -669,7 +699,7 @@
 
           for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const viewport = page.getViewport({ scale: 1.5 });
+            const viewport = page.getViewport({ scale: PDF_RENDER_SCALE });
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d", { willReadFrequently: true });
             canvas.width = viewport.width;
@@ -1336,6 +1366,10 @@
           }
           const zip = new JSZip();
           const seen = new Set();
+          const exportScale = Math.max(
+            1,
+            Math.min(4, parseFloat(exportScaleEl?.value || "2"))
+          );
 
           const selections = getAllSelections();
           if (!selections.length) {
@@ -1368,14 +1402,36 @@
             const sh = Math.round(rectNorm.h * factor);
 
             const out = document.createElement("canvas");
-            out.width = Math.max(1, sw);
-            out.height = Math.max(1, sh);
+            out.width = Math.max(1, Math.round(sw * exportScale));
+            out.height = Math.max(1, Math.round(sh * exportScale));
             const ctx = out.getContext("2d");
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
 
             if (p.type === "image") {
-              ctx.drawImage(p.imgEl, sx, sy, sw, sh, 0, 0, sw, sh);
+              ctx.drawImage(
+                p.imgEl,
+                sx,
+                sy,
+                sw,
+                sh,
+                0,
+                0,
+                out.width,
+                out.height
+              );
             } else {
-              ctx.drawImage(p.canvasEl, sx, sy, sw, sh, 0, 0, sw, sh);
+              ctx.drawImage(
+                p.canvasEl,
+                sx,
+                sy,
+                sw,
+                sh,
+                0,
+                0,
+                out.width,
+                out.height
+              );
             }
 
             const blob = await new Promise((res) =>
@@ -1447,6 +1503,7 @@
           }
           history.redo.push(action);
           updateHistoryUI();
+          scheduleSessionSave();
         }
 
         function redo() {
@@ -1487,6 +1544,7 @@
           }
           history.undo.push(action);
           updateHistoryUI();
+          scheduleSessionSave();
         }
 
         // ---------- Keyboard shortcuts ----------
@@ -1667,6 +1725,114 @@
           helpPanel.style.display =
             helpPanel.style.display === "block" ? "none" : "block";
         }
+        function computeSessionKey(files) {
+          const signature = files
+            .map((f) => `${f.name}|${f.size}|${f.lastModified}|${f.type}`)
+            .sort()
+            .join("||");
+          return `set:${hashString(signature)}`;
+        }
+
+        function hashString(input) {
+          let hash = 5381;
+          for (let i = 0; i < input.length; i++) {
+            hash = (hash * 33) ^ input.charCodeAt(i);
+          }
+          return (hash >>> 0).toString(36);
+        }
+
+        function scheduleSessionSave() {
+          if (!currentSessionKey || !state.pages.length || isRestoringSession) {
+            return;
+          }
+          clearTimeout(saveTimer);
+          saveTimer = setTimeout(saveSession, 250);
+        }
+
+        function saveSession() {
+          if (!currentSessionKey || !state.pages.length) return;
+          try {
+            const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+            const selections = getAllSelections().map(({ pageIndex, node }) => ({
+              pageIndex,
+              rect: getRect(node),
+              label: node.querySelector(".label").textContent.trim() || "untitled",
+              id: node.dataset.id,
+            }));
+
+            store[currentSessionKey] = {
+              savedAt: Date.now(),
+              normalCounter: state.normalCounter,
+              pIndex: state.pIndex,
+              pMode: state.pMode,
+              pSuffixMap: state.pSuffixMap,
+              boxIdCounter: state.boxIdCounter,
+              selections,
+            };
+
+            const keysByAge = Object.keys(store).sort(
+              (a, b) => (store[b]?.savedAt || 0) - (store[a]?.savedAt || 0)
+            );
+            for (const key of keysByAge.slice(MAX_SAVED_SESSIONS)) {
+              delete store[key];
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+          } catch (err) {
+            console.warn("Session save failed:", err);
+          }
+        }
+
+        function restoreSession() {
+          if (!currentSessionKey) return;
+          try {
+            const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+            const session = store[currentSessionKey];
+            if (!session) return;
+
+            isRestoringSession = true;
+            state.normalCounter = Math.max(1, Number(session.normalCounter) || 1);
+            state.pIndex = Math.max(1, Number(session.pIndex) || 1);
+            state.pMode = !!session.pMode;
+            state.pSuffixMap =
+              session.pSuffixMap && typeof session.pSuffixMap === "object"
+                ? session.pSuffixMap
+                : {};
+            state.boxIdCounter = Math.max(1, Number(session.boxIdCounter) || 1);
+
+            const selections = Array.isArray(session.selections)
+              ? session.selections
+              : [];
+            for (const s of selections) {
+              if (
+                !s ||
+                typeof s.pageIndex !== "number" ||
+                s.pageIndex < 0 ||
+                s.pageIndex >= state.pages.length
+              ) {
+                continue;
+              }
+              const p = state.pages[s.pageIndex];
+              const rect = s.rect || {};
+              const x = Number(rect.x);
+              const y = Number(rect.y);
+              const w = Number(rect.w);
+              const h = Number(rect.h);
+              if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
+                continue;
+              }
+              createSelection(
+                p.node.boxes,
+                { x, y, w, h },
+                sanitizeLabel(s.label || "untitled") || "untitled",
+                s.id
+              );
+            }
+          } catch (err) {
+            console.warn("Session restore failed:", err);
+          } finally {
+            isRestoringSession = false;
+          }
+        }
 
         // ---------- Utils ----------
         function updateAllBoxesPositions() {
@@ -1692,3 +1858,4 @@
     </script>
   </body>
 </html>
+
