@@ -1,5 +1,20 @@
 let API_BASE = "";
 
+const DEFAULT_CONFIG = {
+  API_BASE: "https://qbase.103.125.154.215.nip.io",
+  DEV_API_BASE: "http://10.0.0.1:3000",
+  LOCAL_MODE: true,
+  LOCAL_API_BASE: "http://localhost:3000",
+};
+
+function isGithubPagesHost() {
+  try {
+    return /\.github\.io$/i.test(location.hostname || "");
+  } catch {
+    return false;
+  }
+}
+
 function detectDev() {
   try {
     const qs = new URLSearchParams(location.search);
@@ -14,10 +29,70 @@ function detectDev() {
   }
 }
 
+function parseEnvText(text) {
+  const out = {};
+  const lines = String(text || "").split(/\r?\n/);
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const eq = line.indexOf("=");
+    if (eq <= 0) continue;
+    const key = line.slice(0, eq).trim();
+    let value = line.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    const low = value.toLowerCase();
+    if (low === "true") out[key] = true;
+    else if (low === "false") out[key] = false;
+    else out[key] = value;
+  }
+  return out;
+}
+
+async function tryLoadEnvConfig() {
+  try {
+    const res = await fetch("./.env", { cache: "no-store" });
+    if (!res.ok) return null;
+    const txt = await res.text();
+    const parsed = parseEnvText(txt);
+    return Object.keys(parsed).length ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+async function tryLoadJsonConfig() {
+  try {
+    const res = await fetch("./config.json", { cache: "no-store" });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
 async function loadConfig() {
-  // Always bypass HTTP cache for config to pick up updates immediately
-  const res = await fetch("./config.json", { cache: "no-store" });
-  const config = await res.json();
+  // Priority:
+  // 1) .env (local/private),
+  // 2) config.json on GitHub Pages publish,
+  // 3) built-in defaults (LOCAL_MODE=true).
+  const envConfig = await tryLoadEnvConfig();
+  const jsonConfig = envConfig ? null : await tryLoadJsonConfig();
+  let config = { ...DEFAULT_CONFIG };
+  let source = "defaults";
+  if (envConfig) {
+    config = { ...config, ...envConfig };
+    source = ".env";
+  } else if (isGithubPagesHost() && jsonConfig) {
+    config = { ...config, ...jsonConfig };
+    source = "config.json";
+  }
+
+  try { window.CONFIG_SOURCE = source; } catch {}
   // Expose optional version for cache-busting elsewhere if needed
   try { window.CONFIG_VERSION = config.version || config.VERSION || null; } catch {}
 
