@@ -310,9 +310,16 @@
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
-    "chapter": "LCD",
-    "title": "ADV assignment 1",
+    "chapter": "SPT-2 Revision",
+    "title": "LCD 1",
     "aID": 217
+  },
+    {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "LCD 2",
+    "aID": 33
   },
   {
     "subject": "Mathematics",
