@@ -173,7 +173,7 @@
   {
     "qType": "Passage",
     "passageId": "P1",
-    "qText": null,
+    "qText": "",
     "image": "p1.png",
     "qOptions": [],
     "qAnswer": []
@@ -199,7 +199,7 @@
   {
     "qType": "Passage",
     "passageId": "P2",
-    "qText": null,
+    "qText": "",
     "image": "p2.png",
     "qOptions": [],
     "qAnswer": []

@@ -1,0 +1,11 @@
+{
+  "name": "snip-doc-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local server for SnipLab document discovery and page serving",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  }
+}

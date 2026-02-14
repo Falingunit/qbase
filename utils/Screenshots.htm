@@ -57,7 +57,13 @@
         background: rgba(10, 12, 16, 0.75);
         backdrop-filter: blur(10px);
         border-bottom: 1px solid #222831;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+      }
+      .toolbar::-webkit-scrollbar {
+        display: none;
       }
       .toolbar .group {
         display: flex;
@@ -136,6 +142,70 @@
         height: 100%;
         padding: 1.25rem;
         scroll-behavior: smooth;
+        position: relative;
+      }
+      .empty-state {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        z-index: 15;
+      }
+      .empty-state[hidden] {
+        display: none;
+      }
+      .empty-card {
+        pointer-events: auto;
+        text-align: center;
+        background: #121a24;
+        border: 1px solid #2d3c4f;
+        border-radius: 12px;
+        padding: 1rem 1.1rem;
+        box-shadow: var(--shadow);
+      }
+      .empty-card p {
+        margin: 0 0 0.7rem;
+        color: var(--muted);
+      }
+      .loading-mask {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(8, 12, 18, 0.62);
+        backdrop-filter: blur(2px);
+        z-index: 50;
+      }
+      .loading-mask[hidden] {
+        display: none;
+      }
+      .loading-card {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        background: #121a24;
+        border: 1px solid #2d3c4f;
+        border-radius: 10px;
+        padding: 0.6rem 0.8rem;
+        color: var(--ink);
+        box-shadow: var(--shadow);
+        font-size: 13px;
+      }
+      .loading-spinner {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 2px solid #4f647d;
+        border-top-color: #9fd0ff;
+        animation: spin 0.75s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
       .pages {
         width: min(1200px, 96%);
@@ -143,7 +213,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 22px;
+        gap: 0;
+        position: relative;
       }
       .page {
         position: relative;
@@ -166,6 +237,41 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
+      }
+      .page-break-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 25;
+      }
+      .page-break-mark {
+        position: absolute;
+        width: 12px;
+        height: 3px;
+        border-radius: 3px;
+        background: rgba(15, 21, 31, 0.78);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25);
+        cursor: pointer;
+        pointer-events: auto;
+      }
+      .page-break-mark.left {
+        left: 0;
+      }
+      .page-break-mark.right {
+        right: 0;
+      }
+      .page-break-label {
+        position: absolute;
+        transform: translateY(-50%);
+        background: rgba(14, 20, 30, 0.88);
+        border: 1px solid #314358;
+        color: #e8eef6;
+        font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+        padding: 0.12rem 0.35rem;
+        border-radius: 999px;
+        white-space: nowrap;
+        cursor: pointer;
+        pointer-events: auto;
       }
       /* draw layer only renders the ghost; it does NOT capture events */
       .draw-layer {
@@ -204,10 +310,58 @@
         border-radius: 6px;
         pointer-events: auto;
         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset;
+        z-index: 1;
+      }
+      .selection.polygon {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        pointer-events: auto;
+      }
+      .selection.polygon.selected {
+        outline: none;
+      }
+      .selection .poly-fill {
+        display: none;
+      }
+      .selection .poly-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+      }
+      .selection .poly-shape {
+        fill: rgba(122, 162, 255, 0.2);
+        stroke: var(--blue);
+        stroke-width: 2;
+        pointer-events: visibleFill;
+        cursor: move;
+      }
+      .selection.polygon.edge-insert-cue .poly-shape {
+        cursor: copy;
+      }
+      .selection .poly-vertex {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        margin-left: -6px;
+        margin-top: -6px;
+        border-radius: 50%;
+        border: 1px solid #001220;
+        background: #66d9ef;
+        cursor: grab;
+        z-index: 4;
+        pointer-events: auto;
+        touch-action: none;
+      }
+      .selection .poly-vertex:active {
+        cursor: grabbing;
       }
       .selection.selected {
         outline: 2px dashed #7cf;
         outline-offset: 2px;
+        z-index: 3;
       }
       .label {
         position: absolute;
@@ -232,6 +386,19 @@
         border: 2px dashed var(--warn);
         background: rgba(255, 204, 102, 0.12);
         border-radius: 8px;
+      }
+      .ghost-global {
+        position: absolute;
+        border: 2px dashed var(--warn);
+        background: rgba(255, 204, 102, 0.12);
+        border-radius: 8px;
+        pointer-events: none;
+        z-index: 20;
+      }
+      .poly-draft {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
       }
       /* Tiny footer/help */
       .help {
@@ -271,11 +438,51 @@
         font-size: 12px;
         color: var(--muted);
       }
+      .doc-pill {
+        max-width: 250px;
+      }
+      .doc-ticker {
+        display: inline-block;
+        max-width: 160px;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
+      }
+      #docName {
+        display: inline-block;
+        white-space: nowrap;
+      }
+      #docName.scrolling {
+        animation: doc-name-marquee var(--doc-marquee-duration, 8s)
+          linear infinite alternate;
+      }
+      @keyframes doc-name-marquee {
+        0%,
+        15% {
+          transform: translateX(0);
+        }
+        85%,
+        100% {
+          transform: translateX(calc(-1 * var(--doc-marquee-shift, 0px)));
+        }
+      }
+      .save-indicator[data-state="saving"] {
+        border-color: #5f4b24;
+        background: #2d2414;
+        color: #ffdca3;
+      }
+      .save-indicator[data-state="saved"] {
+        border-color: #294a34;
+        background: #182a1f;
+        color: #b8f0c9;
+      }
+      .save-indicator[data-state="error"] {
+        border-color: #5a2b2b;
+        background: #321b1b;
+        color: #ffc6c6;
+      }
       .thumbs {
-        display: flex;
-        gap: 0.4rem;
-        overflow: auto;
-        padding: 0.5rem;
+        display: none !important;
       }
       .thumbs img {
         height: 70px;
@@ -309,33 +516,143 @@
         -moz-user-select: none;
         -webkit-user-drag: none;
       }
+      .doc-modal[hidden] {
+        display: none;
+      }
+      .doc-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.58);
+        backdrop-filter: blur(4px);
+      }
+      .doc-dialog {
+        width: min(860px, 94vw);
+        max-height: min(80vh, 760px);
+        background: #11161d;
+        border: 1px solid #2a3442;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .doc-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 0.85rem;
+        border-bottom: 1px solid #253041;
+        background: #151c26;
+      }
+      .doc-body {
+        padding: 0.75rem;
+        overflow: auto;
+      }
+      .doc-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin: 0 0 0.65rem;
+      }
+      .doc-controls button {
+        border-radius: 8px;
+        border: 1px solid #304055;
+        background: #1a2432;
+        color: var(--ink);
+        padding: 0.35rem 0.55rem;
+        cursor: pointer;
+      }
+      .doc-controls .count {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .doc-search {
+        width: 100%;
+        margin-bottom: 0.75rem;
+        background: #0f141c;
+        color: var(--ink);
+        border: 1px solid #2a3442;
+        border-radius: 8px;
+        padding: 0.5rem 0.65rem;
+      }
+      .doc-tree {
+        font-size: 13px;
+      }
+      .doc-tree details {
+        margin: 0.12rem 0;
+      }
+      .doc-tree summary {
+        cursor: pointer;
+        color: #c4d0de;
+        list-style: none;
+        border-radius: 8px;
+        padding: 0.3rem 0.45rem;
+      }
+      .doc-tree summary:hover {
+        background: #18212c;
+      }
+      .doc-tree summary::-webkit-details-marker {
+        display: none;
+      }
+      .doc-tree summary::before {
+        content: "▸";
+        display: inline-block;
+        width: 1em;
+        color: #8ea4bf;
+      }
+      .doc-tree details[open] > summary::before {
+        content: "▾";
+      }
+      .doc-tree .branch {
+        margin-left: 0.7rem;
+        border-left: 1px dashed #2a3442;
+        padding-left: 0.55rem;
+      }
+      .doc-tree .doc-leaf {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: calc(100% - 0.2rem);
+        margin: 0.2rem 0 0.2rem 0.1rem;
+        background: #17202b;
+        border: 1px solid #2a3442;
+        border-radius: 8px;
+        color: var(--ink);
+        padding: 0.38rem 0.55rem;
+        cursor: pointer;
+        text-align: left;
+      }
+      .doc-tree .doc-leaf:hover {
+        background: #223044;
+        border-color: #3d5370;
+      }
+      .doc-tree .doc-leaf .meta {
+        color: var(--muted);
+        font-size: 12px;
+        margin-left: 0.75rem;
+      }
     </style>
   </head>
   <body>
     <div class="toolbar" role="toolbar" aria-label="SnipLab toolbar">
       <div class="group">
-        <input
-          id="file"
-          type="file"
-          accept="image/*,application/pdf"
-          style="display: none"
-          multiple
-        />
-        <button id="openBtn" title="Open files (Ctrl/Cmd+O)">
-          <span>Open</span> <span class="kbd">Ctrl/Cmd+O</span>
-        </button>
+        <button id="openDocsBtn" title="Open document browser">Docs</button>
+        <button id="refreshDocsBtn" title="Refresh document list">Refresh</button>
+        <div class="pill doc-pill">
+          Doc: <span class="doc-ticker"><span id="docName">No document loaded</span></span>
+        </div>
         <div class="pill">Pages: <span id="pageCount">0</span></div>
       </div>
 
       <div class="group">
-        <button id="prevBtn" title="Previous page (K / PgUp)">&#9664;</button>
-        <button id="nextBtn" title="Next page (J / PgDn)">&#9654;</button>
-        <div class="pill">Active page: <span id="activeIndex">-</span></div>
-      </div>
-
-      <div class="group">
         <button id="zoomOut" title="Zoom out (-)">-</button>
-        <input id="zoom" type="range" min="10" max="400" value="100" />
+        <input id="zoom" type="range" min="10" max="800" value="100" />
         <button id="zoomIn" title="Zoom in (+)">+</button>
         <button id="zoomReset" title="Reset zoom (0)">100%</button>
       </div>
@@ -358,10 +675,12 @@
         >
           Export ZIP
         </button>
-        <button id="toggleCrosshair" title="Toggle crosshair (H)">
-          Crosshair
+        <button
+          id="exportSelectedBtn"
+          title="Export selected polygon only (Shift+E)"
+        >
+          Export Selected
         </button>
-        <button id="newBox" title="New selection at center (N)">New Box</button>
         <label for="exportScale" class="pill">Export:
           <select id="exportScale" title="PNG export scale">
             <option value="1">1x</option>
@@ -373,16 +692,47 @@
       </div>
 
       <div class="group">
-        <button id="undoBtn" title="Undo (Ctrl/Cmd+Z)">Undo</button>
-        <button id="redoBtn" title="Redo (Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y)">
-          Redo
+        <button id="undoBtn" title="Undo (Ctrl/Cmd+Z)" aria-label="Undo">
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M10 7H6.83l2.58-2.59L8 3 3 8l5 5 1.41-1.41L6.83 9H10c4.41 0 8 3.59 8 8h2c0-5.52-4.48-10-10-10z"
+              fill="currentColor"
+            />
+          </svg>
         </button>
+        <button
+          id="redoBtn"
+          title="Redo (Ctrl/Cmd+Shift+Z or Ctrl/Cmd+Y)"
+          aria-label="Redo"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M14 7h3.17l-2.58-2.59L16 3l5 5-5 5-1.41-1.41L17.17 9H14c-4.41 0-8 3.59-8 8H4c0-5.52 4.48-10 10-10z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+        <div class="pill save-indicator" id="saveState" data-state="saved">
+          Saved
+        </div>
         <div class="pill">History: <span id="histState">0 / 0</span></div>
       </div>
     </div>
 
     <div class="wrap">
       <div class="viewer" id="viewer" tabindex="0">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-card">
+            <p>Load a document from PDF Screenshots</p>
+            <button id="emptyOpenDocsBtn" class="primary" type="button">Docs</button>
+          </div>
+        </div>
+        <div id="loadingMask" class="loading-mask" hidden>
+          <div class="loading-card">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <span id="loadingText">Loading document...</span>
+          </div>
+        </div>
         <div class="thumbs" id="thumbs" aria-label="Page thumbnails"></div>
         <div
           class="pages"
@@ -396,8 +746,8 @@
     <div class="help" id="help">
       <h3>Shortcuts</h3>
       <div class="grid">
-        <div><span class="kbd">Ctrl/Cmd+O</span> Open files</div>
         <div><span class="kbd">E</span> Export ZIP</div>
+        <div><span class="kbd">Shift+E</span> Export selected polygon</div>
         <div>
           <span class="kbd">+</span>/<span class="kbd">-</span> Zoom in/out
         </div>
@@ -415,8 +765,6 @@
           <span class="kbd">A</span> / <span class="kbd">D</span> Decrement /
           Increment next label
         </div>
-        <div><span class="kbd">N</span> New box (center)</div>
-        <div><span class="kbd">H</span> Toggle crosshair</div>
         <div><span class="kbd">R</span> Rename selected label</div>
         <div><span class="kbd">Del</span> Delete selected box</div>
         <div>
@@ -433,6 +781,28 @@
         Tip: Click-drag on a page to draw a selection. Double-click a label to
         edit. Selections are movable/resizable.
       </p>
+    </div>
+    <div class="doc-modal" id="docModal" hidden>
+      <div class="doc-dialog" role="dialog" aria-modal="true" aria-label="Document Browser">
+        <div class="doc-head">
+          <strong>Documents</strong>
+          <button id="closeDocModalBtn" title="Close document browser">Close</button>
+        </div>
+        <div class="doc-body">
+          <input
+            id="docSearch"
+            class="doc-search"
+            type="search"
+            placeholder="Search folders or document names..."
+          />
+          <div class="doc-controls">
+            <button id="expandDocsBtn" type="button">Expand all</button>
+            <button id="collapseDocsBtn" type="button">Collapse all</button>
+            <span id="docMatchCount" class="count"></span>
+          </div>
+          <div id="docTree" class="doc-tree" aria-live="polite"></div>
+        </div>
+      </div>
     </div>
 
     <span class="sr" id="live" aria-live="polite"></span>
@@ -455,38 +825,97 @@
         const pagesEl = document.getElementById("pages");
         const thumbsEl = document.getElementById("thumbs");
         const viewerEl = document.getElementById("viewer");
-        const fileEl = document.getElementById("file");
+        const emptyStateEl = document.getElementById("emptyState");
+        const emptyOpenDocsBtn = document.getElementById("emptyOpenDocsBtn");
+        const loadingMaskEl = document.getElementById("loadingMask");
+        const loadingTextEl = document.getElementById("loadingText");
         const pageCountEl = document.getElementById("pageCount");
-        const activeIndexEl = document.getElementById("activeIndex");
         const nextLabelEl = document.getElementById("nextLabel");
         const histStateEl = document.getElementById("histState");
         const liveEl = document.getElementById("live");
+        const docNameEl = document.getElementById("docName");
+        const docTickerEl = document.querySelector(".doc-ticker");
         const exportScaleEl = document.getElementById("exportScale");
+        const openDocsBtn = document.getElementById("openDocsBtn");
+        const refreshDocsBtn = document.getElementById("refreshDocsBtn");
+        const docModalEl = document.getElementById("docModal");
+        const closeDocModalBtn = document.getElementById("closeDocModalBtn");
+        const docSearchEl = document.getElementById("docSearch");
+        const docTreeEl = document.getElementById("docTree");
+        const expandDocsBtn = document.getElementById("expandDocsBtn");
+        const collapseDocsBtn = document.getElementById("collapseDocsBtn");
+        const docMatchCountEl = document.getElementById("docMatchCount");
+        const saveStateEl = document.getElementById("saveState");
         let dragFromIndex = null;
         const STORAGE_KEY = "sniplab.sessions.v1";
         const MAX_SAVED_SESSIONS = 50;
         const PDF_RENDER_SCALE = 2.5;
+        const DEFAULT_API_BASE = "http://localhost:3030";
         let currentSessionKey = null;
+        let currentDocId = null;
+        let currentDocName = "No document loaded";
+        let serverDocs = [];
+        const expandedDocFolders = new Set();
+        let mergedPageTopOffsets = [];
+        let pageBreakLayerEl = null;
         let saveTimer = null;
+        let saveStateTimer = null;
+        let serverSaveInFlight = false;
+        const pendingServerSaves = new Map();
         let isRestoringSession = false;
         let draggedThumb = null;
 
         // Toolbar controls
-        const openBtn = document.getElementById("openBtn");
-        const prevBtn = document.getElementById("prevBtn");
-        const nextBtn = document.getElementById("nextBtn");
         const zoomSlider = document.getElementById("zoom");
         const zoomInBtn = document.getElementById("zoomIn");
         const zoomOutBtn = document.getElementById("zoomOut");
         const zoomResetBtn = document.getElementById("zoomReset");
         const pToggleBtn = document.getElementById("pToggle");
         const exportBtn = document.getElementById("exportBtn");
+        const exportSelectedBtn = document.getElementById("exportSelectedBtn");
         const helpBtn = document.getElementById("helpBtn");
         const helpPanel = document.getElementById("help");
-        const toggleCrosshairBtn = document.getElementById("toggleCrosshair");
-        const newBoxBtn = document.getElementById("newBox");
         const undoBtn = document.getElementById("undoBtn");
         const redoBtn = document.getElementById("redoBtn");
+
+        function getApiBase() {
+          if (location.protocol === "file:") {
+            const saved = localStorage.getItem("sniplab.apiBase");
+            return saved || DEFAULT_API_BASE;
+          }
+          return "";
+        }
+
+        function apiUrl(pathname) {
+          const base = getApiBase();
+          return base ? `${base}${pathname}` : pathname;
+        }
+
+        function setLoading(isLoading, message = "Loading document...") {
+          if (!loadingMaskEl) return;
+          if (loadingTextEl) loadingTextEl.textContent = message;
+          loadingMaskEl.hidden = !isLoading;
+          viewerEl.setAttribute("aria-busy", isLoading ? "true" : "false");
+          updateEmptyState();
+        }
+
+        function setExportLoading(isLoading, message = "Exporting ZIP...") {
+          setLoading(isLoading, message);
+        }
+
+        function setSaveStatus(state, text) {
+          if (!saveStateEl) return;
+          saveStateEl.dataset.state = state;
+          saveStateEl.textContent = text;
+        }
+
+        function setSaveStatusSavedSoon(text = "Saved") {
+          clearTimeout(saveStateTimer);
+          setSaveStatus("saved", text);
+          saveStateTimer = setTimeout(() => {
+            setSaveStatus("saved", "Saved");
+          }, 1800);
+        }
 
         const state = {
           pages: [], // {type:'image'|'pdf', baseCSSWidth, baseCSSHeight, pixelW, pixelH, node:{...}}
@@ -508,6 +937,12 @@
           undo: [],
           redo: [],
         };
+        const polygonDraft = {
+          pageNode: null,
+          points: [],
+          cursor: null,
+        };
+        let vertexDrag = null;
         function updateThumbMeta() {
           [...thumbsEl.children].forEach((img, i) => {
             img.alt = `Page ${i + 1}`;
@@ -531,17 +966,54 @@
         }
 
         function updateToolbar() {
-          pageCountEl.textContent = state.pages.length;
-          activeIndexEl.textContent = state.pages.length
-            ? state.activePage + 1
-            : "-";
+          pageCountEl.textContent = getLogicalPageCount();
+          docNameEl.textContent = currentDocName;
+          updateDocNameTicker();
           pToggleBtn.textContent = `p-mode: ${state.pMode ? "ON" : "OFF"}`;
           pToggleBtn.style.background = state.pMode ? "#2a3d2f" : "#243040";
           pToggleBtn.style.borderColor = state.pMode ? "#355a41" : "#2e3b4e";
           nextLabelEl.textContent = nextLabel();
           zoomResetBtn.textContent = Math.round(state.zoom * 100) + "%";
           updateHistoryUI();
-          if (!isRestoringSession) scheduleSessionSave();
+          exportSelectedBtn.disabled =
+            !state.currentSelection || state.currentSelection.dataset.kind !== "polygon";
+          updateEmptyState();
+        }
+
+        function updateEmptyState() {
+          if (!emptyStateEl) return;
+          const isLoading = loadingMaskEl && !loadingMaskEl.hidden;
+          const showEmpty = state.pages.length === 0 && !isLoading;
+          emptyStateEl.hidden = !showEmpty;
+        }
+
+        function updateDocNameTicker() {
+          if (!docNameEl || !docTickerEl) return;
+          requestAnimationFrame(() => {
+            const visible = docTickerEl.clientWidth;
+            const total = docNameEl.scrollWidth;
+            const overflow = Math.max(0, total - visible);
+            if (overflow > 4) {
+              docNameEl.classList.add("scrolling");
+              docNameEl.style.setProperty("--doc-marquee-shift", `${overflow}px`);
+              const duration = Math.max(6, overflow / 18);
+              docNameEl.style.setProperty(
+                "--doc-marquee-duration",
+                `${duration.toFixed(2)}s`
+              );
+            } else {
+              docNameEl.classList.remove("scrolling");
+              docNameEl.style.removeProperty("--doc-marquee-shift");
+              docNameEl.style.removeProperty("--doc-marquee-duration");
+            }
+          });
+        }
+
+        function getLogicalPageCount() {
+          if (state.pages.length === 1 && mergedPageTopOffsets.length > 0) {
+            return mergedPageTopOffsets.length;
+          }
+          return state.pages.length;
         }
 
         function nextLabel() {
@@ -575,53 +1047,316 @@
         }
 
         // ---------- Loading ----------
-        openBtn.addEventListener("click", () => fileEl.click());
-        fileEl.addEventListener("change", async (e) => {
-          const files = [...(e.target.files || [])];
-          await loadFiles(files);
-          fileEl.value = "";
+        openDocsBtn.addEventListener("click", openDocModal);
+        if (emptyOpenDocsBtn) {
+          emptyOpenDocsBtn.addEventListener("click", openDocModal);
+        }
+        refreshDocsBtn.addEventListener("click", fetchServerDocuments);
+        closeDocModalBtn.addEventListener("click", closeDocModal);
+        docModalEl.addEventListener("click", (e) => {
+          if (e.target === docModalEl) closeDocModal();
+        });
+        docSearchEl.addEventListener("input", renderDocTree);
+        expandDocsBtn.addEventListener("click", () => {
+          docTreeEl
+            .querySelectorAll("details[data-path]")
+            .forEach((d) => expandedDocFolders.add(d.getAttribute("data-path")));
+          renderDocTree();
+        });
+        collapseDocsBtn.addEventListener("click", () => {
+          expandedDocFolders.clear();
+          renderDocTree();
+        });
+        function openDocModal() {
+          docModalEl.hidden = false;
+          docSearchEl.focus();
+          renderDocTree();
+        }
+
+        function closeDocModal() {
+          docModalEl.hidden = true;
+        }
+
+        async function fetchServerDocuments() {
+          try {
+            const res = await fetch(apiUrl("/api/snip-docs"));
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const payload = await res.json();
+            serverDocs = Array.isArray(payload.documents) ? payload.documents : [];
+            renderDocTree();
+          } catch (err) {
+            console.warn("Failed to fetch snip documents:", err);
+            serverDocs = [];
+            docTreeEl.innerHTML = '<div class="pill">Server unavailable</div>';
+          }
+        }
+
+        function renderDocTree() {
+          const q = String(docSearchEl.value || "").trim().toLowerCase();
+          const filtered = q
+            ? serverDocs.filter((d) =>
+                String(d.relativePath || "").toLowerCase().includes(q)
+              )
+            : serverDocs.slice();
+
+          if (!filtered.length) {
+            docTreeEl.innerHTML = '<div class="pill">No matching documents</div>';
+            docMatchCountEl.textContent = "0 documents";
+            return;
+          }
+          docMatchCountEl.textContent = `${filtered.length} document${
+            filtered.length === 1 ? "" : "s"
+          }`;
+
+          const root = { children: {}, docs: [] };
+          for (const d of filtered) {
+            const parts = String(d.relativePath || "").split("/").filter(Boolean);
+            let node = root;
+            for (let i = 0; i < parts.length - 1; i++) {
+              const part = parts[i];
+              if (!node.children[part]) node.children[part] = { children: {}, docs: [] };
+              node = node.children[part];
+            }
+            node.docs.push(d);
+          }
+
+          const esc = (s) =>
+            String(s).replace(/[&<>"]/g, (ch) =>
+              ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch])
+            );
+
+          const renderNode = (node, pathParts = []) => {
+            let html = "";
+            const keys = Object.keys(node.children).sort((a, b) =>
+              a.localeCompare(b, undefined, { numeric: true, sensitivity: "base" })
+            );
+            for (const key of keys) {
+              const nextPathParts = pathParts.concat(key);
+              const pathKey = nextPathParts.join("/");
+              const shouldOpen = q ? true : expandedDocFolders.has(pathKey);
+              html += `<details data-path="${esc(pathKey)}" ${
+                shouldOpen ? "open" : ""
+              }><summary>📁 ${esc(key)}</summary><div class="branch">${renderNode(
+                node.children[key],
+                nextPathParts
+              )}</div></details>`;
+            }
+            const docs = node.docs.slice().sort((a, b) =>
+              String(a.name).localeCompare(String(b.name), undefined, {
+                numeric: true,
+                sensitivity: "base",
+              })
+            );
+            for (const d of docs) {
+              html += `<button class="doc-leaf" data-doc-id="${esc(
+                d.id
+              )}" title="${esc(d.relativePath || d.name)}"><span>📄 ${esc(
+                d.name
+              )}</span><span class="meta">${Number(d.pageCount) || 0} pages</span></button>`;
+            }
+            return html;
+          };
+
+          docTreeEl.innerHTML = renderNode(root);
+        }
+
+        docTreeEl.addEventListener("toggle", (e) => {
+          const details = e.target;
+          if (!(details instanceof HTMLDetailsElement)) return;
+          const pathKey = details.getAttribute("data-path");
+          if (!pathKey) return;
+          if (details.open) expandedDocFolders.add(pathKey);
+          else expandedDocFolders.delete(pathKey);
         });
 
-        async function loadFiles(files) {
-          if (!files.length) return;
-          currentSessionKey = computeSessionKey(files);
+        docTreeEl.addEventListener("click", async (e) => {
+          const btn = e.target.closest(".doc-leaf");
+          if (!btn) return;
+          const docId = String(btn.getAttribute("data-doc-id") || "").trim();
+          if (!docId) return;
+          closeDocModal();
+          await loadServerDocumentById(docId);
+        });
 
-          // Reset current doc
+        async function loadServerDocumentById(docId) {
+          setLoading(true, "Loading pages...");
+          pagesEl.style.visibility = "hidden";
+          pagesEl.style.pointerEvents = "none";
+          pagesEl.setAttribute("aria-busy", "true");
+          try {
+            const url = `${apiUrl("/api/snip-docs/pages")}?doc=${encodeURIComponent(
+              docId
+            )}`;
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const payload = await res.json();
+            const pages = Array.isArray(payload.pages) ? payload.pages : [];
+
+            resetCurrentDocument();
+            currentSessionKey = `doc:${docId}`;
+            currentDocId = docId;
+            currentDocName = payload?.document?.relativePath || payload?.document?.name || docId;
+            setLoading(true, `Loading ${pages.length} pages...`);
+            for (const page of pages) {
+              if (!page?.url) continue;
+              await loadImageFromUrl(page.url);
+            }
+            setLoading(true, "Merging pages...");
+            mergeLoadedPagesIntoSinglePage();
+            setLoading(true, "Restoring selections...");
+            const loadedServerSession = await loadServerSession(docId);
+            if (loadedServerSession) {
+              applySessionSnapshot(loadedServerSession);
+            } else {
+              restoreSession();
+            }
+            updateToolbar();
+            if (state.pages.length) {
+              zoomToFitWidth();
+              scrollToPage(0, false, "start");
+            }
+            announce(`Loaded document ${payload?.document?.name || docId}`);
+          } catch (err) {
+            console.error("Failed to load server document:", err);
+            alert("Failed to load document from server.");
+          } finally {
+            pagesEl.style.visibility = "";
+            pagesEl.style.pointerEvents = "";
+            pagesEl.setAttribute("aria-busy", "false");
+            setLoading(false);
+          }
+        }
+
+        function mergeLoadedPagesIntoSinglePage() {
+          if (state.pages.length <= 1) {
+            mergedPageTopOffsets = state.pages.length ? [0] : [];
+            return;
+          }
+          const originalPages = state.pages.slice();
+          const baseCSSWidth = originalPages[0].baseCSSWidth;
+          mergedPageTopOffsets = [];
+          let accCSS = 0;
+          for (const p of originalPages) {
+            mergedPageTopOffsets.push(accCSS);
+            accCSS += p.baseCSSHeight;
+          }
+          const totalBaseCSSHeight = accCSS;
+
+          const factors = originalPages.map((p) => {
+            const sourceW = p.type === "image" ? p.pixelW : p.canvasEl.width;
+            return sourceW / p.baseCSSWidth;
+          });
+          const renderFactor = Math.max(1, ...factors);
+          const mergedPixelW = Math.max(1, Math.round(baseCSSWidth * renderFactor));
+          const mergedPixelH = Math.max(
+            1,
+            Math.round(totalBaseCSSHeight * renderFactor)
+          );
+
+          const mergedCanvas = document.createElement("canvas");
+          mergedCanvas.width = mergedPixelW;
+          mergedCanvas.height = mergedPixelH;
+          const mctx = mergedCanvas.getContext("2d");
+
+          let yPx = 0;
+          for (const p of originalPages) {
+            const src = p.type === "image" ? p.imgEl : p.canvasEl;
+            const drawH = Math.max(1, Math.round(p.baseCSSHeight * renderFactor));
+            mctx.drawImage(src, 0, yPx, mergedPixelW, drawH);
+            yPx += drawH;
+          }
+
           pagesEl.innerHTML = "";
           thumbsEl.innerHTML = "";
           state.pages = [];
           state.activePage = 0;
-          history.undo.length = 0;
-          history.redo.length = 0;
 
-          files.sort((a, b) =>
-            a.name.localeCompare(b.name, undefined, {
-              numeric: true,
-              sensitivity: "base", // case-insensitive
-            })
-          );
+          const mergedShell = createPageShell(baseCSSWidth, totalBaseCSSHeight);
+          mergedCanvas.className = "content";
+          mergedCanvas.style.width = "100%";
+          mergedCanvas.style.height = "100%";
+          mergedCanvas.style.display = "block";
+          mergedShell.content.appendChild(mergedCanvas);
 
-          const pdfFile =
-            files.length === 1 && files[0].type === "application/pdf"
-              ? files[0]
-              : null;
+          state.pages.push({
+            type: "pdf",
+            baseCSSWidth,
+            baseCSSHeight: totalBaseCSSHeight,
+            pixelW: mergedPixelW,
+            pixelH: mergedPixelH,
+            node: mergedShell,
+            imgEl: null,
+            canvasEl: mergedCanvas,
+          });
+          makeThumb(0, mergedCanvas, baseCSSWidth, totalBaseCSSHeight);
+          renderMergedPageBreakIndicators();
+        }
 
-          if (pdfFile) {
-            await loadPDF(pdfFile);
-          } else {
-            for (const f of files) {
-              if (!f.type.startsWith("image/")) continue;
-              await loadImageFile(f);
-            }
-          }
-
-          restoreSession();
-          updateToolbar();
-          if (state.pages.length) {
-            zoomToFitWidth();
-            scrollToPage(0, false);
+        function renderMergedPageBreakIndicators() {
+          if (!state.pages.length) return;
+          const p = state.pages[0];
+          const layer = ensurePageBreakLayer();
+          if (!layer) return;
+          layer.innerHTML = "";
+          if (state.pages.length !== 1 || mergedPageTopOffsets.length <= 1) return;
+          const rootBox = p.node.root.getBoundingClientRect();
+          const pagesRect = pagesEl.getBoundingClientRect();
+          const factor = rootBox.width / Math.max(1, p.baseCSSWidth);
+          const rootTop = rootBox.top - pagesRect.top;
+          const rootLeft = rootBox.left - pagesRect.left;
+          const rootRight = rootLeft + rootBox.width;
+          for (let i = 1; i < mergedPageTopOffsets.length; i++) {
+            const y = rootTop + mergedPageTopOffsets[i] * factor;
+            const left = document.createElement("div");
+            left.className = "page-break-mark left";
+            left.setAttribute("data-page-index", String(i));
+            left.style.left = `${rootLeft - 22}px`;
+            left.style.top = `${y}px`;
+            const right = document.createElement("div");
+            right.className = "page-break-mark right";
+            right.setAttribute("data-page-index", String(i));
+            right.style.left = `${rootRight + 10}px`;
+            right.style.top = `${y}px`;
+            const label = document.createElement("div");
+            label.className = "page-break-label";
+            label.setAttribute("data-page-index", String(i));
+            label.textContent = `Page ${i + 1}`;
+            label.style.left = `${rootRight + 28}px`;
+            label.style.top = `${y}px`;
+            layer.appendChild(left);
+            layer.appendChild(right);
+            layer.appendChild(label);
           }
         }
+
+        function ensurePageBreakLayer() {
+          if (pageBreakLayerEl && pageBreakLayerEl.isConnected) return pageBreakLayerEl;
+          pageBreakLayerEl = document.createElement("div");
+          pageBreakLayerEl.className = "page-break-layer";
+          pageBreakLayerEl.addEventListener("click", (e) => {
+            const target = e.target.closest(".page-break-mark, .page-break-label");
+            if (!target) return;
+            const idx = Number(target.getAttribute("data-page-index"));
+            if (!Number.isFinite(idx)) return;
+            scrollToPage(idx, true, "start");
+          });
+          pagesEl.appendChild(pageBreakLayerEl);
+          return pageBreakLayerEl;
+        }
+
+        function resetCurrentDocument() {
+          pagesEl.innerHTML = "";
+          thumbsEl.innerHTML = "";
+          state.pages = [];
+          mergedPageTopOffsets = [];
+          pageBreakLayerEl = null;
+          state.activePage = 0;
+          history.undo.length = 0;
+          history.redo.length = 0;
+          state.currentSelection = null;
+          clearPolygonDraft();
+        }
+
         function measuredCSSSize(maxWidth = 1040) {
           const container = pagesEl.getBoundingClientRect();
           const pad = 24;
@@ -870,6 +1605,14 @@
           boxes.className = "boxes";
           const draw = document.createElement("div");
           draw.className = "draw-layer";
+          const polyDraftSvg = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg"
+          );
+          polyDraftSvg.setAttribute("class", "poly-draft");
+          polyDraftSvg.setAttribute("width", "100%");
+          polyDraftSvg.setAttribute("height", "100%");
+          draw.appendChild(polyDraftSvg);
           const cross = document.createElement("div");
           cross.className = "crosshair-layer";
           const vline = document.createElement("div");
@@ -903,86 +1646,156 @@
           });
           page.addEventListener("mouseleave", () => {
             cross.style.display = "none";
+            if (polygonDraft.pageNode === page) {
+              polygonDraft.cursor = null;
+              renderPolygonDraft();
+            }
           });
 
           // ---------- drawing selections (on PAGE, not the draw-layer) ----------
-          let drawing = null; // {x0,y0, ghost}
+          let dragCandidate = null; // {pageNode,x0,y0,moved}
+          let rectGhost = null;
           page.addEventListener("mousedown", (e) => {
             if (e.button !== 0) return; // left only
             // do not start a draw if clicking an existing selection/label
-            if (e.target.closest(".selection") || e.target.closest(".label"))
-              return;
+            if (e.target.closest(".label")) return;
+            const hitSelection = e.target.closest(".selection");
+            if (hitSelection) {
+              if (hitSelection.dataset.kind !== "polygon") return;
+              if (e.target.closest(".poly-vertex")) return;
+              if (isEventInsidePolygonSelection(e, hitSelection)) return;
+            }
 
             const bounds = page.getBoundingClientRect();
-            drawing = {
+            const pagesRect = pagesEl.getBoundingClientRect();
+            const startPX = e.clientX - pagesRect.left;
+            const startPY = e.clientY - pagesRect.top;
+            dragCandidate = {
               pageNode: page,
               x0: e.clientX - bounds.left,
               y0: e.clientY - bounds.top,
-              ghost: document.createElement("div"),
+              moved: false,
+              startClientX: e.clientX,
+              startClientY: e.clientY,
+              lastClientX: e.clientX,
+              lastClientY: e.clientY,
+              startPageX: startPX,
+              startPageY: startPY,
+              startDoc: clientToDocCoord(e.clientX, e.clientY, page),
             };
-            drawing.ghost.className = "ghost";
-            drawing.ghost.style.left = drawing.x0 + "px";
-            drawing.ghost.style.top = drawing.y0 + "px";
-            draw.appendChild(drawing.ghost);
             // prevent text/image selection while dragging
             document.body.style.userSelect = "none";
             e.preventDefault();
           });
 
+          page.addEventListener("mousemove", (e) => {
+            if (polygonDraft.pageNode === page) {
+              const base = getPageRecordFromNode(page);
+              const r = page.getBoundingClientRect();
+              const factor = base.baseCSSWidth / r.width;
+              polygonDraft.cursor = {
+                x: clamp(e.clientX - r.left, 0, r.width) * factor,
+                y: clamp(e.clientY - r.top, 0, r.height) * factor,
+              };
+              renderPolygonDraft();
+            }
+          });
+
           window.addEventListener("mousemove", (e) => {
-            if (!drawing) return;
-            const bounds = drawing.pageNode.getBoundingClientRect();
-            const x = e.clientX - bounds.left,
-              y = e.clientY - bounds.top;
-            const left = Math.min(drawing.x0, x);
-            const top = Math.min(drawing.y0, y);
-            const w = Math.abs(x - drawing.x0);
-            const h = Math.abs(y - drawing.y0);
-            drawing.ghost.style.left = Math.max(0, left) + "px";
-            drawing.ghost.style.top = Math.max(0, top) + "px";
-            drawing.ghost.style.width = Math.min(bounds.width - left, w) + "px";
-            drawing.ghost.style.height =
-              Math.min(bounds.height - top, h) + "px";
+            if (!dragCandidate) return;
+            dragCandidate.lastClientX = e.clientX;
+            dragCandidate.lastClientY = e.clientY;
+            const pagesRect = pagesEl.getBoundingClientRect();
+            const curPX = e.clientX - pagesRect.left;
+            const curPY = e.clientY - pagesRect.top;
+            const dx = curPX - dragCandidate.startPageX;
+            const dy = curPY - dragCandidate.startPageY;
+            const dist = Math.hypot(dx, dy);
+            if (dist >= 4) {
+              dragCandidate.moved = true;
+            }
+            if (dragCandidate.moved) {
+              if (!rectGhost) {
+                rectGhost = document.createElement("div");
+                rectGhost.className = "ghost-global";
+                pagesEl.appendChild(rectGhost);
+              }
+              const left = Math.min(dragCandidate.startPageX, curPX);
+              const top = Math.min(dragCandidate.startPageY, curPY);
+              const w = Math.abs(curPX - dragCandidate.startPageX);
+              const h = Math.abs(curPY - dragCandidate.startPageY);
+              rectGhost.style.left = `${left}px`;
+              rectGhost.style.top = `${top}px`;
+              rectGhost.style.width = `${w}px`;
+              rectGhost.style.height = `${h}px`;
+            }
           });
 
           window.addEventListener("mouseup", (e) => {
-            if (!drawing) return;
-            const g = drawing.ghost;
-            const pageNode = drawing.pageNode;
-            const rect = {
-              x: parseFloat(g.style.left),
-              y: parseFloat(g.style.top),
-              w: parseFloat(g.style.width),
-              h: parseFloat(g.style.height),
-            };
-            draw.removeChild(g);
-            drawing = null;
+            if (!dragCandidate) return;
+            const pageNode = dragCandidate.pageNode;
             document.body.style.userSelect = "";
-
-            const minSize = 6;
-            if (rect.w >= minSize && rect.h >= minSize) {
-              const base = getPageRecordFromNode(pageNode);
-              const factor =
-                base.baseCSSWidth / pageNode.getBoundingClientRect().width;
-              const norm = {
-                x: rect.x * factor,
-                y: rect.y * factor,
-                w: rect.w * factor,
-                h: rect.h * factor,
-              };
-              const label = consumeLabel();
-              const el = createSelection(base.node.boxes, norm, label);
-              selectBox(el);
-              pushAction({
-                type: "create",
-                pageIndex: getPageIndexFromNode(pageNode),
-                rect: { ...norm },
-                label,
-                id: el.dataset.id,
-              });
-              updateToolbar();
-              announce(`Created selection ${label}`);
+            if (rectGhost) {
+              pagesEl.removeChild(rectGhost);
+              rectGhost = null;
             }
+            const minSize = 6;
+            const start =
+              dragCandidate.startDoc ||
+              clientToDocCoord(
+                dragCandidate.startClientX,
+                dragCandidate.startClientY,
+                pageNode
+              );
+            const end = clientToDocCoord(e.clientX, e.clientY, pageNode);
+            const spansMultiplePages =
+              !!start && !!end && start.pageIndex !== end.pageIndex;
+            let hasDocSize = false;
+            if (start && end) {
+              const p =
+                state.pages[start.pageIndex] || state.pages[state.activePage] || null;
+              const docW = p ? Math.abs(end.fx - start.fx) * p.baseCSSWidth : 0;
+              const docH = Math.abs(end.docY - start.docY);
+              hasDocSize = docW >= minSize && docH >= minSize;
+            }
+            if (start && end && (spansMultiplePages || hasDocSize)) {
+              if (polygonDraft.pageNode === pageNode) {
+                clearPolygonDraft();
+              }
+              const label = consumeLabel();
+              const created = createRectSelectionsAcrossPages(start, end, label);
+              if (created.length) {
+                const last = created[created.length - 1];
+                const lastSel = findSelectionById(last.id);
+                if (lastSel) selectBox(lastSel);
+                for (const c of created) {
+                  pushAction({
+                    type: "create",
+                    pageIndex: c.pageIndex,
+                    rect: { ...c.rect },
+                    label,
+                    id: c.id,
+                    kind: "polygon",
+                    points: c.points,
+                  });
+                }
+                updateToolbar();
+                announce(
+                  created.length > 1
+                    ? `Created ${created.length} linked selections ${label}`
+                    : `Created selection ${label}`
+                );
+              }
+            } else if (start) {
+              const p = state.pages[start.pageIndex];
+              const tops = getPageDocTopOffsets();
+              const clickPt = {
+                x: start.fx * p.baseCSSWidth,
+                y: start.docY - tops[start.pageIndex],
+              };
+              handlePolygonClick(p.node.root, clickPt);
+            }
+            dragCandidate = null;
           });
 
           return {
@@ -994,8 +1807,155 @@
             cross,
             vline,
             hline,
+            polyDraftSvg,
             kind: "image",
           };
+        }
+
+        function clearPolygonDraft() {
+          polygonDraft.pageNode = null;
+          polygonDraft.points = [];
+          polygonDraft.cursor = null;
+          renderPolygonDraft();
+        }
+
+        function renderPolygonDraft() {
+          state.pages.forEach((p) => {
+            if (p.node.polyDraftSvg) {
+              p.node.polyDraftSvg.innerHTML = "";
+              p.node.polyDraftSvg.style.display = "none";
+            }
+          });
+          if (!polygonDraft.pageNode || !polygonDraft.points.length) return;
+          const p = getPageRecordFromNode(polygonDraft.pageNode);
+          if (!p || !p.node.polyDraftSvg) return;
+
+          const svg = p.node.polyDraftSvg;
+          svg.style.display = "block";
+          const rootBox = p.node.root.getBoundingClientRect();
+          const factor = rootBox.width / p.baseCSSWidth;
+          const cssPoints = polygonDraft.points.map((pt) => ({
+            x: pt.x * factor,
+            y: pt.y * factor,
+          }));
+
+          const makeLine = (a, b, color = "#ffcc66", width = 1.5) =>
+            `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${color}" stroke-width="${width}" stroke-dasharray="5 4" />`;
+          let markup = "";
+          const previewPts = cssPoints.slice();
+          if (polygonDraft.cursor) {
+            previewPts.push({
+              x: polygonDraft.cursor.x * factor,
+              y: polygonDraft.cursor.y * factor,
+            });
+          }
+          if (previewPts.length >= 3) {
+            markup += `<polygon points="${previewPts
+              .map((p) => `${p.x},${p.y}`)
+              .join(" ")}" fill="rgba(122,162,255,0.18)" stroke="none" />`;
+          }
+
+          for (let i = 1; i < cssPoints.length; i++) {
+            markup += makeLine(cssPoints[i - 1], cssPoints[i], "#7aa2ff", 1.8);
+          }
+          if (polygonDraft.cursor) {
+            const c = {
+              x: polygonDraft.cursor.x * factor,
+              y: polygonDraft.cursor.y * factor,
+            };
+            const first = cssPoints[0];
+            const last = cssPoints[cssPoints.length - 1];
+            markup += makeLine(first, c, "#ffcc66", 1.3);
+            markup += makeLine(last, c, "#ffcc66", 1.3);
+          }
+          cssPoints.forEach((pt, idx) => {
+            const r = idx === 0 ? 4.5 : 3.2;
+            markup += `<circle cx="${pt.x}" cy="${pt.y}" r="${r}" fill="${
+              idx === 0 ? "#66d9ef" : "#7aa2ff"
+            }" />`;
+          });
+          svg.innerHTML = markup;
+        }
+
+        function polygonBoundingRect(points) {
+          const xs = points.map((p) => p.x);
+          const ys = points.map((p) => p.y);
+          const minX = Math.min(...xs);
+          const minY = Math.min(...ys);
+          const maxX = Math.max(...xs);
+          const maxY = Math.max(...ys);
+          return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+        }
+
+        function rectToPolygonPoints(rect) {
+          return [
+            { x: rect.x, y: rect.y },
+            { x: rect.x + rect.w, y: rect.y },
+            { x: rect.x + rect.w, y: rect.y + rect.h },
+            { x: rect.x, y: rect.y + rect.h },
+          ];
+        }
+
+        function isNearFirstVertex(clickPt, pageNode) {
+          if (
+            polygonDraft.pageNode !== pageNode ||
+            polygonDraft.points.length < 3
+          ) {
+            return false;
+          }
+          const first = polygonDraft.points[0];
+          const p = getPageRecordFromNode(pageNode);
+          const rootBox = p.node.root.getBoundingClientRect();
+          const factor = p.baseCSSWidth / rootBox.width;
+          const threshold = 10 * factor;
+          return Math.hypot(first.x - clickPt.x, first.y - clickPt.y) <= threshold;
+        }
+
+        function handlePolygonClick(pageNode, clickPt) {
+          if (polygonDraft.pageNode && polygonDraft.pageNode !== pageNode) {
+            clearPolygonDraft();
+          }
+          if (!polygonDraft.pageNode) {
+            polygonDraft.pageNode = pageNode;
+            polygonDraft.points = [clickPt];
+            polygonDraft.cursor = clickPt;
+            renderPolygonDraft();
+            return;
+          }
+
+          if (isNearFirstVertex(clickPt, pageNode)) {
+            const pts = polygonDraft.points.slice();
+            if (pts.length >= 3) {
+              const rect = polygonBoundingRect(pts);
+              const label = consumeLabel();
+              const base = getPageRecordFromNode(pageNode);
+              const el = createSelection(
+                base.node.boxes,
+                rect,
+                label,
+                undefined,
+                { kind: "polygon", points: pts }
+              );
+              selectBox(el);
+              pushAction({
+                type: "create",
+                pageIndex: getPageIndexFromNode(pageNode),
+                rect: { ...rect },
+                label,
+                id: el.dataset.id,
+                kind: "polygon",
+                points: pts,
+              });
+              announce(`Created polygon selection ${label}`);
+            }
+            clearPolygonDraft();
+            updateToolbar();
+            return;
+          }
+
+          polygonDraft.points.push(clickPt);
+          polygonDraft.cursor = clickPt;
+          renderPolygonDraft();
         }
 
         function getPageRecordFromNode(node) {
@@ -1018,14 +1978,111 @@
           );
         }
 
+        function getPageDocTopOffsets() {
+          let acc = 0;
+          return state.pages.map((p) => {
+            const top = acc;
+            acc += p.baseCSSHeight;
+            return top;
+          });
+        }
+
+        function clientToDocCoord(clientX, clientY, fallbackPageNode) {
+          if (!state.pages.length) return null;
+          let pageIndex = -1;
+          for (let i = 0; i < state.pages.length; i++) {
+            const r = state.pages[i].node.root.getBoundingClientRect();
+            if (clientY >= r.top && clientY <= r.bottom) {
+              pageIndex = i;
+              break;
+            }
+          }
+          if (pageIndex < 0) {
+            if (clientY < state.pages[0].node.root.getBoundingClientRect().top) {
+              pageIndex = 0;
+            } else if (
+              clientY >
+              state.pages[state.pages.length - 1].node.root.getBoundingClientRect()
+                .bottom
+            ) {
+              pageIndex = state.pages.length - 1;
+            } else if (fallbackPageNode) {
+              pageIndex = getPageIndexFromNode(fallbackPageNode);
+            }
+          }
+          if (pageIndex < 0) pageIndex = Math.max(0, state.activePage);
+          const p = state.pages[pageIndex];
+          const r = p.node.root.getBoundingClientRect();
+          const fx = clamp((clientX - r.left) / Math.max(1, r.width), 0, 1);
+          const fy = clamp((clientY - r.top) / Math.max(1, r.height), 0, 1);
+          const tops = getPageDocTopOffsets();
+          return {
+            pageIndex,
+            fx,
+            docY: tops[pageIndex] + fy * p.baseCSSHeight,
+          };
+        }
+
+        function createRectSelectionsAcrossPages(start, end, label) {
+          const tops = getPageDocTopOffsets();
+          const yMin = Math.min(start.docY, end.docY);
+          const yMax = Math.max(start.docY, end.docY);
+          const fxMin = Math.min(start.fx, end.fx);
+          const fxMax = Math.max(start.fx, end.fx);
+          const created = [];
+          for (let i = 0; i < state.pages.length; i++) {
+            const p = state.pages[i];
+            const pTop = tops[i];
+            const pBottom = pTop + p.baseCSSHeight;
+            const oy0 = Math.max(yMin, pTop);
+            const oy1 = Math.min(yMax, pBottom);
+            const h = oy1 - oy0;
+            const x = fxMin * p.baseCSSWidth;
+            const w = (fxMax - fxMin) * p.baseCSSWidth;
+            if (w < 6 || h < 6) continue;
+            const rect = {
+              x,
+              y: oy0 - pTop,
+              w,
+              h,
+            };
+            const points = rectToPolygonPoints(rect);
+            const el = createSelection(p.node.boxes, rect, label, undefined, {
+              kind: "polygon",
+              points,
+            });
+            created.push({ pageIndex: i, rect, id: el.dataset.id, points });
+          }
+          return created;
+        }
+
         // ---------- Selections ----------
-        function createSelection(container, rectNorm, label, reuseId) {
+        function createSelection(container, rectNorm, label, reuseId, options = {}) {
           const page = getPageRecordFromNode(container.parentElement);
+          const kind = options.kind === "polygon" ? "polygon" : "rect";
           const el = document.createElement("div");
-          el.className = "selection";
+          el.className = `selection${kind === "polygon" ? " polygon" : ""}`;
           el.tabIndex = 0;
           el.dataset.id = reuseId || String(state.boxIdCounter++);
+          el.dataset.kind = kind;
 
+          if (kind === "polygon") {
+            const polySvg = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "svg"
+            );
+            polySvg.setAttribute("class", "poly-svg");
+            const polyShape = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "polygon"
+            );
+            polyShape.setAttribute("class", "poly-shape");
+            polySvg.appendChild(polyShape);
+            el.appendChild(polySvg);
+            el.dataset.points = JSON.stringify(
+              Array.isArray(options.points) ? options.points : []
+            );
+          }
           const labelEl = document.createElement("div");
           labelEl.className = "label";
           labelEl.textContent = label;
@@ -1043,102 +2100,159 @@
           let startRect = null;
           const pageIndex = getPageIndexFromNode(container.parentElement);
 
-          interact(el)
-            .draggable({
-              listeners: {
-                move(event) {
-                  const p = getPageRecordFromNode(container.parentElement);
-                  const factor =
-                    p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
-                  const dx = event.dx * factor;
-                  const dy = event.dy * factor;
+          const dragConfig = {
+            ignoreFrom: ".poly-vertex, .label",
+            listeners: {
+              move(event) {
+                const p = getPageRecordFromNode(container.parentElement);
+                const factor =
+                  p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
+                const dx = event.dx * factor;
+                const dy = event.dy * factor;
 
-                  const x = clamp(
-                    parseFloat(el.dataset.x) + dx,
-                    0,
-                    p.baseCSSWidth - parseFloat(el.dataset.w)
-                  );
-                  const y = clamp(
-                    parseFloat(el.dataset.y) + dy,
-                    0,
-                    p.baseCSSHeight - parseFloat(el.dataset.h)
-                  );
-                  el.dataset.x = String(x);
-                  el.dataset.y = String(y);
-                  placeSelectionEl(el, p);
-                },
+                const oldX = parseFloat(el.dataset.x);
+                const oldY = parseFloat(el.dataset.y);
+                const x = clamp(
+                  oldX + dx,
+                  0,
+                  p.baseCSSWidth - parseFloat(el.dataset.w)
+                );
+                const y = clamp(
+                  oldY + dy,
+                  0,
+                  p.baseCSSHeight - parseFloat(el.dataset.h)
+                );
+                const realDx = x - oldX;
+                const realDy = y - oldY;
+                el.dataset.x = String(x);
+                el.dataset.y = String(y);
+                if (el.dataset.kind === "polygon") {
+                  shiftPolygonPoints(el, realDx, realDy);
+                }
+                placeSelectionEl(el, p);
               },
-            })
+            },
+          };
+          if (kind === "polygon") {
+            dragConfig.allowFrom = ".poly-shape";
+          }
+
+          interact(el)
+            .draggable(dragConfig)
             .on("dragstart", () => {
               startRect = getRect(el);
+              if (el.dataset.kind === "polygon") {
+                el.dataset.startPoints = el.dataset.points || "[]";
+              }
             })
             .on("dragend", () => {
               const end = getRect(el);
               if (!rectEqual(startRect, end)) {
+                const fromPoints =
+                  el.dataset.kind === "polygon"
+                    ? JSON.parse(el.dataset.startPoints || "[]")
+                    : null;
+                const toPoints =
+                  el.dataset.kind === "polygon"
+                    ? JSON.parse(el.dataset.points || "[]")
+                    : null;
                 pushAction({
                   type: "transform",
                   id: el.dataset.id,
                   pageIndex,
                   from: startRect,
                   to: end,
+                  fromPoints,
+                  toPoints,
                 });
               }
+              delete el.dataset.startPoints;
               startRect = null;
             });
 
-          interact(el)
-            .resizable({
-              edges: { top: true, left: true, bottom: true, right: true },
-            })
-            .on("resizestart", () => {
-              startRect = getRect(el);
-            })
-            .on("resizemove", (event) => {
-              const p = getPageRecordFromNode(container.parentElement);
-              const factor =
-                p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
-              const { deltaRect } = event;
+          if (kind !== "polygon") {
+            interact(el)
+              .resizable({
+                edges: { top: true, left: true, bottom: true, right: true },
+              })
+              .on("resizestart", () => {
+                startRect = getRect(el);
+              })
+              .on("resizemove", (event) => {
+                const p = getPageRecordFromNode(container.parentElement);
+                const factor =
+                  p.baseCSSWidth / p.node.root.getBoundingClientRect().width;
+                const { deltaRect } = event;
 
-              let x = parseFloat(el.dataset.x) + deltaRect.left * factor;
-              let y = parseFloat(el.dataset.y) + deltaRect.top * factor;
-              let w = parseFloat(el.dataset.w) + event.deltaRect.width * factor;
-              let h =
-                parseFloat(el.dataset.h) + event.deltaRect.height * factor;
+                let x = parseFloat(el.dataset.x) + deltaRect.left * factor;
+                let y = parseFloat(el.dataset.y) + deltaRect.top * factor;
+                let w = parseFloat(el.dataset.w) + event.deltaRect.width * factor;
+                let h =
+                  parseFloat(el.dataset.h) + event.deltaRect.height * factor;
 
-              x = clamp(x, 0, p.baseCSSWidth);
-              y = clamp(y, 0, p.baseCSSHeight);
-              w = Math.max(4, Math.min(w, p.baseCSSWidth - x));
-              h = Math.max(4, Math.min(h, p.baseCSSHeight - y));
+                x = clamp(x, 0, p.baseCSSWidth);
+                y = clamp(y, 0, p.baseCSSHeight);
+                w = Math.max(4, Math.min(w, p.baseCSSWidth - x));
+                h = Math.max(4, Math.min(h, p.baseCSSHeight - y));
 
-              el.dataset.x = String(x);
-              el.dataset.y = String(y);
-              el.dataset.w = String(w);
-              el.dataset.h = String(h);
+                el.dataset.x = String(x);
+                el.dataset.y = String(y);
+                el.dataset.w = String(w);
+                el.dataset.h = String(h);
 
-              placeSelectionEl(el, p);
-            })
-            .on("resizeend", () => {
-              const end = getRect(el);
-              if (!rectEqual(startRect, end)) {
-                pushAction({
-                  type: "transform",
-                  id: el.dataset.id,
-                  pageIndex,
-                  from: startRect,
-                  to: end,
-                });
-              }
-              startRect = null;
-            });
+                placeSelectionEl(el, p);
+              })
+              .on("resizeend", () => {
+                const end = getRect(el);
+                if (!rectEqual(startRect, end)) {
+                  pushAction({
+                    type: "transform",
+                    id: el.dataset.id,
+                    pageIndex,
+                    from: startRect,
+                    to: end,
+                  });
+                }
+                startRect = null;
+              });
+          }
 
           el.addEventListener("mousedown", (e) => {
+            if (
+              el.dataset.kind === "polygon" &&
+              !e.target.closest(".poly-vertex") &&
+              !e.target.closest(".label")
+            ) {
+              if (!isEventInsidePolygonSelection(e, el)) return;
+            }
             selectBox(el);
+            if (maybeInsertVertexOnEdge(el, e)) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
             e.stopPropagation();
+          });
+          el.addEventListener("mousemove", (e) => {
+            if (el.dataset.kind !== "polygon") return;
+            if (!el.classList.contains("selected") || !!vertexDrag) {
+              el.classList.remove("edge-insert-cue");
+              return;
+            }
+            const canInsert = !!getEdgeInsertCandidate(el, e);
+            el.classList.toggle("edge-insert-cue", canInsert);
+          });
+          el.addEventListener("mouseleave", () => {
+            el.classList.remove("edge-insert-cue");
           });
 
           // label editing + history
-          el.querySelector(".label").addEventListener("dblclick", (e) => {
+          labelEl.addEventListener("mousedown", (e) => {
+            e.stopPropagation();
+          });
+          labelEl.addEventListener("dblclick", (e) => {
             startRename(el);
+            e.preventDefault();
             e.stopPropagation();
           });
 
@@ -1178,7 +2292,299 @@
           el.style.top = parseFloat(el.dataset.y) * factor + "px";
           el.style.width = parseFloat(el.dataset.w) * factor + "px";
           el.style.height = parseFloat(el.dataset.h) * factor + "px";
+          if (el.dataset.kind === "polygon") {
+            updatePolygonVisual(el);
+          }
         }
+
+        function shiftPolygonPoints(el, dx, dy) {
+          if (el.dataset.kind !== "polygon") return;
+          const pts = JSON.parse(el.dataset.points || "[]");
+          const shifted = pts.map((p) => ({ x: p.x + dx, y: p.y + dy }));
+          el.dataset.points = JSON.stringify(shifted);
+        }
+
+        function setPolygonPoints(el, points, pageRec) {
+          if (el.dataset.kind !== "polygon") return;
+          el.dataset.points = JSON.stringify(points || []);
+          const rect = polygonBoundingRect(points || []);
+          setRect(el, rect, pageRec);
+        }
+
+        function updatePolygonVisual(el) {
+          if (el.dataset.kind !== "polygon") return;
+          const svg = el.querySelector(".poly-svg");
+          const poly = el.querySelector(".poly-shape");
+          if (!svg || !poly) return;
+          const pts = JSON.parse(el.dataset.points || "[]");
+          const x0 = parseFloat(el.dataset.x);
+          const y0 = parseFloat(el.dataset.y);
+          const w = Math.max(1, parseFloat(el.dataset.w));
+          const h = Math.max(1, parseFloat(el.dataset.h));
+          if (!pts.length) return;
+          svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+          poly.setAttribute(
+            "points",
+            pts.map((p) => `${p.x - x0},${p.y - y0}`).join(" ")
+          );
+
+          el.querySelectorAll(".poly-vertex").forEach((n) => n.remove());
+          if (!el.classList.contains("selected")) return;
+          pts.forEach((p, idx) => {
+            const v = document.createElement("div");
+            v.className = "poly-vertex";
+            v.dataset.vidx = String(idx);
+            v.style.left = `${((p.x - x0) / w) * 100}%`;
+            v.style.top = `${((p.y - y0) / h) * 100}%`;
+            v.addEventListener("pointerdown", startVertexDrag);
+            el.appendChild(v);
+          });
+        }
+
+        function pointsEqual(a, b) {
+          if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) {
+            return false;
+          }
+          for (let i = 0; i < a.length; i++) {
+            if (a[i].x !== b[i].x || a[i].y !== b[i].y) return false;
+          }
+          return true;
+        }
+
+        function isPointOnSegment(point, a, b, eps = 1e-6) {
+          const cross =
+            (point.y - a.y) * (b.x - a.x) - (point.x - a.x) * (b.y - a.y);
+          if (Math.abs(cross) > eps) return false;
+          const dot =
+            (point.x - a.x) * (b.x - a.x) + (point.y - a.y) * (b.y - a.y);
+          if (dot < -eps) return false;
+          const len2 = (b.x - a.x) ** 2 + (b.y - a.y) ** 2;
+          return dot <= len2 + eps;
+        }
+
+        function pointInPolygonInclusive(point, points) {
+          if (!Array.isArray(points) || points.length < 3) return false;
+          for (let i = 0; i < points.length; i++) {
+            const a = points[i];
+            const b = points[(i + 1) % points.length];
+            if (isPointOnSegment(point, a, b)) return true;
+          }
+          let inside = false;
+          for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
+            const xi = points[i].x;
+            const yi = points[i].y;
+            const xj = points[j].x;
+            const yj = points[j].y;
+            const intersects =
+              yi > point.y !== yj > point.y &&
+              point.x < ((xj - xi) * (point.y - yi)) / (yj - yi) + xi;
+            if (intersects) inside = !inside;
+          }
+          return inside;
+        }
+
+        function eventPointInPageSpace(e, pageRec) {
+          const r = pageRec.node.root.getBoundingClientRect();
+          const fx = pageRec.baseCSSWidth / Math.max(1, r.width);
+          return {
+            x: clamp((e.clientX - r.left) * fx, 0, pageRec.baseCSSWidth),
+            y: clamp((e.clientY - r.top) * fx, 0, pageRec.baseCSSHeight),
+          };
+        }
+
+        function isEventInsidePolygonSelection(e, sel) {
+          if (!sel || sel.dataset.kind !== "polygon") return false;
+          const pageNode = sel.closest(".page");
+          const pageRec = getPageRecordFromNode(pageNode);
+          if (!pageRec) return false;
+          const point = eventPointInPageSpace(e, pageRec);
+          const pts = JSON.parse(sel.dataset.points || "[]");
+          return pointInPolygonInclusive(point, pts);
+        }
+
+        function isPointBlockedByOtherPolygon(pageNode, point, excludeSel = null) {
+          const polygons = pageNode.querySelectorAll(
+            '.selection[data-kind="polygon"]'
+          );
+          for (const poly of polygons) {
+            if (excludeSel && poly === excludeSel) continue;
+            const pts = JSON.parse(poly.dataset.points || "[]");
+            if (pointInPolygonInclusive(point, pts)) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        function distancePointToSegment(point, a, b) {
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const len2 = dx * dx + dy * dy;
+          if (len2 <= 1e-9) {
+            const dpx = point.x - a.x;
+            const dpy = point.y - a.y;
+            return { dist: Math.hypot(dpx, dpy), proj: { x: a.x, y: a.y } };
+          }
+          let t = ((point.x - a.x) * dx + (point.y - a.y) * dy) / len2;
+          t = clamp(t, 0, 1);
+          const proj = { x: a.x + t * dx, y: a.y + t * dy };
+          return {
+            dist: Math.hypot(point.x - proj.x, point.y - proj.y),
+            proj,
+          };
+        }
+
+        function beginVertexDrag(sel, idx, pageNode, startRect, startPoints) {
+          const pageRec = getPageRecordFromNode(pageNode);
+          if (!pageRec) return;
+          vertexDrag = {
+            sel,
+            idx,
+            pageRec,
+            pageIndex: getPageIndexFromNode(pageNode),
+            startRect,
+            startPoints,
+            pointerId: null,
+          };
+        }
+
+        function getEdgeInsertCandidate(sel, e) {
+          if (sel.dataset.kind !== "polygon") return null;
+          if (!sel.classList.contains("selected")) return null;
+          if (e.target.closest(".poly-vertex") || e.target.closest(".label")) {
+            return null;
+          }
+          const pageNode = sel.closest(".page");
+          const pageRec = getPageRecordFromNode(pageNode);
+          if (!pageRec) return null;
+          const oldPoints = JSON.parse(sel.dataset.points || "[]");
+          if (oldPoints.length < 3) return null;
+          const rootRect = pageRec.node.root.getBoundingClientRect();
+          const factor = pageRec.baseCSSWidth / Math.max(1, rootRect.width);
+          const clickPt = {
+            x: clamp((e.clientX - rootRect.left) * factor, 0, pageRec.baseCSSWidth),
+            y: clamp((e.clientY - rootRect.top) * factor, 0, pageRec.baseCSSHeight),
+          };
+          const hitThreshold = 8 * factor;
+
+          for (const p of oldPoints) {
+            if (Math.hypot(p.x - clickPt.x, p.y - clickPt.y) <= hitThreshold) {
+              return null;
+            }
+          }
+
+          let best = null;
+          for (let i = 0; i < oldPoints.length; i++) {
+            const a = oldPoints[i];
+            const b = oldPoints[(i + 1) % oldPoints.length];
+            const seg = distancePointToSegment(clickPt, a, b);
+            if (!best || seg.dist < best.dist) {
+              best = { dist: seg.dist, proj: seg.proj, edgeIndex: i };
+            }
+          }
+          if (!best || best.dist > hitThreshold) return null;
+
+          return {
+            pageNode,
+            pageRec,
+            oldPoints,
+            insertIndex: best.edgeIndex + 1,
+            insertPoint: best.proj,
+          };
+        }
+
+        function maybeInsertVertexOnEdge(sel, e) {
+          const hit = getEdgeInsertCandidate(sel, e);
+          if (!hit) return false;
+
+          const startRect = getRect(sel);
+          const newPoints = hit.oldPoints.slice();
+          newPoints.splice(hit.insertIndex, 0, hit.insertPoint);
+          setPolygonPoints(sel, newPoints, hit.pageRec);
+          updatePolygonVisual(sel);
+          beginVertexDrag(
+            sel,
+            hit.insertIndex,
+            hit.pageNode,
+            startRect,
+            hit.oldPoints
+          );
+          return true;
+        }
+
+        function startVertexDrag(e) {
+          if (e.pointerType && e.pointerType !== "mouse" && e.pointerType !== "pen") {
+            return;
+          }
+          const handle = e.currentTarget;
+          const sel = handle.closest(".selection");
+          if (!sel || sel.dataset.kind !== "polygon") return;
+          const idx = Number(handle.dataset.vidx);
+          if (!Number.isFinite(idx)) return;
+          const pageNode = sel.closest(".page");
+          const startPoints = JSON.parse(sel.dataset.points || "[]");
+          beginVertexDrag(sel, idx, pageNode, getRect(sel), startPoints);
+          if (vertexDrag && Number.isFinite(e.pointerId)) {
+            vertexDrag.pointerId = e.pointerId;
+            if (handle.setPointerCapture) {
+              handle.setPointerCapture(e.pointerId);
+            }
+          }
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        window.addEventListener("pointermove", (e) => {
+          if (!vertexDrag) return;
+          if (
+            Number.isFinite(vertexDrag.pointerId) &&
+            Number.isFinite(e.pointerId) &&
+            e.pointerId !== vertexDrag.pointerId
+          ) {
+            return;
+          }
+          const { sel, idx, pageRec } = vertexDrag;
+          const r = pageRec.node.root.getBoundingClientRect();
+          const fx = pageRec.baseCSSWidth / Math.max(1, r.width);
+          const x = clamp((e.clientX - r.left) * fx, 0, pageRec.baseCSSWidth);
+          const y = clamp((e.clientY - r.top) * fx, 0, pageRec.baseCSSHeight);
+          const pts = JSON.parse(sel.dataset.points || "[]");
+          if (!pts[idx]) return;
+          pts[idx] = { x, y };
+          setPolygonPoints(sel, pts, pageRec);
+          updatePolygonVisual(sel);
+        });
+
+        window.addEventListener("pointerup", (e) => {
+          if (!vertexDrag) return;
+          if (
+            Number.isFinite(vertexDrag.pointerId) &&
+            Number.isFinite(e.pointerId) &&
+            e.pointerId !== vertexDrag.pointerId
+          ) {
+            return;
+          }
+          const { sel, pageRec, pageIndex, startRect, startPoints } = vertexDrag;
+          const endRect = getRect(sel);
+          const endPoints = JSON.parse(sel.dataset.points || "[]");
+          if (
+            !rectEqual(startRect, endRect) ||
+            !pointsEqual(startPoints, endPoints)
+          ) {
+            pushAction({
+              type: "transform",
+              id: sel.dataset.id,
+              pageIndex,
+              from: startRect,
+              to: endRect,
+              fromPoints: startPoints,
+              toPoints: endPoints,
+            });
+          }
+          updatePolygonVisual(sel);
+          sel.classList.remove("edge-insert-cue");
+          vertexDrag = null;
+        });
 
         function startRename(el) {
           const tag = el.querySelector(".label");
@@ -1237,10 +2643,19 @@
 
         function selectBox(el) {
           document
+            .querySelectorAll(".selection.edge-insert-cue")
+            .forEach((n) => n.classList.remove("edge-insert-cue"));
+          document
             .querySelectorAll(".selection.selected")
             .forEach((n) => n.classList.remove("selected"));
+          if (el.parentElement) {
+            el.parentElement.appendChild(el);
+          }
           el.classList.add("selected");
           state.currentSelection = el;
+          document
+            .querySelectorAll('.selection[data-kind="polygon"]')
+            .forEach((n) => updatePolygonVisual(n));
         }
 
         function getAllSelections() {
@@ -1269,7 +2684,23 @@
               .querySelectorAll(".selection")
               .forEach((el) => placeSelectionEl(el, p));
           });
+          renderMergedPageBreakIndicators();
           updateToolbar();
+        }
+        function setZoomKeepingViewport(nextZoom) {
+          if (!state.pages.length) return;
+          const vr = viewerEl.getBoundingClientRect();
+          const centerX = viewerEl.scrollLeft + vr.width / 2;
+          const centerY = viewerEl.scrollTop + vr.height / 2;
+          const rw = Math.max(1, pagesEl.scrollWidth);
+          const rh = Math.max(1, pagesEl.scrollHeight);
+          const rx = centerX / rw;
+          const ry = centerY / rh;
+          state.zoom = Math.max(0.1, Math.min(8, nextZoom));
+          zoomSlider.value = Math.round(state.zoom * 100);
+          applyZoom();
+          viewerEl.scrollLeft = rx * pagesEl.scrollWidth - vr.width / 2;
+          viewerEl.scrollTop = ry * pagesEl.scrollHeight - vr.height / 2;
         }
         function zoomToFitWidth() {
           if (!state.pages.length) return;
@@ -1280,175 +2711,218 @@
           applyZoom();
         }
 
-        function scrollToPage(index, smooth = true) {
-          index = clamp(index, 0, state.pages.length - 1);
+        function scrollToPage(index, smooth = true, block = "center") {
+          const logicalCount = getLogicalPageCount();
+          if (!logicalCount) return;
+          index = clamp(index, 0, logicalCount - 1);
           state.activePage = index;
           updateActiveThumb();
-          const node = state.pages[index].node.root;
-          node.scrollIntoView({
-            behavior: smooth ? "smooth" : "auto",
-            block: "center",
-          });
+          const mergedMode =
+            state.pages.length === 1 && mergedPageTopOffsets.length === logicalCount;
+          if (mergedMode) {
+            const p = state.pages[0];
+            const root = p.node.root;
+            const factor =
+              root.getBoundingClientRect().width / Math.max(1, p.baseCSSWidth);
+            const yWithinRoot = (mergedPageTopOffsets[index] || 0) * factor;
+            const targetTop = root.offsetTop + yWithinRoot;
+            let scrollTop = targetTop;
+            if (block === "center") scrollTop = targetTop - viewerEl.clientHeight / 2;
+            if (block === "end") scrollTop = targetTop - viewerEl.clientHeight;
+            viewerEl.scrollTo({
+              top: Math.max(0, scrollTop),
+              behavior: smooth ? "smooth" : "auto",
+            });
+          } else {
+            const node = state.pages[index].node.root;
+            node.scrollIntoView({
+              behavior: smooth ? "smooth" : "auto",
+              block,
+            });
+          }
           updateToolbar();
         }
-
-        prevBtn.addEventListener("click", () =>
-          scrollToPage(state.activePage - 1)
-        );
-        nextBtn.addEventListener("click", () =>
-          scrollToPage(state.activePage + 1)
-        );
 
         zoomSlider.addEventListener("input", (e) => {
-          state.zoom = parseInt(e.target.value, 10) / 100;
-          applyZoom();
+          setZoomKeepingViewport(parseInt(e.target.value, 10) / 100);
         });
         zoomInBtn.addEventListener("click", () => {
-          state.zoom = Math.min(4, state.zoom + 0.1);
-          zoomSlider.value = Math.round(state.zoom * 100);
-          applyZoom();
+          setZoomKeepingViewport(state.zoom + 0.1);
         });
         zoomOutBtn.addEventListener("click", () => {
-          state.zoom = Math.max(0.1, state.zoom - 0.1);
-          zoomSlider.value = Math.round(state.zoom * 100);
-          applyZoom();
+          setZoomKeepingViewport(state.zoom - 0.1);
         });
         zoomResetBtn.addEventListener("click", () => {
-          state.zoom = 1;
-          zoomSlider.value = 100;
-          applyZoom();
+          setZoomKeepingViewport(1);
         });
-
-        // ---------- Crosshair toggle ----------
-        toggleCrosshairBtn.addEventListener("click", () => {
-          state.crosshair = !state.crosshair;
-          document
-            .querySelectorAll(".crosshair-layer")
-            .forEach(
-              (l) => (l.style.display = state.crosshair ? "block" : "none")
-            );
-          updateToolbar();
-        });
-
-        // ---------- New Box (center) ----------
-        newBoxBtn.addEventListener("click", () => {
-          newBoxAtCenter();
-        });
-
-        function newBoxAtCenter() {
-          if (!state.pages.length) return;
-          const p = state.pages[state.activePage];
-          const w = Math.max(60, Math.round(p.baseCSSWidth * 0.25));
-          const h = Math.max(45, Math.round(p.baseCSSHeight * 0.18));
-          const x = Math.round((p.baseCSSWidth - w) / 2);
-          const y = Math.round((p.baseCSSHeight - h) / 2);
-          const label = consumeLabel();
-          const el = createSelection(p.node.boxes, { x, y, w, h }, label);
-          selectBox(el);
-          pushAction({
-            type: "create",
-            pageIndex: state.activePage,
-            rect: { x, y, w, h },
-            label,
-            id: el.dataset.id,
-          });
-          announce(`Created selection ${label}`);
-          updateToolbar();
-        }
 
         // ---------- Export ----------
         exportBtn.addEventListener("click", exportZip);
+        exportSelectedBtn.addEventListener("click", exportSelectedPolygon);
 
         async function exportZip() {
-          if (!window.JSZip) {
-            alert("JSZip failed to load.");
-            return;
-          }
-          const zip = new JSZip();
-          const seen = new Set();
-          const exportScale = Math.max(
-            1,
-            Math.min(4, parseFloat(exportScaleEl?.value || "2"))
-          );
-
           const selections = getAllSelections();
           if (!selections.length) {
             alert("No selections to export.");
             return;
           }
+          await exportSelectionsAsZip(selections, "selections.zip");
+        }
 
-          for (const { pageIndex, node } of selections) {
-            const p = state.pages[pageIndex];
-            const labelRaw =
-              node.querySelector(".label").textContent.trim() || "untitled";
-            const baseName = sanitizeLabel(labelRaw) || "untitled";
-            const name = uniqueName(baseName, seen) + ".png";
+        async function exportSelectedPolygon() {
+          const sel = state.currentSelection;
+          if (!sel) {
+            alert("No selection is currently selected.");
+            return;
+          }
+          if (sel.dataset.kind !== "polygon") {
+            alert("Selected item is not a polygon.");
+            return;
+          }
+          const pageIndex = getPageIndexFromNode(sel.closest(".page"));
+          if (pageIndex < 0) {
+            alert("Selected polygon is not on a valid page.");
+            return;
+          }
+          await exportSelectionsAsZip(
+            [{ pageIndex, node: sel }],
+            "selected-polygon.zip"
+          );
+        }
 
-            const rectNorm = {
-              x: parseFloat(node.dataset.x),
-              y: parseFloat(node.dataset.y),
-              w: parseFloat(node.dataset.w),
-              h: parseFloat(node.dataset.h),
-            };
+        async function exportSelectionsAsZip(selections, zipFileName) {
+          if (!window.JSZip) {
+            alert("JSZip failed to load.");
+            return;
+          }
+          setExportLoading(
+            true,
+            `Exporting 0/${selections.length} selection${
+              selections.length === 1 ? "" : "s"
+            }...`
+          );
+          try {
+            const zip = new JSZip();
+            const seen = new Set();
+            const exportScale = Math.max(
+              1,
+              Math.min(4, parseFloat(exportScaleEl?.value || "2"))
+            );
 
-            const factor =
-              p.type === "image"
-                ? p.pixelW / p.baseCSSWidth
-                : p.canvasEl.width / p.baseCSSWidth;
+            for (let idx = 0; idx < selections.length; idx++) {
+              const { pageIndex, node } = selections[idx];
+              const p = state.pages[pageIndex];
+              const labelRaw =
+                node.querySelector(".label").textContent.trim() || "untitled";
+              const baseName = sanitizeLabel(labelRaw) || "untitled";
+              const name = uniqueName(baseName, seen) + ".png";
 
-            const sx = Math.round(rectNorm.x * factor);
-            const sy = Math.round(rectNorm.y * factor);
-            const sw = Math.round(rectNorm.w * factor);
-            const sh = Math.round(rectNorm.h * factor);
+              const rectNorm = {
+                x: parseFloat(node.dataset.x),
+                y: parseFloat(node.dataset.y),
+                w: parseFloat(node.dataset.w),
+                h: parseFloat(node.dataset.h),
+              };
 
-            const out = document.createElement("canvas");
-            out.width = Math.max(1, Math.round(sw * exportScale));
-            out.height = Math.max(1, Math.round(sh * exportScale));
-            const ctx = out.getContext("2d");
-            ctx.imageSmoothingEnabled = true;
-            ctx.imageSmoothingQuality = "high";
+              const factor =
+                p.type === "image"
+                  ? p.pixelW / p.baseCSSWidth
+                  : p.canvasEl.width / p.baseCSSWidth;
 
-            if (p.type === "image") {
-              ctx.drawImage(
-                p.imgEl,
-                sx,
-                sy,
-                sw,
-                sh,
-                0,
-                0,
-                out.width,
-                out.height
+              const sx = Math.round(rectNorm.x * factor);
+              const sy = Math.round(rectNorm.y * factor);
+              const sw = Math.round(rectNorm.w * factor);
+              const sh = Math.round(rectNorm.h * factor);
+
+              const out = document.createElement("canvas");
+              out.width = Math.max(1, Math.round(sw * exportScale));
+              out.height = Math.max(1, Math.round(sh * exportScale));
+              const ctx = out.getContext("2d");
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = "high";
+              const drawSource = () => {
+                if (p.type === "image") {
+                  ctx.drawImage(
+                    p.imgEl,
+                    sx,
+                    sy,
+                    sw,
+                    sh,
+                    0,
+                    0,
+                    out.width,
+                    out.height
+                  );
+                } else {
+                  ctx.drawImage(
+                    p.canvasEl,
+                    sx,
+                    sy,
+                    sw,
+                    sh,
+                    0,
+                    0,
+                    out.width,
+                    out.height
+                  );
+                }
+              };
+              if (node.dataset.kind === "polygon") {
+                const pts = JSON.parse(node.dataset.points || "[]");
+                const pixelPts = pts.map((pt) => ({
+                  x: pt.x * factor,
+                  y: pt.y * factor,
+                }));
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, out.width, out.height);
+                ctx.save();
+                if (pixelPts.length >= 3) {
+                  ctx.beginPath();
+                  ctx.moveTo(
+                    (pixelPts[0].x - sx) * exportScale,
+                    (pixelPts[0].y - sy) * exportScale
+                  );
+                  for (let i = 1; i < pixelPts.length; i++) {
+                    ctx.lineTo(
+                      (pixelPts[i].x - sx) * exportScale,
+                      (pixelPts[i].y - sy) * exportScale
+                    );
+                  }
+                  ctx.closePath();
+                  ctx.clip();
+                }
+                drawSource();
+                ctx.restore();
+              } else {
+                drawSource();
+              }
+
+              const blob = await new Promise((res) =>
+                out.toBlob(res, "image/png")
               );
-            } else {
-              ctx.drawImage(
-                p.canvasEl,
-                sx,
-                sy,
-                sw,
-                sh,
-                0,
-                0,
-                out.width,
-                out.height
+              zip.file(name, blob);
+              setExportLoading(
+                true,
+                `Exporting ${idx + 1}/${selections.length} selection${
+                  selections.length === 1 ? "" : "s"
+                }...`
               );
+              await new Promise((r) => requestAnimationFrame(r));
             }
 
-            const blob = await new Promise((res) =>
-              out.toBlob(res, "image/png")
-            );
-            zip.file(name, blob);
+            setExportLoading(true, "Building ZIP...");
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+            const url = URL.createObjectURL(zipBlob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = zipFileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          } finally {
+            setExportLoading(false);
           }
-
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-          const url = URL.createObjectURL(zipBlob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "selections.zip";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
         }
 
         function uniqueName(base, seen) {
@@ -1477,11 +2951,18 @@
             }
             case "delete": {
               const p = state.pages[action.pageIndex];
+              const isPolygon = action.kind === "polygon";
               const el = createSelection(
                 p.node.boxes,
                 action.rect,
                 action.label,
-                action.id
+                action.id,
+                {
+                  kind: "polygon",
+                  points: isPolygon
+                    ? action.points || []
+                    : rectToPolygonPoints(action.rect),
+                }
               );
               break;
             }
@@ -1490,6 +2971,12 @@
               if (sel) {
                 const pageRec = state.pages[action.pageIndex];
                 setRect(sel, action.from, pageRec);
+                if (
+                  sel.dataset.kind === "polygon" &&
+                  Array.isArray(action.fromPoints)
+                ) {
+                  setPolygonPoints(sel, action.fromPoints, pageRec);
+                }
               }
               break;
             }
@@ -1506,6 +2993,58 @@
           scheduleSessionSave();
         }
 
+        async function loadImageFromUrl(url) {
+          return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.decoding = "async";
+            img.draggable = false;
+            img.crossOrigin = "anonymous";
+
+            img.onload = () => {
+              const pixelW = img.naturalWidth;
+              const pixelH = img.naturalHeight;
+              const baseCSSWidth = measuredCSSSize();
+              const ratio = pixelH / pixelW;
+              const baseCSSHeight = Math.round(baseCSSWidth * ratio);
+
+              const page = createPageShell(baseCSSWidth, baseCSSHeight);
+              img.className = "content";
+              page.content.appendChild(img);
+
+              page.kind = "image";
+              page.canvasRef = null;
+
+              page.root.style.width = `${baseCSSWidth * state.zoom}px`;
+              page.root.style.height = `${baseCSSHeight * state.zoom}px`;
+              img.style.width = "100%";
+              img.style.height = "100%";
+
+              state.pages.push({
+                type: "image",
+                baseCSSWidth,
+                baseCSSHeight,
+                pixelW,
+                pixelH,
+                node: page,
+                imgEl: img,
+                canvasEl: null,
+              });
+
+              makeThumb(
+                state.pages.length - 1,
+                img,
+                baseCSSWidth,
+                baseCSSHeight
+              );
+              updateToolbar();
+              resolve();
+            };
+
+            img.onerror = () => reject(new Error(`Failed to load image: ${url}`));
+            img.src = url;
+          });
+        }
+
         function redo() {
           const action = history.redo.pop();
           if (!action) return;
@@ -1513,11 +3052,18 @@
           switch (action.type) {
             case "create": {
               const p = state.pages[action.pageIndex];
+              const isPolygon = action.kind === "polygon";
               const el = createSelection(
                 p.node.boxes,
                 action.rect,
                 action.label,
-                action.id
+                action.id,
+                {
+                  kind: "polygon",
+                  points: isPolygon
+                    ? action.points || []
+                    : rectToPolygonPoints(action.rect),
+                }
               );
               break;
             }
@@ -1531,6 +3077,12 @@
               if (sel) {
                 const pageRec = state.pages[action.pageIndex];
                 setRect(sel, action.to, pageRec);
+                if (
+                  sel.dataset.kind === "polygon" &&
+                  Array.isArray(action.toPoints)
+                ) {
+                  setPolygonPoints(sel, action.toPoints, pageRec);
+                }
               }
               break;
             }
@@ -1582,15 +3134,14 @@
             return;
           }
 
-          // Open
-          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "o") {
-            e.preventDefault();
-            fileEl.click();
-          }
           // Export
-          else if (e.key.toLowerCase() === "e") {
+          if (e.key.toLowerCase() === "e") {
             e.preventDefault();
-            exportZip();
+            if (e.shiftKey) {
+              exportSelectedPolygon();
+            } else {
+              exportZip();
+            }
           }
           // Zoom
           else if (e.key === "+" || e.key === "=") {
@@ -1606,16 +3157,17 @@
           // Paging
           else if (e.key.toLowerCase() === "j" || e.key === "PageDown") {
             e.preventDefault();
-            nextBtn.click();
+            scrollToPage(state.activePage + 1);
           } else if (e.key.toLowerCase() === "k" || e.key === "PageUp") {
             e.preventDefault();
-            prevBtn.click();
+            scrollToPage(state.activePage - 1);
           }
           // p-mode toggle
           else if (e.key.toLowerCase() === "p") {
             e.preventDefault();
             state.pMode = !state.pMode;
             updateToolbar();
+            scheduleSessionSave();
             announce(`p-mode ${state.pMode ? "ON" : "OFF"}`);
           }
           // Label adjust A/D
@@ -1627,6 +3179,7 @@
               state.normalCounter = Math.max(1, state.normalCounter - 1);
             }
             updateToolbar();
+            scheduleSessionSave();
           } else if (e.key.toLowerCase() === "d") {
             e.preventDefault();
             if (state.pMode) {
@@ -1635,21 +3188,16 @@
               state.normalCounter = Math.max(1, state.normalCounter + 1);
             }
             updateToolbar();
-          }
-          // New box
-          else if (e.key.toLowerCase() === "n") {
-            e.preventDefault();
-            newBoxAtCenter();
-          }
-          // Crosshair toggle
-          else if (e.key.toLowerCase() === "h") {
-            e.preventDefault();
-            toggleCrosshairBtn.click();
+            scheduleSessionSave();
           }
           // Help
           else if (e.key === "?") {
             e.preventDefault();
             toggleHelp();
+          }
+          // Cancel polygon draft
+          else if (e.key === "Escape") {
+            clearPolygonDraft();
           }
           // Rename selected
           else if (e.key.toLowerCase() === "r") {
@@ -1668,6 +3216,11 @@
                 rect: getRect(sel),
                 label: sel.querySelector(".label").textContent,
                 id: sel.dataset.id,
+                kind: sel.dataset.kind || "rect",
+                points:
+                  sel.dataset.kind === "polygon"
+                    ? JSON.parse(sel.dataset.points || "[]")
+                    : null,
               });
               sel.remove();
               state.currentSelection = null;
@@ -1696,14 +3249,28 @@
             x = clamp(x, 0, p.baseCSSWidth - w);
             y = clamp(y, 0, p.baseCSSHeight - h);
             const after = { x, y, w, h };
+            const beforePoints =
+              state.currentSelection.dataset.kind === "polygon"
+                ? JSON.parse(state.currentSelection.dataset.points || "[]")
+                : null;
             setRect(state.currentSelection, after, p);
+            if (state.currentSelection.dataset.kind === "polygon") {
+              shiftPolygonPoints(state.currentSelection, x - before.x, y - before.y);
+              updatePolygonVisual(state.currentSelection);
+            }
             if (!rectEqual(before, after)) {
+              const toPoints =
+                state.currentSelection.dataset.kind === "polygon"
+                  ? JSON.parse(state.currentSelection.dataset.points || "[]")
+                  : null;
               pushAction({
                 type: "transform",
                 id: state.currentSelection.dataset.id,
                 pageIndex: getPageIndexFromNode(p.node.root),
                 from: before,
                 to: after,
+                fromPoints: beforePoints,
+                toPoints,
               });
             }
           }
@@ -1716,6 +3283,9 @@
               .querySelectorAll(".selection.selected")
               .forEach((n) => n.classList.remove("selected"));
             state.currentSelection = null;
+            document
+              .querySelectorAll('.selection[data-kind="polygon"]')
+              .forEach((n) => updatePolygonVisual(n));
           }
         });
 
@@ -1745,30 +3315,143 @@
           if (!currentSessionKey || !state.pages.length || isRestoringSession) {
             return;
           }
+          setSaveStatus("saving", currentDocId ? "Saving..." : "Saving local...");
           clearTimeout(saveTimer);
           saveTimer = setTimeout(saveSession, 250);
+          if (currentDocId) {
+            queueServerSessionSave(buildSessionSnapshot(), currentDocId);
+          }
+        }
+
+        function queueServerSessionSave(snapshot = null, docId = currentDocId) {
+          if (!docId || !state.pages.length || isRestoringSession) return;
+          const nextSnapshot = snapshot || buildSessionSnapshot();
+          pendingServerSaves.set(docId, nextSnapshot);
+          if (serverSaveInFlight) return;
+          void flushServerSessionSaves();
+        }
+
+        async function flushServerSessionSaves() {
+          if (serverSaveInFlight) return;
+          serverSaveInFlight = true;
+          setSaveStatus("saving", "Saving...");
+          try {
+            while (pendingServerSaves.size) {
+              const queued = Array.from(pendingServerSaves.entries());
+              pendingServerSaves.clear();
+              for (const [docId, snapshot] of queued) {
+                try {
+                  await saveServerSession(docId, snapshot);
+                } catch (err) {
+                  pendingServerSaves.set(docId, snapshot);
+                  throw err;
+                }
+              }
+            }
+            setSaveStatusSavedSoon("Saved");
+          } catch (err) {
+            console.warn("Server session flush failed:", err);
+            setSaveStatus("error", "Save failed");
+          } finally {
+            serverSaveInFlight = false;
+            if (pendingServerSaves.size) {
+              void flushServerSessionSaves();
+            }
+          }
+        }
+
+        function buildSessionSnapshot() {
+          const selections = getAllSelections().map(({ pageIndex, node }) => ({
+            pageIndex,
+            rect: getRect(node),
+            label: node.querySelector(".label").textContent.trim() || "untitled",
+            id: node.dataset.id,
+            kind: node.dataset.kind || "rect",
+            points:
+              node.dataset.kind === "polygon"
+                ? JSON.parse(node.dataset.points || "[]")
+                : null,
+          }));
+          return {
+            savedAt: Date.now(),
+            normalCounter: state.normalCounter,
+            pIndex: state.pIndex,
+            pMode: state.pMode,
+            pSuffixMap: state.pSuffixMap,
+            boxIdCounter: state.boxIdCounter,
+            selections,
+          };
+        }
+
+        function applySessionSnapshot(session) {
+          if (!session || typeof session !== "object") return;
+          isRestoringSession = true;
+          state.normalCounter = Math.max(1, Number(session.normalCounter) || 1);
+          state.pIndex = Math.max(1, Number(session.pIndex) || 1);
+          state.pMode = !!session.pMode;
+          state.pSuffixMap =
+            session.pSuffixMap && typeof session.pSuffixMap === "object"
+              ? session.pSuffixMap
+              : {};
+          state.boxIdCounter = Math.max(1, Number(session.boxIdCounter) || 1);
+
+          const selections = Array.isArray(session.selections)
+            ? session.selections
+            : [];
+          for (const s of selections) {
+            if (!s || typeof s.pageIndex !== "number" || s.pageIndex < 0) {
+              continue;
+            }
+            let targetPageIndex = s.pageIndex;
+            let yOffset = 0;
+            if (targetPageIndex >= state.pages.length) {
+              if (
+                state.pages.length === 1 &&
+                mergedPageTopOffsets.length &&
+                targetPageIndex < mergedPageTopOffsets.length
+              ) {
+                yOffset = mergedPageTopOffsets[targetPageIndex] || 0;
+                targetPageIndex = 0;
+              } else {
+                continue;
+              }
+            }
+            const p = state.pages[targetPageIndex];
+            const rect = s.rect || {};
+            const x = Number(rect.x);
+            const y = Number(rect.y) + yOffset;
+            const w = Number(rect.w);
+            const h = Number(rect.h);
+            if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
+              continue;
+            }
+            const rawPoints =
+              s.kind === "polygon" && Array.isArray(s.points) ? s.points : null;
+            const points = rawPoints
+              ? rawPoints.map((pt) => ({
+                  x: Number(pt.x),
+                  y: Number(pt.y) + yOffset,
+                }))
+              : rectToPolygonPoints({ x, y, w, h });
+            createSelection(
+              p.node.boxes,
+              { x, y, w, h },
+              sanitizeLabel(s.label || "untitled") || "untitled",
+              s.id,
+              {
+                kind: "polygon",
+                points,
+              }
+            );
+          }
+          isRestoringSession = false;
         }
 
         function saveSession() {
           if (!currentSessionKey || !state.pages.length) return;
           try {
             const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-            const selections = getAllSelections().map(({ pageIndex, node }) => ({
-              pageIndex,
-              rect: getRect(node),
-              label: node.querySelector(".label").textContent.trim() || "untitled",
-              id: node.dataset.id,
-            }));
-
-            store[currentSessionKey] = {
-              savedAt: Date.now(),
-              normalCounter: state.normalCounter,
-              pIndex: state.pIndex,
-              pMode: state.pMode,
-              pSuffixMap: state.pSuffixMap,
-              boxIdCounter: state.boxIdCounter,
-              selections,
-            };
+            store[currentSessionKey] = buildSessionSnapshot();
 
             const keysByAge = Object.keys(store).sort(
               (a, b) => (store[b]?.savedAt || 0) - (store[a]?.savedAt || 0)
@@ -1777,8 +3460,10 @@
               delete store[key];
             }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+            if (!currentDocId) setSaveStatusSavedSoon("Saved local");
           } catch (err) {
             console.warn("Session save failed:", err);
+            setSaveStatus("error", "Save failed");
           }
         }
 
@@ -1788,49 +3473,55 @@
             const store = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
             const session = store[currentSessionKey];
             if (!session) return;
-
-            isRestoringSession = true;
-            state.normalCounter = Math.max(1, Number(session.normalCounter) || 1);
-            state.pIndex = Math.max(1, Number(session.pIndex) || 1);
-            state.pMode = !!session.pMode;
-            state.pSuffixMap =
-              session.pSuffixMap && typeof session.pSuffixMap === "object"
-                ? session.pSuffixMap
-                : {};
-            state.boxIdCounter = Math.max(1, Number(session.boxIdCounter) || 1);
-
-            const selections = Array.isArray(session.selections)
-              ? session.selections
-              : [];
-            for (const s of selections) {
-              if (
-                !s ||
-                typeof s.pageIndex !== "number" ||
-                s.pageIndex < 0 ||
-                s.pageIndex >= state.pages.length
-              ) {
-                continue;
-              }
-              const p = state.pages[s.pageIndex];
-              const rect = s.rect || {};
-              const x = Number(rect.x);
-              const y = Number(rect.y);
-              const w = Number(rect.w);
-              const h = Number(rect.h);
-              if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
-                continue;
-              }
-              createSelection(
-                p.node.boxes,
-                { x, y, w, h },
-                sanitizeLabel(s.label || "untitled") || "untitled",
-                s.id
-              );
-            }
+            applySessionSnapshot(session);
           } catch (err) {
             console.warn("Session restore failed:", err);
-          } finally {
-            isRestoringSession = false;
+          }
+        }
+
+        async function loadServerSession(docId) {
+          if (!docId) return null;
+          try {
+            const res = await fetch(
+              `${apiUrl("/api/snip-docs/session")}?doc=${encodeURIComponent(docId)}`
+            );
+            if (!res.ok) return null;
+            const payload = await res.json();
+            return payload?.session || null;
+          } catch {
+            return null;
+          }
+        }
+
+        async function saveServerSession(docId, snapshot) {
+          if (!docId || !snapshot) return;
+          const res = await fetch(
+            `${apiUrl("/api/snip-docs/session")}?doc=${encodeURIComponent(docId)}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ session: snapshot }),
+              keepalive: true,
+            }
+          );
+          if (!res.ok) {
+            throw new Error(`Server save failed with HTTP ${res.status}`);
+          }
+        }
+
+        function saveServerSessionWithBeacon(docId, snapshot) {
+          if (!docId || !snapshot || typeof navigator.sendBeacon !== "function") {
+            return false;
+          }
+          try {
+            const body = JSON.stringify({ session: snapshot });
+            const ok = navigator.sendBeacon(
+              `${apiUrl("/api/snip-docs/session")}?doc=${encodeURIComponent(docId)}`,
+              new Blob([body], { type: "application/json" })
+            );
+            return !!ok;
+          } catch {
+            return false;
           }
         }
 
@@ -1849,13 +3540,38 @@
           resizeTimer = setTimeout(() => {
             applyZoom();
             updateAllBoxesPositions();
+            updateDocNameTicker();
           }, 100);
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (
+            document.visibilityState !== "hidden" ||
+            !currentDocId ||
+            !state.pages.length ||
+            isRestoringSession
+          ) {
+            return;
+          }
+          saveSession();
+          queueServerSessionSave(buildSessionSnapshot(), currentDocId);
+        });
+        window.addEventListener("beforeunload", () => {
+          if (!currentDocId || !state.pages.length || isRestoringSession) return;
+          saveSession();
+          const docIdSnapshot = currentDocId;
+          const snapshot = buildSessionSnapshot();
+          if (!saveServerSessionWithBeacon(docIdSnapshot, snapshot)) {
+            queueServerSessionSave(snapshot, docIdSnapshot);
+          }
         });
 
         // Initial UI
         updateToolbar();
+        updateEmptyState();
+        fetchServerDocuments();
       })();
     </script>
   </body>
 </html>
+
 

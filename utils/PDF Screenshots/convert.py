@@ -3,11 +3,13 @@
 import fitz  # PyMuPDF
 import os
 import getpass
+import argparse
 from typing import Optional
 
 DEFAULT_PASSWORD = "awesomePREPALLY"
+DEFAULT_RENDER_ZOOM = 4.0  # ~288 DPI at 72 DPI base
 
-def _render_pixmap(page: fitz.Page, zoom: float = 2.0) -> "fitz.Pixmap":
+def _render_pixmap(page: fitz.Page, zoom: float = DEFAULT_RENDER_ZOOM) -> "fitz.Pixmap":
     """
     Compatible page-to-pixmap renderer across PyMuPDF versions.
     Newer versions: page.get_pixmap()
@@ -52,7 +54,7 @@ def _authenticate_if_needed(doc: fitz.Document) -> bool:
             return True
         print("❌ Incorrect password. Please try again.")
 
-def convert_pdf_to_images(pdf_path: str):
+def convert_pdf_to_images(pdf_path: str, render_zoom: float = DEFAULT_RENDER_ZOOM):
     """
     Converts each page of a (possibly password-protected) PDF into PNG images.
     - If encrypted, authenticates and writes an *unlocked* copy (…_unlocked.pdf).
@@ -119,7 +121,7 @@ def convert_pdf_to_images(pdf_path: str):
 
     for i in range(total_pages):
         page = doc.load_page(i)
-        pix = _render_pixmap(page, zoom=2.0)  # ~144 DPI equivalent
+        pix = _render_pixmap(page, zoom=render_zoom)
         output_image_path = os.path.join(output_dir, f"page_{i + 1:04d}.png")
         pix.save(output_image_path)
         print(f"    -> Saved page {i + 1} as {output_image_path}")
@@ -134,5 +136,35 @@ def _iter_pdf_paths(root_dir: str):
                 yield os.path.join(root, f)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Convert PDFs to page PNGs using PyMuPDF."
+    )
+    parser.add_argument(
+        "--zoom",
+        type=float,
+        default=DEFAULT_RENDER_ZOOM,
+        help=(
+            "Render zoom multiplier (higher is sharper and larger files). "
+            f"Default: {DEFAULT_RENDER_ZOOM}"
+        ),
+    )
+    parser.add_argument(
+        "--dpi",
+        type=float,
+        default=None,
+        help="Optional DPI target. If set, zoom is derived as dpi / 72.",
+    )
+    args = parser.parse_args()
+
+    render_zoom = args.zoom
+    if args.dpi is not None and args.dpi > 0:
+        render_zoom = args.dpi / 72.0
+    if render_zoom <= 0:
+        raise ValueError("Render zoom must be > 0.")
+
+    print(
+        f"Using render zoom {render_zoom:.3f} "
+        f"(~{render_zoom * 72:.0f} DPI equivalent)."
+    )
     for pdf in _iter_pdf_paths("."):
-        convert_pdf_to_images(pdf)
+        convert_pdf_to_images(pdf, render_zoom=render_zoom)

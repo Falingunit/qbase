@@ -152,7 +152,7 @@
   {
     "qType": "Passage",
     "passageId": "P1",
-    "qText": null,
+    "qText": "",
     "image": "p1.png",
     "qOptions": [],
     "qAnswer": []

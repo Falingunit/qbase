@@ -206,7 +206,7 @@
   {
     "qType": "SMCQ",
     "passageId": "P1",
-    "qText": null,
+    "qText": "",
     "image": "22.png",
     "qOptions": [],
     "qAnswer": "B",

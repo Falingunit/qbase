@@ -280,6 +280,27 @@
     "aID": 28
   },
   {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Alternating Current and EM Waves",
+    "aID": 30
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Electromagnetic Induction",
+    "aID": 31
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Moving charges and Magnetic Field",
+    "aID": 32
+  },
+  {
     "subject": "Chemistry",
     "faculty": "Z7i",
     "chapter": "Amines",
