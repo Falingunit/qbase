@@ -2348,27 +2348,36 @@
     // Passage (text + image)
     const passageImgDiv = document.getElementById("passageImage");
     const passageDiv = document.getElementById("passageText");
-    if (question.passage) {
-      if (question.passageImage) {
-        passageImgDiv.style.display = "block";
-        const imgSrc = `./data/question_data/${aID}/${question.passageImage}`;
-        passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image" loading="lazy" decoding="async">`;
-        passageImgDiv.querySelector("img").addEventListener("click", () => {
-          showImageOverlay(imgSrc);
-        });
-      } else {
-        passageImgDiv.style.display = "none";
-        passageImgDiv.innerHTML = "";
+    const passageWrap = document.querySelector(".passage-wrapper");
+    const hasPassageText = String(question.passage ?? "").trim().length > 0;
+    const hasPassageImage = String(question.passageImage ?? "").trim().length > 0;
+    if (hasPassageImage) {
+      passageImgDiv.style.display = "block";
+      let imgSrc = String(question.passageImage || "");
+      if (!/^https?:|^data:|^\/\//i.test(imgSrc)) {
+        imgSrc = `./data/question_data/${aID}/${imgSrc}`;
       }
-      passageDiv.style.display = "block";
-      passageDiv.textContent = question.passage;
-      try { renderMathInElement && renderMathInElement(passageDiv, katexOptions); } catch {}
+      passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image" loading="lazy" decoding="async">`;
+      passageImgDiv.querySelector("img").addEventListener("click", () => {
+        showImageOverlay(imgSrc);
+      });
     } else {
       passageImgDiv.style.display = "none";
-      passageDiv.style.display = "none";
       passageImgDiv.innerHTML = "";
+    }
+    if (hasPassageText) {
+      passageDiv.style.display = "block";
+      passageDiv.textContent = String(question.passage || "");
+      try { renderMathInElement && renderMathInElement(passageDiv, katexOptions); } catch {}
+    } else {
+      passageDiv.style.display = "none";
       passageDiv.innerHTML = "";
     }
+    try {
+      if (passageWrap) {
+        passageWrap.classList.toggle("passage-image-only", hasPassageImage && !hasPassageText);
+      }
+    } catch {}
 
     // Question image + text
     const qImgDiv = document.getElementById("questionImage");
