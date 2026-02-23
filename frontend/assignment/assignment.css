@@ -683,12 +683,25 @@ body.suppress-eval-anim input.is-wrong {
 #questionText img,
 #MCQOptionDiv .opt-text img,
 #passageText img,
+#passageImage img,
 #solutionText img,
 #questionImage img,
 #solutionImage img,
 #image-overlay .io-img {
   filter: invert(1) contrast(1.2);
   mix-blend-mode: screen;
+}
+
+/* If passage has only image, present it like question image: large and left-aligned. */
+.passage-wrapper.passage-image-only {
+  display: block !important;
+}
+.passage-wrapper.passage-image-only #passageImage {
+  width: 100% !important;
+  justify-content: flex-start;
+}
+.passage-wrapper.passage-image-only #passageImage img {
+  max-width: min(100%, 720px);
 }
 
 img,
@@ -787,6 +800,9 @@ html {
   }
   .passage-image img {
     max-height: 60vh;
+  }
+  .passage-wrapper.passage-image-only #passageImage img {
+    max-height: 70vh;
   }
 }
 

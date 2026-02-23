@@ -314,7 +314,7 @@
     "title": "LCD 1",
     "aID": 217
   },
-    {
+  {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-2 Revision",
@@ -355,4 +355,26 @@
     "chapter": "SPT-3 Revision",
     "title": "Gravitation",
     "aID": 400
-  }]
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Current Electricity",
+    "aID": 34
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Electrostatics",
+    "aID": 35
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Capacitors and Capacitance",
+    "aID": 36
+  }
+]
