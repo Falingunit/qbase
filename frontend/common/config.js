@@ -106,11 +106,143 @@ async function loadConfig() {
 window.qbSetToken = (t) => localStorage.setItem("qb_token", t);
 window.qbGetToken = () => localStorage.getItem("qb_token") || "";
 window.qbClearToken = () => localStorage.removeItem("qb_token");
+let __qbMaintNoticeAt = 0;
+let __qbMaintDialog = null;
+let __qbMaintDialogVisible = false;
+let __qbMaintProbeInFlight = false;
+let __qbPrevBodyOverflow = "";
+function __qbEnsureMaintenanceDialog() {
+  if (__qbMaintDialog || typeof document === "undefined") return __qbMaintDialog;
+  const wrap = document.createElement("div");
+  wrap.id = "qb-maintenance-overlay";
+  wrap.setAttribute("role", "dialog");
+  wrap.setAttribute("aria-modal", "true");
+  wrap.setAttribute("aria-labelledby", "qb-maintenance-title");
+  wrap.style.cssText = [
+    "position:fixed",
+    "inset:0",
+    "z-index:2147483647",
+    "display:none",
+    "align-items:center",
+    "justify-content:center",
+    "background:rgba(0,0,0,0.7)",
+    "padding:16px"
+  ].join(";");
+
+  const box = document.createElement("div");
+  box.style.cssText = [
+    "width:min(520px,100%)",
+    "background:#121417",
+    "color:#f3f4f6",
+    "border:1px solid rgba(255,255,255,0.12)",
+    "border-radius:14px",
+    "box-shadow:0 20px 60px rgba(0,0,0,0.45)",
+    "padding:18px"
+  ].join(";");
+
+  const title = document.createElement("h2");
+  title.id = "qb-maintenance-title";
+  title.textContent = "Server Under Maintenance";
+  title.style.cssText = "margin:0 0 8px;font:600 20px/1.2 system-ui,sans-serif;";
+
+  const msg = document.createElement("p");
+  msg.textContent = "The server is under maintenance and will be back soon.";
+  msg.style.cssText = "margin:0 0 12px;color:#d1d5db;font:400 14px/1.4 system-ui,sans-serif;";
+
+  const status = document.createElement("div");
+  status.id = "qb-maintenance-status";
+  status.textContent = "Connection lost.";
+  status.style.cssText = "margin:0 0 14px;color:#fbbf24;font:500 13px/1.4 system-ui,sans-serif;";
+
+  const btnRow = document.createElement("div");
+  btnRow.style.cssText = "display:flex;gap:10px;justify-content:flex-end;";
+
+  const refreshBtn = document.createElement("button");
+  refreshBtn.type = "button";
+  refreshBtn.id = "qb-maintenance-refresh";
+  refreshBtn.textContent = "Refresh";
+  refreshBtn.style.cssText = [
+    "border:0",
+    "border-radius:10px",
+    "padding:10px 14px",
+    "background:#2563eb",
+    "color:#fff",
+    "font:600 14px/1 system-ui,sans-serif",
+    "cursor:pointer"
+  ].join(";");
+
+  refreshBtn.addEventListener("click", async () => {
+    if (__qbMaintProbeInFlight) return;
+    __qbMaintProbeInFlight = true;
+    refreshBtn.disabled = true;
+    refreshBtn.style.opacity = "0.75";
+    status.textContent = "Checking server status...";
+    status.style.color = "#93c5fd";
+    try {
+      const probeUrl = `${API_BASE}/me?_=${Date.now()}`;
+      const resp = await fetch(probeUrl, { cache: "no-store" });
+      if (resp) {
+        status.textContent = "Server is back. Reloading...";
+        status.style.color = "#86efac";
+        try { location.reload(); } catch {}
+        return;
+      }
+      status.textContent = "Server is still unreachable. Please try again shortly.";
+      status.style.color = "#fbbf24";
+    } catch {
+      status.textContent = "Server is still unreachable. Please try again shortly.";
+      status.style.color = "#fbbf24";
+    } finally {
+      __qbMaintProbeInFlight = false;
+      refreshBtn.disabled = false;
+      refreshBtn.style.opacity = "1";
+    }
+  });
+
+  box.append(title, msg, status);
+  btnRow.appendChild(refreshBtn);
+  box.appendChild(btnRow);
+  wrap.appendChild(box);
+  document.body.appendChild(wrap);
+  __qbMaintDialog = wrap;
+  return __qbMaintDialog;
+}
+
+function __qbOpenMaintenanceDialog() {
+  const dlg = __qbEnsureMaintenanceDialog();
+  if (!dlg) return;
+  if (!__qbMaintDialogVisible) {
+    try {
+      __qbPrevBodyOverflow = document.body.style.overflow || "";
+      document.body.style.overflow = "hidden";
+    } catch {}
+  }
+  const status = dlg.querySelector("#qb-maintenance-status");
+  if (status) {
+    status.textContent = "Connection lost.";
+    status.style.color = "#fbbf24";
+  }
+  dlg.style.display = "flex";
+  __qbMaintDialogVisible = true;
+}
+
+function __qbShowMaintenanceNotice() {
+  const now = Date.now();
+  // Throttle repeated show calls while many requests fail at once.
+  if (now - __qbMaintNoticeAt < 500 && __qbMaintDialogVisible) return;
+  __qbMaintNoticeAt = now;
+  const msg = "Server is under maintenance and will be back soon.";
+  __qbOpenMaintenanceDialog();
+  try { console.warn(msg); } catch {}
+}
 window.authFetch = (url, opts = {}) => {
   const token = qbGetToken();
   const headers = new Headers(opts.headers || {});
   if (token) headers.set("Authorization", `Bearer ${token}`);
-  return fetch(url, { cache: "no-store", ...opts, headers });
+  return fetch(url, { cache: "no-store", ...opts, headers }).catch((err) => {
+    __qbShowMaintenanceNotice();
+    throw err;
+  });
 };
 
 // --- Service worker registration (global) ---
