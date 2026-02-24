@@ -254,29 +254,29 @@
   {
     "subject": "Mathematics",
     "faculty": "MPV",
-    "chapter": "SRF",
-    "title": "SRF Adv Worksheet 1",
+    "chapter": "SPT-1 Revision",
+    "title": "Sets, Relations and Functions 1",
     "aID": 215
   },
   {
     "subject": "Physics",
     "faculty": "Z7i",
-    "chapter": "Modern Physics",
-    "title": "ADV assignment 1",
+    "chapter": "SPT-1 Revision",
+    "title": "Modern Physics 1",
     "aID": 216
   },
   {
     "subject": "Chemistry",
     "faculty": "Z7i",
-    "chapter": "Aldehydes and Ketones",
-    "title": "Aldehydes and Ketones (SPT-2 assignment)",
+    "chapter": "SPT-2 Revision",
+    "title": "Aldehydes and Ketones",
     "aID": 27
   },
   {
     "subject": "Chemistry",
     "faculty": "Z7i",
-    "chapter": "Biomolecules",
-    "title": "Biomolecules and Polymers (SPT-2 assignment)",
+    "chapter": "SPT-2 Revision",
+    "title": "Biomolecules and Polymers",
     "aID": 28
   },
   {
@@ -303,50 +303,50 @@
   {
     "subject": "Chemistry",
     "faculty": "Z7i",
-    "chapter": "Amines",
-    "title": "Amines (SPT-2 assignment)",
+    "chapter": "SPT-2 Revision",
+    "title": "Amines",
     "aID": 29
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-2 Revision",
-    "title": "LCD 1",
+    "title": "Limits, Continuity and Differentiability 1",
     "aID": 217
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-2 Revision",
-    "title": "LCD 2",
+    "title": "Limits, Continuity and Differentiability 2",
     "aID": 33
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-2 Revision",
-    "title": "AOD 1",
+    "title": "Applications of Derivatives 1",
     "aID": 218
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-2 Revision",
-    "title": "AOD 2",
+    "title": "Applications of Derivatives 2",
     "aID": 219
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-3 Revision",
-    "title": "II,DI",
+    "title": "Defenite and Indefenite Integration 1",
     "aID": 401
   },
   {
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-3 Revision",
-    "title": "II,DI",
+    "title": "Defenite and Indefenite Integration 2",
     "aID": 402
   },
 {
@@ -381,7 +381,7 @@
     "subject": "Mathematics",
     "faculty": "Z7i",
     "chapter": "SPT-3 Revision",
-    "title": "Area,DE WS1",
+    "title": "Areas and Differential Equations 1",
     "aID": 220
   },
   {
