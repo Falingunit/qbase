@@ -76,7 +76,7 @@
     "qOptions": [
       "$y = \\ln x + c$",
       "$y = (\\ln x)^2 + c$",
-      "$y = \\pm \\ln x + c$",
+      "$y = \\pm \\sqrt{\\ln x + c}$",
       "$xy = x^y + c$"
     ],
     "qAnswer": "C"
