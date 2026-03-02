@@ -1,0 +1,246 @@
+
+{
+  "questions":
+
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "1.png",
+    "qOptions": [],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "2.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "3.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "4.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "5.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "6.png",
+    "qOptions": [],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "7.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "8.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "9.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "10.png",
+    "qOptions": [],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "11.png",
+    "qOptions": [],
+    "qAnswer": ["A", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "12.png",
+    "qOptions": [],
+    "qAnswer": ["C", "D"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "13.png",
+    "qOptions": [],
+    "qAnswer": 136
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "14.png",
+    "qOptions": [],
+    "qAnswer": 15
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "15.png",
+    "qOptions": [],
+    "qAnswer": 816
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "16.png",
+    "qOptions": [],
+    "qAnswer": 210
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "17.png",
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "18.png",
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "(Options are made-up distractors; one is correct.)",
+    "image": "19.png",
+    "qOptions": [
+      "A \\to q; B \\to p; C \\to s; D \\to r",
+      "A \\to p; B \\to q; C \\to s; D \\to r",
+      "A \\to q; B \\to s; C \\to p; D \\to r",
+      "A \\to r; B \\to p; C \\to s; D \\to q"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "",
+    "image": "p1.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "",
+    "image": "20.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "",
+    "image": "21.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "",
+    "image": "22.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "",
+    "image": "p2.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "",
+    "image": "23.png",
+    "qOptions": [],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "",
+    "image": "24.png",
+    "qOptions": [],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "",
+    "image": "25.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
