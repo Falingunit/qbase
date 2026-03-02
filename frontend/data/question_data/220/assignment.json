@@ -76,7 +76,7 @@
     "qOptions": [
       "$y = \\ln x + c$",
       "$y = (\\ln x)^2 + c$",
-      "$y = \\pm \\ln x + c$",
+      "$y = \\pm \\sqrt{\\ln x + c}$",
       "$xy = x^y + c$"
     ],
     "qAnswer": "C"
@@ -89,7 +89,7 @@
     "qOptions": [
       "$a - 2c + b - d$",
       "$a + b - 2c - 2d$",
-      "$\\int_0^3 f(x) \\, dx + \\int_3^5 f(x) \\, dx + \\int_0^3 g(x) \\, dx + \\int_3^5 g(x) \\, dx$",
+      "$\\int_0^3 f(x) \\, dx - \\int_3^5 f(x) \\, dx - \\int_0^3 g(x) \\, dx + \\int_3^5 g(x) \\, dx$",
       "$\\int_0^3 (g(x) - f(x)) \\, dx + \\int_3^5 (f(x) - g(x)) \\, dx$"
     ],
     "qAnswer": ["B", "C"]
