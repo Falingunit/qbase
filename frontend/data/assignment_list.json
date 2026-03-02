@@ -397,5 +397,12 @@
     "chapter": "Narendra Awasthi",
     "title": "Liquid Solutions ",
     "aID": 222
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "NA",
+    "chapter": "P Bahadur",
+    "title": "Gaseous State",
+    "aID": 223
   }
 ]

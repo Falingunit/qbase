@@ -1,0 +1,730 @@
+
+{
+  "questions":
+
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "(Note: All the Qs here are from the BOOK CVR sir sent in classroom and only the selected Qs (which was marked with a star in the book are added) Thank You)\n\n*4. A manometric fluid dibutyl phthalate has density \\( 1.047 \\times 10^3 \\, \\text{kg m}^{-3} \\). What pressure of this liquid of one mm height suggest?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.077 \\, \\text{torr} \\)",
+      "\\( 0.102 \\, \\text{torr} \\)",
+      "\\( 0.051 \\, \\text{torr} \\)",
+      "\\( 0.093 \\, \\text{torr} \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*7. One litre water in a bucket is placed in a closed dry air room having dimensions \\( 4 \\times 2 \\times 1.5 \\, \\text{m}^3 \\) at 300 K. If the vapour pressure of water at 300 K is 27.0 mm and density of water at 300 K is \\( 0.990 \\, \\text{g cm}^{-3} \\), calculate the amount of water left in liquid state.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 698.2 \\, \\text{mL} \\)",
+      "\\( 685.3 \\, \\text{mL} \\)",
+      "\\( 752.6 \\, \\text{mL} \\)",
+      "\\( 614.8 \\, \\text{mL} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*12. A gaseous system occupies the volume 800 cm\\(^3\\) at 22°C at a certain pressure. To what temperature, the gas should be heated in order to increase its volume by 20% keeping the pressure constant?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 65.8 \\, \\text{°C} \\)",
+      "\\( 73.5 \\, \\text{°C} \\)",
+      "\\( 81.0 \\, \\text{°C} \\)",
+      "\\( 92.4 \\, \\text{°C} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "*23. A container with a volume of 3.0 litre holds \\( N_2(g) \\) and \\( H_2O(l) \\) at 29°C. The pressure is found to be 1.0 atm. The water is then split into hydrogen and oxygen by electrolysis, according to the reaction \\( H_2O(l) \\rightarrow H_2(g) + \\frac{1}{2} O_2(g) \\). After the reaction is complete, the pressure is 1.86 atm. What mass of water was present in the container? The aqueous tension of water at 29°C is 0.04 atm.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "What mass of water was present in the container?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.94 \\, \\text{g} \\)",
+      "\\( 1.25 \\, \\text{g} \\)",
+      "\\( 2.18 \\, \\text{g} \\)",
+      "\\( 1.67 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*27. A dry gas occupies 127 mL at STP. If the same mass of a gas were collected over water at 23°C and a total pressure of 745 mm. What volume would it occupy? The vapour pressure of water at 23°C is 21 mm.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 156.2 \\, \\text{mL} \\)",
+      "\\( 144.5 \\, \\text{mL} \\)",
+      "\\( 132.8 \\, \\text{mL} \\)",
+      "\\( 138.3 \\, \\text{mL} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*28. What percentage of a sample of nitrogen must be allowed to escape if its temperature, pressure and volume are changed from 493 K, 30 atm and 1.65 litre to 383 K, 0.7 atm and 1 litre respectively?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 67.93\\% \\)",
+      "\\( 73.42\\% \\)",
+      "\\( 89.15\\% \\)",
+      "\\( 81.78\\% \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P2",
+    "qText": "*29. 0.01 and 0.03 mole of \\( CH_4 \\) and \\( O_2 \\) respectively are allowed to react as \\( 2CH_4 + 3O_2 \\rightarrow 2CO + 4H_2O \\) at 101.325 kPa and 383 K. After the reaction the flask is cooled to 283 K at which \\( H_2O \\) is completely condensed. Calculate the partial pressure of each species left after reactions and the total pressure of mixture at 283 K.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P2",
+    "qText": "What is the total pressure of the mixture at 283 K?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 38.92 \\, \\text{kPa} \\)",
+      "\\( 52.34 \\, \\text{kPa} \\)",
+      "\\( 46.78 \\, \\text{kPa} \\)",
+      "\\( 41.65 \\, \\text{kPa} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*30. A bulb of 200 mL capacity is filled with gas mixture of \\( C_2H_6 \\) and \\( C_4H_{10} \\), to a pressure of 750 mm at 20°C. If the weight of gas in the bulb is 0.3846 g, what is mole % of butane in mixture?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 60.28\\% \\)",
+      "\\( 45.92\\% \\)",
+      "\\( 68.43\\% \\)",
+      "\\( 52.17\\% \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*32. A flask contains a mixture of \\( N_2 \\) and \\( CO_2 \\). The total pressure is 1.5 atm and the temperature is 27°C. If \\( CO_2 \\) is removed, the pressure falls to 0.5 atm and the weight of flask drops by 22 g. Calculate the volume of flask and the weight of \\( N_2 \\) present.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 8.4 \\, \\text{g} \\)",
+      "\\( 5.8 \\, \\text{g} \\)",
+      "\\( 7.0 \\, \\text{g} \\)",
+      "\\( 6.3 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*34. Liquefied petroleum gas (LPG) contains mainly methane (\\( CH_4 \\)). A 10 m\\(^3\\) tank is made to store LPG at -164°C and 760 torr pressure, under which condition its density is 415 kg/m\\(^3\\). Calculate the volume of a storage tank capable of holding the same mass of LPG as a gas at 27°C and 1 atm pressure.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 4.93 \\times 10^6 \\, \\text{L} \\)",
+      "\\( 6.38 \\times 10^6 \\, \\text{L} \\)",
+      "\\( 5.12 \\times 10^6 \\, \\text{L} \\)",
+      "\\( 7.45 \\times 10^6 \\, \\text{L} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*37. A cylinder containing 5.0 litre \\( O_2 \\) at 25°C was leaking. When the leakage was detected and stopped there was a change in the pressure of the gas from 3.0 atm to 2.235 atm. How much oxygen in g has been leaked during this period? Also report the volume leaked if collected at 1 atm and 25°C.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 3.8 \\, \\text{g} \\)",
+      "\\( 6.1 \\, \\text{g} \\)",
+      "\\( 5.0 \\, \\text{g} \\)",
+      "\\( 4.2 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*40. A cylinder of 0.5 litre capacity is filled with \\( H_2 \\) at 82 atm and 27°C. What is density of hydrogen gas in cylinder? Calculate the volume of cylinder. If the gas is placed under STP, will some gas come out of the cylinder and if so, than how much volume of it comes out?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 28.73 \\, \\text{L} \\)",
+      "\\( 36.81 \\, \\text{L} \\)",
+      "\\( 42.58 \\, \\text{L} \\)",
+      "\\( 31.25 \\, \\text{L} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*41. A 1.5 litre sample of a gas having density \\( 1.25 \\, \\text{kg/m}^3 \\) at 1.0 atm and 0°C was compressed to 575 atm resulting a gas volume of \\( 3.92 \\, \\text{cm}^3 \\) in violation of Boyle's law. What is the final density of this gas?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 435.8 \\, \\text{kg/m}^3 \\)",
+      "\\( 478.3 \\, \\text{kg/m}^3 \\)",
+      "\\( 512.6 \\, \\text{kg/m}^3 \\)",
+      "\\( 491.2 \\, \\text{kg/m}^3 \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*43. A balloon filled with helium raises to a certain height at which it gets fully inflated to a volume of \\( 1 \\times 10^5 \\) litre. If at this altitude temperature and atmospheric pressure is 268 K and \\( 2 \\times 10^{-3} \\) atm respectively, what weight of helium is required to fully inflate the balloon?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 31.25 \\, \\text{g} \\)",
+      "\\( 39.74 \\, \\text{g} \\)",
+      "\\( 42.18 \\, \\text{g} \\)",
+      "\\( 36.36 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*44. Density of dry air (only \\( N_2 \\) and \\( O_2 \\)) is 1.146 g litre\\(^{-1}\\) at 740 mm and 300 K. Calculate composition of air by weight assuming ideal nature.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 19.63\\% \\)",
+      "\\( 23.41\\% \\)",
+      "\\( 27.58\\% \\)",
+      "\\( 31.85\\% \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*46. A bulb is filled with a definite amount of a gas which holds a pressure of 60 cm of Hg. Now another gas having volume 1.52 mL at 1 atm was added to this bulb so that new pressure becomes 65 cm. Calculate the volume of bulb if all the measurements are made at same \\( T \\).",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 19.567 \\, \\text{mL} \\)",
+      "\\( 23.104 \\, \\text{mL} \\)",
+      "\\( 26.832 \\, \\text{mL} \\)",
+      "\\( 21.456 \\, \\text{mL} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*49. An air bubble starts rising from the bottom of a lake. Its diameter is 3.6 mm at the bottom and 4 mm at the surface. The depth of the lake is 250 cm and temperature at the surface is 40°C. What is the temperature at the bottom of the lake? Given atmospheric pressure = 76 cm of Hg and \\( g = 980 \\, \\text{cm sec}^{-2} \\). Neglect surface tension effect.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 7.2 \\, \\text{°C} \\)",
+      "\\( 12.9 \\, \\text{°C} \\)",
+      "\\( 15.8 \\, \\text{°C} \\)",
+      "\\( 10.4 \\, \\text{°C} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*50. A 2 litre vessel is filled with air at 50°C and a pressure of 3 atm. The temperature is now raised to 200°C. A valve is now opened so that the pressure inside drops to one atm. What fraction of the total number of moles, inside, escaped on opening the valve? Assume no change in the volume of the container.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.52 \\)",
+      "\\( 0.77 \\)",
+      "\\( 0.84 \\)",
+      "\\( 0.63 \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*51. A certain container has \\( 5 \\times 10^{23} \\) molecules of a gas \\( A \\) at a pressure of 900 torr. By a photochemical combination allowing light to fall on the molecules, the pressure drops to 500 torr. If the temperature and volume remain the same how many molecules are present after exposure to light? If dimerization: \\( 2A \\rightarrow A_2 \\) has taken place, how many monomer molecules are still present?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 3.24 \\times 10^{22} \\) monomer molecules",
+      "\\( 9.41 \\times 10^{22} \\) monomer molecules",
+      "\\( 5.56 \\times 10^{22} \\) monomer molecules",
+      "\\( 7.82 \\times 10^{22} \\) monomer molecules"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*55. A gas cylinder contains 370 g of \\( O_2 \\) at 30 atm and 25°C. What mass of \\( O_2 \\) would escape if first the cylinder were heated to 75°C and then the valve were held open until the gas pressure was 1 atm, the temperature maintained at 75°C?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 335.91 \\, \\text{g} \\)",
+      "\\( 341.27 \\, \\text{g} \\)",
+      "\\( 372.58 \\, \\text{g} \\)",
+      "\\( 359.44 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*57. An evacuated bulb of unknown volume was filled with \\( H_2 \\) gas at temperature \\( T \\) and pressure 760 mm of Hg. A portion of \\( H_2 \\) from this bulb was then transferred to a different flask of 40.0 mL having 1 atm pressure of transferred \\( H_2 \\) at same temperature. By doing so the pressure of \\( H_2 \\) in first bulb drops to 625 mm of Hg at same temperature. Assuming ideal gas nature, calculate the volume of first bulb.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 236.4 \\, \\text{mL} \\)",
+      "\\( 225.2 \\, \\text{mL} \\)",
+      "\\( 248.6 \\, \\text{mL} \\)",
+      "\\( 207.5 \\, \\text{mL} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*58. A 500 mL bulb is filled with \\( CH_4 \\) at a pressure of 1 atm and oxygen at a pressure of 4 atm at 27°C. The mixture is then exploded, when the reaction \\( CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O(l) \\) occurs. Calculate the pressure if the final temperature is 27°C. Aqueous tension at 27°C is 26.7 mm.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 2.891 \\, \\text{atm} \\)",
+      "\\( 3.512 \\, \\text{atm} \\)",
+      "\\( 2.748 \\, \\text{atm} \\)",
+      "\\( 3.035 \\, \\text{atm} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*59. A bulb of three litre capacity filled with air is heated from 27°C to \\( t°C \\). The air thus, expelled measured 1.45 litre at 17°C. Considering the pressure to be 1 atm throughout the experiment and ignoring the expansion of bulb, calculate \\( t \\).",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 284 \\, \\text{°C} \\)",
+      "\\( 298 \\, \\text{°C} \\)",
+      "\\( 327 \\, \\text{°C} \\)",
+      "\\( 356 \\, \\text{°C} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*64. The stop cock connecting the two bulbs of volume 5 litre and 10 litre containing an ideal gas at 9 atm and 6 atm respectively, is opened. What is the final pressure in two bulbs if the temperature remains same?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 5.5 \\, \\text{atm} \\)",
+      "\\( 7.0 \\, \\text{atm} \\)",
+      "\\( 6.5 \\, \\text{atm} \\)",
+      "\\( 7.8 \\, \\text{atm} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*65. A cylinder containing helium gas at 10 atm have a small orifice through which helium escaped at the rate of 3.4 millimoles per hour. How long would it take for 10 millimoles of \\( CO \\) to leak through the same orifice if \\( CO \\) was kept under same conditions?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 6.893 \\, \\text{hours} \\)",
+      "\\( 8.546 \\, \\text{hours} \\)",
+      "\\( 9.215 \\, \\text{hours} \\)",
+      "\\( 7.782 \\, \\text{hours} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*67. At the top of the mountain, the thermometer reads 10°C and the barometer reads 70 cm of Hg. At the middle of mountain, it reads 73 cm and 20°C and at the bottom it reads 30°C and 76 cm Hg as pressure. Compare the densities of air at the three places.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 1 : 0.998 : 1.005 \\)",
+      "\\( 1 : 1.018 : 1.026 \\)",
+      "\\( 1 : 1.012 : 1.021 \\)",
+      "\\( 1 : 1.007 : 1.014 \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*71. A certain quantity of an organic liquid (mol. wt. 85) was introduced into an air filled flask of volume 6.5 litre and sealed at a temperature of 17°C and 760 mm of Hg. The flask was heated to a temperature of 307°C where liquid is completely vaporized and the pressure is registered 4.3 atm. Calculate the amount of organic liquid introduced into the flask.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 21.87 \\, \\text{g} \\)",
+      "\\( 23.58 \\, \\text{g} \\)",
+      "\\( 26.69 \\, \\text{g} \\)",
+      "\\( 29.43 \\, \\text{g} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P3",
+    "qText": "*75. The rate of diffusion of a sample of ozonised oxygen is 0.98 times more than that of pure oxygen. Find the percentage (by volume) of ozone in the ozonised sample. Also report percentage by weight.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P3",
+    "qText": "What is the percentage by weight of ozone in the ozonised sample?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 13.47\\% \\)",
+      "\\( 8.25\\% \\)",
+      "\\( 11.88\\% \\)",
+      "\\( 9.62\\% \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P4",
+    "qText": "*80. 1 litre of gaseous mixture is diffused in 311 sec. The same amount of \\( O_2 \\) takes 10 minute for diffusion. The gaseous mixture contains \\( CH_4 \\) and \\( H_2 \\). Calculate: (a) the vapour density of gaseous mixture. (b) the % by volume of each gas in mixture.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P4",
+    "qText": "What is the percentage by volume of \\( H_2 \\) in the mixture?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 56.28\\% \\)",
+      "\\( 52.86\\% \\)",
+      "\\( 41.35\\% \\)",
+      "\\( 47.14\\% \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*83. Justify the assumption of kinetic theory of gases that the volume occupied by the molecules is negligibly small as compared to the volume of the gas by taking an example of \\( N_2 \\) gas having molecular radius \\( 2 \\times 10^{-10} \\, \\text{m} \\). Also report the empty space.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 99.9\\% \\)",
+      "\\( 98.7\\% \\)",
+      "\\( 97.5\\% \\)",
+      "\\( 99.3\\% \\)"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*86. Calculate the root mean square speed of oxygen molecules having a kinetic energy of 2 kcal mol\\(^{-1}\\). At what temperature would the molecules have this value of \\(u_{\\text{rms}}\\)?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 358.94 \\, \\text{°C} \\)",
+      "\\( 393.66 \\, \\text{°C} \\)",
+      "\\( 427.38 \\, \\text{°C} \\)",
+      "\\( 412.53 \\, \\text{°C} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*92. Calculate the temperatures at which the molecules of the first two members of the homologous series \\( C_nH_{2n+2} \\) will have the same rms speed as \\( CO_2 \\) gas has 770 K.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 610 \\, \\text{K} \\)",
+      "\\( 280 \\, \\text{K} \\)",
+      "\\( 525 \\, \\text{K} \\)",
+      "\\( 770 \\, \\text{K} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*96. A one litre gas bulb contains \\( 1.03 \\times 10^{23} \\, \\text{H}_2 \\) molecules. If the pressure exerted by these molecules is 760 mm Hg, what must be root average squared molecular speed?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 7.56 \\times 10^4 \\, \\text{cm/s} \\)",
+      "\\( 9.43 \\times 10^4 \\, \\text{cm/s} \\)",
+      "\\( 1.12 \\times 10^5 \\, \\text{cm/s} \\)",
+      "\\( 8.27 \\times 10^4 \\, \\text{cm/s} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P5",
+    "qText": "*99. The compressibility factor for \\( CO_2 \\) at 273 K and 100 atm pressure is 0.2005. Calculate the volume occupied by 0.2 mole of \\( CO_2 \\) gas at 100 atm and 273 K using (a) ideal gas nature and (b) real gas nature.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P5",
+    "qText": "What is the volume occupied by the gas assuming real gas nature?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.0224 \\, \\text{L} \\)",
+      "\\( 6.234 \\times 10^{-3} \\, \\text{L} \\)",
+      "\\( 8.987 \\times 10^{-3} \\, \\text{L} \\)",
+      "\\( 0.0448 \\, \\text{L} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P6",
+    "qText": "*100. Calculate the (a) average volume available to a molecule of \\( CO_2 \\) gas in a sample of \\( CO_2 \\) at STP (b) the average distance between two neighbouring molecules, if they are assumed to be spherical.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P6",
+    "qText": "What is the average distance between two neighbouring molecules?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 3.51 \\times 10^{-7} \\, \\text{cm} \\)",
+      "\\( 4.89 \\times 10^{-7} \\, \\text{cm} \\)",
+      "\\( 3.72 \\times 10^{-7} \\, \\text{cm} \\)",
+      "\\( 4.14 \\times 10^{-7} \\, \\text{cm} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*102. Calculate the volume occupied by 7 g of \\( N_2 \\) under a pressure 100 atm at 27°C (\\( a = 1.39 \\, \\text{atm} \\, \\text{lit}^{-2}, b = 0.0391 \\, \\text{lit} \\, \\text{mol}^{-1} \\)) assuming van der Waals' behaviour.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 73.5 \\, \\text{mL} \\)",
+      "\\( 49.2 \\, \\text{mL} \\)",
+      "\\( 67.3 \\, \\text{mL} \\)",
+      "\\( 58.8 \\, \\text{mL} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*103. van der Waals' constant \\( b \\) for a gas is \\( 4.2 \\times 10^{-2} \\, \\text{litre mol}^{-1} \\). How close the nuclei of the two molecules come together?",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 3.6 \\times 10^{-8} \\, \\text{cm} \\)",
+      "\\( 3.2 \\times 10^{-8} \\, \\text{cm} \\)",
+      "\\( 2.8 \\times 10^{-8} \\, \\text{cm} \\)",
+      "\\( 4.1 \\times 10^{-8} \\, \\text{cm} \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*104. Find the temperature at which 3 mole of \\( SO_2 \\) obeying van der Waals' equation occupies a volume of 10 litre at a pressure of 15 atm. (\\( a = 6.71 \\, \\text{atm lit}^{-2}, b = 0.0564 \\, \\text{lit mol}^{-1} \\))",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 297.4 \\, \\text{°C} \\)",
+      "\\( 382.6 \\, \\text{°C} \\)",
+      "\\( 349.8 \\, \\text{°C} \\)",
+      "\\( 315.2 \\, \\text{°C} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*105. 10 mole of ammonia are present in a 10 litre flask at 27°C. Calculate pressure using van der Waals' equation. Given \\( a = 4.17 \\, \\text{atm litre}^{-2} \\, \\text{mol}^{-2} \\) and \\( b = 0.037 \\, \\text{litre mol}^{-1} \\).",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 23.16 \\, \\text{atm} \\)",
+      "\\( 18.73 \\, \\text{atm} \\)",
+      "\\( 24.52 \\, \\text{atm} \\)",
+      "\\( 21.38 \\, \\text{atm} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*106. 2 mole of ammonia occupied a volume of 5 litre at 27°C. Calculate the pressure if the gas obeys van der Waals' equation. Given \\( a = 4.17 \\, \\text{atm litre}^{-2} \\, \\text{mol}^{-2}, b = 0.0371 \\, \\text{litre mol}^{-1} \\).",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 10.67 \\, \\text{atm} \\)",
+      "\\( 7.82 \\, \\text{atm} \\)",
+      "\\( 9.33 \\, \\text{atm} \\)",
+      "\\( 11.45 \\, \\text{atm} \\)"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*107. How much thermal energy should be added to 3.45 g neon in a 10 litre flask to raise the temperature from 0°C to 100°C? Atomic weight of neon = 20.18",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 43.97 \\, \\text{cal} \\)",
+      "\\( 55.83 \\, \\text{cal} \\)",
+      "\\( 47.62 \\, \\text{cal} \\)",
+      "\\( 51.29 \\, \\text{cal} \\)"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*111. The radius of an Xe atom is \\( 1.3 \\times 10^{-8} \\, \\text{cm} \\). A 100 cm\\(^3\\) container is filled with Xe at a pressure of 1.0 atm and a temperature of 273 K. Calculate the fraction of the volume that is occupied by Xe atom.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.0095 \\, \\text{or} \\, 0.95\\% \\)",
+      "\\( 0.0247 \\, \\text{or} \\, 2.47\\% \\)",
+      "\\( 0.0183 \\, \\text{or} \\, 1.83\\% \\)",
+      "\\( 0.0312 \\, \\text{or} \\, 3.12\\% \\)"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "*112. A mixture of \\( N_2 \\), NO and \\( NO_2 \\) gases was analyzed by selective absorption of the oxides of nitrogen following the decrease in volume of the original mixture. The initial mixture has a volume of 2.74 mL. After treatment with water, which absorbed the \\( NO_2 \\), the volume was 2.02 mL. A ferrous sulphate solution was then shaken with the residual gases to absorb the NO, after which the volume was 0.25 mL. (All volumes were measured under identical P-T conditions). Neglecting the water vapour, find the composition of the gas mixture by volume.",
+    "sText": null,
+    "image": null,
+    "sImage": null,
+    "qOptions": [
+      "\\( 0.28 \\, \\text{mL} \\) of \\( NO_2 \\)",
+      "\\( 0.51 \\, \\text{mL} \\) of \\( NO_2 \\)",
+      "\\( 0.35 \\, \\text{mL} \\) of \\( NO_2 \\)",
+      "\\( 0.42 \\, \\text{mL} \\) of \\( NO_2 \\)"
+    ],
+    "qAnswer": "C"
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
