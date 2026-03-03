@@ -3,7 +3,7 @@
   "questions":
 
 [
-  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (1).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "Note:This assignment contains Both WPE and Conservation Of momentum", "image": "1 (1).png", "qOptions": [], "qAnswer": "C" },
   { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (2).png", "qOptions": [], "qAnswer": "A" },
   { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (3).png", "qOptions": [], "qAnswer": "C" },
   { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (4).png", "qOptions": [], "qAnswer": "C" },
