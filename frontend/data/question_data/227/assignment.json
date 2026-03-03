@@ -1,0 +1,96 @@
+
+{
+  "questions":
+
+[
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (1).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (2).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (3).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (4).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (5).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (6).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (7).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (8).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (9).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (10).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (11).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (12).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (13).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (14).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (15).png", "qOptions": [], "qAnswer": "A" },
+
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (16).png", "qOptions": [], "qAnswer": ["B","D"] },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (17).png", "qOptions": [], "qAnswer": ["B","C","D"] },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (18).png", "qOptions": [], "qAnswer": ["A","D"] },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (19).png", "qOptions": [], "qAnswer": ["A","B","C","D"] },
+
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (20).png", "qOptions": [], "qAnswer": 2.09 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (21).png", "qOptions": [], "qAnswer": 1.7 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (22).png", "qOptions": [], "qAnswer": 3.36 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (23).png", "qOptions": [], "qAnswer": 0.88 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (24).png", "qOptions": [], "qAnswer": -20 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (25).png", "qOptions": [], "qAnswer": 0.323 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (26).png", "qOptions": [], "qAnswer": 2.5 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (27).png", "qOptions": [], "qAnswer": 3 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (28).png", "qOptions": [], "qAnswer": 4 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (29).png", "qOptions": [], "qAnswer": 8 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (30).png", "qOptions": [], "qAnswer": 2 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (31).png", "qOptions": [], "qAnswer": 2 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (32).png", "qOptions": [], "qAnswer": 2 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (33).png", "qOptions": [], "qAnswer": 1 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (34).png", "qOptions": [], "qAnswer": 1 },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (35).png",
+    "qOptions": [
+      "A - p, q, r, t; B - q, s; C - p, q, r, s; D - p, r, t",
+      "A - p, q, s, t; B - q, r; C - p, r, s; D - p, r, t",
+      "A - p, r, t; B - q, s; C - p, q, r, s; D - p, q, r, t",
+      "A - p, q, r, t; B - q, r; C - p, q, s; D - p, r, s"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (36).png",
+    "qOptions": [
+      "A - p, q, r, s, t; B - q, t; C - q, r, s, t; D - t",
+      "A - p, q, r, t; B - q, t; C - q, r, s; D - t",
+      "A - p, q, r, s, t; B - q, r; C - q, r, s, t; D - s",
+      "A - p, r, s, t; B - q, t; C - q, s, t; D - t"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "Passage", "passageId": "P1", "qText": "", "image": "p1.png", "qOptions": [], "qAnswer": [] },
+  { "qType": "SMCQ", "passageId": "P1", "qText": "", "image": "1 (37).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": "P1", "qText": "", "image": "1 (38).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": "P1", "qText": "", "image": "1 (39).png", "qOptions": [], "qAnswer": "A" },
+
+  { "qType": "Passage", "passageId": "P2", "qText": "", "image": "p2.png", "qOptions": [], "qAnswer": [] },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (40).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (41).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (42).png", "qOptions": [], "qAnswer": "C" },
+
+  { "qType": "Passage", "passageId": "P3", "qText": "", "image": "p3.png", "qOptions": [], "qAnswer": [] },
+  { "qType": "SMCQ", "passageId": "P3", "qText": "", "image": "1 (43).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": "P3", "qText": "", "image": "1 (44).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": "P3", "qText": "", "image": "1 (45).png", "qOptions": [], "qAnswer": "D" }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

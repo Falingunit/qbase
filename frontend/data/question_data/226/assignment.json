@@ -1,0 +1,119 @@
+
+{
+  "questions":
+
+[
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (1).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (2).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (3).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (4).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (5).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (6).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (7).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (8).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (9).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (10).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (11).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (12).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (13).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (14).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (15).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (16).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (17).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (18).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (19).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (20).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (21).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (22).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (23).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (24).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (25).png", "qOptions": [], "qAnswer": "C" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (26).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (27).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (28).png", "qOptions": [], "qAnswer": ["A","B","C"] },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (29).png", "qOptions": [], "qAnswer": ["B","D"] },
+  { "qType": "SMCQ", "passageId": null, "qText": "", "image": "1 (30).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (31).png", "qOptions": [], "qAnswer": ["B","C"] },
+  { "qType": "MMCQ", "passageId": null, "qText": "", "image": "1 (32).png", "qOptions": [], "qAnswer": ["A","B","C"] },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (33).png",
+    "qOptions": ["\\(\\frac{4}{13}\\)", "\\(\\frac{13}{4}\\)", "\\(\\frac{4}{11}\\)", "\\(\\frac{8}{13}\\)"],
+    "qAnswer": "A"
+  },
+
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (34).png", "qOptions": [], "qAnswer": 1.28 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (35).png", "qOptions": [], "qAnswer": 3 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (36).png", "qOptions": [], "qAnswer": 5 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (37).png", "qOptions": [], "qAnswer": 0 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (38).png", "qOptions": [], "qAnswer": 2 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (39).png", "qOptions": [], "qAnswer": 3 },
+  { "qType": "Numerical", "passageId": null, "qText": "", "image": "1 (40).png", "qOptions": [], "qAnswer": 2 },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (41).png",
+    "qOptions": [
+      "A \\to q; B \\to r; C \\to t; D \\to r",
+      "A \\to r; B \\to q; C \\to t; D \\to r",
+      "A \\to q; B \\to t; C \\to r; D \\to r",
+      "A \\to t; B \\to r; C \\to q; D \\to r"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (42).png",
+    "qOptions": [
+      "A \\to (p, s); B \\to (q, t); C \\to (p, s); D \\to (r)",
+      "A \\to (q, s); B \\to (p, t); C \\to (p, s); D \\to (r)",
+      "A \\to (p, s); B \\to (q, r); C \\to (p, t); D \\to (s)",
+      "A \\to (p, t); B \\to (q, s); C \\to (p, s); D \\to (r)"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (43).png",
+    "qOptions": [
+      "A \\to s; B \\to r; C \\to p; D \\to q",
+      "A \\to r; B \\to s; C \\to p; D \\to q",
+      "A \\to s; B \\to p; C \\to r; D \\to q",
+      "A \\to s; B \\to r; C \\to q; D \\to p"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "SMCQ", "passageId": null, "qText": "(Options are made-up distractors; one is correct.)", "image": "1 (44).png",
+    "qOptions": [
+      "A \\to r; B \\to r; C \\to p; D \\to s",
+      "A \\to r; B \\to p; C \\to r; D \\to s",
+      "A \\to s; B \\to r; C \\to p; D \\to r",
+      "A \\to r; B \\to r; C \\to s; D \\to p"
+    ],
+    "qAnswer": "A"
+  },
+
+  { "qType": "Passage", "passageId": "P1", "qText": "", "image": "p1.png", "qOptions": [], "qAnswer": [] },
+  { "qType": "SMCQ", "passageId": "P1", "qText": "", "image": "1 (45).png", "qOptions": [], "qAnswer": "D" },
+  { "qType": "SMCQ", "passageId": "P1", "qText": "", "image": "1 (46).png", "qOptions": [], "qAnswer": "A" },
+
+  { "qType": "Passage", "passageId": "P2", "qText": "", "image": "p2.png", "qOptions": [], "qAnswer": [] },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (47).png", "qOptions": [], "qAnswer": "A" },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (48).png", "qOptions": [], "qAnswer": "B" },
+  { "qType": "SMCQ", "passageId": "P2", "qText": "", "image": "1 (49).png", "qOptions": [], "qAnswer": "C" }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
