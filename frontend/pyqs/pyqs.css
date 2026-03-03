@@ -140,6 +140,10 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 
 #pyqs-count-line { margin: .25rem 0 .5rem; }
 
+#questionText{
+  background-color: #15171B;
+}
+
 .pyqs-card .card-body {
   display: flex;
   gap: 0.75rem;
