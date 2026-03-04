@@ -19,8 +19,9 @@
   {"qType":"Numerical","passageId":null,"qText":"","image":"18.png","qOptions":[],"qAnswer":2},
   {"qType":"Numerical","passageId":null,"qText":"","image":"19.png","qOptions":[],"qAnswer":8},
   {"qType":"Numerical","passageId":null,"qText":"","image":"20.png","qOptions":[],"qAnswer":3},
-  {"qType":"SMCQ","passageId":null,"qText":"","image":"21.png","qOptions":[],"qAnswer":"C"},
-  {"qType":"SMCQ","passageId":null,"qText":"","image":"22.png","qOptions":[],"qAnswer":"B"},
+  {"qType":"Passage","passageId":"P1","qText":"","image":"p1.png","qOptions":[],"qAnswer":[]},
+  {"qType":"SMCQ","passageId":"P1","qText":"","image":"21.png","qOptions":[],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":"P1","qText":"","image":"22.png","qOptions":[],"qAnswer":"B"},
   {
     "qType":"SMCQ",
     "passageId":null,
