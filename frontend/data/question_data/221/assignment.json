@@ -1,0 +1,66 @@
+
+{
+  "questions":
+
+[
+  {"qType":"SMCQ","passageId":null,"qText":"Question 1","image":"1 (1).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 2","image":"1 (2).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 3","image":"1 (3).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 4","image":"1 (4).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 5","image":"1 (5).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 6","image":"1 (6).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 7","image":"1 (7).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 8","image":"1 (8).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 9","image":"1 (9).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 10","image":"1 (10).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"D"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 11","image":"1 (11).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 12","image":"1 (12).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"A"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 13","image":"1 (13).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 14","image":"1 (14).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"B"},
+  {"qType":"MMCQ","passageId":null,"qText":"Question 15","image":"1 (15).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":["A","C","D"]},
+  {"qType":"MMCQ","passageId":null,"qText":"Question 16","image":"1 (16).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":["B","D"]},
+  {"qType":"MMCQ","passageId":null,"qText":"Question 17","image":"1 (17).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":["A","C"]},
+  {"qType":"MMCQ","passageId":null,"qText":"Question 18","image":"1 (18).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":["A","B","D"]},
+  {"qType":"Numerical","passageId":null,"qText":"Question 19","image":"1 (19).png","qOptions":[],"qAnswer":0.2},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 20 (Options are made-up distractors; one is correct.)","image":"1 (20).png","qOptions":
+  [
+    "3.2 \\pm 20.625\\%",
+    "3.2 \\pm 2.0625\\%",
+    "3.2 \\pm 0.20625\\%",
+    "3.2 \\pm 206.25\\%"
+  ]
+,"qAnswer":"A"},
+  {"qType":"Numerical","passageId":null,"qText":"Question 21","image":"1 (21).png","qOptions":[],"qAnswer":3},
+  {"qType":"Numerical","passageId":null,"qText":"Question 22","image":"1 (22).png","qOptions":[],"qAnswer":5},
+  {"qType":"Numerical","passageId":null,"qText":"Question 23","image":"1 (23).png","qOptions":[],"qAnswer":4},
+  {"qType":"Numerical","passageId":null,"qText":"Question 24","image":"1 (24).png","qOptions":[],"qAnswer":4},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 25","image":"1 (25).png","qOptions":["A \\rightarrow p, s ; B \\rightarrow r, q ; C \\rightarrow r, s ; D \\rightarrow r, s","A \\rightarrow p, q ; B \\rightarrow r, s ; C \\rightarrow r, s ; D \\rightarrow r, s","A \\rightarrow r, s ; B \\rightarrow p, q ; C \\rightarrow r, s ; D \\rightarrow r, s","A \\rightarrow p, q ; B \\rightarrow r, s ; C \\rightarrow s, r ; D \\rightarrow s, r"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":null,"qText":"Question 26","image":"1 (26).png","qOptions":["A \\rightarrow p ; B \\rightarrow q ; C \\rightarrow s ; D \\rightarrow r","A \\rightarrow s ; B \\rightarrow p ; C \\rightarrow q ; D \\rightarrow r","A \\rightarrow s ; B \\rightarrow q ; C \\rightarrow p ; D \\rightarrow r","A \\rightarrow r ; B \\rightarrow q ; C \\rightarrow p ; D \\rightarrow s"],"qAnswer":"C"},
+  {"qType":"Passage","passageId":"P1","qText":"Passage for Questions 27 and 28","image":"P(1).png","qOptions":[],"qAnswer":[]},
+  {"qType":"SMCQ","passageId":"P1","qText":"Question 27","image":"1 (27).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"C"},
+  {"qType":"SMCQ","passageId":"P1","qText":"Question 28","image":"1 (28).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"D"},
+  {"qType":"Passage","passageId":"P2","qText":"Passage for Questions 29 and 30","image":"P(2).png","qOptions":[],"qAnswer":[]},
+  {"qType":"SMCQ","passageId":"P2","qText":"Question 29","image":"1 (29).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"B"},
+  {"qType":"SMCQ","passageId":"P2","qText":"Question 30","image":"1 (30).png","qOptions":["Option A","Option B","Option C","Option D"],"qAnswer":"C"}
+]
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

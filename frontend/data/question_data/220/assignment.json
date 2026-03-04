@@ -1,0 +1,304 @@
+
+{
+  "questions":
+
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Maximum area of rectangle whose two sides are $x = x_0$, $x = \\pi - x_0$ and which is inscribed in a region bounded by $y = \\sin x$ and the $x$-axis is obtained when $x_0 \\in$",
+    "image": null,
+    "qOptions": [
+      "$\\left(\\frac{\\pi}{4}, \\frac{\\pi}{3}\\right)$",
+      "$\\left(\\frac{\\pi}{6}, \\frac{\\pi}{4}\\right)$",
+      "$\\left(0, \\frac{\\pi}{6}\\right)$",
+      "none of these"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The area bounded by the curve $f(x) = x + \\sin x$ and its inverse function between the ordinates $x = 0$ to $x = 2\\pi$ is",
+    "image": null,
+    "qOptions": [
+      "$4\\pi$ square units",
+      "$8\\pi$ square units",
+      "$4$ square units",
+      "$8$ square units"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Area of region bounded by $[x]^2 = [y]^2$ if $x \\in [1, 5]$ (where $[\\cdot]$ represents the greatest integer function), is",
+    "image": null,
+    "qOptions": [
+      "$10$ sq unit",
+      "$8$ sq unit",
+      "$6$ sq unit",
+      "$5$ sq unit"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The area bounded by the curves $y = \\sin^{-1}|\\sin x|$ and $y = (\\sin^{-1}|\\sin x|)^2$, $0 \\le x \\le 2\\pi$, is",
+    "image": null,
+    "qOptions": [
+      "$\\frac{1}{3} + \\frac{\\pi^2}{4}$",
+      "$\\frac{1}{6} + \\frac{\\pi^2}{8}$",
+      "$\\frac{2}{3} + \\frac{\\pi^2}{2}$",
+      "None of these"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "The real value of $m$ for which the substitution $y = u^m$ will transform the differential equation $2x^4 y \\frac{dy}{dx} + y^4 = 4x^6$ into a homogeneous equation is",
+    "image": null,
+    "qOptions": [
+      "$m = 0$",
+      "$m = 1$",
+      "$m = \\frac{3}{2}$",
+      "$m = \\frac{2}{3}$"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "Solution of the differential equation $x = 1 + xy \\frac{dy}{dx} + \\frac{x^2 y^2}{2!} \\left(\\frac{dy}{dx}\\right)^2 + \\frac{x^3 y^3}{3!} \\left(\\frac{dy}{dx}\\right)^3 + \\cdots$ is",
+    "image": null,
+    "qOptions": [
+      "$y = \\ln x + c$",
+      "$y = (\\ln x)^2 + c$",
+      "$y = \\pm \\sqrt{\\ln x + c}$",
+      "$xy = x^y + c$"
+    ],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let $y = f(x)$ and $y = g(x)$ be two continuous positive functions intersecting only at three points $(0,1)$, $(3,4)$ and $(5,6)$. Define $h(x) = \\max\\{f(x), g(x)\\}$ as $h(x) = \\begin{cases} f(x), & 0 \\le x < 3 \\\\ g(x), & 3 \\le x \\le 5 \\end{cases}$. If $\\int_0^5 f(x) \\, dx = a$, $\\int_0^5 g(x) \\, dx = b$, $\\int_3^5 f(x) \\, dx = c$, $\\int_0^3 g(x) \\, dx = d$, then the area of region bounded between $f(x)$ and $g(x)$ from $x = 0$ to $x = 5$ is",
+    "image": null,
+    "qOptions": [
+      "$a - 2c + b - d$",
+      "$a + b - 2c - 2d$",
+      "$\\int_0^3 f(x) \\, dx - \\int_3^5 f(x) \\, dx - \\int_0^3 g(x) \\, dx + \\int_3^5 g(x) \\, dx$",
+      "$\\int_0^3 (g(x) - f(x)) \\, dx + \\int_3^5 (f(x) - g(x)) \\, dx$"
+    ],
+    "qAnswer": ["B", "C"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Which of the following have the same bounded area?",
+    "image": null,
+    "qOptions": [
+      "$f(x) = \\sin x$, $g(x) = \\sin^2 x$, where $0 \\le x \\le 10\\pi$",
+      "$f(x) = \\sin x$, $g(x) = |\\sin x|$, where $0 \\le x \\le 20\\pi$",
+      "$f(x) = |\\sin x|$, $g(x) = \\sin^3 x$, where $0 \\le x \\le 10\\pi$",
+      "$f(x) = \\sin x$, $g(x) = \\sin^4 x$, where $0 \\le x \\le 10\\pi$"
+    ],
+    "qAnswer": ["A", "C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let $f$ and $g$ be continuous functions on $a \\le x \\le b$ and $p(x) = \\max\\{f(x), g(x)\\}$ and $q(x) = \\min\\{f(x), g(x)\\}$. The area bounded between the curves $y = p(x)$, $y = q(x)$ and the ordinates $x = a$ and $x = b$ is given by",
+    "image": null,
+    "qOptions": [
+      "$\\int_a^b (f(x) - g(x)) \\, dx$",
+      "$\\int_a^b (p(x) - q(x)) \\, dx$",
+      "$\\int_a^b |p(x) - q(x)| \\, dx$",
+      "$\\int_a^b |f(x) - g(x)| \\, dx$"
+    ],
+    "qAnswer": ["C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Let $S$ be the area of the region enclosed by $y = e^{-x^2}$, $y = 0$, $x = 0$ and $x = 1$. Then",
+    "image": null,
+    "qOptions": [
+      "$S \\ge \\frac{1}{e}$",
+      "$S \\ge 1 - \\frac{1}{e}$",
+      "$S \\le \\frac{1}{4} \\left(1 + \\frac{1}{\\sqrt{e}}\\right)$",
+      "$S \\le \\frac{1}{\\sqrt{2}} + \\frac{1}{\\sqrt{e}} \\left(1 - \\frac{1}{\\sqrt{2}}\\right)$"
+    ],
+    "qAnswer": ["A", "B", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The solution of $\\left(\\frac{dy}{dx}\\right)^2 + 2y \\cot x \\frac{dy}{dx} = y^2$ is",
+    "image": null,
+    "qOptions": [
+      "$y = \\dfrac{c}{1 + \\cos x}$",
+      "$y = \\dfrac{c}{1 - \\cos x}$",
+      "$x = 2 \\sin^{-1} \\sqrt{\\dfrac{c}{2y}}$",
+      "$x = 2 \\cos^{-1} \\sqrt{\\dfrac{c}{2y}}$"
+    ],
+    "qAnswer": ["A", "B", "C", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The solution of $\\dfrac{dy}{dx} + x = x e^{(n-1)y}$ is",
+    "image": null,
+    "qOptions": [
+      "$\\dfrac{1}{n-1} \\log \\left( \\dfrac{e^{(n-1)y} - 1}{e^{(n-1)y}} \\right) = \\dfrac{x^2}{2} + C$",
+      "$e^{(n-1)y} = C e^{(n-1)y + (n-1)\\frac{x^2}{2}} + 1$",
+      "$\\log \\left( \\dfrac{e^{(n-1)y} - 1}{(n-1)e^{(n-1)y}} \\right) = x^2 + C$",
+      "$e^{(n-1)y} = C e^{(n-1)\\frac{x^2}{2} + x} + 1$"
+    ],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "Given a function $g$ which has a derivative $g'(x)$ for every real $x$ and satisfies $g'(0) = 2$ and $g(x + y) = e^y g(x) + e^x g(y)$ for all $x, y$, then",
+    "image": null,
+    "qOptions": [
+      "$g(x)$ is increasing for all $x \\in [-1, \\infty)$",
+      "Range of $g(x)$ is $\\left[-\\dfrac{2}{e}, \\infty\\right)$",
+      "$g''(x) > 0 \\; \\forall x$",
+      "$\\lim_{x \\to 0} \\dfrac{g(x)}{x} = 2$"
+    ],
+    "qAnswer": ["A", "B", "D"]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "The curve $y = f(x)$ is such that the area of the trapezium formed by the coordinate axes, ordinate of an arbitrary point and the tangent at this point equals half the square of its abscissa. The equation of the curve can be",
+    "image": null,
+    "qOptions": [
+      "$y = c x^2 + x$",
+      "$y = c x^2 - x$",
+      "$y = c x + x^2$",
+      "$y = c x^2 \\pm x + 1$"
+    ],
+    "qAnswer": ["A", "B"]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The area of the region bounded between the curves $|y| - |\\sin x| \\ge 0$ and $x^2 + y^2 - \\pi^2 \\le 0$ is $\\pi^3 - A$. Find the value of $A$.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "Area of the region bounded by the curve $y = \\{x^2\\}$, where $\\{\\cdot\\}$ denotes fractional part function for all $x \\in [-2, 2]$ is $p\\left(\\sqrt{q} + \\sqrt{r} - \\frac{7}{3}\\right)$. Find the value of $p + q + r$.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 7
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If the area of the region bounded by the curves $|y + x| \\le 1$, $|y - x| \\le 1$ and $3x^2 + 3y^2 = 1$ is $\\left(p - \\frac{\\pi}{p + 1}\\right)$ square unit, then $p$ is equal to",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If $14 + \\ln k$ be the area bounded by the curves $|y| = e^{-|x|} - \\frac{1}{2}$ and $\\dfrac{|x| + |y|}{2} + \\left|\\dfrac{|x| - |y|}{2}\\right| \\le 2$ then $k$ is equal to",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "If the equation of a curve $y = y(x)$ satisfies the differential equation $x \\int_0^x y(t) \\, dt = (x + 1) \\int_0^x t y(t) \\, dt$, $x > 0$, and $y(1) = e$, then $y\\left(\\frac{1}{2}\\right)$ is equal to",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "The population of a country increases at a rate proportional to the number of inhabitants. If the population doubles in $30$ years then the number of years (nearest integer) when the population will triple is equal to",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": 48
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "Consider the areas $S_0, S_1, S_2, \\ldots$ bounded by the $x$-axis and half-waves of the curve $y = e^{-x} \\sin x$, where $x \\ge 0$.",
+    "image": null,
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The value of $S_0$ is",
+    "image": null,
+    "qOptions": [
+      "$\\dfrac{1}{2}(1 + e^{-\\pi})$ sq. units",
+      "$\\dfrac{1}{2}(1 + e^{-\\pi})$ sq. units",
+      "$\\dfrac{1}{2}(1 - e^{-\\pi})$ sq. units",
+      "$\\dfrac{1}{2}(e^{\\pi} - 1)$ sq. units"
+    ],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "The sequence $S_0, S_1, S_2, \\ldots$ forms a G.P. with common ratio",
+    "image": null,
+    "qOptions": [
+      "$\\dfrac{e^{\\pi}}{2}$",
+      "$e^{-\\pi}$",
+      "$e^{\\pi}$",
+      "$\\dfrac{e^{-\\pi}}{2}$"
+    ],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "23.png",
+    "qOptions": [
+      "A matches P, B matches Q, C matches R, D matches S",
+      "A matches Q, B matches P, C matches S, D matches R",
+      "A matches P, B matches P, C matches S, D matches R",
+      "A matches S, B matches R, C matches P, D matches Q"
+    ],
+    "qAnswer": "C"
+  }
+]
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

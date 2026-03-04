@@ -3634,10 +3634,18 @@ app.delete("/account/marks-auth", auth, (req, res) => {
 });
 
 // ---------- Scoring helpers ----------
+function getAssignmentQuestionsList(assignment) {
+  if (Array.isArray(assignment)) return assignment;
+  if (assignment && Array.isArray(assignment.questions)) return assignment.questions;
+  if (assignment && Array.isArray(assignment.data)) return assignment.data;
+  return [];
+}
+
 async function computeAssignmentScore(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
-    const display = assignment.questions.filter((q) => q.qType !== "Passage");
+    const questions = getAssignmentQuestionsList(assignment);
+    const display = questions.filter((q) => q?.qType !== "Passage");
     const maxScore = display.length * 4;
     let score = 0;
     for (let i = 0; i < display.length; i++) {
@@ -3698,7 +3706,8 @@ function scoreQuestion(q, st) {
 async function computeAttempted(assignmentId, stateArray) {
   try {
     const assignment = await loadAssignment(assignmentId);
-    const display = assignment.questions.filter((q) => q.qType !== "Passage");
+    const questions = getAssignmentQuestionsList(assignment);
+    const display = questions.filter((q) => q?.qType !== "Passage");
     const totalQuestions = display.length;
     let attempted = 0;
     for (let i = 0; i < totalQuestions; i++) {
