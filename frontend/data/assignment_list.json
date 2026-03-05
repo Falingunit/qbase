@@ -356,7 +356,7 @@
     "title": "Matrices and Determinants",
     "aID": 404
   },
-{
+  {
     "subject": "Physics",
     "faculty": "Z7i",
     "chapter": "SPT-3 Revision",
@@ -398,7 +398,7 @@
     "title": "Units And dimensions",
     "aID": 221
   },
-   {
+  {
     "subject": "Chemistry",
     "faculty": "NA",
     "chapter": "Narendra Awasthi",
@@ -412,32 +412,39 @@
     "title": "Gaseous State",
     "aID": 223
   },
-    {
+  {
     "subject": "Physics",
     "faculty": "NA",
     "chapter": "SPT-4 Revision",
     "title": "Motions in a straight line",
     "aID": 224
   },
-     {
+  {
     "subject": "Physics",
     "faculty": "NA",
     "chapter": "SPT-4 Revision",
     "title": "Motions in a Plane",
     "aID": 225
   },
-     {
+  {
     "subject": "Physics",
     "faculty": "NA",
     "chapter": "SPT-4 Revision",
     "title": "NLM",
     "aID": 226
   },
-     {
+  {
     "subject": "Physics",
     "faculty": "NA",
     "chapter": "SPT-4 Revision",
     "title": "Work,Energy And Collisions",
     "aID": 227
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MPV",
+    "chapter": "SPT-4 Revision",
+    "title": "Vectors",
+    "aID": 802
   }
 ]

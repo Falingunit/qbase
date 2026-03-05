@@ -1,0 +1,240 @@
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "1.png",
+    "qOptions": [],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "2.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "3.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "4.png",
+    "qOptions": [],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "5.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "6.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "7.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "8.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "C"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "9.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "10.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "11.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "12.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "13.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "14.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "D"
+    ]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "15.png",
+    "qOptions": [],
+    "qAnswer": 7
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "16.png",
+    "qOptions": [],
+    "qAnswer": 50
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "17.png",
+    "qOptions": [],
+    "qAnswer": 2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "18.png",
+    "qOptions": [],
+    "qAnswer": 1
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "19.png",
+    "qOptions": [],
+    "qAnswer": 27
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "20.png",
+    "qOptions": [],
+    "qAnswer": 192
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P1",
+    "qText": "",
+    "image": "p1.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "",
+    "image": "21.png",
+    "qOptions": [],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": "P1",
+    "qText": "",
+    "image": "22.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "23.png",
+    "qOptions": [
+      "P-1;Q-3;R-4;S-2",
+      "P-2;Q-1;R-1;S-3",
+      "P-1;Q-2;R-3;S-4",
+      "P-2;Q-1;R-4;S-3"
+    ],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "24.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  }
+]
