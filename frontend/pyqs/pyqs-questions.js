@@ -2665,7 +2665,7 @@
 
       // desktop button
       const dcol = document.createElement("div");
-      dcol.className = "col";
+      dcol.className = "col d-flex justify-content-center";
       dcol.dataset.displayIdx = displayIdx; // ✓ For filtering logic
       dcol.dataset.originalIdx = originalIdx; // ✓ For state access
 
@@ -2726,6 +2726,9 @@
       : questionsParam.questions;
     const mobile = document.getElementById("mobile-qbar");
     const desktop = document.getElementById("q_list");
+    const paletteCols = Math.min(4, Math.max(1, Number(questions.length) || 1));
+    desktop.classList.remove("row-cols-1", "row-cols-2", "row-cols-3", "row-cols-4");
+    desktop.classList.add(`row-cols-${paletteCols}`);
 
     mobile.innerHTML = "";
     desktop.innerHTML = "";

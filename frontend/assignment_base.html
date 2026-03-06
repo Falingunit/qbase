@@ -571,6 +571,13 @@
                 try {
                   const style = document.createElement('style');
                   style.textContent = [
+                    '#questionText,',
+                    '#passageText,',
+                    '#questionImage,',
+                    '#passageImage {',
+                    '  background: var(--card-bg);',
+                    '  isolation: isolate;',
+                    '}',
                     '#questionText img,',
                     '#MCQOptionDiv .opt-text img,',
                     '#passageText img,',
@@ -581,6 +588,7 @@
                     '#image-overlay .io-img {',
                     '  filter: invert(1) contrast(1.2);',
                     '  mix-blend-mode: screen;',
+                    '  background: var(--card-bg);',
                     '}'
                   ].join('\n');
                   document.head.appendChild(style);
