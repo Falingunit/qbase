@@ -24,42 +24,120 @@
   });
 
   let __bookmarksLoadSeq = 0;
+  let __previewObserver = null;
   async function loadBookmarks(){
     const mySeq = ++__bookmarksLoadSeq; const loadingEl = document.getElementById('loading'); const noBookmarksEl = document.getElementById('no-bookmarks'); const contentEl = document.getElementById('bookmarks-content'); if (!loadingEl || !noBookmarksEl || !contentEl) return; loadingEl.style.display='block'; noBookmarksEl.style.display='none'; contentEl.style.display='none';
     try {
       const all = await BookmarksService.fetchAllBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
       if (!Array.isArray(all) || all.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
       const grouped = BookmarksService.groupBookmarksByTag(all);
-      // Collect assignment IDs and PYQs chapter keys
-      const aIds = new Set();
-      const pyqKeys = new Set();
-      Object.values(grouped).forEach(list => list.forEach(b => {
-        if (b.kind === 'pyq') pyqKeys.add(BookmarksService.mkPyqsKey(b.examId, b.subjectId, b.chapterId)); else aIds.add(b.assignmentId);
-      }));
-      const [aMap, pMap] = await Promise.all([
-        BookmarksService.fetchAssignmentDataForIds(aIds),
-        BookmarksService.fetchPyqsDataForKeys(pyqKeys),
-      ]);
-      if (mySeq !== __bookmarksLoadSeq) return;
-      aMap.forEach((v,k)=>assignmentData.set(k,v)); pMap.forEach((v,k)=>pyqsData.set(k,v));
       BookmarksView.renderBookmarks(grouped, { assignments: assignmentData, pyqs: pyqsData }, {
         katexOptions,
+        assignmentTitles,
         onRemove: async (ctx) => {
           if (!ctx || !ctx.kind) return false;
           if (ctx.kind === 'pyq') return await BookmarksService.removePyqsBookmark(ctx.examId, ctx.subjectId, ctx.chapterId, ctx.questionIndex, ctx.tagId);
           return await BookmarksService.removeBookmark(ctx.assignmentId, ctx.questionIndex, ctx.tagId);
         },
         onDeleteTag: async (tagId) => { if (await BookmarksService.deleteBookmarkTag(tagId)) loadBookmarks(); },
-        onShow: (ctx) => {
+        onShow: async (ctx) => {
           if (!ctx || !ctx.kind) return;
-          if (ctx.kind === 'pyq') BookmarksView.showPyqQuestion(ctx.examId, ctx.subjectId, ctx.chapterId, ctx.questionIndex, pyqsData);
-          else BookmarksView.showQuestion(ctx.assignmentId, ctx.questionIndex, assignmentData, assignmentTitles);
+          if (ctx.kind === 'pyq') {
+            const key = BookmarksService.mkPyqsKey(ctx.examId, ctx.subjectId, ctx.chapterId);
+            if (!pyqsData.has(key)) {
+              const data = await BookmarksService.fetchPyqsData(ctx.examId, ctx.subjectId, ctx.chapterId);
+              if (data) pyqsData.set(key, data);
+            }
+            BookmarksView.showPyqQuestion(ctx.examId, ctx.subjectId, ctx.chapterId, ctx.questionIndex, pyqsData);
+          } else {
+            const assignmentId = Number(ctx.assignmentId);
+            if (!assignmentData.has(assignmentId)) {
+              const data = await BookmarksService.fetchAssignmentData(assignmentId);
+              if (data) assignmentData.set(assignmentId, data);
+            }
+            BookmarksView.showQuestion(assignmentId, ctx.questionIndex, assignmentData, assignmentTitles);
+          }
         }
       });
+      hydrateVisiblePreviews(mySeq);
       loadingEl.style.display='none'; contentEl.style.display='block';
     } catch (err){
       if (mySeq !== __bookmarksLoadSeq) return; loadingEl.style.display='none'; if (err && err.status === 401){ noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p><button class="btn btn-primary" onclick="window.dispatchEvent(new Event(\'qbase:force-login\'))">Sign in</button>'; window.dispatchEvent(new Event('qbase:logout')); return; } noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Error loading bookmarks</h3><p class="text-muted">Failed to load bookmarks. Please try again.</p><button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>';
     }
+  }
+
+  async function hydrateCardPreview(card, seq) {
+    if (!card || seq !== __bookmarksLoadSeq || card.dataset.previewReady === 'true' || card.dataset.previewLoading === 'true') return;
+    card.dataset.previewLoading = 'true';
+    try {
+      const kind = card.dataset.kind || 'assignment';
+      if (kind === 'pyq') {
+        const examId = card.dataset.examId;
+        const subjectId = card.dataset.subjectId;
+        const chapterId = card.dataset.chapterId;
+        const questionIndex = Number(card.dataset.questionIndex);
+        const key = BookmarksService.mkPyqsKey(examId, subjectId, chapterId);
+        let data = pyqsData.get(key);
+        if (!data) {
+          data = await BookmarksService.fetchPyqsData(examId, subjectId, chapterId);
+          if (data) pyqsData.set(key, data);
+        }
+        if (!data || seq !== __bookmarksLoadSeq) return;
+        const q = data.questions?.[questionIndex];
+        if (!q) return;
+        BookmarksView.updateBookmarkCardPreview(card, {
+          labelText: `PYQs · Q${questionIndex + 1}`,
+          text: q.qText || 'Question text not available',
+          qType: q.qType || 'PYQ',
+          isHtml: true,
+        }, katexOptions);
+      } else {
+        const assignmentId = Number(card.dataset.assignmentId);
+        const questionIndex = Number(card.dataset.questionIndex);
+        let data = assignmentData.get(assignmentId);
+        if (!data) {
+          data = await BookmarksService.fetchAssignmentData(assignmentId);
+          if (data) assignmentData.set(assignmentId, data);
+        }
+        if (!data || seq !== __bookmarksLoadSeq) return;
+        const q = data.questions?.[questionIndex];
+        if (!q) return;
+        const displayIndex = data.questions.slice(0, questionIndex + 1).filter((qq) => qq.qType !== 'Passage').length - 1;
+        const title = assignmentTitles.get(assignmentId) || `Assignment ${assignmentId}`;
+        BookmarksView.updateBookmarkCardPreview(card, {
+          labelText: `${title} · Q${displayIndex + 1}`,
+          text: q.qText || 'Question text not available',
+          qType: q.qType || 'Assignment',
+          displayIndex,
+        }, katexOptions);
+      }
+    } catch (err) {
+      console.warn('bookmark preview hydration failed', err);
+    } finally {
+      delete card.dataset.previewLoading;
+    }
+  }
+
+  function hydrateVisiblePreviews(seq) {
+    if (__previewObserver) {
+      try { __previewObserver.disconnect(); } catch {}
+      __previewObserver = null;
+    }
+    const cards = Array.from(document.querySelectorAll('.bookmark-card[data-preview-ready="false"]'));
+    if (cards.length === 0) return;
+    if (!('IntersectionObserver' in window)) {
+      cards.slice(0, 12).forEach((card) => { hydrateCardPreview(card, seq); });
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        hydrateCardPreview(entry.target, seq);
+      }
+    }, { rootMargin: '300px 0px' });
+    __previewObserver = observer;
+    cards.forEach((card) => observer.observe(card));
   }
 
   // legacy export for retry button

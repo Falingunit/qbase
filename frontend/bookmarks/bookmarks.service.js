@@ -139,6 +139,17 @@
     return result;
   }
 
+  async function fetchAssignmentData(assignmentId) {
+    const key = Number(assignmentId);
+    if (_assignmentCache.has(key)) return _assignmentCache.get(key);
+    const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
+    _assignmentCache.set(key, data);
+    return data;
+  }
+
   function mkPyqsKey(examId, subjectId, chapterId) {
     return `${examId}__${subjectId}__${chapterId}`;
   }
@@ -173,6 +184,18 @@
     }
 
     return result;
+  }
+
+  async function fetchPyqsData(examId, subjectId, chapterId) {
+    const key = mkPyqsKey(examId, subjectId, chapterId);
+    if (_pyqsCache.has(key)) return _pyqsCache.get(key);
+    const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
+    if (!r.ok) return null;
+    const data = await r.json();
+    const questions = Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []);
+    const value = { examId, subjectId, chapterId, questions };
+    _pyqsCache.set(key, value);
+    return value;
   }
 
   async function fetchQuestionState(assignmentId) {
@@ -220,5 +243,5 @@
     } catch { return false; }
   }
 
-  window.BookmarksService = { fetchBookmarks, fetchPyqsBookmarks, fetchAllBookmarks, groupBookmarksByTag, fetchAssignmentTitlesMap, fetchAssignmentDataForIds, mkPyqsKey, fetchPyqsDataForKeys, fetchQuestionState, fetchPyqsQuestionState, saveNotes, savePyqsNotes, removeBookmark, removePyqsBookmark, deleteBookmarkTag };
+  window.BookmarksService = { fetchBookmarks, fetchPyqsBookmarks, fetchAllBookmarks, groupBookmarksByTag, fetchAssignmentTitlesMap, fetchAssignmentDataForIds, fetchAssignmentData, mkPyqsKey, fetchPyqsDataForKeys, fetchPyqsData, fetchQuestionState, fetchPyqsQuestionState, saveNotes, savePyqsNotes, removeBookmark, removePyqsBookmark, deleteBookmarkTag };
 })();
