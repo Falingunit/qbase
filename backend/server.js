@@ -46,6 +46,16 @@ const app = express();
 app.set("trust proxy", 1);
 
 // ---------- CORS ----------
+app.use((req, res, next) => {
+  if (
+    req.method === "OPTIONS" &&
+    req.headers["access-control-request-private-network"] === "true"
+  ) {
+    res.setHeader("Access-Control-Allow-Private-Network", "true");
+  }
+  next();
+});
+
 const corsFn = cors({
   origin: (origin, cb) => {
     if (ALLOW_ALL) return cb(null, true);
@@ -70,13 +80,6 @@ const corsFn = cors({
   },
 });
 app.use(corsFn);
-// Allow Chrome Private Network Access for preflights when accessing 10.0.0.1 from 10.0.0.3
-app.options("*", (req, res, next) => {
-  if (req.headers["access-control-request-private-network"] === "true") {
-    res.setHeader("Access-Control-Allow-Private-Network", "true");
-  }
-  corsFn(req, res, next);
-});
 
 // ---------- Parsers ----------
 app.use(express.json());
