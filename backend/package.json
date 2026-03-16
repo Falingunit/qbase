@@ -10,7 +10,7 @@
     "init:doubt": "node scripts/init-doubt-tag.js"
   },
   "dependencies": {
-    "better-sqlite3": "^12.6.2",
+    "better-sqlite3": "^12.8.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
