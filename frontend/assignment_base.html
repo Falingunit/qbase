@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-bs-theme="dark">
   <head>
     <meta charset="UTF-8" />
@@ -28,7 +28,14 @@
         },
         loader: { load: ["[tex]/mhchem"] },
         options: {
-          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+          skipHtmlTags: [
+            "script",
+            "noscript",
+            "style",
+            "textarea",
+            "pre",
+            "code",
+          ],
           ignoreHtmlClass: "mathjax-ignore",
         },
         startup: {
@@ -125,7 +132,8 @@
 
                 // Allow caller to attach event listeners to freshly inserted content
                 try {
-                  if (typeof onContentReady === "function") onContentReady(modalEl);
+                  if (typeof onContentReady === "function")
+                    onContentReady(modalEl);
                 } catch {}
 
                 let result;
@@ -133,7 +141,9 @@
                   modalEl.removeEventListener("hidden.bs.modal", onHidden);
                   resolve(result);
                 };
-                modalEl.addEventListener("hidden.bs.modal", onHidden, { once: true });
+                modalEl.addEventListener("hidden.bs.modal", onHidden, {
+                  once: true,
+                });
 
                 (buttons || []).forEach((b, i) => {
                   const btn = document.createElement("button");
@@ -147,7 +157,10 @@
                   footEl.appendChild(btn);
                 });
 
-                const bsModal = new bootstrap.Modal(modalEl, { backdrop, keyboard });
+                const bsModal = new bootstrap.Modal(modalEl, {
+                  backdrop,
+                  keyboard,
+                });
                 if (focusSelector) {
                   modalEl.addEventListener(
                     "shown.bs.modal",
@@ -155,20 +168,29 @@
                       const el = modalEl.querySelector(focusSelector);
                       if (el) el.focus();
                     },
-                    { once: true }
+                    { once: true },
                   );
                 }
                 bsModal.show();
-              })
+              }),
           );
         }
 
-        async function showConfirm({ title, message, okText = "OK", cancelText = "Cancel" }) {
+        async function showConfirm({
+          title,
+          message,
+          okText = "OK",
+          cancelText = "Cancel",
+        }) {
           return await showModal({
             title,
             bodyHTML: `<p class="mb-0">${message}</p>`,
             buttons: [
-              { text: cancelText, className: "btn btn-outline-secondary", value: false },
+              {
+                text: cancelText,
+                className: "btn btn-outline-secondary",
+                value: false,
+              },
               { text: okText, className: "btn btn-success", value: true },
             ],
           });
@@ -189,13 +211,17 @@
           const id = "qbasePromptInput";
           const body = `
             <label for="${id}" class="form-label">${(label ?? message) || "Enter value"}</label>
-            <input id="${id}" class="form-control" type="text" placeholder="${placeholder}" value="${(initial ?? defaultValue) ?? ""}">
+            <input id="${id}" class="form-control" type="text" placeholder="${placeholder}" value="${initial ?? defaultValue ?? ""}">
           `;
           const res = await showModal({
             title,
             bodyHTML: body,
             buttons: [
-              { text: cancelText, className: "btn btn-outline-secondary", value: null },
+              {
+                text: cancelText,
+                className: "btn btn-outline-secondary",
+                value: null,
+              },
               { text: okText, className: "btn btn-primary", value: "__OK__" },
             ],
             focusSelector: `#${id}`,
@@ -209,7 +235,9 @@
           await showModal({
             title,
             bodyHTML: `<p class="mb-0">${message}</p>`,
-            buttons: [{ text: okText, className: "btn btn-primary", value: true }],
+            buttons: [
+              { text: okText, className: "btn btn-primary", value: true },
+            ],
           });
         }
 
@@ -227,7 +255,7 @@
     ></script>
   </head>
   <body class="bg-dark text-light" style="max-height: 10vh !important">
-<!-- navbar removed for assignment page -->
+    <!-- navbar removed for assignment page -->
     <div
       class="assignment-topbar py-2 px-3 d-flex justify-content-between align-items-center"
     >
@@ -341,12 +369,45 @@
               </div>
               <div class="d-flex align-items-center gap-2">
                 <!-- Order: color mark; time; question type; bookmark; report -->
-                <div id="qcolor-picker" class="qcolor-picker collapsed" title="Mark question">
-                  <button type="button" class="qcolor-chip" data-color="none" aria-label="No color (clear)"></button>
-                  <button type="button" class="qcolor-chip" data-color="#0d6efd" style="--qc:#0d6efd" aria-label="Mark blue"></button>
-                  <button type="button" class="qcolor-chip" data-color="#dc3545" style="--qc:#dc3545" aria-label="Mark red"></button>
-                  <button type="button" class="qcolor-chip" data-color="#ffc107" style="--qc:#ffc107" aria-label="Mark yellow"></button>
-                  <button type="button" class="qcolor-chip" data-color="#198754" style="--qc:#198754" aria-label="Mark green"></button>
+                <div
+                  id="qcolor-picker"
+                  class="qcolor-picker collapsed"
+                  title="Mark question"
+                >
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="none"
+                    aria-label="No color (clear)"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#0d6efd"
+                    style="--qc: #0d6efd"
+                    aria-label="Mark blue"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#dc3545"
+                    style="--qc: #dc3545"
+                    aria-label="Mark red"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#ffc107"
+                    style="--qc: #ffc107"
+                    aria-label="Mark yellow"
+                  ></button>
+                  <button
+                    type="button"
+                    class="qcolor-chip"
+                    data-color="#198754"
+                    style="--qc: #198754"
+                    aria-label="Mark green"
+                  ></button>
                 </div>
                 <span
                   id="timer"
@@ -358,7 +419,10 @@
                 >
                   00:11
                 </span>
-                <span class="badge bg-dark-subtle text-info" id="qTypeInfo"></span>
+                <span
+                  class="badge bg-dark-subtle text-info"
+                  id="qTypeInfo"
+                ></span>
                 <button
                   id="bookmark-btn"
                   class="btn btn-sm btn-outline-primary"
@@ -395,7 +459,11 @@
                 style="display: none"
               ></div>
               <!-- PYQs per-question metadata (e.g., Year / Shift / Paper). Populated by pyqs-questions.js -->
-              <div id="pyq-info" class="text-muted small" style="display: none"></div>
+              <div
+                id="pyq-info"
+                class="text-muted small"
+                style="display: none"
+              ></div>
             </div>
           </div>
 
@@ -451,7 +519,11 @@
             </div>
             <div class="card-body">
               <div id="solutionText" class="fonted"></div>
-              <div id="solutionImage" class="solution-image mt-3" style="display: none"></div>
+              <div
+                id="solutionImage"
+                class="solution-image mt-3"
+                style="display: none"
+              ></div>
             </div>
           </div>
 
@@ -515,16 +587,39 @@
           >
             <i class="bi bi-info-circle"></i>
           </button>
-          <div class="dropdown" style="display: none;">
-            <button id="filter-btn" class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Filter questions"><i class="bi bi-funnel" aria-hidden="true"></i><span class="visually-hidden">Filter</span></button>
-            <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 260px;">
+          <div class="dropdown" style="display: none">
+            <button
+              id="filter-btn"
+              class="btn btn-outline-secondary btn-sm dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              title="Filter questions"
+            >
+              <i class="bi bi-funnel" aria-hidden="true"></i
+              ><span class="visually-hidden">Filter</span>
+            </button>
+            <div
+              class="dropdown-menu dropdown-menu-end p-3"
+              style="min-width: 260px"
+            >
               <div class="mb-2"><strong>Tags</strong></div>
-              <div id="filter-tags" class="mb-2 small" style="max-height: 180px; overflow:auto;"></div>
+              <div
+                id="filter-tags"
+                class="mb-2 small"
+                style="max-height: 180px; overflow: auto"
+              ></div>
               <div class="mb-2"><strong>Colors</strong></div>
               <div id="filter-colors" class="d-flex flex-wrap gap-2 mb-2"></div>
               <div class="d-flex justify-content-between mt-2">
-                <button id="filter-clear" class="btn btn-sm btn-outline-secondary">Clear</button>
-                <button id="filter-apply" class="btn btn-sm btn-primary">Apply</button>
+                <button
+                  id="filter-clear"
+                  class="btn btn-sm btn-outline-secondary"
+                >
+                  Clear
+                </button>
+                <button id="filter-apply" class="btn btn-sm btn-primary">
+                  Apply
+                </button>
               </div>
             </div>
           </div>
@@ -541,12 +636,12 @@
       <script>
         (function () {
           const params = new URLSearchParams(window.location.search);
-          const mode = (params.get('mode') || 'assignment').toLowerCase();
+          const mode = (params.get("mode") || "assignment").toLowerCase();
 
           // Helper to load scripts sequentially
           function loadScript(src) {
             return new Promise((resolve, reject) => {
-              const s = document.createElement('script');
+              const s = document.createElement("script");
               s.src = src;
               s.defer = true;
               s.onload = () => resolve();
@@ -557,80 +652,89 @@
 
           async function boot() {
             try {
-              if (mode === 'pyqs') {
-                try { document.title = 'QBase - PYQs'; } catch {}
+              if (mode === "pyqs") {
                 try {
-                  const t = document.getElementById('assignment-title');
-                  if (t) t.textContent = 'PYQs';
+                  document.title = "QBase - PYQs";
                 } catch {}
                 try {
-                  const b = document.getElementById('filters-info-btn');
-                  if (b) b.classList.remove('d-none');
+                  const t = document.getElementById("assignment-title");
+                  if (t) t.textContent = "PYQs";
+                } catch {}
+                try {
+                  const b = document.getElementById("filters-info-btn");
+                  if (b) b.classList.remove("d-none");
                 } catch {}
                 // Match content-image treatment used across assignment/PYQ pages.
                 try {
-                  const style = document.createElement('style');
+                  const style = document.createElement("style");
                   style.textContent = [
-                    '#questionText,',
-                    '#passageText,',
-                    '#questionImage,',
-                    '#passageImage {',
-                    '  background: var(--card-bg);',
-                    '  isolation: isolate;',
-                    '}',
-                    '#questionText img,',
-                    '#MCQOptionDiv .opt-text img,',
-                    '#passageText img,',
-                    '#passageImage img,',
-                    '#solutionText img,',
-                    '#questionImage img,',
-                    '#solutionImage img,',
-                    '#image-overlay .io-img {',
-                    '  filter: invert(1) contrast(1.2);',
-                    '  mix-blend-mode: screen;',
-                    '  background: var(--card-bg);',
-                    '}'
-                  ].join('\n');
+                    "#questionText,",
+                    "#passageText,",
+                    "#questionImage,",
+                    "#passageImage {",
+                    "  background: var(--card-bg);",
+                    "  isolation: isolate;",
+                    "}",
+                    "#questionText img,",
+                    "#MCQOptionDiv .opt-text img,",
+                    "#passageText img,",
+                    "#passageImage img,",
+                    "#solutionText img,",
+                    "#questionImage img,",
+                    "#solutionImage img,",
+                    "#image-overlay .io-img {",
+                    "  filter: invert(1) contrast(1.2);",
+                    "  mix-blend-mode: lighten;",
+                    "  background: var(--card-bg);",
+                    "}",
+                  ].join("\n");
                   document.head.appendChild(style);
                 } catch {}
                 // Load DOMPurify (used by PYQs renderer)
-                await loadScript('https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js');
+                await loadScript(
+                  "https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js",
+                );
                 // Provide custom loader and then the PYQs viewer
-                await loadScript('./pyqs/pyqs-assignment-loader.js');
-                await loadScript('./pyqs/pyqs-questions.js');
+                await loadScript("./pyqs/pyqs-assignment-loader.js");
+                await loadScript("./pyqs/pyqs-questions.js");
                 // EasyMDE after viewer so fallback textarea exists
-                await loadScript('https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js');
+                await loadScript(
+                  "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js",
+                );
               } else {
-                try { document.title = 'QBase - Assignment'; } catch {}
                 try {
-                  const b = document.getElementById('filters-info-btn');
-                  if (b) b.classList.add('d-none');
+                  document.title = "QBase - Assignment";
                 } catch {}
-                await loadScript('./assignment/assignment.service.js');
-                await loadScript('./assignment/assignment.view.js');
-                await loadScript('./assignment/assignment.js');
-                await loadScript('https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js');
+                try {
+                  const b = document.getElementById("filters-info-btn");
+                  if (b) b.classList.add("d-none");
+                } catch {}
+                await loadScript("./assignment/assignment.service.js");
+                await loadScript("./assignment/assignment.view.js");
+                await loadScript("./assignment/assignment.js");
+                await loadScript(
+                  "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js",
+                );
               }
             } catch (e) {
-              console.error('Failed to load page scripts:', e);
+              console.error("Failed to load page scripts:", e);
             }
           }
 
-          if (document.readyState === 'loading') {
-            window.addEventListener('DOMContentLoaded', boot);
+          if (document.readyState === "loading") {
+            window.addEventListener("DOMContentLoaded", boot);
           } else {
             boot();
           }
         })();
       </script>
-      
 
       <!-- Check answer bar alignment -->
       <script>
         (function () {
           // === CONFIG: tweak selectors if you change layout ===
           const col = document.querySelector(
-            ".main-wrapper > .overflow-y-scroll"
+            ".main-wrapper > .overflow-y-scroll",
           );
           const bar = document.getElementById("question-actions");
           if (!col || !bar) return;
@@ -735,7 +839,7 @@
             const checkBtn = document.getElementById("check-answer");
             if (!isVisible(checkBtn)) return;
             const btn = document.querySelector(
-              `#MCQOptionDiv .mcq-option[data-opt="${opt}"]`
+              `#MCQOptionDiv .mcq-option[data-opt="${opt}"]`,
             );
             if (!btn) return;
             // Avoid bypassing lock state
