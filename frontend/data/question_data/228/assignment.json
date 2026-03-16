@@ -1,0 +1,50 @@
+
+{
+  "questions":
+[
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (1).png","qOptions":[],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (2).png","qOptions":[],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (3).png","qOptions":[],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (4).png","qOptions":[],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (5).png","qOptions":[],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (6).png","qOptions":[],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (7).png","qOptions":[],"qAnswer":"D"},
+
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (8).png","qOptions":[],"qAnswer":["A","B"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (9).png","qOptions":[],"qAnswer":["A","C"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (10).png","qOptions":[],"qAnswer":["B","D"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (11).png","qOptions":[],"qAnswer":["C","D"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (12).png","qOptions":[],"qAnswer":["C","D"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (13).png","qOptions":[],"qAnswer":["B","C","D"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (14).png","qOptions":[],"qAnswer":["A","C","D"]},
+{"qType":"MMCQ","passageId":null,"qText":"","image":"1 (15).png","qOptions":[],"qAnswer":["B","C","D"]},
+
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (16).png","qOptions":[],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"","image":"1 (17).png","qOptions":[],"qAnswer":"A"},
+
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (18).png","qOptions":[],"qAnswer":4},
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (19).png","qOptions":[],"qAnswer":5},
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (20).png","qOptions":[],"qAnswer":6},
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (21).png","qOptions":[],"qAnswer":3},
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (22).png","qOptions":[],"qAnswer":7},
+{"qType":"Numerical","passageId":null,"qText":"","image":"1 (23).png","qOptions":[],"qAnswer":0}
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
