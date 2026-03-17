@@ -897,8 +897,8 @@ body.suppress-eval-anim input.is-wrong {
 #questionImage img,
 #solutionImage img,
 #image-overlay .io-img {
-  filter: invert(1) contrast(1.2);
-  mix-blend-mode: multiply;
+  filter: invert(1);
+  mix-blend-mode: lighten;
 }
 
 html[data-assignment-theme="light"] #questionText img,
@@ -910,7 +910,7 @@ html[data-assignment-theme="light"] #questionImage img,
 html[data-assignment-theme="light"] #solutionImage img,
 html[data-assignment-theme="light"] #image-overlay .io-img {
   filter: none;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply;
 }
 
 html[data-assignment-theme="light"] .btn-outline-light,
