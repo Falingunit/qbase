@@ -80,6 +80,79 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
     />
     <script defer src="./common/config.js"></script>
+    <script>
+      (function () {
+        const LS_KEY = "qbase.assignment.theme";
+        const normalizeTheme = (value) => (value === "light" ? "light" : "dark");
+        const readTheme = () => {
+          try {
+            return normalizeTheme(localStorage.getItem(LS_KEY));
+          } catch {
+            return "dark";
+          }
+        };
+        const applyTheme = (theme, persist = false) => {
+          const next = normalizeTheme(theme);
+          document.documentElement.setAttribute("data-assignment-theme", next);
+          document.documentElement.setAttribute("data-bs-theme", next);
+          if (document.body) {
+            document.body.dataset.assignmentTheme = next;
+            document.body.classList.toggle("bg-dark", next === "dark");
+            document.body.classList.toggle("text-light", next === "dark");
+            document.body.classList.toggle("bg-light", next === "light");
+            document.body.classList.toggle("text-dark", next === "light");
+          }
+          const btn = document.getElementById("toggle-assignment-theme");
+          const label = document.getElementById("assignment-theme-label");
+          const icon = btn?.querySelector("i");
+          if (btn) {
+            btn.setAttribute("aria-pressed", next === "light" ? "true" : "false");
+            btn.title = `Switch to ${next === "dark" ? "light" : "dark"} mode`;
+          }
+          if (label) label.textContent = next === "dark" ? "Dark" : "Light";
+          if (icon) icon.className = next === "dark" ? "bi bi-moon-stars" : "bi bi-brightness-high";
+          if (persist) {
+            try {
+              localStorage.setItem(LS_KEY, next);
+            } catch {}
+          }
+          try {
+            window.dispatchEvent(
+              new CustomEvent("qbase:assignment-theme-change", {
+                detail: { theme: next },
+              }),
+            );
+          } catch {}
+          return next;
+        };
+        const initialTheme = readTheme();
+        applyTheme(initialTheme, false);
+        window.__qbaseAssignmentTheme__ = {
+          key: LS_KEY,
+          get: () => normalizeTheme(document.documentElement.getAttribute("data-assignment-theme")),
+          set: (theme) => applyTheme(theme, true),
+          toggle: () =>
+            applyTheme(
+              normalizeTheme(document.documentElement.getAttribute("data-assignment-theme")) === "dark"
+                ? "light"
+                : "dark",
+              true,
+            ),
+          sync: () => applyTheme(readTheme(), false),
+        };
+        document.addEventListener("DOMContentLoaded", () => {
+          applyTheme(readTheme(), false);
+          document
+            .getElementById("toggle-assignment-theme")
+            ?.addEventListener("click", () => {
+              window.__qbaseAssignmentTheme__?.toggle();
+            });
+        });
+        window.addEventListener("storage", (event) => {
+          if (event.key === LS_KEY) applyTheme(readTheme(), false);
+        });
+      })();
+    </script>
     <!-- Modal helpers (same API as navbar.js) -->
     <script>
       (function () {
@@ -290,6 +363,16 @@
           >
             <i class="bi bi-chevron-bar-up"></i>
             <span class="d-none d-sm-inline">Top Bar</span>
+          </button>
+          <button
+            id="toggle-assignment-theme"
+            type="button"
+            class="btn btn-outline-secondary btn-sm"
+            title="Switch theme"
+            aria-label="Switch theme"
+          >
+            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+            <span class="d-none d-sm-inline" id="assignment-theme-label">Dark</span>
           </button>
           <span class="topbar-sep">|</span>
 
