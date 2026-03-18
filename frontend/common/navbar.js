@@ -904,6 +904,10 @@
     const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
     const RESET_COOLDOWN_DEFAULT_MS = 2000;
     const RESET_COOLDOWN_MAX_MS = 60000;
+    const assignmentThemeId = "qbaseAssignmentTheme";
+    const assignmentThemeSaveId = "qbaseAssignmentThemeSave";
+    const assignmentThemeMsgId = "qbaseAssignmentThemeMsg";
+    const ASSIGNMENT_THEME_LS_KEY = "qbase.assignment.theme";
     // Hotkeys UI removed
     const body = `
         <div class="preferences-modal">
@@ -942,6 +946,18 @@
             
             <div class="tab-pane fade" id="prefs-preferences" role="tabpanel" aria-labelledby="prefs-preferences-tab">
               <div class="mt-1">
+                <h6 class="mb-2">Assignment Viewer</h6>
+                <div class="mb-3">
+                  <label for="${assignmentThemeId}" class="form-label">Assignment/PYQ theme</label>
+                  <select id="${assignmentThemeId}" class="form-select">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                  </select>
+                  <div class="form-text">Applies to the assignment and PYQ viewer topbar layout.</div>
+                </div>
+                <button id="${assignmentThemeSaveId}" class="btn btn-primary btn-sm mt-1">Save Theme</button>
+                <div id="${assignmentThemeMsgId}" class="small text-muted mt-2 mb-3" style="display:none"></div>
+
                 <h6 class="mb-2">Question Controls</h6>
                 <div class="mb-2" pt-2>
                   <label for="${resetCooldownId}" class="form-label">Reset question delay (seconds)</label>
@@ -979,6 +995,9 @@
           const resetInput = modalEl.querySelector(`#${resetCooldownId}`);
           const resetSave = modalEl.querySelector(`#${resetCooldownSaveId}`);
           const resetMsg = modalEl.querySelector(`#${resetCooldownMsgId}`);
+          const assignmentThemeInput = modalEl.querySelector(`#${assignmentThemeId}`);
+          const assignmentThemeSave = modalEl.querySelector(`#${assignmentThemeSaveId}`);
+          const assignmentThemeMsg = modalEl.querySelector(`#${assignmentThemeMsgId}`);
 
           const showResetMsg = (msg, tone = "muted") => {
             if (!resetMsg) return;
@@ -988,6 +1007,34 @@
             if (tone === "success") resetMsg.classList.add("text-success");
             else if (tone === "danger") resetMsg.classList.add("text-danger");
             else resetMsg.classList.add("text-muted");
+          };
+
+          const showThemeMsg = (msg, tone = "muted") => {
+            if (!assignmentThemeMsg) return;
+            assignmentThemeMsg.style.display = msg ? "block" : "none";
+            assignmentThemeMsg.textContent = msg || "";
+            assignmentThemeMsg.classList.remove("text-danger", "text-success", "text-muted");
+            if (tone === "success") assignmentThemeMsg.classList.add("text-success");
+            else if (tone === "danger") assignmentThemeMsg.classList.add("text-danger");
+            else assignmentThemeMsg.classList.add("text-muted");
+          };
+
+          const getAssignmentTheme = () => {
+            try {
+              return localStorage.getItem(ASSIGNMENT_THEME_LS_KEY) === "light" ? "light" : "dark";
+            } catch {
+              return "dark";
+            }
+          };
+
+          const setAssignmentTheme = (theme) => {
+            const next = theme === "light" ? "light" : "dark";
+            try {
+              localStorage.setItem(ASSIGNMENT_THEME_LS_KEY, next);
+            } catch {}
+            try {
+              if (window.__qbaseAssignmentTheme__?.set) window.__qbaseAssignmentTheme__.set(next);
+            } catch {}
           };
 
           const getCooldownMs = () => {
@@ -1015,7 +1062,22 @@
             showResetMsg("", "muted");
           };
 
+          if (assignmentThemeInput) {
+            assignmentThemeInput.value = getAssignmentTheme();
+            showThemeMsg("", "muted");
+          }
+
           syncResetInput();
+
+          assignmentThemeSave?.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (!assignmentThemeInput) return;
+            setAssignmentTheme(assignmentThemeInput.value);
+            showThemeMsg(
+              `Saved: ${assignmentThemeInput.value === "light" ? "light" : "dark"} mode will be used in assignments and PYQs.`,
+              "success"
+            );
+          });
 
           resetSave?.addEventListener("click", (e) => {
             e.preventDefault();
