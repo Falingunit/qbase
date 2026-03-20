@@ -467,5 +467,22 @@
     "chapter": "SPT-5 Revision",
     "title": "Complex Numbers",
     "aID": 228
+  },
+   {
+    "subject": "Chemistry",
+    "faculty": "VK",
+    "chapter": "Salt Analysis",
+    "title": "Reference book Qs",
+    "aID": 229
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MRPK",
+    "chapter": "SPT-5 Revision",
+    "title": "QE,CN and PS combined",
+    "aID": 230
   }
+  
+
+
 ]
