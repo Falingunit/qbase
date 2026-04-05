@@ -88,7 +88,7 @@
   async function fetchAssignmentTitlesMap() {
     const map = new Map();
     try {
-      const raw = await (await fetch('./data/assignment_list.json', { cache: 'no-store' })).json();
+      const raw = await (await authFetch(`${API_BASE}/api/assignments`, { cache: 'no-store' })).json();
       normalizeAssignmentTitles(raw).forEach((it) => map.set(Number(it.aID), it.title));
     } catch {}
     return map;
@@ -122,9 +122,11 @@
     // Fetch missing IDs with limited concurrency to speed up loads without overloading
     if (missing.length > 0) {
       const fetched = await _runWithConcurrency(missing, 8, async (key) => {
-        const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
+        const resp = await authFetch(`${API_BASE}/api/assignments/${encodeURIComponent(key)}`, { cache: 'no-store' });
         if (!resp.ok) return undefined;
-        const data = await resp.json();
+        const payload = await resp.json();
+        const data = payload?.assignment || null;
+        if (!data) return undefined;
         try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
         return { key, data };
       });
@@ -142,9 +144,11 @@
   async function fetchAssignmentData(assignmentId) {
     const key = Number(assignmentId);
     if (_assignmentCache.has(key)) return _assignmentCache.get(key);
-    const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
+    const resp = await authFetch(`${API_BASE}/api/assignments/${encodeURIComponent(key)}`, { cache: 'no-store' });
     if (!resp.ok) return null;
-    const data = await resp.json();
+    const payload = await resp.json();
+    const data = payload?.assignment || null;
+    if (!data) return null;
     try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
     _assignmentCache.set(key, data);
     return data;

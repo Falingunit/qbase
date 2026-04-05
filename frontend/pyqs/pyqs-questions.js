@@ -2545,8 +2545,11 @@
       const data = __customLoader
         ? await __customLoader()
         : await (
-            await fetch(`./data/question_data/${aID}/assignment.json`)
-          ).json();
+            await authFetch(
+              `${API_BASE}/api/assignments/${encodeURIComponent(aID)}`,
+              { cache: "no-store" }
+            )
+          ).json().then((payload) => payload?.assignment || { questions: [] });
 
       // ✓ CRITICAL: Store the complete unfiltered array for state access
       if (data.allQuestionsMap) {

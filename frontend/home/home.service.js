@@ -2,6 +2,12 @@
 // Exposes a global to keep current non-module script setup working.
 
 (function(){
+  async function fetchAssignments() {
+    const r = await authFetch(`${API_BASE}/api/assignments`, { cache: "no-store" });
+    if (!r.ok) throw new Error(`assignments: ${r.status}`);
+    return await r.json();
+  }
+
   async function fetchScores() {
     try {
       const r = await authFetch(`${API_BASE}/api/scores`);
@@ -72,6 +78,11 @@
     return out;
   }
 
-  window.HomeService = { fetchScores, fetchStarred, normalizeAssignments };
+  window.HomeService = {
+    fetchAssignments,
+    fetchScores,
+    fetchStarred,
+    normalizeAssignments
+  };
 })();
 

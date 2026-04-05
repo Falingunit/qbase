@@ -321,46 +321,15 @@
         assignmentTitle = String(window.__PYQS_ASSIGNMENT_TITLE__);
         const el = document.getElementById("assignmentDetails");
         if (el) el.textContent = assignmentTitle;
-        return; // Skip fetching assignment_list.json
+        return;
       }
     } catch {}
-    try {
-      const raw = await (await fetch("./data/assignment_list.json")).json();
-      const items = normalizeAssignmentsForLookup(raw);
-      const meta = items.find((it) => Number(it.aID) === Number(aID));
-      if (meta?.title) assignmentTitle = meta.title;
-
-      // If the page UI is already up, refresh the header
-      const el = document.getElementById("assignmentDetails");
-      if (el) el.textContent = assignmentTitle;
-    } catch (e) {
-      console.warn(
-        "Could not load assignment title from assignment_list.json",
-        e
-      );
+    if (assignmentBootstrap?.meta?.title) {
+      assignmentTitle = String(assignmentBootstrap.meta.title);
     }
+    const el = document.getElementById("assignmentDetails");
+    if (el) el.textContent = assignmentTitle;
   })();
-
-  function normalizeAssignmentsForLookup(input) {
-    const out = [];
-    const pushItem = (raw) => {
-      if (!raw || typeof raw !== "object") return;
-      const id = Number(
-        raw.aID ?? raw.id ?? raw.assignmentId ?? raw.AID ?? raw.Aid
-      );
-      if (!Number.isFinite(id)) return;
-      out.push({ aID: id, title: String(raw.title ?? raw.name ?? raw.assignmentTitle ?? `Assignment ${id}`) });
-    };
-    if (Array.isArray(input)) input.forEach(pushItem);
-    else if (input && Array.isArray(input.assignments)) input.assignments.forEach(pushItem);
-    else if (input && Array.isArray(input.items)) input.items.forEach(pushItem);
-    else if (input && typeof input === "object") {
-      Object.values(input).forEach((arr) => {
-        if (Array.isArray(arr)) arr.forEach(pushItem);
-      });
-    }
-    return out;
-  }
 
   function normalizeAssignmentPayload(input) {
     if (Array.isArray(input)) return { questions: input };
@@ -561,6 +530,11 @@
       // Continue offline: will try local storage below
     }
 
+    if (Array.isArray(assignmentBootstrap?.state) && assignmentBootstrap.state.length) {
+      questionStates = assignmentBootstrap.state;
+      return;
+    }
+
     // Logged in → use server if available; fallback to local only if server has nothing
     try {
       const res = await authFetch(`${API_BASE}/api/state/${aID}`);
@@ -568,6 +542,7 @@
         const server = await res.json();
         if (Array.isArray(server) && server.length) {
           questionStates = server;
+          syncBootstrapState();
           return;
         }
       }
@@ -582,6 +557,7 @@
         const arr = JSON.parse(raw);
         if (Array.isArray(arr) && arr.length) {
           questionStates = arr;
+          syncBootstrapState();
           return;
         }
       }
@@ -591,6 +567,7 @@
     questionStates = Array(window.displayQuestions.length)
       .fill()
       .map(defaultState);
+    syncBootstrapState();
   }
 
   // ---------- Server POST helper ----------
@@ -601,6 +578,7 @@
       body: JSON.stringify({ state }),
     });
     if (!res.ok) throw new Error(`postState failed: ${res.status}`);
+    syncBootstrapState();
   }
 
   // ---------- Save strategy (debounced + flush + periodic) ----------
@@ -688,6 +666,12 @@
             const server = await res.json();
             if (Array.isArray(server) && server.length) {
               questionStates = mergeStates(server, questionStates);
+              syncBootstrapState();
+              if (assignmentBootstrap) {
+                assignmentBootstrap.bookmarks = null;
+                assignmentBootstrap.marks = null;
+                assignmentBootstrap.tags = null;
+              }
               ensureStateLength(window.displayQuestions.length);
               questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
               if (currentQuestionID != null) setQuestion(currentQuestionID);
@@ -709,6 +693,11 @@
   window.addEventListener("qbase:logout", () => {
     loggedInUser = null;
     authSource = "none";
+    if (assignmentBootstrap) {
+      assignmentBootstrap.bookmarks = null;
+      assignmentBootstrap.marks = null;
+      assignmentBootstrap.tags = null;
+    }
   });
 
   // ---------- KaTeX render options ----------
@@ -1546,6 +1535,7 @@
 
   // ---------- App state ----------
   let questionData;
+  let assignmentBootstrap = null;
   let currentQuestionID;
   let questionButtons;
   let questionStates;
@@ -1556,6 +1546,31 @@
   const RESET_COOLDOWN_LS_KEY = "qbase.pref.resetCooldownMs";
   const RESET_COOLDOWN_DEFAULT_MS = 2000;
   const RESET_COOLDOWN_MAX_MS = 60000;
+
+  function getBootstrapBookmarks() {
+    return Array.isArray(assignmentBootstrap?.bookmarks)
+      ? assignmentBootstrap.bookmarks
+      : null;
+  }
+
+  function getBootstrapMarks() {
+    return Array.isArray(assignmentBootstrap?.marks)
+      ? assignmentBootstrap.marks
+      : null;
+  }
+
+  function getBootstrapTags() {
+    return Array.isArray(assignmentBootstrap?.tags)
+      ? assignmentBootstrap.tags
+      : null;
+  }
+
+  function syncBootstrapState() {
+    if (!assignmentBootstrap) return;
+    assignmentBootstrap.state = Array.isArray(questionStates)
+      ? JSON.parse(JSON.stringify(questionStates))
+      : [];
+  }
 
   // ---------- UI helpers ----------
   function formatTime(sec) {
@@ -2075,9 +2090,16 @@
   const __customLoader = (typeof window !== 'undefined' && window.__ASSIGNMENT_CUSTOM_LOADER__) || null;
   (async () => {
     try {
-      const rawData = __customLoader
-        ? await __customLoader()
-        : await AssignmentService.loadLocalAssignment(aID);
+      let rawData;
+      if (__customLoader) {
+        rawData = await __customLoader();
+      } else {
+        assignmentBootstrap = await AssignmentService.loadAssignmentBundle(aID);
+        if (assignmentBootstrap?.meta?.title) {
+          assignmentTitle = String(assignmentBootstrap.meta.title);
+        }
+        rawData = assignmentBootstrap.assignment;
+      }
       const data = normalizeAssignmentPayload(rawData);
       // 1) passages
       processPassageQuestions(data.questions);
@@ -2846,13 +2868,14 @@
 
   async function addBookmark(tagId) {
     try {
+      const originalIdx = window.questionIndexMap[currentQuestionID];
       const response = await authFetch(`${API_BASE}/api/bookmarks`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           assignmentId: aID,
           // Persist original index from assignment.json
-          questionIndex: window.questionIndexMap[currentQuestionID],
+          questionIndex: originalIdx,
           tagId: tagId,
         }),
       });
@@ -2860,6 +2883,18 @@
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || "Failed to add bookmark");
+      }
+
+      if (assignmentBootstrap) {
+        const next = (getBootstrapBookmarks() || []).filter(
+          (b) =>
+            !(
+              Number(b.questionIndex) === Number(originalIdx) &&
+              String(b.tagId) === String(tagId)
+            )
+        );
+        next.push({ questionIndex: Number(originalIdx), tagId: String(tagId) });
+        assignmentBootstrap.bookmarks = next;
       }
 
       // Update badges across question circles
@@ -2890,6 +2925,16 @@
         throw new Error("Failed to remove bookmark");
       }
 
+      if (assignmentBootstrap) {
+        assignmentBootstrap.bookmarks = (getBootstrapBookmarks() || []).filter(
+          (b) =>
+            !(
+              Number(b.questionIndex) === Number(originalIdx) &&
+              String(b.tagId) === String(tagId)
+            )
+        );
+      }
+
       // Update badges across question circles
       updateBookmarkIndicators();
       return true;
@@ -2917,6 +2962,13 @@
       }
 
       const newTag = await response.json();
+      if (assignmentBootstrap) {
+        const nextTags = (getBootstrapTags() || []).filter(
+          (tag) => String(tag.id) !== String(newTag.id)
+        );
+        nextTags.push(newTag);
+        assignmentBootstrap.tags = nextTags;
+      }
 
       // Automatically add bookmark to the new tag
       const ok = await addBookmark(newTag.id);
@@ -3356,19 +3408,21 @@
   // ---------- Bookmark badges on question circles ----------
   async function updateBookmarkIndicators() {
     try {
-      // Fetch all bookmarks and filter to current assignment
-      const res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
-      if (!res.ok) {
-        // On unauthorized, hide all indicators
-        questionButtons?.forEach((btn) => {
-          btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
-        });
-        return;
+      let mine = getBootstrapBookmarks();
+      if (!mine) {
+        const res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
+        if (!res.ok) {
+          // On unauthorized, hide all indicators
+          questionButtons?.forEach((btn) => {
+            btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
+          });
+          return;
+        }
+        const all = await res.json();
+        mine = Array.isArray(all)
+          ? all.filter((b) => Number(b.assignmentId) === Number(aID))
+          : [];
       }
-      const all = await res.json();
-      const mine = Array.isArray(all)
-        ? all.filter((b) => Number(b.assignmentId) === Number(aID))
-        : [];
       const bookmarkedOriginalIdx = new Set(
         mine.map((b) => Number(b.questionIndex))
       );
@@ -3402,6 +3456,12 @@
         body: JSON.stringify({ assignmentId: aID, questionIndex: originalIdx, color })
       });
       if (!response.ok) throw new Error('Failed to set color');
+      if (assignmentBootstrap) {
+        const marks = getBootstrapMarks() || [];
+        const next = marks.filter((m) => Number(m.questionIndex) !== Number(originalIdx));
+        next.push({ questionIndex: Number(originalIdx), color });
+        assignmentBootstrap.marks = next;
+      }
       updateColorIndicators();
       return true;
     } catch (e) {
@@ -3415,6 +3475,11 @@
       const originalIdx = window.questionIndexMap[currentQuestionID];
       const response = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to clear color');
+      if (assignmentBootstrap) {
+        assignmentBootstrap.marks = (getBootstrapMarks() || []).filter(
+          (m) => Number(m.questionIndex) !== Number(originalIdx)
+        );
+      }
       return true;
     } catch (e) {
       console.error('Failed to clear question color:', e);
@@ -3430,14 +3495,21 @@
       if (currentQuestionID == null) return;
       const originalIdx = window.questionIndexMap[currentQuestionID];
       let sel = 'none';
-      try {
-        const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
-        if (res.ok) {
-          const data = await res.json();
-          const color = (data?.color || '').trim().toLowerCase();
-          sel = color || 'none';
-        }
-      } catch {}
+      const cachedMarks = getBootstrapMarks();
+      if (cachedMarks) {
+        const mark = cachedMarks.find((m) => Number(m.questionIndex) === Number(originalIdx));
+        const color = String(mark?.color || '').trim().toLowerCase();
+        sel = color || 'none';
+      } else {
+        try {
+          const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
+          if (res.ok) {
+            const data = await res.json();
+            const color = (data?.color || '').trim().toLowerCase();
+            sel = color || 'none';
+          }
+        } catch {}
+      }
       chips.forEach((c) => {
         const val = String(c.getAttribute('data-color') || '').trim().toLowerCase();
         c.classList.toggle('selected', val === sel);
@@ -3450,17 +3522,20 @@
   // ---------- Color badges on question circles ----------
   async function updateColorIndicators() {
     try {
-      const res = await authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" });
-      if (!res.ok) {
-        questionButtons?.forEach((btn) => {
-          btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
-        });
-        return;
+      let mine = getBootstrapMarks();
+      if (!mine) {
+        const res = await authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" });
+        if (!res.ok) {
+          questionButtons?.forEach((btn) => {
+            btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
+          });
+          return;
+        }
+        const all = await res.json();
+        mine = Array.isArray(all)
+          ? all.filter((m) => Number(m.assignmentId) === Number(aID))
+          : [];
       }
-      const all = await res.json();
-      const mine = Array.isArray(all)
-        ? all.filter((m) => Number(m.assignmentId) === Number(aID))
-        : [];
       const byIdx = new Map();
       for (const m of mine) byIdx.set(Number(m.questionIndex), String(m.color));
 
@@ -3491,6 +3566,14 @@
   // Refresh badges on login/logout
   window.addEventListener('qbase:login', () => { updateBookmarkIndicators(); updateColorIndicators(); updateColorPickerSelection(); });
       window.addEventListener('qbase:logout', () => {
+        if (assignmentBootstrap) {
+          assignmentBootstrap = {
+            ...assignmentBootstrap,
+            bookmarks: null,
+            marks: null,
+            tags: null
+          };
+        }
         questionButtons?.forEach((btn) => {
           btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
           btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
@@ -3603,9 +3686,12 @@
 
   async function populateFilterTags(host) {
     try {
-      const res = await authFetch(`${API_BASE}/api/bookmark-tags`);
-      if (!res.ok) { host.innerHTML = '<div class="text-muted small">Sign in to use tags</div>'; return; }
-      const tags = await res.json();
+      let tags = getBootstrapTags();
+      if (!tags || !tags.length) {
+        const res = await authFetch(`${API_BASE}/api/bookmark-tags`);
+        if (!res.ok) { host.innerHTML = '<div class="text-muted small">Sign in to use tags</div>'; return; }
+        tags = await res.json();
+      }
       const items = tags.map(t => {
         const id = `ftag-${t.id}`;
         const checked = activeTagFilters.has(String(t.id)) ? 'checked' : '';
@@ -3655,26 +3741,40 @@
       }
 
       // Build tag map and color map
-      const [bmRes, cmRes] = await Promise.all([
-        authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' }),
-        authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' }),
-      ]);
       let byQTags = new Map(); // origIdx -> Set(tagId)
-      if (bmRes.ok) {
-        const all = await bmRes.json();
-        const mine = Array.isArray(all) ? all.filter(b => Number(b.assignmentId) === Number(aID)) : [];
-        for (const b of mine) {
+      const cachedBookmarks = getBootstrapBookmarks();
+      if (cachedBookmarks) {
+        for (const b of cachedBookmarks) {
           const key = Number(b.questionIndex);
           if (!byQTags.has(key)) byQTags.set(key, new Set());
           byQTags.get(key).add(String(b.tagId));
         }
+      } else {
+        const bmRes = await authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' });
+        if (bmRes.ok) {
+          const all = await bmRes.json();
+          const mine = Array.isArray(all) ? all.filter(b => Number(b.assignmentId) === Number(aID)) : [];
+          for (const b of mine) {
+            const key = Number(b.questionIndex);
+            if (!byQTags.has(key)) byQTags.set(key, new Set());
+            byQTags.get(key).add(String(b.tagId));
+          }
+        }
       }
       let byQColor = new Map(); // origIdx -> color (lower)
-      if (cmRes.ok) {
-        const all = await cmRes.json();
-        const mine = Array.isArray(all) ? all.filter(m => Number(m.assignmentId) === Number(aID)) : [];
-        for (const m of mine) {
+      const cachedMarks = getBootstrapMarks();
+      if (cachedMarks) {
+        for (const m of cachedMarks) {
           byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+        }
+      } else {
+        const cmRes = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
+        if (cmRes.ok) {
+          const all = await cmRes.json();
+          const mine = Array.isArray(all) ? all.filter(m => Number(m.assignmentId) === Number(aID)) : [];
+          for (const m of mine) {
+            byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+          }
         }
       }
 
