@@ -488,14 +488,6 @@
     "chapter": "EVC",
     "title": "EVC",
     "aID": 231
-<<<<<<< Updated upstream
-  },
-  {
-    "subject": "Others",
-    "faculty": "abc",
-    "chapter": "Full Syllabus",
-    "title": "AITS 2024 FT 1",
-    "aID": 806
   },
   {
     "subject": "Physics",
@@ -517,7 +509,5 @@
     "chapter": "Aits 1",
     "title": "Aits",
     "aID": 809
-=======
->>>>>>> Stashed changes
   }
 ]
