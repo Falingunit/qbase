@@ -1,0 +1,50 @@
+
+{
+  "questions":
+[
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is NOT a greenhouse gas according to NCERT?","image":null,"qOptions":["N2","CH4","O3","N2O"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"The pH of normal rain water is approximately 5.6 due to the presence of:","image":null,"qOptions":["HNO3","H2SO4","H2CO3","HCl"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"Classical smog is a mixture of:","image":null,"qOptions":["Smoke, fog and SO2","Smoke, fog and O3","Smoke, fog and NO2","Smoke, fog and PAN"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is a secondary pollutant?","image":null,"qOptions":["CO","SO2","O3","NO"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"The \"Blue Baby\" syndrome (Methemoglobinemia) is caused by excess of:","image":null,"qOptions":["Fluoride","Sulfate","Nitrate","Lead"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"The catalytic converter in automobiles changes carbon monoxide into:","image":null,"qOptions":["Carbon dioxide","Carbonate","Methane","Bicarbonate"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Stratospheric ozone depletion is mainly caused by the release of:","image":null,"qOptions":["CH4","Chlorofluorocarbons (CFCs)","CO2","SO2"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Eutrophication causes reduction in:","image":null,"qOptions":["Dissolved Oxygen","Nutrients","Algae","Dissolved Salts"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"The maximum prescribed concentration of Cadmium in drinking water is:","image":null,"qOptions":["0.05 ppm","0.005 ppm","5.0 ppm","0.5 ppm"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Which gaseous pollutant has a higher affinity for hemoglobin than oxygen?","image":null,"qOptions":["NO2","SO2","CO","CO2"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"Photochemical smog does not contain:","image":null,"qOptions":["PAN","Ozone","Nitrogen oxides","SO2"],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"The herbicide 'Sodium Chlorate' is used to control:","image":null,"qOptions":["Fungi","Insects","Weeds","Rodents"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is a strategy for 'Green Chemistry'?","image":null,"qOptions":["Use of plastic","Use of sunlight/microwave","High energy","Toxic solvents"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Excessive fluoride (above 10 ppm) in drinking water causes:","image":null,"qOptions":["Mottling of teeth","Harmful effect to bones","Both (a) and (b)","Kidney damage"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"The pollutant responsible for the \"Taj Mahal\" corrosion is:","image":null,"qOptions":["Cl2","SO2","CO","CH4"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is a sink for CO?","image":null,"qOptions":["Hemoglobin","Micro-organisms in soil","Oceans","Plants"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"The gas leaked during the Bhopal Gas Tragedy in 1984 was:","image":null,"qOptions":["Methyl Isocyanate","Ethyl Isocyanate","Sodium Isothiocyanate","Potassium Isocyanate"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"High concentration of SO2 leads to:","image":null,"qOptions":["Stiffness of flower buds","Shortness of breath","Eye irritation","All of these"],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"Most dangerous particulate for human health is size:","image":null,"qOptions":["5 microns","10 microns","< 2.5 microns","20 microns"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"The reaction CF2Cl2 \\xrightarrow{UV} CF2Cl + Cl occurs in:","image":null,"qOptions":["Troposphere","Stratosphere","Mesosphere","Thermosphere"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Which behaves as a scavenger for chlorine atoms in the stratosphere?","image":null,"qOptions":["CH4","NO2","Both (a) and (b)","None"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"Organic solvents like Benzene are being replaced in Green Chemistry by:","image":null,"qOptions":["Ethyl acetate","Liquid CO2","H2O","CCl4"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"'Auspicious' rain is associated with the cloud chemistry of:","image":null,"qOptions":["Venus","Mars","Jupiter","Saturn"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"The concentration of CO2 in the atmosphere is roughly:","image":null,"qOptions":["0.03%","0.3%","3%","0.003%"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is a non-viable particulate?","image":null,"qOptions":["Mist","Bacteria","Algae","Fungi"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Organic matter in sewage is decomposed by:","image":null,"qOptions":["Oxidation","Reduction","Bacteria","Hydrolysis"],"qAnswer":"C"},
+{"qType":"SMCQ","passageId":null,"qText":"Minamata disease is caused by pollution of:","image":null,"qOptions":["Lead","Mercury","Arsenic","Cadmium"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"The oxidant present in photochemical smog is:","image":null,"qOptions":["O3","NO2","PAN","All of these"],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"Greenhouse gas produced by animal digestion:","image":null,"qOptions":["CO2","CH4","H2O","N2O"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"The 'Oxygen sag curve' is related to:","image":null,"qOptions":["BOD","COD","Pesticides","Industrial waste"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Black lung disease is common in:","image":null,"qOptions":["Coal miners","Farmers","Pilots","Petrochemical workers"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"Which of the following is an organophosphate?","image":null,"qOptions":["DDT","Malathion","BHC","Aldrin"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Carbon monoxide poisoning causes:","image":null,"qOptions":["Carboxyhemoglobin","Oxyhemoglobin","Methemoglobin","None"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"London smog is another name for:","image":null,"qOptions":["Photochemical smog","Classical smog","Reducing smog","Both (b) and (c)"],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"PAN stands for:","image":null,"qOptions":["Peroxyacetyl nitrate","Peroxyethyl nitrate","Polyacetyl nitrate","None"],"qAnswer":"A"},
+{"qType":"SMCQ","passageId":null,"qText":"BOD is a measure of:","image":null,"qOptions":["Industrial waste","Organic waste","Inorganic waste","Total solids"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Which is used for bleaching paper in Green Chemistry?","image":null,"qOptions":["Cl2","H2O2","SO2","O3"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Maximum limit of Zinc in drinking water:","image":null,"qOptions":["0.5 ppm","5 ppm","0.05 ppm","50 ppm"],"qAnswer":"B"},
+{"qType":"SMCQ","passageId":null,"qText":"Addition of phosphate fertilizers to water bodies causes:","image":null,"qOptions":["Algal bloom","Eutrophication","Decrease in DO","All of these"],"qAnswer":"D"},
+{"qType":"SMCQ","passageId":null,"qText":"The \"Ozone Hole\" was first discovered over:","image":null,"qOptions":["Arctic","Antarctica","Equator","Himalayas"],"qAnswer":"B"}
+]
+
+
+
+
+}
