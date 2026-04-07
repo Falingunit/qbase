@@ -1568,9 +1568,19 @@ app.get(
         for (const c of chapters) {
           const cid = String(c.id);
           const f = Object.assign(
-            { q: "", years: [], status: "", diff: "", sort: "index" },
+            { q: "", years: [], status: [], diff: [], sort: "index" },
             prefsMap[cid] || {}
           );
+          const activeDiffs = Array.isArray(f.diff)
+            ? f.diff.filter(Boolean).map((v) => String(v))
+            : f.diff
+            ? [String(f.diff)]
+            : [];
+          const activeStatuses = Array.isArray(f.status)
+            ? f.status.filter(Boolean).map((v) => String(v))
+            : f.status
+            ? [String(f.status)]
+            : [];
           const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
           const totalQs = Math.max(0, Number(totalsById[cid] || 0));
           let correct = 0,
@@ -1594,45 +1604,28 @@ app.get(
             green = 0,
             red = 0,
             grey = 0;
-          if (!f.q && !(Array.isArray(f.years) && f.years.length) && !f.diff) {
-            if (!f.status) {
+          if (
+            !f.q &&
+            !(Array.isArray(f.years) && f.years.length) &&
+            !activeDiffs.length
+          ) {
+            if (!activeStatuses.length) {
               green = correct;
               red = incorrect + partial;
               grey = Math.max(0, totalQs - green - red);
               total = totalQs;
             } else {
-              switch (String(f.status)) {
-                case "correct":
-                  total = correct;
-                  green = correct;
-                  break;
-                case "incorrect":
-                  total = incorrect;
-                  red = incorrect;
-                  break;
-                case "partial":
-                  total = partial;
-                  red = partial;
-                  break;
-                case "completed":
-                  total = evaluated;
-                  green = correct;
-                  red = incorrect + partial;
-                  break;
-                case "in-progress":
-                  total = inProgress;
-                  grey = inProgress;
-                  break;
-                case "not-started":
-                  total = Math.max(0, totalQs - evaluated - inProgress);
-                  grey = total;
-                  break;
-                default:
-                  total = totalQs;
-                  green = correct;
-                  red = incorrect + partial;
-                  grey = Math.max(0, totalQs - green - red);
-              }
+              const statusSet = new Set(activeStatuses);
+              if (statusSet.has("completed") || statusSet.has("correct"))
+                green += correct;
+              if (statusSet.has("completed") || statusSet.has("incorrect"))
+                red += incorrect;
+              if (statusSet.has("completed") || statusSet.has("partial"))
+                red += partial;
+              if (statusSet.has("in-progress")) grey += inProgress;
+              if (statusSet.has("not-started"))
+                grey += Math.max(0, totalQs - evaluated - inProgress);
+              total = green + red + grey;
             }
           }
           out[cid] = { total, green, red, grey };
@@ -1962,10 +1955,15 @@ app.get("/api/pyqs/progress/:examId/:subjectId", auth, async (req, res) => {
     const needsMeta = new Set();
     for (const chId of chapters) {
       const f = prefsMap[String(chId)] || {};
+      const activeDiffs = Array.isArray(f.diff)
+        ? f.diff.filter(Boolean)
+        : f.diff
+        ? [f.diff]
+        : [];
       if (
         (f.q && String(f.q).trim()) ||
         (Array.isArray(f.years) && f.years.length) ||
-        (f.diff && String(f.diff).trim())
+        activeDiffs.some((v) => String(v).trim())
       ) {
         needsMeta.add(String(chId));
       }
@@ -2015,17 +2013,27 @@ app.get("/api/pyqs/progress/:examId/:subjectId", auth, async (req, res) => {
       const defaults = {
         q: "",
         years: [],
-        status: "",
-        diff: "",
+        status: [],
+        diff: [],
         sort: "index",
       };
       const f = Object.assign({}, defaults, prefsMap[cid] || {});
+      const activeDiffs = Array.isArray(f.diff)
+        ? f.diff.filter(Boolean).map((v) => String(v))
+        : f.diff
+        ? [String(f.diff)]
+        : [];
+      const activeStatuses = Array.isArray(f.status)
+        ? f.status.filter(Boolean).map((v) => String(v))
+        : f.status
+        ? [String(f.status)]
+        : [];
       const stArr = Array.isArray(statesMap[cid]) ? statesMap[cid] : [];
 
       const requiresMeta =
         (f.q && String(f.q).trim()) ||
         (Array.isArray(f.years) && f.years.length) ||
-        (f.diff && String(f.diff).trim());
+        activeDiffs.some((v) => String(v).trim());
       let total = 0,
         green = 0,
         red = 0,
@@ -2051,56 +2059,23 @@ app.get("/api/pyqs/progress/:examId/:subjectId", auth, async (req, res) => {
             inProgress++;
           }
         }
-        if (!f.status) {
+        if (!activeStatuses.length) {
           green = correct;
           red = incorrect + partial;
           grey = Math.max(0, totalQs - green - red);
           total = totalQs;
         } else {
-          switch (String(f.status)) {
-            case "correct":
-              total = correct;
-              green = correct;
-              red = 0;
-              grey = 0;
-              break;
-            case "incorrect":
-              total = incorrect;
-              green = 0;
-              red = incorrect;
-              grey = 0;
-              break;
-            case "partial":
-              total = partial;
-              green = 0;
-              red = partial;
-              grey = 0;
-              break;
-            case "completed":
-              total = evaluated;
-              green = correct;
-              red = incorrect + partial;
-              grey = 0;
-              break;
-            case "in-progress":
-              total = inProgress;
-              green = 0;
-              red = 0;
-              grey = inProgress;
-              break;
-            case "not-started":
-              total = Math.max(0, totalQs - evaluated - inProgress);
-              green = 0;
-              red = 0;
-              grey = total;
-              break;
-            default:
-              total = totalQs;
-              green = correct;
-              red = incorrect + partial;
-              grey = Math.max(0, totalQs - green - red);
-              break;
-          }
+          const statusSet = new Set(activeStatuses);
+          if (statusSet.has("completed") || statusSet.has("correct"))
+            green += correct;
+          if (statusSet.has("completed") || statusSet.has("incorrect"))
+            red += incorrect;
+          if (statusSet.has("completed") || statusSet.has("partial"))
+            red += partial;
+          if (statusSet.has("in-progress")) grey += inProgress;
+          if (statusSet.has("not-started"))
+            grey += Math.max(0, totalQs - evaluated - inProgress);
+          total = green + red + grey;
         }
       } else {
         const meta = Array.isArray(metaMap[cid]) ? metaMap[cid] : [];
@@ -2118,15 +2093,18 @@ app.get("/api/pyqs/progress/:examId/:subjectId", auth, async (req, res) => {
             return y && set.has(y);
           });
         }
-        if (f.diff) {
-          mapped = mapped.filter((o) => normDiff(o.q.diffuculty) === f.diff);
+        if (activeDiffs.length) {
+          mapped = mapped.filter((o) =>
+            activeDiffs.includes(normDiff(o.q.diffuculty))
+          );
         }
-        if (f.status) {
+        if (activeStatuses.length) {
           mapped = mapped.filter((o) => {
             const s = statusFromState(stArr[o.i]);
             return (
-              s === f.status ||
-              (f.status === "completed" && stArr[o.i]?.isAnswerEvaluated)
+              activeStatuses.includes(s) ||
+              (activeStatuses.includes("completed") &&
+                stArr[o.i]?.isAnswerEvaluated)
             );
           });
         }

@@ -522,8 +522,18 @@ async function updateChapterProgressBar(
       fetchBulkStates(examId, subjectId).catch(() => ({})),
       fetchQuestionsMetaSubject(examId, subjectId).catch(() => ({})),
     ]);
-    const defaults = { q: "", years: [], status: "", diff: "", sort: "index" };
+    const defaults = { q: "", years: [], status: [], diff: [], sort: "index" };
     let filters = { ...defaults, ...(prefsMap?.[chapterId] || {}) };
+    const activeDiffs = Array.isArray(filters.diff)
+      ? filters.diff.filter(Boolean).map((v) => String(v))
+      : filters.diff
+      ? [String(filters.diff)]
+      : [];
+    const activeStatuses = Array.isArray(filters.status)
+      ? filters.status.filter(Boolean).map((v) => String(v))
+      : filters.status
+      ? [String(filters.status)]
+      : [];
     let states = normalizeStates(statesMap?.[chapterId] || []);
     if (!Array.isArray(states) || states.length === 0) {
       try {
@@ -585,16 +595,19 @@ async function updateChapterProgressBar(
         return y && set.has(y);
       });
     }
-    if (filters.diff) {
-      mapped = mapped.filter((o) => normDiff(o.q.diffuculty) === filters.diff);
+    if (activeDiffs.length) {
+      mapped = mapped.filter((o) =>
+        activeDiffs.includes(normDiff(o.q.diffuculty))
+      );
     }
     // hasSol filter removed
-    if (filters.status) {
+    if (activeStatuses.length) {
       mapped = mapped.filter((o) => {
         const s = statusFromState(states[o.i]);
         return (
-          s === filters.status ||
-          (filters.status === "completed" && states[o.i]?.isAnswerEvaluated)
+          activeStatuses.includes(s) ||
+          (activeStatuses.includes("completed") &&
+            states[o.i]?.isAnswerEvaluated)
         );
       });
     }

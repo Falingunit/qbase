@@ -1833,6 +1833,7 @@
   let questionData;
   let currentQuestionID;
   let questionButtons;
+  let questionColorByOriginalIdx = new Map();
   let questionStates;
   let optionButtons = [];
   let timerInterval;
@@ -2130,7 +2131,7 @@
     if (currentQuestionID == null) return;
     const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
     if (!resolved) return;
-    const { originalIdx, question: q } = resolved;
+    const { displayIdx, originalIdx, question: q } = resolved;
 
     // Fully reset state (time = 0 now) (without resetting notes)
     const originalNotes =
@@ -2174,8 +2175,8 @@
     if (checkBtn) checkBtn.classList.remove("d-none");
 
     // Re-render question UI from scratch (timer restarts from 0)
-    setQuestion(qID);
-    evaluateQuestionButtonColor(qID);
+    setQuestion(displayIdx);
+    evaluateQuestionButtonColor(displayIdx);
 
     markDirty();
     scheduleSave(aID);
@@ -2486,7 +2487,7 @@
     } catch {}
 
     // Update question grid color
-    evaluateQuestionButtonColor(qID);
+    evaluateQuestionButtonColor(currentQuestionID);
   }
 
   function showSolution(question) {
@@ -2707,6 +2708,7 @@
 
     // Refresh cached collection
     questionButtons = Array.from(document.getElementsByClassName("q-btn"));
+    applyColorIndicatorsFromCache();
     updateBookmarkIndicators();
     updateColorIndicators();
 
@@ -4261,7 +4263,9 @@
 
   async function setQuestionColor(color) {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+      if (!resolved) return false;
+      const { originalIdx } = resolved;
       const ids = getPyqsIds();
 
       let response;
@@ -4296,6 +4300,8 @@
       }
 
       if (!response.ok) throw new Error("Failed to set color");
+      questionColorByOriginalIdx.set(Number(originalIdx), String(color));
+      applyColorIndicatorsFromCache();
       updateColorIndicators();
       return true;
     } catch (e) {
@@ -4306,7 +4312,9 @@
 
   async function clearQuestionColor() {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+      if (!resolved) return false;
+      const { originalIdx } = resolved;
       const ids = getPyqsIds();
 
       let response;
@@ -4329,6 +4337,8 @@
       }
 
       if (!response.ok) throw new Error("Failed to clear color");
+      questionColorByOriginalIdx.delete(Number(originalIdx));
+      applyColorIndicatorsFromCache();
       return true;
     } catch (e) {
       console.error("Failed to clear question color:", e);
@@ -4344,7 +4354,9 @@
       chips.forEach((c) => c.classList.remove("selected"));
       if (currentQuestionID == null) return;
 
-      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+      if (!resolved) return;
+      const { originalIdx } = resolved;
       const ids = getPyqsIds();
 
       let res;
@@ -4411,6 +4423,7 @@
       }
 
       if (!res.ok) {
+        questionColorByOriginalIdx = new Map();
         questionButtons?.forEach((btn) => {
           btn
             .querySelectorAll(".q-color-indicator")
@@ -4434,29 +4447,33 @@
 
       const byIdx = new Map();
       for (const m of mine) byIdx.set(Number(m.questionIndex), String(m.color));
-
-      questionButtons?.forEach((btn) => {
-        const originalIdx = Number(btn.dataset.originalIdx);
-        let el = btn.querySelector(".q-color-indicator");
-        if (!el) {
-          el = document.createElement("span");
-          el.className = "q-color-indicator hidden";
-          btn.appendChild(el);
-        }
-        const color = byIdx.get(originalIdx);
-        if (color) {
-          el.style.backgroundColor = color;
-          el.classList.remove("hidden");
-        } else {
-          el.classList.add("hidden");
-          try {
-            el.style.removeProperty("background-color");
-          } catch {}
-        }
-      });
+      questionColorByOriginalIdx = byIdx;
+      applyColorIndicatorsFromCache();
     } catch (err) {
       console.warn("updateColorIndicators failed", err);
     }
+  }
+
+  function applyColorIndicatorsFromCache() {
+    questionButtons?.forEach((btn) => {
+      const originalIdx = Number(btn.dataset.originalIdx);
+      let el = btn.querySelector(".q-color-indicator");
+      if (!el) {
+        el = document.createElement("span");
+        el.className = "q-color-indicator hidden";
+        btn.appendChild(el);
+      }
+      const color = questionColorByOriginalIdx.get(originalIdx);
+      if (color) {
+        el.style.backgroundColor = color;
+        el.classList.remove("hidden");
+      } else {
+        el.classList.add("hidden");
+        try {
+          el.style.removeProperty("background-color");
+        } catch {}
+      }
+    });
   }
   // Refresh badges on login/logout
   window.addEventListener("qbase:login", () => {
@@ -4465,6 +4482,7 @@
     updateColorPickerSelection();
   });
   window.addEventListener("qbase:logout", () => {
+    questionColorByOriginalIdx = new Map();
     questionButtons?.forEach((btn) => {
       btn
         .querySelectorAll(".q-bookmark-indicator")
