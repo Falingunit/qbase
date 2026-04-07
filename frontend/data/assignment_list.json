@@ -488,6 +488,7 @@
     "chapter": "EVC",
     "title": "EVC",
     "aID": 231
+<<<<<<< Updated upstream
   },
   {
     "subject": "Others",
@@ -516,5 +517,7 @@
     "chapter": "Aits 1",
     "title": "Aits",
     "aID": 809
+=======
+>>>>>>> Stashed changes
   }
 ]
