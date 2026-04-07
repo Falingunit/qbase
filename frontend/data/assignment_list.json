@@ -495,5 +495,19 @@
     "chapter": "Full Syllabus",
     "title": "AITS 2024 FT 1",
     "aID": 806
+  },
+  {
+    "subject": "Physics",
+    "faculty": "abc",
+    "chapter": "Aits",
+    "title": "Aits1 ",
+    "aID": 807
+  },
+  {
+    "subject": "Physics",
+    "faculty": "abc",
+    "chapter": "Aits",
+    "title": "Aits 1",
+    "aID": 808
   }
 ]
