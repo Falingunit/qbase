@@ -1,0 +1,165 @@
+[
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "18.png",
+    "qOptions": [],
+    "qAnswer": "B"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "19.png",
+    "qOptions": [],
+    "qAnswer": "D"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "20.png",
+    "qOptions": [],
+    "qAnswer": "A"
+  },
+  {
+    "qType": "SMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "21.png",
+    "qOptions": [],
+    "qAnswer": "C"
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "22.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "23.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "qType": "MMCQ",
+    "passageId": null,
+    "qText": "",
+    "image": "24.png",
+    "qOptions": [],
+    "qAnswer": [
+      "A",
+      "D"
+    ]
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "25.png",
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "26.png",
+    "qOptions": [],
+    "qAnswer": 8
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "27.png",
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "28.png",
+    "qOptions": [],
+    "qAnswer": 5
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "29.png",
+    "qOptions": [],
+    "qAnswer": 4
+  },
+  {
+    "qType": "Numerical",
+    "passageId": null,
+    "qText": "",
+    "image": "30.png",
+    "qOptions": [],
+    "qAnswer": 9
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P3",
+    "qText": "",
+    "image": "p3.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "Numerical",
+    "passageId": "P3",
+    "qText": "",
+    "image": "31.png",
+    "qOptions": [],
+    "qAnswer": 73.2
+  },
+  {
+    "qType": "Numerical",
+    "passageId": "P3",
+    "qText": "",
+    "image": "32.png",
+    "qOptions": [],
+    "qAnswer": 104
+  },
+  {
+    "qType": "Passage",
+    "passageId": "P4",
+    "qText": "",
+    "image": "p4.png",
+    "qOptions": [],
+    "qAnswer": []
+  },
+  {
+    "qType": "Numerical",
+    "passageId": "P4",
+    "qText": "",
+    "image": "33.png",
+    "qOptions": [],
+    "qAnswer": 17
+  },
+  {
+    "qType": "Numerical",
+    "passageId": "P4",
+    "qText": "",
+    "image": "34.png",
+    "qOptions": [],
+    "qAnswer": 118
+  }
+]
