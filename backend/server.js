@@ -521,12 +521,17 @@ function ensureTestTables(db) {
     const addTestCol = (name, ddl) => {
       if (!testCols.has(name)) db.exec(`ALTER TABLE tests ADD COLUMN ${ddl}`);
     };
+    addTestCol("ownerId", "ownerId TEXT");
     addTestCol("userId", "userId TEXT");
+    addTestCol("name", "name TEXT");
+    addTestCol("mode", "mode TEXT");
     addTestCol("title", "title TEXT NOT NULL DEFAULT 'Untitled test'");
     addTestCol("description", "description TEXT");
     addTestCol("share_with_json", "share_with_json TEXT");
     addTestCol("config_json", "config_json TEXT NOT NULL DEFAULT '{}'");
+    addTestCol("years_json", "years_json TEXT");
     addTestCol("reuse_policy_json", "reuse_policy_json TEXT");
+    addTestCol("time_limit_sec", "time_limit_sec INTEGER");
     addTestCol("status", "status TEXT NOT NULL DEFAULT 'unattempted'");
     addTestCol("archived_at", "archived_at DATETIME");
     addTestCol("score", "score REAL DEFAULT 0");
@@ -548,8 +553,17 @@ function ensureTestTables(db) {
         db.exec(`ALTER TABLE test_questions ADD COLUMN ${ddl}`);
       }
     };
+    addQuestionCol("test_id", "test_id TEXT");
     addQuestionCol("testId", "testId INTEGER");
     addQuestionCol("order_index", "order_index INTEGER NOT NULL DEFAULT 0");
+    addQuestionCol("exam_id", "exam_id TEXT");
+    addQuestionCol("subject_id", "subject_id TEXT");
+    addQuestionCol("chapter_id", "chapter_id TEXT");
+    addQuestionCol("question_index", "question_index INTEGER");
+    addQuestionCol("year", "year INTEGER");
+    addQuestionCol("difficulty", "difficulty INTEGER");
+    addQuestionCol("q_type", "q_type TEXT");
+    addQuestionCol("tags_json", "tags_json TEXT");
     addQuestionCol("section_id", "section_id TEXT");
     addQuestionCol("section_name", "section_name TEXT");
     addQuestionCol("question_type", "question_type TEXT");
@@ -593,7 +607,10 @@ function ensureTestTables(db) {
     };
     addAttemptCol("testId", "testId INTEGER");
     addAttemptCol("userId", "userId TEXT");
+    addAttemptCol("questions_json", "questions_json TEXT");
+    addAttemptCol("time_limit_sec", "time_limit_sec INTEGER");
     addAttemptCol("score", "score REAL DEFAULT 0");
+    addAttemptCol("maxScore", "maxScore REAL DEFAULT 0");
     addAttemptCol("max_score", "max_score REAL DEFAULT 0");
     addAttemptCol("attempted_count", "attempted_count INTEGER DEFAULT 0");
     addAttemptCol("total_questions", "total_questions INTEGER DEFAULT 0");
