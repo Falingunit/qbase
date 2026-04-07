@@ -2128,13 +2128,9 @@
 
   function resetCurrentQuestion() {
     if (currentQuestionID == null) return;
-    const qID = currentQuestionID;
-    const originalIdx = window.questionIndexMap[qID];
-
-    // ✓ FIX: Use allQuestionsMap
-    const q = window.allQuestionsMap
-      ? window.allQuestionsMap[originalIdx]
-      : questionData.questions[originalIdx];
+    const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+    if (!resolved) return;
+    const { originalIdx, question: q } = resolved;
 
     // Fully reset state (time = 0 now) (without resetting notes)
     const originalNotes =
@@ -2404,13 +2400,9 @@
   })();
 
   function checkCurrentAnswer() {
-    const qID = currentQuestionID;
-    const originalIdx = window.questionIndexMap[qID];
-
-    // ✓ FIX: Use allQuestionsMap
-    const q = window.allQuestionsMap
-      ? window.allQuestionsMap[originalIdx]
-      : questionData.questions[originalIdx];
+    const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+    if (!resolved) return;
+    const { originalIdx, question: q } = resolved;
 
     const st =
       questionStates[originalIdx] ||
@@ -2606,7 +2598,9 @@
       // 5) paint buttons + open first
       questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
       const qParam = parseInt(params.get("q"), 10);
-      if (!isNaN(qParam) && qParam > 0 && qParam <= displayQuestions.length) {
+      if (!displayQuestions.length) {
+        renderNoQuestionsState();
+      } else if (!isNaN(qParam) && qParam > 0 && qParam <= displayQuestions.length) {
         clickQuestionButton(qParam - 1); // convert to zero-based index
       } else {
         clickQuestionButton(0); // default to first question
@@ -2811,12 +2805,9 @@
 
   function MCQOptionClicked(optionElement) {
     const clickedOption = optionElement.dataset.opt;
-    const originalIdx = window.questionIndexMap[currentQuestionID];
-
-    // ✓ FIX: Use allQuestionsMap
-    const question = window.allQuestionsMap
-      ? window.allQuestionsMap[originalIdx]
-      : questionData.questions[originalIdx];
+    const resolved = resolveQuestionByDisplayIndex(currentQuestionID);
+    if (!resolved) return;
+    const { originalIdx, question } = resolved;
 
     const questionState =
       questionStates[originalIdx] ||
@@ -2893,9 +2884,93 @@
     });
   }
 
+  function resolveQuestionByDisplayIndex(qID) {
+    const displayIdx = Number(qID);
+    if (!Number.isInteger(displayIdx) || displayIdx < 0) return null;
+
+    const displayQuestions = Array.isArray(window.displayQuestions)
+      ? window.displayQuestions
+      : [];
+    if (displayQuestions.length && displayIdx >= displayQuestions.length) {
+      return null;
+    }
+
+    const qMap = Array.isArray(window.questionIndexMap)
+      ? window.questionIndexMap
+      : [];
+    const mappedIdx = qMap[displayIdx];
+    const originalIdx =
+      mappedIdx == null || Number.isNaN(Number(mappedIdx))
+        ? displayIdx
+        : Number(mappedIdx);
+
+    const question = Array.isArray(window.allQuestionsMap)
+      ? window.allQuestionsMap[originalIdx]
+      : questionData?.questions?.[originalIdx] || displayQuestions[displayIdx];
+
+    if (!question) return null;
+    return { displayIdx, originalIdx, question };
+  }
+
+  function renderNoQuestionsState() {
+    currentQuestionID = null;
+    stopQuestionTimer();
+    clearResetCooldownTimer();
+
+    const assignmentDetails = document.getElementById("assignmentDetails");
+    const typeInfo = document.getElementById("qTypeInfo");
+    const qNo = document.getElementById("qNo");
+    const questionText = document.getElementById("questionText");
+    const questionImage = document.getElementById("questionImage");
+    const passageText = document.getElementById("passageText");
+    const passageImage = document.getElementById("passageImage");
+    const pyqInfo = document.getElementById("pyq-info");
+    const numerical = document.getElementById("numericalDiv");
+    const MCQOptions = document.getElementById("MCQOptionDiv");
+
+    if (qNo) qNo.textContent = "-";
+    if (typeInfo) typeInfo.textContent = "PYQs";
+    if (assignmentDetails) {
+      assignmentDetails.textContent =
+        window.__ASSIGNMENT_FILTER_INFO__ &&
+        window.__ASSIGNMENT_FILTER_INFO__ !== "No filters"
+          ? `No questions match current filters (${window.__ASSIGNMENT_FILTER_INFO__})`
+          : "No questions are available for this chapter.";
+    }
+    if (questionText) {
+      questionText.textContent =
+        "No PYQ questions are available to display. Clear the saved PYQ filters or choose another chapter.";
+    }
+    [questionImage, passageText, passageImage, pyqInfo, numerical, MCQOptions].forEach(
+      (el) => {
+        if (!el) return;
+        el.style.display = "none";
+        if (el !== numerical && el !== MCQOptions) el.innerHTML = "";
+      }
+    );
+    optionButtons.forEach((btn) => {
+      btn.classList.remove(
+        "correct",
+        "wrong",
+        "missed",
+        "disabled",
+        "mcq-option-selected"
+      );
+      btn.classList.add("disabled");
+    });
+    document.getElementById("check-answer")?.classList.add("d-none");
+    document.getElementById("reset-question")?.classList.add("d-none");
+    document.getElementById("solutionSection")?.style &&
+      (document.getElementById("solutionSection").style.display = "none");
+    updateTopbarNavButtons();
+  }
+
   function clickQuestionButton(qID) {
-    // Add debug logging
-    const originalIdx = window.questionIndexMap[qID];
+    const resolved = resolveQuestionByDisplayIndex(qID);
+    if (!resolved) {
+      renderNoQuestionsState();
+      return;
+    }
     // Save any pending changes from the previously open question
     if (currentQuestionID != null) {
       markDirty();
@@ -2906,15 +2981,15 @@
       const btnDisplayIdx = Number(button.dataset.displayIdx); // ✓ Changed
       if (btnDisplayIdx === currentQuestionID)
         button.classList.remove("selected");
-      if (btnDisplayIdx === qID) button.classList.add("selected");
+      if (btnDisplayIdx === resolved.displayIdx) button.classList.add("selected");
     });
 
     stopQuestionTimer();
     clearResetCooldownTimer();
 
-    currentQuestionID = qID;
-    setQuestion(qID);
-    evaluateQuestionButtonColor(qID);
+    currentQuestionID = resolved.displayIdx;
+    setQuestion(resolved.displayIdx);
+    evaluateQuestionButtonColor(resolved.displayIdx);
   }
   let assignmentTitle = "";
   // Small helper to replay a quick fade/slide on question content
@@ -2955,7 +3030,12 @@
       window.originalTotalCount || window.displayQuestions.length
     );
 
-    const originalIdx = window.questionIndexMap[qID];
+    const resolved = resolveQuestionByDisplayIndex(qID);
+    if (!resolved) {
+      renderNoQuestionsState();
+      return;
+    }
+    const { originalIdx, question } = resolved;
     const numerical = document.getElementById("numericalDiv");
     const MCQOptions = document.getElementById("MCQOptionDiv");
     const assignmentDetails = document.getElementById("assignmentDetails");
@@ -2967,10 +3047,6 @@
     const questionState =
       questionStates[originalIdx] ||
       (questionStates[originalIdx] = defaultState());
-    const question = window.allQuestionsMap
-      ? window.allQuestionsMap[originalIdx] // PYQs: use complete map
-      : questionData.questions[originalIdx]; // Regular assignments: use original array
-
     // Toggle report button based on server block status (best-effort)
     (async () => {
       try {

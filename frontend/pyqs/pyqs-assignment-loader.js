@@ -222,12 +222,24 @@
                 const defaults = {
                   q: "",
                   years: [],
-                  status: "",
-                  diff: "",
+                  status: [],
+                  diff: [],
                   hasSol: false,
                   sort: "index",
                 };
                 const f = Object.assign({}, defaults, serverPrefs);
+                const activeDiffs = Array.isArray(f.diff)
+                  ? f.diff.filter(Boolean).map((v) => String(v))
+                  : f.diff
+                  ? [String(f.diff)]
+                  : [];
+                const activeStatuses = Array.isArray(f.status)
+                  ? f.status.filter(Boolean).map((v) => String(v))
+                  : f.status
+                  ? [String(f.status)]
+                  : [];
+                f.diff = activeDiffs;
+                f.status = activeStatuses;
 
                 window.__ASSIGNMENT_FILTER_OBJECT__ = f;
 
@@ -259,13 +271,17 @@
                     const y = parseYear(Q.pyqInfo);
                     if (!y || !f.years.includes(y)) return false;
                   }
-                  if (f.diff && normDiff(Q.diffuculty) !== f.diff) return false;
+                  if (
+                    activeDiffs.length &&
+                    !activeDiffs.includes(normDiff(Q.diffuculty))
+                  )
+                    return false;
                   if (f.hasSol && !hasSol(Q)) return false;
                   return true;
                 });
 
                 // Apply status filter (requires server state lookup)
-                if (f.status) {
+                if (activeStatuses.length) {
                   try {
                     const stateResp = await authFetch(
                       `${API_BASE}/api/pyqs/state/${encodeURIComponent(
@@ -289,9 +305,11 @@
                         ({ originalIdx }) => {
                           const s = states?.[originalIdx]; // âœ“ Access state by original index
                           const st = statusFromState(s);
-                          if (f.status === "completed")
-                            return !!s?.isAnswerEvaluated;
-                          return st === f.status;
+                          return (
+                            activeStatuses.includes(st) ||
+                            (activeStatuses.includes("completed") &&
+                              !!s?.isAnswerEvaluated)
+                          );
                         }
                       );
                     }
@@ -304,8 +322,10 @@
                 const parts = [];
                 if (f.q) parts.push(`Search: "${f.q}"`);
                 if (f.years?.length) parts.push(`Years: ${f.years.join(", ")}`);
-                if (f.diff) parts.push(`Difficulty: ${f.diff}`);
-                if (f.status) parts.push(`Attempt: ${f.status}`);
+                if (activeDiffs.length)
+                  parts.push(`Difficulty: ${activeDiffs.join(", ")}`);
+                if (activeStatuses.length)
+                  parts.push(`Attempt: ${activeStatuses.join(", ")}`);
                 if (f.hasSol) parts.push("Has solution");
                 window.__ASSIGNMENT_FILTER_INFO__ = parts.length
                   ? parts.join(" â€¢ ")
