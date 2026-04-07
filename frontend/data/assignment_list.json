@@ -491,23 +491,23 @@
   },
   {
     "subject": "Physics",
-    "faculty": "abc",
-    "chapter": "Aits",
-    "title": "Aits1 ",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-1",
     "aID": 807
   },
   {
     "subject": "Physics",
-    "faculty": "abc",
-    "chapter": "Aits",
-    "title": "Aits 1",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-1",
     "aID": 808
   },
   {
     "subject": "Chemistry",
-    "faculty": "abc",
-    "chapter": "Aits 1",
-    "title": "Aits",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-1",
     "aID": 809
   }
 ]
