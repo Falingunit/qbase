@@ -33,9 +33,18 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     backTop: document.getElementById("q-back-top"),
   };
   const PREF_URL = `${API_BASE}/api/pyqs/prefs/${encodeURIComponent(examId)}/${encodeURIComponent(subjectId)}/${encodeURIComponent(chapterId)}`;
-  function defaultFilters() { return { q: '', years: [], status: '', diff: '', sort: 'index' }; }
+  function defaultFilters() { return { q: '', years: [], status: [], diff: [], sort: 'index' }; }
+  function normalizeFilters(f) {
+    return {
+      ...defaultFilters(),
+      ...(f || {}),
+      years: Array.isArray(f?.years) ? f.years.filter((y) => Number.isFinite(Number(y))).map(Number) : [],
+      status: Array.isArray(f?.status) ? f.status.filter(Boolean) : f?.status ? [String(f.status)] : [],
+      diff: Array.isArray(f?.diff) ? f.diff.filter(Boolean) : f?.diff ? [String(f.diff)] : [],
+    };
+  }
   async function loadServerFilters() {
-    try { const r = await authFetch(PREF_URL); if (r.ok) { const obj = await r.json(); if (obj && typeof obj === 'object') return { ...defaultFilters(), ...obj }; } } catch {}
+    try { const r = await authFetch(PREF_URL); if (r.ok) { const obj = await r.json(); if (obj && typeof obj === 'object') return normalizeFilters(obj); } } catch {}
     return defaultFilters();
   }
   const _savePrefState = { timer: 0, last: null };
@@ -197,8 +206,8 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     let n = 0;
     if (f.q && f.q.length) n++;
     if (Array.isArray(f.years) && f.years.length) n++;
-    if (f.status) n++;
-    if (f.diff) n++;
+    if (Array.isArray(f.status) && f.status.length) n++;
+    if (Array.isArray(f.diff) && f.diff.length) n++;
     return n;
   }
   function syncFilterControlsFromFilters() {
@@ -210,13 +219,15 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
       }
       // Years menu
       rebuildYearsMenu();
-      // Status radios
-      els.statusMenu?.querySelectorAll('input[type="radio"]').forEach((inp) => {
-        inp.checked = String(inp.value || "") === String(filters.status || "");
+      // Status multi-select
+      els.statusMenu?.querySelectorAll('input[type="checkbox"]').forEach((inp) => {
+        const value = String(inp.value || "");
+        inp.checked = value ? (filters.status || []).includes(value) : !(filters.status || []).length;
       });
-      // Diff radios
-      els.diffMenu?.querySelectorAll('input[type="radio"]').forEach((inp) => {
-        inp.checked = String(inp.value || "") === String(filters.diff || "");
+      // Diff multi-select
+      els.diffMenu?.querySelectorAll('input[type="checkbox"]').forEach((inp) => {
+        const value = String(inp.value || "");
+        inp.checked = value ? (filters.diff || []).includes(value) : !(filters.diff || []).length;
       });
       // Solution toggle removed
       // Sort label
@@ -230,28 +241,48 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
     syncFilterControlsFromFilters();
     render();
   }
-  // Status menu (radio buttons)
-  els.statusMenu?.querySelectorAll('input[type="radio"]').forEach((inp) => {
-    if (String(inp.value || "") === String(filters.status || ""))
-      inp.checked = true;
+  // Status menu (checkbox multi-select)
+  els.statusMenu?.querySelectorAll('input[type="checkbox"]').forEach((inp) => {
+    const value = String(inp.value || "");
+    inp.checked = value ? (filters.status || []).includes(value) : !(filters.status || []).length;
     inp.addEventListener("change", () => {
-      if (inp.checked) {
-        filters.status = inp.value || "";
-        saveServerFilters(filters);
-        render();
+      if (!value) {
+        filters.status = [];
+        els.statusMenu?.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+          if (box !== inp) box.checked = false;
+        });
+      } else {
+        const next = new Set(Array.isArray(filters.status) ? filters.status : []);
+        if (inp.checked) next.add(value);
+        else next.delete(value);
+        filters.status = Array.from(next);
+        const allBox = els.statusMenu?.querySelector('input[type="checkbox"][value=""]');
+        if (allBox) allBox.checked = filters.status.length === 0;
       }
+      saveServerFilters(filters);
+      render();
     });
   });
-  // Difficulty menu (radio buttons)
-  els.diffMenu?.querySelectorAll('input[type="radio"]').forEach((inp) => {
-    if (String(inp.value || "") === String(filters.diff || ""))
-      inp.checked = true;
+  // Difficulty menu (checkbox multi-select)
+  els.diffMenu?.querySelectorAll('input[type="checkbox"]').forEach((inp) => {
+    const value = String(inp.value || "");
+    inp.checked = value ? (filters.diff || []).includes(value) : !(filters.diff || []).length;
     inp.addEventListener("change", () => {
-      if (inp.checked) {
-        filters.diff = inp.value || "";
-        saveServerFilters(filters);
-        render();
+      if (!value) {
+        filters.diff = [];
+        els.diffMenu?.querySelectorAll('input[type="checkbox"]').forEach((box) => {
+          if (box !== inp) box.checked = false;
+        });
+      } else {
+        const next = new Set(Array.isArray(filters.diff) ? filters.diff : []);
+        if (inp.checked) next.add(value);
+        else next.delete(value);
+        filters.diff = Array.from(next);
+        const allBox = els.diffMenu?.querySelector('input[type="checkbox"][value=""]');
+        if (allBox) allBox.checked = filters.diff.length === 0;
       }
+      saveServerFilters(filters);
+      render();
     });
   });
   // Solution toggle removed
@@ -282,12 +313,13 @@ import { buildYearsMenu, initQListView } from "./pyqs-qlist.view.js";
         const y = parseYear(o.q.pyqInfo);
         return y && f.years.includes(y);
       });
-    if (f.diff) out = out.filter((o) => normDiff(o.q.diffuculty) === f.diff);
-    if (f.status)
+    if (Array.isArray(f.diff) && f.diff.length)
+      out = out.filter((o) => f.diff.includes(normDiff(o.q.diffuculty)));
+    if (Array.isArray(f.status) && f.status.length)
       out = out.filter(
         (o) =>
-          statusFromState(states[o.i]) === f.status ||
-          (f.status === "completed" && states[o.i]?.isAnswerEvaluated)
+          f.status.includes(statusFromState(states[o.i])) ||
+          (f.status.includes("completed") && states[o.i]?.isAnswerEvaluated)
       );
 
     // Sort

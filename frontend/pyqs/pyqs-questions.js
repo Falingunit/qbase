@@ -3324,116 +3324,15 @@
       }
       bookmarkTags = await response.json();
 
-      // Create dialog content
-      const currentTagIds = currentBookmarks.map((b) => b.tagId);
-      const availableTags = bookmarkTags.filter(
-        (tag) => !currentTagIds.includes(tag.id)
-      );
-
-      let bodyHTML = "";
-
-      if (currentBookmarks.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Current bookmarks:</strong><br>';
-        for (const bookmark of currentBookmarks) {
-          const tag = bookmarkTags.find((t) => t.id === bookmark.tagId);
-          if (tag) {
-            bodyHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="badge bg-primary">${escapeHtml(tag.name)}</span>
-              <button class="btn btn-sm btn-outline-danger remove-bookmark-btn" 
-                      data-tag-id="${tag.id}">
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
-          `;
-          }
-        }
-        bodyHTML += "</div>";
-      }
-
-      if (availableTags.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Add to tag:</strong><br>';
-        for (const tag of availableTags) {
-          bodyHTML += `
-          <button class="btn btn-outline-primary btn-sm me-2 mb-1 add-bookmark-btn" 
-                  data-tag-id="${tag.id}">
-            ${escapeHtml(tag.name)}
-          </button>
-        `;
-        }
-        bodyHTML += "</div>";
-      }
-
-      bodyHTML += `
-      <div class="mb-3">
-        <strong>Create new tag:</strong>
-        <div class="input-group mt-2">
-          <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
-          <button class="btn btn-outline-success" id="create-tag-btn">
-            <i class="bi bi-plus"></i>
-          </button>
-        </div>
-      </div>
-    `;
-
       // Show modal with onContentReady callback to attach event listeners
-      const modal = await showModal({
+      await showModal({
         title: "Bookmark Question",
-        bodyHTML: bodyHTML,
+        bodyHTML: renderBookmarkDialogBody(),
         buttons: [
           { text: "Close", className: "btn btn-secondary", value: "close" },
         ],
         onContentReady: (modalEl) => {
-          // Add event listeners to modal content
-          const modalBody = modalEl.querySelector("#qbaseModalBody");
-
-          // Remove bookmark buttons
-          modalBody.querySelectorAll(".remove-bookmark-btn").forEach((btn) => {
-            btn.addEventListener("click", async () => {
-              const tagId = btn.dataset.tagId;
-              if (await removeBookmark(tagId)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            });
-          });
-
-          // Add bookmark buttons
-          modalBody.querySelectorAll(".add-bookmark-btn").forEach((btn) => {
-            btn.addEventListener("click", async () => {
-              const tagId = btn.dataset.tagId;
-              if (await addBookmark(tagId)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            });
-          });
-
-          // Create new tag
-          const createTagBtn = modalBody.querySelector("#create-tag-btn");
-          const newTagInput = modalBody.querySelector("#new-tag-input");
-
-          createTagBtn.addEventListener("click", async () => {
-            const tagName = newTagInput.value.trim();
-            if (tagName) {
-              if (await createBookmarkTag(tagName)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            }
-          });
-
-          newTagInput.addEventListener("keydown", async (e) => {
-            if (e.key === "Enter") {
-              const tagName = newTagInput.value.trim();
-              if (tagName) {
-                if (await createBookmarkTag(tagName)) {
-                  updateBookmarkButton();
-                  refreshBookmarkDialog(modalEl); // Refresh current modal content
-                }
-              }
-            }
-          });
+          attachBookmarkDialogEvents(modalEl);
         },
       });
     } catch (error) {
@@ -3488,113 +3387,210 @@
         currentBookmarks = [];
       }
 
-      // Create updated dialog content
-      const currentTagIds = currentBookmarks.map((b) => b.tagId);
-      const availableTags = bookmarkTags.filter(
-        (tag) => !currentTagIds.includes(tag.id)
-      );
-
-      let bodyHTML = "";
-
-      if (currentBookmarks.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Current bookmarks:</strong><br>';
-        for (const bookmark of currentBookmarks) {
-          const tag = bookmarkTags.find((t) => t.id === bookmark.tagId);
-          if (tag) {
-            bodyHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="badge bg-primary">${escapeHtml(tag.name)}</span>
-              <button class="btn btn-sm btn-outline-danger remove-bookmark-btn" 
-                      data-tag-id="${tag.id}">
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
-          `;
-          }
-        }
-        bodyHTML += "</div>";
-      }
-
-      if (availableTags.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Add to tag:</strong><br>';
-        for (const tag of availableTags) {
-          bodyHTML += `
-          <button class="btn btn-outline-primary btn-sm me-2 mb-1 add-bookmark-btn" 
-                  data-tag-id="${tag.id}">
-            ${escapeHtml(tag.name)}
-          </button>
-        `;
-        }
-        bodyHTML += "</div>";
-      }
-
-      bodyHTML += `
-      <div class="mb-3">
-        <strong>Create new tag:</strong>
-        <div class="input-group mt-2">
-          <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
-          <button class="btn btn-outline-success" id="create-tag-btn">
-            <i class="bi bi-plus"></i>
-          </button>
-        </div>
-      </div>
-    `;
-
       // Update the modal content
       const modalBody = modalEl.querySelector("#qbaseModalBody");
-      modalBody.innerHTML = bodyHTML;
-
-      // Re-attach event listeners to the new content
-      // Remove bookmark buttons
-      modalBody.querySelectorAll(".remove-bookmark-btn").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const tagId = btn.dataset.tagId;
-          if (await removeBookmark(tagId)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        });
-      });
-
-      // Add bookmark buttons
-      modalBody.querySelectorAll(".add-bookmark-btn").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const tagId = btn.dataset.tagId;
-          if (await addBookmark(tagId)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        });
-      });
-
-      // Create new tag
-      const createTagBtn = modalBody.querySelector("#create-tag-btn");
-      const newTagInput = modalBody.querySelector("#new-tag-input");
-
-      createTagBtn.addEventListener("click", async () => {
-        const tagName = newTagInput.value.trim();
-        if (tagName) {
-          if (await createBookmarkTag(tagName)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        }
-      });
-
-      newTagInput.addEventListener("keydown", async (e) => {
-        if (e.key === "Enter") {
-          const tagName = newTagInput.value.trim();
-          if (tagName) {
-            if (await createBookmarkTag(tagName)) {
-              updateBookmarkButton();
-              refreshBookmarkDialog(modalEl); // Refresh current modal content
-            }
-          }
-        }
-      });
+      modalBody.innerHTML = renderBookmarkDialogBody();
+      attachBookmarkDialogEvents(modalEl);
     } catch (error) {
       console.error("Failed to refresh bookmark dialog:", error);
     }
+  }
+
+  function renderBookmarkDialogBody() {
+    return `
+      <div class="qbookmark-dialog">
+        <div class="mb-3">
+          <strong>Tags</strong>
+          <div class="qbookmark-tag-field mt-2" data-bookmark-chip-field>
+            <div class="qbookmark-tag-list" data-bookmark-chip-list></div>
+            <input
+              type="text"
+              class="qbookmark-tag-input"
+              data-bookmark-chip-input
+              placeholder="Type a tag"
+              autocomplete="off"
+            >
+          </div>
+          <div class="qbookmark-tag-suggestions d-none" data-bookmark-chip-suggestions></div>
+        </div>
+        <div class="mb-0">
+          <strong>Create new tag</strong>
+          <div class="input-group mt-2">
+            <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
+            <button class="btn btn-outline-success" id="create-tag-btn" type="button">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function attachBookmarkDialogEvents(modalEl) {
+    const modalBody = modalEl?.querySelector("#qbaseModalBody");
+    if (!modalBody) return;
+
+    setupBookmarkChipPicker({
+      fieldEl: modalBody.querySelector("[data-bookmark-chip-field]"),
+      listEl: modalBody.querySelector("[data-bookmark-chip-list]"),
+      inputEl: modalBody.querySelector("[data-bookmark-chip-input]"),
+      suggestionsEl: modalBody.querySelector("[data-bookmark-chip-suggestions]"),
+      modalEl,
+    });
+
+    const createTagBtn = modalBody.querySelector("#create-tag-btn");
+    const newTagInput = modalBody.querySelector("#new-tag-input");
+    const submitCreate = async () => {
+      const tagName = String(newTagInput?.value || "").trim();
+      if (!tagName) return;
+      if (await createBookmarkTag(tagName)) {
+        updateBookmarkButton();
+        refreshBookmarkDialog(modalEl);
+      }
+    };
+
+    createTagBtn?.addEventListener("click", submitCreate);
+    newTagInput?.addEventListener("keydown", async (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      await submitCreate();
+    });
+  }
+
+  function setupBookmarkChipPicker({
+    fieldEl,
+    listEl,
+    inputEl,
+    suggestionsEl,
+    modalEl,
+  }) {
+    if (!fieldEl || !listEl || !inputEl || !suggestionsEl) return;
+
+    const currentTagIds = new Set(currentBookmarks.map((b) => String(b.tagId)));
+    const selectedTags = bookmarkTags.filter((tag) =>
+      currentTagIds.has(String(tag.id))
+    );
+    const availableTags = bookmarkTags.filter(
+      (tag) => !currentTagIds.has(String(tag.id))
+    );
+    const state = { highlightedIndex: 0 };
+
+    const closeSuggestions = () => {
+      suggestionsEl.classList.add("d-none");
+      suggestionsEl.innerHTML = "";
+      state.highlightedIndex = 0;
+    };
+
+    const getMatches = () => {
+      const query = String(inputEl.value || "").trim().toLowerCase();
+      if (!query) return [];
+      return availableTags
+        .filter((tag) =>
+          String(tag.name || "")
+            .toLowerCase()
+            .includes(query)
+        )
+        .slice(0, 6);
+    };
+
+    const renderSelected = () => {
+      listEl.innerHTML = "";
+      selectedTags.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.className = "qbookmark-tag-chip";
+        chip.innerHTML = `
+          <span>${escapeHtml(tag.name)}</span>
+          <button type="button" class="qbookmark-tag-chip-remove" aria-label="Remove ${escapeHtml(
+            tag.name
+          )}">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        `;
+        chip
+          .querySelector(".qbookmark-tag-chip-remove")
+          ?.addEventListener("click", async (event) => {
+            event.stopPropagation();
+            if (await removeBookmark(tag.id)) {
+              updateBookmarkButton();
+              refreshBookmarkDialog(modalEl);
+            }
+          });
+        listEl.appendChild(chip);
+      });
+      inputEl.placeholder = selectedTags.length ? "" : "Type a tag";
+    };
+
+    const addTag = async (tagId) => {
+      if (!tagId) return;
+      if (await addBookmark(tagId)) {
+        updateBookmarkButton();
+        refreshBookmarkDialog(modalEl);
+      }
+    };
+
+    const renderSuggestions = () => {
+      const matches = getMatches();
+      if (!matches.length) {
+        closeSuggestions();
+        return;
+      }
+      suggestionsEl.innerHTML = "";
+      if (state.highlightedIndex >= matches.length) state.highlightedIndex = 0;
+      matches.forEach((tag, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `qbookmark-tag-suggestion${
+          index === state.highlightedIndex ? " active" : ""
+        }`;
+        btn.textContent = tag.name;
+        btn.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+          addTag(tag.id);
+        });
+        suggestionsEl.appendChild(btn);
+      });
+      suggestionsEl.classList.remove("d-none");
+    };
+
+    fieldEl.addEventListener("click", () => inputEl.focus());
+    inputEl.addEventListener("input", () => {
+      state.highlightedIndex = 0;
+      renderSuggestions();
+    });
+    inputEl.addEventListener("keydown", async (event) => {
+      const matches = getMatches();
+      if ((event.key === "Tab" || event.key === "Enter") && matches.length) {
+        event.preventDefault();
+        await addTag(matches[state.highlightedIndex]?.id || matches[0].id);
+        return;
+      }
+      if (event.key === "ArrowDown" && matches.length) {
+        event.preventDefault();
+        state.highlightedIndex = (state.highlightedIndex + 1) % matches.length;
+        renderSuggestions();
+        return;
+      }
+      if (event.key === "ArrowUp" && matches.length) {
+        event.preventDefault();
+        state.highlightedIndex =
+          (state.highlightedIndex - 1 + matches.length) % matches.length;
+        renderSuggestions();
+        return;
+      }
+      if (event.key === "Backspace" && !inputEl.value && selectedTags.length) {
+        event.preventDefault();
+        const lastTag = selectedTags[selectedTags.length - 1];
+        if (lastTag && (await removeBookmark(lastTag.id))) {
+          updateBookmarkButton();
+          refreshBookmarkDialog(modalEl);
+        }
+      }
+    });
+    inputEl.addEventListener("blur", () =>
+      window.setTimeout(closeSuggestions, 120)
+    );
+
+    renderSelected();
   }
 
   async function addBookmark(tagId) {

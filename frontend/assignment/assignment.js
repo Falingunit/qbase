@@ -302,6 +302,12 @@
 
   await loadConfig();
 
+  const assignmentTestAdapter =
+    (typeof window !== "undefined" && window.__ASSIGNMENT_TEST_ADAPTER__) || null;
+  const assignmentTestMode = assignmentTestAdapter?.mode || "";
+  const isTestTakingMode = assignmentTestMode === "take";
+  const isTestReviewMode = assignmentTestMode === "review";
+
   const params = new URLSearchParams(window.location.search);
   let aID = parseInt(params.get("aID"), 10);
   // Allow external override (e.g., PYQs viewer)
@@ -357,6 +363,7 @@
       pickedNumerical: undefined,
       time: 0,
       notes: "",
+      markedForReview: false,
       resetLockedUntil: 0,
     };
   }
@@ -367,6 +374,9 @@
         questionStates[i] = defaultState();
       } else if (questionStates[i].resetLockedUntil === undefined) {
         questionStates[i].resetLockedUntil = 0;
+      }
+      if (questionStates[i].markedForReview === undefined) {
+        questionStates[i].markedForReview = false;
       }
     }
   }
@@ -414,7 +424,9 @@
       const opt = btn.dataset.opt;
       const picked = pickedSet.has(opt);
       const correct = correctSet.has(opt);
-      if (picked && correct) {
+      if (isTestReviewMode && correct) {
+        btn.classList.add("correct");
+      } else if (picked && correct) {
         btn.classList.add("correct");
       } else if (picked && !correct) {
         btn.classList.add("wrong");
@@ -422,13 +434,15 @@
       // lock interaction
       btn.classList.add("disabled");
     });
-    // Outline missed corrects
-    optionButtons.forEach((btn) => {
-      const opt = btn.dataset.opt;
-      if (!pickedSet.has(opt) && correctSet.has(opt)) {
-        btn.classList.add("missed");
-      }
-    });
+    if (!isTestReviewMode) {
+      // Outline missed corrects in normal assignment practice mode.
+      optionButtons.forEach((btn) => {
+        const opt = btn.dataset.opt;
+        if (!pickedSet.has(opt) && correctSet.has(opt)) {
+          btn.classList.add("missed");
+        }
+      });
+    }
   }
 
   function applyNumericalEvaluationStyles(isCorrect) {
@@ -525,6 +539,16 @@
     loggedInUser = me?.username || null;
     authSource = me?.source || "none";
 
+    if (assignmentTestAdapter && typeof assignmentTestAdapter.loadState === "function") {
+      const customState = await assignmentTestAdapter.loadState({
+        aID,
+        questions: window.displayQuestions || [],
+      });
+      questionStates = Array.isArray(customState) ? customState : [];
+      syncBootstrapState();
+      return;
+    }
+
     if (!loggedInUser) {
       try { window.dispatchEvent(new Event("qbase:force-login")); } catch {}
       // Continue offline: will try local storage below
@@ -572,6 +596,11 @@
 
   // ---------- Server POST helper ----------
   async function postState(aID, state) {
+    if (assignmentTestAdapter && typeof assignmentTestAdapter.saveState === "function") {
+      await assignmentTestAdapter.saveState(state, { aID });
+      syncBootstrapState();
+      return;
+    }
     const res = await authFetch(`${API_BASE}/api/state/${aID}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -585,6 +614,13 @@
   let dirty = false;
   const markDirty = () => {
     dirty = true;
+    try {
+      assignmentTestAdapter?.onStateChange?.({
+        state: questionStates,
+        currentQuestionID,
+        questions: window.displayQuestions || [],
+      });
+    } catch {}
   };
 
   async function scheduleSave(aID) {
@@ -613,6 +649,11 @@
   function flushSave() {
     if (!dirty) return;
     try {
+      if (assignmentTestAdapter && typeof assignmentTestAdapter.flushState === "function") {
+        assignmentTestAdapter.flushState(questionStates, { aID });
+        dirty = false;
+        return;
+      }
       if (authSource === "server") {
         // Use fetch with keepalive so the Authorization header is sent.
         // navigator.sendBeacon cannot include custom headers and would fail against
@@ -1664,6 +1705,7 @@
   // Numerical input
   const numericalInput = document.getElementById("numericalInput");
   numericalInput.addEventListener("input", () => {
+    if (isTestReviewMode) return;
     const qState = questionStates[currentQuestionID];
     const raw = numericalInput.value.trim();
 
@@ -1685,6 +1727,7 @@
     const timerEl = document.getElementById("timer");
     if (!timerEl) return;
     const trigger = (e) => {
+      if (isTestTakingMode || isTestReviewMode) return;
       e?.preventDefault();
       resetTimerForCurrentQuestion();
     };
@@ -1829,6 +1872,7 @@
 
   // Hook up the Check Answer button once
   document.getElementById("check-answer").addEventListener("click", () => {
+    if (isTestTakingMode || isTestReviewMode) return;
     if (currentQuestionID == null) return;
     // micro pulse for feedback
     try {
@@ -2002,6 +2046,7 @@
   })();
 
   function checkCurrentAnswer() {
+    if (isTestTakingMode || isTestReviewMode) return;
     const qID = currentQuestionID;
     const originalIdx = window.questionIndexMap[qID];
     const q = questionData.questions[originalIdx];
@@ -2093,6 +2138,7 @@
       let rawData;
       if (__customLoader) {
         rawData = await __customLoader();
+        if (rawData?.meta?.title) assignmentTitle = String(rawData.meta.title);
       } else {
         assignmentBootstrap = await AssignmentService.loadAssignmentBundle(aID);
         if (assignmentBootstrap?.meta?.title) {
@@ -2156,8 +2202,40 @@
 
     mobile.innerHTML = "";
     desktop.innerHTML = "";
-    questions.forEach((_, i) => {
+    let lastSubjectKey = "";
+    let lastSectionKey = "";
+    const appendTestPaletteDivider = (question) => {
+      if (!isTestTakingMode && !isTestReviewMode) return;
+      const subject = String(question?.subjectName || question?.subject || "Unknown Subject").trim() || "Unknown Subject";
+      const section = String(question?.sectionName || question?.section || "Section").trim() || "Section";
+      if (subject !== lastSubjectKey) {
+        lastSubjectKey = subject;
+        lastSectionKey = "";
+        const subjectDivider = document.createElement("div");
+        subjectDivider.className = "col-12 test-palette-subject-divider";
+        subjectDivider.innerHTML = `<hr><div>${escapeHtml(subject)}</div>`;
+        desktop.appendChild(subjectDivider);
+        const mobileSubject = document.createElement("span");
+        mobileSubject.className = "test-palette-mobile-divider subject";
+        mobileSubject.textContent = subject;
+        mobile.appendChild(mobileSubject);
+      }
+      if (section !== lastSectionKey) {
+        lastSectionKey = section;
+        const sectionDivider = document.createElement("div");
+        sectionDivider.className = "col-12 test-palette-section-divider";
+        sectionDivider.innerHTML = `<hr><div>${escapeHtml(section)}</div>`;
+        desktop.appendChild(sectionDivider);
+        const mobileSection = document.createElement("span");
+        mobileSection.className = "test-palette-mobile-divider section";
+        mobileSection.textContent = section;
+        mobile.appendChild(mobileSection);
+      }
+    };
+
+    questions.forEach((question, i) => {
       questionStates[i] = defaultState();
+      appendTestPaletteDivider(question);
 
       // desktop button
       const dcol = document.createElement("div");
@@ -2208,6 +2286,7 @@
   }
 
   function MCQOptionClicked(optionElement) {
+    if (isTestReviewMode) return;
     const clickedOption = optionElement.dataset.opt;
     const originalIdx = window.questionIndexMap[currentQuestionID];
     const question = questionData.questions[originalIdx];
@@ -2252,8 +2331,10 @@
           "unevaluated",
           "correct",
           "incorrect",
-          "partial"
+          "partial",
+          "marked-review"
         );
+        if (qs.markedForReview) button.classList.add("marked-review");
       }
     });
 
@@ -2267,6 +2348,8 @@
       }
       return;
     }
+
+    if (qs.evalStatus === "unattempted") return;
 
     // Evaluated → correct/partial/incorrect
     const cls =
@@ -2300,6 +2383,53 @@
     currentQuestionID = qID;
     setQuestion(qID);
     evaluateQuestionButtonColor(qID);
+  }
+
+  function ensureTestReviewMarkerControls() {
+    if (!isTestTakingMode && !isTestReviewMode) return;
+    const typeInfo = document.getElementById("qTypeInfo");
+    const headerActions = typeInfo?.parentElement;
+    if (!headerActions) return;
+    if (isTestTakingMode && !document.getElementById("test-mark-review-btn")) {
+      const btn = document.createElement("button");
+      btn.id = "test-mark-review-btn";
+      btn.type = "button";
+      btn.className = "btn btn-sm btn-outline-primary test-mark-review-btn";
+      btn.innerHTML = '<i class="bi bi-flag" aria-hidden="true"></i><span class="d-none d-sm-inline">Review</span>';
+      btn.addEventListener("click", () => {
+        if (currentQuestionID == null) return;
+        const st = questionStates?.[currentQuestionID];
+        if (!st) return;
+        st.markedForReview = !st.markedForReview;
+        syncTestReviewMarkerControls();
+        evaluateQuestionButtonColor(currentQuestionID);
+        markDirty();
+        scheduleSave(aID);
+      });
+      headerActions.appendChild(btn);
+    }
+    if (isTestReviewMode && !document.getElementById("test-mark-review-badge")) {
+      const badge = document.createElement("span");
+      badge.id = "test-mark-review-badge";
+      badge.className = "badge test-mark-review-badge d-none";
+      badge.innerHTML = '<i class="bi bi-flag-fill me-1" aria-hidden="true"></i>Marked for review';
+      headerActions.appendChild(badge);
+    }
+  }
+
+  function syncTestReviewMarkerControls() {
+    if (!isTestTakingMode && !isTestReviewMode) return;
+    const marked = !!questionStates?.[currentQuestionID]?.markedForReview;
+    const btn = document.getElementById("test-mark-review-btn");
+    if (btn) {
+      btn.classList.toggle("active", marked);
+      btn.setAttribute("aria-pressed", marked ? "true" : "false");
+      btn.title = marked ? "Unmark for review" : "Mark for review";
+      const icon = btn.querySelector("i");
+      if (icon) icon.className = marked ? "bi bi-flag-fill" : "bi bi-flag";
+    }
+    const badge = document.getElementById("test-mark-review-badge");
+    if (badge) badge.classList.toggle("d-none", !marked);
   }
 
   // Small helper to replay a quick fade/slide on question content
@@ -2383,10 +2513,7 @@
     const hasPassageImage = String(question.passageImage ?? "").trim().length > 0;
     if (hasPassageImage) {
       passageImgDiv.style.display = "block";
-      let imgSrc = String(question.passageImage || "");
-      if (!/^https?:|^data:|^\/\//i.test(imgSrc)) {
-        imgSrc = `./data/question_data/${aID}/${imgSrc}`;
-      }
+      const imgSrc = resolveAssetUrl(question.passageImage || "");
       passageImgDiv.innerHTML = `<img src="${imgSrc}" alt="Passage image" class="q-image" loading="lazy" decoding="async">`;
       passageImgDiv.querySelector("img").addEventListener("click", () => {
         showImageOverlay(imgSrc);
@@ -2414,10 +2541,7 @@
     const qTextElm = document.getElementById("questionText");
     if (question.image) {
       qImgDiv.style.display = "block";
-      let imgSrc = String(question.image || "");
-      if (!/^https?:|^data:|^\/\//i.test(imgSrc)) {
-        imgSrc = `./data/question_data/${aID}/${imgSrc}`;
-      }
+      const imgSrc = resolveAssetUrl(question.image || "");
       qImgDiv.innerHTML = `<img src="${imgSrc}" alt="Question image" class="q-image" loading="lazy" decoding="async">`;
       qImgDiv.querySelector("img").addEventListener("click", () => {
         showImageOverlay(imgSrc);
@@ -2426,7 +2550,7 @@
       qImgDiv.style.display = "none";
       qImgDiv.innerHTML = "";
     }
-    qTextElm.innerHTML = escapeHtml(question.qText || "").replace(/\n/g, "<br>");
+    renderHTML(qTextElm, question.qText || "");
     try { renderMathInElement && renderMathInElement(qTextElm, katexOptions); } catch {}
 
     // --- Timer control ---
@@ -2468,7 +2592,11 @@
           const user = getUserSelection(questionState, "Numerical");
           const isCorrect =
             typeof user === "number" && ans.valid && user === ans.value;
-          applyNumericalEvaluationStyles(isCorrect);
+          if (questionState.evalStatus !== "unattempted") {
+            applyNumericalEvaluationStyles(isCorrect);
+          } else if (isTestReviewMode) {
+            numericalInput.disabled = true;
+          }
           if (numericalAnswer)
             numericalAnswer.parentElement.style.display = "block";
         }
@@ -2499,10 +2627,10 @@
       const C = document.getElementById("CContent");
       const D = document.getElementById("DContent");
 
-      A.textContent = question.qOptions[0];
-      B.textContent = question.qOptions[1];
-      C.textContent = question.qOptions[2];
-      D.textContent = question.qOptions[3];
+      renderHTML(A, question.qOptions[0] || "");
+      renderHTML(B, question.qOptions[1] || "");
+      renderHTML(C, question.qOptions[2] || "");
+      renderHTML(D, question.qOptions[3] || "");
 
       try {
         renderMathInElement && renderMathInElement(A, katexOptions);
@@ -2541,6 +2669,30 @@
       checkBtn.classList.remove("d-none");
     }
 
+    if (isTestTakingMode || isTestReviewMode) {
+      ensureTestReviewMarkerControls();
+      checkBtn.classList.add("d-none");
+      resetBtn.classList.add("d-none");
+      resetBtn.disabled = true;
+      const notes = document.getElementById("notesSection");
+      if (notes) notes.style.display = "none";
+      const resetAssignment = document.getElementById("reset-assignment");
+      if (resetAssignment) resetAssignment.style.display = "none";
+      const filters = document.getElementById("filter-btn");
+      if (filters) filters.closest(".dropdown")?.classList.add("d-none");
+      if (isTestTakingMode) {
+        document.getElementById("bookmark-btn")?.classList.add("d-none");
+        document.getElementById("qcolor-picker")?.classList.add("d-none");
+        document.getElementById("report-btn")?.classList.add("d-none");
+      }
+      if (isTestReviewMode) {
+        optionButtons.forEach((btn) => btn.classList.add("disabled"));
+        if (question.qType === "Numerical") numericalInput.disabled = true;
+        showSolutionForQuestion(question);
+      }
+      syncTestReviewMarkerControls();
+    }
+
     // Populate notes for this question (Markdown editor)
     try {
       setNotesInEditor(questionState.notes || "");
@@ -2553,6 +2705,15 @@
 
     // Update prev/next button disabled state
     updateTopbarNavButtons();
+
+    try {
+      assignmentTestAdapter?.onQuestionChange?.({
+        state: questionStates,
+        currentQuestionID: qID,
+        questions: window.displayQuestions || [],
+        question,
+      });
+    } catch {}
   }
 
   // --- Bookmark functionality ---
@@ -2564,6 +2725,54 @@
   let activeColorFilters = new Set();
   let filteredQuestionIDs = null; // null => no filter; else Array of display indices
 
+  function getCurrentQuestionSourceRef() {
+    try {
+      if (!isTestReviewMode) return null;
+      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const question = questionData.questions[originalIdx];
+      const source = question?._testSource || null;
+      if (!source?.kind) return null;
+      return { ...source, questionIndex: Number(question?.questionIndex ?? originalIdx) };
+    } catch {
+      return null;
+    }
+  }
+
+  function isPyqSourceRef(source) {
+    return !!(
+      source &&
+      source.kind === "pyq" &&
+      source.examId &&
+      source.subjectId &&
+      source.chapterId
+    );
+  }
+
+  function assignmentSourceId(source) {
+    return source?.kind === "assignment" && source.assignmentId
+      ? source.assignmentId
+      : aID;
+  }
+
+  function sourceBookmarkUrl(source, tagId = null) {
+    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
+    if (isPyqSourceRef(source)) {
+      const base = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}`;
+      return tagId == null ? base : `${base}/${encodeURIComponent(tagId)}`;
+    }
+    const id = assignmentSourceId(source);
+    const base = `${API_BASE}/api/bookmarks/${encodeURIComponent(id)}/${encodeURIComponent(qIndex)}`;
+    return tagId == null ? base : `${base}/${encodeURIComponent(tagId)}`;
+  }
+
+  function sourceQuestionMarkUrl(source) {
+    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
+    if (isPyqSourceRef(source)) {
+      return `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}`;
+    }
+    return `${API_BASE}/api/question-marks/${encodeURIComponent(assignmentSourceId(source))}/${encodeURIComponent(qIndex)}`;
+  }
+
   async function updateBookmarkButton() {
     const bookmarkBtn = document.getElementById("bookmark-btn");
     const icon = bookmarkBtn.querySelector("i");
@@ -2571,8 +2780,9 @@
     try {
       // Use original question index (not display index) for bookmark lookups
       const originalIdx = window.questionIndexMap[currentQuestionID];
+      const source = getCurrentQuestionSourceRef();
       const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        sourceBookmarkUrl(source)
       );
       if (response.ok) {
         currentBookmarks = await response.json();
@@ -2608,117 +2818,15 @@
       bookmarkTags = await response.json();
 
 
-      // Create dialog content
-      const currentTagIds = currentBookmarks.map((b) => b.tagId);
-      const availableTags = bookmarkTags.filter(
-        (tag) => !currentTagIds.includes(tag.id)
-      );
-
-      let bodyHTML = "";
-
-      if (currentBookmarks.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Current bookmarks:</strong><br>';
-        for (const bookmark of currentBookmarks) {
-          const tag = bookmarkTags.find((t) => t.id === bookmark.tagId);
-          if (tag) {
-            bodyHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="badge bg-primary">${escapeHtml(tag.name)}</span>
-              <button class="btn btn-sm btn-outline-danger remove-bookmark-btn" 
-                      data-tag-id="${tag.id}">
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
-          `;
-          }
-        }
-        bodyHTML += "</div>";
-      }
-
-      if (availableTags.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Add to tag:</strong><br>';
-        for (const tag of availableTags) {
-          bodyHTML += `
-          <button class="btn btn-outline-primary btn-sm me-2 mb-1 add-bookmark-btn" 
-                  data-tag-id="${tag.id}">
-            ${escapeHtml(tag.name)}
-          </button>
-        `;
-        }
-        bodyHTML += "</div>";
-      }
-
-      bodyHTML += `
-      <div class="mb-3">
-        <strong>Create new tag:</strong>
-        <div class="input-group mt-2">
-          <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
-          <button class="btn btn-outline-success" id="create-tag-btn">
-            <i class="bi bi-plus"></i>
-          </button>
-        </div>
-      </div>
-    `;
-
       // Show modal with onContentReady callback to attach event listeners
-      const modal = await showModal({
+      await showModal({
         title: "Bookmark Question",
-        bodyHTML: bodyHTML,
+        bodyHTML: renderBookmarkDialogBody(),
         buttons: [
           { text: "Close", className: "btn btn-secondary", value: "close" },
         ],
         onContentReady: (modalEl) => {
-          // Add event listeners to modal content
-          const modalBody = modalEl.querySelector("#qbaseModalBody");
-
-          // Remove bookmark buttons
-          modalBody.querySelectorAll(".remove-bookmark-btn").forEach((btn) => {
-            btn.addEventListener("click", async () => {
-              const tagId = btn.dataset.tagId;
-              if (await removeBookmark(tagId)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            });
-          });
-
-          // Add bookmark buttons
-          modalBody.querySelectorAll(".add-bookmark-btn").forEach((btn) => {
-            btn.addEventListener("click", async () => {
-              const tagId = btn.dataset.tagId;
-              if (await addBookmark(tagId)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            });
-          });
-
-          // Create new tag
-          const createTagBtn = modalBody.querySelector("#create-tag-btn");
-          const newTagInput = modalBody.querySelector("#new-tag-input");
-
-
-          createTagBtn.addEventListener("click", async () => {
-            const tagName = newTagInput.value.trim();
-            if (tagName) {
-              if (await createBookmarkTag(tagName)) {
-                updateBookmarkButton();
-                refreshBookmarkDialog(modalEl); // Refresh current modal content
-              }
-            }
-          });
-
-          newTagInput.addEventListener("keydown", async (e) => {
-            if (e.key === "Enter") {
-              const tagName = newTagInput.value.trim();
-              if (tagName) {
-                if (await createBookmarkTag(tagName)) {
-                  updateBookmarkButton();
-                  refreshBookmarkDialog(modalEl); // Refresh current modal content
-                }
-              }
-            }
-          });
+          attachBookmarkDialogEvents(modalEl);
         },
       });
     } catch (error) {
@@ -2747,8 +2855,9 @@
       // Reload current bookmarks for this question
       // Use original question index for current question
       const originalIdx = window.questionIndexMap[currentQuestionID];
+      const source = getCurrentQuestionSourceRef();
       const bookmarkResponse = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}`
+        sourceBookmarkUrl(source)
       );
       if (bookmarkResponse.ok) {
         currentBookmarks = await bookmarkResponse.json();
@@ -2756,128 +2865,234 @@
         currentBookmarks = [];
       }
 
-      // Create updated dialog content
-      const currentTagIds = currentBookmarks.map((b) => b.tagId);
-      const availableTags = bookmarkTags.filter(
-        (tag) => !currentTagIds.includes(tag.id)
-      );
-
-      let bodyHTML = "";
-
-      if (currentBookmarks.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Current bookmarks:</strong><br>';
-        for (const bookmark of currentBookmarks) {
-          const tag = bookmarkTags.find((t) => t.id === bookmark.tagId);
-          if (tag) {
-            bodyHTML += `
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <span class="badge bg-primary">${escapeHtml(tag.name)}</span>
-              <button class="btn btn-sm btn-outline-danger remove-bookmark-btn" 
-                      data-tag-id="${tag.id}">
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
-          `;
-          }
-        }
-        bodyHTML += "</div>";
-      }
-
-      if (availableTags.length > 0) {
-        bodyHTML += '<div class="mb-3"><strong>Add to tag:</strong><br>';
-        for (const tag of availableTags) {
-          bodyHTML += `
-          <button class="btn btn-outline-primary btn-sm me-2 mb-1 add-bookmark-btn" 
-                  data-tag-id="${tag.id}">
-            ${escapeHtml(tag.name)}
-          </button>
-        `;
-        }
-        bodyHTML += "</div>";
-      }
-
-      bodyHTML += `
-      <div class="mb-3">
-        <strong>Create new tag:</strong>
-        <div class="input-group mt-2">
-          <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
-          <button class="btn btn-outline-success" id="create-tag-btn">
-            <i class="bi bi-plus"></i>
-          </button>
-        </div>
-      </div>
-    `;
-
       // Update the modal content
       const modalBody = modalEl.querySelector("#qbaseModalBody");
-      modalBody.innerHTML = bodyHTML;
-
-      // Re-attach event listeners to the new content
-      // Remove bookmark buttons
-      modalBody.querySelectorAll(".remove-bookmark-btn").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const tagId = btn.dataset.tagId;
-          if (await removeBookmark(tagId)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        });
-      });
-
-      // Add bookmark buttons
-      modalBody.querySelectorAll(".add-bookmark-btn").forEach((btn) => {
-        btn.addEventListener("click", async () => {
-          const tagId = btn.dataset.tagId;
-          if (await addBookmark(tagId)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        });
-      });
-
-      // Create new tag
-      const createTagBtn = modalBody.querySelector("#create-tag-btn");
-      const newTagInput = modalBody.querySelector("#new-tag-input");
-
-
-      createTagBtn.addEventListener("click", async () => {
-        const tagName = newTagInput.value.trim();
-        if (tagName) {
-          if (await createBookmarkTag(tagName)) {
-            updateBookmarkButton();
-            refreshBookmarkDialog(modalEl); // Refresh current modal content
-          }
-        }
-      });
-
-      newTagInput.addEventListener("keydown", async (e) => {
-        if (e.key === "Enter") {
-          const tagName = newTagInput.value.trim();
-          if (tagName) {
-            if (await createBookmarkTag(tagName)) {
-              updateBookmarkButton();
-              refreshBookmarkDialog(modalEl); // Refresh current modal content
-            }
-          }
-        }
-      });
+      modalBody.innerHTML = renderBookmarkDialogBody();
+      attachBookmarkDialogEvents(modalEl);
     } catch (error) {
       console.error("Failed to refresh bookmark dialog:", error);
     }
   }
 
+  function renderBookmarkDialogBody() {
+    return `
+      <div class="qbookmark-dialog">
+        <div class="mb-3">
+          <strong>Tags</strong>
+          <div class="qbookmark-tag-field mt-2" data-bookmark-chip-field>
+            <div class="qbookmark-tag-list" data-bookmark-chip-list></div>
+            <input
+              type="text"
+              class="qbookmark-tag-input"
+              data-bookmark-chip-input
+              placeholder="Type a tag"
+              autocomplete="off"
+            >
+          </div>
+          <div class="qbookmark-tag-suggestions d-none" data-bookmark-chip-suggestions></div>
+        </div>
+        <div class="mb-0">
+          <strong>Create new tag</strong>
+          <div class="input-group mt-2">
+            <input type="text" class="form-control" id="new-tag-input" placeholder="Enter tag name...">
+            <button class="btn btn-outline-success" id="create-tag-btn" type="button">
+              <i class="bi bi-plus"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function attachBookmarkDialogEvents(modalEl) {
+    const modalBody = modalEl?.querySelector("#qbaseModalBody");
+    if (!modalBody) return;
+
+    setupBookmarkChipPicker({
+      fieldEl: modalBody.querySelector("[data-bookmark-chip-field]"),
+      listEl: modalBody.querySelector("[data-bookmark-chip-list]"),
+      inputEl: modalBody.querySelector("[data-bookmark-chip-input]"),
+      suggestionsEl: modalBody.querySelector("[data-bookmark-chip-suggestions]"),
+      modalEl,
+    });
+
+    const createTagBtn = modalBody.querySelector("#create-tag-btn");
+    const newTagInput = modalBody.querySelector("#new-tag-input");
+    const submitCreate = async () => {
+      const tagName = String(newTagInput?.value || "").trim();
+      if (!tagName) return;
+      if (await createBookmarkTag(tagName)) {
+        updateBookmarkButton();
+        refreshBookmarkDialog(modalEl);
+      }
+    };
+
+    createTagBtn?.addEventListener("click", submitCreate);
+    newTagInput?.addEventListener("keydown", async (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      await submitCreate();
+    });
+  }
+
+  function setupBookmarkChipPicker({
+    fieldEl,
+    listEl,
+    inputEl,
+    suggestionsEl,
+    modalEl,
+  }) {
+    if (!fieldEl || !listEl || !inputEl || !suggestionsEl) return;
+
+    const currentTagIds = new Set(currentBookmarks.map((b) => String(b.tagId)));
+    const selectedTags = bookmarkTags.filter((tag) =>
+      currentTagIds.has(String(tag.id))
+    );
+    const availableTags = bookmarkTags.filter(
+      (tag) => !currentTagIds.has(String(tag.id))
+    );
+    const state = { highlightedIndex: 0 };
+
+    const closeSuggestions = () => {
+      suggestionsEl.classList.add("d-none");
+      suggestionsEl.innerHTML = "";
+      state.highlightedIndex = 0;
+    };
+
+    const getMatches = () => {
+      const query = String(inputEl.value || "").trim().toLowerCase();
+      if (!query) return [];
+      return availableTags
+        .filter((tag) =>
+          String(tag.name || "")
+            .toLowerCase()
+            .includes(query)
+        )
+        .slice(0, 6);
+    };
+
+    const renderSelected = () => {
+      listEl.innerHTML = "";
+      selectedTags.forEach((tag) => {
+        const chip = document.createElement("span");
+        chip.className = "qbookmark-tag-chip";
+        chip.innerHTML = `
+          <span>${escapeHtml(tag.name)}</span>
+          <button type="button" class="qbookmark-tag-chip-remove" aria-label="Remove ${escapeHtml(
+            tag.name
+          )}">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        `;
+        chip
+          .querySelector(".qbookmark-tag-chip-remove")
+          ?.addEventListener("click", async (event) => {
+            event.stopPropagation();
+            if (await removeBookmark(tag.id)) {
+              updateBookmarkButton();
+              refreshBookmarkDialog(modalEl);
+            }
+          });
+        listEl.appendChild(chip);
+      });
+      inputEl.placeholder = selectedTags.length ? "" : "Type a tag";
+    };
+
+    const addTag = async (tagId) => {
+      if (!tagId) return;
+      if (await addBookmark(tagId)) {
+        updateBookmarkButton();
+        refreshBookmarkDialog(modalEl);
+      }
+    };
+
+    const renderSuggestions = () => {
+      const matches = getMatches();
+      if (!matches.length) {
+        closeSuggestions();
+        return;
+      }
+      suggestionsEl.innerHTML = "";
+      if (state.highlightedIndex >= matches.length) state.highlightedIndex = 0;
+      matches.forEach((tag, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `qbookmark-tag-suggestion${
+          index === state.highlightedIndex ? " active" : ""
+        }`;
+        btn.textContent = tag.name;
+        btn.addEventListener("mousedown", (event) => {
+          event.preventDefault();
+          addTag(tag.id);
+        });
+        suggestionsEl.appendChild(btn);
+      });
+      suggestionsEl.classList.remove("d-none");
+    };
+
+    fieldEl.addEventListener("click", () => inputEl.focus());
+    inputEl.addEventListener("input", () => {
+      state.highlightedIndex = 0;
+      renderSuggestions();
+    });
+    inputEl.addEventListener("keydown", async (event) => {
+      const matches = getMatches();
+      if ((event.key === "Tab" || event.key === "Enter") && matches.length) {
+        event.preventDefault();
+        await addTag(matches[state.highlightedIndex]?.id || matches[0].id);
+        return;
+      }
+      if (event.key === "ArrowDown" && matches.length) {
+        event.preventDefault();
+        state.highlightedIndex = (state.highlightedIndex + 1) % matches.length;
+        renderSuggestions();
+        return;
+      }
+      if (event.key === "ArrowUp" && matches.length) {
+        event.preventDefault();
+        state.highlightedIndex =
+          (state.highlightedIndex - 1 + matches.length) % matches.length;
+        renderSuggestions();
+        return;
+      }
+      if (event.key === "Backspace" && !inputEl.value && selectedTags.length) {
+        event.preventDefault();
+        const lastTag = selectedTags[selectedTags.length - 1];
+        if (lastTag && (await removeBookmark(lastTag.id))) {
+          updateBookmarkButton();
+          refreshBookmarkDialog(modalEl);
+        }
+      }
+    });
+    inputEl.addEventListener("blur", () =>
+      window.setTimeout(closeSuggestions, 120)
+    );
+
+    renderSelected();
+  }
+
   async function addBookmark(tagId) {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(`${API_BASE}/api/bookmarks`, {
+      const source = getCurrentQuestionSourceRef();
+      const url = isPyqSourceRef(source) ? `${API_BASE}/api/pyqs/bookmarks` : `${API_BASE}/api/bookmarks`;
+      const body = isPyqSourceRef(source)
+        ? {
+            examId: source.examId,
+            subjectId: source.subjectId,
+            chapterId: source.chapterId,
+            questionIndex: source.questionIndex,
+            tagId,
+          }
+        : {
+            assignmentId: assignmentSourceId(source),
+            questionIndex: originalIdx,
+            tagId,
+          };
+      const response = await authFetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          assignmentId: aID,
-          // Persist original index from assignment.json
-          questionIndex: originalIdx,
-          tagId: tagId,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
@@ -2914,8 +3129,9 @@
     try {
       // Remove by original index
       const originalIdx = window.questionIndexMap[currentQuestionID];
+      const source = getCurrentQuestionSourceRef();
       const response = await authFetch(
-        `${API_BASE}/api/bookmarks/${aID}/${originalIdx}/${tagId}`,
+        sourceBookmarkUrl(source, tagId),
         {
           method: "DELETE",
         }
@@ -2998,6 +3214,8 @@
       if (/^(https?:)?\/\//i.test(raw)) return raw;
       if (/^data:/i.test(raw)) return raw;
       if (raw.startsWith("/")) return raw;
+      if (raw.startsWith("./") || raw.startsWith("../")) return raw;
+      if (/^data\/question_data\//i.test(raw)) return `./${raw}`;
       return `./data/question_data/${aID}/${raw}`;
     } catch {
       return "";
@@ -3450,10 +3668,19 @@
   async function setQuestionColor(color) {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(`${API_BASE}/api/question-marks`, {
+      const source = getCurrentQuestionSourceRef();
+      const response = await authFetch(
+        isPyqSourceRef(source)
+          ? `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}`
+          : `${API_BASE}/api/question-marks`,
+        {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ assignmentId: aID, questionIndex: originalIdx, color })
+        body: JSON.stringify(
+          isPyqSourceRef(source)
+            ? { questionIndex: source.questionIndex, color }
+            : { assignmentId: assignmentSourceId(source), questionIndex: originalIdx, color }
+        )
       });
       if (!response.ok) throw new Error('Failed to set color');
       if (assignmentBootstrap) {
@@ -3473,7 +3700,8 @@
   async function clearQuestionColor() {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
-      const response = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`, { method: 'DELETE' });
+      const source = getCurrentQuestionSourceRef();
+      const response = await authFetch(sourceQuestionMarkUrl(source), { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to clear color');
       if (assignmentBootstrap) {
         assignmentBootstrap.marks = (getBootstrapMarks() || []).filter(
@@ -3494,6 +3722,7 @@
       const chips = Array.from(picker.querySelectorAll('.qcolor-chip'));
       if (currentQuestionID == null) return;
       const originalIdx = window.questionIndexMap[currentQuestionID];
+      const source = getCurrentQuestionSourceRef();
       let sel = 'none';
       const cachedMarks = getBootstrapMarks();
       if (cachedMarks) {
@@ -3502,7 +3731,7 @@
         sel = color || 'none';
       } else {
         try {
-          const res = await authFetch(`${API_BASE}/api/question-marks/${aID}/${originalIdx}`);
+          const res = await authFetch(sourceQuestionMarkUrl(source));
           if (res.ok) {
             const data = await res.json();
             const color = (data?.color || '').trim().toLowerCase();

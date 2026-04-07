@@ -11,24 +11,119 @@ export function buildYearsMenu(els, questions, filters, parseYear, onChange) {
     els.yearsMenu.innerHTML = '<div class="text-muted px-2">No year info</div>';
     return;
   }
-  years.forEach((y) => {
-    const id = `yr-${y}`;
-    const wrap = document.createElement("div");
-    wrap.className = "form-check";
-    wrap.innerHTML = `<input class="form-check-input" type="checkbox" value="${y}" id="${id}"> <label class="form-check-label" for="${id}">${y}</label>`;
-    const cb = wrap.querySelector("input");
-    cb.checked = filters.years.includes(y);
-    cb.addEventListener("change", () => {
-      const v = Number(cb.value);
-      if (cb.checked) {
-        if (!filters.years.includes(v)) filters.years.push(v);
-      } else {
-        filters.years = filters.years.filter((x) => x !== v);
-      }
-      onChange?.(filters);
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+  const activeYears =
+    Array.isArray(filters.years) && filters.years.length
+      ? years.filter((y) => filters.years.includes(y))
+      : years.slice();
+  const startMin = activeYears.length ? Math.min(...activeYears) : minYear;
+  const startMax = activeYears.length ? Math.max(...activeYears) : maxYear;
+
+  els.yearsMenu.innerHTML = `
+    <div class="pyqs-year-range">
+      <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+        <span class="small text-muted">Selected range</span>
+        <button type="button" class="btn btn-sm btn-link py-0 px-0 text-warning pyqs-year-clear">Clear</button>
+      </div>
+      <div class="pyqs-year-range-values">
+        <input
+          class="form-control form-control-sm pyqs-year-value-input pyqs-year-value-min"
+          type="number"
+          min="${minYear}"
+          max="${maxYear}"
+          step="1"
+          value="${startMin}"
+          aria-label="Minimum year"
+        >
+        <input
+          class="form-control form-control-sm pyqs-year-value-input pyqs-year-value-max"
+          type="number"
+          min="${minYear}"
+          max="${maxYear}"
+          step="1"
+          value="${startMax}"
+          aria-label="Maximum year"
+        >
+      </div>
+      <div class="pyqs-year-slider-wrap">
+        <div class="pyqs-year-slider-track">
+          <div class="pyqs-year-slider-fill"></div>
+        </div>
+        <input class="form-range pyqs-year-range-input pyqs-year-range-min" type="range" min="${minYear}" max="${maxYear}" step="1" value="${startMin}">
+        <input class="form-range pyqs-year-range-input pyqs-year-range-max" type="range" min="${minYear}" max="${maxYear}" step="1" value="${startMax}">
+      </div>
+      <div class="d-flex justify-content-between text-muted small mt-2">
+        <span>${minYear}</span>
+        <span>${maxYear}</span>
+      </div>
+    </div>
+  `;
+
+  const minEl = els.yearsMenu.querySelector(".pyqs-year-range-min");
+  const maxEl = els.yearsMenu.querySelector(".pyqs-year-range-max");
+  const minValueEl = els.yearsMenu.querySelector(".pyqs-year-value-min");
+  const maxValueEl = els.yearsMenu.querySelector(".pyqs-year-value-max");
+  const fill = els.yearsMenu.querySelector(".pyqs-year-slider-fill");
+  const clearBtn = els.yearsMenu.querySelector(".pyqs-year-clear");
+
+  const sync = (source) => {
+    const clampYear = (value, fallback) => {
+      const parsed = Number(value);
+      if (!Number.isFinite(parsed)) return fallback;
+      return Math.min(maxYear, Math.max(minYear, Math.round(parsed)));
+    };
+    const isValueMin = source === "value-min";
+    const isValueMax = source === "value-max";
+    let lo = clampYear(
+      isValueMin ? minValueEl?.value : minEl.value,
+      Number(minEl.value) || minYear
+    );
+    let hi = clampYear(
+      isValueMax ? maxValueEl?.value : maxEl.value,
+      Number(maxEl.value) || maxYear
+    );
+    if (lo > hi) {
+      if (source === "min" || isValueMin) hi = lo;
+      else lo = hi;
+    }
+    minEl.value = String(lo);
+    maxEl.value = String(hi);
+    if (minValueEl) minValueEl.value = String(lo);
+    if (maxValueEl) maxValueEl.value = String(hi);
+    const left = ((lo - minYear) / Math.max(1, maxYear - minYear)) * 100;
+    const right = ((hi - minYear) / Math.max(1, maxYear - minYear)) * 100;
+    fill.style.left = `${left}%`;
+    fill.style.width = `${right - left}%`;
+    filters.years =
+      lo === minYear && hi === maxYear
+        ? []
+        : years.filter((y) => y >= lo && y <= hi);
+    onChange?.(filters);
+  };
+
+  minEl.addEventListener("input", () => sync("min"));
+  maxEl.addEventListener("input", () => sync("max"));
+  minValueEl?.addEventListener("change", () => sync("value-min"));
+  maxValueEl?.addEventListener("change", () => sync("value-max"));
+  els.yearsMenu.querySelectorAll(".pyqs-year-value-input").forEach((input) => {
+    input.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      sync(
+        input.classList.contains("pyqs-year-value-min")
+          ? "value-min"
+          : "value-max"
+      );
+      input.blur();
     });
-    els.yearsMenu.appendChild(wrap);
   });
+  clearBtn?.addEventListener("click", () => {
+    minEl.value = String(minYear);
+    maxEl.value = String(maxYear);
+    sync("clear");
+  });
+  sync("init");
 }
 
 export function initQListView(

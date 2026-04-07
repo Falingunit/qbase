@@ -271,6 +271,79 @@ body.page-leave .pyqs-container { opacity: 0.0; }
 /* Space between Starred header and grid */
 #pyqs-starred-chapters-wrap .as-header { margin-bottom: 0.75rem; }
 
+.pyqs-year-range {
+  min-width: 260px;
+}
+
+.pyqs-year-range-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  color: #dfe6ee;
+}
+
+.pyqs-year-value-input {
+  width: 5.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.pyqs-year-slider-wrap {
+  position: relative;
+  height: 28px;
+}
+
+.pyqs-year-slider-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 4px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.12);
+  z-index: 1;
+}
+
+.pyqs-year-slider-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--bs-primary);
+  z-index: 2;
+}
+
+.pyqs-year-range-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: transparent;
+  pointer-events: none;
+  z-index: 3;
+  margin: 0;
+  --bs-form-range-track-bg: transparent;
+  --bs-form-range-track-height: 4px;
+}
+
+.pyqs-year-range-input::-webkit-slider-thumb {
+  pointer-events: auto;
+}
+
+.pyqs-year-range-input::-moz-range-thumb {
+  pointer-events: auto;
+}
+
+.pyqs-year-range-input::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+.pyqs-year-range-input::-moz-range-track {
+  background: transparent;
+}
+
 /* Chapter progress bar (bottom of cards) */
 .pyqs-chapbar {
   height: 6px;
@@ -292,4 +365,107 @@ body.page-leave .pyqs-container { opacity: 0.0; }
   .fade-in, .anim-enter, .anim-enter-fast { animation: none !important; }
   .pyqs-card, .as-card.card { transition: none !important; }
   .as-star-btn .bi { transition: none !important; }
+}
+
+.qbookmark-dialog {
+  display: grid;
+  gap: 1rem;
+}
+
+.qbookmark-tag-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  min-height: 46px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  background-color: rgba(20, 22, 26, 0.65);
+  color: #dfe6ee;
+}
+
+.qbookmark-tag-field:focus-within {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.qbookmark-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.qbookmark-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.18);
+  border: 1px solid rgba(13, 110, 253, 0.28);
+  color: #dfe6ee;
+  font-size: 0.9rem;
+}
+
+.qbookmark-tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+
+.qbookmark-tag-chip-remove:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.qbookmark-tag-chip-remove .bi {
+  font-size: 0.72rem;
+}
+
+.qbookmark-tag-input {
+  flex: 1 1 160px;
+  min-width: 140px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.qbookmark-tag-input::placeholder {
+  color: #9aa3ac;
+}
+
+.qbookmark-tag-suggestions {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(20, 22, 26, 0.95);
+}
+
+.qbookmark-tag-suggestion {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #dfe6ee;
+  text-align: left;
+}
+
+.qbookmark-tag-suggestion:hover,
+.qbookmark-tag-suggestion.active {
+  background: rgba(255, 255, 255, 0.08);
 }

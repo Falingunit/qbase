@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>QBase - Test Attempt</title>
+    <script>
+      const next = new URL("./assignment_base.html", window.location.href);
+      const current = new URL(window.location.href);
+      current.searchParams.forEach((value, key) => next.searchParams.set(key, value));
+      next.searchParams.set("mode", "test-attempt");
+      window.location.replace(next.href);
+    </script>
+  </head>
+  <body></body>
+</html>

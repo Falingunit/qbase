@@ -6,13 +6,11 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>QBase – Worksheets</title>
+    <title>QBase - Tests</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
-    <!-- Resource hints -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 
-    <!-- Bootstrap + Icons -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -23,19 +21,17 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
     />
 
-    <!-- Site styles: global theme + page styles -->
     <link href="./common/theme.css" rel="stylesheet" />
     <link href="./common/index.css" rel="stylesheet" />
-    <link href="./worksheets/index.css" rel="stylesheet" />
+    <link href="./tests/tests.css" rel="stylesheet" />
 
-    <!-- Site scripts (config/login/navbar) -->
     <script defer src="./common/config.js"></script>
     <script defer src="./common/navbar.js"></script>
-    <script defer src="./worksheets/worksheets.service.js"></script>
+    <script defer src="./home/home.service.js"></script>
+    <script defer src="./tests/tests.service.js"></script>
   </head>
-  <body class="bg-dark text-light" data-active="worksheets">
-    <!-- NAVBAR (same structure as index.html) -->
-    <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
+  <body class="bg-dark text-light" data-active="tests">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
       <div class="container-fluid">
         <a class="navbar-brand" href="./index.html">QBase</a>
 
@@ -52,7 +48,6 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- Left nav -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link" href="./index.html">Home</a>
@@ -64,11 +59,10 @@
               <a class="nav-link" href="./pyqs.html">PYQs</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./tests.html">Tests</a>
+              <a class="nav-link active" href="./tests.html">Tests</a>
             </li>
           </ul>
 
-          <!-- Right nav -->
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item" id="nav-login-item">
               <a class="nav-link" href="#" id="nav-login">Login</a>
@@ -97,7 +91,7 @@
                     class="dropdown-item text-danger"
                     href="#"
                     id="nav-delete-account"
-                    >Delete Account…</a
+                    >Delete Account...</a
                   >
                 </li>
               </ul>
@@ -107,72 +101,113 @@
       </div>
     </nav>
 
-    <!-- PAGE -->
     <div class="container-lg">
       <h1 class="text-center pt-3 pt-md-5 fs-2 mt-4">QBase</h1>
-
       <div
         class="d-flex flex-wrap align-items-center justify-content-between pt-3 pt-md-5 gap-3"
       >
-        <h2 class="">Worksheets</h2>
+        <h2>Tests</h2>
 
-        <!-- Shared search look/ids to match index.html -->
-        <div
-          class="input-group mb-3"
-          id="table-search-group"
-          style="max-width: 480px"
-        >
-          <span class="input-group-text"><i class="bi bi-search"></i></span>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Search worksheets..."
-            id="table-search-input"
-            aria-label="Search worksheets"
-            autocomplete="off"
-          />
-          <button
-            class="btn btn-outline-secondary d-none"
-            id="as-clear-btn"
-            title="Clear"
-            aria-label="Clear search"
+        <div class="tests-toolbar">
+          <div
+            class="input-group mb-0"
+            id="table-search-group"
+            style="max-width: 480px"
           >
-            <i class="bi bi-x-lg"></i>
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search tests..."
+              id="table-search-input"
+              aria-label="Search tests"
+              autocomplete="off"
+            />
+            <button
+              class="btn btn-outline-secondary d-none"
+              id="tests-clear-btn"
+              title="Clear"
+              aria-label="Clear search"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            id="tests-add-by-id-btn"
+          >
+            Add Test
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="tests-create-btn"
+          >
+            Create Test
           </button>
         </div>
       </div>
-      <div id="as-loading" class="text-center py-5">
+
+      <div id="tests-loading" class="text-center py-5">
         <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading…</span>
+          <span class="visually-hidden">Loading...</span>
         </div>
-        <p class="mt-3">Loading worksheets…</p>
+        <p class="mt-3">Loading tests...</p>
       </div>
 
-      <div id="as-error" class="alert alert-danger d-none" role="alert"></div>
-      <div id="as-empty" class="text-center text-muted py-5 d-none">
-        <h4>No worksheets found</h4>
-        <p>Try clearing your search or check the data file.</p>
-      </div>
+      <div id="tests-error" class="alert alert-danger d-none" role="alert"></div>
 
-      <!-- Starred section injected when any starred exist -->
-      <section id="as-starred-wrap" class="d-none">
+      <section id="tests-starred-wrap" class="d-none">
         <div class="as-header">
-          <span class="fs-5 fw-semibold">Starred</span>
-          <span class="as-count" id="as-starred-count"></span>
+          <span class="fs-5 fw-semibold">Starred Tests</span>
+          <span class="as-count" id="tests-starred-count"></span>
         </div>
-        <div id="as-starred" class="as-grid"></div>
+        <div id="tests-starred" class="as-grid"></div>
         <hr class="border-secondary-subtle my-4" />
       </section>
 
-      <!-- Subject + Chapter groups injected here -->
-      <div id="as-content" class="d-none"><!-- groups injected here --></div>
+      <div id="tests-content" class="d-none">
+        <section id="tests-paused-wrap" class="d-none">
+          <div class="as-header">
+            <span class="fs-5 fw-semibold">Paused Tests</span>
+            <span class="as-count" id="tests-paused-count"></span>
+          </div>
+          <div id="tests-paused" class="as-grid"></div>
+          <hr class="border-secondary-subtle my-4" />
+        </section>
+
+        <section id="tests-attempted-wrap" class="d-none">
+          <div class="as-header">
+            <span class="fs-5 fw-semibold">Tests</span>
+            <span class="as-count" id="tests-attempted-count"></span>
+          </div>
+          <div id="tests-grid" class="as-grid"></div>
+        </section>
+
+        <section id="tests-unattempted-wrap" class="d-none">
+          <hr class="border-secondary-subtle my-4" />
+          <div class="as-header">
+            <span class="fs-5 fw-semibold">Unattempted Tests</span>
+            <span class="as-count" id="tests-unattempted-count"></span>
+          </div>
+          <div id="tests-unattempted" class="as-grid"></div>
+        </section>
+      </div>
+
+      <div id="tests-empty" class="tests-empty text-center text-muted py-5 d-none">
+        <h4>No tests yet</h4>
+        <p>Create your first test to start building the collection.</p>
+        <button type="button" class="btn btn-primary btn-lg" id="tests-empty-create-btn">
+          Create Test
+        </button>
+      </div>
     </div>
 
-    <!-- Bootstrap JS before page script ensures Collapse API is ready -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"
     ></script>
-    <script defer src="./worksheets/index.js"></script>
+    <script defer src="./tests/index.js"></script>
   </body>
 </html>

@@ -86,7 +86,7 @@ const corsFn = cors({
 app.use(corsFn);
 
 // ---------- Parsers ----------
-app.use(express.json());
+app.use(express.json({ limit: "2mb" }));
 
 // ---------- Static uploads ----------
 const uploadsDir = path.join(__dirname, "uploads");
@@ -411,8 +411,233 @@ db.exec(`
     read_at DATETIME,
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS tests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    share_with_json TEXT,
+    config_json TEXT NOT NULL,
+    reuse_policy_json TEXT,
+    status TEXT NOT NULL DEFAULT 'unattempted',
+    archived_at DATETIME,
+    score REAL DEFAULT 0,
+    max_score REAL DEFAULT 0,
+    attempted_count INTEGER DEFAULT 0,
+    total_questions INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS test_questions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    testId INTEGER NOT NULL,
+    order_index INTEGER NOT NULL,
+    section_id TEXT,
+    section_name TEXT,
+    question_type TEXT,
+    subject_key TEXT,
+    subject_name TEXT,
+    kind TEXT NOT NULL,
+    source_id TEXT,
+    assignmentId INTEGER,
+    examId TEXT,
+    subjectId TEXT,
+    chapterId TEXT,
+    questionIndex INTEGER NOT NULL,
+    question_key TEXT NOT NULL,
+    positive_marks REAL DEFAULT 0,
+    negative_marks REAL DEFAULT 0,
+    payload_json TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (testId) REFERENCES tests(id) ON DELETE CASCADE
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_test_questions_test
+    ON test_questions (testId, order_index);
+
+  CREATE TABLE IF NOT EXISTS starred_tests (
+    userId TEXT NOT NULL,
+    testId INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, testId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (testId) REFERENCES tests(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS test_access (
+    userId TEXT NOT NULL,
+    testId INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, testId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (testId) REFERENCES tests(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS unlisted_tests (
+    userId TEXT NOT NULL,
+    testId INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (userId, testId),
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (testId) REFERENCES tests(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS test_attempts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    testId INTEGER NOT NULL,
+    userId TEXT NOT NULL,
+    score REAL DEFAULT 0,
+    max_score REAL DEFAULT 0,
+    attempted_count INTEGER DEFAULT 0,
+    total_questions INTEGER DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'submitted',
+    state_json TEXT,
+    started_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    submitted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (testId) REFERENCES tests(id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_test_attempts_test
+    ON test_attempts (testId, score DESC, submitted_at DESC);
 `);
 ensureAssignmentTables(db);
+ensureTestTables(db);
+const TESTS_COLUMNS = getTableColumns(db, "tests");
+const TEST_QUESTIONS_COLUMNS = getTableColumns(db, "test_questions");
+const TEST_ATTEMPTS_COLUMNS = getTableColumns(db, "test_attempts");
+const TESTS_USE_TEXT_IDS = testsUseTextIds(db);
+const TEST_QUESTIONS_USE_TEXT_IDS = tableUsesTextIds(db, "test_questions");
+const TEST_ATTEMPTS_USE_TEXT_IDS = tableUsesTextIds(db, "test_attempts");
+
+function ensureTestTables(db) {
+  try {
+    const testCols = new Set(
+      db.prepare("PRAGMA table_info(tests)").all().map((col) => col.name)
+    );
+    const addTestCol = (name, ddl) => {
+      if (!testCols.has(name)) db.exec(`ALTER TABLE tests ADD COLUMN ${ddl}`);
+    };
+    addTestCol("userId", "userId TEXT");
+    addTestCol("title", "title TEXT NOT NULL DEFAULT 'Untitled test'");
+    addTestCol("description", "description TEXT");
+    addTestCol("share_with_json", "share_with_json TEXT");
+    addTestCol("config_json", "config_json TEXT NOT NULL DEFAULT '{}'");
+    addTestCol("reuse_policy_json", "reuse_policy_json TEXT");
+    addTestCol("status", "status TEXT NOT NULL DEFAULT 'unattempted'");
+    addTestCol("archived_at", "archived_at DATETIME");
+    addTestCol("score", "score REAL DEFAULT 0");
+    addTestCol("max_score", "max_score REAL DEFAULT 0");
+    addTestCol("attempted_count", "attempted_count INTEGER DEFAULT 0");
+    addTestCol("total_questions", "total_questions INTEGER DEFAULT 0");
+    addTestCol("created_at", "created_at DATETIME");
+    addTestCol("updated_at", "updated_at DATETIME");
+  } catch (e) {
+    console.warn("tests migration failed:", e?.message || e);
+  }
+
+  try {
+    const questionCols = new Set(
+      db.prepare("PRAGMA table_info(test_questions)").all().map((col) => col.name)
+    );
+    const addQuestionCol = (name, ddl) => {
+      if (!questionCols.has(name)) {
+        db.exec(`ALTER TABLE test_questions ADD COLUMN ${ddl}`);
+      }
+    };
+    addQuestionCol("testId", "testId INTEGER");
+    addQuestionCol("order_index", "order_index INTEGER NOT NULL DEFAULT 0");
+    addQuestionCol("section_id", "section_id TEXT");
+    addQuestionCol("section_name", "section_name TEXT");
+    addQuestionCol("question_type", "question_type TEXT");
+    addQuestionCol("subject_key", "subject_key TEXT");
+    addQuestionCol("subject_name", "subject_name TEXT");
+    addQuestionCol("kind", "kind TEXT NOT NULL DEFAULT 'assignment'");
+    addQuestionCol("source_id", "source_id TEXT");
+    addQuestionCol("assignmentId", "assignmentId INTEGER");
+    addQuestionCol("examId", "examId TEXT");
+    addQuestionCol("subjectId", "subjectId TEXT");
+    addQuestionCol("chapterId", "chapterId TEXT");
+    addQuestionCol("questionIndex", "questionIndex INTEGER NOT NULL DEFAULT 0");
+    addQuestionCol("question_key", "question_key TEXT NOT NULL DEFAULT ''");
+    addQuestionCol("positive_marks", "positive_marks REAL DEFAULT 0");
+    addQuestionCol("negative_marks", "negative_marks REAL DEFAULT 0");
+    addQuestionCol("payload_json", "payload_json TEXT NOT NULL DEFAULT '{}'");
+    addQuestionCol("created_at", "created_at DATETIME");
+  } catch (e) {
+    console.warn("test_questions migration failed:", e?.message || e);
+  }
+
+  try {
+    db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_test_questions_test
+        ON test_questions (testId, order_index);
+      CREATE INDEX IF NOT EXISTS idx_test_questions_key
+        ON test_questions (question_key);
+    `);
+  } catch (e) {
+    console.warn("test question indexes migration failed:", e?.message || e);
+  }
+
+  try {
+    const attemptCols = new Set(
+      db.prepare("PRAGMA table_info(test_attempts)").all().map((col) => col.name)
+    );
+    const addAttemptCol = (name, ddl) => {
+      if (!attemptCols.has(name)) {
+        db.exec(`ALTER TABLE test_attempts ADD COLUMN ${ddl}`);
+      }
+    };
+    addAttemptCol("testId", "testId INTEGER");
+    addAttemptCol("userId", "userId TEXT");
+    addAttemptCol("score", "score REAL DEFAULT 0");
+    addAttemptCol("max_score", "max_score REAL DEFAULT 0");
+    addAttemptCol("attempted_count", "attempted_count INTEGER DEFAULT 0");
+    addAttemptCol("total_questions", "total_questions INTEGER DEFAULT 0");
+    addAttemptCol("status", "status TEXT NOT NULL DEFAULT 'submitted'");
+    addAttemptCol("state_json", "state_json TEXT");
+    addAttemptCol("started_at", "started_at DATETIME");
+    addAttemptCol("submitted_at", "submitted_at DATETIME");
+    db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_test_attempts_test
+        ON test_attempts (testId, score DESC, submitted_at DESC);
+    `);
+  } catch (e) {
+    console.warn("test_attempts migration failed:", e?.message || e);
+  }
+}
+
+function testsUseTextIds(db) {
+  return tableUsesTextIds(db, "tests");
+}
+
+function tableUsesTextIds(db, tableName) {
+  try {
+    const idColumn = db
+      .prepare(`PRAGMA table_info(${tableName})`)
+      .all()
+      .find((col) => String(col.name || "").toLowerCase() === "id");
+    return !!idColumn && !String(idColumn.type || "").toUpperCase().includes("INT");
+  } catch {
+    return false;
+  }
+}
+
+function getTableColumns(db, tableName) {
+  try {
+    return new Set(
+      db
+        .prepare(`PRAGMA table_info(${tableName})`)
+        .all()
+        .map((col) => String(col.name || ""))
+    );
+  } catch {
+    return new Set();
+  }
+}
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
 try {
@@ -2331,6 +2556,970 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
 // ---------- Protected routes (require Bearer token) ----------
 app.use(auth);
 
+app.get("/api/users", (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        "SELECT id, username FROM users WHERE id <> ? ORDER BY username COLLATE NOCASE ASC"
+      )
+      .all(req.userId);
+    res.json(rows.map((u) => ({ id: u.id, username: u.username })));
+  } catch (e) {
+    console.error("list users:", e);
+    res.status(500).json({ error: "Failed to list users" });
+  }
+});
+
+// Tests
+app.get("/api/tests", (req, res) => {
+  try {
+    const currentUser = db
+      .prepare("SELECT username FROM users WHERE id = ?")
+      .get(req.userId);
+    const rows = db
+      .prepare(
+        `SELECT
+           t.id AS testId,
+           t.userId,
+           t.title,
+           t.description,
+           t.share_with_json,
+           t.archived_at,
+           u.username AS creator,
+           t.created_at AS createdAt,
+           t.score,
+           t.max_score AS maxScore,
+           t.attempted_count AS attempted,
+           t.total_questions AS totalQuestions,
+           t.status,
+           CASE WHEN st.testId IS NULL THEN 0 ELSE 1 END AS starred
+         FROM tests t
+         LEFT JOIN users u ON u.id = t.userId
+         LEFT JOIN starred_tests st ON st.userId = ? AND st.testId = t.id
+         LEFT JOIN unlisted_tests ut ON ut.userId = ? AND ut.testId = t.id
+         WHERE t.archived_at IS NULL AND ut.testId IS NULL
+         ORDER BY datetime(t.created_at) DESC, t.id DESC`
+      )
+      .all(req.userId, req.userId)
+      .filter((row) => userCanAccessTestRow(req.userId, currentUser?.username, row));
+    const questionRows = db
+      .prepare(
+        `SELECT testId, question_key FROM test_questions
+         WHERE testId IN (${rows.map(() => "?").join(",") || "NULL"})
+         ORDER BY testId, order_index`
+      )
+      .all(...rows.map((row) => row.testId));
+    const keysByTest = new Map();
+    questionRows.forEach((row) => {
+      if (!keysByTest.has(row.testId)) keysByTest.set(row.testId, []);
+      keysByTest.get(row.testId).push(row.question_key);
+    });
+    const attemptRows = rows.length
+      ? db
+          .prepare(
+            `SELECT testId, status, score, max_score AS maxScore, attempted_count AS attempted,
+                    total_questions AS totalQuestions, submitted_at AS submittedAt, started_at AS startedAt
+             FROM test_attempts
+             WHERE userId = ? AND testId IN (${rows.map(() => "?").join(",")})
+             ORDER BY datetime(COALESCE(submitted_at, started_at)) DESC, id DESC`
+          )
+          .all(req.userId, ...rows.map((row) => row.testId))
+      : [];
+    const attemptsByTest = new Map();
+    attemptRows.forEach((attempt) => {
+      if (!attemptsByTest.has(attempt.testId)) attemptsByTest.set(attempt.testId, []);
+      attemptsByTest.get(attempt.testId).push(attempt);
+    });
+    const rankRows = rows.length
+      ? db
+          .prepare(
+            `SELECT testId, userId, status, score, submitted_at AS submittedAt, id
+             FROM test_attempts
+             WHERE testId IN (${rows.map(() => "?").join(",")})
+               AND (submitted_at IS NOT NULL OR status IN ('submitted', 'completed', 'attempted', 'finished'))
+             ORDER BY testId, userId, score DESC, datetime(submitted_at) DESC, id DESC`
+          )
+          .all(...rows.map((row) => row.testId))
+      : [];
+    const bestByTestUser = new Map();
+    rankRows.forEach((attempt) => {
+      const key = `${attempt.testId}:${attempt.userId}`;
+      const prev = bestByTestUser.get(key);
+      if (!prev || Number(attempt.score || 0) > Number(prev.score || 0)) {
+        bestByTestUser.set(key, attempt);
+      }
+    });
+    const rankByTestForCurrentUser = new Map();
+    const leaderboardByTest = new Map();
+    Array.from(bestByTestUser.values()).forEach((attempt) => {
+      const testKey = String(attempt.testId || "");
+      if (!leaderboardByTest.has(testKey)) leaderboardByTest.set(testKey, []);
+      leaderboardByTest.get(testKey).push(attempt);
+    });
+    leaderboardByTest.forEach((attempts, testId) => {
+      attempts.sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
+      attempts.forEach((attempt, index) => {
+        const prev = attempts[index - 1];
+        const rank = prev && Number(prev.score || 0) === Number(attempt.score || 0)
+          ? prev.rank
+          : index + 1;
+        attempt.rank = rank;
+        if (String(attempt.userId || "") === String(req.userId)) {
+          rankByTestForCurrentUser.set(String(testId || ""), rank);
+        }
+      });
+    });
+    const summarizeForCurrentUser = (row) => {
+      const attempts = attemptsByTest.get(row.testId) || attemptsByTest.get(String(row.testId || "")) || [];
+      const rank = rankByTestForCurrentUser.get(String(row.testId || "")) || null;
+      const latest = attempts[0] || null;
+      const submitted = attempts.filter((attempt) =>
+        ["submitted", "completed", "attempted", "finished"].includes(
+          String(attempt.status || "").toLowerCase()
+        ) || attempt.submittedAt
+      );
+      const best = submitted.reduce((winner, attempt) => {
+        if (!winner) return attempt;
+        return Number(attempt.score || 0) > Number(winner.score || 0) ? attempt : winner;
+      }, null);
+      const latestIsPaused =
+        latest &&
+        !(
+          ["submitted", "completed", "attempted", "finished"].includes(
+            String(latest.status || "").toLowerCase()
+          ) || latest.submittedAt
+        );
+      if (latestIsPaused) {
+        return {
+          status: "paused",
+          attempted: Number(latest.attempted || 0),
+          totalQuestions: Number(latest.totalQuestions || row.totalQuestions || 0),
+          score: Number(best?.score ?? row.score ?? 0),
+          maxScore: Number(best?.maxScore ?? row.maxScore ?? 0),
+          rank,
+        };
+      }
+      if (best) {
+        return {
+          status: "attempted",
+          attempted: Number(best.attempted || 0),
+          totalQuestions: Number(best.totalQuestions || row.totalQuestions || 0),
+          score: Number(best.score || 0),
+          maxScore: Number(best.maxScore || row.maxScore || 0),
+          rank,
+        };
+      }
+      return {
+        status: "unattempted",
+        attempted: 0,
+        totalQuestions: Number(row.totalQuestions || 0),
+        score: 0,
+        maxScore: Number(row.maxScore || 0),
+        rank: null,
+      };
+    };
+    res.json(
+      rows.map((row) => {
+        const summary = summarizeForCurrentUser(row);
+        return {
+          ...row,
+          ...summary,
+          userId: undefined,
+          share_with_json: undefined,
+          starred: !!row.starred,
+          questionKeys: keysByTest.get(row.testId) || [],
+        };
+      })
+    );
+  } catch (e) {
+    console.error("list tests:", e);
+    res.status(500).json({ error: "Failed to load tests" });
+  }
+});
+
+app.post("/api/tests", async (req, res) => {
+  try {
+    const draft = req.body || {};
+    const title = String(draft.testName || draft.title || "").trim();
+    if (!title) return res.status(400).json({ error: "Test name is required" });
+
+    const generated = await generateTestQuestions(req, draft);
+    const shareWith = Array.isArray(draft.shareWith)
+      ? draft.shareWith.map((item) => String(item).trim()).filter(Boolean)
+      : [];
+    const reusePolicy = normalizeTestReusePolicy(draft.questionReusePolicy);
+    const timeLimitSeconds = Math.max(
+      0,
+      Math.round(
+        Number(
+          draft.timeLimitSeconds ??
+            draft.testBlueprint?.timeLimitSeconds ??
+            Number(draft.testBlueprint?.timeLimitMinutes || 0) * 60
+        ) || 0
+      )
+    );
+    const maxScore = generated.questions.reduce(
+      (sum, q) => sum + Number(q.positiveMarks || 0),
+      0
+    );
+
+    const insert = db.transaction(() => {
+      const generatedTestId = TESTS_USE_TEXT_IDS ? nanoid() : "";
+      const columns = [];
+      const values = [];
+      const addValue = (column, value) => {
+        if (!TESTS_COLUMNS.has(column)) return;
+        columns.push(column);
+        values.push(value);
+      };
+      if (TESTS_USE_TEXT_IDS) addValue("id", generatedTestId);
+      addValue("ownerId", req.userId);
+      addValue("userId", req.userId);
+      addValue("name", title);
+      addValue("title", title);
+      addValue("mode", "generated");
+      addValue("description", String(draft.testDescription || draft.description || "").trim());
+      addValue("share_with_json", JSON.stringify(shareWith));
+      addValue("config_json", JSON.stringify(draft));
+      addValue("reuse_policy_json", JSON.stringify(reusePolicy));
+      addValue("time_limit_sec", timeLimitSeconds || null);
+      addValue("status", "unattempted");
+      addValue("score", 0);
+      addValue("max_score", maxScore);
+      addValue("attempted_count", 0);
+      addValue("total_questions", generated.questions.length);
+      const placeholders = columns.map(() => "?").join(", ");
+      const insertSql = `INSERT INTO tests (${columns.join(", ")}) VALUES (${placeholders})`;
+      const info = db.prepare(insertSql).run(...values);
+      const testId = TESTS_USE_TEXT_IDS ? generatedTestId : String(info.lastInsertRowid);
+      generated.questions.forEach((question, index) => {
+        insertGeneratedTestQuestion(testId, question, index);
+      });
+      return testId;
+    });
+
+    const testId = insert();
+    const row = db
+      .prepare(
+        `SELECT id AS testId, title, description, created_at AS createdAt,
+                score, max_score AS maxScore, attempted_count AS attempted,
+                total_questions AS totalQuestions, status
+           FROM tests WHERE id = ? AND userId = ?`
+      )
+      .get(testId, req.userId);
+    res.status(201).json({
+      ...row,
+      questionKeys: generated.questions.map((q) => q.questionKey),
+      generation: generated.summary,
+    });
+  } catch (e) {
+    console.error("create test:", e);
+    res.status(e.status || 500).json({ error: e.message || "Failed to create test" });
+  }
+});
+
+app.post("/api/tests/join", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.body?.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid test id" });
+    }
+    const row = db
+      .prepare(
+        "SELECT id, ownerId, userId, archived_at, share_with_json, config_json FROM tests WHERE id = ?"
+      )
+      .get(testId);
+    if (!row || row.archived_at) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    const currentUser = db
+      .prepare("SELECT username FROM users WHERE id = ?")
+      .get(req.userId);
+    const shareWith = mergeShareWithUsername(row.share_with_json, currentUser?.username);
+    const configValue = safeParseJSON(row.config_json, {});
+    const config =
+      configValue && typeof configValue === "object" && !Array.isArray(configValue)
+        ? configValue
+        : {};
+    config.shareWith = mergeShareWithUsername(config.shareWith || [], currentUser?.username);
+    db.transaction(() => {
+      db.prepare(
+        `INSERT INTO test_access (userId, testId) VALUES (?, ?)
+         ON CONFLICT(userId, testId) DO NOTHING`
+      ).run(req.userId, testId);
+      db.prepare("DELETE FROM unlisted_tests WHERE userId = ? AND testId = ?").run(
+        req.userId,
+        testId
+      );
+      if (TESTS_COLUMNS.has("share_with_json") || TESTS_COLUMNS.has("config_json")) {
+        const setParts = [];
+        const values = [];
+        if (TESTS_COLUMNS.has("share_with_json")) {
+          setParts.push("share_with_json = ?");
+          values.push(JSON.stringify(shareWith));
+        }
+        if (TESTS_COLUMNS.has("config_json")) {
+          setParts.push("config_json = ?");
+          values.push(JSON.stringify(config));
+        }
+        if (TESTS_COLUMNS.has("updated_at")) setParts.push("updated_at = CURRENT_TIMESTAMP");
+        if (setParts.length) {
+          db.prepare(`UPDATE tests SET ${setParts.join(", ")} WHERE id = ?`).run(
+            ...values,
+            testId
+          );
+        }
+      }
+    })();
+    res.json({ success: true, testId, shareWith });
+  } catch (e) {
+    console.error("join test:", e);
+    res.status(500).json({ error: "Failed to add test" });
+  }
+});
+
+app.get("/api/tests/starred", (req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT testId FROM starred_tests
+         WHERE userId = ?
+         ORDER BY datetime(created_at) DESC`
+      )
+      .all(req.userId);
+    res.json(rows.map((row) => String(row.testId)));
+  } catch (e) {
+    console.error("list starred tests:", e);
+    res.status(500).json({ error: "Failed to load starred tests" });
+  }
+});
+
+app.post("/api/tests/starred/:testId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    const row = db
+      .prepare("SELECT id FROM tests WHERE id = ? AND userId = ?")
+      .get(testId, req.userId);
+    if (!row && !userCanAccessTest(req.userId, testId)) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    db.prepare(
+      `INSERT INTO starred_tests (userId, testId) VALUES (?, ?)
+       ON CONFLICT(userId, testId) DO NOTHING`
+    ).run(req.userId, testId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error("star test:", e);
+    res.status(500).json({ error: "Failed to star test" });
+  }
+});
+
+app.delete("/api/tests/starred/:testId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    db.prepare("DELETE FROM starred_tests WHERE userId = ? AND testId = ?").run(
+      req.userId,
+      testId
+    );
+    res.json({ success: true });
+  } catch (e) {
+    console.error("unstar test:", e);
+    res.status(500).json({ error: "Failed to unstar test" });
+  }
+});
+
+app.patch("/api/tests/:testId/archive", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    const row = db
+      .prepare("SELECT userId FROM tests WHERE id = ?")
+      .get(testId);
+    if (!row) return res.status(404).json({ error: "Test not found" });
+    if (String(row.userId) !== String(req.userId)) {
+      return res.status(403).json({ error: "Only the creator can archive this test" });
+    }
+    const archived = req.body?.archived !== false;
+    db.prepare(
+      `UPDATE tests
+       SET archived_at = ${archived ? "CURRENT_TIMESTAMP" : "NULL"},
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = ?`
+    ).run(testId);
+    res.json({ success: true, archived });
+  } catch (e) {
+    console.error("archive test:", e);
+    res.status(500).json({ error: "Failed to archive test" });
+  }
+});
+
+app.delete("/api/tests/:testId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    const row = db
+      .prepare("SELECT userId FROM tests WHERE id = ?")
+      .get(testId);
+    if (!row) return res.status(404).json({ error: "Test not found" });
+    if (String(row.userId) !== String(req.userId)) {
+      return res.status(403).json({ error: "Only the creator can delete this test" });
+    }
+    db.prepare("DELETE FROM tests WHERE id = ?").run(testId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error("delete test:", e);
+    res.status(500).json({ error: "Failed to delete test" });
+  }
+});
+
+app.post("/api/tests/:testId/unlist", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    if (!userCanAccessTest(req.userId, testId, { includeArchived: true })) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    db.prepare(
+      `INSERT INTO unlisted_tests (userId, testId) VALUES (?, ?)
+       ON CONFLICT(userId, testId) DO NOTHING`
+    ).run(req.userId, testId);
+    db.prepare("DELETE FROM starred_tests WHERE userId = ? AND testId = ?").run(
+      req.userId,
+      testId
+    );
+    res.json({ success: true });
+  } catch (e) {
+    console.error("unlist test:", e);
+    res.status(500).json({ error: "Failed to unlist test" });
+  }
+});
+
+app.patch("/api/tests/:testId/share", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    const row = db
+      .prepare("SELECT ownerId, userId, share_with_json, config_json FROM tests WHERE id = ?")
+      .get(testId);
+    if (!row) return res.status(404).json({ error: "Test not found" });
+    const creatorId = row.userId || row.ownerId;
+    if (String(creatorId) !== String(req.userId)) {
+      return res.status(403).json({ error: "Only the creator can update sharing" });
+    }
+    const previousShareWith = new Set(
+      safeParseJSON(row.share_with_json, [])
+        .map((item) => String(item).trim().toLowerCase())
+        .filter(Boolean)
+    );
+    const usernames = Array.isArray(req.body?.shareWith)
+      ? req.body.shareWith.map((item) => String(item).trim()).filter(Boolean)
+      : [];
+    const validRows = usernames.length
+      ? db
+          .prepare(
+            `SELECT id, username FROM users
+             WHERE LOWER(username) IN (${usernames.map(() => "LOWER(?)").join(",")})
+             ORDER BY username COLLATE NOCASE ASC`
+          )
+          .all(...usernames)
+      : [];
+    const shareWith = Array.from(new Set(validRows.map((user) => user.username)));
+    const nextShareWith = new Set(shareWith.map((item) => item.toLowerCase()));
+    const addedUsernames = Array.from(nextShareWith).filter(
+      (username) => !previousShareWith.has(username)
+    );
+    const addedRows = addedUsernames.length
+      ? validRows.filter((user) => addedUsernames.includes(String(user.username || "").toLowerCase()))
+      : [];
+    const removedUsernames = Array.from(previousShareWith).filter(
+      (username) => !nextShareWith.has(username)
+    );
+    const removedRows = removedUsernames.length
+      ? db
+          .prepare(
+            `SELECT id, username FROM users
+             WHERE LOWER(username) IN (${removedUsernames.map(() => "LOWER(?)").join(",")})`
+          )
+          .all(...removedUsernames)
+      : [];
+    const configValue = safeParseJSON(row.config_json, {});
+    const config =
+      configValue && typeof configValue === "object" && !Array.isArray(configValue)
+        ? configValue
+        : {};
+    config.shareWith = shareWith;
+    db.transaction(() => {
+      db.prepare(
+        `UPDATE tests
+         SET share_with_json = ?, config_json = ?, updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`
+      ).run(JSON.stringify(shareWith), JSON.stringify(config), testId);
+      const grantVisibility = db.prepare(
+        "DELETE FROM unlisted_tests WHERE userId = ? AND testId = ?"
+      );
+      validRows.forEach((user) => {
+        grantVisibility.run(user.id, testId);
+      });
+      const revokeAccess = db.prepare(
+        "DELETE FROM test_access WHERE userId = ? AND testId = ?"
+      );
+      const unstar = db.prepare(
+        "DELETE FROM starred_tests WHERE userId = ? AND testId = ?"
+      );
+      removedRows.forEach((user) => {
+        if (String(user.id) === String(creatorId)) return;
+        revokeAccess.run(user.id, testId);
+        unstar.run(user.id, testId);
+      });
+      const creator = db
+        .prepare("SELECT username FROM users WHERE id = ?")
+        .get(creatorId);
+      const titleRow = db
+        .prepare("SELECT title, name FROM tests WHERE id = ?")
+        .get(testId);
+      const testTitle = titleRow?.title || titleRow?.name || "a test";
+      addedRows.forEach((user) => {
+        if (String(user.id) === String(creatorId)) return;
+        createNotification({
+          userId: user.id,
+          title: "Test shared with you",
+          body: `${creator?.username || "A user"} shared **${testTitle}** with you.`,
+          meta: {
+            type: "test_shared",
+            testId,
+            testTitle,
+            sharedBy: creator?.username || "",
+          },
+        });
+      });
+      removedRows.forEach((user) => {
+        if (String(user.id) === String(creatorId)) return;
+        createNotification({
+          userId: user.id,
+          title: "Test sharing removed",
+          body: `${creator?.username || "A user"} removed your access to **${testTitle}**.`,
+          meta: {
+            type: "test_unshared",
+            testId,
+            testTitle,
+            unsharedBy: creator?.username || "",
+          },
+        });
+      });
+    })();
+    res.json({ success: true, shareWith });
+  } catch (e) {
+    console.error("update test sharing:", e);
+    res.status(500).json({ error: "Failed to update sharing" });
+  }
+});
+
+app.get("/api/tests/:testId/overview", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    if (!userCanAccessTest(req.userId, testId)) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    const test = db
+      .prepare(
+        `SELECT
+           t.id AS testId,
+           t.title,
+           t.description,
+           t.config_json,
+           t.reuse_policy_json,
+           t.share_with_json,
+           t.userId,
+           t.archived_at AS archivedAt,
+           u.username AS creator,
+           t.created_at AS createdAt,
+           t.total_questions AS totalQuestions,
+           t.max_score AS maxScore,
+           t.status
+         FROM tests t
+         LEFT JOIN users u ON u.id = t.userId
+         WHERE t.id = ?`
+      )
+      .get(testId);
+    const attempts = db
+      .prepare(
+        `SELECT
+           a.id AS attemptId,
+           a.testId,
+           a.userId,
+           COALESCE(u.username, '') AS username,
+           a.score,
+           a.max_score AS maxScore,
+           a.attempted_count AS attempted,
+           a.total_questions AS totalQuestions,
+           a.status,
+           a.state_json,
+           a.started_at AS startedAt,
+           a.submitted_at AS submittedAt
+         FROM test_attempts a
+         LEFT JOIN users u ON u.id = a.userId
+         WHERE a.testId = ?
+         ORDER BY datetime(COALESCE(a.submitted_at, a.started_at)) DESC, a.id DESC`
+      )
+      .all(testId);
+    const isCompletedAttempt = (attempt) =>
+      String(attempt.status || "").toLowerCase() === "submitted" || attempt.submittedAt;
+    const completedAttempts = attempts.filter(isCompletedAttempt);
+    const bestByUser = new Map();
+    completedAttempts.forEach((attempt) => {
+      const prev = bestByUser.get(attempt.userId);
+      const score = Number(attempt.score || 0);
+      const prevScore = Number(prev?.score || 0);
+      const newer =
+        String(attempt.submittedAt || "") > String(prev?.submittedAt || "");
+      if (!prev || score > prevScore || (score === prevScore && newer)) {
+        bestByUser.set(attempt.userId, attempt);
+      }
+    });
+    const leaderboard = Array.from(bestByUser.values())
+      .sort((a, b) => {
+        const byScore = Number(b.score || 0) - Number(a.score || 0);
+        if (byScore) return byScore;
+        return String(a.submittedAt || "").localeCompare(String(b.submittedAt || ""));
+      })
+      .map((attempt, index, arr) => {
+        const prev = arr[index - 1];
+        const rank =
+          prev && Number(prev.score || 0) === Number(attempt.score || 0)
+            ? prev.rank
+            : index + 1;
+        attempt.rank = rank;
+        return attempt;
+    });
+    const leaderboardWithoutUser = new Map();
+    completedAttempts.forEach((attempt) => {
+      const prev = leaderboardWithoutUser.get(attempt.userId);
+      const score = Number(attempt.score || 0);
+      const prevScore = Number(prev?.score || 0);
+      if (!prev || score > prevScore) leaderboardWithoutUser.set(attempt.userId, attempt);
+    });
+    const enrichedAttempts = attempts.map((attempt) => {
+      const meta = safeParseJSON(attempt.state_json, {});
+      const competitors = Array.from(leaderboardWithoutUser.values()).filter(
+        (row) => String(row.userId) !== String(attempt.userId)
+      );
+      const candidateRankList = competitors.concat([attempt]).sort((a, b) => {
+        const byScore = Number(b.score || 0) - Number(a.score || 0);
+        if (byScore) return byScore;
+        return String(a.submittedAt || "").localeCompare(String(b.submittedAt || ""));
+      });
+      let rankIfCounted = candidateRankList.length;
+      for (let i = 0; i < candidateRankList.length; i += 1) {
+        const prev = candidateRankList[i - 1];
+        const rank =
+          prev && Number(prev.score || 0) === Number(candidateRankList[i].score || 0)
+            ? prev.rankIfCounted
+            : i + 1;
+        candidateRankList[i].rankIfCounted = rank;
+        if (candidateRankList[i] === attempt) rankIfCounted = rank;
+      }
+      return {
+        ...attempt,
+        state_json: undefined,
+        rankIfCounted,
+        canDelete:
+          String(attempt.userId || "") === String(req.userId) ||
+          String(test?.userId || "") === String(req.userId),
+        canReview:
+          String(attempt.userId || "") === String(req.userId) ||
+          String(test?.userId || "") === String(req.userId),
+        positiveScore: Number(meta.positiveScore ?? meta.positiveMarks ?? attempt.score ?? 0),
+        negativeScore: Number(meta.negativeScore ?? meta.negativeMarks ?? 0),
+        partialScore: Number(meta.partialScore ?? meta.partialMarks ?? 0),
+        subjectBreakdown: Array.isArray(meta.subjectBreakdown)
+          ? meta.subjectBreakdown
+          : Array.isArray(meta.subjects)
+          ? meta.subjects
+          : [],
+      };
+    });
+    const currentUserAttempts = enrichedAttempts.filter(
+      (attempt) => String(attempt.userId || "") === String(req.userId)
+    );
+    const currentUserCompletedAttempts = currentUserAttempts.filter(isCompletedAttempt);
+    const currentUserBestScore = currentUserCompletedAttempts.length
+      ? Math.max(...currentUserCompletedAttempts.map((attempt) => Number(attempt.score || 0)))
+      : null;
+    res.json({
+      test,
+      config: safeParseJSON(test?.config_json, {}),
+      questionReusePolicy: safeParseJSON(test?.reuse_policy_json, {}),
+      shareWith: safeParseJSON(test?.share_with_json, []),
+      permissions: {
+        isCreator: String(test?.userId || "") === String(req.userId),
+        currentUserId: String(req.userId || ""),
+      },
+      latestAttempt: currentUserAttempts[0] || null,
+      attempts: currentUserAttempts.map((attempt) => ({
+        ...attempt,
+        isBestAttempt:
+          currentUserBestScore != null &&
+          isCompletedAttempt(attempt) &&
+          Number(attempt.score || 0) === currentUserBestScore,
+      })),
+      leaderboard,
+    });
+  } catch (e) {
+    console.error("test overview:", e);
+    res.status(500).json({ error: "Failed to load test overview" });
+  }
+});
+
+app.get("/api/tests/:testId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId) {
+      return res.status(400).json({ error: "Invalid testId" });
+    }
+    const row = db
+      .prepare(
+        `SELECT
+           t.id AS testId,
+           t.title,
+           t.description,
+           t.share_with_json,
+           t.config_json,
+           t.reuse_policy_json,
+           u.username AS creator,
+           t.created_at AS createdAt,
+           t.score,
+           t.max_score AS maxScore,
+           t.attempted_count AS attempted,
+           t.total_questions AS totalQuestions,
+           t.status
+         FROM tests t
+         LEFT JOIN users u ON u.id = t.userId
+         WHERE t.id = ?`
+      )
+      .get(testId);
+    if (!row || !userCanAccessTest(req.userId, testId)) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    const questions = db
+      .prepare(
+        `SELECT
+           order_index AS orderIndex,
+           section_id AS sectionId,
+           section_name AS sectionName,
+           question_type AS questionType,
+           subject_key AS subjectKey,
+           subject_name AS subjectName,
+           kind,
+           source_id AS sourceId,
+           assignmentId,
+           examId,
+           subjectId,
+           chapterId,
+           questionIndex,
+           question_key AS questionKey,
+           positive_marks AS positiveMarks,
+           negative_marks AS negativeMarks,
+           payload_json
+         FROM test_questions
+         WHERE testId = ?
+         ORDER BY order_index ASC`
+      )
+      .all(testId)
+      .map((question) => ({
+        ...question,
+        payload: safeParseJSON(question.payload_json, {}),
+        payload_json: undefined,
+      }));
+    res.json({
+      testId: row.testId,
+      title: row.title,
+      description: row.description || "",
+      creator: row.creator || "",
+      createdAt: row.createdAt,
+      score: row.score,
+      maxScore: row.maxScore,
+      attempted: row.attempted,
+      totalQuestions: row.totalQuestions,
+      status: row.status,
+      shareWith: safeParseJSON(row.share_with_json, []),
+      config: safeParseJSON(row.config_json, {}),
+      questionReusePolicy: safeParseJSON(row.reuse_policy_json, {}),
+      questionKeys: questions.map((question) => question.questionKey),
+      questions,
+    });
+  } catch (e) {
+    console.error("get test:", e);
+    res.status(500).json({ error: "Failed to load test" });
+  }
+});
+
+app.post("/api/tests/:testId/attempts", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    if (!testId || !userCanAccessTest(req.userId, testId)) {
+      return res.status(404).json({ error: "Test not found" });
+    }
+    const active = db
+      .prepare(
+        `SELECT id FROM test_attempts
+         WHERE testId = ? AND userId = ? AND status = 'paused'
+         ORDER BY datetime(started_at) DESC, id DESC LIMIT 1`
+      )
+      .get(testId, req.userId);
+    const attemptId = active?.id || createTestAttempt(req.userId, testId);
+    res.status(active ? 200 : 201).json(buildTestAttemptPayload(req.userId, testId, attemptId, "take"));
+  } catch (e) {
+    console.error("start test attempt:", e);
+    res.status(500).json({ error: "Failed to start test attempt" });
+  }
+});
+
+app.get("/api/tests/:testId/attempts/:attemptId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    const attemptId = normalizeTestId(req.params.attemptId);
+    const payload = buildTestAttemptPayload(req.userId, testId, attemptId, "take");
+    if (!payload) return res.status(404).json({ error: "Attempt not found" });
+    res.json(payload);
+  } catch (e) {
+    console.error("get test attempt:", e);
+    res.status(500).json({ error: "Failed to load test attempt" });
+  }
+});
+
+app.get("/api/tests/:testId/attempts/:attemptId/review", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    const attemptId = normalizeTestId(req.params.attemptId);
+    const payload = buildTestAttemptPayload(req.userId, testId, attemptId, "review");
+    if (!payload) return res.status(404).json({ error: "Attempt not found" });
+    res.json(payload);
+  } catch (e) {
+    console.error("review test attempt:", e);
+    res.status(500).json({ error: "Failed to load test review" });
+  }
+});
+
+app.delete("/api/tests/:testId/attempts/:attemptId", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    const attemptId = normalizeTestId(req.params.attemptId);
+    if (!testId || !attemptId || !userCanAccessTest(req.userId, testId)) {
+      return res.status(404).json({ error: "Attempt not found" });
+    }
+    const test = db.prepare("SELECT userId FROM tests WHERE id = ?").get(testId);
+    const attempt = db
+      .prepare("SELECT * FROM test_attempts WHERE id = ? AND testId = ?")
+      .get(attemptId, testId);
+    if (!test || !attempt) return res.status(404).json({ error: "Attempt not found" });
+    const canDelete =
+      String(attempt.userId || "") === String(req.userId) ||
+      String(test.userId || "") === String(req.userId);
+    if (!canDelete) {
+      return res.status(403).json({ error: "You can only delete your own attempts" });
+    }
+    db.prepare("DELETE FROM test_attempts WHERE id = ? AND testId = ?").run(attemptId, testId);
+    refreshTestSummaryFromAttempts(testId);
+    res.json({ success: true });
+  } catch (e) {
+    console.error("delete test attempt:", e);
+    res.status(500).json({ error: "Failed to delete attempt" });
+  }
+});
+
+app.post("/api/tests/:testId/attempts/:attemptId/save", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    const attemptId = normalizeTestId(req.params.attemptId);
+    const row = getOwnedAttempt(req.userId, testId, attemptId);
+    if (!row) return res.status(404).json({ error: "Attempt not found" });
+    if (row.status === "submitted") return res.json({ success: true, submitted: true });
+    const state = Array.isArray(req.body?.state) ? req.body.state : [];
+    const meta = safeParseJSON(row.state_json, {});
+    meta.state = state;
+    meta.elapsedSeconds = Math.max(0, Number(req.body?.elapsedSeconds || meta.elapsedSeconds || 0));
+    meta.remainingSeconds =
+      req.body?.remainingSeconds == null
+        ? meta.remainingSeconds
+        : Math.max(0, Number(req.body.remainingSeconds || 0));
+    meta.subjectProgress = buildSubjectProgress(safeParseJSON(row.questions_json, []), state);
+    meta.subjectBreakdown = meta.subjectProgress;
+    const attempted = countAttemptedTestAnswers(state);
+    updateTestAttemptRow(attemptId, {
+      state_json: JSON.stringify(meta),
+      status: "paused",
+      attempted_count: attempted,
+      total_questions: safeParseJSON(row.questions_json, []).length,
+      submitted_at: null,
+    });
+    updateTestSummary(testId, { status: "paused", attempted, totalQuestions: safeParseJSON(row.questions_json, []).length });
+    res.json({ success: true });
+  } catch (e) {
+    console.error("save test attempt:", e);
+    res.status(500).json({ error: "Failed to save attempt" });
+  }
+});
+
+app.post("/api/tests/:testId/attempts/:attemptId/submit", (req, res) => {
+  try {
+    const testId = normalizeTestId(req.params.testId);
+    const attemptId = normalizeTestId(req.params.attemptId);
+    const row = getOwnedAttempt(req.userId, testId, attemptId);
+    if (!row) return res.status(404).json({ error: "Attempt not found" });
+    const questions = safeParseJSON(row.questions_json, []);
+    const state = Array.isArray(req.body?.state)
+      ? req.body.state
+      : safeParseJSON(row.state_json, {}).state || [];
+    const result = scoreTestAttempt(questions, state);
+    const meta = {
+      ...safeParseJSON(row.state_json, {}),
+      state,
+      elapsedSeconds: Math.max(0, Number(req.body?.elapsedSeconds || 0)),
+      remainingSeconds:
+        req.body?.remainingSeconds == null ? undefined : Math.max(0, Number(req.body.remainingSeconds || 0)),
+      ...result.meta,
+    };
+    updateTestAttemptRow(attemptId, {
+      state_json: JSON.stringify(meta),
+      status: "submitted",
+      score: result.score,
+      max_score: result.maxScore,
+      maxScore: result.maxScore,
+      attempted_count: result.attempted,
+      total_questions: questions.length,
+      submitted_at: "CURRENT_TIMESTAMP",
+    });
+    updateTestSummary(testId, {
+      status: "attempted",
+      score: result.score,
+      maxScore: result.maxScore,
+      attempted: result.attempted,
+      totalQuestions: questions.length,
+    });
+    res.json({ success: true, attemptId, score: result.score, maxScore: result.maxScore });
+  } catch (e) {
+    console.error("submit test attempt:", e);
+    res.status(500).json({ error: "Failed to submit attempt" });
+  }
+});
+
 // Report a question (assignment or PYQs)
 app.post("/api/report", async (req, res) => {
   try {
@@ -3756,6 +4945,938 @@ function getAssignmentQuestionsList(assignment) {
   if (assignment && Array.isArray(assignment.questions)) return assignment.questions;
   if (assignment && Array.isArray(assignment.data)) return assignment.data;
   return [];
+}
+
+async function generateTestQuestions(req, draft) {
+  const blueprint = normalizeTestBlueprintForGeneration(draft.testBlueprint);
+  const sourceSelections =
+    draft.sourceSelections && typeof draft.sourceSelections === "object"
+      ? draft.sourceSelections
+      : {};
+  const selected = Object.entries(sourceSelections)
+    .filter(([, state]) => state?.selected && !state?.filters?.matchNone)
+    .map(([sourceId, state]) => ({
+      sourceId: String(sourceId),
+      filters: state?.filters || {},
+    }));
+  if (!selected.length) {
+    const err = new Error("Select at least one question source");
+    err.status = 400;
+    throw err;
+  }
+
+  const reuseFilter = buildBackendReuseFilter(
+    req.userId,
+    normalizeTestReusePolicy(draft.questionReusePolicy)
+  );
+  const subjects = new Map();
+  for (const selection of selected) {
+    const candidates = await loadTestSourceCandidates(req, selection, reuseFilter);
+    for (const candidate of candidates) {
+      const subjectKey = normalizeTestSubjectName(candidate.subjectName);
+      if (!subjects.has(subjectKey)) {
+        subjects.set(subjectKey, {
+          key: subjectKey,
+          name: candidate.subjectName || "Unknown Subject",
+          candidates: [],
+        });
+      }
+      subjects.get(subjectKey).candidates.push(candidate);
+    }
+  }
+
+  const output = [];
+  const byType = new Map();
+  for (const subject of subjects.values()) {
+    const typeMap = new Map();
+    subject.candidates.forEach((candidate) => {
+      if (!typeMap.has(candidate.questionType)) typeMap.set(candidate.questionType, []);
+      typeMap.get(candidate.questionType).push(candidate);
+    });
+    byType.set(subject.key, typeMap);
+  }
+
+  for (const section of blueprint.sections) {
+    for (const subject of subjects.values()) {
+      const pool = byType.get(subject.key)?.get(section.type) || [];
+      const picked = shuffleForTest(pool).slice(0, section.questionCount);
+      picked.forEach((candidate) => {
+        output.push({
+          ...candidate,
+          sectionId: section.id,
+          sectionName: section.name,
+          positiveMarks: section.positiveMarks,
+          negativeMarks: section.negativeMarks,
+        });
+      });
+    }
+  }
+
+  return {
+    questions: output,
+    summary: {
+      subjects: Array.from(subjects.values()).map((subject) => ({
+        key: subject.key,
+        name: subject.name,
+        totalCandidates: subject.candidates.length,
+      })),
+      generatedQuestions: output.length,
+    },
+  };
+}
+
+function normalizeTestBlueprintForGeneration(value) {
+  const sections = Array.isArray(value?.sections) ? value.sections : [];
+  return {
+    sections: sections
+      .map((section, index) => ({
+        id: String(section?.id || `section_${index + 1}`),
+        name: String(section?.name || `Section ${index + 1}`),
+        type: normalizeGeneratedQuestionType(section?.type),
+        questionCount: Math.max(0, Math.floor(Number(section?.questionCount) || 0)),
+        positiveMarks: Number(section?.positiveMarks ?? 4) || 0,
+        negativeMarks: Number(section?.negativeMarks ?? 0) || 0,
+      }))
+      .filter((section) => section.questionCount > 0 && section.type),
+  };
+}
+
+async function loadTestSourceCandidates(req, selection, reuseFilter) {
+  if (selection.sourceId.includes("::")) {
+    return loadPyqTestCandidates(req, selection, reuseFilter);
+  }
+  return loadAssignmentTestCandidates(req, selection, reuseFilter);
+}
+
+async function loadAssignmentTestCandidates(req, selection, reuseFilter) {
+  const assignmentId = Number(selection.sourceId);
+  if (!Number.isFinite(assignmentId)) return [];
+  const assignment = await loadAssignment(assignmentId);
+  const questions = getAssignmentQuestionsList(assignment);
+  const meta =
+    db
+      .prepare(
+        `SELECT COALESCE(subject, '(No subject)') AS subject,
+                COALESCE(title, 'Assignment ' || id) AS title
+           FROM assignments WHERE id = ?`
+      )
+      .get(assignmentId) || {};
+  const bookmarks = db
+    .prepare(
+      "SELECT questionIndex, tagId FROM bookmarks WHERE userId = ? AND assignmentId = ?"
+    )
+    .all(req.userId, assignmentId);
+  const marks = db
+    .prepare(
+      "SELECT questionIndex, color FROM question_marks WHERE userId = ? AND assignmentId = ?"
+    )
+    .all(req.userId, assignmentId);
+
+  return questions
+    .map((question, index) =>
+      buildTestCandidate({
+        kind: "assignment",
+        sourceId: String(assignmentId),
+        subjectName: meta.subject || "Unknown Subject",
+        sourceTitle: meta.title || `Assignment ${assignmentId}`,
+        question,
+        index,
+        assignmentId,
+      })
+    )
+    .filter(
+      (candidate) =>
+        candidate &&
+        !reuseFilter.blockedKeys.has(candidate.questionKey) &&
+        testCandidateMatchesFilters(candidate, selection.filters, {
+          kind: "assignment",
+          bookmarks,
+          marks,
+        })
+    );
+}
+
+async function loadPyqTestCandidates(req, selection, reuseFilter) {
+  const [examId, subjectId, chapterId] = selection.sourceId.split("::");
+  if (!examId || !subjectId || !chapterId) return [];
+  const questions = await loadPyqQuestionListForTest(req, examId, subjectId, chapterId);
+  const subjectName = await getPyqSubjectNameForTest(req, examId, subjectId);
+  const bookmarks = db
+    .prepare(
+      "SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+    )
+    .all(req.userId, String(examId), String(subjectId), String(chapterId));
+  const marks = db
+    .prepare(
+      "SELECT questionIndex, color FROM pyqs_question_marks WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+    )
+    .all(req.userId, String(examId), String(subjectId), String(chapterId));
+  const stateRow = db
+    .prepare(
+      "SELECT state FROM pyqs_states WHERE userId = ? AND examId = ? AND subjectId = ? AND chapterId = ?"
+    )
+    .get(req.userId, String(examId), String(subjectId), String(chapterId));
+  const state = stateRow ? safeParseJSON(stateRow.state, []) : [];
+
+  return questions
+    .map((question, index) =>
+      buildTestCandidate({
+        kind: "pyq",
+        sourceId: selection.sourceId,
+        subjectName,
+        sourceTitle: `PYQ ${chapterId}`,
+        question,
+        index,
+        examId,
+        subjectId,
+        chapterId,
+      })
+    )
+    .filter(
+      (candidate) =>
+        candidate &&
+        !reuseFilter.blockedKeys.has(candidate.questionKey) &&
+        testCandidateMatchesFilters(candidate, selection.filters, {
+          kind: "pyq",
+          bookmarks,
+          marks,
+          state,
+        })
+    );
+}
+
+async function loadPyqQuestionListForTest(req, examId, subjectId, chapterId) {
+  if (USE_LOCAL_PYQS) {
+    const rows = pyqsDb
+      .prepare(
+        "SELECT data_json FROM questions WHERE examId = ? AND subjectId = ? AND chapterId = ? ORDER BY idx ASC"
+      )
+      .all(String(examId), String(subjectId), String(chapterId));
+    return rows.map((r) => absolutizeQuestion(safeParseJSON(r.data_json, {}), req));
+  }
+  const data = await gmFetch(req, GM_BASE.questions(examId, subjectId, chapterId), {
+    limit: 10000,
+    hideOutOfSyllabus: "false",
+  });
+  return (data?.data?.questions || []).map((q) => ({
+    type: q?.type,
+    diffuculty: q?.level,
+    pyqInfo:
+      (Array.isArray(q?.previousYearPapers) && q.previousYearPapers[0]?.title) ||
+      "",
+    qText: replaceMathMLWithLatex(q?.question?.text || ""),
+    qImage: q?.question?.image || "",
+    options: (Array.isArray(q?.options) ? q.options : []).map((o) => ({
+      oText: replaceMathMLWithLatex(o?.text || ""),
+      oImage: o?.image || "",
+    })),
+    correctAnswer:
+      q?.type === "numerical"
+        ? q?.correctValue
+        : (Array.isArray(q?.options) ? q.options : []).reduce((acc, o, i) => {
+            if (o?.isCorrect) acc.push(["A", "B", "C", "D"][i] || String(i + 1));
+            return acc;
+          }, []),
+    solution: {
+      sText: replaceMathMLWithLatex(q?.solution?.text || ""),
+      sImage: q?.solution?.image || "",
+    },
+  }));
+}
+
+async function getPyqSubjectNameForTest(req, examId, subjectId) {
+  if (USE_LOCAL_PYQS) {
+    const row = pyqsDb
+      .prepare("SELECT name FROM subjects WHERE examId = ? AND id = ?")
+      .get(String(examId), String(subjectId));
+    if (row?.name) return String(row.name);
+  }
+  try {
+    const data = await gmFetch(req, GM_BASE.exam_subjects(examId), { limit: 10000 });
+    const subjects = data?.data?.subjects?.data || data?.data?.subjects || [];
+    const found = subjects.find(
+      (subject) => String(subject?._id || subject?.id) === String(subjectId)
+    );
+    return String(found?.title || found?.name || subjectId);
+  } catch {
+    return String(subjectId);
+  }
+}
+
+function buildTestCandidate({
+  kind,
+  sourceId,
+  subjectName,
+  sourceTitle,
+  question,
+  index,
+  assignmentId = null,
+  examId = null,
+  subjectId = null,
+  chapterId = null,
+}) {
+  const questionType = normalizeGeneratedQuestionType(question?.qType || question?.type);
+  if (!questionType) return null;
+  const questionKey = buildGeneratedQuestionKey({
+    kind,
+    sourceId,
+    question,
+    index,
+  });
+  return {
+    kind,
+    sourceId,
+    subjectKey: normalizeTestSubjectName(subjectName),
+    subjectName,
+    sourceTitle,
+    assignmentId,
+    examId: examId == null ? null : String(examId),
+    subjectId: subjectId == null ? null : String(subjectId),
+    chapterId: chapterId == null ? null : String(chapterId),
+    questionIndex: index,
+    questionKey,
+    questionType,
+    positiveMarks: 0,
+    negativeMarks: 0,
+    payload: question,
+  };
+}
+
+function buildGeneratedQuestionKey({ kind, sourceId, question, index }) {
+  const explicit =
+    question?.questionKey ||
+    question?.key ||
+    question?.sourceQuestionKey ||
+    question?.generatedQuestionKey;
+  if (explicit) return String(explicit);
+  const questionId = question?.questionId ?? question?.qid ?? question?.id ?? question?._id;
+  if (questionId != null) return `${kind}:${sourceId}:${questionId}`;
+  return `${kind}:${sourceId}:${index}`;
+}
+
+function testCandidateMatchesFilters(candidate, filters, context) {
+  if (!filters || filters.matchNone) return !filters?.matchNone;
+  const bookmarkTags = new Set((filters.bookmarkTagIds || []).map(String));
+  const bookmarksByIndex = groupTestBookmarksByQuestionIndex(context.bookmarks || []);
+  if (bookmarkTags.size) {
+    const tags = bookmarksByIndex.get(candidate.questionIndex) || new Set();
+    if (!Array.from(bookmarkTags).some((tagId) => tags.has(tagId))) return false;
+  }
+  const colors = new Set((filters.colors || []).map((c) => String(c).toLowerCase()));
+  if (colors.size) {
+    const mark = (context.marks || []).find(
+      (row) => Number(row.questionIndex) === candidate.questionIndex
+    );
+    const color = String(mark?.color || "none").toLowerCase();
+    if (!colors.has(color)) return false;
+  }
+  if (context.kind === "assignment") {
+    return true;
+  }
+
+  const question = candidate.payload || {};
+  const qSearchTerms = String(filters.q || "")
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (
+    qSearchTerms.length &&
+    !qSearchTerms.every((term) =>
+      String(question.qText || "").toLowerCase().includes(term)
+    )
+  ) {
+    return false;
+  }
+  const years = new Set((filters.years || []).map(Number));
+  if (years.size) {
+    const m = String(question.pyqInfo || "").match(/(19|20)\d{2}/);
+    const year = m ? Number(m[0]) : null;
+    if (!years.has(year)) return false;
+  }
+  const diffs = new Set((filters.diff || []).map(String));
+  if (diffs.size && !diffs.has(normalizeTestDiff(question.diffuculty))) {
+    return false;
+  }
+  const statuses = new Set((filters.status || []).map(String));
+  if (statuses.size) {
+    const status = getTestPyqStatus(context.state?.[candidate.questionIndex]);
+    const completed =
+      status === "correct" || status === "partial" || status === "incorrect";
+    if (!statuses.has(status) && !(statuses.has("completed") && completed)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function buildBackendReuseFilter(userId, policy) {
+  const selectedIds = new Set((policy.testIds || []).map(String));
+  const rows = db
+    .prepare(
+      `SELECT tq.testId, tq.question_key
+         FROM test_questions tq
+         JOIN tests t ON t.id = tq.testId
+        WHERE t.userId = ?`
+    )
+    .all(userId);
+  const allKeys = new Set();
+  const selectedKeys = new Set();
+  rows.forEach((row) => {
+    allKeys.add(String(row.question_key));
+    if (selectedIds.has(String(row.testId))) selectedKeys.add(String(row.question_key));
+  });
+  if (policy.mode === "whitelist") {
+    return {
+      blockedKeys: new Set(
+        Array.from(allKeys).filter((key) => !selectedKeys.has(key))
+      ),
+    };
+  }
+  return { blockedKeys: selectedKeys };
+}
+
+function normalizeTestReusePolicy(value) {
+  const mode = value?.mode === "whitelist" ? "whitelist" : "blacklist";
+  const testIds = Array.isArray(value?.testIds)
+    ? value.testIds.map((id) => String(id).trim()).filter(Boolean)
+    : [];
+  return { mode, testIds };
+}
+
+function insertGeneratedTestQuestion(testId, question, index) {
+  const columns = [];
+  const values = [];
+  const addValue = (column, value) => {
+    if (!TEST_QUESTIONS_COLUMNS.has(column)) return;
+    columns.push(column);
+    values.push(value);
+  };
+  const isPyq = question.kind === "pyq";
+  const sourceParts = String(question.sourceId || "").split("::");
+  const examId = String(question.examId ?? (isPyq ? sourceParts[0] : "assignment"));
+  const subjectId = String(question.subjectId ?? (isPyq ? sourceParts[1] : question.subjectKey || "assignment"));
+  const chapterId = String(question.chapterId ?? (isPyq ? sourceParts[2] : question.assignmentId ?? question.sourceId ?? ""));
+  if (TEST_QUESTIONS_USE_TEXT_IDS) addValue("id", nanoid());
+  addValue("test_id", testId);
+  addValue("testId", testId);
+  addValue("order_index", index);
+  addValue("section_id", question.sectionId);
+  addValue("section_name", question.sectionName);
+  addValue("question_type", question.questionType);
+  addValue("q_type", question.questionType);
+  addValue("subject_key", question.subjectKey);
+  addValue("subject_name", question.subjectName);
+  addValue("kind", question.kind);
+  addValue("source_id", question.sourceId);
+  addValue("assignmentId", question.assignmentId);
+  addValue("exam_id", examId);
+  addValue("examId", question.examId);
+  addValue("subject_id", subjectId);
+  addValue("subjectId", question.subjectId);
+  addValue("chapter_id", chapterId);
+  addValue("chapterId", question.chapterId);
+  addValue("question_index", question.questionIndex);
+  addValue("questionIndex", question.questionIndex);
+  addValue("question_key", question.questionKey);
+  addValue("positive_marks", question.positiveMarks);
+  addValue("negative_marks", question.negativeMarks);
+  addValue("payload_json", JSON.stringify(question.payload || {}));
+  addValue("tags_json", "[]");
+  const placeholders = columns.map(() => "?").join(", ");
+  db.prepare(
+    `INSERT INTO test_questions (${columns.join(", ")}) VALUES (${placeholders})`
+  ).run(...values);
+}
+
+function normalizeGeneratedQuestionType(value) {
+  const raw = String(value || "").toLowerCase();
+  if (raw.includes("passage")) return "";
+  if (raw.includes("num")) return "numerical";
+  if (raw.includes("multi") || raw.includes("mmcq")) return "multiple";
+  if (raw.includes("single") || raw.includes("smcq") || raw.includes("mcq")) {
+    return "single";
+  }
+  return "single";
+}
+
+function normalizeTestSubjectName(value) {
+  return String(value || "Unknown Subject")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
+
+function groupTestBookmarksByQuestionIndex(bookmarks) {
+  const grouped = new Map();
+  (bookmarks || []).forEach((bookmark) => {
+    const index = Number(bookmark.questionIndex);
+    if (!grouped.has(index)) grouped.set(index, new Set());
+    grouped.get(index).add(String(bookmark.tagId));
+  });
+  return grouped;
+}
+
+function normalizeTestDiff(value) {
+  const raw = String(value || "").toLowerCase();
+  if (raw === "1" || raw.includes("easy")) return "easy";
+  if (raw === "2" || raw.includes("moderate") || raw.includes("medium")) {
+    return "medium";
+  }
+  if (raw === "3" || raw.includes("hard")) return "hard";
+  return raw;
+}
+
+function getTestPyqStatus(questionState) {
+  if (!questionState || typeof questionState !== "object") return "not-started";
+  const hasAnswer =
+    questionState.pickedAnswer ||
+    (Array.isArray(questionState.pickedAnswers) && questionState.pickedAnswers.length) ||
+    questionState.pickedNumerical !== undefined;
+  if (!questionState.evaluated) return hasAnswer ? "in-progress" : "not-started";
+  if (questionState.correct) return "correct";
+  if (questionState.partial) return "partial";
+  return "incorrect";
+}
+
+function shuffleForTest(items) {
+  const arr = Array.isArray(items) ? items.slice() : [];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = crypto.randomInt(0, i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function normalizeTestId(value) {
+  return String(value ?? "").trim();
+}
+
+function getTestQuestionRows(testId) {
+  const hasSnakeTestId = TEST_QUESTIONS_COLUMNS.has("test_id");
+  const hasCamelTestId = TEST_QUESTIONS_COLUMNS.has("testId");
+  const where = hasSnakeTestId && hasCamelTestId
+    ? "WHERE testId = ? OR test_id = ?"
+    : hasSnakeTestId
+    ? "WHERE test_id = ?"
+    : "WHERE testId = ?";
+  const args = hasSnakeTestId && hasCamelTestId ? [testId, testId] : [testId];
+  return db
+    .prepare(
+      `SELECT
+         order_index AS orderIndex,
+         section_id AS sectionId,
+         section_name AS sectionName,
+         question_type AS questionType,
+         subject_key AS subjectKey,
+         subject_name AS subjectName,
+         kind,
+         source_id AS sourceId,
+         assignmentId,
+         exam_id AS exam_id,
+         examId,
+         subject_id AS subject_id,
+         subjectId,
+         chapter_id AS chapter_id,
+         chapterId,
+         question_index AS question_index,
+         questionIndex,
+         question_key AS questionKey,
+         positive_marks AS positiveMarks,
+         negative_marks AS negativeMarks,
+         payload_json
+       FROM test_questions
+       ${where}
+       ORDER BY order_index ASC`
+    )
+    .all(...args)
+    .map((row, index) => {
+      const payload = safeParseJSON(row.payload_json, {});
+      const examId = row.examId ?? row.exam_id ?? null;
+      const subjectId = row.subjectId ?? row.subject_id ?? null;
+      const chapterId = row.chapterId ?? row.chapter_id ?? null;
+      const questionIndex = Number(row.questionIndex ?? row.question_index ?? index);
+      return {
+        ...row,
+        orderIndex: Number(row.orderIndex ?? index),
+        examId: examId == null ? null : String(examId),
+        subjectId: subjectId == null ? null : String(subjectId),
+        chapterId: chapterId == null ? null : String(chapterId),
+        questionIndex,
+        payload,
+        payload_json: undefined,
+      };
+    });
+}
+
+function createTestAttempt(userId, testId) {
+  const test = db
+    .prepare("SELECT time_limit_sec, config_json FROM tests WHERE id = ?")
+    .get(testId);
+  const questions = getTestQuestionRows(testId);
+  const timeLimitSec = Number(test?.time_limit_sec || 0) || Number(safeParseJSON(test?.config_json, {})?.testBlueprint?.timeLimitSeconds || 0) || null;
+  const state = questions.map(() => defaultTestAttemptState());
+  const meta = {
+    state,
+    elapsedSeconds: 0,
+    remainingSeconds: timeLimitSec || null,
+    subjectProgress: buildSubjectProgress(questions, state),
+  };
+  const columns = [];
+  const values = [];
+  const add = (column, value) => {
+    if (!TEST_ATTEMPTS_COLUMNS.has(column)) return;
+    columns.push(column);
+    values.push(value);
+  };
+  const attemptId = TEST_ATTEMPTS_USE_TEXT_IDS ? nanoid() : "";
+  if (TEST_ATTEMPTS_USE_TEXT_IDS) add("id", attemptId);
+  add("testId", testId);
+  add("userId", userId);
+  add("questions_json", JSON.stringify(questions));
+  add("state_json", JSON.stringify(meta));
+  add("time_limit_sec", timeLimitSec);
+  add("score", 0);
+  add("maxScore", questions.reduce((sum, q) => sum + Number(q.positiveMarks || 0), 0));
+  add("max_score", questions.reduce((sum, q) => sum + Number(q.positiveMarks || 0), 0));
+  add("attempted_count", 0);
+  add("total_questions", questions.length);
+  add("status", "paused");
+  const info = db
+    .prepare(`INSERT INTO test_attempts (${columns.join(", ")}) VALUES (${columns.map(() => "?").join(", ")})`)
+    .run(...values);
+  return TEST_ATTEMPTS_USE_TEXT_IDS ? attemptId : String(info.lastInsertRowid);
+}
+
+function getOwnedAttempt(userId, testId, attemptId) {
+  return db
+    .prepare("SELECT * FROM test_attempts WHERE id = ? AND testId = ? AND userId = ?")
+    .get(attemptId, testId, userId);
+}
+
+function getReviewableAttempt(userId, testId, attemptId) {
+  const test = db.prepare("SELECT userId FROM tests WHERE id = ?").get(testId);
+  const attempt = db
+    .prepare("SELECT * FROM test_attempts WHERE id = ? AND testId = ?")
+    .get(attemptId, testId);
+  if (!test || !attempt) return null;
+  const canReview =
+    String(attempt.userId || "") === String(userId) ||
+    String(test.userId || "") === String(userId);
+  return canReview ? attempt : null;
+}
+
+function buildTestAttemptPayload(userId, testId, attemptId, mode) {
+  if (!testId || !attemptId || !userCanAccessTest(userId, testId)) return null;
+  const test = db
+    .prepare("SELECT id AS testId, title, name, time_limit_sec, config_json FROM tests WHERE id = ?")
+    .get(testId);
+  const attempt =
+    mode === "review"
+      ? getReviewableAttempt(userId, testId, attemptId)
+      : getOwnedAttempt(userId, testId, attemptId);
+  if (!test || !attempt) return null;
+  if (
+    mode === "take" &&
+    ["submitted", "completed", "attempted", "finished"].includes(String(attempt.status || "").toLowerCase())
+  ) {
+    return null;
+  }
+  const meta = safeParseJSON(attempt.state_json, {});
+  const questions = safeParseJSON(attempt.questions_json, getTestQuestionRows(testId));
+  return {
+    test: {
+      testId,
+      title: test.title || test.name || "Test",
+      timeLimitSeconds: Number(attempt.time_limit_sec || test.time_limit_sec || 0),
+    },
+    attempt: {
+      attemptId,
+      status: attempt.status,
+      score: attempt.score,
+      maxScore: attempt.max_score ?? attempt.maxScore,
+      startedAt: attempt.started_at,
+      submittedAt: attempt.submitted_at,
+      elapsedSeconds: Number(meta.elapsedSeconds || 0),
+      remainingSeconds: meta.remainingSeconds ?? null,
+      state: Array.isArray(meta.state) ? meta.state : [],
+      subjectProgress: meta.subjectProgress || [],
+      result: meta,
+    },
+    questions,
+  };
+}
+
+function defaultTestAttemptState() {
+  return {
+    isAnswerPicked: false,
+    pickedAnswers: [],
+    pickedAnswer: "",
+    pickedNumerical: undefined,
+  };
+}
+
+function updateTestAttemptRow(attemptId, values) {
+  const parts = [];
+  const args = [];
+  Object.entries(values || {}).forEach(([column, value]) => {
+    if (value === undefined) return;
+    if (!TEST_ATTEMPTS_COLUMNS.has(column)) return;
+    if (value === "CURRENT_TIMESTAMP" || value === null && column === "submitted_at") {
+      parts.push(`${column} = ${value === "CURRENT_TIMESTAMP" ? "CURRENT_TIMESTAMP" : "NULL"}`);
+    } else {
+      parts.push(`${column} = ?`);
+      args.push(value);
+    }
+  });
+  if (!parts.length) return;
+  args.push(attemptId);
+  db.prepare(`UPDATE test_attempts SET ${parts.join(", ")} WHERE id = ?`).run(...args);
+}
+
+function updateTestSummary(testId, values) {
+  const parts = [];
+  const args = [];
+  const add = (column, value) => {
+    if (value === undefined) return;
+    if (!TESTS_COLUMNS.has(column)) return;
+    parts.push(`${column} = ?`);
+    args.push(value);
+  };
+  add("status", values.status);
+  add("score", values.score);
+  add("max_score", values.maxScore);
+  add("attempted_count", values.attempted);
+  add("total_questions", values.totalQuestions);
+  if (TESTS_COLUMNS.has("updated_at")) parts.push("updated_at = CURRENT_TIMESTAMP");
+  if (!parts.length) return;
+  args.push(testId);
+  db.prepare(`UPDATE tests SET ${parts.join(", ")} WHERE id = ?`).run(...args);
+}
+
+function refreshTestSummaryFromAttempts(testId) {
+  const attempts = db
+    .prepare(
+      `SELECT status, score, max_score AS maxScore, attempted_count AS attempted, total_questions AS totalQuestions,
+              submitted_at AS submittedAt, started_at AS startedAt
+       FROM test_attempts
+       WHERE testId = ?
+       ORDER BY datetime(COALESCE(submitted_at, started_at)) DESC, id DESC`
+    )
+    .all(testId);
+  if (!attempts.length) {
+    const questions = getTestQuestionRows(testId);
+    updateTestSummary(testId, {
+      status: "unattempted",
+      score: 0,
+      maxScore: questions.reduce((sum, question) => sum + Number(question.positiveMarks || 0), 0),
+      attempted: 0,
+      totalQuestions: questions.length,
+    });
+    return;
+  }
+  const latest = attempts[0];
+  const submitted = attempts.filter((attempt) =>
+    String(attempt.status || "").toLowerCase() === "submitted" || attempt.submittedAt
+  );
+  const best = submitted.reduce((winner, attempt) => {
+    if (!winner) return attempt;
+    return Number(attempt.score || 0) > Number(winner.score || 0) ? attempt : winner;
+  }, null);
+  updateTestSummary(testId, {
+    status: best ? "attempted" : String(latest.status || "paused"),
+    score: Number((best || latest).score || 0),
+    maxScore: Number((best || latest).maxScore || 0),
+    attempted: Number(latest.attempted || 0),
+    totalQuestions: Number(latest.totalQuestions || getTestQuestionRows(testId).length),
+  });
+}
+
+function countAttemptedTestAnswers(state) {
+  return (Array.isArray(state) ? state : []).filter((s) => hasTestAnswer(s)).length;
+}
+
+function hasTestAnswer(s) {
+  return !!(
+    s &&
+    (s.pickedAnswer ||
+      (Array.isArray(s.pickedAnswers) && s.pickedAnswers.length) ||
+      s.pickedNumerical !== undefined && s.pickedNumerical !== null && s.pickedNumerical !== "")
+  );
+}
+
+function buildSubjectProgress(questions, state) {
+  const bySubject = new Map();
+  (questions || []).forEach((q, index) => {
+    const key = q.subjectKey || q.subjectName || "Unknown";
+    if (!bySubject.has(key)) {
+      bySubject.set(key, { key, name: q.subjectName || "Unknown", attempted: 0, totalQuestions: 0 });
+    }
+    const row = bySubject.get(key);
+    row.totalQuestions += 1;
+    if (hasTestAnswer(state?.[index])) row.attempted += 1;
+  });
+  return Array.from(bySubject.values());
+}
+
+function scoreTestAttempt(questions, state) {
+  let score = 0;
+  let maxScore = 0;
+  let attempted = 0;
+  let positiveScore = 0;
+  let negativeScore = 0;
+  let partialScore = 0;
+  const subjectMap = new Map();
+  const rows = (questions || []).map((q, index) => {
+    const st = state?.[index] || {};
+    const max = Number(q.positiveMarks || 0);
+    maxScore += max;
+    const subjectKey = q.subjectKey || q.subjectName || "Unknown";
+    if (!subjectMap.has(subjectKey)) {
+      subjectMap.set(subjectKey, {
+        key: subjectKey,
+        name: q.subjectName || "Unknown",
+        score: 0,
+        maxScore: 0,
+        attempted: 0,
+        totalQuestions: 0,
+        positiveScore: 0,
+        negativeScore: 0,
+        partialScore: 0,
+      });
+    }
+    const subject = subjectMap.get(subjectKey);
+    subject.maxScore += max;
+    subject.totalQuestions += 1;
+    const result = scoreOneTestQuestion(q, st);
+    score += result.score;
+    if (result.attempted) {
+      attempted += 1;
+      subject.attempted += 1;
+    }
+    if (result.score > 0 && !result.partial) {
+      positiveScore += result.score;
+      subject.positiveScore += result.score;
+    }
+    if (result.partial) {
+      partialScore += result.score;
+      subject.partialScore += result.score;
+    }
+    if (result.score < 0) {
+      negativeScore += Math.abs(result.score);
+      subject.negativeScore += Math.abs(result.score);
+    }
+    subject.score += result.score;
+    return { index, ...result };
+  });
+  return {
+    score,
+    maxScore,
+    attempted,
+    meta: {
+      positiveScore,
+      negativeScore,
+      partialScore,
+      subjectBreakdown: Array.from(subjectMap.values()),
+      questionResults: rows,
+      subjectProgress: buildSubjectProgress(questions, state),
+    },
+  };
+}
+
+function scoreOneTestQuestion(q, st) {
+  if (!hasTestAnswer(st)) return { attempted: false, score: 0, status: "unanswered" };
+  const type = normalizeGeneratedQuestionType(q.questionType || q.payload?.qType || q.payload?.type);
+  const positive = Number(q.positiveMarks || 0);
+  const negative = Math.abs(Number(q.negativeMarks || 0));
+  const correct = normalizeTestCorrectAnswer(q.payload);
+  if (type === "numerical") {
+    const picked = Number(st.pickedNumerical);
+    const ok = Number.isFinite(picked) && Number(correct?.value) === picked;
+    return { attempted: true, score: ok ? positive : -negative, status: ok ? "correct" : "incorrect" };
+  }
+  const picked = new Set(
+    type === "multiple"
+      ? (Array.isArray(st.pickedAnswers) ? st.pickedAnswers : []).map((x) => String(x).toUpperCase())
+      : st.pickedAnswer
+      ? [String(st.pickedAnswer).toUpperCase()]
+      : []
+  );
+  const correctSet = new Set((correct?.values || []).map((x) => String(x).toUpperCase()));
+  const wrong = Array.from(picked).some((x) => !correctSet.has(x));
+  const hits = Array.from(picked).filter((x) => correctSet.has(x)).length;
+  if (!wrong && hits && hits === correctSet.size && picked.size === correctSet.size) {
+    return { attempted: true, score: positive, status: "correct" };
+  }
+  if (type === "multiple" && !wrong && hits > 0) {
+    return { attempted: true, score: Number(((positive * hits) / Math.max(correctSet.size, 1)).toFixed(2)), status: "partial", partial: true };
+  }
+  return { attempted: true, score: -negative, status: "incorrect" };
+}
+
+function normalizeTestCorrectAnswer(question) {
+  const raw = question?.qAnswer ?? question?.correctAnswer ?? question?.answer ?? question?.correctValue;
+  if (Array.isArray(raw)) return { values: raw };
+  if (typeof raw === "number") return { value: raw, values: [String(raw)] };
+  const text = String(raw ?? "").trim();
+  if (/^-?\d+(\.\d+)?$/.test(text)) return { value: Number(text), values: [text] };
+  return { values: text ? text.split(/[,\s]+/).filter(Boolean) : [] };
+}
+
+function mergeShareWithUsername(rawShareWith, username) {
+  const name = String(username || "").trim();
+  const shareWith = Array.isArray(rawShareWith)
+    ? rawShareWith
+    : safeParseJSON(rawShareWith, []);
+  const output = [];
+  const seen = new Set();
+  const add = (value) => {
+    const item = String(value || "").trim();
+    const key = item.toLowerCase();
+    if (!item || seen.has(key)) return;
+    seen.add(key);
+    output.push(item);
+  };
+  (Array.isArray(shareWith) ? shareWith : []).forEach(add);
+  add(name);
+  return output;
+}
+
+function createNotification({ userId, title, body, meta = null }) {
+  const uid = String(userId || "").trim();
+  const titleText = String(title || "").trim();
+  const bodyText = String(body || "").trim();
+  if (!uid || !titleText || !bodyText) return false;
+  db.prepare(
+    "INSERT INTO notifications (id, userId, title, body_md, meta) VALUES (?, ?, ?, ?, ?)"
+  ).run(nanoid(), uid, titleText, bodyText, meta ? JSON.stringify(meta) : null);
+  return true;
+}
+
+function userCanAccessTest(userId, testId, options = {}) {
+  const user = db.prepare("SELECT username FROM users WHERE id = ?").get(userId);
+  const row = db
+    .prepare("SELECT id AS testId, userId, share_with_json, archived_at FROM tests WHERE id = ?")
+    .get(testId);
+  return userCanAccessTestRow(userId, user?.username, row, options);
+}
+
+function userCanAccessTestRow(userId, username, row, options = {}) {
+  if (!row) return false;
+  if (!options.includeArchived && row.archived_at) return false;
+  if (String(row.userId) === String(userId)) return true;
+  if (row.testId != null) {
+    const access = db
+      .prepare("SELECT 1 FROM test_access WHERE userId = ? AND testId = ?")
+      .get(userId, row.testId);
+    if (access) return true;
+  }
+  const sharedWith = safeParseJSON(row.share_with_json, []);
+  return (
+    !!username &&
+    Array.isArray(sharedWith) &&
+    sharedWith.map((item) => String(item).toLowerCase()).includes(String(username).toLowerCase())
+  );
 }
 
 async function computeAssignmentScore(assignmentId, stateArray) {

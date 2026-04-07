@@ -75,6 +75,7 @@
       href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css"
     />
     <link href="./assignment/assignment.css" rel="stylesheet" />
+    <link href="./tests/tests.css" rel="stylesheet" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css"
@@ -675,6 +676,7 @@
               id="filter-btn"
               class="btn btn-outline-secondary btn-sm dropdown-toggle"
               data-bs-toggle="dropdown"
+              data-bs-auto-close="outside"
               aria-expanded="false"
               title="Filter questions"
             >
@@ -781,6 +783,26 @@
                 await loadScript("./pyqs/pyqs-assignment-loader.js");
                 await loadScript("./pyqs/pyqs-questions.js");
                 // EasyMDE after viewer so fallback textarea exists
+                await loadScript(
+                  "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js",
+                );
+              } else if (mode === "test-attempt" || mode === "test-review") {
+                try {
+                  document.body.classList.add("test-attempt-page");
+                  document.body.dataset.testMode = mode === "test-review" ? "review" : "take";
+                  document.title = mode === "test-review" ? "QBase - Test Review" : "QBase - Test Attempt";
+                } catch {}
+                try {
+                  const t = document.getElementById("assignment-title");
+                  if (t) t.textContent = mode === "test-review" ? "Test Review" : "Test Attempt";
+                } catch {}
+                await loadScript(
+                  "https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js",
+                );
+                await loadScript("./tests/test-attempt-loader.js");
+                await loadScript("./assignment/assignment.service.js");
+                await loadScript("./assignment/assignment.view.js");
+                await loadScript("./assignment/assignment.js");
                 await loadScript(
                   "https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js",
                 );
@@ -920,7 +942,8 @@
           const pickOption = (opt) => {
             // Only allow picking when in MCQ before evaluation (Check button visible)
             const checkBtn = document.getElementById("check-answer");
-            if (!isVisible(checkBtn)) return;
+            const testMode = document.body?.dataset?.testMode || "";
+            if (!isVisible(checkBtn) && testMode !== "take") return;
             const btn = document.querySelector(
               `#MCQOptionDiv .mcq-option[data-opt="${opt}"]`,
             );

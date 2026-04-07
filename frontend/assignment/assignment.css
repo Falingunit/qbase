@@ -575,6 +575,95 @@ html[data-assignment-theme="light"] button {
   border-color: var(--assignment-state-info-border) !important;
 }
 
+.q-btn.marked-review {
+  box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.58);
+}
+
+.test-mark-review-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.test-mark-review-btn.active {
+  color: #fff;
+  background: #6f42c1;
+  border-color: #6f42c1;
+}
+
+.test-mark-review-badge {
+  display: inline-flex;
+  align-items: center;
+  color: #fff;
+  background: #6f42c1;
+}
+
+.test-palette-subject-divider,
+.test-palette-section-divider {
+  flex: 0 0 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.test-palette-subject-divider {
+  margin: 0.55rem 0 0.15rem;
+}
+
+.test-palette-subject-divider hr,
+.test-palette-section-divider hr {
+  margin: 0 0 0.45rem;
+  border-color: rgba(255, 255, 255, 0.16);
+  opacity: 1;
+}
+
+.test-palette-subject-divider div {
+  color: #dfe6ee;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.test-palette-section-divider {
+  margin: 0.35rem 0 0.05rem;
+}
+
+.test-palette-section-divider hr {
+  border-color: rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.3rem;
+}
+
+.test-palette-section-divider div {
+  color: #8f9aa6;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.test-palette-mobile-divider {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.test-palette-mobile-divider.subject {
+  color: #dfe6ee;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.test-palette-mobile-divider.section {
+  color: #8f9aa6;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
 /* =========================
    Options (MCQ)
    ========================= */
@@ -1770,3 +1859,106 @@ html[data-assignment-theme="light"] .cm-image-widget .img-align-right-btn {
 }
 
 /* (removed) expand control styles */
+
+.qbookmark-dialog {
+  display: grid;
+  gap: 1rem;
+}
+
+.qbookmark-tag-field {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  min-height: 46px;
+  padding: 0.45rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  background-color: rgba(20, 22, 26, 0.65);
+  color: #dfe6ee;
+}
+
+.qbookmark-tag-field:focus-within {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.qbookmark-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.qbookmark-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.18);
+  border: 1px solid rgba(13, 110, 253, 0.28);
+  color: #dfe6ee;
+  font-size: 0.9rem;
+}
+
+.qbookmark-tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+
+.qbookmark-tag-chip-remove:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.qbookmark-tag-chip-remove .bi {
+  font-size: 0.72rem;
+}
+
+.qbookmark-tag-input {
+  flex: 1 1 160px;
+  min-width: 140px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.qbookmark-tag-input::placeholder {
+  color: #9aa3ac;
+}
+
+.qbookmark-tag-suggestions {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: rgba(20, 22, 26, 0.95);
+}
+
+.qbookmark-tag-suggestion {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #dfe6ee;
+  text-align: left;
+}
+
+.qbookmark-tag-suggestion:hover,
+.qbookmark-tag-suggestion.active {
+  background: rgba(255, 255, 255, 0.08);
+}
