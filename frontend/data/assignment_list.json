@@ -509,5 +509,12 @@
     "chapter": "AITS",
     "title": "AITS-1",
     "aID": 809
+  },
+  {
+    "subject": "Physics",
+    "faculty": "FIITJEE",
+    "chapter": "AITS 1 p2",
+    "title": "AITS",
+    "aID": 810
   }
 ]
