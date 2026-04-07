@@ -8,6 +8,10 @@ import { nanoid } from "nanoid";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import multer from "multer";
+import {
+  ensureAssignmentTables,
+  loadAssignmentFromDb,
+} from "./assignment-store.js";
 
 // ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
@@ -408,6 +412,7 @@ db.exec(`
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
 `);
+ensureAssignmentTables(db);
 
 // --- Lightweight migration: ensure users.password_hash and force_pw_reset exist ---
 try {
@@ -564,6 +569,70 @@ function adminOnly(req, res, next) {
 
 // ---------- Public routes ----------
 app.get("/healthz", (_req, res) => res.send("ok"));
+app.get("/api/assignments", (_req, res) => {
+  try {
+    const rows = db
+      .prepare(
+        `SELECT
+           id AS aID,
+           COALESCE(subject, '(No subject)') AS subject,
+           COALESCE(faculty, '') AS faculty,
+           COALESCE(chapter, '') AS chapter,
+           COALESCE(title, 'Assignment ' || id) AS title,
+           question_count AS totalQuestions
+         FROM assignments
+         ORDER BY
+           LOWER(COALESCE(subject, '')),
+           LOWER(COALESCE(chapter, '')),
+           LOWER(COALESCE(title, '')),
+           id ASC`
+      )
+      .all();
+    res.json(rows);
+  } catch (e) {
+    console.error("list assignments:", e);
+    res.status(500).json({ error: "Failed to load assignments" });
+  }
+});
+app.get("/api/assignments/:aID", async (req, res) => {
+  try {
+    const aID = Number(req.params.aID);
+    if (!Number.isFinite(aID)) {
+      return res.status(400).json({ error: "invalid assignment id" });
+    }
+
+    const assignment = await loadAssignment(aID);
+    const meta = db
+      .prepare(
+        `SELECT
+           id AS aID,
+           COALESCE(subject, '(No subject)') AS subject,
+           COALESCE(faculty, '') AS faculty,
+           COALESCE(chapter, '') AS chapter,
+           COALESCE(title, 'Assignment ' || id) AS title,
+           question_count AS totalQuestions
+         FROM assignments
+         WHERE id = ?`
+      )
+      .get(aID) || {
+      aID,
+      subject: "(No subject)",
+      faculty: "",
+      chapter: "",
+      title: `Assignment ${aID}`,
+      totalQuestions: Array.isArray(assignment?.questions)
+        ? assignment.questions.length
+        : Array.isArray(assignment)
+          ? assignment.length
+          : 0,
+    };
+
+    res.json({ assignment, meta });
+  } catch (e) {
+    console.error("get assignment:", e);
+    res.status(500).json({ error: "Failed to load assignment" });
+  }
+});
 
 // ---------- PYQs proxy (public) ----------
 // Uses per-user token when available (from profile), otherwise falls back to server-side token.
@@ -2161,16 +2230,29 @@ app.post("/logout", (_req, res) => {
 });
 
 // ---------- Assignment loader (from Pages) ----------
+const ASSIGNMENT_CACHE_TTL_MS = 15_000;
 const assignmentCache = new Map();
 async function loadAssignment(assignmentId) {
-  if (assignmentCache.has(assignmentId))
-    return assignmentCache.get(assignmentId);
+  const cached = assignmentCache.get(assignmentId);
+  if (cached && Date.now() - cached.loadedAt < ASSIGNMENT_CACHE_TTL_MS) {
+    return cached.value;
+  }
+
+  const dbAssignment = loadAssignmentFromDb(db, assignmentId);
+  if (dbAssignment) {
+    assignmentCache.set(assignmentId, {
+      loadedAt: Date.now(),
+      value: dbAssignment,
+    });
+    return dbAssignment;
+  }
+
   const url = `${ASSETS_BASE}/data/question_data/${assignmentId}/assignment.json`;
   const r = await fetch(url, { cache: "no-store" });
   if (!r.ok)
     throw new Error(`Failed to fetch assignment ${assignmentId}: ${r.status}`);
   const json = await r.json();
-  assignmentCache.set(assignmentId, json);
+  assignmentCache.set(assignmentId, { loadedAt: Date.now(), value: json });
   return json;
 }
 
@@ -2183,17 +2265,30 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
     // Load assignment from static cache/Pages
     loadAssignment(aID)
       .then((assignment) => {
+        const metaRow = db
+          .prepare(
+            `SELECT
+               id AS aID,
+               COALESCE(subject, '(No subject)') AS subject,
+               COALESCE(faculty, '') AS faculty,
+               COALESCE(chapter, '') AS chapter,
+               COALESCE(title, 'Assignment ' || id) AS title,
+               question_count AS totalQuestions
+             FROM assignments
+             WHERE id = ?`
+          )
+          .get(aID);
         const stateRow = db
           .prepare(
             "SELECT state FROM states WHERE userId = ? AND assignmentId = ?"
           )
           .get(req.userId, aID);
-        const state = stateRow ? safeParseJSON(stateRow.state, {}) : {};
+        const state = stateRow ? safeParseJSON(stateRow.state, []) : [];
         const bookmarks = db
           .prepare(
-            "SELECT questionIndex, tagId FROM pyqs_bookmarks WHERE userId = ? AND examId IS NULL AND subjectId IS NULL AND chapterId IS NULL AND questionIndex IS NOT NULL"
+            "SELECT questionIndex, tagId FROM bookmarks WHERE userId = ? AND assignmentId = ?"
           )
-          .all(req.userId);
+          .all(req.userId, aID);
         const marks = db
           .prepare(
             "SELECT questionIndex, color FROM question_marks WHERE userId = ? AND assignmentId = ?"
@@ -2204,7 +2299,26 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
             "SELECT id, name, created_at FROM bookmark_tags WHERE userId = ? ORDER BY name = 'Doubt' DESC, name ASC"
           )
           .all(req.userId);
-        res.json({ assignment, state, bookmarks, marks, tags });
+        res.json({
+          assignment,
+          meta:
+            metaRow || {
+              aID: aID,
+              subject: "(No subject)",
+              faculty: "",
+              chapter: "",
+              title: `Assignment ${aID}`,
+              totalQuestions: Array.isArray(assignment?.questions)
+                ? assignment.questions.length
+                : Array.isArray(assignment)
+                  ? assignment.length
+                  : 0,
+            },
+          state,
+          bookmarks,
+          marks,
+          tags,
+        });
       })
       .catch((e) => {
         res.status(500).json({ error: "Failed to load assignment" });

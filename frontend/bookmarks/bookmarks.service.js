@@ -2,7 +2,9 @@
 (function(){
   // Simple in-memory caches to avoid re-fetching the same data during a session
   const _assignmentCache = new Map(); // key: Number(assignmentId) -> assignment data
+  const _assignmentPromiseCache = new Map(); // key -> Promise<assignment data|null>
   const _pyqsCache = new Map();       // key: `${examId}__${subjectId}__${chapterId}` -> { examId, subjectId, chapterId, questions }
+  const _pyqsPromiseCache = new Map(); // key -> Promise<pyqs data|null>
 
   // Small utility to run async work with a concurrency cap
   async function _runWithConcurrency(items, limit, worker) {
@@ -88,7 +90,7 @@
   async function fetchAssignmentTitlesMap() {
     const map = new Map();
     try {
-      const raw = await (await fetch('./data/assignment_list.json', { cache: 'no-store' })).json();
+      const raw = await (await authFetch(`${API_BASE}/api/assignments`, { cache: 'no-store' })).json();
       normalizeAssignmentTitles(raw).forEach((it) => map.set(Number(it.aID), it.title));
     } catch {}
     return map;
@@ -103,6 +105,54 @@
         q.passage = currentPassage; q.passageImage = currentPassageImage;
       }
     });
+  }
+
+  function normalizeAssignmentPayload(input) {
+    if (Array.isArray(input)) return { questions: input };
+    if (!input || typeof input !== 'object') return { questions: [] };
+    if (Array.isArray(input.questions)) return input;
+    if (Array.isArray(input.data)) return { ...input, questions: input.data };
+    return { ...input, questions: [] };
+  }
+
+  async function _fetchAssignmentFromApi(key) {
+    if (_assignmentCache.has(key)) return _assignmentCache.get(key);
+    if (_assignmentPromiseCache.has(key)) return await _assignmentPromiseCache.get(key);
+    const promise = (async () => {
+      try {
+        const resp = await authFetch(`${API_BASE}/api/assignments/${encodeURIComponent(key)}`, { cache: 'no-store' });
+        if (!resp.ok) return null;
+        const payload = await resp.json();
+        const data = normalizeAssignmentPayload(payload?.assignment || null);
+        try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
+        _assignmentCache.set(key, data);
+        return data;
+      } finally {
+        _assignmentPromiseCache.delete(key);
+      }
+    })();
+    _assignmentPromiseCache.set(key, promise);
+    return await promise;
+  }
+
+  async function _fetchPyqsFromApi(key, examId, subjectId, chapterId) {
+    if (_pyqsCache.has(key)) return _pyqsCache.get(key);
+    if (_pyqsPromiseCache.has(key)) return await _pyqsPromiseCache.get(key);
+    const promise = (async () => {
+      try {
+        const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
+        if (!r.ok) return null;
+        const data = await r.json();
+        const questions = Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []);
+        const value = { examId, subjectId, chapterId, questions };
+        _pyqsCache.set(key, value);
+        return value;
+      } finally {
+        _pyqsPromiseCache.delete(key);
+      }
+    })();
+    _pyqsPromiseCache.set(key, promise);
+    return await promise;
   }
 
   async function fetchAssignmentDataForIds(ids) {
@@ -122,10 +172,8 @@
     // Fetch missing IDs with limited concurrency to speed up loads without overloading
     if (missing.length > 0) {
       const fetched = await _runWithConcurrency(missing, 8, async (key) => {
-        const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
-        if (!resp.ok) return undefined;
-        const data = await resp.json();
-        try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
+        const data = await _fetchAssignmentFromApi(key);
+        if (!data) return undefined;
         return { key, data };
       });
 
@@ -141,13 +189,7 @@
 
   async function fetchAssignmentData(assignmentId) {
     const key = Number(assignmentId);
-    if (_assignmentCache.has(key)) return _assignmentCache.get(key);
-    const resp = await fetch(`./data/question_data/${key}/assignment.json`, { cache: 'no-store' });
-    if (!resp.ok) return null;
-    const data = await resp.json();
-    try { processPassageQuestions(Array.isArray(data.questions) ? data.questions : []); } catch {}
-    _assignmentCache.set(key, data);
-    return data;
+    return await _fetchAssignmentFromApi(key);
   }
 
   function mkPyqsKey(examId, subjectId, chapterId) {
@@ -169,11 +211,9 @@
     if (missing.length > 0) {
       const fetched = await _runWithConcurrency(missing, 6, async (key) => {
         const [examId, subjectId, chapterId] = String(key).split('__');
-        const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
-        if (!r.ok) return undefined;
-        const data = await r.json();
-        const questions = Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []);
-        return { key, value: { examId, subjectId, chapterId, questions } };
+        const value = await _fetchPyqsFromApi(key, examId, subjectId, chapterId);
+        if (!value) return undefined;
+        return { key, value };
       });
 
       for (const item of fetched) {
@@ -188,14 +228,7 @@
 
   async function fetchPyqsData(examId, subjectId, chapterId) {
     const key = mkPyqsKey(examId, subjectId, chapterId);
-    if (_pyqsCache.has(key)) return _pyqsCache.get(key);
-    const r = await authFetch(`${API_BASE}/api/pyqs/exams/${encodeURIComponent(examId)}/subjects/${encodeURIComponent(subjectId)}/chapters/${encodeURIComponent(chapterId)}/questions`);
-    if (!r.ok) return null;
-    const data = await r.json();
-    const questions = Array.isArray(data?.questions) ? data.questions : (Array.isArray(data) ? data : []);
-    const value = { examId, subjectId, chapterId, questions };
-    _pyqsCache.set(key, value);
-    return value;
+    return await _fetchPyqsFromApi(key, examId, subjectId, chapterId);
   }
 
   async function fetchQuestionState(assignmentId) {

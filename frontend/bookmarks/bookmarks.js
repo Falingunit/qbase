@@ -30,6 +30,15 @@
     try {
       const all = await BookmarksService.fetchAllBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
       if (!Array.isArray(all) || all.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
+      const assignmentIds = [...new Set(all.filter((b) => b.kind === 'assignment').map((b) => Number(b.assignmentId)).filter((n) => Number.isFinite(n)))];
+      const pyqsKeys = [...new Set(all.filter((b) => b.kind === 'pyq').map((b) => BookmarksService.mkPyqsKey(b.examId, b.subjectId, b.chapterId)))];
+      const [assignmentBatch, pyqsBatch] = await Promise.all([
+        BookmarksService.fetchAssignmentDataForIds(assignmentIds),
+        BookmarksService.fetchPyqsDataForKeys(pyqsKeys),
+      ]);
+      if (mySeq !== __bookmarksLoadSeq) return;
+      assignmentBatch?.forEach?.((value, key) => assignmentData.set(Number(key), value));
+      pyqsBatch?.forEach?.((value, key) => pyqsData.set(key, value));
       const grouped = BookmarksService.groupBookmarksByTag(all);
       BookmarksView.renderBookmarks(grouped, { assignments: assignmentData, pyqs: pyqsData }, {
         katexOptions,

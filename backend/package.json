@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
+    "sync:assignments": "node scripts/sync-assignments.js",
     "migrate:legacy-passwords": "node scripts/migrate-legacy-passwords.js",
     "clear:users": "node scripts/clear-users.js",
     "init:doubt": "node scripts/init-doubt-tag.js"
