@@ -530,5 +530,19 @@
     "chapter": "AITS",
     "title": "AITS-1 P2",
     "aID": 812
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT REVISION-6",
+    "title": "BT,STAT",
+    "aID": 813
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT REVISION-5",
+    "title": "BT STAT",
+    "aID": 814
   }
 ]
