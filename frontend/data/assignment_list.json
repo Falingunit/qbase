@@ -493,42 +493,42 @@
     "subject": "Mathematics",
     "faculty": "FIITJEE",
     "chapter": "AITS",
-    "title": "AITS-1",
+    "title": "AITS-1 P1",
     "aID": 807
   },
   {
     "subject": "Physics",
     "faculty": "FIITJEE",
     "chapter": "AITS",
-    "title": "AITS-1",
+    "title": "AITS-1 P1",
     "aID": 808
   },
   {
     "subject": "Chemistry",
     "faculty": "FIITJEE",
     "chapter": "AITS",
-    "title": "AITS-1",
+    "title": "AITS-1 P1",
     "aID": 809
   },
   {
     "subject": "Physics",
     "faculty": "FIITJEE",
-    "chapter": "AITS 1 p2",
-    "title": "AITS",
+    "chapter": "AITS",
+    "title": "AITS-1 P2",
     "aID": 810
   },
   {
     "subject": "Chemistry",
     "faculty": "FIITJEE",
     "chapter": "AITS",
-    "title": "AITS",
+    "title": "AITS-1 P2",
     "aID": 811
   },
   {
     "subject": "Mathematics",
     "faculty": "FIITJEE",
     "chapter": "AITS",
-    "title": "AITS 1 P2",
+    "title": "AITS-1 P2",
     "aID": 812
   }
 ]
