@@ -859,13 +859,32 @@
 }
 
 .test-attempt-page .mcq-option.correct {
-  border-color: #198754;
-  background: rgba(25, 135, 84, 0.18);
+  border-color: var(--assignment-state-correct-border) !important;
+  background: var(--assignment-state-correct-soft) !important;
+  color: var(--assignment-state-correct-text) !important;
+}
+
+.test-attempt-page .mcq-option.correct .opt-badge {
+  background: var(--assignment-state-correct-badge) !important;
+  color: #ffffff !important;
+  border-color: var(--assignment-state-correct-border) !important;
 }
 
 .test-attempt-page .mcq-option.wrong {
-  border-color: #dc3545;
-  background: rgba(220, 53, 69, 0.16);
+  border-color: var(--assignment-state-wrong-border) !important;
+  background: var(--assignment-state-wrong-soft) !important;
+  color: var(--assignment-state-wrong-text) !important;
+}
+
+.test-attempt-page .mcq-option.wrong .opt-badge {
+  background: var(--assignment-state-wrong-badge) !important;
+  color: #ffffff !important;
+  border-color: var(--assignment-state-wrong-border) !important;
+}
+
+.test-attempt-page .mcq-option.missed {
+  outline: 2px solid var(--assignment-state-correct-border) !important;
+  outline-offset: 2px;
 }
 
 .tests-blueprint .form-select:focus,
