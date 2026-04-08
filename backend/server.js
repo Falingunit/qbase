@@ -3569,7 +3569,7 @@ app.get("/api/tests/:testId", (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts", (req, res) => {
+app.post("/api/tests/:testId/attempts", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     if (!testId || !userCanAccessTest(req.userId, testId)) {
@@ -3582,19 +3582,21 @@ app.post("/api/tests/:testId/attempts", (req, res) => {
          ORDER BY datetime(started_at) DESC, id DESC LIMIT 1`
       )
       .get(testId, req.userId);
-    const attemptId = active?.id || createTestAttempt(req.userId, testId);
-    res.status(active ? 200 : 201).json(buildTestAttemptPayload(req.userId, testId, attemptId, "take"));
+    const attemptId = active?.id || await createTestAttempt(req, req.userId, testId);
+    res
+      .status(active ? 200 : 201)
+      .json(await buildTestAttemptPayload(req, req.userId, testId, attemptId, "take"));
   } catch (e) {
     console.error("start test attempt:", e);
     res.status(500).json({ error: "Failed to start test attempt" });
   }
 });
 
-app.get("/api/tests/:testId/attempts/:attemptId", (req, res) => {
+app.get("/api/tests/:testId/attempts/:attemptId", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
-    const payload = buildTestAttemptPayload(req.userId, testId, attemptId, "take");
+    const payload = await buildTestAttemptPayload(req, req.userId, testId, attemptId, "take");
     if (!payload) return res.status(404).json({ error: "Attempt not found" });
     res.json(payload);
   } catch (e) {
@@ -3603,11 +3605,11 @@ app.get("/api/tests/:testId/attempts/:attemptId", (req, res) => {
   }
 });
 
-app.get("/api/tests/:testId/attempts/:attemptId/review", (req, res) => {
+app.get("/api/tests/:testId/attempts/:attemptId/review", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
-    const payload = buildTestAttemptPayload(req.userId, testId, attemptId, "review");
+    const payload = await buildTestAttemptPayload(req, req.userId, testId, attemptId, "review");
     if (!payload) return res.status(404).json({ error: "Attempt not found" });
     res.json(payload);
   } catch (e) {
@@ -3643,13 +3645,14 @@ app.delete("/api/tests/:testId/attempts/:attemptId", (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts/:attemptId/save", (req, res) => {
+app.post("/api/tests/:testId/attempts/:attemptId/save", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
     const row = getOwnedAttempt(req.userId, testId, attemptId);
     if (!row) return res.status(404).json({ error: "Attempt not found" });
     if (row.status === "submitted") return res.json({ success: true, submitted: true });
+    const questions = await getResolvedTestQuestions(req, testId, row);
     const state = Array.isArray(req.body?.state) ? req.body.state : [];
     const meta = safeParseJSON(row.state_json, {});
     meta.state = state;
@@ -3658,17 +3661,17 @@ app.post("/api/tests/:testId/attempts/:attemptId/save", (req, res) => {
       req.body?.remainingSeconds == null
         ? meta.remainingSeconds
         : Math.max(0, Number(req.body.remainingSeconds || 0));
-    meta.subjectProgress = buildSubjectProgress(safeParseJSON(row.questions_json, []), state);
+    meta.subjectProgress = buildSubjectProgress(questions, state);
     meta.subjectBreakdown = meta.subjectProgress;
     const attempted = countAttemptedTestAnswers(state);
     updateTestAttemptRow(attemptId, {
       state_json: JSON.stringify(meta),
       status: "paused",
       attempted_count: attempted,
-      total_questions: safeParseJSON(row.questions_json, []).length,
+      total_questions: questions.length,
       submitted_at: null,
     });
-    updateTestSummary(testId, { status: "paused", attempted, totalQuestions: safeParseJSON(row.questions_json, []).length });
+    updateTestSummary(testId, { status: "paused", attempted, totalQuestions: questions.length });
     res.json({ success: true });
   } catch (e) {
     console.error("save test attempt:", e);
@@ -3676,13 +3679,13 @@ app.post("/api/tests/:testId/attempts/:attemptId/save", (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts/:attemptId/submit", (req, res) => {
+app.post("/api/tests/:testId/attempts/:attemptId/submit", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
     const row = getOwnedAttempt(req.userId, testId, attemptId);
     if (!row) return res.status(404).json({ error: "Attempt not found" });
-    const questions = safeParseJSON(row.questions_json, []);
+    const questions = await getResolvedTestQuestions(req, testId, row);
     const state = Array.isArray(req.body?.state)
       ? req.body.state
       : safeParseJSON(row.state_json, {}).state || [];
@@ -5708,11 +5711,71 @@ function getTestQuestionRows(testId) {
     });
 }
 
-function createTestAttempt(userId, testId) {
+function getAssignmentQuestionList(payload) {
+  if (Array.isArray(payload)) return payload;
+  if (Array.isArray(payload?.questions)) return payload.questions;
+  if (Array.isArray(payload?.data)) return payload.data;
+  return [];
+}
+
+async function resolveLiveTestQuestionPayload(req, row, caches) {
+  const fallback =
+    row && row.payload && typeof row.payload === "object" ? row.payload : {};
+  const kind = String(row?.kind || "").toLowerCase();
+  const questionIndex = Number(row?.questionIndex ?? row?.question_index ?? -1);
+  if (!Number.isFinite(questionIndex) || questionIndex < 0) return fallback;
+  try {
+    if (kind === "assignment") {
+      const assignmentId = Number(row?.assignmentId ?? row?.sourceId);
+      if (!Number.isFinite(assignmentId) || assignmentId <= 0) return fallback;
+      if (!caches.assignments.has(assignmentId)) {
+        caches.assignments.set(assignmentId, loadAssignment(assignmentId));
+      }
+      const assignment = await caches.assignments.get(assignmentId);
+      const question = getAssignmentQuestionList(assignment)?.[questionIndex];
+      return question && typeof question === "object" ? question : fallback;
+    }
+    if (kind === "pyq") {
+      const examId = String(row?.examId ?? row?.exam_id ?? "").trim();
+      const subjectId = String(row?.subjectId ?? row?.subject_id ?? "").trim();
+      const chapterId = String(row?.chapterId ?? row?.chapter_id ?? "").trim();
+      if (!examId || !subjectId || !chapterId) return fallback;
+      const cacheKey = `${examId}::${subjectId}::${chapterId}`;
+      if (!caches.pyqs.has(cacheKey)) {
+        caches.pyqs.set(cacheKey, loadPyqQuestionListForTest(req, examId, subjectId, chapterId));
+      }
+      const questions = await caches.pyqs.get(cacheKey);
+      const question = Array.isArray(questions) ? questions[questionIndex] : null;
+      return question && typeof question === "object" ? question : fallback;
+    }
+  } catch {}
+  return fallback;
+}
+
+async function syncTestQuestionRows(req, rows) {
+  const caches = { assignments: new Map(), pyqs: new Map() };
+  return Promise.all(
+    (Array.isArray(rows) ? rows : []).map(async (row, index) => ({
+      ...row,
+      orderIndex: Number(row?.orderIndex ?? index),
+      questionIndex: Number(row?.questionIndex ?? row?.question_index ?? index),
+      payload: await resolveLiveTestQuestionPayload(req, row, caches),
+    }))
+  );
+}
+
+async function getResolvedTestQuestions(req, testId, attemptRow = null) {
+  const storedRows = getTestQuestionRows(testId);
+  const snapshotRows = safeParseJSON(attemptRow?.questions_json, []);
+  const sourceRows = Array.isArray(storedRows) && storedRows.length ? storedRows : snapshotRows;
+  return syncTestQuestionRows(req, sourceRows);
+}
+
+async function createTestAttempt(req, userId, testId) {
   const test = db
     .prepare("SELECT time_limit_sec, config_json FROM tests WHERE id = ?")
     .get(testId);
-  const questions = getTestQuestionRows(testId);
+  const questions = await getResolvedTestQuestions(req, testId);
   const timeLimitSec = Number(test?.time_limit_sec || 0) || Number(safeParseJSON(test?.config_json, {})?.testBlueprint?.timeLimitSeconds || 0) || null;
   const state = questions.map(() => defaultTestAttemptState());
   const meta = {
@@ -5765,7 +5828,7 @@ function getReviewableAttempt(userId, testId, attemptId) {
   return canReview ? attempt : null;
 }
 
-function buildTestAttemptPayload(userId, testId, attemptId, mode) {
+async function buildTestAttemptPayload(req, userId, testId, attemptId, mode) {
   if (!testId || !attemptId || !userCanAccessTest(userId, testId)) return null;
   const test = db
     .prepare("SELECT id AS testId, title, name, time_limit_sec, config_json FROM tests WHERE id = ?")
@@ -5782,7 +5845,7 @@ function buildTestAttemptPayload(userId, testId, attemptId, mode) {
     return null;
   }
   const meta = safeParseJSON(attempt.state_json, {});
-  const questions = safeParseJSON(attempt.questions_json, getTestQuestionRows(testId));
+  const questions = await getResolvedTestQuestions(req, testId, attempt);
   return {
     test: {
       testId,
