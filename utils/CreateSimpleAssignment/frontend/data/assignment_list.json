@@ -1,0 +1,443 @@
+[
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Magnetism",
+    "title": "Motion of Charged Particles in Magnetic Field #2 (advanced)",
+    "aID": 0
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Motional E.M.F. #2 (advanced)",
+    "aID": 1
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Motional E.M.F. #1",
+    "aID": 2
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Faradays Law",
+    "aID": 3
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Induced Electric Field",
+    "aID": 4
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Nikiil",
+    "chapter": "Integration",
+    "title": "Integration #1",
+    "aID": 5
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MJG",
+    "chapter": "Integration",
+    "title": "Integration #2",
+    "aID": 6
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "EMI",
+    "title": "Inductors",
+    "aID": 7
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Dilute Solutions",
+    "title": "Dilute Solutions Assignment",
+    "aID": 8
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #1",
+    "aID": 9
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #2",
+    "aID": 10
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Alternating Current",
+    "title": "AC Assignment #3 (advanced)",
+    "aID": 11
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Plane Mirrors",
+    "aID": 12
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Surface Chemistry",
+    "title": "Surface Chemistry Assignment",
+    "aID": 13
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Ores and Metallurgy",
+    "title": "Ores and Metallurgy Assignment",
+    "aID": 14
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "P-Block",
+    "title": "Group 15",
+    "aID": 15
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Spherical Mirrors",
+    "aID": 16
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "P-Block",
+    "title": "Group 18",
+    "aID": 17
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "P-Block",
+    "title": "Group 17",
+    "aID": 18
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Refraction through Plane Surfaces",
+    "aID": 19
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Thin Lenses",
+    "aID": 20
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Electrochemistry",
+    "title": "Electrolytic Cells",
+    "aID": 21
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Salt Analysis",
+    "title": "Salt Analysis Assignment 1",
+    "aID": 26
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MJG",
+    "chapter": "Differential Equations",
+    "title": "Assignment #1",
+    "aID": 200
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Redox Reactions",
+    "title": "Redox Reactions Revision Assignment",
+    "aID": 203
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Prisms",
+    "aID": 204
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Ray Optics",
+    "title": "Optical Instruments",
+    "aID": 205
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Electrochemistry",
+    "title": "Conductance",
+    "aID": 206
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "YDSE Basics #1",
+    "aID": 22
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "YDSE Basics #2",
+    "aID": 23
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MJG",
+    "chapter": "Matrices and Determinants",
+    "title": "ADV assignment 1",
+    "aID": 209
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "Polarization",
+    "aID": 24
+  },
+  {
+    "subject": "Physics",
+    "faculty": "PGR",
+    "chapter": "Wave Optics",
+    "title": "Diffraction",
+    "aID": 25
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "CVR",
+    "chapter": "Electrochemistry",
+    "title": "Galvanic Cell",
+    "aID": 801
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "ChatGPT",
+    "chapter": "D and F Block",
+    "title": "Compounds Of D Block",
+    "aID": 212
+  },
+  {
+    "subject": "JEE 2026 Papers",
+    "faculty": "NTA",
+    "chapter": "Jan",
+    "title": "21st Jan shift 2",
+    "aID": 214
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "MPV",
+    "chapter": "SPT-1 Revision",
+    "title": "Sets, Relations and Functions 1",
+    "aID": 215
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-1 Revision",
+    "title": "Modern Physics 1",
+    "aID": 216
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Aldehydes and Ketones",
+    "aID": 27
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Biomolecules and Polymers",
+    "aID": 28
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Alternating Current and EM Waves",
+    "aID": 30
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Electromagnetic Induction",
+    "aID": 31
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Moving charges and Magnetic Field",
+    "aID": 32
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Amines",
+    "aID": 29
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Limits, Continuity and Differentiability 1",
+    "aID": 217
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Limits, Continuity and Differentiability 2",
+    "aID": 33
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Applications of Derivatives 1",
+    "aID": 218
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-2 Revision",
+    "title": "Applications of Derivatives 2",
+    "aID": 219
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Defenite and Indefenite Integration 1",
+    "aID": 401
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Defenite and Indefenite Integration 2",
+    "aID": 402
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Gravitation",
+    "aID": 400
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Current Electricity",
+    "aID": 34
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Electrostatics",
+    "aID": 35
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Capacitors and Capacitance",
+    "aID": 36
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "Z7i",
+    "chapter": "SPT-3 Revision",
+    "title": "Areas and Differential Equations 1",
+    "aID": 220
+  },
+  {
+    "subject": "Physics",
+    "faculty": "Z7i",
+    "chapter": "SPT-4 Revision",
+    "title": "Units And dimensions",
+    "aID": 221
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "NA",
+    "chapter": "Narendra Awasthi",
+    "title": "Liquid Solutions ",
+    "aID": 222
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "NA",
+    "chapter": "P Bahadur",
+    "title": "Gaseous State",
+    "aID": 223
+  },
+  {
+    "subject": "Physics",
+    "faculty": "NA",
+    "chapter": "SPT-4 Revision",
+    "title": "Motions in a straight line",
+    "aID": 224
+  },
+  {
+    "subject": "Physics",
+    "faculty": "NA",
+    "chapter": "SPT-4 Revision",
+    "title": "Motions in a Plane",
+    "aID": 225
+  },
+  {
+    "subject": "Physics",
+    "faculty": "NA",
+    "chapter": "SPT-4 Revision",
+    "title": "NLM",
+    "aID": 226
+  },
+  {
+    "subject": "Physics",
+    "faculty": "NA",
+    "chapter": "SPT-4 Revision",
+    "title": "Work,Energy And Collisions",
+    "aID": 227
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "poopa",
+    "chapter": "poopa",
+    "title": "poopa",
+    "aID": 801
+  }
+]
