@@ -77,7 +77,7 @@
     "qText": "",
     "image": "10.png",
     "qOptions": ["A", "B", "C", "D"],
-    "qAnswer": "D"
+    "qAnswer": "C"
   },
   {
     "qType": "SMCQ",
