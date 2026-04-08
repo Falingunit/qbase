@@ -11,6 +11,7 @@ import multer from "multer";
 import {
   ensureAssignmentTables,
   loadAssignmentFromDb,
+  upsertAssignmentInDb,
 } from "./assignment-store.js";
 
 // ---------- Paths ----------
@@ -2452,6 +2453,95 @@ app.post("/logout", (_req, res) => {
 // ---------- Assignment loader (from Pages) ----------
 const ASSIGNMENT_CACHE_TTL_MS = 15_000;
 const assignmentCache = new Map();
+function invalidateAssignmentCache(assignmentId) {
+  assignmentCache.delete(assignmentId);
+}
+
+function getNextAssignmentId() {
+  const row = db
+    .prepare("SELECT COALESCE(MAX(id), 0) AS maxId FROM assignments")
+    .get();
+  return Number(row?.maxId || 0) + 1;
+}
+
+function parseAssignmentWriteInput(body, { allowImplicitId = true } = {}) {
+  const source = body && typeof body === "object" ? body : {};
+  const rawAssignmentId =
+    source.assignmentId ?? source.aID ?? source.id ?? source.assignment?.aID;
+  const assignmentId =
+    rawAssignmentId == null || rawAssignmentId === ""
+      ? null
+      : Number(rawAssignmentId);
+  if (
+    assignmentId != null &&
+    (!Number.isInteger(assignmentId) || assignmentId <= 0)
+  ) {
+    return { error: "assignmentId must be a positive integer" };
+  }
+
+  const payload =
+    source.assignment ??
+    source.payload ??
+    (Array.isArray(source.questions) || Array.isArray(source.data)
+      ? source
+      : null) ??
+    (Array.isArray(source) ? source : null);
+  if (
+    payload == null ||
+    (typeof payload !== "object" && !Array.isArray(payload))
+  ) {
+    return { error: "assignment payload is required" };
+  }
+
+  const title =
+    source.title ?? source.meta?.title ?? source.assignmentMeta?.title ?? null;
+  const subject =
+    source.subject ??
+    source.meta?.subject ??
+    source.assignmentMeta?.subject ??
+    null;
+  const faculty =
+    source.faculty ??
+    source.meta?.faculty ??
+    source.assignmentMeta?.faculty ??
+    null;
+  const chapter =
+    source.chapter ??
+    source.meta?.chapter ??
+    source.assignmentMeta?.chapter ??
+    null;
+  const sourceRelPath =
+    source.sourceRelPath ??
+    source.meta?.sourceRelPath ??
+    source.assignmentMeta?.sourceRelPath ??
+    null;
+
+  const metadata = {
+    title: title == null ? null : String(title).trim(),
+    subject: subject == null ? null : String(subject).trim(),
+    faculty: faculty == null ? null : String(faculty).trim(),
+    chapter: chapter == null ? null : String(chapter).trim(),
+    sourceRelPath:
+      sourceRelPath == null ? null : String(sourceRelPath).trim(),
+  };
+
+  if (!metadata.title) return { error: "title is required" };
+  if (!metadata.subject) return { error: "subject is required" };
+  if (!metadata.chapter) return { error: "chapter is required" };
+  if (!metadata.faculty) return { error: "faculty is required" };
+
+  return {
+    assignmentId:
+      assignmentId != null
+        ? assignmentId
+        : allowImplicitId
+          ? getNextAssignmentId()
+          : null,
+    payload,
+    metadata,
+  };
+}
+
 async function loadAssignment(assignmentId) {
   const cached = assignmentCache.get(assignmentId);
   if (cached && Date.now() - cached.loadedAt < ASSIGNMENT_CACHE_TTL_MS) {
@@ -2550,6 +2640,120 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
 
 // ---------- Protected routes (require Bearer token) ----------
 app.use(auth);
+
+app.get("/api/admin/assignments/next-id", adminOnly, (_req, res) => {
+  try {
+    res.json({ assignmentId: getNextAssignmentId() });
+  } catch (e) {
+    console.error("next assignment id:", e);
+    res.status(500).json({ error: "Failed to generate assignment id" });
+  }
+});
+
+app.post("/api/admin/assignments", adminOnly, (req, res) => {
+  try {
+    const parsed = parseAssignmentWriteInput(req.body, {
+      allowImplicitId: true,
+    });
+    if (parsed.error) {
+      return res.status(400).json({ error: parsed.error });
+    }
+
+    const { assignmentId, payload, metadata } = parsed;
+    const existed = !!db
+      .prepare("SELECT 1 FROM assignments WHERE id = ?")
+      .get(assignmentId);
+
+    const result = upsertAssignmentInDb(db, assignmentId, payload, metadata);
+    invalidateAssignmentCache(assignmentId);
+
+    const assignment = loadAssignmentFromDb(db, assignmentId);
+    const meta = db
+      .prepare(
+        `SELECT
+           id AS aID,
+           COALESCE(subject, '(No subject)') AS subject,
+           COALESCE(faculty, '') AS faculty,
+           COALESCE(chapter, '') AS chapter,
+           COALESCE(title, 'Assignment ' || id) AS title,
+           question_count AS totalQuestions
+         FROM assignments
+         WHERE id = ?`
+      )
+      .get(assignmentId);
+
+    res.status(existed ? 200 : 201).json({
+      success: true,
+      created: !existed,
+      assignmentId,
+      result,
+      assignment,
+      meta,
+    });
+  } catch (e) {
+    console.error("upsert assignment:", e);
+    res.status(500).json({ error: "Failed to save assignment" });
+  }
+});
+
+app.put("/api/admin/assignments/:aID", adminOnly, (req, res) => {
+  try {
+    const routeAssignmentId = Number(req.params.aID);
+    if (!Number.isInteger(routeAssignmentId) || routeAssignmentId <= 0) {
+      return res.status(400).json({ error: "invalid assignment id" });
+    }
+
+    const parsed = parseAssignmentWriteInput(
+      { ...(req.body || {}), assignmentId: routeAssignmentId },
+      { allowImplicitId: false }
+    );
+    if (parsed.error) {
+      return res.status(400).json({ error: parsed.error });
+    }
+
+    const existed = !!db
+      .prepare("SELECT 1 FROM assignments WHERE id = ?")
+      .get(routeAssignmentId);
+    if (!existed) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    const result = upsertAssignmentInDb(
+      db,
+      routeAssignmentId,
+      parsed.payload,
+      parsed.metadata
+    );
+    invalidateAssignmentCache(routeAssignmentId);
+
+    const assignment = loadAssignmentFromDb(db, routeAssignmentId);
+    const meta = db
+      .prepare(
+        `SELECT
+           id AS aID,
+           COALESCE(subject, '(No subject)') AS subject,
+           COALESCE(faculty, '') AS faculty,
+           COALESCE(chapter, '') AS chapter,
+           COALESCE(title, 'Assignment ' || id) AS title,
+           question_count AS totalQuestions
+         FROM assignments
+         WHERE id = ?`
+      )
+      .get(routeAssignmentId);
+
+    res.json({
+      success: true,
+      created: false,
+      assignmentId: routeAssignmentId,
+      result,
+      assignment,
+      meta,
+    });
+  } catch (e) {
+    console.error("update assignment:", e);
+    res.status(500).json({ error: "Failed to update assignment" });
+  }
+});
 
 app.get("/api/users", (req, res) => {
   try {

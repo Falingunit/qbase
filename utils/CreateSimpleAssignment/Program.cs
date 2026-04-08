@@ -3,12 +3,16 @@ using PDFtoImage;
 using SkiaSharp;
 using Spectre.Console;
 using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using TextCopy;
 
 const string PromptColor = "aqua";
 const string TitleStyle = "bold fuchsia";
+const string DefaultApiBase = "https://qbase.103.125.154.215.nip.io";
+var jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
 // Heading ---
 AnsiConsole.Write(new Rule("[yellow]QBase simple assignment maker[/]").DoubleBorder());
@@ -18,6 +22,31 @@ AnsiConsole.WriteLine();
 AnsiConsole.Write(new Rule($"[{TitleStyle}]Updating repository[/]").LeftJustified());
 
 GitUpdater.PullWithEphemeralLogs();
+AnsiConsole.WriteLine();
+
+// API details
+AnsiConsole.Write(new Rule($"[{TitleStyle}]Connect to backend[/]").LeftJustified());
+
+string apiBase = AnsiConsole.Prompt(
+    new TextPrompt<string>($"[{PromptColor}]API base URL:[/]")
+        .DefaultValue(DefaultApiBase)
+);
+string apiUsername = AnsiConsole.Ask<string>($"[{PromptColor}]API username:[/] ");
+string apiPassword = AnsiConsole.Prompt(
+    new TextPrompt<string>($"[{PromptColor}]API password:[/]").Secret()
+);
+
+var apiClient = new HttpClient
+{
+    BaseAddress = new Uri(NormalizeApiBase(apiBase))
+};
+string authToken = "";
+
+AnsiConsole.Status()
+    .Spinner(Spinner.Known.Dots)
+    .Start("Signing into API...", AuthenticateApi);
+
+AnsiConsole.MarkupLine($"[lime]Signed into backend as [bold]{apiUsername}[/].[/]");
 AnsiConsole.WriteLine();
 
 // Assignment details
@@ -119,6 +148,10 @@ AnsiConsole.Status()
         File.WriteAllText($"./frontend/data/question_data/{assignmentId}/assignment.json", assignmentJson);
     });
 
+AnsiConsole.Status()
+    .Spinner(Spinner.Known.Dots)
+    .Start("Syncing assignment with backend...", SyncAssignmentToApi);
+
 AnsiConsole.MarkupLine("[lime]Successfully added assignment data![/]");
 AnsiConsole.Write(new Rule($"[{TitleStyle}]Updating repository[/]").LeftJustified());
 
@@ -131,37 +164,11 @@ Thread.Sleep(10000000);
 
 void UpdateAssignmentData(StatusContext ctx)
 {
-    const string assignmentListPath = "./frontend/data/assignment_list.json";
-
-    ctx.Status("Reading [underline]assignment_list.json[/]...");
-
-    string assignmentsJson = File.ReadAllText(assignmentListPath);
-    var assignments = JsonSerializer.Deserialize<List<Assignment>>(assignmentsJson) ?? new();
-
     if (assignmentId is null)
     {
-        int highestId = 0;
-        foreach (var a in assignments)
-            highestId = Math.Max(highestId, a.ID);
-
-        // NOTE: original code set to highest ID (not highest+1). Kept same behavior.
-        assignmentId = (uint)highestId + 1;
+        ctx.Status("Requesting next assignment ID from backend...");
+        assignmentId = FetchNextAssignmentId();
     }
-
-    assignments.Add(new Assignment
-    {
-        Subject = subject,
-        Faculty = facultyName,
-        Chapter = chapter,
-        Title = assignmentTitle,
-        ID = (int)assignmentId.Value
-    });
-
-    ctx.Status("Writing [underline]assignment_list.json[/]...");
-    File.WriteAllText(
-        assignmentListPath,
-        JsonSerializer.Serialize(assignments, new JsonSerializerOptions { WriteIndented = true })
-    );
 
     ctx.Status("Creating assignment directory...");
     Directory.CreateDirectory($"./frontend/data/question_data/{assignmentId}");
@@ -243,6 +250,99 @@ static string PdfPicker()
     return selected ?? "";
 }
 
+void AuthenticateApi(StatusContext ctx)
+{
+    ctx.Status("Logging in...");
+    var loginResponse = apiClient.PostAsJsonAsync(
+        "/login",
+        new LoginRequest(apiUsername, apiPassword),
+        jsonOptions
+    ).GetAwaiter().GetResult();
+
+    if (!loginResponse.IsSuccessStatusCode)
+    {
+        string body = loginResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        throw new InvalidOperationException($"Login failed ({(int)loginResponse.StatusCode}): {body}");
+    }
+
+    var loginPayload = loginResponse.Content.ReadFromJsonAsync<LoginResponse>(jsonOptions)
+        .GetAwaiter().GetResult()
+        ?? throw new InvalidOperationException("Login response was empty.");
+
+    if (string.IsNullOrWhiteSpace(loginPayload.Token))
+        throw new InvalidOperationException("Login response did not include a token.");
+
+    authToken = loginPayload.Token;
+    apiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+
+    ctx.Status("Verifying session...");
+    var meResponse = apiClient.GetAsync("/me").GetAwaiter().GetResult();
+    if (!meResponse.IsSuccessStatusCode)
+    {
+        string body = meResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        throw new InvalidOperationException($"Session verification failed ({(int)meResponse.StatusCode}): {body}");
+    }
+
+    var mePayload = meResponse.Content.ReadFromJsonAsync<MeResponse>(jsonOptions)
+        .GetAwaiter().GetResult();
+    if (mePayload is null || string.IsNullOrWhiteSpace(mePayload.Username))
+        throw new InvalidOperationException("Session verification returned no user.");
+}
+
+uint FetchNextAssignmentId()
+{
+    var response = apiClient.GetAsync("/api/admin/assignments/next-id").GetAwaiter().GetResult();
+    if (!response.IsSuccessStatusCode)
+    {
+        string body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        throw new InvalidOperationException($"Failed to get next assignment ID ({(int)response.StatusCode}): {body}");
+    }
+
+    var payload = response.Content.ReadFromJsonAsync<NextAssignmentIdResponse>(jsonOptions)
+        .GetAwaiter().GetResult()
+        ?? throw new InvalidOperationException("Next assignment ID response was empty.");
+
+    if (payload.AssignmentId <= 0)
+        throw new InvalidOperationException("Backend returned an invalid assignment ID.");
+
+    return checked((uint)payload.AssignmentId);
+}
+
+void SyncAssignmentToApi(StatusContext ctx)
+{
+    ctx.Status("Preparing API payload...");
+    using JsonDocument assignmentDocument = JsonDocument.Parse(assignmentJson);
+    var request = new AssignmentUpsertRequest
+    {
+        AssignmentId = checked((int)assignmentId!.Value),
+        Title = assignmentTitle,
+        Subject = subject,
+        Faculty = facultyName,
+        Chapter = chapter,
+        SourceRelPath = $"frontend/data/question_data/{assignmentId}/assignment.json",
+        Assignment = assignmentDocument.RootElement.Clone()
+    };
+
+    ctx.Status("Uploading assignment metadata and payload...");
+    var response = apiClient.PostAsJsonAsync("/api/admin/assignments", request, jsonOptions)
+        .GetAwaiter().GetResult();
+
+    if (!response.IsSuccessStatusCode)
+    {
+        string body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        throw new InvalidOperationException($"Assignment sync failed ({(int)response.StatusCode}): {body}");
+    }
+}
+
+static string NormalizeApiBase(string input)
+{
+    string trimmed = (input ?? "").Trim();
+    if (string.IsNullOrWhiteSpace(trimmed))
+        return DefaultApiBase;
+
+    return trimmed.TrimEnd('/') + "/";
+}
+
 public enum Subjects
 {
     Mathematics,
@@ -267,4 +367,51 @@ public readonly struct Assignment
 
     [JsonPropertyName("aID")]
     public int ID { get; init; }
+}
+
+public sealed record LoginRequest(
+    [property: JsonPropertyName("username")] string Username,
+    [property: JsonPropertyName("password")] string Password
+);
+
+public sealed class LoginResponse
+{
+    [JsonPropertyName("token")]
+    public string Token { get; init; } = "";
+}
+
+public sealed class MeResponse
+{
+    [JsonPropertyName("username")]
+    public string Username { get; init; } = "";
+}
+
+public sealed class NextAssignmentIdResponse
+{
+    [JsonPropertyName("assignmentId")]
+    public int AssignmentId { get; init; }
+}
+
+public sealed class AssignmentUpsertRequest
+{
+    [JsonPropertyName("assignmentId")]
+    public int AssignmentId { get; init; }
+
+    [JsonPropertyName("title")]
+    public string Title { get; init; } = "";
+
+    [JsonPropertyName("subject")]
+    public string Subject { get; init; } = "";
+
+    [JsonPropertyName("faculty")]
+    public string Faculty { get; init; } = "";
+
+    [JsonPropertyName("chapter")]
+    public string Chapter { get; init; } = "";
+
+    [JsonPropertyName("sourceRelPath")]
+    public string SourceRelPath { get; init; } = "";
+
+    [JsonPropertyName("assignment")]
+    public JsonElement Assignment { get; init; }
 }
