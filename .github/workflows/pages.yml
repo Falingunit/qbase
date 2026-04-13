@@ -33,5 +33,26 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Build assignment sync payload
+        run: node backend/scripts/build-assignment-sync-payload.js --out assignment-sync-payload.json
+      - name: Check assignment sync secret is configured
+        env:
+          ASSIGNMENT_SYNC_SECRET: ${{ secrets.ASSIGNMENT_SYNC_SECRET }}
+        run: |
+          test -n "${ASSIGNMENT_SYNC_SECRET}" || {
+            echo "Missing GitHub secret: ASSIGNMENT_SYNC_SECRET" >&2
+            exit 1
+          }
+      - name: Sync assignments to backend
+        env:
+          BACKEND_ASSIGNMENTS_SYNC_URL: https://qbase.103.125.154.215.nip.io/api/internal/assignments/sync
+          ASSIGNMENT_SYNC_SECRET: ${{ secrets.ASSIGNMENT_SYNC_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            -H "Content-Type: application/json" \
+            -H "x-assignment-sync-secret: ${ASSIGNMENT_SYNC_SECRET}" \
+            --data-binary @assignment-sync-payload.json \
+            "${BACKEND_ASSIGNMENTS_SYNC_URL}"

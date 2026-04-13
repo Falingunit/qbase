@@ -13,6 +13,7 @@ import {
   loadAssignmentFromDb,
   upsertAssignmentInDb,
 } from "./assignment-store.js";
+import { syncAssignmentsToDb } from "./assignment-sync.js";
 
 // ---------- Paths ----------
 const __filename = fileURLToPath(import.meta.url);
@@ -33,6 +34,7 @@ const ASSETS_BASE =
   process.env.ASSETS_BASE || "https://falingunit.github.io/qbase";
 // Optional: forward reports to a webhook (e.g., Slack/Discord)
 const REPORTS_WEBHOOK_URL = process.env.REPORTS_WEBHOOK_URL || "";
+const ASSIGNMENT_SYNC_SECRET = process.env.ASSIGNMENT_SYNC_SECRET || "";
 
 // For Zoom/in-app browsers, requests still come from the frontend origin.
 // But we’ll also allow dev and your nip.io domain for safety.
@@ -87,7 +89,7 @@ const corsFn = cors({
 app.use(corsFn);
 
 // ---------- Parsers ----------
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "25mb" }));
 
 // ---------- Static uploads ----------
 const uploadsDir = path.join(__dirname, "uploads");
@@ -777,6 +779,13 @@ function verifyPassword(password, stored) {
   const test = crypto.scryptSync(String(password), salt, 64);
   if (test.length !== keyBuf.length) return false;
   return crypto.timingSafeEqual(test, keyBuf);
+}
+
+function secretsMatch(left, right) {
+  const a = Buffer.from(String(left || ""), "utf8");
+  const b = Buffer.from(String(right || ""), "utf8");
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 function auth(req, res, next) {
@@ -2635,6 +2644,42 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
       });
   } catch (e) {
     res.status(500).json({ error: "Failed to bootstrap assignment" });
+  }
+});
+
+app.post("/api/internal/assignments/sync", assignmentSyncOnly, (req, res) => {
+  try {
+    const body = req.body && typeof req.body === "object" ? req.body : {};
+    const assignments = Array.isArray(body.assignments) ? body.assignments : [];
+    if (!assignments.length) {
+      return res
+        .status(400)
+        .json({ error: "assignments must be a non-empty array" });
+    }
+
+    const summary = syncAssignmentsToDb(db, assignments, {
+      onAssignment(result) {
+        invalidateAssignmentCache(result.assignmentId);
+      },
+    });
+
+    res.json({
+      success: true,
+      source: body.source == null ? null : String(body.source),
+      commitSha: body.commitSha == null ? null : String(body.commitSha),
+      generatedAt: body.generatedAt == null ? null : String(body.generatedAt),
+      ...summary,
+    });
+  } catch (e) {
+    console.error("assignment sync api:", e);
+    const message = e?.message || "Failed to sync assignments";
+    const status =
+      /assignmentId must be a non-negative integer|assignment payload is required/i.test(
+        message
+      )
+        ? 400
+        : 500;
+    res.status(status).json({ error: message });
   }
 });
 
@@ -5403,6 +5448,20 @@ async function getPyqSubjectNameForTest(req, examId, subjectId) {
   } catch {
     return String(subjectId);
   }
+}
+
+function assignmentSyncOnly(req, res, next) {
+  if (!ASSIGNMENT_SYNC_SECRET) {
+    return res.status(503).json({ error: "Assignment sync is not configured" });
+  }
+  const headerSecret = req.get("x-assignment-sync-secret");
+  const authHeader = req.headers.authorization || "";
+  const bearerSecret = authHeader.match(/^Bearer\s+(.+)$/i)?.[1] || "";
+  const providedSecret = headerSecret || bearerSecret;
+  if (!providedSecret || !secretsMatch(providedSecret, ASSIGNMENT_SYNC_SECRET)) {
+    return res.status(401).json({ error: "Invalid assignment sync secret" });
+  }
+  return next();
 }
 
 function buildTestCandidate({
