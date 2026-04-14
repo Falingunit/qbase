@@ -6546,9 +6546,7 @@ function scoreAgainstAlternativeSets(correct, picked, { positive, negative, allo
       return { attempted: true, score: positive, status: "correct" };
     }
     if (allowPartial && !wrong && hits > 0) {
-      const partialScore = Number(
-        ((positive * hits) / Math.max(correctSet.size, 1)).toFixed(2)
-      );
+      const partialScore = Math.min(hits, positive);
       if (partialScore > best.score) {
         best = {
           attempted: true,
