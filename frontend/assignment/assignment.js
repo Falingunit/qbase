@@ -381,21 +381,114 @@
     }
   }
 
-  function normalizeAnswer(q) {
-    // q.qAnswer may be "A" | ["A","C"] | number | string-number
-    if (q.qType === "SMCQ") {
-      return new Set([String(q.qAnswer).trim().toUpperCase()]);
+  function normalizeOptionSet(values) {
+    return new Set(
+      (Array.isArray(values) ? values : [values])
+        .map((x) => String(x || "").trim().toUpperCase())
+        .filter(Boolean)
+    );
+  }
+
+  function getNormalizedAnswerSpec(q) {
+    const raw = q?.qAnswer;
+    if (q?.qType === "Numerical") {
+      if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.kind === "numerical") {
+        const alternatives = Array.isArray(raw.alternatives)
+          ? raw.alternatives
+              .map((item) => {
+                if (String(item?.mode || "").toLowerCase() === "range") {
+                  const start = Number(item?.start);
+                  const end = Number(item?.end);
+                  if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+                  return { mode: "range", start: Math.min(start, end), end: Math.max(start, end) };
+                }
+                const value = Number(item?.value);
+                if (!Number.isFinite(value)) return null;
+                return { mode: "value", value };
+              })
+              .filter(Boolean)
+          : [];
+        return { kind: "numerical", alternatives };
+      }
+      const n = Number(raw);
+      return {
+        kind: "numerical",
+        alternatives: Number.isFinite(n) ? [{ mode: "value", value: n }] : [],
+      };
     }
-    if (q.qType === "MMCQ") {
-      const arr = Array.isArray(q.qAnswer) ? q.qAnswer : [q.qAnswer];
-      return new Set(arr.map((x) => String(x).trim().toUpperCase()));
+
+    if (q?.qType === "MMCQ") {
+      if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.kind === "multiple") {
+        return {
+          kind: "multiple",
+          alternatives: (Array.isArray(raw.alternatives) ? raw.alternatives : [])
+            .map((entry) => normalizeOptionSet(Array.isArray(entry) ? entry : entry?.options))
+            .filter((set) => set.size),
+        };
+      }
+      return { kind: "multiple", alternatives: [normalizeOptionSet(raw)] };
     }
-    if (q.qType === "Numerical") {
-      // Allow number or numeric string in data
-      const n = Number(q.qAnswer);
-      return { value: n, valid: !Number.isNaN(n) };
+
+    if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.kind === "single") {
+      return {
+        kind: "single",
+        alternatives: (Array.isArray(raw.alternatives) ? raw.alternatives : [])
+          .map((entry) => normalizeOptionSet(entry?.value ?? entry))
+          .filter((set) => set.size),
+      };
     }
-    return new Set();
+
+    return { kind: "single", alternatives: [normalizeOptionSet(raw)] };
+  }
+
+  function pickBestAnswerAlternative(answerSpec, pickedSet = new Set()) {
+    const alternatives = Array.isArray(answerSpec?.alternatives)
+      ? answerSpec.alternatives
+      : [];
+    if (!alternatives.length) return new Set();
+    const picked = pickedSet instanceof Set ? pickedSet : normalizeOptionSet(pickedSet);
+    let best = alternatives[0];
+    let bestScore = -Infinity;
+    alternatives.forEach((alternative) => {
+      if (!(alternative instanceof Set)) return;
+      let score = 0;
+      alternative.forEach((value) => {
+        if (picked.has(value)) score += 2;
+      });
+      picked.forEach((value) => {
+        if (!alternative.has(value)) score -= 1;
+      });
+      score -= Math.abs(alternative.size - picked.size) * 0.25;
+      if (score > bestScore) {
+        best = alternative;
+        bestScore = score;
+      }
+    });
+    return best instanceof Set ? best : new Set();
+  }
+
+  function isNumericalAnswerCorrect(answerSpec, userValue) {
+    return Array.isArray(answerSpec?.alternatives) && answerSpec.alternatives.some((item) => {
+      if (!item || typeof item !== "object") return false;
+      if (item.mode === "range") return userValue >= item.start && userValue <= item.end;
+      return userValue === item.value;
+    });
+  }
+
+  function describeAnswerSpec(q) {
+    const spec = getNormalizedAnswerSpec(q);
+    if (spec.kind === "numerical") {
+      return spec.alternatives
+        .map((item) =>
+          item.mode === "range"
+            ? `${item.start} to ${item.end}`
+            : String(item.value)
+        )
+        .join(" OR ");
+    }
+    return spec.alternatives
+      .map((set) => Array.from(set).sort().join(", "))
+      .join(" OR ");
   }
 
   function getUserSelection(state, qType) {
@@ -1909,6 +2002,10 @@
     showReportDialog();
   });
 
+  document.getElementById("edit-answer-btn")?.addEventListener("click", () => {
+    updateCurrentQuestionAnswer();
+  });
+
   async function showReportDialog() {
     try {
       const originalIdx = window.questionIndexMap[currentQuestionID];
@@ -2061,20 +2158,25 @@
     let partial = false;
 
     if (q.qType === "SMCQ") {
-      const correct = normalizeAnswer(q); // Set
+      const answerSpec = getNormalizedAnswerSpec(q);
       const picked = getUserSelection(st, "SMCQ"); // Set
-      const isCorrect = picked.size === 1 && correct.has([...picked][0]);
+      const correct = pickBestAnswerAlternative(answerSpec, picked);
+      const isCorrect = Array.from(answerSpec.alternatives || []).some(
+        (alternative) =>
+          alternative instanceof Set &&
+          alternative.size === picked.size &&
+          Array.from(alternative).every((value) => picked.has(value))
+      );
       status = isCorrect ? "correct" : "incorrect";
-      // visuals
       clearMCQVisuals();
       applyMCQEvaluationStyles(correct, picked);
     } else if (q.qType === "MMCQ") {
-      const correct = normalizeAnswer(q); // Set of correct opts
+      const answerSpec = getNormalizedAnswerSpec(q);
       const picked = getUserSelection(st, "MMCQ"); // Set of picked opts
-
+      const correct = pickBestAnswerAlternative(answerSpec, picked);
       const pickedWrong = [...picked].some((x) => !correct.has(x));
       const missed = [...correct].some((x) => !picked.has(x));
-      const allCorrectPickedOnly = !pickedWrong && !missed;
+      const allCorrectPickedOnly = !pickedWrong && !missed && picked.size === correct.size;
 
       if (allCorrectPickedOnly) status = "correct";
       else if (!pickedWrong && picked.size > 0 && picked.size < correct.size) {
@@ -2087,16 +2189,12 @@
       clearMCQVisuals();
       applyMCQEvaluationStyles(correct, picked);
     } else if (q.qType === "Numerical") {
-      const ans = normalizeAnswer(q); // {value, valid}
+      const answerSpec = getNormalizedAnswerSpec(q);
       const user = getUserSelection(st, "Numerical"); // number | undefined
-      let isCorrect = false;
-      if (ans.valid && typeof user === "number") {
-        // exact match by default; adjust tolerance if needed:
-        isCorrect = user === ans.value;
-      }
+      const isCorrect =
+        typeof user === "number" && isNumericalAnswerCorrect(answerSpec, user);
       status = isCorrect ? "correct" : "incorrect";
       applyNumericalEvaluationStyles(isCorrect);
-      // show correct answer text
       const numericalAnswer = document.getElementById("numericalAnswer");
       if (numericalAnswer)
         numericalAnswer.parentElement.style.display = "block";
@@ -2578,20 +2676,25 @@
       document.body.classList.add("suppress-eval-anim");
       try {
         if (question.qType === "SMCQ") {
-          const correct = normalizeAnswer(question);
+          const correct = pickBestAnswerAlternative(
+            getNormalizedAnswerSpec(question),
+            getUserSelection(questionState, "SMCQ")
+          );
           const picked = getUserSelection(questionState, "SMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
         } else if (question.qType === "MMCQ") {
-          const correct = normalizeAnswer(question);
+          const correct = pickBestAnswerAlternative(
+            getNormalizedAnswerSpec(question),
+            getUserSelection(questionState, "MMCQ")
+          );
           const picked = getUserSelection(questionState, "MMCQ");
           clearMCQVisuals();
           applyMCQEvaluationStyles(correct, picked);
         } else if (question.qType === "Numerical") {
-          const ans = normalizeAnswer(question);
+          const ans = getNormalizedAnswerSpec(question);
           const user = getUserSelection(questionState, "Numerical");
-          const isCorrect =
-            typeof user === "number" && ans.valid && user === ans.value;
+          const isCorrect = typeof user === "number" && isNumericalAnswerCorrect(ans, user);
           if (questionState.evalStatus !== "unattempted") {
             applyNumericalEvaluationStyles(isCorrect);
           } else if (isTestReviewMode) {
@@ -2617,7 +2720,7 @@
 
     // Show numerical vs MCQ
     if (question.qType === "Numerical") {
-      numericalAnswer.textContent = question.qAnswer;
+      numericalAnswer.textContent = describeAnswerSpec(question);
       numerical.style.display = "block";
       MCQOptions.style.display = "none";
       numericalInput.value = questionStates[qID].pickedNumerical ?? "";
@@ -2702,6 +2805,7 @@
     updateBookmarkButton();
     // Update color picker selected state for current question
     updateColorPickerSelection();
+    syncEditAnswerButton();
 
     // Update prev/next button disabled state
     updateTopbarNavButtons();
@@ -2727,7 +2831,6 @@
 
   function getCurrentQuestionSourceRef() {
     try {
-      if (!isTestReviewMode) return null;
       const originalIdx = window.questionIndexMap[currentQuestionID];
       const question = questionData.questions[originalIdx];
       const source = question?._testSource || null;
@@ -2771,6 +2874,333 @@
       return `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}`;
     }
     return `${API_BASE}/api/question-marks/${encodeURIComponent(assignmentSourceId(source))}/${encodeURIComponent(qIndex)}`;
+  }
+
+  function getCurrentQuestionAnswerSourceRef() {
+    try {
+      const testSource = getCurrentQuestionSourceRef();
+      if (testSource?.kind) return testSource;
+      if (assignmentTestAdapter) return null;
+      const originalIdx = Number(window.questionIndexMap?.[currentQuestionID]);
+      if (!Number.isFinite(originalIdx)) return null;
+      const pyqs = window.__PYQS_IDS__;
+      if (pyqs?.examId && pyqs?.subjectId && pyqs?.chapterId) {
+        return {
+          kind: "pyq",
+          examId: String(pyqs.examId),
+          subjectId: String(pyqs.subjectId),
+          chapterId: String(pyqs.chapterId),
+          questionIndex: originalIdx,
+        };
+      }
+      return {
+        kind: "assignment",
+        assignmentId: aID,
+        questionIndex: originalIdx,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  function sourceAnswerUpdateUrl(source) {
+    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
+    if (isPyqSourceRef(source)) {
+      return `${API_BASE}/api/pyqs/questions/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}/answer`;
+    }
+    return `${API_BASE}/api/assignment/${encodeURIComponent(assignmentSourceId(source))}/questions/${encodeURIComponent(qIndex)}/answer`;
+  }
+
+  function buildAnswerEditorState(question) {
+    const type = String(question?.qType || "").trim();
+    const spec = getNormalizedAnswerSpec(question);
+    if (type === "Numerical") {
+      const alternatives = Array.isArray(spec.alternatives) && spec.alternatives.length
+        ? spec.alternatives
+        : [{ mode: "value", value: "" }];
+      return {
+        type,
+        alternatives: alternatives.map((item) =>
+          item.mode === "range"
+            ? { mode: "range", start: item.start, end: item.end }
+            : { mode: "value", value: item.value }
+        ),
+      };
+    }
+    const fallback = type === "MMCQ" ? ["A"] : "A";
+    const alternatives = Array.isArray(spec.alternatives) && spec.alternatives.length
+      ? spec.alternatives
+      : [normalizeOptionSet(fallback)];
+    return {
+      type,
+      alternatives: alternatives.map((set) => ({
+        options: ["A", "B", "C", "D"].map((option) => ({
+          option,
+          checked: set.has(option),
+        })),
+      })),
+    };
+  }
+
+  function renderAnswerEditorRows(host, editorState) {
+    if (!host) return;
+    const type = editorState.type;
+    const rows = editorState.alternatives || [];
+    host.innerHTML = rows
+      .map((row, index) => {
+        const prefix = `<div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="fw-semibold">Answer ${index + 1}${index > 0 ? ' <span class="badge text-bg-info ms-2">OR</span>' : ''}</div>
+            ${rows.length > 1 ? `<button type="button" class="btn btn-sm btn-outline-danger" data-answer-remove="${index}"><i class="bi bi-trash"></i></button>` : ""}
+          </div>`;
+        if (type === "Numerical") {
+          const mode = row.mode === "range" ? "range" : "value";
+          return `<div class="border rounded p-3 mb-3" data-answer-row="${index}">
+            ${prefix}
+            <div class="btn-group mb-3" role="group">
+              <input class="btn-check" type="radio" name="ans-mode-${index}" id="ans-mode-value-${index}" value="value" ${mode === "value" ? "checked" : ""}>
+              <label class="btn btn-outline-secondary" for="ans-mode-value-${index}">Exact</label>
+              <input class="btn-check" type="radio" name="ans-mode-${index}" id="ans-mode-range-${index}" value="range" ${mode === "range" ? "checked" : ""}>
+              <label class="btn btn-outline-secondary" for="ans-mode-range-${index}">Range</label>
+            </div>
+            <div class="row g-2">
+              <div class="col-12 col-md-6" data-answer-exact-wrap="${index}" ${mode === "range" ? 'style="display:none"' : ""}>
+                <label class="form-label">Value</label>
+                <input type="number" step="any" class="form-control" data-answer-value="${index}" value="${row.value ?? ""}">
+              </div>
+              <div class="col-12 col-md-6" data-answer-range-start-wrap="${index}" ${mode === "range" ? "" : 'style="display:none"'}>
+                <label class="form-label">Start</label>
+                <input type="number" step="any" class="form-control" data-answer-start="${index}" value="${row.start ?? ""}">
+              </div>
+              <div class="col-12 col-md-6" data-answer-range-end-wrap="${index}" ${mode === "range" ? "" : 'style="display:none"'}>
+                <label class="form-label">End</label>
+                <input type="number" step="any" class="form-control" data-answer-end="${index}" value="${row.end ?? ""}">
+              </div>
+            </div>
+          </div>`;
+        }
+
+        const inputType = type === "MMCQ" ? "checkbox" : "radio";
+        const optionName = `ans-options-${index}`;
+        return `<div class="border rounded p-3 mb-3" data-answer-row="${index}">
+          ${prefix}
+          <div class="d-flex flex-wrap gap-2">
+            ${row.options
+              .map(
+                ({ option, checked }) => `
+              <input class="btn-check" type="${inputType}" name="${optionName}" id="ans-${index}-${option}" value="${option}" ${checked ? "checked" : ""}>
+              <label class="btn btn-outline-primary" for="ans-${index}-${option}">${option}</label>
+            `
+              )
+              .join("")}
+          </div>
+        </div>`;
+      })
+      .join("");
+  }
+
+  function readAnswerEditorValue(question, modalEl) {
+    const type = String(question?.qType || "").trim();
+    const rows = Array.from(modalEl.querySelectorAll("[data-answer-row]"));
+    if (!rows.length) return { error: "Add at least one answer." };
+
+    if (type === "Numerical") {
+      const alternatives = [];
+      for (const row of rows) {
+        const index = Number(row.getAttribute("data-answer-row"));
+        const mode =
+          modalEl.querySelector(`input[name="ans-mode-${index}"]:checked`)?.value ||
+          "value";
+        if (mode === "range") {
+          const start = Number(
+            modalEl.querySelector(`[data-answer-start="${index}"]`)?.value
+          );
+          const end = Number(
+            modalEl.querySelector(`[data-answer-end="${index}"]`)?.value
+          );
+          if (!Number.isFinite(start) || !Number.isFinite(end)) {
+            return { error: "Enter valid start and end values for each range." };
+          }
+          if (start > end) return { error: "Range start cannot be greater than range end." };
+          alternatives.push({ mode: "range", start, end });
+        } else {
+          const value = Number(
+            modalEl.querySelector(`[data-answer-value="${index}"]`)?.value
+          );
+          if (!Number.isFinite(value)) {
+            return { error: "Enter a valid number for each exact answer." };
+          }
+          alternatives.push({ mode: "value", value });
+        }
+      }
+      return {
+        value:
+          alternatives.length === 1 && alternatives[0].mode === "value"
+            ? alternatives[0].value
+            : { kind: "numerical", alternatives },
+      };
+    }
+
+    const alternatives = [];
+    for (const row of rows) {
+      const inputs = Array.from(
+        row.querySelectorAll('input[type="checkbox"], input[type="radio"]')
+      );
+      const selected = inputs
+        .filter((input) => input.checked)
+        .map((input) => String(input.value || "").trim().toUpperCase())
+        .filter(Boolean);
+      const unique = Array.from(new Set(selected)).sort();
+      if (!unique.length) {
+        return { error: "Each answer row must have at least one selected option." };
+      }
+      if (type !== "MMCQ" && unique.length !== 1) {
+        return { error: "Single-correct rows must have exactly one selected option." };
+      }
+      alternatives.push(unique);
+    }
+
+    if (type === "MMCQ") {
+      return {
+        value:
+          alternatives.length === 1
+            ? alternatives[0]
+            : { kind: "multiple", alternatives },
+      };
+    }
+    return {
+      value:
+        alternatives.length === 1
+          ? alternatives[0][0]
+          : { kind: "single", alternatives: alternatives.map((entry) => entry[0]) },
+    };
+  }
+
+  function captureAnswerEditorState(question, modalEl, editorState) {
+    const parsed = readAnswerEditorValue(question, modalEl);
+    if (!parsed?.error && parsed?.value !== undefined) {
+      const nextQuestion = { ...question, qAnswer: parsed.value };
+      const nextState = buildAnswerEditorState(nextQuestion);
+      editorState.alternatives = nextState.alternatives;
+    }
+  }
+
+  async function updateCurrentQuestionAnswer() {
+    if (currentQuestionID == null) return;
+    const originalIdx = window.questionIndexMap?.[currentQuestionID];
+    const question = questionData?.questions?.[originalIdx];
+    const source = getCurrentQuestionAnswerSourceRef();
+    if (!question || !source) {
+      await uiNotice("This question cannot be updated from this view.", "Unavailable");
+      return;
+    }
+    const editorState = buildAnswerEditorState(question);
+    const bodyHTML = `
+      <div class="mb-3 text-body-secondary small">
+        ${editorState.type === "Numerical"
+          ? "Add one or more exact values or ranges. Any one matching row will be accepted."
+          : editorState.type === "MMCQ"
+            ? "Build one or more valid checkbox combinations. Any one matching combination will be accepted."
+            : "Build one or more valid single-option answers. Any one matching option will be accepted."}
+      </div>
+      <div id="answer-editor-rows"></div>
+      <button type="button" class="btn btn-sm btn-outline-info" id="add-answer-row-btn">
+        <i class="bi bi-plus-lg"></i> Add OR Answer
+      </button>
+    `;
+    const modalResult = await showModal({
+      title: "Update Answer",
+      bodyHTML,
+      buttons: [
+        { text: "Cancel", className: "btn btn-secondary", value: "cancel" },
+        { text: "Save", className: "btn btn-info", value: "save" },
+      ],
+      onContentReady(modalEl) {
+        const rowsHost = modalEl.querySelector("#answer-editor-rows");
+        const syncRows = () => renderAnswerEditorRows(rowsHost, editorState);
+        syncRows();
+        modalEl.querySelector("#add-answer-row-btn")?.addEventListener("click", () => {
+          captureAnswerEditorState(question, modalEl, editorState);
+          if (editorState.type === "Numerical") {
+            editorState.alternatives.push({ mode: "value", value: "" });
+          } else {
+            editorState.alternatives.push({
+              options: ["A", "B", "C", "D"].map((option) => ({ option, checked: false })),
+            });
+          }
+          syncRows();
+        });
+        rowsHost?.addEventListener("click", (event) => {
+          const removeBtn = event.target.closest("[data-answer-remove]");
+          if (!removeBtn) return;
+          captureAnswerEditorState(question, modalEl, editorState);
+          const index = Number(removeBtn.getAttribute("data-answer-remove"));
+          if (!Number.isFinite(index)) return;
+          editorState.alternatives.splice(index, 1);
+          if (!editorState.alternatives.length) {
+            if (editorState.type === "Numerical") {
+              editorState.alternatives.push({ mode: "value", value: "" });
+            } else {
+              editorState.alternatives.push({
+                options: ["A", "B", "C", "D"].map((option) => ({ option, checked: false })),
+              });
+            }
+          }
+          syncRows();
+        });
+        rowsHost?.addEventListener("change", (event) => {
+          const radio = event.target.closest('input[type="radio"][name^="ans-mode-"]');
+          if (!radio) return;
+          const index = radio.name.split("-").pop();
+          const exactWrap = modalEl.querySelector(`[data-answer-exact-wrap="${index}"]`);
+          const startWrap = modalEl.querySelector(`[data-answer-range-start-wrap="${index}"]`);
+          const endWrap = modalEl.querySelector(`[data-answer-range-end-wrap="${index}"]`);
+          const isRange = radio.value === "range";
+          if (exactWrap) exactWrap.style.display = isRange ? "none" : "";
+          if (startWrap) startWrap.style.display = isRange ? "" : "none";
+          if (endWrap) endWrap.style.display = isRange ? "" : "none";
+        });
+      },
+    });
+    if (modalResult !== "save") return;
+    const parsed = readAnswerEditorValue(question, document.getElementById("qbaseModal"));
+    if (parsed?.error) {
+      await uiNotice(parsed.error, "Invalid Answer");
+      return;
+    }
+    try {
+      const response = await authFetch(sourceAnswerUpdateUrl(source), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answer: parsed.value }),
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.error || `Request failed: ${response.status}`);
+      }
+      const payload = await response.json().catch(() => null);
+      const nextAnswer = payload?.answer ?? parsed.value;
+      question.qAnswer = nextAnswer;
+      if (window.displayQuestions?.[currentQuestionID]) {
+        window.displayQuestions[currentQuestionID].qAnswer = nextAnswer;
+      }
+      if (
+        source.kind === "assignment" &&
+        Number(source.assignmentId ?? aID) === Number(aID)
+      ) {
+        try { AssignmentService.invalidateAssignmentBundle(aID); } catch {}
+      }
+      setQuestion(currentQuestionID);
+      await uiNotice("Answer updated.", "Saved");
+    } catch (error) {
+      console.error("updateCurrentQuestionAnswer failed", error);
+      await uiNotice(error?.message || "Failed to update the answer.", "Error");
+    }
+  }
+
+  function syncEditAnswerButton() {
+    const btn = document.getElementById("edit-answer-btn");
+    if (!btn) return;
+    btn.classList.toggle("d-none", !getCurrentQuestionAnswerSourceRef());
   }
 
   async function updateBookmarkButton() {

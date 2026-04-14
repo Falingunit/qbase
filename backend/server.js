@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import multer from "multer";
 import {
+  deriveQuestionContentHash,
   ensureAssignmentTables,
   loadAssignmentFromDb,
   upsertAssignmentInDb,
@@ -2575,6 +2576,113 @@ async function loadAssignment(assignmentId) {
   return json;
 }
 
+function normalizeEditableAnswerByType(qType, rawAnswer) {
+  const type = String(qType || "").trim().toUpperCase();
+  const normalizeOption = (value) => String(value || "").trim().toUpperCase();
+  const normalizeOptionList = (values) => {
+    const parts = (Array.isArray(values) ? values : [values])
+      .map(normalizeOption)
+      .filter(Boolean);
+    if (!parts.length) return { error: "answer is required" };
+    if (parts.some((value) => !/^[A-D]$/.test(value))) {
+      return { error: "answers must contain only A, B, C, or D" };
+    }
+    return { value: Array.from(new Set(parts)).sort() };
+  };
+  const normalizeNumber = (value, label = "value") => {
+    if (value == null || String(value).trim() === "") {
+      return { error: `${label} is required` };
+    }
+    const num = Number(value);
+    if (!Number.isFinite(num)) return { error: `${label} must be a valid number` };
+    return { value: num };
+  };
+
+  if (type === "NUMERICAL") {
+    if (rawAnswer && typeof rawAnswer === "object" && !Array.isArray(rawAnswer)) {
+      const alternatives = Array.isArray(rawAnswer.alternatives)
+        ? rawAnswer.alternatives
+        : [];
+      if (!alternatives.length) return { error: "answer is required" };
+      const normalized = [];
+      for (const alternative of alternatives) {
+        const mode = String(alternative?.mode || "value").trim().toLowerCase();
+        if (mode === "range") {
+          const start = normalizeNumber(alternative?.start, "range start");
+          if (start.error) return { error: start.error };
+          const end = normalizeNumber(alternative?.end, "range end");
+          if (end.error) return { error: end.error };
+          if (start.value > end.value) {
+            return { error: "range start must be less than or equal to range end" };
+          }
+          normalized.push({ mode: "range", start: start.value, end: end.value });
+        } else {
+          const value = normalizeNumber(alternative?.value, "value");
+          if (value.error) return { error: value.error };
+          normalized.push({ mode: "value", value: value.value });
+        }
+      }
+      if (
+        normalized.length === 1 &&
+        normalized[0].mode === "value"
+      ) {
+        return { value: normalized[0].value };
+      }
+      return { value: { kind: "numerical", alternatives: normalized } };
+    }
+
+    const value = normalizeNumber(rawAnswer, "answer");
+    if (value.error) return { error: value.error };
+    return { value: value.value };
+  }
+
+  if (type === "MMCQ") {
+    if (rawAnswer && typeof rawAnswer === "object" && !Array.isArray(rawAnswer)) {
+      const alternatives = Array.isArray(rawAnswer.alternatives)
+        ? rawAnswer.alternatives
+        : [];
+      if (!alternatives.length) return { error: "answer is required" };
+      const normalized = [];
+      for (const alternative of alternatives) {
+        const optionList = normalizeOptionList(alternative?.options ?? alternative);
+        if (optionList.error) return { error: optionList.error };
+        normalized.push(optionList.value);
+      }
+      if (normalized.length === 1) return { value: normalized[0] };
+      return { value: { kind: "multiple", alternatives: normalized } };
+    }
+
+    const optionList = normalizeOptionList(rawAnswer);
+    if (optionList.error) return { error: optionList.error };
+    return { value: optionList.value };
+  }
+
+  if (rawAnswer && typeof rawAnswer === "object" && !Array.isArray(rawAnswer)) {
+    const alternatives = Array.isArray(rawAnswer.alternatives)
+      ? rawAnswer.alternatives
+      : [];
+    if (!alternatives.length) return { error: "answer is required" };
+    const normalized = [];
+    for (const alternative of alternatives) {
+      const optionList = normalizeOptionList(alternative?.options ?? alternative?.value ?? alternative);
+      if (optionList.error) return { error: optionList.error };
+      if (optionList.value.length !== 1) {
+        return { error: "single-correct answers must contain exactly one option" };
+      }
+      normalized.push(optionList.value[0]);
+    }
+    if (normalized.length === 1) return { value: normalized[0] };
+    return { value: { kind: "single", alternatives: Array.from(new Set(normalized)).sort() } };
+  }
+
+  const optionList = normalizeOptionList(rawAnswer);
+  if (optionList.error) return { error: optionList.error };
+  if (optionList.value.length !== 1) {
+    return { error: "answer must be one of A, B, C, or D" };
+  }
+  return { value: optionList.value[0] };
+}
+
 // Assignment bootstrap aggregator
 app.get("/api/assignment/:aID/bootstrap", (req, res) => {
   try {
@@ -2647,10 +2755,144 @@ app.get("/api/assignment/:aID/bootstrap", (req, res) => {
   }
 });
 
+app.patch("/api/assignment/:assignmentId/questions/:questionIndex/answer", auth, (req, res) => {
+  try {
+    const assignmentId = Number(req.params.assignmentId);
+    const questionIndex = Number(req.params.questionIndex);
+    if (!Number.isInteger(assignmentId) || assignmentId <= 0) {
+      return res.status(400).json({ error: "Invalid assignmentId" });
+    }
+    if (!Number.isInteger(questionIndex) || questionIndex < 0) {
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    }
+
+    const row = db
+      .prepare(
+        `SELECT payload_json
+           FROM assignment_questions
+          WHERE assignment_id = ? AND source_index = ?`
+      )
+      .get(assignmentId, questionIndex);
+    if (!row) return res.status(404).json({ error: "Question not found" });
+
+    const payload = safeParseJSON(row.payload_json, {});
+    const normalized = normalizeEditableAnswerByType(payload?.qType, req.body?.answer);
+    if (normalized.error) {
+      return res.status(400).json({ error: normalized.error });
+    }
+
+    payload.qAnswer = normalized.value;
+    db.prepare(
+      `UPDATE assignment_questions
+          SET payload_json = ?,
+              content_hash = ?,
+              q_type = ?,
+              q_text = ?,
+              updated_at = CURRENT_TIMESTAMP
+        WHERE assignment_id = ? AND source_index = ?`
+    ).run(
+      JSON.stringify(payload),
+      deriveQuestionContentHash(payload),
+      payload?.qType == null ? null : String(payload.qType),
+      payload?.qText == null ? null : String(payload.qText),
+      assignmentId,
+      questionIndex
+    );
+    db.prepare(
+      "UPDATE assignments SET updated_at = CURRENT_TIMESTAMP WHERE id = ?"
+    ).run(assignmentId);
+    invalidateAssignmentCache(assignmentId);
+
+    res.json({ success: true, answer: normalized.value });
+  } catch (e) {
+    console.error("assignment answer update:", e);
+    res.status(500).json({ error: "Failed to update answer" });
+  }
+});
+
+app.patch("/api/pyqs/questions/:examId/:subjectId/:chapterId/:questionIndex/answer", auth, (req, res) => {
+  try {
+    if (!USE_LOCAL_PYQS || !pyqsDb) {
+      return res.status(501).json({ error: "PYQ answer editing is unavailable on this server" });
+    }
+    const { examId, subjectId, chapterId } = req.params;
+    const questionIndex = Number(req.params.questionIndex);
+    if (!examId || !subjectId || !chapterId) {
+      return res.status(400).json({ error: "examId, subjectId, and chapterId are required" });
+    }
+    if (!Number.isInteger(questionIndex) || questionIndex < 0) {
+      return res.status(400).json({ error: "Invalid questionIndex" });
+    }
+
+    const row = pyqsDb
+      .prepare(
+        `SELECT data_json
+           FROM questions
+          WHERE examId = ? AND subjectId = ? AND chapterId = ? AND idx = ?`
+      )
+      .get(String(examId), String(subjectId), String(chapterId), questionIndex);
+    if (!row) return res.status(404).json({ error: "Question not found" });
+
+    const payload = safeParseJSON(row.data_json, {});
+    const qType = (() => {
+      if (payload?.qType || payload?.type) return payload.qType || payload.type;
+      if (payload?.correctAnswer && typeof payload.correctAnswer === "object" && !Array.isArray(payload.correctAnswer)) {
+        const kind = String(payload.correctAnswer.kind || "").toLowerCase();
+        if (kind === "multiple") return "MMCQ";
+        if (kind === "numerical") return "Numerical";
+      }
+      if (Array.isArray(payload?.correctAnswer)) return "MMCQ";
+      if (typeof payload?.correctAnswer === "number") return "Numerical";
+      return "SMCQ";
+    })();
+    const normalized = normalizeEditableAnswerByType(qType, req.body?.answer);
+    if (normalized.error) {
+      return res.status(400).json({ error: normalized.error });
+    }
+
+    payload.correctAnswer = normalized.value;
+    if (Object.prototype.hasOwnProperty.call(payload, "qAnswer")) {
+      payload.qAnswer = normalized.value;
+    }
+    if (Object.prototype.hasOwnProperty.call(payload, "answer")) {
+      payload.answer = normalized.value;
+    }
+
+    pyqsDb
+      .prepare(
+        `UPDATE questions
+            SET data_json = ?
+          WHERE examId = ? AND subjectId = ? AND chapterId = ? AND idx = ?`
+      )
+      .run(
+        JSON.stringify(payload),
+        String(examId),
+        String(subjectId),
+        String(chapterId),
+        questionIndex
+      );
+
+    res.json({ success: true, answer: normalized.value });
+  } catch (e) {
+    console.error("pyq answer update:", e);
+    res.status(500).json({ error: "Failed to update answer" });
+  }
+});
+
 app.post("/api/internal/assignments/sync", assignmentSyncOnly, (req, res) => {
   try {
     const body = req.body && typeof req.body === "object" ? req.body : {};
-    const assignments = Array.isArray(body.assignments) ? body.assignments : [];
+    const assignments = Array.isArray(body.assignments)
+      ? body.assignments
+      : [body].filter((entry) => {
+          const candidate = entry && typeof entry === "object" ? entry : null;
+          return !!(
+            candidate &&
+            (candidate.assignmentId != null ||
+              candidate.aID != null ||
+              candidate.id != null)
+          );
+        });
     if (!assignments.length) {
       return res
         .status(400)
@@ -6113,7 +6355,7 @@ function scoreOneTestQuestion(q, st) {
   const correct = normalizeTestCorrectAnswer(q.payload);
   if (type === "numerical") {
     const picked = Number(st.pickedNumerical);
-    const ok = Number.isFinite(picked) && Number(correct?.value) === picked;
+    const ok = Number.isFinite(picked) && numericalMatchesAny(correct, picked);
     return { attempted: true, score: ok ? positive : -negative, status: ok ? "correct" : "incorrect" };
   }
   const picked = new Set(
@@ -6123,25 +6365,103 @@ function scoreOneTestQuestion(q, st) {
       ? [String(st.pickedAnswer).toUpperCase()]
       : []
   );
-  const correctSet = new Set((correct?.values || []).map((x) => String(x).toUpperCase()));
-  const wrong = Array.from(picked).some((x) => !correctSet.has(x));
-  const hits = Array.from(picked).filter((x) => correctSet.has(x)).length;
-  if (!wrong && hits && hits === correctSet.size && picked.size === correctSet.size) {
-    return { attempted: true, score: positive, status: "correct" };
-  }
-  if (type === "multiple" && !wrong && hits > 0) {
-    return { attempted: true, score: Number(((positive * hits) / Math.max(correctSet.size, 1)).toFixed(2)), status: "partial", partial: true };
-  }
-  return { attempted: true, score: -negative, status: "incorrect" };
+  return scoreAgainstAlternativeSets(correct, picked, {
+    positive,
+    negative,
+    allowPartial: type === "multiple",
+  });
 }
 
 function normalizeTestCorrectAnswer(question) {
   const raw = question?.qAnswer ?? question?.correctAnswer ?? question?.answer ?? question?.correctValue;
-  if (Array.isArray(raw)) return { values: raw };
-  if (typeof raw === "number") return { value: raw, values: [String(raw)] };
+  if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+    const kind = String(raw.kind || "").trim().toLowerCase();
+    const alternatives = Array.isArray(raw.alternatives) ? raw.alternatives : [];
+    if (kind === "numerical") {
+      const numericalAlternatives = alternatives
+        .map((alternative) => {
+          const mode = String(alternative?.mode || "value").trim().toLowerCase();
+          if (mode === "range") {
+            const start = Number(alternative?.start);
+            const end = Number(alternative?.end);
+            if (!Number.isFinite(start) || !Number.isFinite(end)) return null;
+            return { mode: "range", start: Math.min(start, end), end: Math.max(start, end) };
+          }
+          const value = Number(alternative?.value);
+          if (!Number.isFinite(value)) return null;
+          return { mode: "value", value };
+        })
+        .filter(Boolean);
+      return { alternatives: numericalAlternatives };
+    }
+    if (kind === "multiple") {
+      return {
+        alternatives: alternatives.map((alternative) =>
+          Array.isArray(alternative) ? alternative : alternative?.options ?? []
+        ),
+      };
+    }
+    if (kind === "single") {
+      return { alternatives: alternatives.map((value) => [value]) };
+    }
+  }
+  if (Array.isArray(raw)) return { alternatives: [raw] };
+  if (typeof raw === "number") return { alternatives: [{ mode: "value", value: raw }] };
   const text = String(raw ?? "").trim();
-  if (/^-?\d+(\.\d+)?$/.test(text)) return { value: Number(text), values: [text] };
-  return { values: text ? text.split(/[,\s]+/).filter(Boolean) : [] };
+  if (/^-?\d+(\.\d+)?$/.test(text)) {
+    return { alternatives: [{ mode: "value", value: Number(text) }] };
+  }
+  return { alternatives: text ? [text.split(/[,\s]+/).filter(Boolean)] : [] };
+}
+
+function normalizeAlternativeSet(values) {
+  return new Set(
+    (Array.isArray(values) ? values : [values])
+      .map((value) => String(value || "").trim().toUpperCase())
+      .filter(Boolean)
+  );
+}
+
+function scoreAgainstAlternativeSets(correct, picked, { positive, negative, allowPartial }) {
+  const alternatives = Array.isArray(correct?.alternatives) ? correct.alternatives : [];
+  if (!alternatives.length) {
+    return { attempted: true, score: -negative, status: "incorrect" };
+  }
+
+  let best = { attempted: true, score: -negative, status: "incorrect" };
+  for (const alternative of alternatives) {
+    const correctSet = normalizeAlternativeSet(alternative);
+    const wrong = Array.from(picked).some((x) => !correctSet.has(x));
+    const hits = Array.from(picked).filter((x) => correctSet.has(x)).length;
+    if (!wrong && hits && hits === correctSet.size && picked.size === correctSet.size) {
+      return { attempted: true, score: positive, status: "correct" };
+    }
+    if (allowPartial && !wrong && hits > 0) {
+      const partialScore = Number(
+        ((positive * hits) / Math.max(correctSet.size, 1)).toFixed(2)
+      );
+      if (partialScore > best.score) {
+        best = {
+          attempted: true,
+          score: partialScore,
+          status: "partial",
+          partial: true,
+        };
+      }
+    }
+  }
+  return best;
+}
+
+function numericalMatchesAny(correct, picked) {
+  const alternatives = Array.isArray(correct?.alternatives) ? correct.alternatives : [];
+  return alternatives.some((alternative) => {
+    if (!alternative || typeof alternative !== "object") return false;
+    if (alternative.mode === "range") {
+      return picked >= Number(alternative.start) && picked <= Number(alternative.end);
+    }
+    return Number(alternative.value) === picked;
+  });
 }
 
 function mergeShareWithUsername(rawShareWith, username) {
@@ -6228,35 +6548,36 @@ function scoreQuestion(q, st) {
   if (unanswered) return 0;
 
   if (q.qType === "SMCQ") {
-    const correct = String(q.qAnswer).trim().toUpperCase();
-    const picked = String(st.pickedAnswer || "")
-      .trim()
-      .toUpperCase();
-    return picked && picked === correct ? 4 : -1;
+    const picked = new Set(
+      String(st.pickedAnswer || "")
+        .trim()
+        .toUpperCase()
+        ? [String(st.pickedAnswer || "").trim().toUpperCase()]
+        : []
+    );
+    return scoreAgainstAlternativeSets(normalizeTestCorrectAnswer(q), picked, {
+      positive: 4,
+      negative: 1,
+      allowPartial: false,
+    }).score;
   }
   if (q.qType === "MMCQ") {
-    const correctSet = new Set(
-      (Array.isArray(q.qAnswer) ? q.qAnswer : [q.qAnswer]).map((x) =>
-        String(x).trim().toUpperCase()
-      )
-    );
     const pickedSet = new Set(
       (Array.isArray(st.pickedAnswers) ? st.pickedAnswers : []).map((x) =>
         String(x).trim().toUpperCase()
       )
     );
-    for (const p of pickedSet) if (!correctSet.has(p)) return -1;
-    const hits = [...pickedSet].filter((x) => correctSet.has(x)).length;
-    if (hits === correctSet.size && pickedSet.size === correctSet.size)
-      return 4;
-    if (hits > 0) return hits;
-    return -1;
+    return scoreAgainstAlternativeSets(normalizeTestCorrectAnswer(q), pickedSet, {
+      positive: 4,
+      negative: 1,
+      allowPartial: true,
+    }).score;
   }
   if (q.qType === "Numerical") {
-    const ans = Number(q.qAnswer);
     const user = st.pickedNumerical;
-    if (typeof user === "number" && !Number.isNaN(ans))
-      return user === ans ? 4 : -1;
+    if (typeof user === "number") {
+      return numericalMatchesAny(normalizeTestCorrectAnswer(q), user) ? 4 : -1;
+    }
     return 0;
   }
   return 0;

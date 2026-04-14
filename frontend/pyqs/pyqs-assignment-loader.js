@@ -158,7 +158,13 @@
                 }
 
                 let qAnswer;
-                if (qType === "Numerical") {
+                if (
+                  q?.correctAnswer &&
+                  typeof q.correctAnswer === "object" &&
+                  !Array.isArray(q.correctAnswer)
+                ) {
+                  qAnswer = q.correctAnswer;
+                } else if (qType === "Numerical") {
                   const n = Number(q?.correctAnswer);
                   qAnswer = Number.isFinite(n) ? n : undefined;
                 } else if (Array.isArray(q?.correctAnswer)) {

@@ -655,6 +655,29 @@
   }
 
   function normalizeAnswer(q) {
+    if (q.qAnswer && typeof q.qAnswer === "object" && !Array.isArray(q.qAnswer)) {
+      const kind = String(q.qAnswer.kind || "").toLowerCase();
+      const alternatives = Array.isArray(q.qAnswer.alternatives)
+        ? q.qAnswer.alternatives
+        : [];
+      if (kind === "numerical") {
+        const first = alternatives[0];
+        if (first?.mode === "range") {
+          return {
+            value: `${first.start} to ${first.end}`,
+            valid: Number.isFinite(Number(first.start)) && Number.isFinite(Number(first.end)),
+          };
+        }
+        const n = Number(first?.value);
+        return { value: n, valid: !Number.isNaN(n) };
+      }
+      const sets = alternatives.map((entry) =>
+        Array.isArray(entry) ? entry : [entry]
+      );
+      return new Set(
+        sets.flat().map((x) => String(x).trim().toUpperCase()).filter(Boolean)
+      );
+    }
     if (q.qType === "SMCQ") {
       return new Set([String(q.qAnswer).trim().toUpperCase()]);
     }

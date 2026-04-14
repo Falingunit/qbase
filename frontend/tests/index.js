@@ -1826,6 +1826,12 @@
       return "single";
     }
     const correct = question?.correctAnswer;
+    if (correct && typeof correct === "object" && !Array.isArray(correct)) {
+      const kind = String(correct.kind || "").toLowerCase();
+      if (kind === "numerical") return "numerical";
+      if (kind === "multiple") return "multiple";
+      return "single";
+    }
     if (Array.isArray(correct) && correct.length > 1) return "multiple";
     return "single";
   }

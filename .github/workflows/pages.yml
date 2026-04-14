@@ -36,8 +36,6 @@ jobs:
       - uses: actions/checkout@v4
       - id: deployment
         uses: actions/deploy-pages@v4
-      - name: Build assignment sync payload
-        run: node backend/scripts/build-assignment-sync-payload.js --out assignment-sync-payload.json
       - name: Check assignment sync secret is configured
         env:
           ASSIGNMENT_SYNC_SECRET: ${{ secrets.ASSIGNMENT_SYNC_SECRET }}
@@ -50,9 +48,4 @@ jobs:
         env:
           BACKEND_ASSIGNMENTS_SYNC_URL: https://qbase.103.125.154.215.nip.io/api/internal/assignments/sync
           ASSIGNMENT_SYNC_SECRET: ${{ secrets.ASSIGNMENT_SYNC_SECRET }}
-        run: |
-          curl --fail --show-error --silent \
-            -H "Content-Type: application/json" \
-            -H "x-assignment-sync-secret: ${ASSIGNMENT_SYNC_SECRET}" \
-            --data-binary @assignment-sync-payload.json \
-            "${BACKEND_ASSIGNMENTS_SYNC_URL}"
+        run: node backend/scripts/push-assignments-to-backend.js

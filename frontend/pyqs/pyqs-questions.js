@@ -349,6 +349,31 @@
   }
 
   function normalizeAnswer(q) {
+    if (q.qAnswer && typeof q.qAnswer === "object" && !Array.isArray(q.qAnswer)) {
+      const kind = String(q.qAnswer.kind || "").toLowerCase();
+      const alternatives = Array.isArray(q.qAnswer.alternatives)
+        ? q.qAnswer.alternatives
+        : [];
+      if (kind === "numerical") {
+        const first = alternatives[0];
+        if (first?.mode === "range") {
+          return {
+            alternatives,
+            value: Number(first.start),
+            valid:
+              Number.isFinite(Number(first.start)) &&
+              Number.isFinite(Number(first.end)),
+          };
+        }
+        const n = Number(first?.value);
+        return { alternatives, value: n, valid: !Number.isNaN(n) };
+      }
+      return new Set(
+        alternatives.flatMap((entry) => (Array.isArray(entry) ? entry : [entry]))
+          .map((x) => String(x).trim().toUpperCase())
+          .filter(Boolean)
+      );
+    }
     // q.qAnswer may be "A" | ["A","C"] | number | string-number
     if (q.qType === "SMCQ") {
       return new Set([String(q.qAnswer).trim().toUpperCase()]);
