@@ -2781,7 +2781,12 @@ app.patch("/api/assignment/:assignmentId/questions/:questionIndex/answer", auth,
       return res.status(400).json({ error: normalized.error });
     }
 
+    const previousAnswer = cloneAnswerValue(payload?.qAnswer);
+    if (!Object.prototype.hasOwnProperty.call(payload, "_originalQAnswer")) {
+      payload._originalQAnswer = previousAnswer;
+    }
     payload.qAnswer = normalized.value;
+    payload.qBonus = req.body?.bonus === true;
     db.prepare(
       `UPDATE assignment_questions
           SET payload_json = ?,
@@ -2803,7 +2808,12 @@ app.patch("/api/assignment/:assignmentId/questions/:questionIndex/answer", auth,
     ).run(assignmentId);
     invalidateAssignmentCache(assignmentId);
 
-    res.json({ success: true, answer: normalized.value });
+    res.json({
+      success: true,
+      answer: normalized.value,
+      bonus: payload.qBonus === true,
+      originalAnswer: cloneAnswerValue(payload._originalQAnswer),
+    });
   } catch (e) {
     console.error("assignment answer update:", e);
     res.status(500).json({ error: "Failed to update answer" });
@@ -2850,6 +2860,14 @@ app.patch("/api/pyqs/questions/:examId/:subjectId/:chapterId/:questionIndex/answ
       return res.status(400).json({ error: normalized.error });
     }
 
+    const previousAnswer = cloneAnswerValue(
+      Object.prototype.hasOwnProperty.call(payload, "qAnswer")
+        ? payload.qAnswer
+        : payload.correctAnswer
+    );
+    if (!Object.prototype.hasOwnProperty.call(payload, "_originalCorrectAnswer")) {
+      payload._originalCorrectAnswer = previousAnswer;
+    }
     payload.correctAnswer = normalized.value;
     if (Object.prototype.hasOwnProperty.call(payload, "qAnswer")) {
       payload.qAnswer = normalized.value;
@@ -2857,6 +2875,7 @@ app.patch("/api/pyqs/questions/:examId/:subjectId/:chapterId/:questionIndex/answ
     if (Object.prototype.hasOwnProperty.call(payload, "answer")) {
       payload.answer = normalized.value;
     }
+    payload.qBonus = req.body?.bonus === true;
 
     pyqsDb
       .prepare(
@@ -2872,7 +2891,12 @@ app.patch("/api/pyqs/questions/:examId/:subjectId/:chapterId/:questionIndex/answ
         questionIndex
       );
 
-    res.json({ success: true, answer: normalized.value });
+    res.json({
+      success: true,
+      answer: normalized.value,
+      bonus: payload.qBonus === true,
+      originalAnswer: cloneAnswerValue(payload._originalCorrectAnswer),
+    });
   } catch (e) {
     console.error("pyq answer update:", e);
     res.status(500).json({ error: "Failed to update answer" });
@@ -3057,7 +3081,7 @@ app.get("/api/users", (req, res) => {
 });
 
 // Tests
-app.get("/api/tests", (req, res) => {
+app.get("/api/tests", async (req, res) => {
   try {
     const currentUser = db
       .prepare("SELECT username FROM users WHERE id = ?")
@@ -3100,26 +3124,34 @@ app.get("/api/tests", (req, res) => {
       if (!keysByTest.has(row.testId)) keysByTest.set(row.testId, []);
       keysByTest.get(row.testId).push(row.question_key);
     });
-    const attemptRows = rows.length
+    const rawAttemptRows = rows.length
       ? db
           .prepare(
             `SELECT testId, status, score, max_score AS maxScore, attempted_count AS attempted,
-                    total_questions AS totalQuestions, submitted_at AS submittedAt, started_at AS startedAt
+                    total_questions AS totalQuestions, state_json, submitted_at AS submittedAt, started_at AS startedAt
              FROM test_attempts
              WHERE userId = ? AND testId IN (${rows.map(() => "?").join(",")})
              ORDER BY datetime(COALESCE(submitted_at, started_at)) DESC, id DESC`
           )
           .all(req.userId, ...rows.map((row) => row.testId))
       : [];
+    const attemptRows = [];
+    for (const row of rows) {
+      const perTest = rawAttemptRows.filter(
+        (attempt) => String(attempt.testId || "") === String(row.testId || "")
+      );
+      const enriched = await enrichAttemptsForTest(req, row.testId, perTest);
+      attemptRows.push(...enriched);
+    }
     const attemptsByTest = new Map();
     attemptRows.forEach((attempt) => {
       if (!attemptsByTest.has(attempt.testId)) attemptsByTest.set(attempt.testId, []);
       attemptsByTest.get(attempt.testId).push(attempt);
     });
-    const rankRows = rows.length
+    const rawRankRows = rows.length
       ? db
           .prepare(
-            `SELECT testId, userId, status, score, submitted_at AS submittedAt, id
+            `SELECT testId, userId, status, score, total_questions AS totalQuestions, state_json, submitted_at AS submittedAt, id
              FROM test_attempts
              WHERE testId IN (${rows.map(() => "?").join(",")})
                AND (submitted_at IS NOT NULL OR status IN ('submitted', 'completed', 'attempted', 'finished'))
@@ -3127,6 +3159,14 @@ app.get("/api/tests", (req, res) => {
           )
           .all(...rows.map((row) => row.testId))
       : [];
+    const rankRows = [];
+    for (const row of rows) {
+      const perTest = rawRankRows.filter(
+        (attempt) => String(attempt.testId || "") === String(row.testId || "")
+      );
+      const enriched = await enrichAttemptsForTest(req, row.testId, perTest);
+      rankRows.push(...enriched);
+    }
     const bestByTestUser = new Map();
     rankRows.forEach((attempt) => {
       const key = `${attempt.testId}:${attempt.userId}`;
@@ -3614,7 +3654,7 @@ app.patch("/api/tests/:testId/share", (req, res) => {
   }
 });
 
-app.get("/api/tests/:testId/overview", (req, res) => {
+app.get("/api/tests/:testId/overview", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     if (!testId) {
@@ -3644,7 +3684,7 @@ app.get("/api/tests/:testId/overview", (req, res) => {
          WHERE t.id = ?`
       )
       .get(testId);
-    const attempts = db
+    const rawAttempts = db
       .prepare(
         `SELECT
            a.id AS attemptId,
@@ -3665,6 +3705,7 @@ app.get("/api/tests/:testId/overview", (req, res) => {
          ORDER BY datetime(COALESCE(a.submitted_at, a.started_at)) DESC, a.id DESC`
       )
       .all(testId);
+    const attempts = await enrichAttemptsForTest(req, testId, rawAttempts);
     const isCompletedAttempt = (attempt) =>
       String(attempt.status || "").toLowerCase() === "submitted" || attempt.submittedAt;
     const completedAttempts = attempts.filter(isCompletedAttempt);
@@ -3702,7 +3743,7 @@ app.get("/api/tests/:testId/overview", (req, res) => {
       if (!prev || score > prevScore) leaderboardWithoutUser.set(attempt.userId, attempt);
     });
     const enrichedAttempts = attempts.map((attempt) => {
-      const meta = safeParseJSON(attempt.state_json, {});
+      const meta = attempt._dynamicMeta || safeParseJSON(attempt.state_json, {});
       const competitors = Array.from(leaderboardWithoutUser.values()).filter(
         (row) => String(row.userId) !== String(attempt.userId)
       );
@@ -3724,6 +3765,7 @@ app.get("/api/tests/:testId/overview", (req, res) => {
       return {
         ...attempt,
         state_json: undefined,
+        _dynamicMeta: undefined,
         rankIfCounted,
         canDelete:
           String(attempt.userId || "") === String(req.userId) ||
@@ -3773,7 +3815,7 @@ app.get("/api/tests/:testId/overview", (req, res) => {
   }
 });
 
-app.get("/api/tests/:testId", (req, res) => {
+app.get("/api/tests/:testId", async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     if (!testId) {
@@ -3833,22 +3875,27 @@ app.get("/api/tests/:testId", (req, res) => {
         payload: safeParseJSON(question.payload_json, {}),
         payload_json: undefined,
       }));
+    const resolvedQuestions = await syncTestQuestionRows(req, questions);
+    const liveMaxScore = resolvedQuestions.reduce(
+      (sum, question) => sum + Number(question.positiveMarks || 0),
+      0
+    );
     res.json({
       testId: row.testId,
       title: row.title,
       description: row.description || "",
       creator: row.creator || "",
       createdAt: row.createdAt,
-      score: row.score,
-      maxScore: row.maxScore,
-      attempted: row.attempted,
-      totalQuestions: row.totalQuestions,
+      score: 0,
+      maxScore: liveMaxScore,
+      attempted: 0,
+      totalQuestions: resolvedQuestions.length,
       status: row.status,
       shareWith: safeParseJSON(row.share_with_json, []),
       config: safeParseJSON(row.config_json, {}),
       questionReusePolicy: safeParseJSON(row.reuse_policy_json, {}),
-      questionKeys: questions.map((question) => question.questionKey),
-      questions,
+      questionKeys: resolvedQuestions.map((question) => question.questionKey),
+      questions: resolvedQuestions,
     });
   } catch (e) {
     console.error("get test:", e);
@@ -3988,18 +4035,11 @@ app.post("/api/tests/:testId/attempts/:attemptId/submit", async (req, res) => {
     updateTestAttemptRow(attemptId, {
       state_json: JSON.stringify(meta),
       status: "submitted",
-      score: result.score,
-      max_score: result.maxScore,
-      maxScore: result.maxScore,
-      attempted_count: result.attempted,
       total_questions: questions.length,
       submitted_at: "CURRENT_TIMESTAMP",
     });
     updateTestSummary(testId, {
       status: "attempted",
-      score: result.score,
-      maxScore: result.maxScore,
-      attempted: result.attempted,
       totalQuestions: questions.length,
     });
     res.json({ success: true, attemptId, score: result.score, maxScore: result.maxScore });
@@ -5706,6 +5746,28 @@ function assignmentSyncOnly(req, res, next) {
   return next();
 }
 
+function cloneAnswerValue(value) {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (Array.isArray(value) || typeof value === "object") {
+    try {
+      return JSON.parse(JSON.stringify(value));
+    } catch {
+      return value;
+    }
+  }
+  return value;
+}
+
+function isQuestionBonus(question) {
+  return !!(
+    question &&
+    (question.bonus === true ||
+      question.isBonus === true ||
+      question.qBonus === true)
+  );
+}
+
 function buildTestCandidate({
   kind,
   sourceId,
@@ -6147,6 +6209,7 @@ async function buildTestAttemptPayload(req, userId, testId, attemptId, mode) {
   }
   const meta = safeParseJSON(attempt.state_json, {});
   const questions = await getResolvedTestQuestions(req, testId, attempt);
+  const computed = buildDynamicAttemptResult(questions, attempt);
   return {
     test: {
       testId,
@@ -6156,15 +6219,15 @@ async function buildTestAttemptPayload(req, userId, testId, attemptId, mode) {
     attempt: {
       attemptId,
       status: attempt.status,
-      score: attempt.score,
-      maxScore: attempt.max_score ?? attempt.maxScore,
+      score: computed.result.score,
+      maxScore: computed.result.maxScore,
       startedAt: attempt.started_at,
       submittedAt: attempt.submitted_at,
-      elapsedSeconds: Number(meta.elapsedSeconds || 0),
-      remainingSeconds: meta.remainingSeconds ?? null,
-      state: Array.isArray(meta.state) ? meta.state : [],
-      subjectProgress: meta.subjectProgress || [],
-      result: meta,
+      elapsedSeconds: Number(computed.meta.elapsedSeconds || 0),
+      remainingSeconds: computed.meta.remainingSeconds ?? null,
+      state: computed.state,
+      subjectProgress: computed.meta.subjectProgress || [],
+      result: computed.meta,
     },
     questions,
   };
@@ -6347,11 +6410,57 @@ function scoreTestAttempt(questions, state) {
   };
 }
 
+function getAttemptStateMeta(row) {
+  const meta = safeParseJSON(row?.state_json, {});
+  const state = Array.isArray(meta?.state) ? meta.state : [];
+  return { meta, state };
+}
+
+function buildDynamicAttemptResult(questions, row) {
+  const { meta, state } = getAttemptStateMeta(row);
+  const result = scoreTestAttempt(questions, state);
+  return {
+    meta: {
+      ...meta,
+      ...result.meta,
+      state,
+      subjectProgress: result.meta.subjectProgress,
+      subjectBreakdown: result.meta.subjectBreakdown,
+      questionResults: result.meta.questionResults,
+    },
+    state,
+    result,
+  };
+}
+
+async function enrichAttemptsForTest(req, testId, attemptRows) {
+  const questions = await getResolvedTestQuestions(
+    req,
+    testId,
+    Array.isArray(attemptRows) && attemptRows.length ? attemptRows[0] : null
+  );
+  return (Array.isArray(attemptRows) ? attemptRows : []).map((attempt) => {
+    const computed = buildDynamicAttemptResult(questions, attempt);
+    return {
+      ...attempt,
+      score: computed.result.score,
+      maxScore: computed.result.maxScore,
+      attempted: computed.result.attempted,
+      totalQuestions:
+        Number(attempt.totalQuestions || 0) || Number(questions.length || 0),
+      _dynamicMeta: computed.meta,
+    };
+  });
+}
+
 function scoreOneTestQuestion(q, st) {
-  if (!hasTestAnswer(st)) return { attempted: false, score: 0, status: "unanswered" };
-  const type = normalizeGeneratedQuestionType(q.questionType || q.payload?.qType || q.payload?.type);
   const positive = Number(q.positiveMarks || 0);
   const negative = Math.abs(Number(q.negativeMarks || 0));
+  if (isQuestionBonus(q?.payload || q)) {
+    return { attempted: false, score: positive, status: "bonus", bonus: true };
+  }
+  if (!hasTestAnswer(st)) return { attempted: false, score: 0, status: "unanswered" };
+  const type = normalizeGeneratedQuestionType(q.questionType || q.payload?.qType || q.payload?.type);
   const correct = normalizeTestCorrectAnswer(q.payload);
   if (type === "numerical") {
     const picked = Number(st.pickedNumerical);
@@ -6539,6 +6648,7 @@ async function computeAssignmentScore(assignmentId, stateArray) {
 }
 
 function scoreQuestion(q, st) {
+  if (isQuestionBonus(q)) return 4;
   const unanswered =
     !st ||
     (!st.isAnswerPicked &&

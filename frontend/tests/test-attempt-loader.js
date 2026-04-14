@@ -401,6 +401,9 @@
   }
 
   function getEvalStatus(question, state) {
+    if (question?.qBonus === true || question?.bonus === true || question?.isBonus === true) {
+      return "correct";
+    }
     if (!hasAnswer(state)) return "unattempted";
     const correct = normalizeCorrect(question);
     if (question.qType === "Numerical") {

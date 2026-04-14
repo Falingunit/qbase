@@ -389,9 +389,8 @@
     );
   }
 
-  function getNormalizedAnswerSpec(q) {
-    const raw = q?.qAnswer;
-    if (q?.qType === "Numerical") {
+  function getNormalizedAnswerSpecFromValue(qType, raw) {
+    if (qType === "Numerical") {
       if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.kind === "numerical") {
         const alternatives = Array.isArray(raw.alternatives)
           ? raw.alternatives
@@ -417,7 +416,7 @@
       };
     }
 
-    if (q?.qType === "MMCQ") {
+    if (qType === "MMCQ") {
       if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.kind === "multiple") {
         return {
           kind: "multiple",
@@ -439,6 +438,61 @@
     }
 
     return { kind: "single", alternatives: [normalizeOptionSet(raw)] };
+  }
+
+  function getNormalizedAnswerSpec(q) {
+    return getNormalizedAnswerSpecFromValue(q?.qType, q?.qAnswer);
+  }
+
+  function getOriginalAnswerValue(q) {
+    if (!q || typeof q !== "object") return undefined;
+    if (Object.prototype.hasOwnProperty.call(q, "_originalQAnswer")) {
+      return q._originalQAnswer;
+    }
+    if (Object.prototype.hasOwnProperty.call(q, "_originalCorrectAnswer")) {
+      return q._originalCorrectAnswer;
+    }
+    return undefined;
+  }
+
+  function getOriginalAnswerSpec(q) {
+    const original = getOriginalAnswerValue(q);
+    return original === undefined
+      ? null
+      : getNormalizedAnswerSpecFromValue(q?.qType, original);
+  }
+
+  function serializeAnswerSpec(spec) {
+    if (!spec || !Array.isArray(spec.alternatives)) return "";
+    if (spec.kind === "numerical") {
+      return JSON.stringify(
+        spec.alternatives.map((item) =>
+          item?.mode === "range"
+            ? { mode: "range", start: Number(item.start), end: Number(item.end) }
+            : { mode: "value", value: Number(item?.value) }
+        )
+      );
+    }
+    return JSON.stringify(
+      spec.alternatives.map((set) =>
+        Array.from(set instanceof Set ? set : normalizeOptionSet(set)).sort()
+      )
+    );
+  }
+
+  function hasAnswerKeyChange(q) {
+    const originalSpec = getOriginalAnswerSpec(q);
+    if (!originalSpec) return false;
+    return serializeAnswerSpec(originalSpec) !== serializeAnswerSpec(getNormalizedAnswerSpec(q));
+  }
+
+  function isBonusQuestion(q) {
+    return !!(q && (q.qBonus === true || q.bonus === true || q.isBonus === true));
+  }
+
+  function getQuestionByDisplayIndex(qID) {
+    const originalIdx = window.questionIndexMap?.[qID];
+    return questionData?.questions?.[originalIdx];
   }
 
   function pickBestAnswerAlternative(answerSpec, pickedSet = new Set()) {
@@ -475,8 +529,7 @@
     });
   }
 
-  function describeAnswerSpec(q) {
-    const spec = getNormalizedAnswerSpec(q);
+  function describeAnswerSpecFromSpec(spec) {
     if (spec.kind === "numerical") {
       return spec.alternatives
         .map((item) =>
@@ -489,6 +542,11 @@
     return spec.alternatives
       .map((set) => Array.from(set).sort().join(", "))
       .join(" OR ");
+  }
+
+  function describeAnswerSpec(q) {
+    const base = describeAnswerSpecFromSpec(getNormalizedAnswerSpec(q));
+    return isBonusQuestion(q) ? `${base}${base ? " " : ""}(Bonus)` : base;
   }
 
   function getUserSelection(state, qType) {
@@ -2353,6 +2411,10 @@
       const dColor = document.createElement('span');
       dColor.className = 'q-color-indicator hidden';
       dbtn.appendChild(dColor);
+      const dEdited = document.createElement("span");
+      dEdited.className = "q-answer-edited-indicator hidden";
+      dEdited.title = "Answer key changed";
+      dbtn.appendChild(dEdited);
       dcol.appendChild(dbtn);
       desktop.appendChild(dcol);
 
@@ -2371,6 +2433,10 @@
       const mColor = document.createElement('span');
       mColor.className = 'q-color-indicator hidden';
       mbtn.appendChild(mColor);
+      const mEdited = document.createElement("span");
+      mEdited.className = "q-answer-edited-indicator hidden";
+      mEdited.title = "Answer key changed";
+      mbtn.appendChild(mEdited);
       mobile.appendChild(mbtn);
     });
 
@@ -2379,6 +2445,7 @@
     updateBookmarkIndicators();
     // initial color badges
     updateColorIndicators();
+    updateAnswerEditedIndicators();
     // initialize filters UI
     try { setupFilterDropdown(); } catch {}
   }
@@ -3094,7 +3161,23 @@
       return;
     }
     const editorState = buildAnswerEditorState(question);
+    const currentAnswerLabel = describeAnswerSpec(question) || "Not set";
+    const originalAnswerSpec = getOriginalAnswerSpec(question);
+    const originalAnswerLabel = originalAnswerSpec
+      ? describeAnswerSpecFromSpec(originalAnswerSpec) || "Not set"
+      : null;
     const bodyHTML = `
+      <div class="mb-3">
+        <div class="small text-body-secondary mb-1">Current key</div>
+        <div class="fw-semibold">${escapeHtml(currentAnswerLabel)}</div>
+        ${originalAnswerLabel && hasAnswerKeyChange(question)
+          ? `<div class="small text-danger mt-2">Original key: ${escapeHtml(originalAnswerLabel)}</div>`
+          : ""}
+      </div>
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" role="switch" id="answer-bonus-toggle" ${isBonusQuestion(question) ? "checked" : ""}>
+        <label class="form-check-label" for="answer-bonus-toggle">Treat this question as bonus</label>
+      </div>
       <div class="mb-3 text-body-secondary small">
         ${editorState.type === "Numerical"
           ? "Add one or more exact values or ranges. Any one matching row will be accepted."
@@ -3167,11 +3250,12 @@
       await uiNotice(parsed.error, "Invalid Answer");
       return;
     }
+    const bonus = !!document.getElementById("answer-bonus-toggle")?.checked;
     try {
       const response = await authFetch(sourceAnswerUpdateUrl(source), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answer: parsed.value }),
+        body: JSON.stringify({ answer: parsed.value, bonus }),
       });
       if (!response.ok) {
         const body = await response.json().catch(() => null);
@@ -3179,9 +3263,27 @@
       }
       const payload = await response.json().catch(() => null);
       const nextAnswer = payload?.answer ?? parsed.value;
+      const originalAnswer = payload && Object.prototype.hasOwnProperty.call(payload, "originalAnswer")
+        ? payload.originalAnswer
+        : undefined;
       question.qAnswer = nextAnswer;
+      question.qBonus = payload?.bonus === true || bonus;
+      if (originalAnswer !== undefined) {
+        if (source.kind === "pyq") question._originalCorrectAnswer = originalAnswer;
+        else question._originalQAnswer = originalAnswer;
+      }
       if (window.displayQuestions?.[currentQuestionID]) {
         window.displayQuestions[currentQuestionID].qAnswer = nextAnswer;
+        window.displayQuestions[currentQuestionID].qBonus = payload?.bonus === true || bonus;
+        if (originalAnswer !== undefined) {
+          if (source.kind === "pyq") {
+            window.displayQuestions[currentQuestionID]._originalCorrectAnswer =
+              originalAnswer;
+          } else {
+            window.displayQuestions[currentQuestionID]._originalQAnswer =
+              originalAnswer;
+          }
+        }
       }
       if (
         source.kind === "assignment" &&
@@ -3189,6 +3291,7 @@
       ) {
         try { AssignmentService.invalidateAssignmentBundle(aID); } catch {}
       }
+      updateAnswerEditedIndicators();
       setQuestion(currentQuestionID);
       await uiNotice("Answer updated.", "Saved");
     } catch (error) {
@@ -3200,7 +3303,27 @@
   function syncEditAnswerButton() {
     const btn = document.getElementById("edit-answer-btn");
     if (!btn) return;
+    const question = getQuestionByDisplayIndex(currentQuestionID);
+    const changed = hasAnswerKeyChange(question);
     btn.classList.toggle("d-none", !getCurrentQuestionAnswerSourceRef());
+    btn.classList.toggle("has-answer-key-change", changed);
+    btn.title = changed
+      ? "Update this question's answer (key changed)"
+      : "Update this question's answer";
+  }
+
+  function updateAnswerEditedIndicators() {
+    const total = window.displayQuestions?.length || 0;
+    for (let i = 0; i < total; i += 1) {
+      const changed = hasAnswerKeyChange(getQuestionByDisplayIndex(i));
+      questionButtons
+        .filter((button) => Number(button.dataset.qid) === i)
+        .forEach((button) => {
+          const marker = button.querySelector(".q-answer-edited-indicator");
+          if (marker) marker.classList.toggle("hidden", !changed);
+        });
+    }
+    if (currentQuestionID != null) syncEditAnswerButton();
   }
 
   async function updateBookmarkButton() {

@@ -1208,6 +1208,39 @@ html {
   display: none !important;
 }
 
+.q-btn .q-answer-edited-indicator {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 999px;
+  background: #dc3545;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.q-btn .q-answer-edited-indicator.hidden {
+  display: none !important;
+}
+
+#edit-answer-btn {
+  position: relative;
+}
+
+#edit-answer-btn.has-answer-key-change::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #dc3545;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+}
+
 /* Quick color chips in topbar */
 .qcolor-picker {
   display: inline-flex;
