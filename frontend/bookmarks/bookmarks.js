@@ -4,9 +4,15 @@
 
   const katexOptions = { delimiters: [ { left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }, { left: "\\(", right: "\\)", display: false }, { left: "\\[", right: "\\]", display: true } ] };
 
-  const assignmentTitles = await BookmarksService.fetchAssignmentTitlesMap();
+  const assignmentTitles = new Map();
   const assignmentData = new Map();
   const pyqsData = new Map();
+  const assignmentTitlesPromise = BookmarksService.fetchAssignmentTitlesMap()
+    .then((titles) => {
+      titles?.forEach?.((value, key) => assignmentTitles.set(Number(key), value));
+      BookmarksView.updateAssignmentCardLabels(assignmentTitles);
+    })
+    .catch(() => {});
 
   const onReady = () => {
     const refreshBtn = document.getElementById('refresh-bookmarks');
@@ -18,7 +24,9 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady, { once: true }); else onReady();
 
   window.addEventListener('qbase:login', loadBookmarks);
-  window.addEventListener('pageshow', loadBookmarks);
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) loadBookmarks();
+  });
   window.addEventListener('qbase:logout', () => {
     const loadingEl = document.getElementById('loading'); const noBookmarksEl = document.getElementById('no-bookmarks'); const contentEl = document.getElementById('bookmarks-content'); if (!loadingEl || !noBookmarksEl || !contentEl) return; loadingEl.style.display='none'; contentEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p>';
   });
@@ -30,15 +38,6 @@
     try {
       const all = await BookmarksService.fetchAllBookmarks(); if (mySeq !== __bookmarksLoadSeq) return;
       if (!Array.isArray(all) || all.length===0){ loadingEl.style.display='none'; noBookmarksEl.style.display='block'; noBookmarksEl.textContent = 'No bookmarks yet.'; return; }
-      const assignmentIds = [...new Set(all.filter((b) => b.kind === 'assignment').map((b) => Number(b.assignmentId)).filter((n) => Number.isFinite(n)))];
-      const pyqsKeys = [...new Set(all.filter((b) => b.kind === 'pyq').map((b) => BookmarksService.mkPyqsKey(b.examId, b.subjectId, b.chapterId)))];
-      const [assignmentBatch, pyqsBatch] = await Promise.all([
-        BookmarksService.fetchAssignmentDataForIds(assignmentIds),
-        BookmarksService.fetchPyqsDataForKeys(pyqsKeys),
-      ]);
-      if (mySeq !== __bookmarksLoadSeq) return;
-      assignmentBatch?.forEach?.((value, key) => assignmentData.set(Number(key), value));
-      pyqsBatch?.forEach?.((value, key) => pyqsData.set(key, value));
       const grouped = BookmarksService.groupBookmarksByTag(all);
       BookmarksView.renderBookmarks(grouped, { assignments: assignmentData, pyqs: pyqsData }, {
         katexOptions,
@@ -68,8 +67,8 @@
           }
         }
       });
-      hydrateVisiblePreviews(mySeq);
       loadingEl.style.display='none'; contentEl.style.display='block';
+      hydrateVisiblePreviews(mySeq);
     } catch (err){
       if (mySeq !== __bookmarksLoadSeq) return; loadingEl.style.display='none'; if (err && err.status === 401){ noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Login required</h3><p class="text-muted">Please sign in to view your bookmarks.</p><button class="btn btn-primary" onclick="window.dispatchEvent(new Event(\'qbase:force-login\'))">Sign in</button>'; window.dispatchEvent(new Event('qbase:logout')); return; } noBookmarksEl.style.display='block'; noBookmarksEl.innerHTML = '<h3>Error loading bookmarks</h3><p class="text-muted">Failed to load bookmarks. Please try again.</p><button class="btn btn-primary" onclick="window.qbLoadBookmarks()">Retry</button>';
     }
@@ -134,8 +133,10 @@
     }
     const cards = Array.from(document.querySelectorAll('.bookmark-card[data-preview-ready="false"]'));
     if (cards.length === 0) return;
+    const eagerCards = cards.slice(0, 6);
+    eagerCards.forEach((card) => { hydrateCardPreview(card, seq); });
     if (!('IntersectionObserver' in window)) {
-      cards.slice(0, 12).forEach((card) => { hydrateCardPreview(card, seq); });
+      cards.slice(6).forEach((card) => { hydrateCardPreview(card, seq); });
       return;
     }
     const observer = new IntersectionObserver((entries) => {
@@ -146,7 +147,7 @@
       }
     }, { rootMargin: '300px 0px' });
     __previewObserver = observer;
-    cards.forEach((card) => observer.observe(card));
+    cards.slice(6).forEach((card) => observer.observe(card));
   }
 
   // legacy export for retry button

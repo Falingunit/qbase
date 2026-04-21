@@ -103,8 +103,6 @@
 
     contentEl.innerHTML = html;
 
-    try { if (window.renderMathInElement) document.querySelectorAll('.card-text').forEach((card) => { window.renderMathInElement(card, katexOptions); }); } catch {}
-
     document.querySelectorAll('.bookmark-card').forEach((card) => {
       card.addEventListener('click', (e) => {
         if (e.target.closest('.remove-bookmark')) return;
@@ -134,6 +132,20 @@
         if (!confirmed) return;
         onDeleteTag?.(tagId);
       });
+    });
+  }
+
+  function updateAssignmentCardLabels(assignmentTitles){
+    const titles = assignmentTitles || new Map();
+    document.querySelectorAll('.bookmark-card[data-kind="assignment"]').forEach((card) => {
+      const labelEl = card.querySelector('.bookmark-question-label');
+      if (!labelEl) return;
+      const assignmentId = Number(card.dataset.assignmentId);
+      if (!Number.isFinite(assignmentId)) return;
+      const rawDisplayIndex = Number(card.dataset.displayIndex);
+      const displayIndex = Number.isFinite(rawDisplayIndex) ? rawDisplayIndex : Number(card.dataset.questionIndex) || 0;
+      const title = titles.get(assignmentId) || `Assignment ${assignmentId}`;
+      labelEl.textContent = `${title} Â· Q${displayIndex + 1}`;
     });
   }
 
@@ -216,5 +228,5 @@
     saveNotesBtn.addEventListener('click', saveFn);
   }
 
-  window.BookmarksView = { renderBookmarks, updateBookmarkCardPreview, showQuestion, showPyqQuestion, setupNotesEditing, truncateKaTeXSafe, openInAssignment, openInPyqs };
+  window.BookmarksView = { renderBookmarks, updateAssignmentCardLabels, updateBookmarkCardPreview, showQuestion, showPyqQuestion, setupNotesEditing, truncateKaTeXSafe, openInAssignment, openInPyqs };
 })();
