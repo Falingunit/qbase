@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="refresh"
+      content="0; url=assignment_base.html?mode=bookmark-tag"
+    />
+    <title>QBase - Bookmark Tag</title>
+    <script>
+      (function () {
+        try {
+          var qs = window.location.search;
+          var target =
+            "assignment_base.html?mode=bookmark-tag" +
+            (qs ? "&" + qs.slice(1) : "");
+          window.location.replace(target);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p>
+        Please go to
+        <a href="assignment_base.html?mode=bookmark-tag"
+          >assignment_base.html</a
+        >.
+      </p>
+    </noscript>
+  </body>
+</html>
