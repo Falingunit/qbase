@@ -310,6 +310,15 @@
 
   const params = new URLSearchParams(window.location.search);
   let aID = parseInt(params.get("aID"), 10);
+  try {
+    if (
+      typeof window !== "undefined" &&
+      window.__ASSIGNMENT_VIEW_ID__ != null
+    ) {
+      const v = Number(window.__ASSIGNMENT_VIEW_ID__);
+      if (Number.isFinite(v)) aID = v;
+    }
+  } catch {}
   // Allow external override (e.g., PYQs viewer)
   try {
     if (typeof window !== "undefined" && window.__PYQS_ASSIGNMENT_ID__ != null) {
@@ -491,8 +500,7 @@
   }
 
   function getQuestionByDisplayIndex(qID) {
-    const originalIdx = window.questionIndexMap?.[qID];
-    return questionData?.questions?.[originalIdx];
+    return getResolvedQuestionContext(qID)?.question || null;
   }
 
   function pickBestAnswerAlternative(answerSpec, pickedSet = new Set()) {
@@ -848,6 +856,22 @@
     const me = await whoAmI();
     loggedInUser = me?.username || null;
     authSource = me?.source || "none";
+
+    if (assignmentTestAdapter && typeof assignmentTestAdapter.loadState === "function") {
+      try {
+        questionStates = await assignmentTestAdapter.loadState({
+          aID,
+          questions: window.displayQuestions || [],
+        });
+        syncBootstrapState();
+        ensureStateLength(window.displayQuestions.length);
+        questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
+        if (currentQuestionID != null) setQuestion(currentQuestionID);
+      } catch (e) {
+        console.warn("Reload after login failed.", e);
+      }
+      return;
+    }
 
     if (authSource === "server") {
       try {
@@ -1757,6 +1781,151 @@
       : null;
   }
 
+  function isBookmarkTagMode() {
+    return !!(
+      typeof window !== "undefined" &&
+      window.__BOOKMARK_TAG_CONTEXT__ &&
+      window.__BOOKMARK_TAG_ROWS__
+    );
+  }
+
+  function normalizeSourceRef(source, fallbackQuestionIndex = null) {
+    if (source && typeof source === "object" && source.kind === "pyq") {
+      return {
+        kind: "pyq",
+        examId: String(source.examId),
+        subjectId: String(source.subjectId),
+        chapterId: String(source.chapterId),
+        questionIndex: Number(
+          source.questionIndex ?? fallbackQuestionIndex ?? 0
+        ),
+      };
+    }
+    const assignmentId = Number(
+      source?.assignmentId ?? aID
+    );
+    return {
+      kind: "assignment",
+      assignmentId: Number.isFinite(assignmentId) ? assignmentId : aID,
+      questionIndex: Number(
+        source?.questionIndex ?? fallbackQuestionIndex ?? 0
+      ),
+    };
+  }
+
+  function sourceContainerKey(source) {
+    const normalized = normalizeSourceRef(source);
+    if (normalized.kind === "pyq") {
+      return `pyq:${normalized.examId}:${normalized.subjectId}:${normalized.chapterId}`;
+    }
+    return `assignment:${normalized.assignmentId}`;
+  }
+
+  function sourceQuestionKey(source) {
+    const normalized = normalizeSourceRef(source);
+    return `${sourceContainerKey(normalized)}:q:${Number(normalized.questionIndex)}`;
+  }
+
+  function normalizeBookmarkCacheRow(row) {
+    if (!row || typeof row !== "object") return null;
+    if (row.kind === "pyq" || row.examId != null) {
+      return {
+        kind: "pyq",
+        examId: String(row.examId),
+        subjectId: String(row.subjectId),
+        chapterId: String(row.chapterId),
+        questionIndex: Number(row.questionIndex),
+        tagId: String(row.tagId),
+        tagName: row.tagName == null ? "" : String(row.tagName),
+      };
+    }
+    const assignmentId = Number(row.assignmentId ?? aID);
+    if (!Number.isFinite(assignmentId)) return null;
+    return {
+      kind: "assignment",
+      assignmentId,
+      questionIndex: Number(row.questionIndex),
+      tagId: String(row.tagId),
+      tagName: row.tagName == null ? "" : String(row.tagName),
+    };
+  }
+
+  function normalizeMarkCacheRow(row) {
+    if (!row || typeof row !== "object") return null;
+    if (row.kind === "pyq" || row.examId != null) {
+      return {
+        kind: "pyq",
+        examId: String(row.examId),
+        subjectId: String(row.subjectId),
+        chapterId: String(row.chapterId),
+        questionIndex: Number(row.questionIndex),
+        color: String(row.color || ""),
+      };
+    }
+    const assignmentId = Number(row.assignmentId ?? aID);
+    if (!Number.isFinite(assignmentId)) return null;
+    return {
+      kind: "assignment",
+      assignmentId,
+      questionIndex: Number(row.questionIndex),
+      color: String(row.color || ""),
+    };
+  }
+
+  function sourceMatchesRow(source, row) {
+    const normalizedRow =
+      row && "color" in row
+        ? normalizeMarkCacheRow(row)
+        : normalizeBookmarkCacheRow(row);
+    if (!normalizedRow) return false;
+    const normalizedSource = normalizeSourceRef(
+      source,
+      normalizedRow.questionIndex
+    );
+    return sourceQuestionKey(normalizedSource) === sourceQuestionKey(normalizedRow);
+  }
+
+  function getResolvedQuestionContext(displayIdx = currentQuestionID) {
+    if (displayIdx == null) return null;
+    const qMap = Array.isArray(window.questionIndexMap)
+      ? window.questionIndexMap
+      : [];
+    const mappedIdx = qMap[displayIdx];
+    const originalIdx =
+      mappedIdx == null || Number.isNaN(Number(mappedIdx))
+        ? Number(displayIdx)
+        : Number(mappedIdx);
+    const question =
+      questionData?.questions?.[originalIdx] ||
+      window.displayQuestions?.[displayIdx] ||
+      null;
+    if (!question) return null;
+    const source = normalizeSourceRef(
+      question?._testSource,
+      question?.questionIndex ?? originalIdx
+    );
+    return {
+      displayIdx: Number(displayIdx),
+      originalIdx,
+      question,
+      source,
+      sourceQuestionIndex: Number(source.questionIndex),
+    };
+  }
+
+  function getCurrentQuestionSourceQuestionIndex() {
+    const resolved = getResolvedQuestionContext(currentQuestionID);
+    return resolved ? resolved.sourceQuestionIndex : null;
+  }
+
+  function setQuestionSourceLabel(label) {
+    const el = document.getElementById("questionSourceLabel");
+    if (!el) return;
+    const text = String(label || "").trim();
+    el.textContent = text;
+    el.classList.toggle("d-none", !text);
+  }
+
   function syncBootstrapState() {
     if (!assignmentBootstrap) return;
     assignmentBootstrap.state = Array.isArray(questionStates)
@@ -1893,18 +2062,18 @@
 
   // Reuse modal helper from navbar.js if available, else fallback to confirm
   async function confirmReset() {
+    const message = isBookmarkTagMode()
+      ? "This will permanently clear your answers and progress for the questions currently shown in this bookmark tag."
+      : "This will permanently clear all your answers and progress for this assignment.";
     if (typeof showConfirm === "function") {
       return await showConfirm({
         title: "Reset Assignment?",
-        message:
-          "This will permanently clear all your answers and progress for this assignment.",
+        message,
         okText: "Yes, Reset",
         cancelText: "Cancel",
       });
     }
-    return confirm(
-      "This will permanently clear all your answers and progress for this assignment."
-    );
+    return confirm(message);
   }
 
   document
@@ -1936,29 +2105,40 @@
           questionStates = resetStates;
         }
 
-        // Also clear all saved question colors for this assignment
+        // Clear saved question colors only for questions in the current view.
         try {
-          const listResp = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
-          if (listResp.ok) {
-            const all = await listResp.json();
-            const mine = Array.isArray(all)
-              ? all.filter((m) => Number(m.assignmentId) === Number(aID))
-              : [];
-            for (const m of mine) {
-              const qi = Number(m?.questionIndex);
-              if (!Number.isNaN(qi)) {
-                try { await authFetch(`${API_BASE}/api/question-marks/${aID}/${qi}`, { method: 'DELETE' }); } catch {}
-              }
-            }
+          const deleted = new Set();
+          for (const question of window.displayQuestions || []) {
+            const source = normalizeSourceRef(
+              question?._testSource,
+              question?.questionIndex
+            );
+            const key = sourceQuestionKey(source);
+            if (deleted.has(key)) continue;
+            deleted.add(key);
+            try {
+              await authFetch(sourceQuestionMarkUrl(source), {
+                method: "DELETE",
+              });
+            } catch {}
+          }
+          if (assignmentBootstrap) {
+            assignmentBootstrap.marks = (getBootstrapMarks() || []).filter(
+              (row) => !deleted.has(sourceQuestionKey(row))
+            );
           }
           try { updateColorIndicators(); } catch {}
         } catch {}
 
         // Refresh UI to first question
-        questionButtons.forEach((btn) =>
-          evaluateQuestionButtonColor(btn.dataset.qid)
-        );
-        clickQuestionButton(0);
+        if (!window.displayQuestions.length) {
+          renderNoQuestionsState();
+        } else {
+          questionButtons.forEach((btn) =>
+            evaluateQuestionButtonColor(btn.dataset.qid)
+          );
+          clickQuestionButton(0);
+        }
         dirty = false;
       } catch (e) {
         console.error("Reset failed:", e);
@@ -1976,8 +2156,9 @@
   function resetCurrentQuestion() {
     if (currentQuestionID == null) return;
     const qID = currentQuestionID;
-    const originalIdx = window.questionIndexMap[qID];
-    const q = questionData.questions[originalIdx];
+    const resolved = getResolvedQuestionContext(qID);
+    if (!resolved) return;
+    const { question: q } = resolved;
 
     // Fully reset state (time = 0 now) (without resetting notes)
     const originalNotes = questionStates[qID]['notes']
@@ -2019,6 +2200,62 @@
 
     markDirty();
     scheduleSave(aID);
+  }
+
+  async function removeQuestionFromBookmarkTagView(source, tagId) {
+    if (!isBookmarkTagMode()) return false;
+    const activeTagId = String(window.__BOOKMARK_TAG_CONTEXT__?.tagId || "");
+    if (!activeTagId || String(tagId) !== activeTagId) return false;
+    const rows = Array.isArray(window.__BOOKMARK_TAG_ROWS__)
+      ? window.__BOOKMARK_TAG_ROWS__
+      : [];
+    const removeAt = rows.findIndex((row) =>
+      sourceQuestionKey(
+        normalizeSourceRef(row?._testSource, row?.questionIndex)
+      ) === sourceQuestionKey(source)
+    );
+    if (removeAt === -1) return false;
+
+    rows.splice(removeAt, 1);
+    if (Array.isArray(questionData?.questions)) questionData.questions.splice(removeAt, 1);
+    if (Array.isArray(window.displayQuestions)) window.displayQuestions.splice(removeAt, 1);
+    if (Array.isArray(window.questionIndexMap)) window.questionIndexMap.splice(removeAt, 1);
+    if (Array.isArray(questionStates)) questionStates.splice(removeAt, 1);
+    if (Array.isArray(assignmentBootstrap?.state)) assignmentBootstrap.state.splice(removeAt, 1);
+    if (Array.isArray(assignmentBootstrap?.bookmarks)) {
+      assignmentBootstrap.bookmarks = assignmentBootstrap.bookmarks.filter(
+        (row) => sourceQuestionKey(row) !== sourceQuestionKey(source)
+      );
+    }
+    if (Array.isArray(assignmentBootstrap?.marks)) {
+      assignmentBootstrap.marks = assignmentBootstrap.marks.filter(
+        (row) => sourceQuestionKey(row) !== sourceQuestionKey(source)
+      );
+    }
+    if (Array.isArray(filteredQuestionIDs)) {
+      filteredQuestionIDs = filteredQuestionIDs
+        .filter((idx) => Number(idx) !== removeAt)
+        .map((idx) => (Number(idx) > removeAt ? Number(idx) - 1 : Number(idx)));
+      if (!filteredQuestionIDs.length) filteredQuestionIDs = null;
+    }
+
+    fillQuestionData(window.displayQuestions || []);
+    if (!(window.displayQuestions || []).length) {
+      renderNoQuestionsState();
+      return true;
+    }
+    if (filteredQuestionIDs) {
+      try { await applyQuestionFilters(); } catch {}
+    }
+    const activeIds = getActiveFilteredIDs();
+    const nextIdx = activeIds.includes(removeAt)
+      ? removeAt
+      : activeIds.includes(removeAt - 1)
+        ? removeAt - 1
+        : activeIds[0];
+    if (Number.isFinite(nextIdx)) clickQuestionButton(nextIdx);
+    else renderNoQuestionsState();
+    return true;
   }
 
   // Hook up the Check Answer button once
@@ -2066,7 +2303,9 @@
 
   async function showReportDialog() {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
+      const resolved = getResolvedQuestionContext(currentQuestionID);
+      const source = resolved?.source || getCurrentQuestionSourceRef();
+      if (!resolved || !source) return;
       const reasons = [
         { id: "wrong-answer", label: "Answer seems incorrect" },
         { id: "wrong-solution", label: "Solution seems incorrect" },
@@ -2132,13 +2371,17 @@
       }
 
       const payload = {
-        kind: "assignment",
-        assignmentId: aID,
-        questionIndex: Number(originalIdx),
+        kind: isPyqSourceRef(source) ? "pyqs" : "assignment",
+        assignmentId: isPyqSourceRef(source) ? undefined : assignmentSourceId(source),
+        examId: isPyqSourceRef(source) ? source.examId : undefined,
+        subjectId: isPyqSourceRef(source) ? source.subjectId : undefined,
+        chapterId: isPyqSourceRef(source) ? source.chapterId : undefined,
+        questionIndex: Number(source.questionIndex),
         reason,
         message,
         meta: {
           assignmentTitle: assignmentTitle || `Assignment ${aID}`,
+          sourceLabel: resolved.question?._testSourceLabel || "",
           displayIndex: currentQuestionID + 1,
         },
       };
@@ -2293,8 +2536,19 @@
     try {
       let rawData;
       if (__customLoader) {
+        assignmentBootstrap =
+          (typeof window !== "undefined" && window.__ASSIGNMENT_CUSTOM_BOOTSTRAP__) ||
+          assignmentBootstrap ||
+          null;
         rawData = await __customLoader();
         if (rawData?.meta?.title) assignmentTitle = String(rawData.meta.title);
+        assignmentBootstrap =
+          (typeof window !== "undefined" && window.__ASSIGNMENT_CUSTOM_BOOTSTRAP__) ||
+          assignmentBootstrap ||
+          null;
+        if (assignmentBootstrap?.meta?.title) {
+          assignmentTitle = String(assignmentBootstrap.meta.title);
+        }
       } else {
         assignmentBootstrap = await AssignmentService.loadAssignmentBundle(aID);
         if (assignmentBootstrap?.meta?.title) {
@@ -2329,6 +2583,10 @@
 
       // 5) paint buttons + open first
       questionButtons.forEach((_, i) => evaluateQuestionButtonColor(i));
+      if (!displayQuestions.length) {
+        renderNoQuestionsState();
+        return;
+      }
       const qParam = parseInt(params.get("q"), 10);
       if (!isNaN(qParam) && qParam > 0 && qParam <= displayQuestions.length) {
         clickQuestionButton(qParam - 1); // convert to zero-based index
@@ -2353,8 +2611,10 @@
     desktop.classList.remove("row-cols-1", "row-cols-2", "row-cols-3", "row-cols-4");
     desktop.classList.add(`row-cols-${paletteCols}`);
 
-    // init clean state array matching display length
-    questionStates = Array(questions.length);
+    // keep existing per-display state when rebuilding mixed-source views
+    questionStates = Array.isArray(questionStates)
+      ? questionStates.slice(0, questions.length)
+      : Array(questions.length);
 
     mobile.innerHTML = "";
     desktop.innerHTML = "";
@@ -2390,8 +2650,13 @@
     };
 
     questions.forEach((question, i) => {
-      questionStates[i] = defaultState();
+      questionStates[i] = questionStates[i] || defaultState();
       appendTestPaletteDivider(question);
+      const source = normalizeSourceRef(
+        question?._testSource,
+        question?.questionIndex ?? window.questionIndexMap?.[i] ?? i
+      );
+      const sourceQuestionKeyValue = sourceQuestionKey(source);
 
       // desktop button
       const dcol = document.createElement("div");
@@ -2401,6 +2666,7 @@
       dbtn.className = "btn btn-secondary q-btn";
       dbtn.textContent = i + 1;
       dbtn.dataset.qid = i;
+      dbtn.dataset.sourceQuestionKey = sourceQuestionKeyValue;
       dbtn.addEventListener("click", () => clickQuestionButton(i));
       // Bookmark indicator (hidden by default)
       const dInd = document.createElement("span");
@@ -2423,6 +2689,7 @@
       mbtn.className = "btn btn-secondary q-btn";
       mbtn.textContent = i + 1;
       mbtn.dataset.qid = i;
+      mbtn.dataset.sourceQuestionKey = sourceQuestionKeyValue;
       mbtn.addEventListener("click", () => clickQuestionButton(i));
       // Bookmark indicator (hidden by default)
       const mInd = document.createElement("span");
@@ -2529,7 +2796,90 @@
     });
   }
 
+  function renderNoQuestionsState() {
+    currentQuestionID = null;
+    stopQuestionTimer();
+    clearResetCooldownTimer();
+    setQuestionSourceLabel("");
+
+    const emptyState =
+      (typeof window !== "undefined" && window.__ASSIGNMENT_EMPTY_STATE__) || {};
+    const assignmentTitleElem = document.getElementById("assignment-title");
+    const assignmentDetails = document.getElementById("assignmentDetails");
+    const typeInfo = document.getElementById("qTypeInfo");
+    const qNo = document.getElementById("qNo");
+    const questionText = document.getElementById("questionText");
+    const questionImage = document.getElementById("questionImage");
+    const passageText = document.getElementById("passageText");
+    const passageImage = document.getElementById("passageImage");
+    const numerical = document.getElementById("numericalDiv");
+    const MCQOptions = document.getElementById("MCQOptionDiv");
+    const checkBtn = document.getElementById("check-answer");
+    const resetBtn = document.getElementById("reset-question");
+    const bookmarkBtn = document.getElementById("bookmark-btn");
+    const colorPicker = document.getElementById("qcolor-picker");
+    const editAnswerBtn = document.getElementById("edit-answer-btn");
+    const reportBtn = document.getElementById("report-btn");
+    const notesSection = document.getElementById("notesSection");
+
+    if (assignmentTitleElem && emptyState.title) {
+      assignmentTitleElem.textContent = String(emptyState.title);
+    }
+    if (qNo) qNo.textContent = "-";
+    if (typeInfo) typeInfo.textContent = "Info";
+    if (assignmentDetails) {
+      assignmentDetails.textContent = String(
+        emptyState.message || "No questions are available.",
+      );
+    }
+    if (questionText) {
+      const bodyHtml = `${
+        emptyState.description
+          ? `<p class="mb-3">${escapeHtml(String(emptyState.description))}</p>`
+          : ""
+      }${
+        emptyState.backHref
+          ? `<a class="btn btn-outline-primary btn-sm" href="${String(
+              emptyState.backHref,
+            )}">${escapeHtml(
+              String(emptyState.backText || "Go Back"),
+            )}</a>`
+          : ""
+      }`;
+      renderHTML(questionText, bodyHtml || "No questions are available.");
+    }
+
+    [
+      questionImage,
+      passageText,
+      passageImage,
+      numerical,
+      MCQOptions,
+      notesSection,
+    ].forEach((el) => {
+      if (!el) return;
+      if (el === numerical || el === MCQOptions || el === notesSection) {
+        el.style.display = "none";
+      } else {
+        el.style.display = "none";
+        el.innerHTML = "";
+      }
+    });
+
+    [checkBtn, resetBtn, bookmarkBtn, colorPicker, editAnswerBtn, reportBtn].forEach(
+      (el) => el?.classList.add("d-none"),
+    );
+    hideSolutionPanel();
+    document.getElementById("nav-prev")?.setAttribute("disabled", "disabled");
+    document.getElementById("nav-next")?.setAttribute("disabled", "disabled");
+    updateTopbarNavButtons();
+  }
+
   function clickQuestionButton(qID) {
+    if (!Array.isArray(window.displayQuestions) || !window.displayQuestions.length) {
+      renderNoQuestionsState();
+      return;
+    }
     // Save any pending changes from the previously open question only after the first selection.
     if (currentQuestionID != null) {
       markDirty();
@@ -2635,25 +2985,31 @@
 
     ensureStateLength(window.displayQuestions.length);
 
-    const originalIdx = window.questionIndexMap[qID];
+    const resolved = getResolvedQuestionContext(qID);
+    if (!resolved) {
+      renderNoQuestionsState();
+      return;
+    }
+    const { originalIdx, question, source } = resolved;
     const numerical = document.getElementById("numericalDiv");
     const MCQOptions = document.getElementById("MCQOptionDiv");
     const assignmentDetails = document.getElementById("assignmentDetails");
-    const assignmentTitleElem = document.getElementById("assignment-title")
-    const pageTitle = document.getElementsByTagName("title")
+    const assignmentTitleElem = document.getElementById("assignment-title");
     const typeInfo = document.getElementById("qTypeInfo");
     const qNo = document.getElementById("qNo");
     const numericalAnswer = document.getElementById("numericalAnswer");
     // Notes editor now renders inline; no textarea reference
     const questionState = questionStates[qID];
-    const question = questionData.questions[originalIdx];
 
     // Toggle report button based on server block status (best-effort)
     (async () => {
       try {
         const btn = document.getElementById("report-btn");
         if (!btn) return;
-        const url = `${API_BASE}/api/report/blocked?kind=assignment&assignmentId=${encodeURIComponent(aID)}&questionIndex=${encodeURIComponent(originalIdx)}`;
+        const qIndex = Number(source.questionIndex);
+        const url = isPyqSourceRef(source)
+          ? `${API_BASE}/api/report/blocked?kind=pyqs&examId=${encodeURIComponent(source.examId)}&subjectId=${encodeURIComponent(source.subjectId)}&chapterId=${encodeURIComponent(source.chapterId)}&questionIndex=${encodeURIComponent(qIndex)}`
+          : `${API_BASE}/api/report/blocked?kind=assignment&assignmentId=${encodeURIComponent(assignmentSourceId(source))}&questionIndex=${encodeURIComponent(qIndex)}`;
         const r = await authFetch(url);
         if (!r.ok) return; // leave as-is on failure
         const j = await r.json();
@@ -2667,8 +3023,9 @@
       document.body.setAttribute("data-qtype", String(question.qType || "").toUpperCase());
     } catch {}
     assignmentDetails.textContent = assignmentTitle;
-    assignmentTitleElem.textContent = assignmentTitle
-    pageTitle.textContent = `QBase - ${assignmentTitle} - Q${qID + 1}`
+    assignmentTitleElem.textContent = assignmentTitle;
+    setQuestionSourceLabel(question?._testSourceLabel || "");
+    document.title = `QBase - ${assignmentTitle} - Q${qID + 1}`;
 
     // Passage (text + image)
     const passageImgDiv = document.getElementById("passageImage");
@@ -2854,6 +3211,7 @@
         document.getElementById("bookmark-btn")?.classList.add("d-none");
         document.getElementById("qcolor-picker")?.classList.add("d-none");
         document.getElementById("report-btn")?.classList.add("d-none");
+        setQuestionSourceLabel("");
       }
       if (isTestReviewMode) {
         optionButtons.forEach((btn) => btn.classList.add("disabled"));
@@ -2869,6 +3227,11 @@
     } catch {}
 
     // Update bookmark button state
+    document.getElementById("bookmark-btn")?.classList.remove("d-none");
+    document.getElementById("qcolor-picker")?.classList.remove("d-none");
+    document.getElementById("edit-answer-btn")?.classList.remove("d-none");
+    document.getElementById("report-btn")?.classList.remove("d-none");
+    document.getElementById("notesSection")?.style && (document.getElementById("notesSection").style.display = "");
     updateBookmarkButton();
     // Update color picker selected state for current question
     updateColorPickerSelection();
@@ -2897,50 +3260,52 @@
   let filteredQuestionIDs = null; // null => no filter; else Array of display indices
 
   function getCurrentQuestionSourceRef() {
-    try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
-      const question = questionData.questions[originalIdx];
-      const source = question?._testSource || null;
-      if (!source?.kind) return null;
-      return { ...source, questionIndex: Number(question?.questionIndex ?? originalIdx) };
-    } catch {
-      return null;
-    }
+    return getResolvedQuestionContext(currentQuestionID)?.source || null;
   }
 
   function isPyqSourceRef(source) {
+    const normalized = normalizeSourceRef(source);
     return !!(
-      source &&
-      source.kind === "pyq" &&
-      source.examId &&
-      source.subjectId &&
-      source.chapterId
+      normalized &&
+      normalized.kind === "pyq" &&
+      normalized.examId &&
+      normalized.subjectId &&
+      normalized.chapterId
     );
   }
 
   function assignmentSourceId(source) {
-    return source?.kind === "assignment" && source.assignmentId
-      ? source.assignmentId
+    const normalized = normalizeSourceRef(source);
+    return normalized?.kind === "assignment" && normalized.assignmentId
+      ? normalized.assignmentId
       : aID;
   }
 
   function sourceBookmarkUrl(source, tagId = null) {
-    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
-    if (isPyqSourceRef(source)) {
-      const base = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}`;
+    const normalized = normalizeSourceRef(
+      source,
+      getCurrentQuestionSourceQuestionIndex()
+    );
+    const qIndex = normalized.questionIndex;
+    if (isPyqSourceRef(normalized)) {
+      const base = `${API_BASE}/api/pyqs/bookmarks/${encodeURIComponent(normalized.examId)}/${encodeURIComponent(normalized.subjectId)}/${encodeURIComponent(normalized.chapterId)}/${encodeURIComponent(qIndex)}`;
       return tagId == null ? base : `${base}/${encodeURIComponent(tagId)}`;
     }
-    const id = assignmentSourceId(source);
+    const id = assignmentSourceId(normalized);
     const base = `${API_BASE}/api/bookmarks/${encodeURIComponent(id)}/${encodeURIComponent(qIndex)}`;
     return tagId == null ? base : `${base}/${encodeURIComponent(tagId)}`;
   }
 
   function sourceQuestionMarkUrl(source) {
-    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
-    if (isPyqSourceRef(source)) {
-      return `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}`;
+    const normalized = normalizeSourceRef(
+      source,
+      getCurrentQuestionSourceQuestionIndex()
+    );
+    const qIndex = normalized.questionIndex;
+    if (isPyqSourceRef(normalized)) {
+      return `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(normalized.examId)}/${encodeURIComponent(normalized.subjectId)}/${encodeURIComponent(normalized.chapterId)}/${encodeURIComponent(qIndex)}`;
     }
-    return `${API_BASE}/api/question-marks/${encodeURIComponent(assignmentSourceId(source))}/${encodeURIComponent(qIndex)}`;
+    return `${API_BASE}/api/question-marks/${encodeURIComponent(assignmentSourceId(normalized))}/${encodeURIComponent(qIndex)}`;
   }
 
   function getCurrentQuestionAnswerSourceRef() {
@@ -2948,7 +3313,7 @@
       const testSource = getCurrentQuestionSourceRef();
       if (testSource?.kind) return testSource;
       if (assignmentTestAdapter) return null;
-      const originalIdx = Number(window.questionIndexMap?.[currentQuestionID]);
+      const originalIdx = Number(getCurrentQuestionSourceQuestionIndex());
       if (!Number.isFinite(originalIdx)) return null;
       const pyqs = window.__PYQS_IDS__;
       if (pyqs?.examId && pyqs?.subjectId && pyqs?.chapterId) {
@@ -2971,11 +3336,15 @@
   }
 
   function sourceAnswerUpdateUrl(source) {
-    const qIndex = source?.questionIndex ?? window.questionIndexMap[currentQuestionID];
-    if (isPyqSourceRef(source)) {
-      return `${API_BASE}/api/pyqs/questions/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}/${encodeURIComponent(qIndex)}/answer`;
+    const normalized = normalizeSourceRef(
+      source,
+      getCurrentQuestionSourceQuestionIndex()
+    );
+    const qIndex = normalized.questionIndex;
+    if (isPyqSourceRef(normalized)) {
+      return `${API_BASE}/api/pyqs/questions/${encodeURIComponent(normalized.examId)}/${encodeURIComponent(normalized.subjectId)}/${encodeURIComponent(normalized.chapterId)}/${encodeURIComponent(qIndex)}/answer`;
     }
-    return `${API_BASE}/api/assignment/${encodeURIComponent(assignmentSourceId(source))}/questions/${encodeURIComponent(qIndex)}/answer`;
+    return `${API_BASE}/api/assignment/${encodeURIComponent(assignmentSourceId(normalized))}/questions/${encodeURIComponent(qIndex)}/answer`;
   }
 
   function buildAnswerEditorState(question) {
@@ -3153,8 +3522,7 @@
 
   async function updateCurrentQuestionAnswer() {
     if (currentQuestionID == null) return;
-    const originalIdx = window.questionIndexMap?.[currentQuestionID];
-    const question = questionData?.questions?.[originalIdx];
+    const question = getQuestionByDisplayIndex(currentQuestionID);
     const source = getCurrentQuestionAnswerSourceRef();
     if (!question || !source) {
       await uiNotice("This question cannot be updated from this view.", "Unavailable");
@@ -3331,8 +3699,6 @@
     const icon = bookmarkBtn.querySelector("i");
 
     try {
-      // Use original question index (not display index) for bookmark lookups
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
       const response = await authFetch(
         sourceBookmarkUrl(source)
@@ -3406,8 +3772,6 @@
       bookmarkTags = await response.json();
 
       // Reload current bookmarks for this question
-      // Use original question index for current question
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
       const bookmarkResponse = await authFetch(
         sourceBookmarkUrl(source)
@@ -3626,8 +3990,9 @@
 
   async function addBookmark(tagId) {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
-      const source = getCurrentQuestionSourceRef();
+      const resolved = getResolvedQuestionContext(currentQuestionID);
+      const source = resolved?.source || getCurrentQuestionSourceRef();
+      if (!resolved || !source) return false;
       const url = isPyqSourceRef(source) ? `${API_BASE}/api/pyqs/bookmarks` : `${API_BASE}/api/bookmarks`;
       const body = isPyqSourceRef(source)
         ? {
@@ -3639,7 +4004,7 @@
           }
         : {
             assignmentId: assignmentSourceId(source),
-            questionIndex: originalIdx,
+            questionIndex: source.questionIndex,
             tagId,
           };
       const response = await authFetch(url, {
@@ -3655,13 +4020,15 @@
 
       if (assignmentBootstrap) {
         const next = (getBootstrapBookmarks() || []).filter(
-          (b) =>
-            !(
-              Number(b.questionIndex) === Number(originalIdx) &&
-              String(b.tagId) === String(tagId)
-            )
+          (b) => !(sourceMatchesRow(source, b) && String(b.tagId) === String(tagId))
         );
-        next.push({ questionIndex: Number(originalIdx), tagId: String(tagId) });
+        next.push(
+          normalizeBookmarkCacheRow({
+            ...source,
+            questionIndex: Number(source.questionIndex),
+            tagId: String(tagId),
+          })
+        );
         assignmentBootstrap.bookmarks = next;
       }
 
@@ -3680,9 +4047,8 @@
 
   async function removeBookmark(tagId) {
     try {
-      // Remove by original index
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
+      if (!source) return false;
       const response = await authFetch(
         sourceBookmarkUrl(source, tagId),
         {
@@ -3696,16 +4062,14 @@
 
       if (assignmentBootstrap) {
         assignmentBootstrap.bookmarks = (getBootstrapBookmarks() || []).filter(
-          (b) =>
-            !(
-              Number(b.questionIndex) === Number(originalIdx) &&
-              String(b.tagId) === String(tagId)
-            )
+          (b) => !(sourceMatchesRow(source, b) && String(b.tagId) === String(tagId))
         );
       }
 
       // Update badges across question circles
       updateBookmarkIndicators();
+      const removedFromView = await removeQuestionFromBookmarkTagView(source, tagId);
+      if (removedFromView) return true;
       return true;
     } catch (error) {
       console.error("Failed to remove bookmark:", error);
@@ -4181,27 +4545,44 @@
     try {
       let mine = getBootstrapBookmarks();
       if (!mine) {
-        const res = await authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" });
-        if (!res.ok) {
+        const responses = await Promise.allSettled([
+          authFetch(`${API_BASE}/api/bookmarks`, { cache: "no-store" }),
+          authFetch(`${API_BASE}/api/pyqs/bookmarks`, { cache: "no-store" }),
+        ]);
+        const assignmentRes =
+          responses[0].status === "fulfilled" ? responses[0].value : null;
+        const pyqRes =
+          responses[1].status === "fulfilled" ? responses[1].value : null;
+        if (!assignmentRes?.ok && !pyqRes?.ok) {
           // On unauthorized, hide all indicators
           questionButtons?.forEach((btn) => {
             btn.querySelectorAll('.q-bookmark-indicator').forEach((el) => el.classList.add('hidden'));
           });
           return;
         }
-        const all = await res.json();
-        mine = Array.isArray(all)
-          ? all.filter((b) => Number(b.assignmentId) === Number(aID))
-          : [];
+        const assignmentItems = assignmentRes?.ok ? await assignmentRes.json() : [];
+        const pyqItems = pyqRes?.ok ? await pyqRes.json() : [];
+        mine = []
+          .concat(
+            (Array.isArray(assignmentItems) ? assignmentItems : []).map((row) =>
+              normalizeBookmarkCacheRow({ ...row, kind: "assignment" })
+            )
+          )
+          .concat(
+            (Array.isArray(pyqItems) ? pyqItems : []).map((row) =>
+              normalizeBookmarkCacheRow({ ...row, kind: "pyq" })
+            )
+          )
+          .filter(Boolean);
       }
-      const bookmarkedOriginalIdx = new Set(
-        mine.map((b) => Number(b.questionIndex))
+      const bookmarked = new Set(
+        mine.map((b) => sourceQuestionKey(b))
       );
 
       const qMap = window.questionIndexMap || [];
       questionButtons?.forEach((btn) => {
         const idx = Number(btn.dataset.qid);
-        const orig = qMap[idx];
+        const source = getResolvedQuestionContext(idx)?.source;
         let ind = btn.querySelector('.q-bookmark-indicator');
         if (!ind) {
           ind = document.createElement('span');
@@ -4209,7 +4590,7 @@
           ind.innerHTML = '<i class="bi bi-bookmark-fill" aria-hidden="true"></i>';
           btn.appendChild(ind);
         }
-        if (bookmarkedOriginalIdx.has(Number(orig))) ind.classList.remove('hidden');
+        if (source && bookmarked.has(sourceQuestionKey(source))) ind.classList.remove('hidden');
         else ind.classList.add('hidden');
       });
     } catch (err) {
@@ -4220,8 +4601,8 @@
   // --- Question color mark helpers ---
   async function setQuestionColor(color) {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
+      if (!source) return false;
       const response = await authFetch(
         isPyqSourceRef(source)
           ? `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}`
@@ -4232,14 +4613,20 @@
         body: JSON.stringify(
           isPyqSourceRef(source)
             ? { questionIndex: source.questionIndex, color }
-            : { assignmentId: assignmentSourceId(source), questionIndex: originalIdx, color }
+            : { assignmentId: assignmentSourceId(source), questionIndex: source.questionIndex, color }
         )
       });
       if (!response.ok) throw new Error('Failed to set color');
       if (assignmentBootstrap) {
         const marks = getBootstrapMarks() || [];
-        const next = marks.filter((m) => Number(m.questionIndex) !== Number(originalIdx));
-        next.push({ questionIndex: Number(originalIdx), color });
+        const next = marks.filter((m) => !sourceMatchesRow(source, m));
+        next.push(
+          normalizeMarkCacheRow({
+            ...source,
+            questionIndex: Number(source.questionIndex),
+            color,
+          })
+        );
         assignmentBootstrap.marks = next;
       }
       updateColorIndicators();
@@ -4252,13 +4639,13 @@
 
   async function clearQuestionColor() {
     try {
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
+      if (!source) return false;
       const response = await authFetch(sourceQuestionMarkUrl(source), { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to clear color');
       if (assignmentBootstrap) {
         assignmentBootstrap.marks = (getBootstrapMarks() || []).filter(
-          (m) => Number(m.questionIndex) !== Number(originalIdx)
+          (m) => !sourceMatchesRow(source, m)
         );
       }
       return true;
@@ -4274,12 +4661,12 @@
       if (!picker) return;
       const chips = Array.from(picker.querySelectorAll('.qcolor-chip'));
       if (currentQuestionID == null) return;
-      const originalIdx = window.questionIndexMap[currentQuestionID];
       const source = getCurrentQuestionSourceRef();
+      if (!source) return;
       let sel = 'none';
       const cachedMarks = getBootstrapMarks();
       if (cachedMarks) {
-        const mark = cachedMarks.find((m) => Number(m.questionIndex) === Number(originalIdx));
+        const mark = cachedMarks.find((m) => sourceMatchesRow(source, m));
         const color = String(mark?.color || '').trim().toLowerCase();
         sel = color || 'none';
       } else {
@@ -4306,32 +4693,59 @@
     try {
       let mine = getBootstrapMarks();
       if (!mine) {
-        const res = await authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" });
-        if (!res.ok) {
+        const rows = Array.isArray(window.displayQuestions) ? window.displayQuestions : [];
+        const pyqContainers = new Map();
+        rows.forEach((question) => {
+          const source = normalizeSourceRef(question?._testSource, question?.questionIndex);
+          if (source.kind === "pyq") pyqContainers.set(sourceContainerKey(source), source);
+        });
+        const responses = await Promise.allSettled([
+          authFetch(`${API_BASE}/api/question-marks`, { cache: "no-store" }),
+          ...Array.from(pyqContainers.values()).map((source) =>
+            authFetch(
+              `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}`,
+              { cache: "no-store" }
+            )
+          ),
+        ]);
+        if (responses[0]?.status !== "fulfilled" || !responses[0]?.value?.ok) {
           questionButtons?.forEach((btn) => {
             btn.querySelectorAll('.q-color-indicator').forEach((el) => el.classList.add('hidden'));
           });
-          return;
         }
-        const all = await res.json();
-        mine = Array.isArray(all)
-          ? all.filter((m) => Number(m.assignmentId) === Number(aID))
-          : [];
+        const assignmentItems =
+          responses[0]?.status === "fulfilled" && responses[0].value.ok
+            ? await responses[0].value.json()
+            : [];
+        mine = (Array.isArray(assignmentItems) ? assignmentItems : [])
+          .map((row) => normalizeMarkCacheRow({ ...row, kind: "assignment" }))
+          .filter(Boolean);
+        const pyqSources = Array.from(pyqContainers.values());
+        for (let i = 0; i < pyqSources.length; i += 1) {
+          const result = responses[i + 1];
+          if (result?.status !== "fulfilled" || !result.value?.ok) continue;
+          const items = await result.value.json();
+          mine.push(
+            ...((Array.isArray(items) ? items : [])
+              .map((row) => normalizeMarkCacheRow({ ...row, ...pyqSources[i], kind: "pyq" }))
+              .filter(Boolean))
+          );
+        }
       }
-      const byIdx = new Map();
-      for (const m of mine) byIdx.set(Number(m.questionIndex), String(m.color));
+      const byQuestion = new Map();
+      for (const m of mine) byQuestion.set(sourceQuestionKey(m), String(m.color));
 
       const qMap = window.questionIndexMap || [];
       questionButtons?.forEach((btn) => {
         const idx = Number(btn.dataset.qid);
-        const orig = qMap[idx];
+        const source = getResolvedQuestionContext(idx)?.source;
         let el = btn.querySelector('.q-color-indicator');
         if (!el) {
           el = document.createElement('span');
           el.className = 'q-color-indicator hidden';
           btn.appendChild(el);
         }
-        const color = byIdx.get(Number(orig));
+        const color = source ? byQuestion.get(sourceQuestionKey(source)) : "";
         if (color) {
           el.style.backgroundColor = color;
           el.classList.remove('hidden');
@@ -4517,7 +4931,16 @@
       if (!hasTag && !hasColor) {
         filteredQuestionIDs = null;
         // show all buttons
-        questionButtons?.forEach((btn) => btn.classList.remove('d-none'));
+        questionButtons?.forEach((btn) => {
+          btn.classList.remove('d-none');
+          const p = btn.parentElement;
+          if (p && p.classList && p.classList.contains('col')) {
+            p.classList.remove('d-none');
+          }
+        });
+        if (currentQuestionID == null && (window.displayQuestions?.length || 0) > 0) {
+          clickQuestionButton(0);
+        }
         updateTopbarNavButtons();
         return;
       }
@@ -4527,51 +4950,94 @@
       const cachedBookmarks = getBootstrapBookmarks();
       if (cachedBookmarks) {
         for (const b of cachedBookmarks) {
-          const key = Number(b.questionIndex);
+          const key = sourceQuestionKey(b);
           if (!byQTags.has(key)) byQTags.set(key, new Set());
           byQTags.get(key).add(String(b.tagId));
         }
       } else {
-        const bmRes = await authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' });
-        if (bmRes.ok) {
-          const all = await bmRes.json();
-          const mine = Array.isArray(all) ? all.filter(b => Number(b.assignmentId) === Number(aID)) : [];
-          for (const b of mine) {
-            const key = Number(b.questionIndex);
-            if (!byQTags.has(key)) byQTags.set(key, new Set());
-            byQTags.get(key).add(String(b.tagId));
-          }
+        const [bmRes, pyqBmRes] = await Promise.allSettled([
+          authFetch(`${API_BASE}/api/bookmarks`, { cache: 'no-store' }),
+          authFetch(`${API_BASE}/api/pyqs/bookmarks`, { cache: 'no-store' }),
+        ]);
+        const bookmarkRows = [];
+        if (bmRes.status === "fulfilled" && bmRes.value.ok) {
+          const all = await bmRes.value.json();
+          bookmarkRows.push(
+            ...(Array.isArray(all) ? all : []).map((b) =>
+              normalizeBookmarkCacheRow({ ...b, kind: "assignment" })
+            )
+          );
+        }
+        if (pyqBmRes.status === "fulfilled" && pyqBmRes.value.ok) {
+          const all = await pyqBmRes.value.json();
+          bookmarkRows.push(
+            ...(Array.isArray(all) ? all : []).map((b) =>
+              normalizeBookmarkCacheRow({ ...b, kind: "pyq" })
+            )
+          );
+        }
+        for (const b of bookmarkRows.filter(Boolean)) {
+          const key = sourceQuestionKey(b);
+          if (!byQTags.has(key)) byQTags.set(key, new Set());
+          byQTags.get(key).add(String(b.tagId));
         }
       }
-      let byQColor = new Map(); // origIdx -> color (lower)
+      let byQColor = new Map(); // sourceQuestionKey -> color (lower)
       const cachedMarks = getBootstrapMarks();
       if (cachedMarks) {
         for (const m of cachedMarks) {
-          byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+          byQColor.set(sourceQuestionKey(m), String(m.color || '').trim().toLowerCase());
         }
       } else {
-        const cmRes = await authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' });
-        if (cmRes.ok) {
-          const all = await cmRes.json();
-          const mine = Array.isArray(all) ? all.filter(m => Number(m.assignmentId) === Number(aID)) : [];
-          for (const m of mine) {
-            byQColor.set(Number(m.questionIndex), String(m.color || '').trim().toLowerCase());
+        const rows = Array.isArray(window.displayQuestions) ? window.displayQuestions : [];
+        const pyqContainers = new Map();
+        rows.forEach((question) => {
+          const source = normalizeSourceRef(question?._testSource, question?.questionIndex);
+          if (source.kind === "pyq") pyqContainers.set(sourceContainerKey(source), source);
+        });
+        const responses = await Promise.allSettled([
+          authFetch(`${API_BASE}/api/question-marks`, { cache: 'no-store' }),
+          ...Array.from(pyqContainers.values()).map((source) =>
+            authFetch(
+              `${API_BASE}/api/pyqs/question-marks/${encodeURIComponent(source.examId)}/${encodeURIComponent(source.subjectId)}/${encodeURIComponent(source.chapterId)}`,
+              { cache: "no-store" }
+            )
+          ),
+        ]);
+        if (responses[0].status === "fulfilled" && responses[0].value.ok) {
+          const all = await responses[0].value.json();
+          for (const m of Array.isArray(all) ? all : []) {
+            const row = normalizeMarkCacheRow({ ...m, kind: "assignment" });
+            if (!row) continue;
+            byQColor.set(sourceQuestionKey(row), String(row.color || '').trim().toLowerCase());
+          }
+        }
+        const pyqSources = Array.from(pyqContainers.values());
+        for (let i = 0; i < pyqSources.length; i += 1) {
+          const result = responses[i + 1];
+          if (result.status !== "fulfilled" || !result.value.ok) continue;
+          const all = await result.value.json();
+          for (const m of Array.isArray(all) ? all : []) {
+            const row = normalizeMarkCacheRow({ ...m, ...pyqSources[i], kind: "pyq" });
+            if (!row) continue;
+            byQColor.set(sourceQuestionKey(row), String(row.color || '').trim().toLowerCase());
           }
         }
       }
 
-      const qMap = window.questionIndexMap || [];
       const total = window.displayQuestions?.length || 0;
       const keep = [];
       for (let i = 0; i < total; i++) {
-        const orig = qMap[i];
+        const source = getResolvedQuestionContext(i)?.source;
+        if (!source) continue;
+        const key = sourceQuestionKey(source);
         let ok = false;
         if (hasTag) {
-          const tags = byQTags.get(Number(orig));
+          const tags = byQTags.get(key);
           if (tags) for (const t of activeTagFilters) { if (tags.has(String(t))) { ok = true; break; } }
         }
         if (hasColor && !ok) {
-          const col = (byQColor.get(Number(orig)) || '').toLowerCase();
+          const col = (byQColor.get(key) || '').toLowerCase();
           if (activeColorFilters.has('none') && !col) ok = true;
           if (!ok && col && activeColorFilters.has(col)) ok = true;
         }
@@ -4596,6 +5062,9 @@
       // If current question is filtered out, jump to first kept
       if (currentQuestionID != null && !keepSet.has(currentQuestionID) && keep.length > 0) {
         clickQuestionButton(keep[0]);
+      }
+      if (!keep.length) {
+        renderNoQuestionsState();
       }
       updateTopbarNavButtons();
     } catch (e) {

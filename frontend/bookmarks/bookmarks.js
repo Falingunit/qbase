@@ -48,6 +48,12 @@
           return await BookmarksService.removeBookmark(ctx.assignmentId, ctx.questionIndex, ctx.tagId);
         },
         onDeleteTag: async (tagId) => { if (await BookmarksService.deleteBookmarkTag(tagId)) loadBookmarks(); },
+        onOpenTag: ({ tagId }) => {
+          if (!tagId) return;
+          const next = new URL("./bookmark_tag_assignment.html", window.location.href);
+          next.searchParams.set("tagId", String(tagId));
+          window.location.href = next.toString();
+        },
         onShow: async (ctx) => {
           if (!ctx || !ctx.kind) return;
           if (ctx.kind === 'pyq') {

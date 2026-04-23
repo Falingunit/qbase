@@ -32,6 +32,7 @@
     const onRemove = opts?.onRemove;
     const onDeleteTag = opts?.onDeleteTag;
     const onShow = opts?.onShow;
+    const onOpenTag = opts?.onOpenTag;
     const assignmentTitles = opts?.assignmentTitles || new Map();
     const assignmentData = (data && data.assignments) || new Map();
     const pyqsData = (data && data.pyqs) || new Map();
@@ -42,7 +43,10 @@
       <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h5 class="mb-0"><i class="bi bi-bookmark-fill text-primary"></i> ${escapeHtml(tagName)} <span class="badge bg-secondary ms-2">${bookmarks.length}</span></h5>
-          <div>${tagId ? `<button class="btn btn-sm btn-outline-danger delete-tag" data-tag-id="${escapeHtml(String(tagId))}" data-tag-name="${escapeHtml(tagName)}" title="Delete tag and its bookmarks"><i class="bi bi-trash"></i></button>` : ''}</div>
+          <div class="d-flex align-items-center gap-2">
+            ${tagId ? `<button class="btn btn-sm btn-outline-primary open-tag" data-tag-id="${escapeHtml(String(tagId))}" data-tag-name="${escapeHtml(tagName)}" title="Open this tag in the assignment reader"><i class="bi bi-box-arrow-up-right"></i><span class="ms-1">Open Tag</span></button>` : ''}
+            ${tagId ? `<button class="btn btn-sm btn-outline-danger delete-tag" data-tag-id="${escapeHtml(String(tagId))}" data-tag-name="${escapeHtml(tagName)}" title="Delete tag and its bookmarks"><i class="bi bi-trash"></i></button>` : ''}
+          </div>
         </div>
         <div class="card-body"><div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">`;
       for (const b of bookmarks){
@@ -131,6 +135,16 @@
         try { confirmed = await (window.showConfirm ? showConfirm({ title:'Delete Tag', message:`Delete "${escapeHtml(tagName)}" and all its bookmarks?`, okText:'Delete', cancelText:'Cancel' }) : Promise.resolve(confirm(`Delete "${tagName}" and all its bookmarks? This cannot be undone.`))); } catch {}
         if (!confirmed) return;
         onDeleteTag?.(tagId);
+      });
+    });
+
+    document.querySelectorAll('.open-tag').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        onOpenTag?.({
+          tagId: btn.dataset.tagId,
+          tagName: btn.dataset.tagName || "",
+        });
       });
     });
   }
