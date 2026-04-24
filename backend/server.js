@@ -373,6 +373,14 @@ db.exec(`
     FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
   );
 
+  CREATE TABLE IF NOT EXISTS user_preferences (
+    userId TEXT PRIMARY KEY,
+    prefs_json TEXT NOT NULL DEFAULT '{}',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
+  );
+
   -- Reported questions (assignment or PYQs)
   CREATE TABLE IF NOT EXISTS question_reports (
     id TEXT PRIMARY KEY,
@@ -2343,6 +2351,48 @@ app.get("/api/pyqs/prefs/:examId/:subjectId", auth, (req, res) => {
   }
 });
 
+app.get("/api/preferences", auth, (req, res) => {
+  try {
+    const row = db
+      .prepare("SELECT prefs_json FROM user_preferences WHERE userId = ?")
+      .get(req.userId);
+    const prefs = row ? safeParseJSON(row.prefs_json, {}) : {};
+    res.json(prefs && typeof prefs === "object" && !Array.isArray(prefs) ? prefs : {});
+  } catch (e) {
+    console.error("get preferences:", e);
+    res.status(500).json({ error: "Failed to get preferences" });
+  }
+});
+
+app.post("/api/preferences", auth, (req, res) => {
+  try {
+    const incoming =
+      req.body?.prefs && typeof req.body.prefs === "object" && !Array.isArray(req.body.prefs)
+        ? req.body.prefs
+        : {};
+    const row = db
+      .prepare("SELECT prefs_json FROM user_preferences WHERE userId = ?")
+      .get(req.userId);
+    const current = row ? safeParseJSON(row.prefs_json, {}) : {};
+    const merged = {
+      ...(current && typeof current === "object" && !Array.isArray(current) ? current : {}),
+      ...incoming,
+    };
+    db.prepare(
+      `
+      INSERT INTO user_preferences (userId, prefs_json)
+      VALUES (?, ?)
+      ON CONFLICT(userId)
+      DO UPDATE SET prefs_json = excluded.prefs_json, updated_at = CURRENT_TIMESTAMP
+    `
+    ).run(req.userId, JSON.stringify(merged));
+    res.json({ success: true, prefs: merged });
+  } catch (e) {
+    console.error("save preferences:", e);
+    res.status(500).json({ error: "Failed to save preferences" });
+  }
+});
+
 // Sign up: create or set password for existing username without password
 app.post("/signup", (req, res) => {
   try {
@@ -3903,7 +3953,7 @@ app.get("/api/tests/:testId", async (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts", async (req, res) => {
+app.post("/api/tests/:testId/attempts", auth, async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     if (!testId || !userCanAccessTest(req.userId, testId)) {
@@ -3926,7 +3976,7 @@ app.post("/api/tests/:testId/attempts", async (req, res) => {
   }
 });
 
-app.get("/api/tests/:testId/attempts/:attemptId", async (req, res) => {
+app.get("/api/tests/:testId/attempts/:attemptId", auth, async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
@@ -3939,7 +3989,7 @@ app.get("/api/tests/:testId/attempts/:attemptId", async (req, res) => {
   }
 });
 
-app.get("/api/tests/:testId/attempts/:attemptId/review", async (req, res) => {
+app.get("/api/tests/:testId/attempts/:attemptId/review", auth, async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
@@ -3952,7 +4002,7 @@ app.get("/api/tests/:testId/attempts/:attemptId/review", async (req, res) => {
   }
 });
 
-app.delete("/api/tests/:testId/attempts/:attemptId", (req, res) => {
+app.delete("/api/tests/:testId/attempts/:attemptId", auth, (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
@@ -3979,7 +4029,7 @@ app.delete("/api/tests/:testId/attempts/:attemptId", (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts/:attemptId/save", async (req, res) => {
+app.post("/api/tests/:testId/attempts/:attemptId/save", auth, async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);
@@ -4013,7 +4063,7 @@ app.post("/api/tests/:testId/attempts/:attemptId/save", async (req, res) => {
   }
 });
 
-app.post("/api/tests/:testId/attempts/:attemptId/submit", async (req, res) => {
+app.post("/api/tests/:testId/attempts/:attemptId/submit", auth, async (req, res) => {
   try {
     const testId = normalizeTestId(req.params.testId);
     const attemptId = normalizeTestId(req.params.attemptId);

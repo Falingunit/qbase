@@ -908,6 +908,10 @@
     const assignmentThemeSaveId = "qbaseAssignmentThemeSave";
     const assignmentThemeMsgId = "qbaseAssignmentThemeMsg";
     const ASSIGNMENT_THEME_LS_KEY = "qbase.assignment.theme";
+    const testAttemptUiId = "qbaseTestAttemptUi";
+    const testAttemptUiSaveId = "qbaseTestAttemptUiSave";
+    const testAttemptUiMsgId = "qbaseTestAttemptUiMsg";
+    const TEST_ATTEMPT_UI_LS_KEY = "qbase.testAttempt.ui";
     // Hotkeys UI removed
     const body = `
         <div class="preferences-modal">
@@ -958,6 +962,17 @@
                 <button id="${assignmentThemeSaveId}" class="btn btn-primary btn-sm mt-1">Save Theme</button>
                 <div id="${assignmentThemeMsgId}" class="small text-muted mt-2 mb-3" style="display:none"></div>
 
+                <div class="mb-3">
+                  <label for="${testAttemptUiId}" class="form-label">Test Attempt UI</label>
+                  <select id="${testAttemptUiId}" class="form-select">
+                    <option value="classic">Classic</option>
+                    <option value="exam-center">Exam Center</option>
+                  </select>
+                  <div class="form-text">Applies only while actively attempting a test. Finished test review stays unchanged.</div>
+                </div>
+                <button id="${testAttemptUiSaveId}" class="btn btn-primary btn-sm mt-1">Save Test UI</button>
+                <div id="${testAttemptUiMsgId}" class="small text-muted mt-2 mb-3" style="display:none"></div>
+
                 <h6 class="mb-2">Question Controls</h6>
                 <div class="mb-2" pt-2>
                   <label for="${resetCooldownId}" class="form-label">Reset question delay (seconds)</label>
@@ -998,6 +1013,9 @@
           const assignmentThemeInput = modalEl.querySelector(`#${assignmentThemeId}`);
           const assignmentThemeSave = modalEl.querySelector(`#${assignmentThemeSaveId}`);
           const assignmentThemeMsg = modalEl.querySelector(`#${assignmentThemeMsgId}`);
+          const testAttemptUiInput = modalEl.querySelector(`#${testAttemptUiId}`);
+          const testAttemptUiSave = modalEl.querySelector(`#${testAttemptUiSaveId}`);
+          const testAttemptUiMsg = modalEl.querySelector(`#${testAttemptUiMsgId}`);
 
           const showResetMsg = (msg, tone = "muted") => {
             if (!resetMsg) return;
@@ -1019,6 +1037,16 @@
             else assignmentThemeMsg.classList.add("text-muted");
           };
 
+          const showTestAttemptUiMsg = (msg, tone = "muted") => {
+            if (!testAttemptUiMsg) return;
+            testAttemptUiMsg.style.display = msg ? "block" : "none";
+            testAttemptUiMsg.textContent = msg || "";
+            testAttemptUiMsg.classList.remove("text-danger", "text-success", "text-muted");
+            if (tone === "success") testAttemptUiMsg.classList.add("text-success");
+            else if (tone === "danger") testAttemptUiMsg.classList.add("text-danger");
+            else testAttemptUiMsg.classList.add("text-muted");
+          };
+
           const getAssignmentTheme = () => {
             try {
               return localStorage.getItem(ASSIGNMENT_THEME_LS_KEY) === "light" ? "light" : "dark";
@@ -1035,6 +1063,24 @@
             try {
               if (window.__qbaseAssignmentTheme__?.set) window.__qbaseAssignmentTheme__.set(next);
             } catch {}
+          };
+
+          const getCachedTestAttemptUi = () => {
+            try {
+              return localStorage.getItem(TEST_ATTEMPT_UI_LS_KEY) === "exam-center"
+                ? "exam-center"
+                : "classic";
+            } catch {
+              return "classic";
+            }
+          };
+
+          const setCachedTestAttemptUi = (value) => {
+            const next = value === "exam-center" ? "exam-center" : "classic";
+            try {
+              localStorage.setItem(TEST_ATTEMPT_UI_LS_KEY, next);
+            } catch {}
+            return next;
           };
 
           const getCooldownMs = () => {
@@ -1066,6 +1112,22 @@
             assignmentThemeInput.value = getAssignmentTheme();
             showThemeMsg("", "muted");
           }
+          if (testAttemptUiInput) {
+            testAttemptUiInput.value = getCachedTestAttemptUi();
+            showTestAttemptUiMsg("", "muted");
+            (async () => {
+              try {
+                const res = await authFetch(`${API_BASE}/api/preferences`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const prefs = await res.json();
+                const next =
+                  prefs?.testAttemptUi === "exam-center" ? "exam-center" : "classic";
+                testAttemptUiInput.value = setCachedTestAttemptUi(next);
+              } catch {
+                testAttemptUiInput.value = getCachedTestAttemptUi();
+              }
+            })();
+          }
 
           syncResetInput();
 
@@ -1077,6 +1139,37 @@
               `Saved: ${assignmentThemeInput.value === "light" ? "light" : "dark"} mode will be used in assignments and PYQs.`,
               "success"
             );
+          });
+
+          testAttemptUiSave?.addEventListener("click", async (e) => {
+            e.preventDefault();
+            if (!testAttemptUiInput) return;
+            const next = testAttemptUiInput.value === "exam-center" ? "exam-center" : "classic";
+            testAttemptUiSave.disabled = true;
+            showTestAttemptUiMsg("Saving...", "muted");
+            try {
+              const res = await authFetch(`${API_BASE}/api/preferences`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prefs: { testAttemptUi: next } }),
+              });
+              if (!res.ok) {
+                const body = await res.json().catch(() => null);
+                throw new Error(body?.error || `HTTP ${res.status}`);
+              }
+              setCachedTestAttemptUi(next);
+              showTestAttemptUiMsg(
+                `Saved: ${next === "exam-center" ? "Exam Center" : "Classic"} will be used only while attempting tests.`,
+                "success"
+              );
+            } catch (error) {
+              showTestAttemptUiMsg(
+                error?.message || "Failed to save the test attempt UI preference.",
+                "danger"
+              );
+            } finally {
+              testAttemptUiSave.disabled = false;
+            }
           });
 
           resetSave?.addEventListener("click", (e) => {

@@ -373,6 +373,7 @@
       time: 0,
       notes: "",
       markedForReview: false,
+      visited: false,
       resetLockedUntil: 0,
     };
   }
@@ -386,6 +387,9 @@
       }
       if (questionStates[i].markedForReview === undefined) {
         questionStates[i].markedForReview = false;
+      }
+      if (questionStates[i].visited === undefined) {
+        questionStates[i].visited = false;
       }
     }
   }
@@ -3000,6 +3004,12 @@
     const numericalAnswer = document.getElementById("numericalAnswer");
     // Notes editor now renders inline; no textarea reference
     const questionState = questionStates[qID];
+
+    if (isTestTakingMode && questionState && questionState.visited !== true) {
+      questionState.visited = true;
+      markDirty();
+      scheduleSave(aID);
+    }
 
     // Toggle report button based on server block status (best-effort)
     (async () => {

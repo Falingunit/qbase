@@ -1,0 +1,338 @@
+.scribble-pad-container .lft_cont{width:30px}
+/* .scribble-pad-container .canvas_cont{width:624px}
+.scribble-pad-container .canvas_cont canvas{width:624px} */
+
+.scribble-pad-container .toolhdr
+{
+	padding:10px 10px 5px;
+	background-color:#f9f9fa;
+}
+
+.tools a {
+    border: 1px solid black;
+    color: black;
+    display: inline-block;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+.scribble-pad-container{
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #000;
+    width: 840px;
+}
+
+canvas {
+   
+}
+
+/* Scribble Pad New CSS */
+
+#scribblepad .tools{float:left;background-color:#dde7f7;height:298px}
+
+#scribblepad .tools a{width:40px;display:block;border:none;padding:10px;border-bottom:1px solid #bbd2ee}
+#scribblepad .tools a:hover{background-color:#fbc41e}
+
+#scribblepad .markpen{
+    background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xIEJhc2ljLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLWJhc2ljLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgYmFzZVByb2ZpbGU9ImJhc2ljIiBpZD0iTGF5ZXJfMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiDQoJIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzJGMzIzQSIgZD0iTTEuMTgsMjEuNzExTDAsMjMuMDMxTDEuMDIzLDI0bDEuMTg3LTEuMjYxbDAuNzMyLDAuNjgNCgljMCwwLDAuNjQsMC42NDUsMS41MzUsMC4xOTNsMS43MjctMC43MWMwLDAsMC44MzIsMC45MDMsMS42LDAuMTI5bDEyLjE1My0xMi4zOThjMCwwLDEuMDg3LTAuNTgxLDEuMDIzLDAuNTE3bC02Ljg0NCw2Ljk3Mw0KCWMwLDAtMC40NDgsMS41NSwxLjIxNSwxLjA5OWw2LjUyMy02LjY1MWMwLDAsMS4yMTYtMS4xNjIsMC4zODUtMi41MThsLTAuNjQtMC45NjlsMS43MjctMi4wMDFjMCwwLDEuOTgyLTMuMzU4LTAuOTU5LTUuODc2DQoJYzAsMC0yLjY4Ny0yLjMyNS01Ljg4NS0wLjUxN0wxLjAyMywxNi4xMjJjMCwwLTAuNTEyLDAuOTY4LDAuMTI4LDEuMTYxYzAsMC0xLjEzNSwzLjE0NC0wLjgzMiwzLjU1M0wxLjE4LDIxLjcxMXogTTIuMjM5LDE4LjUxMQ0KCWwzLjEzNCwzLjFsLTEuNjYzLDAuNTE3bC0xLjc5MS0xLjgwOEwyLjIzOSwxOC41MTF6Ii8+DQo8Zz4NCgk8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzAwQkZGMyIgZD0iTTEuOTk5LDE3LjM4bDQuNjg2LDQuNTU3bDkuODkzLTkuODkzbC00LjY4Ni00LjY4N0wxLjk5OSwxNy4zOHoNCgkJIE0yMC43MTIsMi42NGMtMi4wOC0xLjI2MS0zLjkwNi0wLjA2Mi0zLjkwNi0wLjA2MkwxMy4yMTIsNi4xNGw0LjY1Niw0LjQzOGwzLjg3NS0zLjgxMkMyMS43NDMsNi43NjUsMjIuNzc0LDMuODksMjAuNzEyLDIuNjR6Ii8+DQo8L2c+DQo8cGF0aCBvcGFjaXR5PSIwLjUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBmaWxsPSIjRkZGRkZGIiBkPSJNMjAuNTYyLDMuNjI1TDIxLjY4OCw1TDYuMzc1LDIwLjU2Mkw1LDE5LjMxMg0KCUwyMC41NjIsMy42MjV6Ii8+DQo8L3N2Zz4NCg==');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+	width:30px;
+	height:30px;
+	display:block;
+}
+
+#scribblepad .erasertool{
+    background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xIEJhc2ljLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLWJhc2ljLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgYmFzZVByb2ZpbGU9ImJhc2ljIiBpZD0iTGF5ZXJfMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjIwcHgiDQoJIHZpZXdCb3g9IjAgMCAyNCAyMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzJGMzIzQSIgZD0iTTAuMjE3LDE0LjQzMWMwLDAtMC40NDgsMC42MTktMC4wNTYsMS4yOTRMNC40NjgsMjBoOC4xNjgNCglMMjMuODgxLDkuMTQyYzAsMCwwLjUwMy0xLjIzOC0wLjU2LTEuOGwtNy4yMTctNy4wMzJjMCwwLTAuNzI3LTAuNzMxLTEuNTY3LDAuMDU3TDAuMjE3LDE0LjQzMXogTTkuMTMsOC4xODNsNi44MTEsNi44NTUNCglsLTMuOTIsMy40NDNsLTYuODI1LTAuMTEzTDEuOTUxLDE1LjA1TDkuMTMsOC4xODN6Ii8+DQo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0Q2NDUxOCIgZD0iTTkuNzYyLDYuNjg5TDEsMTQuODEybDQuMDk4LDQuMDYybDcuODUyLTAuMjQxbDQuNjk1LTQuNDU2DQoJTDkuNzYyLDYuNjg5eiIvPg0KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiMzMDcwQkEiIGQ9Ik0xMC4xLDYuMjYxbDcuOTYsNy41NDdsNS4zMDYtNS4yODJMMTUuMjYsMS4wMDNMMTAuMSw2LjI2MXoiLz4NCjxwYXRoIG9wYWNpdHk9IjAuNSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGZpbGw9IiNGRkZGRkYiIGQ9Ik0yMC45MTEsNy4yNTZsMS4yNTEsMS4yMjJsLTEwLjAwOCw5LjMzNA0KCWwtMi42NTksMC4wNzlMMjAuOTExLDcuMjU2eiIvPg0KPC9zdmc+DQo=');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+	width:30px;
+	height:30px;
+	display:block;
+}
+
+#scribblepad .toolplatetool{
+    background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iMjRweCIgaGVpZ2h0PSIyNHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDI0IDI0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGw9IiNEODMyMjYiIGQ9Ik0xMS44NCw0LjI1NWw3Ljc2Niw4LjAybC0zLjA2OCwzLjA0OEw4LjY1OCw3LjQ2OEwxMS44NCw0LjI1NXoiLz4NCjxwb2x5bGluZSBmaWxsPSIjMzVCQTZCIiBwb2ludHM9IjE1LjgyNCwxNi4wMzMgMTIuNjUsMTkuMjM2IDQuNzcxLDExLjM4MyA3Ljk1NCw4LjE3ICIvPg0KPHBvbHlsaW5lIGZpbGw9IiMxM0FGRUEiIHBvaW50cz0iMTIuMDUzLDE5Ljc5NiA4Ljg3OSwyMyAxLDE1LjE0NiA0LjE4MywxMS45MzMgIi8+DQo8cGF0aCBmaWxsPSIjMkYzMjNBIiBkPSJNMjMuNzkzLDguMTEzbC0xLjEwOS01LjExMmMwLDAuMDAxLTAuMTUxLTEuNDAyLTEuNzE1LTEuNzAzbC01LjM5Ni0xLjIwNGMwLDAtMS4zMTItMC40MDEtMi4xNjksMC40NTINCglMMC4yNCwxMy43NzdjMCwwLTAuNzA2LDEuMTU0LDAuMzAzLDIuMzU1bDcuNjE1LDcuNDE4YzAsMCwwLjk1OCwxLjEwNCwyLjYyMy0wLjE0OGwxMi41NTgtMTIuNTMxDQoJQzIzLjMzOSwxMC44NzEsMjQuNDQ5LDEwLjA2OCwyMy43OTMsOC4xMTN6IE05LjQyLDIyLjI5OUwxLjU1MiwxNC41OGwyLjY3My0yLjYwNmw3LjcxNiw3LjgxOUw5LjQyLDIyLjI5OXogTTEzLjIwMSwxOC42ODkNCglsLTcuODE2LTcuODY5bDIuNTcyLTIuNjU2bDcuODY3LDcuODY5TDEzLjIwMSwxOC42ODl6IE0xNi45ODQsMTQuNzc5TDkuMTY3LDYuOTYybDIuNjczLTIuNzA3bDcuNzY2LDguMDE5TDE2Ljk4NCwxNC43Nzl6Ii8+DQo8cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNMjEuMjYsMy4wNTdjMCwwLTAuMjU1LTAuNDQ2LTAuNjk5LTAuNTQxbC01LjYzNS0wLjgyOEwxMy4wMTgsMy4yOGw3LjgxNSw3LjkxNmwxLjczMS0yLjA1OUwyMS4yNiwzLjA1N3oNCgkgTTE5LjE4OCw2LjA2NWMtMC41NDksMC0wLjk5Mi0wLjQ0NS0wLjk5Mi0wLjk5M2MwLTAuNTQ4LDAuNDQzLTAuOTkzLDAuOTkyLTAuOTkzYzAuNTQ3LDAsMC45OTIsMC40NDQsMC45OTIsMC45OTINCglDMjAuMTgsNS42MiwxOS43MzQsNi4wNjUsMTkuMTg4LDYuMDY1eiIvPg0KPC9zdmc+DQo=');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+	width:30px;
+	height:30px;
+	display:block;
+	
+}
+
+
+#scribblepad .linesizetool{
+    background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xIEJhc2ljLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLWJhc2ljLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgYmFzZVByb2ZpbGU9ImJhc2ljIiBpZD0iTGF5ZXJfMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjE3cHgiDQoJIHZpZXdCb3g9IjAgMCAyNCAxNyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8Zz4NCgk8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzJGMzIzQSIgZD0iTTAsMHYxaDI0VjBIMHogTTAsNWgyNFYzSDBWNXogTTAsMTBoMjRWN0gwVjEweiBNMCwxN2gyNHYtNUgwVjE3DQoJCXoiLz4NCjwvZz4NCjwvc3ZnPg0K');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+	width:30px;
+	height:30px;
+	display:block;
+}
+
+
+#scribblepad .tool_plate{position:relative;padding:10px;border-bottom:1px solid #bbd2ee}
+
+#scribblepad .tool_plate .platearrow{
+	background-image:url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xIFRpbnkvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEtdGlueS5kdGQiPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGJhc2VQcm9maWxlPSJ0aW55IiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayINCgkgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4IiB2aWV3Qm94PSIwIDAgNiA2IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzU4NUQ2NSIgZD0iTTYsMEwwLDZoNlYweiIvPg0KPC9zdmc+DQo=');
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+	width:6px;
+	height:6px;
+	display:block;
+	position:absolute;
+	bottom:2px;
+	right:2px;
+	}
+
+#scribblepad .tool_plate:hover{background-color:#fbc41e}
+#scribblepad .colorbox{position:absolute;top:0 ;left:41px;border:1px solid #c5c5c5;width:126px;height:64px;display:none;background-color:#ffffff }
+
+
+#scribblepad .colorbox a{padding:0;margin:5px; width:20px;height:20px;border-radius:0;}
+
+.color_container{
+	background-color: #efefef;
+    float: left;
+    height: 30px;
+    width: 30px;
+	margin:1px
+}
+
+.color_container:hover{
+	background-color: #fbc41e;
+}
+
+.colorbox .color-parent{width:30px;height:30px;float:left;background-color: #efefef;margin-right: 1px;
+    margin-top: 1px;}
+
+.colorbox .color-parent:hover{background-color:#fbc41e}
+
+.color-parent.selectedColor{background-color:#fbc41e}
+
+.linebox
+{
+	position:absolute;top:0 ;left:50px;border:1px solid #c5c5c5;width:64px;height:64px;display:none;
+}
+
+.toolcolor{background-color: #fbc41e !important;}
+
+#scribblepad .linebox a{float:left;display:block;width:30px;height:30px;padding:0;background-color:#efefef;margin:1px}
+#scribblepad .linebox a:hover{background-color: #fbc41e;}
+
+#scribblepad .linebox .circle3{background-color:#000;width:5px;height:5px;border-radius:50%; -webkit-border-radius: 50%;-moz-border-radius: 50%;
+ behavior: url(css/pie.htc);margin:13px auto}
+#scribblepad .linebox .circle5{background-color:#000;width:10px;height:10px;border-radius:50%; -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+ behavior: url(css/pie.htc);margin:10px auto}
+#scribblepad .linebox .circle10{background-color:#000;width:15px;height:15px;border-radius:50%;
+ -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+ behavior: url(css/pie.htc);margin:8px auto}
+#scribblepad .linebox .circle15{background-color:#000;width:20px;height:20px;border-radius:50%;margin:5px auto}
+
+
+/* Css Scratchpad */
+
+
+.scribble-pad-container .tools a {
+    box-sizing: border-box;
+    position: relative;
+}
+
+.thumb-drag {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -3px -3px;
+    cursor: move;
+    display: inline-block;
+    height: 23px;
+    vertical-align: middle;
+    width: 41px;
+}
+
+.selectedTool {
+    background-color: #fdc61e;
+    opacity: 1;
+}
+
+
+.thumb-size::after, .thumb-color::after {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -232px -11px;
+    bottom: 1px;
+    content: " ";
+    height: 6px;
+    position: absolute;
+    right: 1px;
+    width: 5px;
+}
+
+.size-container, .color-container {
+    background-color: #fff;
+    border: 1px solid #bbd2ee;
+    box-shadow: 2px 2px 5px #dfdfdf;
+    display: none;
+    height: auto;
+    left: 41px;
+    position: absolute;
+    top: -2px;
+    width: 64px;
+    z-index: 9;
+}
+
+
+.color-container a {
+    border-radius: 5px;
+	 -webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+ behavior: url(css/pie.htc);
+    height: 16px;
+    margin-bottom: 5px;
+    margin-top: 6px;
+    width: 16px;
+}
+
+.size-container a[data-size="5"] {
+    height: 12px;
+    padding-bottom: 10px;
+    padding-left: 14px;
+    width: 100%;
+}
+
+.tools a .dynamicDots {
+    background: #000 none repeat scroll 0 0;
+    border-radius: 50%;
+	 -webkit-border-radius: 50%;
+-moz-border-radius: 50%;
+ behavior: url(css/pie.htc);
+    /*display: table-cell;
+    position: absolute;*/
+    z-index: 100;
+	margin:0 auto;
+}
+
+#scribblepad .size-container a{
+	background-color:#efefef;
+	border:none;
+	float: left;
+    height: 30px;
+    margin-right: 1px;
+    margin-top: 1px;
+    text-align: center;
+    width: 30px;
+	padding:0
+	}
+
+.size-container a[data-size="10"] {
+    height: 12px;
+  
+    width: 100%;
+}
+
+
+.size-container a[data-size="15"] {
+    height: 12px;
+   
+    width: 100%;
+}
+
+.size-container a[data-size="20"] {
+    height: 12px;
+  
+    width: 100%;
+}
+
+.size-container a[data-size="5"] p{
+margin:12px auto;
+}
+
+
+.size-container a[data-size="10"] p{
+margin:9px auto;
+}
+
+.size-container a[data-size="15"] p{
+margin:8px auto;
+}
+.size-container a[data-size="20"] p{
+margin:5px auto;
+}
+
+#scribblepad .size-container a.selectedColor {
+    background-color: #fbc41e;
+}
+
+.thumb-clear {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -182px 4px;
+    border-bottom: 0 none;
+    border-top: 1px solid #ccc;
+    height: 41px !important;
+    margin-top: 129px;
+    width: 41px;
+}
+
+.thumb-size {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -146px 4px;
+    height: 41px !important;
+    width: 41px;
+}
+
+
+.scribble-pad-container .tools a {
+	border:none;
+    border-bottom: 1px solid #bbd2ee;
+    color: black;
+    display: inline-block;
+    font-weight: bold;
+    height: 23px;
+    line-height: 30px;
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    width: 41px;
+}
+
+
+.thumb-marker {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -44px 4px;
+    height: 36px !important;
+    width: 41px;
+}
+
+
+.thumb-Erase {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -78px 5px;
+    height: 41px !important;
+    width: 41px;
+}
+
+
+.thumb-color {
+    background: rgba(0, 0, 0, 0) url("../images/scribblePadSprite.png") no-repeat scroll -111px 6px;
+    height: 41px !important;
+    width: 41px;
+}
+
+.scribble-pad-container table tr td:first-child {
+    background-color: #dde7f7;
+}
+.bcksp{
+	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xIEJhc2ljLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLWJhc2ljLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgYmFzZVByb2ZpbGU9ImJhc2ljIiBpZD0iTGF5ZXJfMSINCgkgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyM3B4IiBoZWlnaHQ9IjE2cHgiDQoJIHZpZXdCb3g9IjAgMCAyMyAxNiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzg1QjdEOCIgZD0iTTIzLDE0Ljk2MkwyMiwxNkw4LjA1LDE2LjAxTDAsOC45ODFWNy41MTJMOC4wMzgsMEgyMmwxLDAuOTE2DQoJVjE0Ljk2MnogTTE3LjE1MSw1LjkwMmMwLjUyNC0wLjUyNCwxLjE3NS0xLjE3OSwwLjY0OS0xLjcwNHMtMS4xNywwLjEzLTEuNjk0LDAuNjU0bC0yLjA5LDIuMDk4bC0yLjA5LTIuMDk4DQoJYy0wLjUyNC0wLjUyNC0xLjIwNS0xLjE3OS0xLjcyOS0wLjY1NGMtMC41MjUsMC41MjQsMC4xNTksMS4xNzksMC42ODUsMS43MDRMMTIuOTcyLDhsLTIuMDksMi4wOTkNCgljLTAuNTI1LDAuNTI0LTEuMjEsMS4xNjktMC42ODUsMS42OTJjMC41MjQsMC41MjUsMS4yMDUtMC4xMTksMS43MjktMC42NDRsMi4wOS0yLjA5OWwyLjA5LDIuMDk5DQoJYzAuNTI0LDAuNTI0LDEuMTY5LDEuMTY5LDEuNjk0LDAuNjQ0YzAuNTI1LTAuNTIzLTAuMTI1LTEuMTY4LTAuNjQ5LTEuNjkyTDE1LjA2Miw4TDE3LjE1MSw1LjkwMnoiLz4NCjwvc3ZnPg0K");
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: block;
+    float: right;
+    height: 14px;
+    width: 30px;
+	cursor:pointer;	
+	}

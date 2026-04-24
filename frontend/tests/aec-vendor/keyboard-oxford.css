@@ -1,0 +1,340 @@
+#keyboardInputMaster {
+  /*position:static;
+  font:normal 11px Arial,sans-serif;
+  border-top:1px solid #eeeeee;
+  border-right:1px solid #888888;
+  border-bottom:1px solid #444444;
+  border-left:1px solid #cccccc;
+  -webkit-border-radius:0.6em;
+  -moz-border-radius:0.6em;
+  border-radius:0.6em;
+  -webkit-box-shadow:0px 2px 10px #444444;
+  -moz-box-shadow:0px 2px 10px #444444;
+  box-shadow:0px 2px 10px #444444;
+  opacity:0.95;
+  filter:alpha(opacity=95);
+  background-color:#dddddd;
+  text-align:left;
+  z-index:1000000;
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  margin:0px;
+  padding:0px;
+  line-height:normal;
+  -moz-user-select:none;
+  cursor:default;*/
+  font-family: 'Roboto', Tahoma, Arial, sans-serif;
+	position: fixed;
+	bottom: 60px;
+	z-index: 99;
+	background: #666;
+	list-style: none;
+	font-size: 12px;
+	width:50%;
+	border-top-radius: 5px;
+	height: auto;
+  }
+/*#keyboardInputMaster * {
+  position:static;
+  color:#000000;
+  background:transparent;
+  font:normal 11px Arial,sans-serif;
+  width:auto;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  margin:0px;
+  padding:0px;
+  border:0px none;
+  outline:0px;
+  vertical-align:baseline;
+  line-height:1.3em;
+}*/
+#keyboardInputMaster.keyboardInputSize1,
+#keyboardInputMaster.keyboardInputSize1 * {
+  font-size:9px;
+}
+#keyboardInputMaster.keyboardInputSize3,
+#keyboardInputMaster.keyboardInputSize3 * {
+  font-size:13px;
+}
+#keyboardInputMaster.keyboardInputSize4,
+#keyboardInputMaster.keyboardInputSize4 * {
+  font-size:12px;
+}
+#keyboardInputMaster.keyboardInputSize5,
+#keyboardInputMaster.keyboardInputSize5 * {
+  font-size:20px;
+}
+
+#keyboardInputMaster thead tr th {
+  padding:0.3em 0.3em 0.1em 0.3em;
+  background-color:#999999;
+  white-space:nowrap;
+  text-align:right;
+  -webkit-border-radius:0.6em 0.6em 0px 0px;
+  -moz-border-radius:0.6em 0.6em 0px 0px;
+  border-radius:0.6em 0.6em 0px 0px;
+}
+#keyboardInputMaster thead tr th div {
+  float:left;
+  font-size:130% !important;
+  height:1.3em;
+  font-weight:bold;
+  position:relative;
+  z-index:1;
+  margin-right:0.5em;
+  cursor:pointer;
+  background-color:transparent;
+}
+#keyboardInputMaster thead tr th div ol {
+  position:absolute;
+  left:0px;
+  top:90%;
+  list-style-type:none;
+  height:9.4em;
+  overflow-y:auto;
+  overflow-x:hidden;
+  background-color:#f6f6f6;
+  border:1px solid #999999;
+  display:none;
+  text-align:left;
+  width:12em;
+}
+#keyboardInputMaster thead tr th div ol li {
+  padding:0.2em 0.4em;
+  cursor:pointer;
+  white-space:nowrap;
+  width:12em;
+}
+#keyboardInputMaster thead tr th div ol li.selected {
+  background-color:#ffffcc;
+}
+#keyboardInputMaster thead tr th div ol li:hover,
+#keyboardInputMaster thead tr th div ol li.hover {
+  background-color:#dddddd;
+}
+#keyboardInputMaster thead tr th span,
+#keyboardInputMaster thead tr th strong,
+#keyboardInputMaster thead tr th small,
+#keyboardInputMaster thead tr th big {
+  display:inline-block;
+  padding:0px 0.4em;
+  height:1.4em;
+  line-height:1.4em;
+  border-top:1px solid #e5e5e5;
+  border-right:1px solid #5d5d5d;
+  border-bottom:1px solid #5d5d5d;
+  border-left:1px solid #e5e5e5;
+  background-color:#cccccc;
+  cursor:pointer;
+  margin:0px 0px 0px 0.3em;
+  -webkit-border-radius:0.3em;
+  -moz-border-radius:0.3em;
+  border-radius:0.3em;
+  vertical-align:middle;
+  -webkit-transition:background-color .15s ease-in-out;
+  -o-transition:background-color .15s ease-in-out;
+  transition:background-color .15s ease-in-out;
+}
+#keyboardInputMaster thead tr th strong {
+  font-weight:bold;
+}
+#keyboardInputMaster thead tr th small {
+  -webkit-border-radius:0.3em 0px 0px 0.3em;
+  -moz-border-radius:0.3em 0px 0px 0.3em;
+  border-radius:0.3em 0px 0px 0.3em;
+  border-right:1px solid #aaaaaa;
+  padding:0px 0.2em 0px 0.3em;
+}
+#keyboardInputMaster thead tr th big {
+  -webkit-border-radius:0px 0.3em 0.3em 0px;
+  -moz-border-radius:0px 0.3em 0.3em 0px;
+  border-radius:0px 0.3em 0.3em 0px;
+  border-left:0px none;
+  margin:0px;
+  padding:0px 0.3em 0px 0.2em;
+}
+#keyboardInputMaster thead tr th span:hover,
+#keyboardInputMaster thead tr th span.hover,
+#keyboardInputMaster thead tr th strong:hover,
+#keyboardInputMaster thead tr th strong.hover,
+#keyboardInputMaster thead tr th small:hover,
+#keyboardInputMaster thead tr th small.hover,
+#keyboardInputMaster thead tr th big:hover,
+#keyboardInputMaster thead tr th big.hover {
+  background-color:#dddddd;
+}
+
+#keyboardInputMaster tbody tr td {
+  text-align:left;
+ /* padding:0.7em 0.6em 0.6em 0.6em; */
+  vertical-align:top;
+  
+}
+#keyboardInputMaster tbody tr td div {
+  text-align:center;
+  position:relative;
+  zoom:1;
+  }
+#keyboardInputMaster tbody tr td table {
+  white-space:nowrap;
+  width:100%;
+  border-collapse:separate;
+  border-spacing: 2px;
+}
+#keyboardInputMaster tbody tr td#keyboardInputNumpad table {
+  margin-left:0.2em;
+  width:auto;
+}
+#keyboardInputMaster tbody tr td table.keyboardInputCenter {
+  width:auto;
+  margin:0px auto;
+}
+#keyboardInputMaster tbody tr td table tbody tr td {
+  /*vertical-align:middle;
+  /*padding:0px 0.45em;
+  white-space:pre;
+  /*height:1.8em;*/
+font-family: 'Roboto', Tahoma, Arial, sans-serif;
+  border: 1px solid #f9f9f9;
+   background-color:#fff;
+  cursor:pointer;
+  border-color: #e5e5e5;
+  	margin: 0 0 0.5% 0.5%;
+  -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-color: #e5e5e5;
+	width: 40px;
+	height: 40px;
+	text-align: center;
+    min-width:0.75em;
+      /*-webkit-border-radius:0.2em;
+  -moz-border-radius:0.2em;
+  border-radius:0.2em;
+  -webkit-transition:background-color .15s ease-in-out;
+  -o-transition:background-color .15s ease-in-out;
+  transition:background-color .15s ease-in-out;
+   /*float: left;
+	margin: 0 0 0.5% 0.5%;
+	width: auto;
+	text-align: center;
+	background-color: #fff;
+	border: 1px solid #f9f9f9;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-color: #e5e5e5;
+	cursor: pointer;*/
+}
+#keyboardInputMaster tbody tr td table tbody tr td.last {
+  /*width:99%;*/
+}
+#keyboardInputMaster tbody tr td table tbody tr td.space {
+  padding:0px 4em;
+}
+#keyboardInputMaster tbody tr td table tbody tr td.deadkey {
+  background-color:#ccccdd;
+}
+#keyboardInputMaster tbody tr td table tbody tr td.target {
+  background-color:#ddddcc;
+}
+#keyboardInputMaster tbody tr td table tbody tr td:hover,
+#keyboardInputMaster tbody tr td table tbody tr td.hover {
+  background-color: #FFD488;
+	border-color: #FFAE6E;
+}
+#keyboardInputMaster thead tr th span:active,
+#keyboardInputMaster thead tr th span.pressed,
+#keyboardInputMaster tbody tr td table tbody tr td:active,
+#keyboardInputMaster tbody tr td table tbody tr td.pressed {
+  background-color: #E6FFD8;
+	border-color: #6FDA54;
+	}
+
+#keyboardInputMaster tbody tr td table tbody tr td small {
+  display:block;
+  text-align:center;
+  font-size:0.6em !important;
+  line-height:1.1em;
+}
+
+#keyboardInputMaster tbody tr td div label {
+  position:absolute;
+  bottom:0.2em;
+  left:0.3em;
+}
+#keyboardInputMaster tbody tr td div label input {
+  background-color:#f6f6f6;
+  vertical-align:middle;
+  font-size:inherit;
+  width:1.1em;
+  height:1.1em;
+}
+#keyboardInputMaster tbody tr td div var {
+  position:absolute;
+  bottom:0px;
+  right:3px;
+  font-weight:bold;
+  font-style:italic;
+  color:#444444;
+}
+
+.keyboardInputInitiator {
+	width: 36px !important;
+    height: 23px !important;
+    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzOCIgaGVpZ2h0PSIyMyIgdmlld0JveD0iMCAwIDM4IDIzIj4KICA8ZyBpZD0iR3JvdXBfMTM1MSIgZGF0YS1uYW1lPSJHcm91cCAxMzUxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNDYyIC0yMCkiPgogICAgPGcgaWQ9IlBhdGhfNjE5MCIgZGF0YS1uYW1lPSJQYXRoIDYxOTAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ2MiAyMCkiIGZpbGw9IiNmZmYiPgogICAgICA8cGF0aCBkPSJNIDM2IDIyIEwgMiAyMiBDIDEuNDQ4NjAwMDUzNzg3MjMxIDIyIDEgMjEuNTUxMzk5MjMwOTU3MDMgMSAyMSBMIDEgMiBDIDEgMS40NDg2MDAwNTM3ODcyMzEgMS40NDg2MDAwNTM3ODcyMzEgMSAyIDEgTCAzNiAxIEMgMzYuNTUxMzk5MjMwOTU3MDMgMSAzNyAxLjQ0ODYwMDA1Mzc4NzIzMSAzNyAyIEwgMzcgMjEgQyAzNyAyMS41NTEzOTkyMzA5NTcwMyAzNi41NTEzOTkyMzA5NTcwMyAyMiAzNiAyMiBaIiBzdHJva2U9Im5vbmUiLz4KICAgICAgPHBhdGggZD0iTSAyIDIgTCAyIDIxIEwgMzYgMjEgTCAzNiAyIEwgMiAyIE0gMiAwIEwgMzYgMCBDIDM3LjEwNDU2ODQ4MTQ0NTMxIDAgMzggMC44OTU0Mjk2MTEyMDYwNTQ3IDM4IDIgTCAzOCAyMSBDIDM4IDIyLjEwNDU3MDM4ODc5Mzk1IDM3LjEwNDU2ODQ4MTQ0NTMxIDIzIDM2IDIzIEwgMiAyMyBDIDAuODk1NDMxNTE4NTU0Njg3NSAyMyAwIDIyLjEwNDU3MDM4ODc5Mzk1IDAgMjEgTCAwIDIgQyAwIDAuODk1NDI5NjExMjA2MDU0NyAwLjg5NTQzMTUxODU1NDY4NzUgMCAyIDAgWiIgc3Ryb2tlPSJub25lIiBmaWxsPSIjNzA3MDcwIi8+CiAgICA8L2c+CiAgICA8ZyBpZD0iR3JvdXBfMTM1MCIgZGF0YS1uYW1lPSJHcm91cCAxMzUwIj4KICAgICAgPGxpbmUgaWQ9IkxpbmVfMzQiIGRhdGEtbmFtZT0iTGluZSAzNCIgeDI9IjIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ2OS41IDI3LjUpIiBmaWxsPSJub25lIiBzdHJva2U9IiM3MDcwNzAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM4IiBkYXRhLW5hbWU9IkxpbmUgMzgiIHgyPSIyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0NjkuNSAzMS41KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzA3MDcwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8bGluZSBpZD0iTGluZV80MiIgZGF0YS1uYW1lPSJMaW5lIDQyIiB4Mj0iMTYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ2OS41IDM1LjUpIiBmaWxsPSJub25lIiBzdHJva2U9IiM3MDcwNzAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM1IiBkYXRhLW5hbWU9IkxpbmUgMzUiIHgyPSIyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0NzYuNSAyNy41KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzA3MDcwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8bGluZSBpZD0iTGluZV8zOSIgZGF0YS1uYW1lPSJMaW5lIDM5IiB4Mj0iMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDc2LjUgMzEuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcwNzA3MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPGxpbmUgaWQ9IkxpbmVfMzYiIGRhdGEtbmFtZT0iTGluZSAzNiIgeDI9IjIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ4My41IDI3LjUpIiBmaWxsPSJub25lIiBzdHJva2U9IiM3MDcwNzAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzQwIiBkYXRhLW5hbWU9IkxpbmUgNDAiIHgyPSIyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0ODMuNSAzMS41KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzA3MDcwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgICA8bGluZSBpZD0iTGluZV8zNyIgZGF0YS1uYW1lPSJMaW5lIDM3IiB4Mj0iMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDkwLjUgMjcuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzcwNzA3MCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiLz4KICAgICAgPGxpbmUgaWQ9IkxpbmVfNDEiIGRhdGEtbmFtZT0iTGluZSA0MSIgeDI9IjIiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDQ5MC41IDM1LjUpIiBmaWxsPSJub25lIiBzdHJva2U9IiM3MDcwNzAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzQzIiBkYXRhLW5hbWU9IkxpbmUgNDMiIHkxPSI0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0OTIuNSAzMS41KSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNzA3MDcwIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg==) no-repeat 50% 50% !important;
+    background-size: contain !important;
+    position: relative !important;
+    right: 10px;
+    top: -50px;
+    z-index: 1;
+	
+/*  margin-top: -4px;
+  margin-top: 5px\9;
+  *margin-top: -23px;*/
+    padding: 10px;
+  /* vertical-align:-13px ; */
+   vertical-align:-3px;
+    cursor:pointer;
+  border:solid 1px #cacaca;
+  border-left:none;
+   border-radius: 0 3px 3px 0;
+   background-color: #eee;
+   float:right;
+   margin-right:2px;
+}
+.ie8 .keyboardInputInitiator{
+    /* vertical-align:-18px ; */
+    margin-right: 2px;
+    margin-top: 6px;
+}
+#keyboardInputMaster tbody tr td table tbody tr td.space{
+	padding-left: 170px;
+	padding-right: 350px;
+	}
+	
+.shift-key{
+	width: 125px !important;
+}
+.caps-key{
+width: 100px !important;
+}
+.space{
+	width: 94% !important;
+}
+.return-key{
+	width: 100px !important;
+}
+.tab-key{
+	width: 60px !important;
+}
+.delete-key{
+	width: 80px !important;
+}
+#keyboardInputMaster thead tr th div[title]
+{
+	display: none;
+}
+	

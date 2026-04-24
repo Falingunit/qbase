@@ -1,0 +1,38 @@
+ /* additional style for quiz page*/
+ 
+ 
+ .skip-wait-time-btn1{ 
+  border: none;
+  cursor: pointer;
+  width: 33px;
+  height: 33px;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIj4KICA8cmVjdCB4PSIwLjUiIHk9IjAuNSIgd2lkdGg9IjM5IiBoZWlnaHQ9IjM5IiByeD0iMiIgc3Ryb2tlPSIjYzhjOGM4IiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9IiNmZmYiLz4KICA8cGF0aCBkPSJNMTQgMTJsMTAgOC0xMCA4IiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPg==') no-repeat center center;
+  background-size: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+
+
+  .skip-wait-time-btn2{
+  border: none;
+  cursor: pointer;
+  width: 33px;
+  height: 33px;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIj4KICA8cmVjdCB4PSIwLjUiIHk9IjAuNSIgd2lkdGg9IjM5IiBoZWlnaHQ9IjM5IiByeD0iMiIgc3Ryb2tlPSIjYzhjOGM4IiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9IiMxNDdFQjMiLz4KICA8cGF0aCBkPSJNMTQgMTJsMTAgOC0xMCA4IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPg==') no-repeat center center;
+  background-size: contain;
+  
+  }
+
+
+
+.skip-wait-time-btn1:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid #333 !important;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIiBmaWxsPSJub25lIj4KICA8cmVjdCB4PSIwLjUiIHk9IjAuNSIgd2lkdGg9IjM5IiBoZWlnaHQ9IjM5IiByeD0iMiIgc3Ryb2tlPSIjYzhjOGM4IiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9IiMxNDdFQjMiLz4KICA8cGF0aCBkPSJNMTQgMTJsMTAgOC0xMCA4IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPg==') no-repeat center center;
+
+}
+.skip-wait-time-btn2:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #333;
+}
+

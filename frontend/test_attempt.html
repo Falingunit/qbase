@@ -4,13 +4,61 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>QBase - Test Attempt</title>
+    <script defer src="./common/config.js"></script>
     <script>
-      const next = new URL("./assignment_base.html", window.location.href);
-      const current = new URL(window.location.href);
-      current.searchParams.forEach((value, key) => next.searchParams.set(key, value));
-      next.searchParams.set("mode", "test-attempt");
-      window.location.replace(next.href);
+      document.addEventListener("DOMContentLoaded", async () => {
+        if (typeof loadConfig === "function") {
+          await loadConfig();
+        }
+        const current = new URL(window.location.href);
+        const TEST_ATTEMPT_UI_LS_KEY = "qbase.testAttempt.ui";
+
+        const readCachedUi = () => {
+          try {
+            return localStorage.getItem(TEST_ATTEMPT_UI_LS_KEY) === "exam-center"
+              ? "exam-center"
+              : "classic";
+          } catch {
+            return "classic";
+          }
+        };
+
+        const writeCachedUi = (value) => {
+          const next = value === "exam-center" ? "exam-center" : "classic";
+          try {
+            localStorage.setItem(TEST_ATTEMPT_UI_LS_KEY, next);
+          } catch {}
+          return next;
+        };
+
+        const resolveUi = async () => {
+          try {
+            if (!(typeof qbGetToken === "function" && qbGetToken())) {
+              return readCachedUi();
+            }
+            const res = await authFetch(`${API_BASE}/api/preferences`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const prefs = await res.json();
+            return writeCachedUi(
+              prefs?.testAttemptUi === "exam-center" ? "exam-center" : "classic",
+            );
+          } catch {
+            return readCachedUi();
+          }
+        };
+
+        const ui = await resolveUi();
+        const next = new URL(
+          ui === "exam-center" ? "./test_attempt_exam.html" : "./assignment_base.html",
+          window.location.href,
+        );
+        current.searchParams.forEach((value, key) => next.searchParams.set(key, value));
+        if (ui !== "exam-center") next.searchParams.set("mode", "test-attempt");
+        window.location.replace(next.href);
+      });
     </script>
   </head>
-  <body></body>
+  <body>
+    <p style="font-family: sans-serif; padding: 1rem">Loading test attempt...</p>
+  </body>
 </html>

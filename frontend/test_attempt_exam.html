@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Assessment Examination Center</title>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+          processEscapes: true,
+          packages: { "[+]": ["mhchem"] },
+        },
+        loader: { load: ["[tex]/mhchem"] },
+        options: {
+          skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"],
+          ignoreHtmlClass: "mathjax-ignore",
+        },
+        startup: {
+          ready: () => {
+            MathJax.startup.defaultReady();
+            try {
+              if (window.__qbaseMathFlush) window.__qbaseMathFlush();
+            } catch {}
+          },
+        },
+      };
+    </script>
+    <script defer src="./common/mathjax-setup.js"></script>
+    <script defer id="mathjax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="./common/config.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.0.8/dist/purify.min.js"></script>
+    <script defer src="./tests/test-attempt-runtime.js"></script>
+    <link rel="stylesheet" href="./tests/aec-vendor/mock_style.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/screen.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/nanoscroller.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/style.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/quizStyle.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/aecInstructions.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/thickbox.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/jquery.alerts.css" />
+    <link rel="stylesheet" href="./tests/aec-vendor/RightToLeft.css" />
+    <link rel="stylesheet" href="./tests/test-attempt-exam.css" />
+    <script defer src="./tests/test-attempt-exam.js"></script>
+  </head>
+  <body>
+    <div class="headergrup">
+      <div id="header" style="background-color: rgb(237, 237, 237); --headerBG: #EDEDED">
+        <div align="left" id="bannerImage" style="float: left">
+          <div id="bannerImg" style="float: left">
+            <img src="./tests/aec-vendor/banner.jpg" alt="" />
+          </div>
+          <div id="bannerText" align="center" style="margin-top: 10px; font-weight: bold">
+            <font size="4" color="#ffffff"></font>
+          </div>
+        </div>
+      </div>
+      <section class="commanHeaderPatch">
+        <div class="subjectdetailsArea">
+          <div class="subjectdetailsAreaInside">
+            <h1 class="subjectDetailHead mockName">Test Attempt</h1>
+            <div class="profileDetailsCricle">
+              <div class="timerBoxPannel ontimerRealtedBlock">
+                <div class="timerContainer" role="timer" tabindex="0" id="timer_div">
+                  <em class="timeimg"></em>
+                  <div class="hrs timeBlk hrsDiv">
+                    <span class="timerUpdate">
+                      <span id="m01_hrs" class="paperHrs">00</span>
+                      <span>:</span>
+                    </span>
+                    <span class="sanssB" style="display: none">HRS</span>
+                  </div>
+                  <div class="hrs timeBlk minsDiv">
+                    <span class="timerUpdate">
+                      <span id="min_val" class="paperMins">00</span>
+                      <span>:</span>
+                    </span>
+                    <span class="timerStatic" style="display: none">MIN</span>
+                  </div>
+                  <div class="hrs timeBlk secsDiv">
+                    <span class="timerUpdate">
+                      <span id="sec01_val" class="paperSecs">00</span>
+                    </span>
+                    <span class="timerStatic" style="display: none">SEC</span>
+                  </div>
+                </div>
+              </div>
+              <div role="region" aria-label="candidate information" class="qbase-header-candidate" id="User_Hldr">
+                <div class="singleImageDiv">
+                  <div class="profile_image">
+                    <img alt="candidate image" width="94" height="101" align="absmiddle" class="candidateImg mockCandidateImg" src="./tests/aec-vendor/NewCandidateImage.jpg" />
+                  </div>
+                  <div class="profile_details">
+                    <div role="heading" aria-level="2" id="candidate-name" class="candOriginalName" title="Candidate">Candidate</div>
+                    <div id="candidate-attempt" class="qbase-candidate-attempt">Attempt</div>
+                  </div>
+                </div>
+                <div class="clear"></div>
+              </div>
+              <div class="userName1"></div>
+              <div class="candId1"></div>
+              <div class="userProfileDataMain qbase-back-wrap">
+                <a id="exam-back-link" class="btn btn-primary-blue auditlogButton" href="./test_overview.html">Back to Overview</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div role="banner" aria-label="Assessment Header" id="sub-header">
+        <div class="exam_name">
+          <span style="outline: none" tabindex="-1" id="exam_name_h1" role="heading" aria-level="1" class="test-header">Test Attempt</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="qbase-aec-shell">
+      <div class="qbase-top-row">
+        <div class="qbase-sections-shell">
+          <div class="section-timepanel">
+            <div class="section-details" id="sectionsField">
+              <span role="heading" aria-level="2" class="sect"><b>Sections</b></span>
+            </div>
+            <div class="time-details">
+              <div id="showTime" style="float: right">
+                <b class="langLabel">Time Left : <span id="timeInMins">0:00</span></b>
+              </div>
+            </div>
+          </div>
+          <div role="tabpanel" class="subject-selection qbase-subject-selection" style="direction: ltr; float: left">
+            <div id="sections-left-arrow" aria-disabled="true" aria-label="scroll left" role="button" class="subject-arrow-left-disabled"></div>
+            <div role="tablist" id="sections" aria-label="section"></div>
+            <div id="sections-right-arrow" aria-disabled="true" aria-label="scroll right" role="button" class="subject-arrow-right-disabled"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qbase-main-row">
+        <div class="qbase-left-column">
+          <div role="tabpanel" aria-label="question area" id="currentQues">
+            <a href="#numberpanelQues" class="skip-link" tabindex="0" aria-label="Skip to question navigation">Skip to ques navigation</a>
+            <a href="#buttons-div-id" class="skip-link" tabindex="0" aria-label="Skip to answer submission controls">Skip to ans controls</a>
+            <div class="questionTypeCont displayQuestionTypeContent">
+              <span role="heading" aria-level="2" id="questiontype-details_id" class="questiontype-details">
+                <span class="questionType langLabel" lang="en">Question Type: </span>--
+              </span>
+            </div>
+            <div id="Questn_Innr_Div_section">
+              <div id="Subjt_Div"></div>
+              <div id="Subdetail_Div"></div>
+            </div>
+            <div id="quesOuterDiv" class="uniqueQuesOuterDiv" style="display: block; height: auto; overflow: hidden; position: relative">
+              <div class="leftDiv qbase-question-scroll" lang="en">
+                <div align="right" style="float: right">
+                  <a role="button" id="scrollToBottom" class="tipIcon" objid="scroll to bottom" tabindex="0" aria-label="scroll to bottom" style="display: inline">
+                    <img width="28" height="28" align="right" alt="" src="./tests/aec-vendor/Down.png" />
+                  </a>
+                </div>
+                <div role="heading" aria-level="3" class="divHeader" id="divHeader_id">
+                  <b><span class="questionNumber langLabel" lang="en">Question No</span>. 1</b>
+                </div>
+                <div id="quesAnsContent" class="Ans_Area"></div>
+                <div align="right" style="float: right; clear: both">
+                  <a id="scrollToTop" class="tipIcon" objid="scroll to top" tabindex="0" role="button" aria-label="scroll to top" style="display: inline">
+                    <img width="30" height="30" alt="" src="./tests/aec-vendor/Up.png" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div role="region" aria-label="answer submission controls" class="buttons-div" id="buttons-div-id">
+            <div class="Bttn_Area" id="Bttn_Area2">
+              <div class="other_buttoncontainer">
+                <input type="button" tabindex="0" id="underreview" class="normalBtn btn tempBtnClass btn-primary auditlog underreview" value="Mark for Review &amp; Next" style="margin-left: 1%" />
+                <input type="button" tabindex="0" id="clearResponse" class="normalBtn tempBtnClass btn btn-primary auditlog clearResponse" value="Clear Response" style="" />
+              </div>
+
+              <div class="save_buttoncontainer qbase-save-buttoncontainer">
+                <input type="button" id="previousBtn" class="tempBtnClass langLabel btn btn-primary auditlog previousBtn btnEnabled" value="Previous" lang="en" />
+                <input type="button" id="savenext" class="normalBtn tempBtnClass btn btn-primary-save langLabel btnEnabled auditlog savenext" value="Save &amp; Next" lang="en" />
+              </div>
+
+              <div class="finalSubmit" id="submitTD" align="">
+                <input type="button" tabindex="0" class="btn btn-primary-blue auditlogButton" id="finalSubmit" value="Submit" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="question_description_number_panel" id="rightDivision">
+          <div class="Rght_Section column qbase-right-panel" id="col2">
+            <div class="collapsebel_panel">
+              <div role="complementary" aria-label="question status legend" class="diff_type_notation_area_outer">
+                <div class="diff_type_notation_area_inner" style="padding-left: 8px">
+                  <div role="list" class="notation_type_description fontSizeAccessibility">
+                    <div role="listitem" class="notation_typeDiv leftdiv_notation">
+                      <span class="answered answeredCount">0</span>
+                      <span class="type_title answeredLabel langLabel longtext-hide" lang="en">Answered</span>
+                    </div>
+                    <div role="listitem" class="notation_typeDiv">
+                      <span class="not_answered notAnsweredCount">0</span>
+                      <span class="type_title notAnsweredLabel langLabel longtext-hide" lang="en">Not Answered</span>
+                    </div>
+                    <div class="clear"></div>
+                    <div role="listitem" class="notation_typeDiv leftdiv_notation">
+                      <span class="not_visited notVisitedCount">0</span>
+                      <span class="type_title notVisitedLabel langLabel longtext-hide" lang="en">Not Visited</span>
+                    </div>
+                    <div role="listitem" class="notation_typeDiv MarkForReviewDiv">
+                      <span class="review markedCount">0</span>
+                      <span class="type_title markedLabel langLabel longtext-hide" lang="en">Marked for Review</span>
+                    </div>
+                    <div class="clear"></div>
+                    <div role="listitem" class="notation_typeDiv answered_review_container review_answer">
+                      <span class="review_answered markedAnsweredCount">0</span>
+                      <span class="type_title langLabel markedAndAnsweredLabel" lang="en">Answered &amp; Marked for Review (will also be evaluated)</span>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div role="navigation" class="rightSectionDiv" id="rightSectionDiv2" style="direction: ltr" aria-label="Current section">
+                <div role="heading" aria-level="2" class="header" style="text-align: left">
+                  &nbsp;<span class="viewSection"><b title="Current section" id="current-section-title">Current Section</b></span>
+                </div>
+                <div role="heading" aria-level="3" class="subheader" id="chooseQuestion" style="text-align: left">Choose a Question</div>
+                <div class="content nano has-scrollbar" id="question_area">
+                  <div id="num_panel_box" class="question_area nano-content" tabindex="-1">
+                    <div aria-labelledby="chooseQuestion" id="numberpanelQues" class="numberpanelQues" role="tablist"></div>
+                  </div>
+                  <div class="nano-pane" style="right: 0px; display: none">
+                    <div class="nano-slider"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="image-overlay" class="qbase-image-overlay qbase-hidden" aria-hidden="true">
+      <button id="image-overlay-close" type="button" class="qbase-image-overlay-close" aria-label="Close image preview">Close</button>
+      <img id="image-overlay-img" src="" alt="" />
+    </div>
+  </body>
+</html>
