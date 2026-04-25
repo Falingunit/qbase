@@ -558,5 +558,26 @@
     "chapter": "SPT REVISION-6",
     "title": "BT,STAT,PC,PROB",
     "aID": 816
+  },
+  {
+    "subject": "Mathematics",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-2 P1",
+    "aID": 1001
+  },
+  {
+    "subject": "Physics",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-2 P1",
+    "aID": 1002
+  },
+  {
+    "subject": "Chemistry",
+    "faculty": "FIITJEE",
+    "chapter": "AITS",
+    "title": "AITS-2 P1",
+    "aID": 1003
   }
 ]

@@ -184,11 +184,11 @@ export function upsertAssignmentInDb(db, assignmentId, payload, metadata = {}) {
          payload_shape = excluded.payload_shape,
          meta_json = excluded.meta_json,
          question_count = excluded.question_count,
-         source_relpath = excluded.source_relpath,
-         subject = excluded.subject,
-         faculty = excluded.faculty,
-         chapter = excluded.chapter,
-         title = excluded.title,
+         source_relpath = COALESCE(excluded.source_relpath, assignments.source_relpath),
+         subject = COALESCE(excluded.subject, assignments.subject),
+         faculty = COALESCE(excluded.faculty, assignments.faculty),
+         chapter = COALESCE(excluded.chapter, assignments.chapter),
+         title = COALESCE(excluded.title, assignments.title),
          updated_at = CURRENT_TIMESTAMP`
     ).run(
       assignmentId,

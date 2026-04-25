@@ -173,6 +173,9 @@ void UpdateAssignmentData(StatusContext ctx)
     ctx.Status("Creating assignment directory...");
     Directory.CreateDirectory($"./frontend/data/question_data/{assignmentId}");
 
+    ctx.Status("Updating assignment list...");
+    UpsertAssignmentListEntry();
+
     ctx.Status("[lime]Done![/]");
 }
 
@@ -332,6 +335,49 @@ void SyncAssignmentToApi(StatusContext ctx)
         string body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
         throw new InvalidOperationException($"Assignment sync failed ({(int)response.StatusCode}): {body}");
     }
+}
+
+void UpsertAssignmentListEntry()
+{
+    const string assignmentListPath = "./frontend/data/assignment_list.json";
+    List<Assignment> assignments;
+
+    if (File.Exists(assignmentListPath))
+    {
+        assignments = JsonSerializer.Deserialize<List<Assignment>>(
+            File.ReadAllText(assignmentListPath),
+            jsonOptions
+        ) ?? new List<Assignment>();
+    }
+    else
+    {
+        assignments = new List<Assignment>();
+    }
+
+    int existingIndex = assignments.FindIndex(item => item.ID == checked((int)assignmentId!.Value));
+    var updated = new Assignment
+    {
+        Subject = subject,
+        Faculty = facultyName,
+        Chapter = chapter,
+        Title = assignmentTitle,
+        ID = checked((int)assignmentId!.Value)
+    };
+
+    if (existingIndex >= 0)
+        assignments[existingIndex] = updated;
+    else
+        assignments.Add(updated);
+
+    assignments.Sort((left, right) => left.ID.CompareTo(right.ID));
+
+    File.WriteAllText(
+        assignmentListPath,
+        JsonSerializer.Serialize(assignments, new JsonSerializerOptions(jsonOptions)
+        {
+            WriteIndented = true
+        })
+    );
 }
 
 static string NormalizeApiBase(string input)
